@@ -108,7 +108,7 @@ function git {
 }
 
 function validate {
-  if ! [[ "$1" =~ ^($HOME|/etc)/ ]]; then
+  if ! [[ "$1" =~ ^($HOME|/etc)($|/) ]]; then
     error "Path is not inside \$HOME or /etc: {{$1}}"
     return 1
   else
@@ -176,14 +176,19 @@ function run {
       if [ -z "$1" ]; then
         function add_paths {
           for path in "$@"; do
-            if [ -e "$path" ]; then
-              if [ "$path" != "$DOTFILES/etc" ]; then
-                run install "$path"
-              fi
+            if [ ! -e "$path" ]; then
+              continue
+            fi
 
-              if [ -d "$path" -a $? -eq 255 ]; then
-                add_paths "$path"/*
-              fi
+            if [ -e "$path/.skip" ]; then
+              local status=255
+            else
+              run install "$path"
+              local status=$?
+            fi
+
+            if [ -d "$path" -a $status -eq 255 ]; then
+              add_paths "$path"/*
             fi
           done
         }
@@ -221,12 +226,12 @@ function run {
           fi
 
           if [ -e "$origin" -o -L "$origin" ]; then
-            action="Replace"
+            question="Install symlink for existing path"
           else
-            action="Install"
+            question="Install symlink for"
           fi
 
-          if [ $force -eq 1 ] || ask "$action {{$origin}}?"; then
+          if [ $force -eq 1 ] || ask "$question {{$origin}}?"; then
             if [ -d "$origin" ]; then
               if ask "Delete {{$origin}}?"; then
                 system rm -r "$origin"
@@ -270,7 +275,7 @@ function run {
 
         ask_yes "Add {{$origin}} to repository?" || continue
 
-        if system mkdir -p "`dirname "$target"`" && system mv "$origin" "$target" && system ln -s "$target" "$origin"; then
+        if system mkdir -p "`dirname "$target"`" && system rm -f "`dirname "$target"`/.skip" && system mv "$origin" "$target" && system ln -s "$target" "$origin"; then
           status "Successfully added {{$target}}"
         else
           error "Error while converting path: {{$origin}}"
