@@ -1,0 +1,23 @@
+#!/bin/sh
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 PATH [PATH..]"
+  exit 255
+fi
+
+for dir in $*; do
+  if [ ! -d "$dir/.svn" ]; then
+    echo " [1;31m>>>[0m '[1m$dir[0m' is not a working copy"
+    exit 1
+  else
+    echo -n " [1;34m>>>[0m Flush '[1m$dir[0m'? [y/n] "
+    read -n 1
+    echo
+    if [ "$REPLY" = "y" ]; then
+      find "$dir" -type d -name .svn | while read dir; do
+        echo "deleting $dir..."
+        rm -r "$dir" || exec echo " [1;31m>>>[0m Error!"
+      done
+    fi
+  fi
+done

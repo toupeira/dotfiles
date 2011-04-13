@@ -1,0 +1,160 @@
+#!/usr/bin/env ruby
+
+require 'tempfile'
+
+@svn = 'svn'
+@interactive = true
+@paths = ''
+
+while arg = ARGV.shift
+  case arg
+  when '-f'
+    @svn << ' -q --non-interactive'
+    @interactive = false
+  when '-m'
+    @svn << " -m \"#{ARGV.shift.gsub(/"/, "\"")}\""
+  else
+    if File.exists? arg
+      @paths << " \"#{arg}\""
+    end
+  end
+end
+
+def msg(message, color=2)
+  "[1;3#{color}m>>>[0m [1m#{message}[0m "
+end
+
+def ask(prompt, default=true)
+  print msg(prompt)
+  print default ? '[Yn] ' : '[yN] '
+
+  begin
+    # Don't show typed input
+    system('stty cbreak')
+    answer = STDIN.getc.chr.chomp.downcase
+  ensure
+    system('stty -cbreak')
+  end
+
+  puts unless answer == ""
+  answer != (default ? 'n' : 'y')
+end
+
+def stat(action, symbol, files)
+  return if files.empty?
+  puts msg("#{action}: #{files.size}")
+  files.each do |file|
+    puts " #{symbol} #{file}"
+  end
+  puts
+end
+
+add, skip, remove, commit = [], [], [], []
+
+`svn status #{@paths} --ignore-externals`.each_line do |line|
+  next unless line =~ /^ *(.)[ +]+(.+)/
+  case $1
+  when 'A'
+    add << $2
+  when '?'
+    if !@interactive or ask("add #$2")
+      add << $2
+    else
+      skip << $2
+    end
+  when 'D', '!'
+    remove << $2
+  when 'M'
+    commit << $2
+  end
+end
+exit unless $?.exitstatus.zero?
+
+if add.empty? and remove.empty? and commit.empty?
+  puts msg("nothing to do.") if @interactive
+  exit
+elsif !add.empty? or !skip.empty?
+  puts if @interactive
+end
+
+tmp = Tempfile.new('svncommit')
+tmp.write(`svn diff #{@paths} --non-interactive`)
+tmp.close
+
+if @interactive
+  loop do
+    unless @quiet
+      stat("adding", 'A', add)
+      stat("skipping", '?', skip)
+      stat("removing", 'D', remove)
+      stat("modified", 'M', commit)
+      puts ' [0;36m*[0m [d] [1mshow diff[0m'
+      puts ' [0;36m*[0m [t] [1mrun tests[0m'
+      puts ' [0;36m*[0m [c] [1mcommit[0m'
+      puts ' [0;36m*[0m [*] [1mabort[0m'
+    end
+    @quiet = false
+    print "[1;32m>>>[0m "
+
+    begin
+      system('stty cbreak -echo')
+      cmd = STDIN.getc.chr.chomp.downcase
+    ensure
+      system('stty -cbreak echo')
+    end
+
+    case cmd
+      when /^d/
+        puts 'showing diff...'
+        if ENV['DISPLAY']
+          system("gvim #{tmp.path}")
+          @quiet = true
+        else
+          system("vim #{tmp.path}")
+        end
+      when /^t/
+        puts 'running tests...'
+        runner = if File.executable?('script/test')
+          'script/test'
+        elsif File.file?('Rakefile')
+          'rake test'
+        elsif File.file?('Makefile')
+          'make test'
+        else
+          nil
+        end
+
+        if runner
+          puts
+          status = system(runner)
+          puts
+          status or (ask('abort', true) and exit)
+          puts
+        else
+          puts 'no tests found.'
+          @quiet = true
+        end
+      when /^c/
+        puts 'committing...'
+        break
+      else
+        puts 'aborting...'
+        exit
+    end
+  end
+end
+
+puts if @interactive
+system("svn add -q #{add.join(' ')}") unless add.empty?
+system("svn remove -q #{remove.join(' ')}") unless remove.empty?
+
+if ENV['DISPLAY'] and !`which gvim`.empty?
+  @editor = "gvim -f"
+else
+  @editor = "vim"
+end
+@editor << " -o2 -c \" :wincmd x | :1 \" #{tmp.path}"
+
+if !system("#{@svn} commit --editor-cmd '#{@editor}' #{@paths}") and @interactive
+  puts msg('commit failed', 1)
+end

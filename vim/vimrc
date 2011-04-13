@@ -1,0 +1,436 @@
+" General Settings
+" {{{
+
+  set nocompatible
+
+  " load all bundles
+  let g:pathogen_disabled = []
+
+  " FuzzyFinder/L9 requires Vim 7.2 and floating-point support
+  if v:version < '702' || !has('float')
+    call add(g:pathogen_disabled, 'vim-l9')
+    call add(g:pathogen_disabled, 'vim-fuzzyfinder')
+  endif
+
+  " Gundo requires Vim 7.3 and Python
+  if v:version < '703' || !has('python')
+    call add(g:pathogen_disabled, 'gundo.vim')
+  endif
+
+  call pathogen#runtime_append_all_bundles()
+  call pathogen#helptags()
+
+  " file handling
+  set nobackup
+  set autowrite
+  set encoding=utf-8
+  set modeline
+  set modelines=2
+
+  " interface
+  set hidden
+  set lazyredraw
+  set splitbelow
+  set splitright
+  set scrolloff=5
+  set virtualedit+=block
+  set nostartofline
+
+  " command prompt and status line
+  set showcmd
+  set ruler
+  set laststatus=2
+  set history=1000
+  set wildmenu
+  set wildmode=longest:full,full
+  set report=0
+
+  " searching
+  set ignorecase
+  set smartcase
+  set incsearch
+  set hlsearch
+
+" }}}
+
+" Display Settings
+" {{{
+
+  if &term == 'screen-bce' || &term == 'rxvt-unicode'
+    " enable 256 color support for screen and rxvt
+    set t_Co=256
+
+    " don't clear screen on exit
+    set t_ti=
+    set t_te=
+  endif
+
+  " syntax highlighting
+  syntax on
+
+  " color scheme
+  colorscheme desertink
+
+  " statusline
+  set statusline=%<%f\ %h%m%r%y%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%=%-20.(%l/%L,%c%V%)\ %P
+
+  " line numbers
+  set number
+  set numberwidth=6
+
+  " cursor line
+  autocmd BufEnter,WinEnter * if bufname('%') != '-MiniBufExplorer-' && &buftype != 'quickfix' | setlocal cursorline | endif
+  autocmd WinLeave * setlocal nocursorline nocursorcolumn
+
+  " highlight trailing whitespace
+  highlight Whitespace ctermbg=236 guibg=#333333
+  match Whitespace /\s\+$/
+
+  " go to last cursor position when opening files
+  if has('autocmd')
+    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+                           \| exe "normal g'\"" | endif
+  endif
+
+  " window titles
+  set title
+  if &term == 'screen-bce' || &term == 'rxvt-unicode'
+    set t_ts=k
+    set t_fs=\
+  endif
+
+" }}}
+
+" Text Formatting
+" {{{
+
+  set selection=inclusive
+  set backspace=indent,eol,start
+  set whichwrap+=<,>,[,],h,l
+
+  " indents
+  filetype plugin indent on
+  set autoindent
+  set smartindent
+  set nocindent
+
+  " avoid auto-indenting pound signs
+  inoremap # x<C-H>#
+
+  " tabs
+  set noexpandtab
+  set smarttab
+  set shiftround
+
+  " matching
+  set showmatch
+  runtime macros/matchit.vim
+  let b:match_ignorecase = 1
+
+  " completion
+  inoremap <C-Tab> <C-X><C-O>
+
+  " diffing
+  set diffopt+=iwhite
+
+  " folding
+  set foldenable foldmethod=marker
+  autocmd Syntax * set foldmethod=marker
+
+" }}}
+
+" Custom Filetype Settings
+" {{{
+
+  autocmd FileType alsaconf,asm,autoit,context,css,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,php.xhtml,smarty,sql,plaintex,ruby,sh,svn,tex,textile,vb,vim,xhtml,xml,xslt setlocal ts=2 sts=2 sw=2 expandtab nocindent
+  autocmd FileType c,cs,cpp,php,php.xhtml setlocal ts=3 sts=3 sw=3 expandtab
+  autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
+  autocmd FileType apache setlocal ts=4 sts=4 sw=4
+  autocmd FileType mail setlocal ts=2 sts=2 sw=2 expandtab tw=80 lbr
+  autocmd FileType tex,plaintex,context setlocal lbr
+  autocmd FileType ruby compiler ruby | setlocal makeprg=ruby\ -c\ %
+
+  "autocmd FileType php,php.xhtml compiler php | setlocal makeprg=php\ -lq\ % errorformat=%m\ in\ %f\ on\ line\ %l
+
+  autocmd BufEnter /home/*/bin/*.run setf sh
+  autocmd BufEnter *.php,*.inc,*.thtml setf php.xhtml
+  autocmd BufEnter *.boo setf python
+  autocmd BufEnter *.io setf io
+  autocmd BufEnter *.red setf textile
+  autocmd BufEnter *.plan setf ruby
+  autocmd BufEnter ~/.devilspie/* setf lisp
+
+  " PHP syntax highlighting
+  let php_htmlInStrings = 1
+  let php_baselib = 1
+  let php_special_functions = 1
+  let php_alt_comparisons = 1
+  let php_alt_AssignByReference = 1
+
+  let php_folding = 1
+
+  " Ruby block auto-completion
+  function! RubyEndToken()
+    let current_line = getline( '.' )
+    let braces_at_end = '{\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
+    let brackets_at_end = '[\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
+    let stuff_without_do = '^\s*\(class\|if\|unless\|begin\|case\|for\|module\|while\|until\|def\)'
+    let with_do = 'do\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
+
+    if match(current_line, braces_at_end) >= 0
+      return "\<CR>}\<C-O>O"
+    elseif match(current_line, brackets_at_end) >= 0
+      return "\<CR>\1\<C-O>O"
+    elseif match(current_line, stuff_without_do) >= 0
+      return "\<CR>end\<C-O>O"
+    elseif match(current_line, with_do) >= 0
+      return "\<CR>end\<C-O>O"
+    else
+      return "\<CR>"
+    endif
+  endfunction
+
+  autocmd FileType ruby inoremap <buffer> <CR> <C-R>=RubyEndToken()<CR>
+
+" }}}
+
+" Keybindings
+" {{{
+
+  let mapleader = ","
+
+  " map Ctrl+C to Escape
+  inoremap <C-c> <Esc>
+
+  " move between functions with Tab / Shift+Tab in normal mode
+  nmap <Tab> ]]
+  nmap <S-Tab> [[
+
+  " move to matching pair with Tab in visual mode
+  vmap <Tab> %
+
+  " toggle paste mode with F12
+  set pastetoggle=<f12>
+
+  " emacs keybindings in console
+  cnoremap <C-a> <Home>
+  cnoremap <C-e> <End>
+
+  " switch windows in insert mode
+  inoremap <C-j> <C-o><C-w>j
+  inoremap <C-k> <C-o><C-w>k
+
+  " scroll in insert mode
+  inoremap <C-e> <C-o><C-e>
+  inoremap <C-y> <C-o><C-y>
+
+  " quickfix window and location list
+  function! GetBufferList()
+    redir =>buflist
+    silent! ls
+    redir END
+    return buflist
+  endfunction
+
+  function! ToggleList(bufname, pfx)
+    let buflist = GetBufferList()
+    for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
+      if bufwinnr(bufnum) != -1
+        exec(a:pfx.'close')
+        return
+      endif
+    endfor
+    if a:pfx == 'l' && len(getloclist(0)) == 0
+        echohl ErrorMsg
+        echo "Location List is Empty."
+        return
+    endif
+    let winnr = winnr()
+    exec(a:pfx.'open')
+    if winnr() != winnr
+      wincmd p
+    endif
+  endfunction
+
+  nnoremap Q :call ToggleList('Quickfix List', 'c')<CR>
+  nnoremap E :call ToggleList('Location List', 'l')<CR>
+
+  " ,/, F2 - remove highlighted search
+  nnoremap <silent> <leader>/ :noh<CR>
+  nnoremap <silent> <F2> :noh<CR>
+
+  " ,1-9 - quick buffer switching
+  nnoremap <silent> <leader>1 :b1<CR>
+  nnoremap <silent> <leader>2 :b2<CR>
+  nnoremap <silent> <leader>3 :b3<CR>
+  nnoremap <silent> <leader>4 :b4<CR>
+  nnoremap <silent> <leader>5 :b5<CR>
+  nnoremap <silent> <leader>6 :b6<CR>
+  nnoremap <silent> <leader>7 :b7<CR>
+  nnoremap <silent> <leader>8 :b8<CR>
+  nnoremap <silent> <leader>9 :b9<CR>
+
+  " ,b - fuzzy find buffers
+  nnoremap <silent> <leader>b :FufBuffer<CR>
+
+  " ,c - close current window
+  nnoremap <silent> <leader>c :silent! close<CR>
+
+  " ,D - close current buffer
+  nnoremap <silent> <leader>D :bdelete<CR>
+
+  " ,f - fuzzy find files
+  nnoremap <silent> <leader>f :FufFileWithCurrentBufferDir<CR>
+
+  " ,F - enable syntax folding
+  function! ToggleFolding()
+    if &foldcolumn == 0
+      if &filetype == 'python'
+        setlocal foldmethod=indent
+      else
+        setlocal foldmethod=syntax
+      endif
+      setlocal foldcolumn=3
+    else
+      setlocal foldcolumn=0 foldmethod=marker
+    endif
+  endfunction
+
+  nnoremap <silent> <leader>F :call ToggleFolding()<CR>
+
+  " ,g - grep current search pattern
+  function! GrepCurrentPattern()
+    if @/ != ""
+      execute 'vimgrep /'.@/.'/g %'
+      copen
+    endif
+  endfunction
+  nnoremap <silent> <leader>g :call GrepCurrentPattern()<CR>
+
+  " ,i - toggle indent guides
+  nmap   <Leader>i :IndentGuidesToggle<CR>
+
+  " ,n - next buffer
+  nnoremap <silent> <leader>n :bnext<CR>
+
+  " ,N - toggle line numbers
+  nnoremap <silent> <leader>N :set number!<CR>
+
+  " ,p - previous buffer
+  nnoremap <silent> <leader>p :bprevious<CR>
+
+  " ,P - preview file
+  function! PreviewFile()
+    if &filetype == 'html' || &filetype == 'xhtml'
+      !x-www-browser "%"
+    elseif &filetype == 'markdown'
+      Mm
+		else
+			echo "Don't know how to preview ".&filetype." files"
+    endif
+  endfunction
+  nnoremap <silent> <leader>P :call PreviewFile()<CR>
+
+  " ,r - reload current buffer
+  nnoremap <silent> <leader>r :edit<CR>
+
+  " ,R - reload vimrc
+  nnoremap <silent> <leader>R :runtime! vimrc gvimrc<CR>:nohlsearch<CR>
+
+  " ,s - split horizontally
+  nnoremap <silent> <leader>s :split<CR>
+
+  " ,S - show syntax attributes
+  nnoremap <silent> <leader>S :call SyntaxAttr()<CR>
+
+  " ,t - open NERDTree
+  nnoremap <silent> <leader>t :NERDTreeToggle<CR>
+
+  " ,u / Ctrl+u - open gundo
+  nnoremap <silent> <leader>u :GundoToggle<CR>
+
+  " ,v - split vertically
+  nnoremap <silent> <leader>v :vsplit<CR>
+
+  " ,w - write file
+  nnoremap <silent> <leader>w :write<CR>
+
+  " ,W - clear trailing whitespace
+  nnoremap <silent> <leader>W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w
+
+  " ,Q - quit all
+  nnoremap <silent> <leader>Q :quitall<CR>
+
+  " ,!! - force quit all
+  nnoremap <silent> <leader>!! :quitall!<CR>
+
+  " F4 / F5 - change window height
+  noremap <silent> <F4> <C-w>+
+  imap <silent> <F4> <C-o><F4>
+  noremap <silent> <F5> <C-w>-
+  imap <silent> <F5> <C-o><F5>
+
+  " F6 / F7 - change window width
+  noremap <silent> <F6> <C-w>>
+  imap <silent> <F6> <C-o><F6>
+  noremap <silent> <F7> <C-w><
+  imap <silent> <F7> <C-o><F7>
+
+" }}}
+
+" Plugin Settings
+" {{{
+
+  runtime ftplugin/man.vim
+  runtime scripts/SyntaxAttr.vim
+
+  " netrw
+  let g:netrw_silent = 1
+  let g:netrw_ftpmode = 'ascii'
+  let g:netrw_longlist = 1
+  let g:netrw_winsize = 40
+  let g:netrw_altv = 1
+  let g:DrChipTopLvlMenu = 'Plugins.'
+  if has('unix') && exists("$DISPLAY")
+    let g:netrw_browsex_viewer = 'gnome-open'
+  endif
+
+  " buffer explorer
+  let g:miniBufExplSplitBelow = 0
+  let g:miniBufExplForceSyntaxEnable = 0
+  let g:miniBufExplMapCTabSwitchBufs = 1
+  let g:miniBufExplMapWindowNavVim = 1
+  let g:miniBufExplMapWindowNavArrows = 1
+  let g:miniBufExplMaxSize = 0
+  let g:miniBufExplModSelTarget = 1
+  let g:miniBufExplTabWrap = 1
+  let g:miniBufExplUseSingleClick = 1
+  highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
+  highlight MBEVisibleActive cterm=bold ctermbg=28 gui=bold guibg=#368736
+  highlight MBEVisibleChangedActive cterm=bold ctermbg=124 gui=bold guibg=#cc5653
+  highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
+  highlight MBEChanged ctermbg=88 guibg=#913d3b
+
+  " nerd tree
+  let g:NERDTreeQuitOnOpen = 1
+
+  " syntastic
+  let g:syntastic_enable_signs = 1
+  let g:syntastic_disabled_filetypes = [ 'xhtml' ]
+
+  if !&diff
+    let g:syntastic_auto_loc_list = 0
+    let g:syntastic_auto_jump = 0
+  endif
+
+  " indent guides
+  let g:indent_guides_auto_colors = 0
+  highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
+  highlight IndentGuidesEven ctermbg=236 guibg=#333333
+  autocmd VimEnter * silent! nunmap <Leader>ig
+
+  " closetag
+  runtime scripts/closetag.vim
+  autocmd BufAdd,BufRead * runtime scripts/closetag.vim
+
+" }}}

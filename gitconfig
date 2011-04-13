@@ -1,0 +1,21 @@
+[core]
+	excludesfile = /home/toupeira/.gitexcludes
+
+[user]
+	name = Markus Koller
+	email = markus-koller@gmx.ch
+
+[color]
+	branch = auto
+	diff = auto
+	interactive = auto
+	status = auto
+	pager = true
+
+[alias]
+	ci = commit
+	co = checkout
+	st = status
+	stat = status
+	sub = submodule
+	unstage = reset HEAD

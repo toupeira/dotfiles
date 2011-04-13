@@ -1,0 +1,5 @@
+#!/bin/bash
+
+for url in "$@"; do
+  youtube-dl -t -w -c "$url"
+done

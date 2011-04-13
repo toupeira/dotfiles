@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo "Usage: svnimport PATH [NAME]"
+  exit 1
+fi
+
+path="$1"
+name=`basename $path`
+[ -n "$2" ] && name="$2"
+url="http://dev.diarrhea.ch/svn/$name/trunk/"
+
+if [ -d "$path/.svn" ]; then
+  echo "$path is a working copy.";
+  exit 1
+fi
+
+set -e
+
+svn import "$path" "$url"
+mv -v "$path" "${path%/}.old"
+svn checkout "$url" "$path"

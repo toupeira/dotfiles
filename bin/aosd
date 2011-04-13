@@ -1,0 +1,30 @@
+#!/bin/bash
+
+options='--position 0 --padding 8 --x-offset 45 --y-offset 75
+         --back-color black --fore-color white --shadow-color black --shadow-offset 2
+         --back-opacity 160 --fore-opacity 255 --shadow-opacity 127
+         --font "Monospace 20" --fade-in 0 --fade-full 3000'
+
+while [ "${1:0:1}" = "-" ]; do
+  arg="$1"
+  shift
+
+  case "$arg" in
+    -l|--left);;
+    -r|--right)
+			options="$options --position 2 --x-offset -20"
+			;;
+    -o)
+      options="$options $1"
+      shift
+      ;;
+	esac
+done
+
+killall -9 aosd_cat &>/dev/null
+
+if [ -n "$1" ]; then
+  echo "$@" | eval aosd_cat $options &>/dev/null &
+else
+  eval aosd_cat $options
+fi

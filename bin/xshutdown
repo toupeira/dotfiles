@@ -1,0 +1,85 @@
+#!/usr/bin/ruby
+
+require 'yaml'
+require 'gtk2/base'
+
+class XShutdown < Gtk::Window
+  ICONS = "/usr/share/icons/gnome/32x32/actions"
+
+  ACTIONS = YAML.load('
+
+    - - _Shutdown
+      - gnome-shutdown
+      - "[ -p ~/.quodlibet/control ] && timeout 2 quodlibet --quit; pgrep -x deluged && timeout 2 deluge-console halt; sudo /etc/init.d/gdm stop; sudo init 0"
+
+    - - _Reboot
+      - gtk-refresh
+      - "[ -p ~/.quodlibet/control ] && timeout 2 quodlibet --quit; pgrep -x deluged && timeout 2 deluge-console halt; sudo /etc/init.d/gdm stop; sudo init 6"
+
+    #- - _Hibernate
+    #  - appointment
+    #  - sudo hibernate
+
+    - - _Logout
+      - gnome-logout
+      - "gnome-session-save --logout"
+
+  ')
+
+  def initialize
+    super
+
+    set_title "Shutdown"
+    set_icon "#{ICONS}/gnome-shutdown.png"
+
+    set_resizable false
+    set_keep_above true
+    set_window_position Gtk::Window::POS_CENTER
+
+    signal_connect('destroy') { Gtk.main_quit }
+    signal_connect('key-press-event') do |view, event|
+      Gtk.main_quit if [
+        Gdk::Keyval::GDK_Escape,
+        Gdk::Keyval::GDK_q,
+        Gdk::Keyval::GDK_Q,
+      ].include? event.keyval
+    end
+
+    buttons = Gtk::HBox.new(false, 8)
+    buttons.border_width = 8
+    self << buttons
+
+    ACTIONS.each do |(label, icon, command)|
+      button = Gtk::Button.new
+      button.width_request = 130
+      buttons << button
+
+      align = Gtk::Alignment.new(0.0, 0.5, 0.0, 1.0)
+      align.border_width = 4
+      button << align
+      button.signal_connect('clicked') do
+        Gtk.main_quit
+        system("(#{command}) &>/dev/null &")
+      end
+
+      hbox = Gtk::HBox.new(false, 4)
+      align << hbox
+
+      icon = Gtk::Image.new("#{ICONS}/#{icon}.png")
+      hbox.pack_start(icon, false, false)
+
+      label = Gtk::Label.new("<b>#{label}</b>")
+      label.use_underline = true
+      label.use_markup = true
+      hbox.pack_start(label, true, true)
+    end
+
+    show_all
+  end
+end
+
+if __FILE__ == $0
+  Gtk.init
+  XShutdown.new
+  Gtk.main
+end

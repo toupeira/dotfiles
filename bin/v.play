@@ -1,0 +1,98 @@
+#!/bin/bash
+
+function usage {
+  echo "Usage:  v.play [-ftnrst] [-re REGEX] [-a ASPECT] [-size SIZE]"
+  echo "               [-debug] [-playlist PLAYLIST] [-mono|-stereo]"
+  echo "               [-o MPLAYER-OPTIONS] [-fo FIND-OPTIONS] PATH..."
+  exit 255
+}
+
+[ "$1" ] || usage
+
+function add_path {
+  path=`realpath "$1" 2>/dev/null`
+  if [ -d "$path" ]; then
+    find -L "$path" -type f $options \( \
+          -iname "*.avi"    -or -iname "*.mp[eg34]" \
+      -or -iname "*.w[am]v" -or -iname "*.m[ko4]v" \
+      -or -iname "*.og[gm]" -or -iname "*.rm" \
+      -or -iname "*.iso"    -or -iname "*.asf" \
+      -or -iname "*.bin"    -or -iname "*.vob" \
+      -or -iname "*.rmv"    -or -iname "*.rmvb" \
+      -or -iname "*.flv"    -or -iname "*.img" \
+      -or -iname "*.divx"   -or -iname "*.flac" \
+      -or -iname "*.ram"    -or -iname "*.mpeg" \
+    \) | sort | egrep -i "$regex" >> $playlist
+  elif [ -f "$path" ]; then
+    realpath -- "$path" >> $playlist
+  elif [ "$1" ]; then
+    echo "$1" >> $playlist
+  fi
+}
+
+playlist=`mktemp /tmp/playlist.XXXXXX`
+trap "rm -f $playlist" 0 1 2 3 9 10 15
+trap "iecset audio on >/dev/null" 0 1 2 3 9 10 15
+rm -f $playlist
+
+mplayer="mplayer -playlist $playlist"
+
+unset format options regex debug
+sort="cat"
+tail="cat"
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -debug ) mplayer="echo $mplayer"; debug=1; trap - 0 1 2 3 9 10 15; shift;;
+    -playlist ) cat "$2" >> $playlist; shift 2;;
+    -mono ) mplayer="$mplayer -af pan=1:0.5:0.5"; shift;;
+    -stereo ) mplayer="$mplayer -af pan=2:1:0:0:1"; shift;;
+    -analog ) mplayer="$mplayer -ac a52,"; shift;;
+    -re ) regex="$2"; shift 2;;
+    -fo ) options="$2"; shift 2;;
+    -f ) mplayer="$mplayer -fs"; shift;;
+    -a ) mplayer="$mplayer -aspect $2"; shift 2;;
+    -n ) mplayer="$mplayer -ac dummy"; shift;;
+    -r ) mplayer="$mplayer -loop 0"; shift;;
+    -s ) mplayer="$mplayer -shuffle"; shift;;
+    -o ) mplayer="$mplayer $2"; shift 2;;
+    -size ) options="-size +$2"; shift 2;;
+    -p ) shift; exec $0 -f -t "$@" .;;
+    -t)
+      sort="sort -rn"
+      format="%C@ "
+      shift
+      ;;
+    -tail)
+      shift
+      tail="tail -n +$1"
+      shift
+      ;;
+    -* )
+      mplayer="$mplayer $1"
+      shift
+      if [ -n "$2" -a ! -e "$2" ]; then
+        mplayer="$mplayer \"$2\""
+        shift
+      fi
+      ;;
+    * )
+      if [ -f "$1" -o -z "$format" ]; then
+        add_path "$1"
+      else
+        while read path; do
+          add_path "$path"
+        done < <(find "$1" -mindepth 1 -maxdepth 2 -printf "$format%p\n" | $sort | $tail | sed -r 's/^ *[0-9\.]+ //')
+      fi
+      shift
+      ;;
+  esac
+done
+
+
+if [ -s $playlist ]; then
+  $mplayer
+  [ "$debug" ] || rm -f $playlist
+else
+  usage
+fi

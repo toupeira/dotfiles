@@ -1,0 +1,39 @@
+#!/bin/bash
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 [-w] [-o OPTIONS] [--standard|--extreme|--insane|--<kbps>] FILES"
+  echo " -w  don't encode, only save .wav files"
+  echo " -o  set LAME options"
+  echo " --* set LAME preset"
+  exit
+fi
+
+options="--preset extreme"
+unset wav
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -w ) wav=1; shift;;
+    -o ) options="$2"; shift 2;;
+    --*) options="--preset $2"; shift 2;;
+    *  ) break;;
+  esac
+done
+
+for file in "$@"; do
+  ext=${file##*.}
+  name=`basename "$file" ".$ext"`
+
+  echo " [1;34m>>>[0m [1;37m$file[0m"
+
+  if [ "$ext" != "wav" -a ! -f "$name.wav" ]; then
+    nice mplayer -ao pcm:file="$name.wav" -vc dummy -vo null "$file"
+    file="$name.wav"
+  fi
+
+  if [ ! "$wav" ]; then
+    [ "$ext" = "wav" -o -f "$name.wav" ] && nice lame $options "$file" "$name.mp3"
+    [ "$ext" != "wav" ] && rm -fv "$name.wav"
+  fi
+  echo
+done

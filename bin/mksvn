@@ -1,0 +1,15 @@
+#!/bin/sh
+
+[ "$1" ] || exec echo "Usage: mksvn DIRECTORY"
+
+if [ -d "$1" ]; then
+  read -p "Directory already exists, apply permissions? [y/n] "
+  [ "$REPLY" = "y" ] || exit
+else
+  svnadmin create "$1"
+fi
+
+cd "$1" || exit 1
+chown -R $USER:www-data .
+chmod -R g+w dav locks db/revprops db/revs db/transactions
+chmod g+w db db/current db/uuid db/write-lock

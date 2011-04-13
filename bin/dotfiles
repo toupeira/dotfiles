@@ -1,0 +1,325 @@
+#!/bin/bash
+
+# The dotfiles repository
+DOTFILES=${DOTFILES:-~/.dotfiles}
+
+# Options
+VERBOSE=0
+FORCE=0
+DRYRUN=0
+
+function usage {
+  echo "Usage: `basename $0` [options] COMMAND [args]"
+  echo
+  echo "Options:"
+  echo "  -f [--force]       Assume yes for all questions"
+  echo "  -n [--dry-run]     Only show changes, without performing them"
+  echo "  -v [--verbose]     Increase verbosity"
+  echo
+  echo "Actions:"
+  echo
+  echo "  sync               Update, commit and push"
+  echo "  update             Updates repository and submodules"
+  echo "  commit             Commit all changes"
+  echo
+  echo "  install            Install symlinks for all dotfiles"
+  echo "  install PATH...    Install symlink for PATH"
+  echo "  add PATH...        Add file to repository and replace it with a symlink"
+  echo
+  echo "Git commands:"
+  echo "  status, push, pull, log, diff, submodule"
+  echo
+  exit 255
+}
+
+function msg {
+  local msg="${1/$HOME/~}"
+  local color=${2:-4}
+
+  echo $3 " [1;3${color}m>[0m $msg" | sed -r 's/\{\{/[1m/g' | sed -r 's/\}\}/[0m/g'
+}
+
+function status {
+  msg "$1" 2
+}
+
+function ask {
+  [ $FORCE -eq 1 ] && return
+
+  msg "$1 [y/N] " "${2:-6}" -n >&2
+  read
+  [ "$REPLY" = "Y" -o "$REPLY" = "y" ]
+}
+
+function ask_yes {
+  msg "$1 [Y/n] " "$2" -n >&2
+  read
+  [ "$REPLY" != "N" -a "$REPLY" != "n" ]
+}
+
+function error {
+  STATUS=1
+  msg "$1" 1
+}
+
+function abort {
+  STATUS=1
+  if ! ask "Do you want to continue?" 1; then
+    exit 1
+  fi
+}
+
+function system {
+  local command="$1"
+  shift
+
+  for arg in "$@"; do
+    dir=`dirname -- "$arg"`
+    if [ -d "$dir" -a ! -w "$dir" ]; then
+      command="sudo $command"
+      break
+    fi
+  done
+
+  [ $FORCE   -eq 1 ] && command="$command -f"
+  [ $VERBOSE -eq 1 ] && command="$command -v" && echo "     executing: $command $@"
+  [ $DRYRUN  -eq 1 ]                          && echo "     executing: $command $@ [DRY RUN]" && return
+
+  $command "$@"
+}
+
+function git {
+  if [ "$1" = "ignore-errors" ]; then
+    local onerror=":"
+    shift
+  else
+    local onerror="abort"
+  fi
+
+  [ $VERBOSE -eq 1 ] && echo "    executing: git $@"
+  [ $DRYRUN  -eq 1 ] && echo "    executing: git $@ [DRY RUN]" && return
+
+  pushd "$DOTFILES" >/dev/null || exit 1
+  command git "$@" || $onerror
+  local status=$?
+  popd >/dev/null
+
+  return $status
+}
+
+function validate {
+  if ! [[ "$1" =~ ^($HOME|/etc)/ ]]; then
+    error "Path is not inside \$HOME or /etc: {{$1}}"
+    return 1
+  else
+    return 0
+  fi
+}
+
+function target {
+  local origin="$1"
+
+  if [[ "$origin" =~ ^$HOME/ ]]; then
+    local target="${1:${#HOME}+1}"
+  elif [[ "$origin" =~ ^/etc/ ]]; then
+    local target="${1:1}"
+  fi
+
+  echo "$DOTFILES/${target#.}"
+}
+
+function origin {
+  local target="${1:${#DOTFILES}+1}"
+  local topdir="${target%%/*}"
+
+  if [ "$topdir" = "etc" ]; then
+    echo "/$target"
+  elif [ -e "$HOME/$topdir" ]; then
+    echo "$HOME/$target"
+  else
+    echo "$HOME/.$target"
+  fi
+}
+
+function run {
+  local command="$1"
+  local status=0
+  shift
+
+  case "$command" in
+    sync)
+      echo
+      status "{{Merging remote changes...}}"
+      run pull
+
+      echo
+      status "{{Committing local changes...}}"
+      run commit -m "Sync dotfiles"
+
+      echo
+      status "{{Pushing local changes...}}"
+      run push
+
+      echo
+      status "{{Updating submodules...}}"
+      run submodule sync -q
+      run submodule update --init
+
+      echo
+      ;;
+    update)
+      run pull
+      run submodule sync -q
+      run submodule update --init
+      ;;
+    install)
+      if [ -z "$1" ]; then
+        function add_paths {
+          for path in "$@"; do
+            if [ -e "$path" ]; then
+              if [ "$path" != "$DOTFILES/etc" ]; then
+                run install "$path"
+              fi
+
+              if [ -d "$path" -a $? -eq 255 ]; then
+                add_paths "$path"/*
+              fi
+            fi
+          done
+        }
+
+        echo
+        add_paths "$DOTFILES"/*
+        echo
+      else
+        for path in "$@"; do
+          origin=`realpath -s -- "$path"`
+          target=`target "$origin"`
+          force=0
+
+          if [[ "$origin" =~ ^$DOTFILES/ ]]; then
+            target="$origin"
+            origin=`origin "$target"`
+          fi
+
+          if [ ! -e "$target" ]; then
+            error "Path not found: {{$target}}"
+            continue
+          elif ! validate "$origin"; then
+            continue
+          elif [ -L "$origin" ]; then
+            local link=`readlink "$origin" 2>/dev/null`
+            if [ ! -e "$link" ]; then
+              error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
+              force=1
+            elif [[ "$link" =~ ^$DOTFILES/ ]]; then
+              msg "Already symlinked: {{$origin}}"
+              continue
+            else
+              msg "Already symlinked: {{$origin}} -> [1;36m$link[0m"
+            fi
+          fi
+
+          if [ -e "$origin" -o -L "$origin" ]; then
+            action="Replace"
+          else
+            action="Install"
+          fi
+
+          if [ $force -eq 1 ] || ask "$action {{$origin}}?"; then
+            if [ -d "$origin" ]; then
+              if ask "Delete {{$origin}}?"; then
+                system rm -r "$origin"
+              else
+                abort
+              fi
+            elif [ -e "$origin" -o -L "$origin" ]; then
+              system rm "$origin"
+            fi
+
+            if [ ! -e "$origin" -o $DRYRUN -eq 1 ] && system ln -s "$target" "$origin"; then
+              status "Successfully installed {{$origin}}"
+            else
+              error "Error while installing {{$origin}}"
+              continue
+            fi
+          else
+            status=255
+          fi
+        done
+      fi
+      ;;
+    add)
+      [ $# -eq 0 ] && usage
+
+      for path in "$@"; do
+        origin=`realpath "$path" 2>/dev/null`
+        target=`target "$origin"`
+
+        if [ ! -e "$origin" ]; then
+          error "Path not found: {{$origin}}"
+        elif ! validate "$origin"; then
+          continue
+        elif [ -L "$path" ]; then
+          msg "Already symlinked: {{$path}}"
+          continue
+        elif [ -e "$target" ]; then
+          run install "$target" "$origin"
+          continue
+        fi
+
+        ask_yes "Add {{$origin}} to repository?" || continue
+
+        if system mkdir -p "`dirname "$target"`" && system mv "$origin" "$target" && system ln -s "$target" "$origin"; then
+          status "Successfully added {{$target}}"
+        else
+          error "Error while converting path: {{$origin}}"
+          continue
+        fi
+      done
+      ;;
+    st*)
+      git ignore-errors status "$@"
+      ;;
+    ci|commit)
+      git ignore-errors add .
+      git ignore-errors commit "$@"
+      ;;
+    push|pull|log|diff)
+      git ignore-errors $command "$@"
+      ;;
+    sub*)
+      git ignore-errors submodule "$@"
+      ;;
+    *)
+      usage
+      exit 255
+      ;;
+  esac
+
+  return $status
+}
+
+# Parse arguments
+unset command
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -f|--force)   FORCE=1;;
+    -n|--dry-run) DRYRUN=1;;
+    -v|--verbose) VERBOSE=1;;
+    *)
+      if [ "${1:0:1}" = "-" -a ${#command[@]} -eq 0 ]; then
+        usage
+      else
+        command=( "${command[@]}" "$1" )
+      fi
+      ;;
+  esac
+  shift
+done
+
+STATUS=0
+
+run "${command[@]}"
+
+exit $STATUS

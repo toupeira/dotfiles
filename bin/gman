@@ -1,0 +1,15 @@
+#!/bin/sh
+
+if [ -n "$2" ]; then
+  section="$1"
+  page="$2"
+else
+  section=
+  page="$1"
+fi
+
+if whatis "$page" >/dev/null; then
+  exec gvim +"Man $*" +"wincmd o"
+else
+  exec whatis "$page"
+fi

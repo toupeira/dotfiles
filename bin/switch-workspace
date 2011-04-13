@@ -1,0 +1,29 @@
+#!/bin/bash
+
+workspaces=( `wmctrl -d | awk '{ print $10 }'` )
+active=`wmctrl -d | awk '/\*/ { print int($1) }'`
+count=${#workspaces[@]}
+
+if [ -z "$1" ]; then
+  exec aosd "You're on workspace $((active+1)): ${workspaces[$active]}"
+elif [ "$1" = "+" ]; then
+  if [ $((active+1)) -eq $count ]; then
+    active=0
+  else
+    let active++
+  fi
+elif [ "$1" = "-" ]; then
+  if [ $active -eq 0 ]; then
+    active=$((count-1))
+  else
+    let active--
+  fi
+elif [[ "$1" =~ ^[0-9]+$ ]] && [ "$1" -gt 0 ] && [ "$1" -le $count ]; then
+  active=$(($1-1))
+else
+  echo "Usage: switch-workspace [+|-|NUMBER]"
+  exit 255
+fi
+
+wmctrl -s $((active))
+aosd -o '--fade-full 750' "Workspace $((active+1)): ${workspaces[$active]}"

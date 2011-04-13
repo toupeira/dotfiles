@@ -1,0 +1,4 @@
+#!/bin/dash
+while pgrep -x Xorg &>/dev/null && xte 'usleep 1' &>/dev/null; do
+  "$@"
+done
