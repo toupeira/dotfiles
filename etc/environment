@@ -12,8 +12,6 @@ export LC_CTYPE="en_US.UTF-8"
 
 export EDITOR="vim"
 export PAGER="less"
-export BROWSER="start x-www-browser"
-export WINEBROWSER="x-www-browser"
 
 export LESS="-iRM"
 export GREP_OPTIONS="-i --color=auto --exclude=*.svn*"

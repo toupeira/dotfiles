@@ -180,7 +180,7 @@ function run {
               continue
             fi
 
-            if [ -e "$path/.skip" ]; then
+            if [ -e "$path/.skip" -o -d "`find "$path" -mindepth 1 -maxdepth 1 2>/dev/null`" ]; then
               local status=255
             else
               run install "$path"
@@ -260,6 +260,7 @@ function run {
       for path in "$@"; do
         origin=`realpath "$path" 2>/dev/null`
         target=`target "$origin"`
+        target_dir=`dirname "$target"`
 
         if [ ! -e "$origin" ]; then
           error "Path not found: {{$origin}}"
@@ -275,7 +276,11 @@ function run {
 
         ask_yes "Add {{$origin}} to repository?" || continue
 
-        if system mkdir -p "`dirname "$target"`" && system rm -f "`dirname "$target"`/.skip" && system mv "$origin" "$target" && system ln -s "$target" "$origin"; then
+        if system mkdir -p "$target_dir" && system mv "$origin" "$target" && system ln -s "$target" "$origin"; then
+          system rm -f "$target_dir/.skip"
+          system sudo chown "$USER.users" "$target"
+          [ -d "$target" ] && system chmod g+s "$target"
+
           status "Successfully added {{$target}}"
         else
           error "Error while converting path: {{$origin}}"
