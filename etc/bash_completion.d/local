@@ -1,0 +1,17 @@
+# vim: ft=sh
+
+complete -F _command start
+complete -F _pgrep psgrep
+complete -o bashdefault -o default -W 'sync update commit install add status push pull log diff submodule' dotfiles
+
+complete -f -X '!*.deb' pkginstall
+
+_available() {
+  COMPREPLY=( $(compgen -W "`apt-cache pkgnames ${COMP_WORDS[COMP_CWORD]} 2>/dev/null`") )
+}
+complete -F _available pkget
+
+_installed() {
+  COMPREPLY=( $(compgen -W "`dglob ${COMP_WORDS[COMP_CWORD]}`") )
+}
+complete -F _installed pkglist pkgpurge pkgremove debbugs debpackages
