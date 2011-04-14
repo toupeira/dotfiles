@@ -385,7 +385,7 @@ def draw_chart(chart, origin, angle, numbers, cell_cols, cell_rows):
     chart -- chart data parsed by parse_chart()
     origin -- 0..7 origin of colour cube
     angle -- 0..5 rotation angle of colour cube
-    numbers -- if True display hex palette numbers on the chart
+    numbers -- if True display decimal palette numbers on the chart
     cell_cols -- number of screen columns per cell
     cell_rows -- number of screen rows per cell
     """
@@ -410,9 +410,9 @@ def draw_chart(chart, origin, angle, numbers, cell_cols, cell_rows):
         y = n_to_gray(n)
         if y>0x30:
             # use black text
-            return "\x1b[48;5;%d;30m%02x%s" % (n, n, cell_pad[2:])
+            return "\x1b[48;5;%d;30m%03d%s" % (n, n, cell_pad[2:])
         # else use gray text
-        return "\x1b[48;5;%d;37m%02x%s" % (n, n, cell_pad[2:])
+        return "\x1b[48;5;%d;37m%03d%s" % (n, n, cell_pad[2:])
 
     def blank():
         return "\x1b[0m%s" % (cell_pad,)
@@ -453,8 +453,8 @@ def main():
         default=0, metavar="NUM",
         help="set the angle of the colour cube: 0-5 [default: %default]")
     parser.add_option("-n", "--numbers", action="store_true",
-        dest="numbers", default=False,
-        help="display hex colour numbers on chart")
+        dest="numbers", default=True,
+        help="display decimal colour numbers on chart")
     parser.add_option("-x", "--cell-columns", dest="columns", type="int",
         default=2, metavar="COLS",
         help="set the number of columns for drawing each colour cell "

@@ -180,7 +180,7 @@ function run {
               continue
             fi
 
-            if [ -e "$path/.skip" -o -d "`find "$path" -mindepth 1 -maxdepth 1 2>/dev/null`" ]; then
+            if [ -d "$path" -a ! -e "$path/.link" ]; then
               local status=255
             else
               run install "$path"
@@ -226,12 +226,14 @@ function run {
           fi
 
           if [ -e "$origin" -o -L "$origin" ]; then
-            question="Install symlink for existing path"
+            ask="ask"
+            question="Delete {{$origin}} and install symlink?"
           else
-            question="Install symlink for"
+            ask="ask_yes"
+            question="Install symlink for {{$origin}}?"
           fi
 
-          if [ $force -eq 1 ] || ask "$question {{$origin}}?"; then
+          if [ $force -eq 1 ] || $ask "$question"; then
             if [ -d "$origin" ]; then
               if ask "Delete {{$origin}}?"; then
                 system rm -r "$origin"

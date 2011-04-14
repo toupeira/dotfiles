@@ -1,0 +1,50 @@
+#!/bin/bash
+
+if [ "$1" = "restore" ]; then
+  alsactl restore
+elif [ "$1" = "low" ]; then
+  alsactl restore
+  amixer -q set DAC 77
+  amixer -q set DAC,1 77
+else
+  if pgrep -ox amixer.sync | fgrep -vx $$ | grep -q .; then
+    exit
+  fi
+
+  for command in "$@"; do
+    amixer -q set $command
+  done
+fi
+
+volume=`amixer get DAC | awk '/Mono: [0-9]+/ { print }'`
+db=`echo "$volume" | awk '{ print $4 }'`
+volume=`echo "$volume" | awk '{ print $2 }'`
+let percent=(volume*100/127)
+let volume=(volume+1)/4
+
+(
+  echo -n "$db "
+
+  if [ $volume -eq 0 ]; then
+    echo -n "┠"
+  else
+    echo -n "▐"
+  fi
+
+  for i in `seq 1 31`; do
+    if [ $i -le "$volume" ]; then
+      echo -n "█"
+    else
+      echo -n "━"
+    fi
+  done
+
+  if [ $volume -eq 32 ]; then
+    echo -n "▋"
+  else
+    echo -n "┫";
+  fi
+
+  printf " [%3d%%]\n" $percent
+
+) | aosd -r -o "--y-offset 82 --back-opacity 60 --fore-opacity 127 --shadow-opacity 127 --fade-full 1500" &>/dev/null &
