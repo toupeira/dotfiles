@@ -295,7 +295,7 @@ function run {
       ;;
     ci|commit)
       git ignore-errors add .
-      git ignore-errors commit "$@"
+      git ignore-errors commit -a "$@"
       ;;
     push|pull|log|diff)
       git ignore-errors $command "$@"
