@@ -312,6 +312,11 @@ function run {
   return $status
 }
 
+if [ ! -d "$DOTFILES" ]; then
+  error "Dotfiles not found in {{$DOTFILES}}"
+  exit 1
+fi
+
 # Parse arguments
 unset command
 while [ $# -gt 0 ]; do
