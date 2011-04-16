@@ -53,18 +53,22 @@ endif
 " Keybindings
 " {{{
 
-  " Ctrl+PageUp / Ctrl+PageDown - change font size
-  function! ToggleFontSize(large)
-    if a:large == 1
-      set guifont=Monospace\ 15 lines=40 columns=110
-    else
+  " ,M - toggle font size
+  function! ToggleFontSize()
+    if exists('g:toggle_font_size')
+      unlet g:toggle_font_size
       set guifont=Monospace\ 9 lines=50 columns=120
+    else
+      let g:toggle_font_size = 1
+      set guifont=Monospace\ 15 lines=40 columns=110
+      winpos 290 100
     endif
     wincmd =
   endfunction
 
-  noremap <silent> <C-PageUp> :call ToggleFontSize(1)<CR>
-  noremap <silent> <C-PageDown> :call ToggleFontSize(0)<CR>
+  noremap <silent> <leader>M :call ToggleFontSize()<CR>
+  noremap <silent> <C-PageUp> :call ToggleFontSize()<CR>
+  noremap <silent> <C-PageDown> :call ToggleFontSize()<CR>
 
   " cursor movements with Alt key in insert mode and console
   set winaltkeys=no

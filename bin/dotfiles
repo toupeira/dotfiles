@@ -4,39 +4,43 @@
 DOTFILES=${DOTFILES:-~/.dotfiles}
 
 # Options
-VERBOSE=0
-FORCE=0
 DRYRUN=0
+VERBOSE=0
+QUIET=0
+FORCE=0
 
 function usage {
   echo "Usage: `basename $0` [options] COMMAND [args]"
   echo
   echo "Options:"
-  echo "  -f [--force]       Assume yes for all questions"
-  echo "  -n [--dry-run]     Only show changes, without performing them"
-  echo "  -v [--verbose]     Increase verbosity"
+  echo "  -n, --dry-run      Only show changes, without performing them"
+  echo "  -v, --verbose      Increase verbosity"
+  echo "  -q, --quiet        Suppress all normal output"
+  echo "  -f, --force        Assume yes for all questions"
   echo
   echo "Actions:"
-  echo
   echo "  sync               Update, commit and push"
-  echo "  update             Updates repository and submodules"
-  echo "  commit             Commit all changes"
-  echo
-  echo "  install            Install symlinks for all dotfiles"
+  echo "  up, update         Updates repository and submodules"
+  echo "  ca, commitall      Commit all changes"
+  echo "  init               Install symlinks for all dotfiles"
   echo "  install PATH...    Install symlink for PATH"
   echo "  add PATH...        Add file to repository and replace it with a symlink"
-  echo
-  echo "Git commands:"
-  echo "  status, push, pull, log, diff, submodule"
+  echo "  *                  Excecute a Git subcommand inside the repository directory"
   echo
   exit 255
 }
 
 function msg {
-  local msg="${1/$HOME/~}"
-  local color=${2:-4}
+  if [ $QUIET -eq 0 -o $VERBOSE -eq 1 -o "$2" = 1 ]; then
+    local msg="${1/$HOME/~}"
+    local color=${2:-4}
 
-  echo $3 " [1;3${color}m>[0m $msg" | sed -r 's/\{\{/[1m/g' | sed -r 's/\}\}/[0m/g'
+    if [ -n "$msg" ]; then
+      echo $3 " [1;3${color}m>[0m $msg" | sed -r 's/\{\{/[1m/g' | sed -r 's/\}\}/[0m/g'
+    else
+      echo
+    fi
+  fi
 }
 
 function status {
@@ -148,113 +152,114 @@ function run {
 
   case "$command" in
     sync)
-      echo
+      msg
       status "{{Merging remote changes...}}"
       run pull
 
-      echo
+      msg
       status "{{Committing local changes...}}"
-      run commit -m "Sync dotfiles"
+      run commitall -m "Sync dotfiles"
 
-      echo
+      msg
       status "{{Pushing local changes...}}"
       run push
 
-      echo
+      msg
       status "{{Updating submodules...}}"
       run submodule sync -q
       run submodule update --init
 
-      echo
+      msg
       ;;
     update)
       run pull
       run submodule sync -q
       run submodule update --init
       ;;
-    install)
-      if [ -z "$1" ]; then
-        function add_paths {
-          for path in "$@"; do
-            if [ ! -e "$path" ]; then
-              continue
-            fi
-
-            if [ -d "$path" -a ! -e "$path/.link" ]; then
-              local status=255
-            else
-              run install "$path"
-              local status=$?
-            fi
-
-            if [ -d "$path" -a $status -eq 255 ]; then
-              add_paths "$path"/*
-            fi
-          done
-        }
-
-        echo
-        add_paths "$DOTFILES"/*
-        echo
-      else
+    init)
+      function add_paths {
         for path in "$@"; do
-          origin=`realpath -s -- "$path"`
-          target=`target "$origin"`
-          force=0
-
-          if [[ "$origin" =~ ^$DOTFILES/ ]]; then
-            target="$origin"
-            origin=`origin "$target"`
-          fi
-
-          if [ ! -e "$target" ]; then
-            error "Path not found: {{$target}}"
+          if [ ! -e "$path" ]; then
             continue
-          elif ! validate "$origin"; then
-            continue
-          elif [ -L "$origin" ]; then
-            local link=`readlink "$origin" 2>/dev/null`
-            if [ ! -e "$link" ]; then
-              error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
-              force=1
-            elif [[ "$link" =~ ^$DOTFILES/ ]]; then
-              msg "Already symlinked: {{$origin}}"
-              continue
-            else
-              msg "Already symlinked: {{$origin}} -> [1;36m$link[0m"
-            fi
           fi
 
-          if [ -e "$origin" -o -L "$origin" ]; then
-            ask="ask"
-            question="Delete {{$origin}} and install symlink?"
+          if [ -d "$path" -a ! -e "$path/.install" ]; then
+            local status=255
           else
-            ask="ask_yes"
-            question="Install symlink for {{$origin}}?"
+            run install "$path"
+            local status=$?
           fi
 
-          if [ $force -eq 1 ] || $ask "$question"; then
-            if [ -d "$origin" ]; then
-              if ask "Delete {{$origin}}?"; then
-                system rm -r "$origin"
-              else
-                abort
-              fi
-            elif [ -e "$origin" -o -L "$origin" ]; then
-              system rm "$origin"
-            fi
-
-            if [ ! -e "$origin" -o $DRYRUN -eq 1 ] && system ln -s "$target" "$origin"; then
-              status "Successfully installed {{$origin}}"
-            else
-              error "Error while installing {{$origin}}"
-              continue
-            fi
-          else
-            status=255
+          if [ -d "$path" -a $status -eq 255 ]; then
+            add_paths "$path"/*
           fi
         done
-      fi
+      }
+
+      msg
+      add_paths "$DOTFILES"/*
+      msg
+      ;;
+    install)
+      [ $# -eq 0 ] && usage
+
+      for path in "$@"; do
+        origin=`realpath -s -- "$path"`
+        target=`target "$origin"`
+        force=0
+
+        if [[ "$origin" =~ ^$DOTFILES/ ]]; then
+          target="$origin"
+          origin=`origin "$target"`
+        fi
+
+        if [ ! -e "$target" ]; then
+          error "Path not found: {{$target}}"
+          continue
+        elif ! validate "$origin"; then
+          continue
+        elif [ -L "$origin" ]; then
+          local link=`readlink "$origin" 2>/dev/null`
+          if [ ! -e "$link" ]; then
+            error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
+            force=1
+          elif [[ "$link" =~ ^$DOTFILES/ ]]; then
+            msg "Already symlinked: {{$origin}}"
+            continue
+          else
+            msg "Already symlinked: {{$origin}} -> [1;36m$link[0m"
+          fi
+        fi
+
+        if [ -e "$origin" -o -L "$origin" ]; then
+          ask="ask"
+          question="Delete {{$origin}} and install symlink?"
+        else
+          ask="ask_yes"
+          question="Install symlink for {{$origin}}?"
+        fi
+
+        if [ $force -eq 1 ] || $ask "$question"; then
+          if [ -d "$origin" ]; then
+            if ask "Delete {{$origin}}?"; then
+              system rm -r "$origin"
+            else
+              abort
+            fi
+          elif [ -e "$origin" -o -L "$origin" ]; then
+            system rm "$origin"
+          fi
+
+          if [ ! -e "$origin" -o $DRYRUN -eq 1 ] && system ln -s "$target" "$origin"; then
+            status "Successfully installed {{$origin}}"
+          else
+            error "Error while installing {{$origin}}"
+            continue
+          fi
+        else
+          status=255
+        fi
+      done
       ;;
     add)
       [ $# -eq 0 ] && usage
@@ -290,22 +295,12 @@ function run {
         fi
       done
       ;;
-    st*)
-      git ignore-errors status "$@"
-      ;;
-    ci|commit)
+    ca|commitall)
       git ignore-errors add .
       git ignore-errors commit -a "$@"
       ;;
-    push|pull|log|diff)
-      git ignore-errors $command "$@"
-      ;;
-    sub*)
-      git ignore-errors submodule "$@"
-      ;;
     *)
-      usage
-      exit 255
+      git ignore-errors $command "$@"
       ;;
   esac
 
@@ -321,22 +316,23 @@ fi
 unset command
 while [ $# -gt 0 ]; do
   case "$1" in
-    -f|--force)   FORCE=1;;
+    -h|--help)    usage;;
     -n|--dry-run) DRYRUN=1;;
     -v|--verbose) VERBOSE=1;;
+    -q|--quiet)   QUIET=1;;
+    -f|--force)   FORCE=1;;
     *)
-      if [ "${1:0:1}" = "-" -a ${#command[@]} -eq 0 ]; then
-        usage
-      else
-        command=( "${command[@]}" "$1" )
-      fi
+      command=( "$@" )
+      break
       ;;
   esac
   shift
 done
 
-STATUS=0
-
-run "${command[@]}"
-
-exit $STATUS
+if [ -n "$command" ]; then
+  STATUS=0
+  run "${command[@]}"
+  exit $STATUS
+else
+  usage
+fi

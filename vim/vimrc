@@ -308,7 +308,7 @@
   nnoremap <silent> <leader>g :call GrepCurrentPattern()<CR>
 
   " ,i - toggle indent guides
-  nmap   <Leader>i :IndentGuidesToggle<CR>
+  nmap <Leader>i :IndentGuidesToggle<CR>
 
   " ,n - next buffer
   nnoremap <silent> <leader>n :bnext<CR>

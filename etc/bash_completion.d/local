@@ -2,7 +2,7 @@
 
 complete -F _command start
 complete -F _pgrep psgrep
-complete -o bashdefault -o default -W 'sync update commit install add status push pull log diff submodule' dotfiles
+complete -o bashdefault -o default -o nospace -F _git -W 'sync up update ca commitall init install add' dotfiles
 
 complete -f -X '!*.deb' pkginstall
 

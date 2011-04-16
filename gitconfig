@@ -6,11 +6,7 @@
 	email = markus-koller@gmx.ch
 
 [color]
-	branch = auto
-	diff = auto
-	interactive = auto
-	status = auto
-	pager = true
+	ui = auto
 
 [alias]
 	ci = commit
