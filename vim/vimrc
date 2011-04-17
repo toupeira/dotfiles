@@ -8,13 +8,13 @@
 
   " FuzzyFinder/L9 requires Vim 7.2 and floating-point support
   if v:version < '702' || !has('float')
-    call add(g:pathogen_disabled, 'vim-l9')
-    call add(g:pathogen_disabled, 'vim-fuzzyfinder')
+    call add(g:pathogen_disabled, 'l9')
+    call add(g:pathogen_disabled, 'fuzzyfinder')
   endif
 
   " Gundo requires Vim 7.3 and Python
   if v:version < '703' || !has('python')
-    call add(g:pathogen_disabled, 'gundo.vim')
+    call add(g:pathogen_disabled, 'gundo')
   endif
 
   call pathogen#runtime_append_all_bundles()
@@ -56,7 +56,7 @@
 " Display Settings
 " {{{
 
-  if &term == 'screen-bce' || &term == 'rxvt-unicode'
+  if (&term == 'screen-bce' || &term == 'rxvt-unicode') && $TERM_ORIGINAL != 'ansi'
     " enable 256 color support for screen and rxvt
     set t_Co=256
 
@@ -199,12 +199,19 @@
 
   let mapleader = ","
 
+  " command-mode aliases
+  cnoreabbrev E e
+  cnoreabbrev W w
+  cnoreabbrev WQ wq
+  cnoreabbrev Q q
+  cnoreabbrev QA qa
+
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
 
   " move between functions with Tab / Shift+Tab in normal mode
-  nmap <Tab> ]]
-  nmap <S-Tab> [[
+  nmap <silent> <Tab> :silent! normal ]]<CR>
+  nmap <silent> <S-Tab> :silent! normal [[<CR>
 
   " move to matching pair with Tab in visual mode
   vmap <Tab> %

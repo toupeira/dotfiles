@@ -1,10 +1,10 @@
-silent snippet pr
+snippet pr
 	print "${1:string}"${2};
 
-silent snippet ar
+snippet ar
 	array('${1}' => ${2})
 
-silent snippet cla
+snippet cla
 	class ${1:ClassName}
 	{
 		${2}
@@ -14,7 +14,12 @@ silent snippet cla
 		}
 	}
 
-silent snippet fun
+snippet fn
+	function ${1:FunctionName}(${2}) {
+		${3:// code...}
+	}
+
+snippet meth
 	${1:public }function ${2:FunctionName}(${3}) {
 		${4:// code...}
 	}
