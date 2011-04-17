@@ -1,6 +1,6 @@
 #!/bin/bash
 
-workspaces=( `wmctrl -d | awk '{ print $10 }'` )
+workspaces=( main work work work work download )
 active=`wmctrl -d | awk '/\*/ { print int($1) }'`
 count=${#workspaces[@]}
 
