@@ -1,5 +1,5 @@
 [core]
-	excludesfile = /home/toupeira/.gitexcludes
+	excludesfile = ~/.gitexcludes
 
 [user]
 	name = Markus Koller
