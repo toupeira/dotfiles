@@ -306,21 +306,21 @@ let loaded_minibufexplorer = 1
 " MBE Keyboard Mappings {{{
 " If we don't already have keyboard mappings for MBE then create them 
 " 
-" if !hasmapto('<Plug>MiniBufExplorer')
-"   map <unique> <Leader>mbe <Plug>MiniBufExplorer
-" endif
-" if !hasmapto('<Plug>CMiniBufExplorer')
-"   map <unique> <Leader>mbc <Plug>CMiniBufExplorer
-" endif
-" if !hasmapto('<Plug>UMiniBufExplorer')
-"   map <unique> <Leader>mbu <Plug>UMiniBufExplorer
-" endif
-" if !hasmapto('<Plug>TMiniBufExplorer')
-"   map <unique> <Leader>mbt <Plug>TMiniBufExplorer
-" endif
-" if !hasmapto('<Plug>MBEMarkCurrent')
-"   map <unique> <Leader>mq <Plug>MBEMarkCurrent
-" endif
+if !hasmapto('<Plug>MiniBufExplorer')
+  map <unique> <Leader>mbe <Plug>MiniBufExplorer
+endif
+if !hasmapto('<Plug>CMiniBufExplorer')
+  map <unique> <Leader>mbc <Plug>CMiniBufExplorer
+endif
+if !hasmapto('<Plug>UMiniBufExplorer')
+  map <unique> <Leader>mbu <Plug>UMiniBufExplorer
+endif
+if !hasmapto('<Plug>TMiniBufExplorer')
+  map <unique> <Leader>mbt <Plug>TMiniBufExplorer
+endif
+if !hasmapto('<Plug>MBEMarkCurrent')
+  map <unique> <Leader>mq <Plug>MBEMarkCurrent
+endif
 " }}}
 " MBE <Script> internal map {{{
 " 
