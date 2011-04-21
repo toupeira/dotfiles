@@ -221,10 +221,6 @@
   cnoremap <C-a> <Home>
   cnoremap <C-e> <End>
 
-  " switch windows in insert mode
-  inoremap <C-j> <C-o><C-w>j
-  inoremap <C-k> <C-o><C-w>k
-
   " scroll in insert mode
   inoremap <C-e> <C-o><C-e>
   inoremap <C-y> <C-o><C-y>
