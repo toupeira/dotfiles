@@ -158,7 +158,7 @@ function run {
 
       msg
       status "{{Committing local changes...}}"
-      run commitall -m "Sync dotfiles"
+      run commitall
 
       msg
       status "{{Pushing local changes...}}"
@@ -297,7 +297,7 @@ function run {
       ;;
     ca|commitall)
       git ignore-errors add .
-      git ignore-errors commit -a "$@"
+      git ignore-errors commit -a -m "Sync dotfiles" "$@"
       ;;
     *)
       git ignore-errors $command "$@"
