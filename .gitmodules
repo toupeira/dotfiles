@@ -37,6 +37,3 @@
 [submodule "vim/bundle/fuzzyfinder"]
 	path = vim/bundle/fuzzyfinder
 	url = https://github.com/vim-scripts/FuzzyFinder.git
-[submodule "vim/bundle/markdown-preview"]
-	path = vim/bundle/markdown-preview
-	url = https://github.com/robgleeson/vim-markdown-preview.git

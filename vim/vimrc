@@ -253,8 +253,8 @@
     endif
   endfunction
 
-  nnoremap Q :call ToggleList('Quickfix List', 'c')<CR>
-  nnoremap E :call ToggleList('Location List', 'l')<CR>
+  nnoremap <silent> Q :call ToggleList('Quickfix List', 'c')<CR>
+  nnoremap <silent> E :call ToggleList('Location List', 'l')<CR>
 
   " ,/, F2 - remove highlighted search
   nnoremap <silent> ,/ :noh<CR>
@@ -324,10 +324,8 @@
   function! PreviewFile()
     if &filetype == 'html' || &filetype == 'xhtml'
       !x-www-browser "%"
-    elseif &filetype == 'markdown'
-      Mm
-		else
-			echo "Don't know how to preview ".&filetype." files"
+    else
+      Hammer
     endif
   endfunction
   nnoremap <silent> ,P :call PreviewFile()<CR>
