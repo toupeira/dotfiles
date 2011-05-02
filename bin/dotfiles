@@ -177,6 +177,7 @@ function run {
       run pull
       run submodule sync -q
       run submodule update --init
+      run submodule foreach git pull -q origin master
       ;;
     init)
       function add_paths {
