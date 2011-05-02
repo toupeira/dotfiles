@@ -17,6 +17,11 @@
     call add(g:pathogen_disabled, 'gundo')
   endif
 
+  " Hammer requires Ruby
+  if !has('ruby')
+    call add(g:pathogen_disabled, 'hammer')
+  endif
+
   call pathogen#runtime_append_all_bundles()
   call pathogen#helptags()
 
