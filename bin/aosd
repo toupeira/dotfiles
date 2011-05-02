@@ -27,7 +27,6 @@ done
 
 killall -9 aosd_cat &>/dev/null
 
-echo $options
 if [ -n "$1" ]; then
   echo "$@" | eval aosd_cat $options &>/dev/null &
 else
