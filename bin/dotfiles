@@ -160,9 +160,11 @@ function run {
       status "{{Committing local changes...}}"
       run commitall
 
-      msg
-      status "{{Pushing local changes...}}"
-      run push
+      if git status | grep -q ahead; then
+        msg
+        status "{{Pushing local changes...}}"
+        run push
+      fi
 
       msg
       status "{{Updating submodules...}}"
