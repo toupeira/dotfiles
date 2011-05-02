@@ -20,7 +20,7 @@ function usage {
   echo
   echo "Actions:"
   echo "  sync               Update, commit and push"
-  echo "  up, update         Updates repository and submodules"
+  echo "  up, update         Update submodules (fetch new commits)"
   echo "  ca, commitall      Commit all changes"
   echo "  init               Install symlinks for all dotfiles"
   echo "  install PATH...    Install symlink for PATH"
@@ -167,17 +167,20 @@ function run {
       fi
 
       msg
-      status "{{Updating submodules...}}"
+      status "{{Checking out submodules...}}"
       run submodule sync -q
       run submodule update --init
 
       msg
       ;;
-    update)
-      run pull
+    up|update)
+      msg
+      status "{{Updating submodules...}}"
+      run pull -q
       run submodule sync -q
-      run submodule update --init
-      run submodule foreach git pull -q origin master
+      run submodule foreach git pull origin master
+
+      msg
       ;;
     init)
       function add_paths {
