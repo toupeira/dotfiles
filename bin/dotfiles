@@ -157,6 +157,11 @@ function run {
       run pull
 
       msg
+      status "{{Checking out submodules...}}"
+      run submodule sync -q
+      run submodule update --init
+
+      msg
       status "{{Committing local changes...}}"
       run commitall
 
@@ -167,11 +172,6 @@ function run {
       fi
 
       msg
-      status "{{Checking out submodules...}}"
-      run submodule sync -q
-      run submodule update --init
-
-      msg
       ;;
     up|update)
       msg
@@ -179,6 +179,10 @@ function run {
       run pull -q
       run submodule sync -q
       run submodule foreach git pull origin master
+      run commitall
+      if git status | grep -q ahead; then
+        run push
+      fi
 
       msg
       ;;
