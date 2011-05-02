@@ -17,8 +17,8 @@
     call add(g:pathogen_disabled, 'gundo')
   endif
 
-  " Hammer requires Ruby
-  if !has('ruby')
+  " Hammer requires Ruby and RubyGems
+  if !has('ruby') || !filereadable('/usr/bin/gem')
     call add(g:pathogen_disabled, 'hammer')
   endif
 
