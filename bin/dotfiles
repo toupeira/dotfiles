@@ -179,7 +179,7 @@ function run {
       run pull -q
       run submodule sync -q
       run submodule foreach git pull origin master
-      run commitall
+      git commit -m "Update submodules" .gitmodules
       if git status | grep -q ahead; then
         run push
       fi
