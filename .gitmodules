@@ -39,4 +39,4 @@
 	url = https://github.com/vim-scripts/FuzzyFinder.git
 [submodule "vim/bundle/hammer"]
 	path = vim/bundle/hammer
-	url = git://github.com/robgleeson/hammer.vim.git
+	url = https://github.com/robgleeson/hammer.vim.git
