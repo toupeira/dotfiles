@@ -179,8 +179,8 @@ function run {
       run pull -q
       run submodule sync -q
       run submodule foreach git pull origin master
-      git commit -m "Update submodules" .gitmodules
-      if git status | grep -q ahead; then
+      run commit -m "Update submodules" .gitmodules
+      if git status | grep -q "Your branch is ahead"; then
         run push
       fi
 
