@@ -66,8 +66,8 @@
     set t_Co=256
 
     " don't clear screen on exit
-    set t_ti=
-    set t_te=
+    "set t_ti=
+    "set t_te=
   endif
 
   " syntax highlighting
@@ -230,7 +230,7 @@
   inoremap <C-e> <C-o><C-e>
   inoremap <C-y> <C-o><C-y>
 
-  " quickfix window and location list
+  " ,q / ,e - toggle quickfix window and location list
   function! GetBufferList()
     redir =>buflist
     silent! ls
@@ -258,8 +258,8 @@
     endif
   endfunction
 
-  nnoremap <silent> Q :call ToggleList('Quickfix List', 'c')<CR>
-  nnoremap <silent> E :call ToggleList('Location List', 'l')<CR>
+  nnoremap <silent> ,q :call ToggleList('Quickfix List', 'c')<CR>
+  nnoremap <silent> ,e :call ToggleList('Location List', 'l')<CR>
 
   " ,/, F2 - remove highlighted search
   nnoremap <silent> ,/ :noh<CR>
@@ -361,9 +361,6 @@
 
   " ,W - clear trailing whitespace
   nnoremap <silent> ,W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w
-
-  " ,q - show mappings for exiting
-  nnoremap <silent> ,q :echo "Quit: ,Q  Force: ,!!"<CR>
 
   " ,Q - quit all
   nnoremap <silent> ,Q :quitall<CR>
