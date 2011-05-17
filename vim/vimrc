@@ -104,6 +104,10 @@
     set t_fs=\
   endif
 
+  if exists($STY)
+    set titlestring=%t\ %m
+  endif
+
 " }}}
 
 " Text Formatting
