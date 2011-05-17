@@ -104,7 +104,7 @@
     set t_fs=\
   endif
 
-  if exists($STY)
+  if $STY
     set titlestring=%t\ %m
   endif
 
