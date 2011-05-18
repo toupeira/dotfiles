@@ -43,6 +43,3 @@
 [submodule "vim/bundle/gitv"]
 	path = vim/bundle/gitv
 	url = https://github.com/gregsexton/gitv.git
-[submodule "vim/bundle/css-color"]
-	path = vim/bundle/css-color
-	url = https://github.com/skammer/vim-css-color.git
