@@ -413,6 +413,8 @@
   let g:miniBufExplModSelTarget = 1
   let g:miniBufExplTabWrap = 1
   let g:miniBufExplUseSingleClick = 1
+  let g:miniBufExplCheckDupeBufs = 0
+
   highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
   highlight MBEVisibleActive cterm=bold ctermbg=28 gui=bold guibg=#368736
   highlight MBEVisibleChangedActive cterm=bold ctermbg=124 gui=bold guibg=#cc5653
