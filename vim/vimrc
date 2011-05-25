@@ -151,18 +151,16 @@
 " Custom Filetype Settings
 " {{{
 
-  autocmd FileType alsaconf,asm,autoit,context,css,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,php.xhtml,smarty,sql,plaintex,ruby,sh,svn,tex,textile,vb,vim,xhtml,xml,xslt setlocal ts=2 sts=2 sw=2 expandtab nocindent
-  autocmd FileType c,cs,cpp,php,php.xhtml setlocal ts=3 sts=3 sw=3 expandtab
+  autocmd FileType alsaconf,asm,autoit,context,css,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,smarty,sql,plaintex,ruby,sh,svn,tex,textile,vb,vim,xhtml,xml,xslt setlocal ts=2 sts=2 sw=2 expandtab nocindent
+  autocmd FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3 expandtab
   autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
   autocmd FileType apache setlocal ts=4 sts=4 sw=4
   autocmd FileType mail setlocal ts=2 sts=2 sw=2 expandtab tw=80 lbr
   autocmd FileType tex,plaintex,context setlocal lbr
   autocmd FileType ruby compiler ruby | setlocal makeprg=ruby\ -c\ %
 
-  "autocmd FileType php,php.xhtml compiler php | setlocal makeprg=php\ -lq\ % errorformat=%m\ in\ %f\ on\ line\ %l
-
   autocmd BufEnter /home/*/bin/*.run setf sh
-  autocmd BufEnter *.php,*.inc,*.thtml setf php.xhtml
+  autocmd BufEnter *.inc,*.thtml setf php
   autocmd BufEnter *.boo setf python
   autocmd BufEnter *.io setf io
   autocmd BufEnter *.red setf textile
