@@ -112,6 +112,9 @@ alias ifconfig='sudo ifconfig'
 alias ifup='sudo ifup'
 alias ifdown='sudo ifdown'
 alias tcpkill='sudo tcpkill'
+alias fdisk='sudo fdisk'
+alias parted='sudo parted'
+alias lvm='sudo lvm'
 
 # program aliases
 alias fortune='fortune -a'

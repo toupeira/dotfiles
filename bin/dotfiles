@@ -293,9 +293,12 @@ function run {
 
         ask_yes "Add {{$origin}} to repository?" || continue
 
-        if system mkdir -p "$target_dir" && system mv "$origin" "$target" && system ln -s "$target" "$origin"; then
+        if (test -d "$target_dir" || system mkdir -p "$target_dir") \
+          && system mv "$origin" "$target" \
+          && system ln -s "$target" "$origin"
+        then
           system rm -f "$target_dir/.skip"
-          system sudo chown "$USER.users" "$target"
+          system chown "$USER.users" "$target"
           [ -d "$target" ] && system chmod g+s "$target"
 
           status "Successfully added {{$target}}"

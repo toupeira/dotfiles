@@ -18,3 +18,6 @@ export GREP_OPTIONS="-i --color=auto --exclude=*.svn*"
 export ACK_OPTIONS="-i"
 export IRB_HISTORY_SIZE=3000
 export RI="--format ansi --no-pager"
+
+export VDPAU_NVIDIA_SYNC_DISPLAY_DEVICE="DFP-1"
+#export __GL_SYNC_TO_VBLANK="1"
