@@ -39,9 +39,9 @@ class XShutdown < Gtk::Window
     signal_connect('destroy') { Gtk.main_quit }
     signal_connect('key-press-event') do |view, event|
       Gtk.main_quit if [
-        Gdk::Keyval::GDK_Escape,
-        Gdk::Keyval::GDK_q,
-        Gdk::Keyval::GDK_Q,
+        Gdk::Keyval::GDK_KEY_Escape,
+        Gdk::Keyval::GDK_KEY_q,
+        Gdk::Keyval::GDK_KEY_Q,
       ].include? event.keyval
     end
 
