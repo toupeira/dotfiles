@@ -1,0 +1,9 @@
+#!/bin/bash
+
+function xpid { pgrep -x Xorg | head -1; }
+
+PID=`xpid`
+
+while xpid | fgrep -qx "$PID"; do
+  "$@"
+done
