@@ -29,7 +29,7 @@ if [[ "$TERM" =~ "rxvt" ]]; then
   function command_title {
     case "$BASH_COMMAND" in
       *\033]0*|*]*) ;;
-      *) 
+      *)
         cmd=${BASH_COMMAND/$HOME/\~}
         echo -ne "]1;$cmd ($_pwd)\007]2;$cmd ($USER@$HOSTNAME:$_pwd)\007";;
     esac
@@ -127,7 +127,6 @@ alias fetchmail='fetchmail -v'
 alias wget='wget -c'
 alias gvi='gvim'
 alias gvi.add='gvim --remote-silent'
-alias mysql='mysql -u root'
 alias ruby='ruby -w'
 alias open='xdg-open'
 alias gcc='gcc -Wall'
@@ -141,6 +140,30 @@ alias ack='ack-grep'
 alias cadaver='EDITOR="gvim -f" cadaver'
 alias archive.sync='archive.checkout; archive.commit'
 alias psgrep='pgrep -fl'
+
+# MySQL aliases and functions
+alias mysql='mysql -u root'
+
+function mysql-ps {
+  uptime
+  sudo mysqladmin --defaults-file=/etc/mysql/debian.cnf status || return 1
+  echo
+
+  command="sudo mysql --defaults-file=/etc/mysql/debian.cnf -e 'SHOW FULL PROCESSLIST' -B | sort -k 5"
+  if [ -n "$1" ]; then
+    eval $command | egrep "$1"
+  else
+    eval $command | egrep -v "\sSleep\s"
+  fi
+}
+
+function mysql-kill {
+  sudo mysql --defaults-file=/etc/mysql/debian.cnf -e "KILL $1"
+}
+
+function mysql-top {
+  watch -n 1 "bash -c '. /etc/profile; mysql-ps $1'";
+}
 
 function down {
   local i
