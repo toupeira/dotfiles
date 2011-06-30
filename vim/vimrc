@@ -77,7 +77,19 @@
   colorscheme desertink
 
   " statusline
-  set statusline=%<%f\ %h%m%r%y%{\"[\".(&fenc==\"\"?&enc:&fenc).((exists(\"+bomb\")\ &&\ &bomb)?\",B\":\"\").\"]\ \"}%=%-20.(%l/%L,%c%V%)\ %P
+  hi! StatusLineGreen cterm=bold,reverse ctermfg=231 ctermbg=22 gui=bold,reverse guifg=#c2bfa5 guibg=#3a663a
+  hi! StatusLineRed   cterm=bold,reverse ctermfg=231 ctermbg=88 gui=bold,reverse guifg=#c2bfa5 guibg=#913d3b
+
+  set statusline=
+  set stl+=\ %#StatusLineNC#%n:%*\ %<\"%f\"\      " buffer number and file name
+  set stl+=%#StatusLineRed#%r%*                   " read-only flag
+  set stl+=%#StatusLineRed#%m%*                   " modified flag
+  set stl+=%y                                     " file type
+  set stl+=[%{strlen(&fenc)?&fenc:'none'}         " file encoding
+  set stl+=%{&bomb?',BOM':''}                     " BOM flag
+  set stl+=%{&ff!='unix'?','.toupper(&ff):''}]\   " file format
+  set stl+=%=                                     " left/right separator
+  set stl+=%-20.(%l/%L,%c%)\ %P                   " cursor position
 
   " line numbers
   set number

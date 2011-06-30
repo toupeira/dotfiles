@@ -18,7 +18,6 @@ URxvt*saveLines:	1000
 URxvt*iso14755:		false
 URxvt*iso14755_52:	false
 URxvt*visualBell:	true
-URxvt*urlLauncher:	x-www-browser
 URxvt*matcher.button:	1
 URxvt*perl-ext-common:	selection,matcher
 
