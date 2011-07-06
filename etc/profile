@@ -23,17 +23,8 @@ if [[ "$TERM" =~ "rxvt" ]]; then
   if [ "$SSH_CLIENT" ]; then
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;@$HOSTNAME:$_pwd\007]2;$USER@$HOSTNAME:$_pwd\007"'
   else
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;$_pwd\007]2;$USER@$HOSTNAME:$_pwd\007"'
+    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;$_pwd\007]2;$USER:$_pwd\007"'
   fi
-
-  function command_title {
-    case "$BASH_COMMAND" in
-      *\033]0*|*]*) ;;
-      *)
-        cmd=${BASH_COMMAND/$HOME/\~}
-        echo -ne "]1;$cmd ($_pwd)\007]2;$cmd ($USER@$HOSTNAME:$_pwd)\007";;
-    esac
-  }
 fi
 
 shopt -s histappend checkwinsize
