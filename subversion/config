@@ -98,7 +98,7 @@ password-stores = gnome-keyring
 ### Set global-ignores to a set of whitespace-delimited globs
 ### which Subversion will ignore in its 'status' output, and
 ### while importing or adding files and directories.
-global-ignores = *.pyc *.o *.lo *.la *.exe *.swp *.db *.bak *.old *.dat *.tmp *.mdb *~
+global-ignores = *.pyc *.o *.lo *.la *.exe *.swp *.db *.bak *.old *.dat *.tmp *.mdb *~ ~*
 ### Set log-encoding to the default encoding for log messages
 # log-encoding = latin1
 ### Set use-commit-times to make checkout/update/switch/revert
