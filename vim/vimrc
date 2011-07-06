@@ -77,8 +77,8 @@
   colorscheme desertink
 
   " statusline
-  hi! StatusLineGreen cterm=bold,reverse ctermfg=231 ctermbg=22 gui=bold,reverse guifg=#c2bfa5 guibg=#3a663a
   hi! StatusLineRed   cterm=bold,reverse ctermfg=231 ctermbg=88 gui=bold,reverse guifg=#c2bfa5 guibg=#913d3b
+  hi! StatusLineGreen cterm=bold,reverse ctermfg=231 ctermbg=22 gui=bold,reverse guifg=#c2bfa5 guibg=#3a663a
 
   set statusline=
   set stl+=\ %#StatusLineNC#%n:%*\ %<\"%f\"\      " buffer number and file name
