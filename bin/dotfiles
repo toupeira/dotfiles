@@ -329,11 +329,11 @@ fi
 unset command
 while [ $# -gt 0 ]; do
   case "$1" in
-    -h|--help)    usage;;
     -n|--dry-run) DRYRUN=1;;
     -v|--verbose) VERBOSE=1;;
     -q|--quiet)   QUIET=1;;
     -f|--force)   FORCE=1;;
+    -*)           usage;;
     *)
       command=( "$@" )
       break
