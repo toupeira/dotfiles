@@ -457,4 +457,7 @@
   runtime scripts/closetag.vim
   autocmd BufAdd,BufRead * runtime scripts/closetag.vim
 
+  " tcomment
+  let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
+
 " }}}
