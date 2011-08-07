@@ -61,7 +61,7 @@ while [ $# -gt 0 ]; do
     -p ) shift; exec $0 -f -t "$@" .;;
     -t)
       sort="sort -rn"
-      format="%C@ "
+      format="%T@ "
       shift
       ;;
     -tail)
@@ -83,7 +83,7 @@ while [ $# -gt 0 ]; do
       else
         while read path; do
           add_path "$path"
-        done < <(find "$1" -mindepth 1 -maxdepth 2 -printf "$format%p\n" | $sort | $tail | sed -r 's/^ *[0-9\.]+ //')
+        done < <(find "$1" -mindepth 1 -maxdepth 1 -printf "$format%p\n" | $sort | $tail | sed -r 's/^ *[0-9\.]+ //')
       fi
       shift
       ;;

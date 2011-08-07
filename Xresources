@@ -14,7 +14,7 @@ URxvt*foreground:	#fff
 URxvt*fading:		25
 URxvt*title:		shell
 URxvt*iconName:		shell
-URxvt*saveLines:	1000
+URxvt*saveLines:	10000
 URxvt*iso14755:		false
 URxvt*iso14755_52:	false
 URxvt*visualBell:	true
