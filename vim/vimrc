@@ -86,7 +86,12 @@
   hi! StatusLineGreen cterm=bold,reverse ctermfg=231 ctermbg=22 gui=bold,reverse guifg=#c2bfa5 guibg=#3a663a
 
   set statusline=
-  set stl+=\ %#StatusLineNC#%n:%*\ %<\"%f\"\      " buffer number and file name
+
+  set stl+=\ %#StatusLineNC#%n:%*                 " buffer number
+  if $SSH_CLIENT != ""
+    set stl+=%{toupper(hostname())}:              " hostname
+  endif
+  set stl+=\ %<\"%f\"\                            "file name
   set stl+=%#StatusLineRed#%r%*                   " read-only flag
   set stl+=%#StatusLineRed#%m%*                   " modified flag
   set stl+=%y                                     " file type
