@@ -37,7 +37,7 @@ rm -f $playlist
 
 mplayer="mplayer -playlist $playlist"
 
-unset format options regex debug
+unset format options regex debug skipopen
 sort="cat"
 tail="cat"
 
@@ -49,6 +49,7 @@ while [ $# -gt 0 ]; do
     -mono ) mplayer="$mplayer -af pan=1:0.5:0.5"; shift;;
     -stereo ) mplayer="$mplayer -af pan=2:1:0:0:1"; shift;;
     -analog ) mplayer="$mplayer -ac a52,"; shift;;
+    -so ) skipopen=1; shift;;
     -re ) regex="$2"; shift 2;;
     -fo ) options="$2"; shift 2;;
     -f ) mplayer="$mplayer -fs"; shift;;
@@ -58,7 +59,7 @@ while [ $# -gt 0 ]; do
     -s ) mplayer="$mplayer -shuffle"; shift;;
     -o ) mplayer="$mplayer $2"; shift 2;;
     -size ) options="-size +$2"; shift 2;;
-    -p ) shift; exec $0 -f -t "$@" .;;
+    -p ) shift; exec $0 -f -t -so -mono "$@";;
     -t)
       sort="sort -rn"
       format="%T@ "
@@ -92,8 +93,24 @@ done
 
 
 if [ -s $playlist ]; then
+  if [ "$skipopen" ]; then
+    echo -n "Filtering incomplete files: "
+    (cat $playlist | while read file; do
+      size=`du --block-size=1 --apparent-size "$file" | cut -f1`
+      used=`du --block-size=1 "$file" | cut -f1`
+      let done=(used*10)/size
+
+      if [ $done -gt 5 ]; then
+        echo "$file"
+      fi
+      echo -n "." >&2
+    done) > $playlist.tmp && mv $playlist.tmp $playlist
+    echo
+  fi
+
   $mplayer
   [ "$debug" ] || rm -f $playlist
 else
+  echo "Playlist empty."
   usage
 fi
