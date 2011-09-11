@@ -35,7 +35,7 @@ export HISTCONTROL="ignoreboth"
 
 # ls
 eval `dircolors -b`
-export LS_COLORS="$LS_COLORS:ow=30;42:*.wmv=01;35:*.rm=01;35:*.ogm=01;35:*.mp4=01;35"
+export LS_COLORS="$LS_COLORS:ow=30;42:*.avi=01;35:*.wmv=01;35:*.rm=01;35:*.ogm=01;35:*.mp4=01;35:*.mkv=01;35:*.m4v=01;35"
 alias ls='ls --color'
 alias ll='ls -lh'
 alias l='ls -A'

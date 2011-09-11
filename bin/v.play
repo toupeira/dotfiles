@@ -59,7 +59,7 @@ while [ $# -gt 0 ]; do
     -s ) mplayer="$mplayer -shuffle"; shift;;
     -o ) mplayer="$mplayer $2"; shift 2;;
     -size ) options="-size +$2"; shift 2;;
-    -p ) shift; exec $0 -f -t -so -mono "$@";;
+    -p ) shift; exec $0 -f -t -mono "$@";;
     -t)
       sort="sort -rn"
       format="%T@ "
@@ -94,18 +94,29 @@ done
 
 if [ -s $playlist ]; then
   if [ "$skipopen" ]; then
-    echo -n "Filtering incomplete files: "
-    (cat $playlist | while read file; do
+    echo
+    echo "Filtering incomplete files:"
+    (while read file; do
       size=`du --block-size=1 --apparent-size "$file" | cut -f1`
       used=`du --block-size=1 "$file" | cut -f1`
       let done=(used*10)/size
 
       if [ $done -gt 5 ]; then
         echo "$file"
+      else
+        echo "  - Skipping $file" >&2
       fi
-      echo -n "." >&2
-    done) > $playlist.tmp && mv $playlist.tmp $playlist
+    done < <(cat $playlist)) > $playlist.tmp
+
+    old=`grep -c . $playlist`
+    new=`grep -c . $playlist.tmp`
+    let diff=old-new
+    [ $diff -gt 0 ] && echo
+    echo "Removed $diff incomplete files."
     echo
+    sleep 1
+
+    mv $playlist.tmp $playlist
   fi
 
   $mplayer
