@@ -445,7 +445,7 @@
   highlight MBEChanged ctermbg=88 guibg=#913d3b
 
   " nerd tree
-  let g:NERDTreeQuitOnOpen = 1
+  "let g:NERDTreeQuitOnOpen = 1
 
   " syntastic
   let g:syntastic_enable_signs = 1
@@ -469,9 +469,10 @@
   let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
 
   " tagbar
-  let g:tagbar_width = 30
+  let g:tagbar_width = 31
   let g:tagbar_autofocus = 1
   let g:tagbar_sort = 0
   let g:tagbar_compact = 1
+  let g:tagbar_singleclick = 1
 
 " }}}
