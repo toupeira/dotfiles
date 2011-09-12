@@ -95,7 +95,7 @@
   set stl+=%#StatusLineRed#%r%*                   " read-only flag
   set stl+=%#StatusLineRed#%m%*                   " modified flag
   set stl+=%y                                     " file type
-  set stl+=[%{strlen(&fenc)?&fenc:'none'}         " file encoding
+  set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
   set stl+=%{&bomb?',BOM':''}                     " BOM flag
   set stl+=%{&ff!='unix'?','.toupper(&ff):''}]\   " file format
   set stl+=%=                                     " left/right separator
