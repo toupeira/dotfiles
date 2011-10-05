@@ -26,17 +26,16 @@ endif
   if !exists('g:gui_loaded')
     let g:gui_loaded = 1
 
-    set lines=50
+    set lines=80
     if &diff
-      set lines=60
-      set columns=200
+      set columns=240
     else
-      set columns=120
+      set columns=160
     end
 
     " font
     if has('mac')
-      set guifont=Menlo\ Regular:h12
+      set guifont=Menlo\ Regular:h13
     elseif has('unix')
       set guifont=Monaco\ 10
     else
