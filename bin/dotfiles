@@ -3,16 +3,15 @@
 # The dotfiles repository
 DOTFILES=${DOTFILES:-~/.dotfiles}
 
-# Options
-DRYRUN=0
-VERBOSE=0
-QUIET=0
-FORCE=0
+if [ ! -d "$DOTFILES" ]; then
+  error "Dotfiles not found in {{$DOTFILES}}"
+  exit 1
+fi
 
 # Use Homebrew GNU commands on OS X if available
+shopt -s expand_aliases
 for command in readlink sed; do
   if which g$command &>/dev/null; then
-    shopt -s expand_aliases
     alias $command="g$command"
   fi
 done
@@ -328,13 +327,13 @@ function run {
   return $status
 }
 
-if [ ! -d "$DOTFILES" ]; then
-  error "Dotfiles not found in {{$DOTFILES}}"
-  exit 1
-fi
-
 # Parse arguments
-unset command
+DRYRUN=0
+VERBOSE=0
+QUIET=0
+FORCE=0
+COMMAND=
+
 while [ $# -gt 0 ]; do
   case "$1" in
     -n|--dry-run) DRYRUN=1;;
@@ -343,16 +342,16 @@ while [ $# -gt 0 ]; do
     -f|--force)   FORCE=1;;
     -*)           usage;;
     *)
-      command=( "$@" )
+      COMMAND=( "$@" )
       break
       ;;
   esac
   shift
 done
 
-if [ -n "$command" ]; then
+if [ -n "$COMMAND" ]; then
   STATUS=0
-  run "${command[@]}"
+  run "${COMMAND[@]}"
   exit $STATUS
 else
   usage
