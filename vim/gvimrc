@@ -35,8 +35,10 @@ endif
     end
 
     " font
-    if has('unix')
-      set guifont=Monospace\ 9
+    if has('mac')
+      set guifont=Menlo\ Regular:h12
+    elseif has('unix')
+      set guifont=Monaco\ 10
     else
       set guifont=DejaVu_Sans_Mono:h9:cANSI
     endif

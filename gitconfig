@@ -12,6 +12,7 @@
 	ci = commit -v
 	co = checkout
 	st = status
+	sw = checkout
 	stat = status
 	sub = submodule
 	unstage = reset HEAD

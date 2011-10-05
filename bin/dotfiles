@@ -9,15 +9,13 @@ VERBOSE=0
 QUIET=0
 FORCE=0
 
-# Check required commands
-errors=0
-for command in git realpath dirname; do
-  if ! which $command &>/dev/null; then
-    errors=1
-    echo "Could not find required command [1m$command[0m"
+# Use Homebrew GNU commands on OS X if available
+for command in readlink sed; do
+  if which g$command &>/dev/null; then
+    shopt -s expand_aliases
+    alias $command="g$command"
   fi
 done
-[ "$errors" -ne 0 ] && exit 1
 
 function usage {
   echo "Usage: `basename $0` [options] COMMAND [args]"
@@ -224,7 +222,7 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        origin=`realpath -s -- "$path"`
+        origin=`readlink -f -- "$path"`
         target=`target "$origin"`
         force=0
 
@@ -285,7 +283,7 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        origin=`realpath "$path" 2>/dev/null`
+        origin=`readlink -f "$path" 2>/dev/null`
         target=`target "$origin"`
         target_dir=`dirname "$target"`
 
