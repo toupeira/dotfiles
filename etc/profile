@@ -23,11 +23,21 @@ fi
 if [ "$BASH" ]; then
   if [ "$SSH_CLIENT" ] || [ "$SUDO_USER" ]; then
     export PS1='\u@\h:\w\$ '
-  elif [ "`id -u`" -eq 0 ]; then
+  elif [ "$UID" = "0" -o "$USER" = "${HOSTNAME%%.*}" ]; then
     export PS1='\h:\w\$ '
   else
-    export PS1='\u@\h:\w$ '
+    export PS1='\u@\h:\w\$ '
   fi
+
+  function __parse_git_dirty {
+    git status 2>/dev/null | fgrep -q 'working directory clean' || echo '[[1;31m+[0m]'
+  }
+
+  function __parse_git_branch {
+    git branch --color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1]`__parse_git_dirty` /"
+  }
+
+  export PS1=$PS1'$(__parse_git_branch)'
 else
   if [ "`id -u`" -eq 0 ]; then
     export PS1='# '
@@ -35,12 +45,6 @@ else
     export PS1='$ '
   fi
 fi
-
-function __parse_git_branch {
-  git branch --color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1] /"
-}
-
-export PS1=$PS1'$(__parse_git_branch)'
 
 if [[ "$TERM" =~ "rxvt" ]]; then
   if [ "$SSH_CLIENT" ]; then
