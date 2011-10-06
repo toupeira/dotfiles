@@ -168,7 +168,7 @@ function run {
       msg
       status "{{Checking out submodules...}}"
       run submodule sync -q
-      run submodule update --init
+      run submodule update --init -q
 
       msg
       status "{{Committing local changes...}}"
