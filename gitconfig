@@ -11,8 +11,9 @@
 [alias]
 	ci = commit -v
 	co = checkout
-	st = status
 	sw = checkout
+	st = status
 	stat = status
 	sub = submodule
 	unstage = reset HEAD
+	ls = branch -av

@@ -5,6 +5,10 @@ if [ -f /etc/environment ]; then
   . /etc/environment
 fi
 
+if [ -f /etc/bash_completion ]; then
+  . /etc/bash_completion
+fi
+
 # OS X specific configuration
 if [ "`uname -s`" = "Darwin" ]; then
   if [ -x /usr/libexec/path_helper ]; then
@@ -29,15 +33,14 @@ if [ "$BASH" ]; then
     export PS1='\u@\h:\w\$ '
   fi
 
-  function __parse_git_dirty {
-    git status 2>/dev/null | fgrep -q 'working directory clean' || echo '[[1;31m+[0m]'
-  }
+  # Use Git prompt if available
+  if type __git_ps1 &>/dev/null; then
+    export GIT_PS1_SHOWDIRTYSTATE=1
+    export GIT_PS1_SHOWSTASHSTATE=1
+    export GIT_PS1_SHOWUNTRACKEDFILES=1
 
-  function __parse_git_branch {
-    git branch --color 2> /dev/null | sed -e '/^[^*]/d' -e "s/* \(.*\)/[\1]`__parse_git_dirty` /"
-  }
-
-  export PS1=$PS1'$(__parse_git_branch)'
+    export PS1=$PS1'$(__git_ps1 "[\[[1;32m\]%s\[[0m\]] ")'
+  fi
 else
   if [ "`id -u`" -eq 0 ]; then
     export PS1='# '
