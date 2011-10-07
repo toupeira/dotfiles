@@ -205,7 +205,7 @@ function run {
           if [ -d "$path" -a ! -e "$path/.install" ]; then
             local status=255
           else
-            echo run install "$path"
+            run install "$path"
             local status=$?
           fi
 
