@@ -3,11 +3,6 @@
 # The dotfiles repository
 DOTFILES=${DOTFILES:-~/.dotfiles}
 
-if [ ! -d "$DOTFILES" ]; then
-  error "Dotfiles not found in {{$DOTFILES}}"
-  exit 1
-fi
-
 # Use Homebrew GNU commands on OS X if available
 shopt -s expand_aliases
 for command in readlink sed; do
@@ -205,7 +200,7 @@ function run {
           if [ -d "$path" -a ! -e "$path/.install" ]; then
             local status=255
           else
-            echo run install "$path"
+            run install "$path"
             local status=$?
           fi
 
@@ -329,13 +324,18 @@ function run {
   return $status
 }
 
-# Parse arguments
 DRYRUN=0
 VERBOSE=0
 QUIET=0
 FORCE=0
 COMMAND=
 
+if [ ! -d "$DOTFILES" ]; then
+  error "Dotfiles not found in {{$DOTFILES}}"
+  exit 1
+fi
+
+# Parse arguments
 while [ $# -gt 0 ]; do
   case "$1" in
     -n|--dry-run) DRYRUN=1;;
