@@ -33,6 +33,10 @@ if [ "$BASH" ]; then
     export PS1='\u@\h:\w\$ '
   fi
 
+<<<<<<< HEAD
+=======
+  # Use Git prompt if available
+>>>>>>> 2661a9a272976c5953789dc5c5fd1e58d5c44207
   if type __git_ps1 &>/dev/null; then
     export GIT_PS1_SHOWDIRTYSTATE=1
     export GIT_PS1_SHOWSTASHSTATE=1

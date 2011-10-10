@@ -9,10 +9,14 @@
 	ui = auto
 
 [alias]
+	commit = commit -v
 	ci = commit -v
 	co = checkout
-	st = status
+	di = diff
 	sw = checkout
+	st = status
 	stat = status
 	sub = submodule
+	un = reset HEAD
 	unstage = reset HEAD
+	ls = branch -av
