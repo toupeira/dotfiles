@@ -26,6 +26,8 @@
   call pathogen#helptags()
 
   " file handling
+  set binary
+  set noendofline
   set nobackup
   set autowrite
   set encoding=utf-8
@@ -86,11 +88,16 @@
   hi! StatusLineGreen cterm=bold,reverse ctermfg=231 ctermbg=22 gui=bold,reverse guifg=#c2bfa5 guibg=#3a663a
 
   set statusline=
-  set stl+=\ %#StatusLineNC#%n:%*\ %<\"%f\"\      " buffer number and file name
+
+  set stl+=\ %#StatusLineNC#%n:%*                 " buffer number
+  if $SSH_CLIENT != ""
+    set stl+=%{toupper(hostname())}:              " hostname
+  endif
+  set stl+=\ %<\"%f\"\                            "file name
   set stl+=%#StatusLineRed#%r%*                   " read-only flag
   set stl+=%#StatusLineRed#%m%*                   " modified flag
   set stl+=%y                                     " file type
-  set stl+=[%{strlen(&fenc)?&fenc:'none'}         " file encoding
+  set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
   set stl+=%{&bomb?',BOM':''}                     " BOM flag
   set stl+=%{&ff!='unix'?','.toupper(&ff):''}]\   " file format
   set stl+=%=                                     " left/right separator
@@ -168,7 +175,7 @@
 " Custom Filetype Settings
 " {{{
 
-  autocmd FileType alsaconf,asm,autoit,context,css,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,smarty,sql,plaintex,ruby,sh,svn,tex,textile,vb,vim,xhtml,xml,xslt setlocal ts=2 sts=2 sw=2 expandtab nocindent
+  autocmd FileType alsaconf,applescript,asm,autoit,context,css,dot,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,smarty,sql,plaintex,ruby,sh,svn,tex,textile,vb,vim,xhtml,xml,xslt setlocal ts=2 sts=2 sw=2 expandtab nocindent
   autocmd FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3 expandtab
   autocmd FileType python setlocal ts=4 sts=4 sw=4 expandtab
   autocmd FileType apache setlocal ts=4 sts=4 sw=4
@@ -366,8 +373,11 @@
   " ,S - show syntax attributes
   nnoremap <silent> ,S :call SyntaxAttr()<CR>
 
-  " ,t - open NERDTree
-  nnoremap <silent> ,t :NERDTreeToggle<CR>
+  " ,t - toggle tagbar
+  nnoremap <silent> ,t :TagbarToggle<CR>
+
+  " ,T - toggle NERDTree
+  nnoremap <silent> ,T :NERDTreeToggle<CR>
 
   " ,u / Ctrl+u - open gundo
   nnoremap <silent> ,u :GundoToggle<CR>
@@ -437,14 +447,14 @@
   highlight MBEChanged ctermbg=88 guibg=#913d3b
 
   " nerd tree
-  let g:NERDTreeQuitOnOpen = 1
+  "let g:NERDTreeQuitOnOpen = 1
 
   " syntastic
   let g:syntastic_enable_signs = 1
   let g:syntastic_disabled_filetypes = [ 'xhtml' ]
 
   if !&diff
-    let g:syntastic_auto_loc_list = 0
+    let g:syntastic_auto_loc_list = 1
     let g:syntastic_auto_jump = 0
   endif
 
@@ -456,5 +466,15 @@
   " closetag
   runtime scripts/closetag.vim
   autocmd BufAdd,BufRead * runtime scripts/closetag.vim
+
+  " tcomment
+  let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
+
+  " tagbar
+  let g:tagbar_width = 31
+  let g:tagbar_autofocus = 1
+  let g:tagbar_sort = 0
+  let g:tagbar_compact = 1
+  let g:tagbar_singleclick = 1
 
 " }}}

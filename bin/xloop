@@ -4,6 +4,6 @@ function xpid { pgrep -x Xorg | head -1; }
 
 PID=`xpid`
 
-while xpid | fgrep -qx "$PID"; do
+while [ "`xpid`" = "$PID" ]; do
   "$@"
 done

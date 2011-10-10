@@ -1,15 +1,45 @@
 # /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
 
-. /etc/environment
+if [ -f /etc/environment ]; then
+  . /etc/environment
+fi
+
+if [ -f /etc/bash_completion ]; then
+  . /etc/bash_completion
+fi
+
+# OS X specific configuration
+if [ "`uname -s`" = "Darwin" ]; then
+  if [ -x /usr/libexec/path_helper ]; then
+    eval `/usr/libexec/path_helper -s`
+  fi
+
+  # Homebrew aliases
+  . /usr/local/Cellar/coreutils/*/aliases
+  alias sed='gsed'
+  alias gvim='mvim'
+  alias gvimdiff='mvimdiff'
+
+  unalias [ echo false kill printf pwd test true
+fi
 
 if [ "$BASH" ]; then
   if [ "$SSH_CLIENT" ] || [ "$SUDO_USER" ]; then
     export PS1='\u@\h:\w\$ '
-  elif [ "`id -u`" -eq 0 ]; then
+  elif [ "$UID" = "0" -o "$USER" = "${HOSTNAME%%.*}" ]; then
     export PS1='\h:\w\$ '
   else
-    export PS1='\u@\h:\w$ '
+    export PS1='\u@\h:\w\$ '
+  fi
+
+  # Use Git prompt if available
+  if type __git_ps1 &>/dev/null; then
+    export GIT_PS1_SHOWDIRTYSTATE=1
+    export GIT_PS1_SHOWSTASHSTATE=1
+    export GIT_PS1_SHOWUNTRACKEDFILES=1
+
+    export PS1=$PS1'$(__git_ps1 "[\[[1;32m\]%s\[[0m\]] ")'
   fi
 else
   if [ "`id -u`" -eq 0 ]; then
@@ -34,9 +64,9 @@ export HISTFILESIZE=5000
 export HISTCONTROL="ignoreboth"
 
 # ls
-eval `dircolors -b`
-export LS_COLORS="$LS_COLORS:ow=30;42:*.wmv=01;35:*.rm=01;35:*.ogm=01;35:*.mp4=01;35"
+which dircolors &>/dev/null && eval `dircolors -b`
 alias ls='ls --color'
+[ "`uname -s`" = "Darwin" ] && alias ls='gls --color'
 alias ll='ls -lh'
 alias l='ls -A'
 
@@ -52,7 +82,8 @@ alias rm='rm -v'
 alias du='du -ch'
 alias df='df -h'
 alias ln='ln -svfi'
-alias rgrep='rgrep --exclude-dir=.svn'
+[ "`uname -s`" = "Darwin" ] && alias ln='gln -svfi'
+alias rgrep='grep -r --exclude=.svn --exclude=.git'
 alias cgrep='GREP_OPTIONS= grep'
 alias mime='file -i'
 alias killbg='kill -9 %1'
@@ -96,7 +127,6 @@ alias iptables='sudo iptables'
 alias ip6tables='sudo ip6tables'
 alias tcpdump='sudo tcpdump'
 alias ethtool='sudo ethtool'
-alias gem='sudo gem'
 alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+"'
 alias jnettop='sudo jnettop'
 alias ifconfig='sudo ifconfig'
@@ -118,19 +148,17 @@ alias fetchmail='fetchmail -v'
 alias wget='wget -c'
 alias gvi='gvim'
 alias gvi.add='gvim --remote-silent'
-alias ruby='ruby -w'
-alias open='xdg-open'
 alias gcc='gcc -Wall'
 alias vi.svndiff='svn diff --diff-cmd ~/.subversion/diff'
 alias vi.xdebug='gvim -c "source ~/.vim/xdebug/debugger.vim"'
 alias sbcl='rlwrap sbcl'
 alias ocaml='rlwrap ocaml'
-alias ruby='ruby -w'
 alias gcc='gcc -Wall'
 alias ack='ack-grep'
 alias cadaver='EDITOR="gvim -f" cadaver'
 alias archive.sync='archive.checkout; archive.commit'
 alias psgrep='pgrep -fl'
+which xdg-open &>/dev/null && alias open='xdg-open'
 
 # MySQL aliases and functions
 alias mysql='mysql -u root'

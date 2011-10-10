@@ -5,7 +5,7 @@ require 'yaml'
 require 'ostruct'
 require 'open-uri'
 require 'wirble'
-require 'active_support'
+require 'active_support/all'
 
 puts
 puts `ruby -v`

@@ -3,8 +3,6 @@
 
 export PATH=/usr/bin:/bin:/usr/sbin:/sbin:/usr/local/bin:/usr/local/sbin:/usr/games:/var/lib/gems/1.8/bin:~/bin
 
-export DOTFILES="/etc/dotfiles"
-
 export LANG="de_CH.UTF-8"
 export LC_MESSAGES="en_US.UTF-8"
 export LC_NUMERIC="en_US.UTF-8"

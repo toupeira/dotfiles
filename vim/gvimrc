@@ -28,14 +28,15 @@ endif
 
     set lines=50
     if &diff
-      set lines=60
-      set columns=200
+      set columns=240
     else
       set columns=120
     end
 
     " font
-    if has('unix')
+    if has('mac')
+      set guifont=Menlo\ Regular:h13
+    elseif has('unix')
       set guifont=Monospace\ 9
     else
       set guifont=DejaVu_Sans_Mono:h9:cANSI

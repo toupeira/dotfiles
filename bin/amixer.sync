@@ -4,8 +4,8 @@ if [ "$1" = "restore" ]; then
   alsactl restore
 elif [ "$1" = "low" ]; then
   alsactl restore
-  amixer -q set DAC 77
-  amixer -q set DAC,1 77
+  amixer -q set DAC 84
+  amixer -q set DAC,1 84
 else
   if pgrep -ox amixer.sync | fgrep -vx $$ | grep -q .; then
     exit

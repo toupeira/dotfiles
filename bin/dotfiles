@@ -3,11 +3,13 @@
 # The dotfiles repository
 DOTFILES=${DOTFILES:-~/.dotfiles}
 
-# Options
-DRYRUN=0
-VERBOSE=0
-QUIET=0
-FORCE=0
+# Use Homebrew GNU commands on OS X if available
+shopt -s expand_aliases
+for command in readlink sed; do
+  if which g$command &>/dev/null; then
+    alias $command="g$command"
+  fi
+done
 
 function usage {
   echo "Usage: `basename $0` [options] COMMAND [args]"
@@ -112,7 +114,7 @@ function git {
 }
 
 function validate {
-  if ! [[ "$1" =~ ^($HOME|/etc)($|/) ]]; then
+if ! [[ "$1" =~ ^($HOME|(/private)?/etc)($|/) ]]; then
     error "Path is not inside \$HOME or /etc: {{$1}}"
     return 1
   else
@@ -125,6 +127,8 @@ function target {
 
   if [[ "$origin" =~ ^$HOME/ ]]; then
     local target="${1:${#HOME}+1}"
+  elif [[ "$origin" =~ ^/private/etc/ ]]; then
+    local target="${1:8}"
   elif [[ "$origin" =~ ^/etc/ ]]; then
     local target="${1:1}"
   fi
@@ -136,7 +140,7 @@ function origin {
   local target="${1:${#DOTFILES}+1}"
   local topdir="${target%%/*}"
 
-  if [ "$topdir" = "etc" ]; then
+  if [ "$topdir" = "etc" -o "$topdir" = "private" ]; then
     echo "/$target"
   elif [ -e "$HOME/$topdir" ]; then
     echo "$HOME/$target"
@@ -159,7 +163,7 @@ function run {
       msg
       status "{{Checking out submodules...}}"
       run submodule sync -q
-      run submodule update --init
+      run submodule update --init -q
 
       msg
       status "{{Committing local changes...}}"
@@ -214,7 +218,7 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        origin=`realpath -s -- "$path"`
+        origin=`readlink -f -- "$path"`
         target=`target "$origin"`
         force=0
 
@@ -275,7 +279,7 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        origin=`realpath "$path" 2>/dev/null`
+        origin=`readlink -f "$path" 2>/dev/null`
         target=`target "$origin"`
         target_dir=`dirname "$target"`
 
@@ -320,13 +324,18 @@ function run {
   return $status
 }
 
+DRYRUN=0
+VERBOSE=0
+QUIET=0
+FORCE=0
+COMMAND=
+
 if [ ! -d "$DOTFILES" ]; then
   error "Dotfiles not found in {{$DOTFILES}}"
   exit 1
 fi
 
 # Parse arguments
-unset command
 while [ $# -gt 0 ]; do
   case "$1" in
     -n|--dry-run) DRYRUN=1;;
@@ -335,16 +344,16 @@ while [ $# -gt 0 ]; do
     -f|--force)   FORCE=1;;
     -*)           usage;;
     *)
-      command=( "$@" )
+      COMMAND=( "$@" )
       break
       ;;
   esac
   shift
 done
 
-if [ -n "$command" ]; then
+if [ -n "$COMMAND" ]; then
   STATUS=0
-  run "${command[@]}"
+  run "${COMMAND[@]}"
   exit $STATUS
 else
   usage
