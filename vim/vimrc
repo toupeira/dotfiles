@@ -234,13 +234,10 @@
   cnoreabbrev WQ wq
   cnoreabbrev Q q
   cnoreabbrev QA qa
+  cnoreabbrev Qa qa
 
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
-
-  " move between functions with Tab / Shift+Tab in normal mode
-  nmap <silent> <Tab> :silent! normal ]]<CR>
-  nmap <silent> <S-Tab> :silent! normal [[<CR>
 
   " move to matching pair with Tab in visual mode
   vmap <Tab> %
