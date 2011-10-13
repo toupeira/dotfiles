@@ -32,7 +32,7 @@ if [ "$BASH" ]; then
   fi
 
   # Use Git prompt if available
-  if type __git_ps1 2>/dev/null; then
+  if type __git_ps1 &>/dev/null; then
     export GIT_PS1_SHOWDIRTYSTATE=1
     export GIT_PS1_SHOWSTASHSTATE=1
     export GIT_PS1_SHOWUNTRACKEDFILES=1
