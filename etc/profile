@@ -53,7 +53,7 @@ if [[ "$TERM" =~ "rxvt" ]]; then
   if [ "$SSH_CLIENT" ]; then
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;@$HOSTNAME:$_pwd\007]2;$USER@$HOSTNAME:$_pwd\007"'
   else
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;$_pwd\007]2;$USER:$_pwd\007"'
+    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;$_pwd\007]2;$_pwd\007"'
   fi
 fi
 
