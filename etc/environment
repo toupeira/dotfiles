@@ -12,7 +12,7 @@ export EDITOR="vim"
 export PAGER="less"
 
 export LESS="-iRM"
-export GREP_OPTIONS="-i --color=auto --exclude=*.svn*"
+export GREP_OPTIONS="-i --color=auto --exclude=.svn --exclude=.git --exclude=.*.swp"
 export ACK_OPTIONS="-i"
 export IRB_HISTORY_SIZE=3000
 export RI="--format ansi --no-pager"

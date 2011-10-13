@@ -327,14 +327,51 @@
 
   nnoremap <silent> ,F :call ToggleFolding()<CR>
 
-  " ,g - grep current search pattern
-  function! GrepCurrentPattern()
-    if @/ != ""
-      execute 'vimgrep /'.@/.'/g %'
-      copen
+  " ,g - grep the current file
+  function! GrepCurrentFile()
+    if expand('%') == ''
+      return
+    endif
+
+    let l:pattern = input('grep file: /', expand('<cword>'))
+
+    if l:pattern != ""
+      echo "/ searching..."
+      execute 'silent grep '.l:pattern.' %'
+      if len(getqflist()) > 0
+        copen
+      else
+        echohl ErrorMsg
+        echo "Pattern not found in current file: ".l:pattern
+        echohl None
+      endif
     endif
   endfunction
-  nnoremap <silent> ,g :call GrepCurrentPattern()<CR>
+  nnoremap <silent> ,g :call GrepCurrentFile()<CR>
+
+  " ,G - grep the current path
+  function! GrepCurrentPath()
+    let l:pattern = input('grep path: /', expand('<cword>'))
+
+    if l:pattern != ""
+      if exists('b:rails_root')
+        let l:path = b:rails_root.'/{app,config,lib,vendor/plugins,public/javascripts,public/stylesheets}'
+      else
+        let l:path = '.'
+      endif
+
+      echo "/ searching..."
+      execute 'silent grep -r "'.l:pattern.'" '.l:path
+      if len(getqflist()) > 0
+        copen
+      else
+        echohl ErrorMsg
+        echoerr "Pattern not found in current path: ".l:pattern
+        echohl None
+      endif
+    endif
+  endfunction
+  nnoremap <silent> ,G :call GrepCurrentPath()<CR>
 
   " ,i - toggle indent guides
   nmap ,i :IndentGuidesToggle<CR>
