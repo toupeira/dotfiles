@@ -11,6 +11,7 @@
 [alias]
 	commit = commit -v
 	ci = commit -v
+	ca = commit -va
 	co = checkout
 	di = diff
 	sw = checkout
