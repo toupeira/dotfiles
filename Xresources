@@ -1,6 +1,6 @@
 Xft.dpi:		96
 
-!URxvt*termName:		rxvt-256color
+URxvt*termName:		rxvt-256color
 URxvt*font:		-misc-fixed-medium-*-*-*-13-100-*-*-*-60-*-*
 URxvt*geometry:		90x36
 URxvt*utmpInhibit:	true

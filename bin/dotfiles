@@ -304,6 +304,7 @@ function run {
           system rm -f "$target_dir/.skip"
           system chown "$USER.users" "$target"
           [ -d "$target" ] && system chmod g+s "$target"
+          git add "$target"
 
           status "Successfully added {{$target}}"
         else

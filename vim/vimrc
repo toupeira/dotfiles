@@ -64,8 +64,8 @@
 " Display Settings
 " {{{
 
-  if (&term == 'screen-bce' || &term == 'rxvt-unicode') && $TERM_ORIGINAL != 'ansi'
-    " enable 256 color support for screen and rxvt
+  if &term == 'screen-bce'
+    " enable 256 color support for screen
     set t_Co=256
 
     " don't clear screen on exit
