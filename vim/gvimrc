@@ -28,7 +28,7 @@ endif
 
     set lines=60
     if &diff
-      set columns=240
+      set columns=200
     else
       set columns=120
     end
