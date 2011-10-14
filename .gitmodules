@@ -36,7 +36,7 @@
 	url = https://github.com/vim-scripts/L9.git
 [submodule "vim/bundle/fuzzyfinder"]
 	path = vim/bundle/fuzzyfinder
-	url = https://github.com/toupeira/FuzzyFinder.git
+	url = https://github.com/toupeira/fuzzyfinder.vim.git
 [submodule "vim/bundle/hammer"]
 	path = vim/bundle/hammer
 	url = https://github.com/robgleeson/hammer.vim.git
