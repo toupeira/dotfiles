@@ -413,7 +413,7 @@
   " ,T - toggle NERDTree
   nnoremap <silent> ,T :NERDTreeToggle<CR>
 
-  " ,u / Ctrl+u - open gundo
+  " ,u - open gundo
   nnoremap <silent> ,u :GundoToggle<CR>
 
   " ,v - split vertically
