@@ -153,10 +153,10 @@ alias vi.xdebug='gvim -c "source ~/.vim/xdebug/debugger.vim"'
 alias sbcl='rlwrap sbcl'
 alias ocaml='rlwrap ocaml'
 alias gcc='gcc -Wall'
-alias ack='ack-grep'
 alias cadaver='EDITOR="gvim -f" cadaver'
 alias archive.sync='archive.checkout; archive.commit'
 alias psgrep='pgrep -fl'
+which ack-grep &>/dev/null && alias ack='ack-grep'
 which xdg-open &>/dev/null && alias open='xdg-open'
 
 # MySQL aliases and functions
