@@ -22,8 +22,8 @@
     call add(g:pathogen_disabled, 'hammer')
   endif
 
-  call pathogen#runtime_append_all_bundles()
-  call pathogen#helptags()
+  call pathogen#infect()
+  "call pathogen#helptags()
 
   " file handling
   set binary
@@ -100,6 +100,7 @@
   set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
   set stl+=%{&bomb?',BOM':''}                     " BOM flag
   set stl+=%{&ff!='unix'?','.toupper(&ff):''}]\   " file format
+  set stl+=%{fugitive#statusline()}               " Git status
   set stl+=%=                                     " left/right separator
   set stl+=%-20.(%l/%L,%c%)\ %P                   " cursor position
 
@@ -108,8 +109,8 @@
   set numberwidth=6
 
   " cursor line
-  autocmd BufEnter,WinEnter * if bufname('%') != '-MiniBufExplorer-' && &buftype != 'quickfix' | setlocal cursorline | endif
-  autocmd WinLeave * setlocal nocursorline nocursorcolumn
+  "autocmd BufEnter,WinEnter * if bufname('%') != '-MiniBufExplorer-' && &buftype != 'quickfix' | setlocal cursorline | endif
+  "autocmd WinLeave * setlocal nocursorline nocursorcolumn
 
   " highlight trailing whitespace
   highlight Whitespace ctermbg=236 guibg=#333333
@@ -419,7 +420,7 @@
   " ,T - toggle NERDTree
   nnoremap <silent> ,T :NERDTreeToggle<CR>
 
-  " ,u / Ctrl+u - open gundo
+  " ,u - open gundo
   nnoremap <silent> ,u :GundoToggle<CR>
 
   " ,v - split vertically
@@ -433,6 +434,9 @@
 
   " ,Q - quit all
   nnoremap <silent> ,Q :quitall<CR>
+
+  " ,y - toggle yankring
+  nnoremap <silent> ,y :YRShow<CR>
 
   " ,!! - force quit all
   nnoremap <silent> ,!! :quitall!<CR>
@@ -516,5 +520,8 @@
   let g:tagbar_sort = 0
   let g:tagbar_compact = 1
   let g:tagbar_singleclick = 1
+
+  " yankring
+  let g:yankring_history_file = '.vim_yankring_history'
 
 " }}}
