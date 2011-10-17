@@ -289,7 +289,7 @@
   function! ResizeWindow(min, max)
     execute max([min([line('$') + 1, a:max]), a:min]).'wincmd _'
   endfunction
-  au FileType qf call ResizeWindow(2, 20)
+  autocmd FileType qf call ResizeWindow(2, 20)
 
   " ,/, F2 - remove highlighted search
   nnoremap <silent> ,/ :noh<CR>
@@ -508,8 +508,7 @@
   highlight IndentGuidesEven ctermbg=236 guibg=#333333
 
   " closetag
-  runtime scripts/closetag.vim
-  autocmd BufAdd,BufRead * runtime scripts/closetag.vim
+  autocmd BufEnter * runtime scripts/closetag.vim
 
   " tcomment
   let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
