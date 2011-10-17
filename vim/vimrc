@@ -284,6 +284,12 @@
   nnoremap <silent> ,q :call ToggleList('Quickfix List', 'c')<CR>
   nnoremap <silent> ,e :call ToggleList('Location List', 'l')<CR>
 
+  " resize quickfix windows to their content, or 20 lines maximum
+  function! ResizeWindow(min, max)
+    execute max([min([line('$') + 1, a:max]), a:min]).'wincmd _'
+  endfunction
+  au FileType qf call ResizeWindow(2, 20)
+
   " ,/, F2 - remove highlighted search
   nnoremap <silent> ,/ :noh<CR>
   nnoremap <silent> <F2> :noh<CR>
