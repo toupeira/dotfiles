@@ -189,7 +189,7 @@
   autocmd BufEnter *.boo setf python
   autocmd BufEnter *.io setf io
   autocmd BufEnter *.red setf textile
-  autocmd BufEnter *.plan setf ruby
+  autocmd BufEnter Gemfile,*.plan setf ruby
   autocmd BufEnter ~/.devilspie/* setf lisp
 
   " PHP syntax highlighting
