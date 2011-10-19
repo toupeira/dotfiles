@@ -89,9 +89,9 @@
   set stl+=%#StatusLineGreen#%{fugitive#statusline()[4:-2]}%* " Git status
   set stl+=%#StatusLineRed#%r%*                   " read-only flag
   set stl+=%#StatusLineRed#%m%*                   " modified flag
-  if $SSH_CLIENT != ""
-    set stl+=%{toupper(hostname())}:              " hostname
-  endif
+  " if $SSH_CLIENT != ""
+  "   set stl+=%{toupper(hostname())}:              " hostname
+  " endif
   set stl+=\ %<\"%f\"\                            "file name
   set stl+=%y                                     " file type
   set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
