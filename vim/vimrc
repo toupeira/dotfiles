@@ -17,11 +17,6 @@
     call add(g:pathogen_disabled, 'gundo')
   endif
 
-  " Hammer requires Ruby and RubyGems
-  if !has('ruby') || !filereadable('/usr/bin/gem')
-    call add(g:pathogen_disabled, 'hammer')
-  endif
-
   call pathogen#infect()
   "call pathogen#helptags()
 
@@ -84,23 +79,24 @@
   set errorbells
 
   " statusline
-  hi! StatusLineRed   cterm=bold,reverse ctermfg=231 ctermbg=88 gui=bold,reverse guifg=#c2bfa5 guibg=#913d3b
-  hi! StatusLineGreen cterm=bold,reverse ctermfg=231 ctermbg=22 gui=bold,reverse guifg=#c2bfa5 guibg=#3a663a
+  hi! StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
+  hi! StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
+  hi! StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
 
   set statusline=
 
-  set stl+=\ %#StatusLineNC#%n:%*                 " buffer number
+  set stl+=%#StatusLineGray#\ %n\ %*              " buffer number
+  set stl+=%#StatusLineGreen#%{fugitive#statusline()[4:-2]}%* " Git status
+  set stl+=%#StatusLineRed#%r%*                   " read-only flag
+  set stl+=%#StatusLineRed#%m%*                   " modified flag
   if $SSH_CLIENT != ""
     set stl+=%{toupper(hostname())}:              " hostname
   endif
   set stl+=\ %<\"%f\"\                            "file name
-  set stl+=%#StatusLineRed#%r%*                   " read-only flag
-  set stl+=%#StatusLineRed#%m%*                   " modified flag
   set stl+=%y                                     " file type
   set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
   set stl+=%{&bomb?',BOM':''}                     " BOM flag
   set stl+=%{&ff!='unix'?','.toupper(&ff):''}]\   " file format
-  set stl+=%{fugitive#statusline()}               " Git status
   set stl+=%=                                     " left/right separator
   set stl+=%-20.(%l/%L,%c%)\ %P                   " cursor position
 
@@ -391,16 +387,6 @@
 
   " ,p - previous buffer
   nnoremap <silent> ,p :bprevious<CR>
-
-  " ,P - preview file
-  function! PreviewFile()
-    if &filetype == 'html' || &filetype == 'xhtml'
-      !x-www-browser "%"
-    else
-      Hammer
-    endif
-  endfunction
-  nnoremap <silent> ,P :call PreviewFile()<CR>
 
   " ,r - reload current buffer
   nnoremap <silent> ,r :edit<CR>
