@@ -283,7 +283,8 @@
 
   " resize quickfix windows to their content, or 20 lines maximum
   function! ResizeWindow(min, max)
-    execute max([min([line('$') + 1, a:max]), a:min]).'wincmd _'
+    let l:max = min([a:max, &lines / 3])
+    execute max([a:min, min([l:max, line('$') + 1])]).'wincmd _'
   endfunction
   autocmd FileType qf call ResizeWindow(2, 20)
 
@@ -378,6 +379,9 @@
 
   " ,i - toggle indent guides
   nmap ,i :IndentGuidesToggle<CR>
+
+  " ,l - fuzzy find line
+  nnoremap <silent> ,l :FufLine<CR>
 
   " ,n - next buffer
   nnoremap <silent> ,n :bnext<CR>
