@@ -337,25 +337,33 @@
       return
     endif
 
-    let l:pattern = input('grep file: /', expand('<cword>'))
+    echohl ModeMsg
+    let l:pattern = input("Grep file: /", expand('<cword>'))
 
     if l:pattern != ""
+      echohl ModeMsg
       echo "/ searching..."
       execute 'silent grep '.l:pattern.' %'
-      if len(getqflist()) > 0
+
+      let l:len = len(getqflist())
+      if l:len > 0
         copen
+        redraw
+        echo l:len l:len == 1 ? "match" : "matches" "found"
       else
         echohl ErrorMsg
         echo "Pattern not found in current file: ".l:pattern
-        echohl None
       endif
     endif
+
+    echohl None
   endfunction
   nnoremap <silent> ,g :call GrepCurrentFile()<CR>
 
   " ,G - grep the current path
   function! GrepCurrentPath()
-    let l:pattern = input('grep path: /', expand('<cword>'))
+    echohl Question
+    let l:pattern = input("Grep path: /", expand('<cword>'))
 
     if l:pattern != ""
       if exists('b:rails_root')
@@ -364,16 +372,22 @@
         let l:path = '.'
       endif
 
+      echohl Question
       echo "/ searching..."
       execute 'silent grep -r "'.l:pattern.'" '.l:path
-      if len(getqflist()) > 0
+
+      let l:len = len(getqflist())
+      if l:len > 0
         copen
+        redraw
+        echo l:len l:len == 1 ? "match" : "matches" "found"
       else
         echohl ErrorMsg
         echoerr "Pattern not found in current path: ".l:pattern
-        echohl None
       endif
     endif
+
+    echohl None
   endfunction
   nnoremap <silent> ,G :call GrepCurrentPath()<CR>
 
