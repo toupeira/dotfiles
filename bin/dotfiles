@@ -20,7 +20,7 @@ function usage {
   echo "  -q, --quiet        Suppress all normal output"
   echo "  -f, --force        Assume yes for all questions"
   echo
-  echo "Actions:"
+  echo "Commands:"
   echo "  sync               Update, commit and push"
   echo "  up, update         Update submodules (fetch new commits)"
   echo "  ca, commitall      Commit all changes"
