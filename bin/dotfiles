@@ -20,7 +20,7 @@ function usage {
   echo "  -q, --quiet        Suppress all normal output"
   echo "  -f, --force        Assume yes for all questions"
   echo
-  echo "Actions:"
+  echo "Commands:"
   echo "  sync               Update, commit and push"
   echo "  up, update         Update submodules (fetch new commits)"
   echo "  ca, commitall      Commit all changes"
@@ -316,6 +316,13 @@ function run {
     ca|commitall)
       git ignore-errors add .
       git ignore-errors commit -a -m "Sync dotfiles" "$@"
+      ;;
+    push)
+      key=~/.ssh/id_rsa
+      if [ -f "$key" ]; then
+        ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
+      fi
+      git push "$@"
       ;;
     *)
       git ignore-errors $command "$@"
