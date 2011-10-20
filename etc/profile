@@ -1,6 +1,8 @@
 # /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
 
+[ -n "$PS1" ] || return
+
 if [ "`uname -s`" = "Linux" ]; then
   if [ -z "$SSH_AUTH_SOCK" ]; then
     exec ssh-agent -- bash --login
