@@ -317,6 +317,13 @@ function run {
       git ignore-errors add .
       git ignore-errors commit -a -m "Sync dotfiles" "$@"
       ;;
+    push)
+      key=~/.ssh/id_rsa
+      if [ -f "$key" ]; then
+        ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
+      fi
+      git push "$@"
+      ;;
     *)
       git ignore-errors $command "$@"
       ;;

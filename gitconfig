@@ -9,18 +9,20 @@
 	ui = auto
 
 [alias]
+	h = help
+	sub = submodule
+
 	di = diff
 	st = status
 	stat = status
 	ls = branch -av
 
-	ci = commit -v
-	ca = commit -va
-	amend = commit -v --amend
-
+	br = branch
 	co = checkout
 	sw = checkout
 	un = reset HEAD
 	unstage = reset HEAD
 
-	sub = submodule
+	ci = commit -v
+	ca = commit -va
+	amend = commit -v --amend

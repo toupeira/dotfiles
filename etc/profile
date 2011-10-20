@@ -1,6 +1,14 @@
 # /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
 
+if [ "`uname -s`" = "Linux" ]; then
+  if [ -z "$SSH_AUTH_SOCK" ]; then
+    exec ssh-agent -- bash --login
+  elif [ -z "$STY" -a -n "$SSH_CONNECTION" -a -x /usr/bin/screen ]; then
+    exec screen -qRR
+  fi
+fi
+
 if [ -f /etc/environment ]; then
   . /etc/environment
 fi
@@ -148,8 +156,6 @@ alias wget='wget -c'
 alias gvi='gvim'
 alias gvi.add='gvim --remote-silent'
 alias gcc='gcc -Wall'
-alias vi.svndiff='svn diff --diff-cmd ~/.subversion/diff'
-alias vi.xdebug='gvim -c "source ~/.vim/xdebug/debugger.vim"'
 alias sbcl='rlwrap sbcl'
 alias ocaml='rlwrap ocaml'
 alias gcc='gcc -Wall'
@@ -158,6 +164,24 @@ alias archive.sync='archive.checkout; archive.commit'
 alias psgrep='pgrep -fl'
 which ack-grep &>/dev/null && alias ack='ack-grep'
 which xdg-open &>/dev/null && alias open='xdg-open'
+
+# SSH agent wrappers
+if [ -n "$SSH_AUTH_SOCK" ]; then
+  function __load_key {
+    local key=~/.ssh/id_rsa
+    ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
+  }
+
+  function ssh {
+    __load_key
+    command ssh "$@"
+  }
+
+  function git {
+    [[ "$@" =~ pull|push ]] && __load_key
+    command git "$@"
+  }
+fi
 
 # MySQL aliases and functions
 alias mysql='mysql -u root'
