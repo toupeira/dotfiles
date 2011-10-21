@@ -8,6 +8,9 @@
 [color]
 	ui = auto
 
+[merge]
+	tool = gvimdiff
+
 [alias]
 	h = help
 	sub = submodule
