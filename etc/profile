@@ -1,22 +1,22 @@
 # /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
 
-[ -n "$PS1" ] || return
-
-if [ "`uname -s`" = "Linux" ]; then
-  if [ -z "$SSH_AUTH_SOCK" ]; then
-    exec ssh-agent -- bash --login
-  elif [ -z "$STY" -a -n "$SSH_CONNECTION" -a -x /usr/bin/screen ]; then
-    exec screen -qRR
-  fi
-fi
-
 if [ -f /etc/environment ]; then
   . /etc/environment
 fi
 
-if [ -f /etc/bash_completion ]; then
-  . /etc/bash_completion
+if [ -n "$PS1" ]; then
+  if [ "`uname -s`" = "Linux" ]; then
+    if [ -z "$SSH_AUTH_SOCK" ]; then
+      exec ssh-agent -- bash --login
+    elif [ -z "$STY" -a -n "$SSH_CONNECTION" -a -x /usr/bin/screen ]; then
+      exec screen -qRR
+    fi
+  fi
+
+  if [ -f /etc/bash_completion ]; then
+    . /etc/bash_completion
+  fi
 fi
 
 # OS X specific configuration
