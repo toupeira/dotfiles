@@ -10,11 +10,11 @@ class XShutdown < Gtk::Window
 
     - - _Shutdown
       - gnome-shutdown
-      - "[ -p ~/.quodlibet/control ] && timeout 2 quodlibet --quit; pgrep -x deluged && timeout 2 deluge-console halt; sudo init 0"
+      - "[ -p ~/.quodlibet/control ] && timeout 2 quodlibet --quit; pgrep -x deluged && timeout 2 deluge-console halt; xfce4-session-logout --halt"
 
     - - _Reboot
       - gtk-refresh
-      - "[ -p ~/.quodlibet/control ] && timeout 2 quodlibet --quit; pgrep -x deluged && timeout 2 deluge-console halt; sudo init 6"
+      - "[ -p ~/.quodlibet/control ] && timeout 2 quodlibet --quit; pgrep -x deluged && timeout 2 deluge-console halt; xfce4-session-logout --reboot"
 
     #- - _Hibernate
     #  - appointment
@@ -22,7 +22,7 @@ class XShutdown < Gtk::Window
 
     - - _Logout
       - gnome-logout
-      - "gnome-session-save --logout"
+      - "xfce4-session-logout --logout"
 
   ')
 
