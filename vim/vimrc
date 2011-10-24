@@ -383,7 +383,7 @@
         echo l:len l:len == 1 ? "match" : "matches" "found"
       else
         echohl ErrorMsg
-        echoerr "Pattern not found in current path: ".l:pattern
+        echo "Pattern not found in current path: ".l:pattern
       endif
     endif
 
