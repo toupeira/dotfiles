@@ -302,7 +302,7 @@ function run {
           && system ln -s "$target" "$origin"
         then
           system rm -f "$target_dir/.skip"
-          system chown "$USER.users" "$target"
+          system chown "$USER:$GROUPS" "$target"
           [ -d "$target" ] && system chmod g+s "$target"
           git add "$target"
 

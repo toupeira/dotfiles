@@ -1,0 +1,291 @@
+#!/usr/bin/env ruby
+
+## git-wtf: display the state of your repository in a readable and easy-to-scan
+## format. git-wtf tries to ease the task of dealing with many git branches.
+## It's also useful for getting a summary of how tracking branches relate to a
+## remote server.
+##
+## git-wtf is mainly useful in the case where you have one local repo and one
+## remote repo, and you're interested in the relationship between the two.
+## It's less useful for tracking multiple remote repos, though it's getting
+## better at it.
+##
+## git-wtf shows you:
+## - How your branch relates to the remote repo, if it's a tracking branch.
+## - How your branch relates to non-feature (what I've been calling "version")
+##   branches, if it's a feature branch.
+## - How your branch relates to the feature branches, if it's a version branch.
+##
+## For each of these relationships, git-wtf displays the commits pending on
+## either side, if any. It displays checkboxes along the side for easy scanning
+## of merged/non-merged branches.
+##
+## OUTPUT KEY
+##
+## [] means the branch has a corresponding remote version
+## () means it doesn't, i.e. it only exists in the local repo
+##
+## x means the merge occurs both locally and remotely
+## ~ means the merge occurs only locally
+##   (space) means the branch isn't merged in
+##
+## It's possible for merges to occur remotely and not locally, of course,
+## but that's a less common case and git-wtf currently doesn't display anything
+## special for it.
+##
+## USAGE
+##
+## git wtf [branch+] [-l|--long] [-a|--all] [-A|--all-commits] [-s|--short]
+##
+## git-wtf is best used after a 'git fetch' and before a 'git push' or a 'git
+## merge'.
+##
+## If [branch] is not specified, git-wtf will use the current branch.  With
+## --long, you'll see author info and date for each commit. With --all-commits,
+## you'll see all commits, not just the first 5; with --short, you'll see none.
+## With --dump-config, git-wtf will print out its current configuration in YAML
+## format and exit. With --all, you'll see all feature branches across all
+## remote repos, not just local feature branches.
+##
+## git-wtf uses some heuristics to determine which branches are version
+## branches, and which are feature branches. (Specifically, it assumes the
+## version branches are named "master", "next" and "edge".) If it guesses
+## incorrectly, you will have to create a .git-wtfrc file.
+##
+## git-wtf looks for a .git-wtfrc file starting in the current directory, and
+## recursively up to the root. The config file is a YAML file that specifies
+## the version branches, any branches to ignore, and the max number of commits
+## to display when --all-commits isn't used. To start building a configuration
+## file, run "git-wtf --dump-config > .git-wtfrc" and edit it.
+##
+## IMPORTANT NOTE: all local branches referenced in .git-wtfrc must be prefixed
+## with heads/, e.g. "heads/master". Remote branches must be of the form
+## remotes/<remote>/<branch>.
+##
+## git-wtf Copyright 2008 William Morgan <wmorgan-git-wt-add@masanjin.net>.
+## This program is free software: you can redistribute it and/or modify it
+## under the terms of the GNU General Public License as published by the Free
+## Software Foundation, either version 3 of the License, or (at your option)
+## any later version.
+##
+## This program is distributed in the hope that it will be useful, but WITHOUT
+## ANY WARRANTY; without even the implied warranty of MERCHANTABILITY or
+## FITNESS FOR A PARTICULAR PURPOSE.  See the GNU General Public License for
+## more details.
+##
+## You can find the GNU General Public License at: http://www.gnu.org/licenses/
+
+$VERBOSE = nil
+
+require 'yaml'
+CONFIG_FN = ".git-wtfrc"
+
+class Numeric; def pluralize s; "#{to_s} #{s}" + (self != 1 ? "s" : "") end end
+
+$long = ARGV.delete("--long") || ARGV.delete("-l")
+$short = ARGV.delete("--short") || ARGV.delete("-s")
+$all = ARGV.delete("--all") || ARGV.delete("-a")
+$all_commits = ARGV.delete("--all-commits") || ARGV.delete("-A")
+$dump_config = ARGV.delete("--dump-config")
+
+NORMAL      = "\e[00;00m"
+NORMAL_BOLD = "\e[00;01m"
+YELLOW      = "\e[00;33m"
+BORING_CYAN = "\e[00;36m"
+BLUE        = "\e[00;34m"
+CYAN        = "\e[01;36m"
+RED         = "\e[00;31m"
+GREEN       = "\e[00;32m"
+BOLD_GREEN  = "\e[01;32m"
+DEEP_BLUE   = "\e[01;34m"
+# Black       0;30     Dark Gray     1;30
+# Blue        0;34     Light Blue    1;34
+# Green       0;32     Light Green   1;32
+# Cyan        0;36     Light Cyan    1;36
+# Red         0;31     Light Red     1;31
+# Purple      0;35     Light Purple  1;35
+# Brown       0;33     Yellow        1;33
+# Light Gray  0;37     White         1;37
+
+## find config file
+$config = { "versions" => %w(heads/master heads/next heads/release-candidate), "ignore" => [], "max_commits" => 5 }.merge begin
+home_config_fn = ENV['HOME'] + '/' + CONFIG_FN
+data = {}
+if File.exist? home_config_fn
+    data = YAML::load_file(home_config_fn)
+end
+data
+end
+
+$config = $config.merge begin
+p = File.expand_path "."
+fn = while true
+         fn = File.join p, CONFIG_FN
+         break fn if File.exist? fn
+         pp = File.expand_path File.join(p, "..")
+         break if p == pp
+         p = pp
+     end
+
+(fn && YAML::load_file(fn)) || {} # YAML turns empty files into false
+end
+
+if $dump_config
+    puts $config.to_yaml
+    exit(0)
+end
+
+## the set of commits in 'to' that aren't in 'from'.
+## if empty, 'to' has been merged into 'from'.
+def commits_between from, to
+    if $long
+        `git log --pretty=format:"- %s [#{DEEP_BLUE}%h#{NORMAL}] (%ae; %ar)" #{from}..#{to}`
+    else
+        `git log --pretty=format:"- %s [#{DEEP_BLUE}%h#{NORMAL}]" #{from}..#{to}`
+    end.split(/[\r\n]+/)
+end
+
+def show_commits commits, prefix="    "
+    if commits.empty?
+        puts "#{prefix} none"
+    else
+        max = $all_commits ? commits.size : $config["max_commits"]
+        max -= 1 if max == commits.size - 1 # never show "and 1 more"
+        commits[0 ... max].each { |c| puts "#{prefix}#{c}" }
+        puts "#{prefix}... and #{commits.size - max} more." if commits.size > max
+    end
+end
+
+def ahead_behind_string ahead, behind
+    [ahead.empty? ? nil : "#{GREEN}#{ahead.size.pluralize 'commit'} ahead#{NORMAL}",
+        behind.empty? ? nil : "#{RED}#{behind.size.pluralize 'commit'} behind#{NORMAL}"].
+        compact.join("; ")
+end
+
+def widget merged_in, local_only=false, local_only_merge=false
+    dumb_string_hack = ""
+    dumb_string_hack += local_only ? "(" : "["
+    dumb_string_hack += merged_in ? (local_only_merge ? "~" : "x") : " "
+    dumb_string_hack += local_only ? ")" : "]"
+    dumb_string_hack
+end
+
+def show b, all_branches
+    puts "Local branch: #{NORMAL_BOLD}#{b[:local_branch]}#{NORMAL}"
+    both = false
+
+    if b[:remote_branch]
+        pushc = commits_between b[:remote_branch], b[:local_branch]
+        pullc = commits_between b[:local_branch], b[:remote_branch]
+
+        both = !pushc.empty? && !pullc.empty?
+        if pushc.empty?
+            puts "#{GREEN}#{widget true}#{NORMAL} in sync with remote"
+        else
+            action = both ? "push after rebase / merge" : "push"
+            puts "#{RED}#{widget false}#{NORMAL} NOT in sync with remote (needs #{action})"
+            show_commits pushc unless $short
+        end
+
+        puts "\nRemote branch: #{BORING_CYAN}#{b[:remote_branch]}#{NORMAL} (#{b[:remote_url]})"
+
+        if pullc.empty?
+            puts "#{GREEN}#{widget true}#{NORMAL} in sync with local"
+        else
+            action = pushc.empty? ? "merge" : "rebase / merge"
+            puts "#{RED}#{widget false}#{NORMAL} NOT in sync with local (needs #{action})"
+            show_commits pullc unless $short
+
+            both = !pushc.empty? && !pullc.empty?
+        end
+    end
+
+    vbs, fbs = all_branches.partition { |name, br| $config["versions"].include? br[:local_branch] }
+    if true or $config["versions"].include? b[:local_branch]
+        puts "\nFeature branches:" unless fbs.empty?
+        fbs.sort.each do |name, br|
+            local_only = br[:remote_branch].nil?
+            remote_ahead = b[:remote_branch] ? commits_between(b[:remote_branch], br[:local_branch]) : []
+            local_ahead = commits_between b[:local_branch], br[:local_branch]
+            if local_ahead.empty? && remote_ahead.empty?
+                puts "#{GREEN}#{widget true, local_only}#{NORMAL} #{CYAN}#{br[:name]}#{NORMAL} is merged in"
+            elsif local_ahead.empty? && b[:remote_branch]
+                puts "#{GREEN}#{widget true, local_only, true}#{NORMAL} #{CYAN}#{br[:name]}#{NORMAL} merged in #{RED}(only locally)#{NORMAL}"
+            else
+                behind = commits_between br[:local_branch], b[:local_branch]
+                puts "#{RED}#{widget false, local_only}#{NORMAL} #{CYAN}#{br[:name]}#{NORMAL} is NOT merged in (#{ahead_behind_string local_ahead, behind})"
+                show_commits local_ahead unless $short
+            end
+        end
+    else
+        puts "\nVersion branches:" unless vbs.empty? # unlikely
+        vbs.sort.each do |v, br|
+            local_only = br[:remote_branch].nil?
+            ahead = commits_between v, b[:local_branch]
+            if ahead.empty?
+                puts "#{GREEN}#{widget true, local_only}#{NORMAL} merged into #{CYAN}#{v}#{NORMAL}"
+            else
+                #behind = commits_between b[:local_branch], v
+                puts "#{RED}#{widget false, local_only}#{NORMAL} NOT merged into #{CYAN}#{v}#{NORMAL} (#{ahead.size.pluralize 'commit'} ahead)"
+                show_commits ahead unless $short
+            end
+        end
+    end
+
+    puts "\nWARNING: local and remote branches have diverged. A merge will occur unless you rebase." if both
+end
+
+branches = `git show-ref`.inject({}) do |hash, l|
+    sha1, ref = l.chomp.split " refs/"
+    next hash if $config["ignore"].member? ref
+    name = if $all
+               ref =~ /^(?:heads|remotes)\/(.+)/ && $1
+           else
+               ref =~ /^heads\/(.+)/ && $1
+           end
+
+    next hash if name.nil? || name == "origin/HEAD"
+    hash[name] = { :name => name, :local_branch => ref }
+    hash
+end
+
+remotes = `git config --get-regexp ^remote\.\*\.url`.inject({}) do |hash, l|
+    l =~ /^remote\.(.+?)\.url (.+)$/ or next hash
+    hash[$1] ||= $2
+    hash
+end
+
+`git config --get-regexp ^branch\.`.each do |l|
+    case l
+    when /branch\.(.*?)\.remote (.+)/
+        next if $2 == '.'
+
+        branches[$1] ||= {}
+        branches[$1][:remote] = $2
+        branches[$1][:remote_url] = remotes[$2]
+    when /branch\.(.*?)\.merge ((refs\/)?heads\/)?(.+)/
+        branches[$1] ||= {}
+        branches[$1][:remote_mergepoint] = $4
+    end
+end
+
+branches.each { |k, v| v[:remote_branch] = "#{v[:remote]}/#{v[:remote_mergepoint]}" if v[:remote] && v[:remote_mergepoint] }
+
+show_dirty = ARGV.empty?
+targets = if ARGV.empty?
+              [`git symbolic-ref HEAD`.chomp.sub(/^refs\/heads\//, "")]
+          else
+              ARGV
+          end.map { |t| branches[t] or abort "Error: can't find branch #{t.inspect}." }
+
+          targets.each { |t| show t, branches }
+
+          modified = show_dirty && `git ls-files -m` != ""
+          uncommitted = show_dirty &&  `git diff-index --cached HEAD` != ""
+
+          puts if modified || uncommitted
+          puts "NOTE: working directory contains modified files" if modified
+          puts "NOTE: staging area contains staged but uncommitted files" if uncommitted
+
+          # the end!
+
