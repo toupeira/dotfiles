@@ -1,15 +1,30 @@
-[core]
-	excludesfile = ~/.gitexcludes
-
 [user]
 	name = Markus Koller
 	email = markus-koller@gmx.ch
 
+[core]
+	excludesfile = ~/.gitexcludes
+
 [color]
 	ui = auto
 
+[advice]
+	statusHints = false
+
+[diff]
+	renames = copies
+	mnemonicprefix = true
+
+[difftool]
+	prompt = false
+
 [merge]
+	stat = true
 	tool = gvimdiff
+
+[mergetool]
+	prompt = false
+	keepBackup = false
 
 [alias]
 	h = help
