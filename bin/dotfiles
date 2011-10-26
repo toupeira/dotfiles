@@ -82,6 +82,7 @@ function system {
   for arg in "$@"; do
     dir=`dirname -- "$arg"`
     if [ -d "$dir" -a ! -w "$dir" ]; then
+      echo "not writable: $dir"
       command="sudo $command"
       break
     fi
@@ -264,7 +265,12 @@ function run {
             system rm "$origin"
           fi
 
-          if [ ! -e "$origin" -o $DRYRUN -eq 1 ] && system mkdir -p "`dirname "$origin"`" && system ln -s "$target" "$origin"; then
+          parent=`dirname "$origin"`
+          if [ ! -d "$parent" ]; then
+            system mkdir -p "$parent"
+          fi
+
+          if [ ! -e "$origin" -o $DRYRUN -eq 1 ] && system ln -s "$target" "$origin"; then
             status "Successfully installed {{$origin}}"
           else
             error "Error while installing {{$origin}}"
