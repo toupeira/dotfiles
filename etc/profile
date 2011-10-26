@@ -170,6 +170,7 @@ which xdg-open &>/dev/null && alias open='xdg-open'
 # SSH agent wrappers
 if [ -n "$SSH_AUTH_SOCK" ]; then
   function __load_key {
+    [ "`uname -s`" = "Darwin" ] && return
     local key=~/.ssh/id_rsa
     ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
   }
