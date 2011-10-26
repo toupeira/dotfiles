@@ -264,7 +264,7 @@ function run {
             system rm "$origin"
           fi
 
-          if [ ! -e "$origin" -o $DRYRUN -eq 1 ] && system ln -s "$target" "$origin"; then
+          if [ ! -e "$origin" -o $DRYRUN -eq 1 ] && system mkdir -p "`dirname "$origin"`" && system ln -s "$target" "$origin"; then
             status "Successfully installed {{$origin}}"
           else
             error "Error while installing {{$origin}}"
