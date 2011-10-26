@@ -55,3 +55,6 @@
 [submodule "vim/bundle/indent-object"]
 	path = vim/bundle/indent-object
 	url = https://github.com/michaeljsmith/vim-indent-object.git
+[submodule "vim/bundle/puppet"]
+	path = vim/bundle/puppet
+	url = https://github.com/rodjek/vim-puppet.git

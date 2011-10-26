@@ -79,9 +79,9 @@
   set errorbells
 
   " statusline
-  hi! StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
-  hi! StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
-  hi! StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
+  highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
+  highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
+  highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
 
   set statusline=
 
