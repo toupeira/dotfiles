@@ -79,9 +79,9 @@
   set errorbells
 
   " statusline
-  highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
-  highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
-  highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
+  autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
+  autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
+  autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
 
   set statusline=
 
@@ -109,8 +109,8 @@
   "autocmd WinLeave * setlocal nocursorline nocursorcolumn
 
   " highlight trailing whitespace
-  highlight Whitespace ctermbg=236 guibg=#333333
-  match Whitespace /\s\+$/
+  autocmd VimEnter,BufRead,BufNewFile * highlight Whitespace ctermbg=236 guibg=#333333
+  autocmd VimEnter,BufRead,BufNewFile * match Whitespace /\s\+$/
 
   " go to last cursor position when opening files
   if has('autocmd')
@@ -488,11 +488,11 @@
   let g:miniBufExplUseSingleClick = 1
   let g:miniBufExplCheckDupeBufs = 0
 
-  highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
-  highlight MBEVisibleActive cterm=bold ctermbg=28 gui=bold guibg=#368736
-  highlight MBEVisibleChangedActive cterm=bold ctermbg=124 gui=bold guibg=#cc5653
-  highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
-  highlight MBEChanged ctermbg=88 guibg=#913d3b
+  autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
+  autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleActive cterm=bold ctermbg=28 gui=bold guibg=#368736
+  autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleChangedActive cterm=bold ctermbg=124 gui=bold guibg=#cc5653
+  autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
+  autocmd VimEnter,BufRead,BufNewFile * highlight MBEChanged ctermbg=88 guibg=#913d3b
 
   " nerd tree
   "let g:NERDTreeQuitOnOpen = 1
@@ -508,8 +508,8 @@
 
   " indent guides
   let g:indent_guides_auto_colors = 0
-  highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
-  highlight IndentGuidesEven ctermbg=236 guibg=#333333
+  autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
+  autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
 
   " closetag
   autocmd BufEnter * runtime scripts/closetag.vim
