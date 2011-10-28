@@ -237,7 +237,7 @@ end
 
 branches = `git show-ref`.inject({}) do |hash, l|
     sha1, ref = l.chomp.split " refs/"
-    next hash if $config["ignore"].member? ref
+    next hash if !$config["ignore"].empty? and ref =~ Regexp.new($config["ignore"])
     name = if $all
                ref =~ /^(?:heads|remotes)\/(.+)/ && $1
            else
