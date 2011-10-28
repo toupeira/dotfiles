@@ -179,6 +179,7 @@
   autocmd FileType mail setlocal ts=2 sts=2 sw=2 expandtab tw=80 lbr
   autocmd FileType tex,plaintex,context setlocal lbr
   autocmd FileType ruby compiler ruby | setlocal makeprg=ruby\ -c\ %
+  autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
 
   autocmd BufEnter /home/*/bin/*.run setf sh
   autocmd BufEnter *.inc,*.thtml setf php

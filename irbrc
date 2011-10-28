@@ -1,11 +1,16 @@
 # vim: ft=ruby
 
-require 'rubygems'
-require 'yaml'
-require 'ostruct'
-require 'open-uri'
-require 'wirble'
-require 'active_support/all'
+begin
+  require 'rubygems'
+  require 'yaml'
+  require 'ostruct'
+  require 'open-uri'
+  require 'wirble'
+  require 'active_support/all'
+rescue LoadError => e
+  puts e.message
+  exit
+end
 
 puts
 puts `ruby -v`
