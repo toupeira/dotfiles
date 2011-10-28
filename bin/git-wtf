@@ -139,9 +139,9 @@ end
 ## if empty, 'to' has been merged into 'from'.
 def commits_between from, to
     if $long
-        `git log --pretty=format:"- %s [#{DEEP_BLUE}%h#{NORMAL}] (%ae; %ar)" #{from}..#{to}`
+        `git log --pretty=format:"- %C(yellow)[%h]%Creset %Cred%an:%Creset %s %C(cyan)(%ar)%Creset" #{from}..#{to}`
     else
-        `git log --pretty=format:"- %s [#{DEEP_BLUE}%h#{NORMAL}]" #{from}..#{to}`
+        `git log --pretty=format:"- %C(yellow)[%h]%Creset %s" #{from}..#{to}`
     end.split(/[\r\n]+/)
 end
 

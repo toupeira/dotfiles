@@ -47,7 +47,7 @@
 
 	logstat = log --stat
 	logdiff = log -p
-	oneline = log --pretty=format:\"%C(yellow)%h%Creset - %Cred%an%Creset - %C(cyan)%s%Creset (%ar)\"
+	oneline = log --pretty=format:\"%C(yellow)[%h]%Creset %Cred%an:%Creset %C(cyan)%s%Creset (%ar)\"
 	new = !sh -c 'PAGER= git oneline HEAD@{1}.. && echo'
 	newdiff = log -p HEAD@{1}..
 
