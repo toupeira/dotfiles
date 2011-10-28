@@ -527,4 +527,7 @@
   " yankring
   let g:yankring_history_file = '.vim_yankring_history'
 
+  " rails
+  hi! link rubyRailsARMethod Statement
+
 " }}}
