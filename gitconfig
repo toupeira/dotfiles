@@ -45,5 +45,6 @@
 	ca = commit -va
 	amend = commit -v --amend
 
-	new = !sh -c 'PAGER= git log --pretty=format:\"%C(yellow)%h%Creset - %Cred%an%Creset - %C(cyan)%s%Creset (%ar)\" HEAD@{1}.. && echo'
-	up = !sh -c 'git pull --prune && git new'
+	oneline = log --pretty=format:\"%C(yellow)%h%Creset - %Cred%an%Creset - %C(cyan)%s%Creset (%ar)\"
+	new = !sh -c 'PAGER= git oneline HEAD@{1}.. && echo'
+	up = !sh -c 'git pull --all --prune && git new'
