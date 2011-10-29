@@ -5,7 +5,10 @@ if [ -f /etc/environment ]; then
   . /etc/environment
 fi
 
-if [ -n "$PS1" ]; then
+[ -z "$BASH" ] && return
+[ -n "$PS1" ] && shopt -q login_shell && export BASH_INTERACTIVE=1
+
+if [ "$BASH_INTERACTIVE" ]; then
   if [ "`uname -s`" = "Linux" ]; then
     if [ -z "$SSH_AUTH_SOCK" ]; then
       exec ssh-agent -- bash --login
@@ -16,6 +19,38 @@ if [ -n "$PS1" ]; then
 
   if [ -f /etc/bash_completion ]; then
     . /etc/bash_completion
+  fi
+fi
+
+# History settings
+shopt -s histappend checkwinsize
+export HISTSIZE=5000
+export HISTFILESIZE=5000
+export HISTCONTROL="ignoreboth"
+
+# Prompt configuration
+if [ "$SSH_CLIENT" ] || [ "$SUDO_USER" ]; then
+  export PS1='\u@\h:\w\$ '
+else
+  export PS1='\u@\h:\w\$ '
+fi
+
+# Use Git prompt if available
+if type __git_ps1 &>/dev/null; then
+  export GIT_PS1_SHOWDIRTYSTATE=1
+  export GIT_PS1_SHOWSTASHSTATE=1
+  export GIT_PS1_SHOWUNTRACKEDFILES=1
+
+  export SUDO_PS1=$PS1
+  export PS1=$PS1'$(__git_ps1 "[\[[1;32m\]%s\[[0m\]] ")'
+fi
+
+# Window titles
+if [[ "$TERM" =~ ^(rxvt|xterm-256color) ]]; then
+  if [ "$SSH_CLIENT" ]; then
+    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;@$HOSTNAME:$_pwd\007]2;$USER@$HOSTNAME:$_pwd\007"'
+  else
+    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;$_pwd\007]2;$_pwd\007"'
   fi
 fi
 
@@ -34,43 +69,7 @@ if [ "`uname -s`" = "Darwin" ]; then
   unalias [ echo false kill printf pwd test true
 fi
 
-if [ "$BASH" ]; then
-  if [ "$SSH_CLIENT" ] || [ "$SUDO_USER" ]; then
-    export PS1='\u@\h:\w\$ '
-  else
-    export PS1='\u@\h:\w\$ '
-  fi
-
-  # Use Git prompt if available
-  if type __git_ps1 &>/dev/null; then
-    export GIT_PS1_SHOWDIRTYSTATE=1
-    export GIT_PS1_SHOWSTASHSTATE=1
-    export GIT_PS1_SHOWUNTRACKEDFILES=1
-
-    export SUDO_PS1=$PS1
-    export PS1=$PS1'$(__git_ps1 "[\[[1;32m\]%s\[[0m\]] ")'
-  fi
-else
-  if [ "`id -u`" -eq 0 ]; then
-    export PS1='# '
-  else
-    export PS1='$ '
-  fi
-fi
-
-if [[ "$TERM" =~ ^(rxvt|xterm-256color) ]]; then
-  if [ "$SSH_CLIENT" ]; then
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;@$HOSTNAME:$_pwd\007]2;$USER@$HOSTNAME:$_pwd\007"'
-  else
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;$_pwd\007]2;$_pwd\007"'
-  fi
-fi
-
-shopt -s histappend checkwinsize
-
-export HISTSIZE=5000
-export HISTFILESIZE=5000
-export HISTCONTROL="ignoreboth"
+# Aliases
 
 # ls
 which dircolors &>/dev/null && eval `dircolors -b`
@@ -101,7 +100,6 @@ alias killbg='kill -9 %1'
 alias pkget='aptitude -Z install'
 alias pkgpurge='aptitude -Z purge'
 alias pkgremove='aptitude -Z remove'
-alias pkginstall='sudo dpkg -i'
 alias pkglist='dpkg -L'
 alias pkgname='apt-cache pkgnames'
 alias pkgsearch='apt-cache search'
@@ -110,41 +108,51 @@ function pkgwhich {
 }
 
 # sudo aliases
-alias sucp='sudo cp -vi'
-alias sumv='sudo mv -vi'
-alias surm='sudo rm -v'
-alias suln='sudo ln -svfi'
-alias sush='sudo -i'
-alias suown='sudo chown -vR 0:0'
-alias sumod='sudo chmod -vR 644'
-alias suvi='sudo vim'
-alias sugvi='sudo gvim'
-alias sudiff='sudo vimdiff'
-alias sugdiff='sudo gvimdiff'
-alias init='sudo init'
-alias modprobe='sudo modprobe'
-alias rmmod='sudo rmmod'
-alias apt-get='sudo apt-get'
-alias aptitude='sudo aptitude'
-alias dpkg-reconfigure='sudo dpkg-reconfigure'
-alias invoke-rc.d='sudo invoke-rc.d'
-alias update-rc.d='sudo update-rc.d'
-alias update-alternatives='sudo update-alternatives'
-alias visudo='sudo visudo'
-alias make-kpkg='sudo make-kpkg'
-alias iptables='sudo iptables'
-alias ip6tables='sudo ip6tables'
-alias tcpdump='sudo tcpdump'
-alias ethtool='sudo ethtool'
-alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+"'
-alias jnettop='sudo jnettop'
-alias ifconfig='sudo ifconfig'
-alias ifup='sudo ifup'
-alias ifdown='sudo ifdown'
-alias tcpkill='sudo tcpkill'
-alias fdisk='sudo fdisk'
-alias parted='sudo parted'
-alias lvm='sudo lvm'
+if which sudo &>/dev/null; then
+  # file management
+  alias sucp='sudo cp -vi'
+  alias sumv='sudo mv -vi'
+  alias surm='sudo rm -v'
+  alias suln='sudo ln -svfi'
+  alias sush='sudo -i'
+  alias suown='sudo chown -vR 0:0'
+  alias sumod='sudo chmod -vR 644'
+
+  # vim
+  alias suvi='sudo vim'
+  alias sugvi='sudo gvim'
+  alias sudiff='sudo vimdiff'
+  alias sugdiff='sudo gvimdiff'
+  alias visudo='sudo visudo'
+
+  # debian tools
+  alias apt-get='sudo apt-get'
+  alias aptitude='sudo aptitude'
+  alias pkginstall='sudo dpkg -i'
+  alias dpkg-reconfigure='sudo dpkg-reconfigure'
+  alias update-alternatives='sudo update-alternatives'
+  alias invoke-rc.d='sudo invoke-rc.d'
+  alias update-rc.d='sudo update-rc.d'
+  alias make-kpkg='sudo make-kpkg'
+
+  # system tools
+  alias init='sudo init'
+  alias modprobe='sudo modprobe'
+  alias rmmod='sudo rmmod'
+  alias iptables='sudo iptables'
+  alias ip6tables='sudo ip6tables'
+  alias tcpdump='sudo tcpdump'
+  alias ethtool='sudo ethtool'
+  alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+"'
+  alias jnettop='sudo jnettop'
+  alias ifconfig='sudo ifconfig'
+  alias ifup='sudo ifup'
+  alias ifdown='sudo ifdown'
+  alias tcpkill='sudo tcpkill'
+  alias fdisk='sudo fdisk'
+  alias parted='sudo parted'
+  alias lvm='sudo lvm'
+fi
 
 # program aliases
 alias fortune='fortune -a'
