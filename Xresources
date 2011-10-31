@@ -21,9 +21,6 @@ URxvt*visualBell:	true
 URxvt*matcher.button:	1
 URxvt*perl-ext-common:	selection,matcher
 
-! Black
-URxvt*color0:		#111111
-
 ! Red
 URxvt*color1:		#ee2233
 URxvt*color9:		#ee3333
@@ -31,10 +28,6 @@ URxvt*color9:		#ee3333
 ! Green
 URxvt*color2:		#85DA20
 URxvt*color10:		#8FF814
-
-! Yellow
-URxvt*color3:		#e28223
-URxvt*color11:		#F9F747
 
 ! Blue
 URxvt*color4:		#6578ff
