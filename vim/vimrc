@@ -111,6 +111,7 @@
   " highlight trailing whitespace
   autocmd VimEnter,BufRead,BufNewFile * highlight Whitespace ctermbg=236 guibg=#333333
   autocmd VimEnter,BufRead,BufNewFile * match Whitespace /\s\+$/
+  autocmd VimEnter,BufRead,BufNewFile ~/*/politnetz/* match none
 
   " go to last cursor position when opening files
   if has('autocmd')
