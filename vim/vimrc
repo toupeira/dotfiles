@@ -92,7 +92,7 @@
   " if $SSH_CLIENT != ""
   "   set stl+=%{toupper(hostname())}:              " hostname
   " endif
-  set stl+=\ %<\"%f\"\                            "file name
+  set stl+=\ %<\"%f\"\                            " file name
   set stl+=%y                                     " file type
   set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
   set stl+=%{&bomb?',BOM':''}                     " BOM flag
@@ -128,6 +128,8 @@
 
   if $STY
     set titlestring=%t\ %m
+  else
+    set titlestring=%f\ %r%m%y\ -\ %{v:servername}
   endif
 
 " }}}
