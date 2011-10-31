@@ -325,7 +325,7 @@ function run {
       ;;
     push)
       key=~/.ssh/id_rsa
-      if [ -f "$key" ]; then
+      if [ -f "$key" -a "`uname -s`" != "Darwin" ]; then
         ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
       fi
       git push "$@"
