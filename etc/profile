@@ -6,7 +6,7 @@ if [ -f /etc/environment ]; then
 fi
 
 [ -z "$BASH" ] && return
-[ -n "$PS1" ] && shopt -q login_shell && export BASH_INTERACTIVE=1
+[ -n "$PS1" ] && shopt -q login_shell && BASH_INTERACTIVE=1
 
 if [ "$BASH_INTERACTIVE" ]; then
   if [ "`uname -s`" = "Linux" ]; then
