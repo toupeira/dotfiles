@@ -129,7 +129,7 @@
   if $STY
     set titlestring=%t\ %m
   else
-    set titlestring=%f\ %r%m%y\ -\ %{v:servername}
+    "set titlestring=%r%m\ %t\ \[%{substitute(expand('%:p:h'),\ $HOME,\ '~',\ 'g')}\]\ -\ %{v:servername}
   endif
 
 " }}}
