@@ -92,7 +92,7 @@
   " if $SSH_CLIENT != ""
   "   set stl+=%{toupper(hostname())}:              " hostname
   " endif
-  set stl+=\ %<\"%f\"\                            "file name
+  set stl+=\ %<\"%f\"\                            " file name
   set stl+=%y                                     " file type
   set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
   set stl+=%{&bomb?',BOM':''}                     " BOM flag
@@ -111,6 +111,7 @@
   " highlight trailing whitespace
   autocmd VimEnter,BufRead,BufNewFile * highlight Whitespace ctermbg=236 guibg=#333333
   autocmd VimEnter,BufRead,BufNewFile * match Whitespace /\s\+$/
+  autocmd VimEnter,BufRead,BufNewFile ~/*/politnetz/* match none
 
   " go to last cursor position when opening files
   if has('autocmd')
@@ -127,6 +128,8 @@
 
   if $STY
     set titlestring=%t\ %m
+  else
+    "set titlestring=%r%m\ %t\ \[%{substitute(expand('%:p:h'),\ $HOME,\ '~',\ 'g')}\]\ -\ %{v:servername}
   endif
 
 " }}}
