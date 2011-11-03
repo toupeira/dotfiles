@@ -396,7 +396,7 @@
   nnoremap <silent> ,G :call GrepCurrentPath()<CR>
 
   " ,i - toggle indent guides
-  nmap ,i :IndentGuidesToggle<CR>
+  nnoremap <silent> ,i :IndentGuidesToggle<CR>
 
   " ,l - fuzzy find line
   nnoremap <silent> ,l :FufLine<CR>
@@ -438,28 +438,27 @@
   nnoremap <silent> ,w :write<CR>
 
   " ,W - clear trailing whitespace
-  nnoremap <silent> ,W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w
-
-  " ,Q - quit all
-  nnoremap <silent> ,Q :quitall<CR>
+  nnoremap <silent> ,W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
 
   " ,y - toggle yankring
   nnoremap <silent> ,y :YRShow<CR>
 
-  " ,!! - force quit all
-  nnoremap <silent> ,!! :quitall!<CR>
-
   " F4 / F5 - change window height
-  noremap <silent> <F4> <C-w>+
+  nnoremap <silent> <F4> <C-w>+
   imap <silent> <F4> <C-o><F4>
-  noremap <silent> <F5> <C-w>-
+  nnoremap <silent> <F5> <C-w>-
   imap <silent> <F5> <C-o><F5>
 
   " F6 / F7 - change window width
-  noremap <silent> <F6> <C-w>>
+  nnoremap <silent> <F6> <C-w>>
   imap <silent> <F6> <C-o><F6>
-  noremap <silent> <F7> <C-w><
+  nnoremap <silent> <F7> <C-w><
   imap <silent> <F7> <C-o><F7>
+
+  " conque bindings
+  cnoreabbrev sh ConqueTermSplit bash --login
+  cnoreabbrev irb ConqueTermSplit irb
+  cnoreabbrev py ConqueTermSplit ipython
 
 " }}}
 
@@ -533,5 +532,8 @@
 
   " rails
   hi! link rubyRailsARMethod Statement
+
+  " conque
+  let g:ConqueTerm_StartMessages = 0
 
 " }}}

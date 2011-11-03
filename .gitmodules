@@ -1,6 +1,6 @@
 [submodule "vim/bundle/desertink"]
 	path = vim/bundle/desertink
-	url = https://github.com/toupeira/desertink.vim.git
+	url = https://github.com/toupeira/vim-desertink.git
 [submodule "vim/bundle/gundo"]
 	path = vim/bundle/gundo
 	url = https://github.com/sjl/gundo.vim.git
@@ -36,7 +36,7 @@
 	url = https://github.com/vim-scripts/L9.git
 [submodule "vim/bundle/fuzzyfinder"]
 	path = vim/bundle/fuzzyfinder
-	url = https://github.com/toupeira/fuzzyfinder.vim.git
+	url = https://github.com/toupeira/vim-fuzzyfinder.git
 [submodule "vim/bundle/gitv"]
 	path = vim/bundle/gitv
 	url = https://github.com/gregsexton/gitv.git
@@ -58,3 +58,6 @@
 [submodule "vim/bundle/puppet"]
 	path = vim/bundle/puppet
 	url = https://github.com/rodjek/vim-puppet.git
+[submodule "vim/bundle/conque"]
+	path = vim/bundle/conque
+	url = https://github.com/rson/vim-conque.git
