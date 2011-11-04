@@ -25,7 +25,11 @@ interval=${interval:-60}
 
 export LC_ALL=C # make sure git talks english
 
-[[ -d $1 ]] && cd $1
+if [ -d $1 ]; then
+  cd $1
+else
+  cd ~/.git-dude || exit 1
+fi
 
 function notify() {
   if [ $(which notify-send 2>/dev/null) ]; then
