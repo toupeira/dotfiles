@@ -64,3 +64,6 @@
 [submodule "vim/bundle/pathogen"]
 	path = vim/bundle/pathogen
 	url = https://github.com/tpope/vim-pathogen.git
+[submodule "vim/bundle/syntaxattr"]
+	path = vim/bundle/syntaxattr
+	url = https://github.com/vim-scripts/SyntaxAttr.vim.git

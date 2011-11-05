@@ -4,6 +4,7 @@
   set nocompatible
 
   " load all bundles
+  runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
   " FuzzyFinder/L9 requires Vim 7.2 and floating-point support
