@@ -548,7 +548,4 @@
   " conque
   let g:ConqueTerm_StartMessages = 0
 
-  " supertab
-  let g:superTabDefaultCompletionType = 'context'
-
 " }}}
