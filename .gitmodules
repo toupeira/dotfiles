@@ -67,3 +67,6 @@
 [submodule "vim/bundle/syntaxattr"]
 	path = vim/bundle/syntaxattr
 	url = https://github.com/vim-scripts/SyntaxAttr.vim.git
+[submodule "vim/bundle/autocomplpop"]
+	path = vim/bundle/autocomplpop
+	url = https://github.com/vim-scripts/AutoComplPop.git
