@@ -161,9 +161,6 @@
   runtime macros/matchit.vim
   let b:match_ignorecase = 1
 
-  " completion
-  inoremap <C-Tab> <C-X><C-O>
-
   " diffing
   set diffopt+=iwhite
 
@@ -241,6 +238,16 @@
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
 
+  " use Tab to complete words
+  function! SmartTab()
+    if pumvisible()
+      return "\<CR>"
+    else
+      return TriggerSnippet()
+    endif
+  endfunction
+  autocmd VimEnter * inoremap <Tab> <C-R>=SmartTab()<CR>
+
   " move to matching pair with Tab in visual mode
   vmap <Tab> %
 
@@ -254,6 +261,10 @@
   " scroll in insert mode
   inoremap <C-e> <C-o><C-e>
   inoremap <C-y> <C-o><C-y>
+
+  " autocomplete search history in command mode
+  cnoremap <C-n> <Up>
+  cnoremap <C-p> <Down>
 
   " ,q / ,e - toggle quickfix window and location list
   function! GetBufferList()
@@ -314,8 +325,8 @@
   " ,c - close current window
   nnoremap <silent> ,c :silent! close<CR>
 
-  " ,D - close current buffer
-  nnoremap <silent> ,D :bdelete<CR>
+  " ,d - open definition in new window
+  nmap <silent> ,d <C-w>f
 
   " ,f - fuzzy find files
   nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
@@ -536,5 +547,8 @@
 
   " conque
   let g:ConqueTerm_StartMessages = 0
+
+  " supertab
+  let g:superTabDefaultCompletionType = 'context'
 
 " }}}
