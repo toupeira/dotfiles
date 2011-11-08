@@ -237,16 +237,6 @@
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
 
-  " use Tab to complete words
-  function! SmartTab()
-    if pumvisible()
-      return "\<CR>"
-    else
-      return TriggerSnippet()
-    endif
-  endfunction
-  autocmd VimEnter * inoremap <Tab> <C-R>=SmartTab()<CR>
-
   " move to matching pair with Tab in visual mode
   vmap <Tab> %
 
@@ -330,7 +320,7 @@
   " ,f - fuzzy find files
   nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
 
-  " ,F - enable syntax folding
+  " ,F - toggle syntax folding
   function! ToggleFolding()
     if &foldcolumn == 0
       if &filetype == 'python'
@@ -409,7 +399,7 @@
   " ,i - toggle indent guides
   nnoremap <silent> ,i :IndentGuidesToggle<CR>
 
-  " ,l - fuzzy find line
+  " ,l - fuzzy find lines
   nnoremap <silent> ,l :FufLine<CR>
 
   " ,n - next buffer
@@ -551,11 +541,30 @@
   let g:ConqueTerm_StartMessages = 0
 
   " autocomplpop
+  let g:acp_mappingDriven = 1
   let g:acp_behaviorKeywordLength = 3
   let g:acp_behaviorKeywordIgnores = [
-    \ 'def', 'class', 'module', 'begin', 'rescue', 'ensure', 'end',
-    \ 'if', 'fi', 'else', 'elsif', 'elif',
-    \ 'case', 'when', 'switch',
+    \ 'the', 'def', 'end',
+    \ 'else', 'elsif', 'elif', 'endif',
+    \ 'case',
     \ ]
+
+  " use <Tab> to complete words, and also handle snippets
+  function! TabWrapper(...)
+    if a:0 == 0
+      if pumvisible()
+        " close the popup and expand snippets
+        return "\<CR>\<C-R>=TabWrapper(1)\<CR>"
+      else
+        " popup is closed, use normal SnipMate behavior
+        return TriggerSnippet()
+      endif
+    else
+      " expand snippets, but don't return the <Tab>
+      call TriggerSnippet()
+      return ''
+    endif
+  endfunction
+  autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
 
 " }}}
