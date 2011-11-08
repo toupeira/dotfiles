@@ -354,12 +354,12 @@
     endif
 
     echohl ModeMsg
-    let l:pattern = input("Grep file: /", expand('<cword>'))
+    let l:pattern = substitute(input("Grep file: /", expand('<cword>')), '"', '\"', '')
 
     if l:pattern != ""
       echohl ModeMsg
       echo "/ searching..."
-      execute 'silent grep '.l:pattern.' %'
+      execute 'silent grep "'.l:pattern.'" %'
 
       let l:len = len(getqflist())
       if l:len > 0
@@ -379,7 +379,7 @@
   " ,G - grep the current path
   function! GrepCurrentPath()
     echohl Question
-    let l:pattern = input("Grep path: /", expand('<cword>'))
+    let l:pattern = substitute(input("Grep path: /", expand('<cword>')), '"', '\"', '')
 
     if l:pattern != ""
       if exists('b:rails_root')
@@ -547,5 +547,9 @@
 
   " conque
   let g:ConqueTerm_StartMessages = 0
+
+  " autocomplpop
+  let g:acp_behaviorKeywordLength = 4
+  let g:acp_behaviorKeywordIgnores = [ 'else' ]
 
 " }}}
