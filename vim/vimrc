@@ -179,7 +179,6 @@
   autocmd FileType apache setlocal ts=4 sts=4 sw=4
   autocmd FileType mail setlocal ts=2 sts=2 sw=2 expandtab tw=80 lbr
   autocmd FileType tex,plaintex,context setlocal lbr
-  autocmd FileType ruby compiler ruby | setlocal makeprg=ruby\ -c\ %
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
 
   autocmd BufEnter /home/*/bin/*.run setf sh
@@ -220,7 +219,7 @@
     endif
   endfunction
 
-  autocmd FileType ruby inoremap <buffer> <CR> <C-R>=RubyEndToken()<CR>
+  "autocmd FileType ruby inoremap <buffer> <CR> <C-R>=RubyEndToken()<CR>
 
 " }}}
 
@@ -552,7 +551,11 @@
   let g:ConqueTerm_StartMessages = 0
 
   " autocomplpop
-  let g:acp_behaviorKeywordLength = 4
-  let g:acp_behaviorKeywordIgnores = [ 'else' ]
+  let g:acp_behaviorKeywordLength = 3
+  let g:acp_behaviorKeywordIgnores = [
+    \ 'def', 'class', 'module', 'begin', 'rescue', 'ensure', 'end',
+    \ 'if', 'fi', 'else', 'elsif', 'elif',
+    \ 'case', 'when', 'switch',
+    \ ]
 
 " }}}

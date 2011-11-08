@@ -55,4 +55,5 @@
 	new = !sh -c 'git oneline HEAD@{1}.. | grep --color=never .'
 	newdiff = log -p HEAD@{1}..
 
+	reup = remote update
 	up = merge HEAD@{u}

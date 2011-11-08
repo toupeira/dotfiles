@@ -1,16 +1,14 @@
-snippet span
+snippet sp
 	<span>${1}</span>${2}
-
-snippet small
+snippet sm
 	<small>${1}</small>${2}
-
 snippet ul
 	<ul>
 		${1}
 	</ul>
 snippet li
-	<li>${1}</li>${2}
-
+	<li>${1}</li>
+	${2}
 snippet tb
 	<table>
 	<tr>
@@ -19,10 +17,22 @@ snippet tb
 	</table>
 snippet tr
 	<tr>
+		${1}
+	</tr>
+	${2}
+snippet trh
+	<tr>
 		<th>${1}</th>
 		${2}
 	</tr>${3}
+snippet trd
+	<tr>
+		<td>${1}</td>
+		${2}
+	</tr>${3}
 snippet th
-	<th>${1}</th>${2}
+	<th>${1}</th>
+	${2}
 snippet td
-	<td>${1}</td>${2}
+	<td>${1}</td>
+	${2}
