@@ -422,6 +422,9 @@
   " ,p - previous buffer
   nnoremap <silent> ,p :bprevious<CR>
 
+  " ,P - toggle paste
+  nnoremap <silent> ,P :let &paste=!&paste<CR>
+
   " ,r - reload current buffer
   nnoremap <silent> ,r :edit<CR>
 
@@ -437,9 +440,6 @@
   " ,t - toggle tagbar
   nnoremap <silent> ,t :TagbarToggle<CR>
 
-  " ,T - toggle NERDTree
-  nnoremap <silent> ,T :NERDTreeToggle<CR>
-
   " ,u - open gundo
   nnoremap <silent> ,u :GundoToggle<CR>
 
@@ -451,6 +451,9 @@
 
   " ,W - clear trailing whitespace
   nnoremap <silent> ,W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
+
+  " ,x - toggle NERDTree
+  nnoremap <silent> ,x :NERDTreeToggle<CR>
 
   " ,y - toggle yankring
   nnoremap <silent> ,y :YRShow<CR>
