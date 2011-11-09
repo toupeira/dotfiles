@@ -318,7 +318,7 @@
   nmap <silent> ,d <C-w>f
 
   " ,f - fuzzy find files
-  nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
+  nnoremap <silent> ,f :FufFile<CR>
 
   " ,F - toggle syntax folding
   function! ToggleFolding()
