@@ -549,11 +549,9 @@
     \ 'case',
     \ ]
 
-  " only enable if a filetype is set, and only for local sessions
+  " only enable if a filetype is set
   let g:acp_enableAtStartup = 0
-  if $SSH_CLIENT == ""
-    autocmd FileType * AcpEnable
-  endif
+  autocmd FileType * AcpEnable
 
   " use <Tab> to complete words, and also handle snippets
   function! TabWrapper(...)
