@@ -26,10 +26,6 @@
 	prompt = false
 	keepBackup = false
 
-[dude]
-	interval = 60
-	icon = ~/Dropbox/Icons/github.png
-
 [alias]
 	h = help
 	sub = submodule
