@@ -32,6 +32,7 @@
 
 [alias]
 	h = help
+	r = remote
 	sub = submodule
 
 	di = diff
