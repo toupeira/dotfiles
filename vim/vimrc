@@ -541,7 +541,7 @@
   let g:ConqueTerm_StartMessages = 0
 
   " autocomplpop
-  let g:acp_mappingDriven = 1
+  "let g:acp_mappingDriven = 1
   let g:acp_behaviorKeywordLength = 3
   let g:acp_behaviorKeywordIgnores = [
     \ 'the', 'def', 'end',
