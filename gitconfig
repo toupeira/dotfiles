@@ -52,5 +52,7 @@
 	new = !sh -c 'git oneline HEAD@{1}.. | grep --color=never .'
 	news = log -p HEAD@{1}..
 
+	ff = merge HEAD@{u}
+	up = pull
+	upbase = !sh -c 'git stash save; git pull --rebase; git stash pop'
 	reup = remote update
-	up = merge HEAD@{u}

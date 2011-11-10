@@ -323,6 +323,11 @@ function run {
       git ignore-errors add -A .
       git ignore-errors commit -a -m "Sync dotfiles" "$@"
       ;;
+    pull)
+      git stash save -q
+      git pull --rebase "$@"
+      git stash pop -q
+      ;;
     push)
       key=~/.ssh/id_rsa
       if [ -f "$key" -a "`uname -s`" != "Darwin" ]; then
