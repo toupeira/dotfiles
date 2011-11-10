@@ -26,6 +26,9 @@
 	prompt = false
 	keepBackup = false
 
+[rebase]
+	stat = true
+
 [alias]
 	h = help
 	r = remote
@@ -49,10 +52,10 @@
 	logstat = log --stat
 	logdiff = log -p
 	oneline = log --pretty=format:\"%C(yellow)[%h]%Creset %Cred%an:%Creset %C(cyan)%s%Creset (%ar)\"
-	new = !sh -c 'git oneline HEAD@{1}.. | grep --color=never .'
+	new = "!git oneline HEAD@{1}.. | grep --color=never ."
 	news = log -p HEAD@{1}..
 
 	ff = merge HEAD@{u}
-	up = pull
-	upbase = !sh -c 'git stash save; git pull --rebase; git stash pop'
+	up = pull -v
+	upbase = "!git stash save -q; git pull -v --rebase; git stash pop -q"
 	reup = remote update
