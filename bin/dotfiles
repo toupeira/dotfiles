@@ -332,7 +332,7 @@ function run {
         abort
       fi
 
-      [ -n "$changes" ] && git stash save -q
+      [ -n "$changes" ] && git stash save | grep -q "No local changes to save" && unset changes
       git pull "$@"
       [ -n "$changes" ] && git stash pop -q
       ;;
