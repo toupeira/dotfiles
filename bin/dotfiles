@@ -332,9 +332,9 @@ function run {
         abort
       fi
 
-      git stash save -q
+      [ -n "$changes" ] && git stash save -q
       git pull "$@"
-      git stash pop -q
+      [ -n "$changes" ] && git stash pop -q
       ;;
     push)
       key=~/.ssh/id_rsa
