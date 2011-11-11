@@ -406,13 +406,22 @@
   nnoremap <silent> ,n :bnext<CR>
 
   " ,N - toggle line numbers
-  nnoremap <silent> ,N :set number!<CR>
+  function! ToggleLineNumbers()
+    if &number
+      set nonumber
+    elseif &relativenumber
+      set number
+    else
+      set relativenumber
+    endif
+  endfunction
+  nnoremap <silent> ,N :call ToggleLineNumbers()<CR>
 
   " ,p - previous buffer
   nnoremap <silent> ,p :bprevious<CR>
 
   " ,P - toggle paste
-  nnoremap <silent> ,P :let &paste=!&paste<CR>
+  nnoremap <silent> ,P :set paste!<CR>
 
   " ,r - reload current buffer
   nnoremap <silent> ,r :edit<CR>
@@ -546,6 +555,7 @@
 
   " autocomplpop
   "let g:acp_mappingDriven = 1
+  let g:acp_completeoptPreview = 1
   let g:acp_behaviorKeywordLength = 3
   let g:acp_behaviorKeywordIgnores = [
     \ 'the', 'def', 'end',
