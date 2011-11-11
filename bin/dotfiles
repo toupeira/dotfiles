@@ -166,14 +166,16 @@ function run {
       run submodule sync -q
       run submodule update --init -q
 
-      msg
-      status "{{Committing local changes...}}"
-      run commitall
-
-      if git status | grep -q ahead; then
+      if git status -s | grep -q .; then
         msg
-        status "{{Pushing local changes...}}"
-        run push
+        status "{{Committing local changes...}}"
+        run commitall
+
+        if git status | grep -q ahead; then
+          msg
+          status "{{Pushing local changes...}}"
+          run push
+        fi
       fi
 
       msg
@@ -324,7 +326,7 @@ function run {
       git ignore-errors commit -a -m "Sync dotfiles" "$@"
       ;;
     pull)
-      changes=`git status -s`
+      changes=`git status -s --ignore-submodules`
 
       if [ -n "$changes" ]; then
         git status
