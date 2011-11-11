@@ -545,8 +545,8 @@
   let g:acp_behaviorKeywordLength = 3
   let g:acp_behaviorKeywordIgnores = [
     \ 'the', 'def', 'end',
-    \ 'else', 'elsif', 'elif', 'endif',
-    \ 'case',
+    \ 'else', 'elsif', 'elif', 'endif', 'then',
+    \ 'case', 'done',
     \ ]
 
   " only enable if a filetype is set

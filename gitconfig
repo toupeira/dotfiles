@@ -59,3 +59,7 @@
 	up = pull -v
 	upbase = "!git stash save -q; git pull -v --rebase; git stash pop -q"
 	reup = remote update
+
+	tig = "!tig"
+	gitg = "!gitg"
+	gitx = "!gitx"
