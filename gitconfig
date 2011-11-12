@@ -57,8 +57,9 @@
 	new = "!git oneline HEAD@{1}.. | grep --color=never ."
 	news = log -p HEAD@{1}..
 
-	ff = merge HEAD@{u}
 	up = pull -v --progress
+	pu = push -v --progress
+	ff = merge HEAD@{u}
 	upbase = "!git stash save -q; git pull -v --progress --rebase; git stash pop -q"
 	reup = remote update
 

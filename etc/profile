@@ -197,6 +197,13 @@ if [ -n "$SSH_AUTH_SOCK" ]; then
   }
 fi
 
+# RubyGems wrapper
+function gem {
+  local gem="gem"
+  [[ "$@" =~ (install) ]] && gem="sudo gem"
+  command $gem "$@"
+}
+
 # MySQL aliases and functions
 alias mysql='mysql -u root'
 
