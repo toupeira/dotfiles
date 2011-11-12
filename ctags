@@ -1,0 +1,1 @@
+--regex-html=/(id=|:id => )["':]?([-A-Za-z0-9_]*)["']?/\1/d,named element,named elements/
