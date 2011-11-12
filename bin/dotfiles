@@ -170,12 +170,12 @@ function run {
         msg
         status "{{Committing local changes...}}"
         run commitall
+      fi
 
-        if git status | grep -q ahead; then
-          msg
-          status "{{Pushing local changes...}}"
-          run push
-        fi
+      if git status | grep -q ahead; then
+        msg
+        status "{{Pushing local changes...}}"
+        run push
       fi
 
       msg
