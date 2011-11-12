@@ -335,7 +335,7 @@ function run {
       fi
 
       [ -n "$changes" ] && git stash save | grep -q "No local changes to save" && unset changes
-      git pull "$@"
+      git pull -v --progress "$@"
       [ -n "$changes" ] && git stash pop -q
       ;;
     push)
@@ -343,7 +343,7 @@ function run {
       if [ -f "$key" -a "`uname -s`" != "Darwin" ]; then
         ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
       fi
-      git push "$@"
+      git push -v -progress "$@"
       ;;
     *)
       git ignore-errors $command "$@"

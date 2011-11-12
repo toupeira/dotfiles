@@ -3,6 +3,8 @@
 	email = markus-koller@gmx.ch
 
 [core]
+	eol = lf
+	autocrlf = input
 	excludesfile = ~/.gitexcludes
 
 [color]
@@ -56,8 +58,8 @@
 	news = log -p HEAD@{1}..
 
 	ff = merge HEAD@{u}
-	up = pull -v
-	upbase = "!git stash save -q; git pull -v --rebase; git stash pop -q"
+	up = pull -v --progress
+	upbase = "!git stash save -q; git pull -v --progress --rebase; git stash pop -q"
 	reup = remote update
 
 	tig = "!tig"

@@ -28,8 +28,6 @@
   "call pathogen#helptags()
 
   " file handling
-  "set binary
-  "set noendofline
   set nobackup
   set autowrite
   set encoding=utf-8
