@@ -2,6 +2,7 @@
 " {{{
 
   set nocompatible
+  let $LANG = "en"
 
   " load all bundles
   runtime bundle/pathogen/autoload/pathogen.vim
@@ -18,12 +19,17 @@
     call add(g:pathogen_disabled, 'gundo')
   endif
 
+  " Hammer requires Ruby
+  if !has('ruby')
+    call add(g:pathogen_disabled, 'hammer')
+  endif
+
   call pathogen#infect()
   "call pathogen#helptags()
 
   " file handling
-  set binary
-  set noendofline
+  "set binary
+  "set noendofline
   set nobackup
   set autowrite
   set encoding=utf-8
