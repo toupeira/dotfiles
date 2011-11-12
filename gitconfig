@@ -60,7 +60,7 @@
 	up = pull -v --progress
 	pu = push -v --progress
 	ff = merge HEAD@{u}
-	upbase = "!git stash save -q; git pull -v --progress --rebase; git stash pop -q"
+	upbase = "!git stash save -q; git pull -v --rebase; git stash pop -q"
 	reup = remote update
 
 	tig = "!tig"
