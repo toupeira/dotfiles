@@ -80,7 +80,7 @@ function system {
   shift
 
   for arg in "$@"; do
-    dir=`dirname -- "$arg"`
+    local dir=`dirname -- "$arg"`
     if [ -d "$dir" -a ! -w "$dir" ]; then
       echo "not writable: $dir"
       command="sudo $command"
@@ -221,9 +221,9 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        origin=`readlink -f -- "$path"`
-        target=`target "$origin"`
-        force=0
+        local origin=`readlink -f -- "$path"`
+        local target=`target "$origin"`
+        local force=0
 
         if [[ "$origin" =~ ^$DOTFILES/ ]]; then
           target="$origin"
@@ -249,11 +249,11 @@ function run {
         fi
 
         if [ -e "$origin" -o -L "$origin" ]; then
-          ask="ask"
-          question="Delete {{$origin}} and install symlink?"
+          local ask="ask"
+          local question="Delete {{$origin}} and install symlink?"
         else
-          ask="ask_yes"
-          question="Install symlink for {{$origin}}?"
+          local ask="ask_yes"
+          local question="Install symlink for {{$origin}}?"
         fi
 
         if [ $force -eq 1 ] || $ask "$question"; then
@@ -267,7 +267,7 @@ function run {
             system rm "$origin"
           fi
 
-          parent=`dirname "$origin"`
+          local parent=`dirname "$origin"`
           if [ ! -d "$parent" ]; then
             system mkdir -p "$parent"
           fi
@@ -287,9 +287,9 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        origin=`readlink -f "$path" 2>/dev/null`
-        target=`target "$origin"`
-        target_dir=`dirname "$target"`
+        local origin=`readlink -f "$path" 2>/dev/null`
+        local target=`target "$origin"`
+        local target_dir=`dirname "$target"`
 
         if [ ! -e "$origin" ]; then
           error "Path not found: {{$origin}}"
@@ -315,6 +315,7 @@ function run {
           git add "$target"
 
           status "Successfully added {{$target}}"
+          let added++
         else
           error "Error while converting path: {{$origin}}"
           continue
@@ -326,7 +327,7 @@ function run {
       git ignore-errors commit -a -m "Sync dotfiles" "$@"
       ;;
     pull)
-      changes=`git status -s --ignore-submodules`
+      local changes=`git status -s --ignore-submodules`
 
       if [ -n "$changes" ]; then
         git status
@@ -339,7 +340,7 @@ function run {
       [ -n "$changes" ] && git stash pop -q
       ;;
     push)
-      key=~/.ssh/id_rsa
+      local key=~/.ssh/id_rsa
       if [ -f "$key" -a "`uname -s`" != "Darwin" ]; then
         ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
       fi
