@@ -29,7 +29,7 @@ export HISTFILESIZE=5000
 export HISTCONTROL="ignoreboth"
 
 # Prompt configuration
-if [ "$SSH_CLIENT" ] || [ "$SUDO_USER" ]; then
+if [ "$SSH_CONNECTION" ] || [ "$SUDO_USER" ]; then
   export PS1='\u@\h:\w\$ '
 else
   export PS1='\u@\h:\w\$ '
@@ -47,7 +47,7 @@ fi
 
 # Window titles
 if [[ "$TERM" =~ ^(rxvt|xterm-256color) ]]; then
-  if [ "$SSH_CLIENT" ]; then
+  if [ "$SSH_CONNECTION" ]; then
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;@$HOSTNAME:$_pwd\007]2;$USER@$HOSTNAME:$_pwd\007"'
   else
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "]1;$_pwd\007]2;$_pwd\007"'
@@ -204,45 +204,67 @@ function gem {
   command $gem "$@"
 }
 
+# GVim wrapper for SSH sessions
+if [ -n "$SSH_CONNECTION" ]; then
+  unalias gvi
+  function gvi {
+    local wait=1
+
+    while true; do
+      [ -n "$DISPLAY" -a -x /usr/bin/gvim ] || break
+
+      if gvim --serverlist | grep -q .; then
+        args=()
+        options=
+        for arg in "$@"; do
+          if [ "${arg:0:1}" = "@" ]; then
+            options="$options --servername ${arg:1}"
+          else
+            args=( "${args[@]}" "scp://$HOSTNAME/`readlink -f "$arg"`" )
+          fi
+        done
+        pushd / >/dev/null
+        gvim $options --remote "${args[@]}"
+        popd >/dev/null
+        return
+      else
+        [ $wait -eq 1 ] && echo "Waiting for GVim server..."
+        wait=0
+        sleep 1
+      fi
+    done
+
+    vim "$@"
+  }
+fi
+
 # MySQL aliases and functions
-alias mysql='mysql -u root'
+if which mysql >/dev/null; then
+  alias mysql='mysql -u root'
 
-function mysql-ps {
-  uptime
-  sudo mysqladmin --defaults-file=/etc/mysql/debian.cnf status || return 1
-  echo
-
-  command="sudo mysql --defaults-file=/etc/mysql/debian.cnf -e 'SHOW FULL PROCESSLIST' -B | sort -k 5"
-  if [ -n "$1" ]; then
-    eval $command | egrep "$1"
-  else
-    eval $command | egrep -v "\sSleep\s"
-  fi
-}
-
-function mysql-kill {
-  sudo mysql --defaults-file=/etc/mysql/debian.cnf -e "KILL $1"
-}
-
-function mysql-top {
-  watch -n 1 "bash -c '. /etc/profile; mysql-ps $1'";
-}
-
-function down {
-  local i
-  for i in `seq 1 $(tput lines)`; do
+  function mysql-ps {
+    uptime
+    sudo mysqladmin --defaults-file=/etc/mysql/debian.cnf status || return 1
     echo
-  done
-}
 
-function .home {
-  cd; down
-  fortune
-  echo; echo
-  date "+%A, %e. %B %Y  %k:%M"
-  echo; ls; echo
-}
+    command="sudo mysql --defaults-file=/etc/mysql/debian.cnf -e 'SHOW FULL PROCESSLIST' -B | sort -k 5"
+    if [ -n "$1" ]; then
+      eval $command | egrep "$1"
+    else
+      eval $command | egrep -v "\sSleep\s"
+    fi
+  }
 
+  function mysql-kill {
+    sudo mysql --defaults-file=/etc/mysql/debian.cnf -e "KILL $1"
+  }
+
+  function mysql-top {
+    watch -n 1 "bash -c '. /etc/profile; mysql-ps $1'";
+  }
+fi
+
+# Mount a loopback device
 function mount.loop {
   mount="/mnt/loop"
   [ -n "$2" ] && mount="$2"
@@ -259,6 +281,22 @@ function mount.loop {
   else
     sudo mount -v -o loop "$1" "$mount" | tail -1
   fi
+}
+
+# Show the login message
+function .home {
+  cd; down
+  fortune
+  echo; echo
+  date "+%A, %e. %B %Y  %k:%M"
+  echo; ls; echo
+}
+
+function down {
+  local i
+  for i in `seq 1 $(tput lines)`; do
+    echo
+  done
 }
 
 
