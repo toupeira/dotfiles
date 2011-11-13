@@ -225,12 +225,32 @@
 " {{{
 
   " command-mode aliases
-  cnoreabbrev E e
   cnoreabbrev W w
   cnoreabbrev WQ wq
   cnoreabbrev Q q
   cnoreabbrev QA qa
   cnoreabbrev Qa qa
+
+  " shortcut to edit runtime files
+  function! RuntimeFileCompletion(A, L, P)
+    let l:dir = getcwd()
+    chdir ~/.dotfiles/vim/
+
+    if isdirectory(a:A) && a:A[-1:] != '/'
+      let l:arg = a:A.'/'
+    else
+      let l:arg = a:A
+    endif
+
+    let l:values = split(glob(l:arg.'*',), "\n")
+    if len(l:values) == 1 && isdirectory(l:values[0])
+      let l:values = [ l:values[0].'/' ]
+    endif
+
+    execute "chdir ".l:dir
+    return l:values
+  endfunction
+  command! -nargs=1 -complete=customlist,RuntimeFileCompletion E edit ~/.dotfiles/vim/<args>
 
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
