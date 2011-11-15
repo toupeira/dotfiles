@@ -6,7 +6,9 @@ if [ -f /etc/environment ]; then
 fi
 
 [ -z "$BASH" ] && return
+
 [ -n "$PS1" ] && shopt -q login_shell && BASH_INTERACTIVE=1
+[ "`uname -s`" = "Darwin" ] && BASH_OSX=1
 
 if [ "$BASH_INTERACTIVE" ]; then
   if [ "`uname -s`" = "Linux" ]; then
@@ -55,7 +57,7 @@ if [[ "$TERM" =~ ^(rxvt|xterm-256color) ]]; then
 fi
 
 # OS X specific configuration
-if [ "`uname -s`" = "Darwin" ]; then
+if [ "$BASH_OSX" ]; then
   if [ -x /usr/libexec/path_helper ]; then
     eval `/usr/libexec/path_helper -s`
   fi
@@ -75,7 +77,7 @@ fi
 # ls
 which dircolors &>/dev/null && eval `dircolors -b`
 alias ls='ls --color'
-[ "`uname -s`" = "Darwin" ] && alias ls='gls --color'
+[ "$BASH_OSX" ] && alias ls='gls --color'
 alias ll='ls -lh'
 alias l='ls -A'
 
@@ -89,9 +91,11 @@ alias cp='cp -v'
 alias mv='mv -v'
 alias rm='rm -v'
 alias du='du -ch'
+[ "$BASH_OSX" ] && alias du='gdu -ch'
 alias df='df -h'
+[ "$BASH_OSX" ] && alias df='df -h'
 alias ln='ln -svfi'
-[ "`uname -s`" = "Darwin" ] && alias ln='gln -svfi'
+[ "$BASH_OSX" ] && alias ln='gln -svfi'
 alias rgrep='grep -r --exclude=.svn --exclude=.git --exclude=.*.swp'
 alias cgrep='GREP_OPTIONS= grep'
 alias mime='file -i'
@@ -179,7 +183,7 @@ which xdg-open &>/dev/null && alias open='xdg-open'
 # SSH agent wrappers
 if [ -n "$SSH_AUTH_SOCK" ]; then
   function __load_key {
-    [ "`uname -s`" = "Darwin" ] && return
+    [ "$BASH_OSX" ] && return
     local key=~/.ssh/id_rsa
     if [ -f "$key" ]; then
       ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
