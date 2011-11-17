@@ -1,6 +1,3 @@
-# /etc/environment - Global environment variables
-# vim: ft=sh
-
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/games:/var/lib/gems/1.8/bin:~/bin
 
 export LANG="de_CH.UTF-8"
@@ -16,6 +13,3 @@ export GREP_OPTIONS="-i --color=auto --exclude=.svn --exclude=.git --exclude=.*.
 export ACK_OPTIONS="-i"
 export IRB_HISTORY_SIZE=3000
 export RI="--format ansi --no-pager"
-
-export VDPAU_NVIDIA_SYNC_DISPLAY_DEVICE="DFP-1"
-#export __GL_SYNC_TO_VBLANK="1"

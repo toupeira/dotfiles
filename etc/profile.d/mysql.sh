@@ -1,0 +1,25 @@
+# Check for interactive bash and MySQL
+[ -z "$BASH_INTERACTIVE" ] || ! which mysql >/dev/null && return
+
+alias mysql='mysql -u root'
+
+function mysql-ps {
+  uptime
+  mysqladmin status || return 1
+  echo
+
+  command="mysql -e 'SHOW FULL PROCESSLIST' -B | sort -k 5"
+  if [ -n "$1" ]; then
+    eval $command | egrep "$1"
+  else
+    eval $command | egrep -v "\sSleep\s"
+  fi
+}
+
+function mysql-kill {
+  mysql -e "KILL $1"
+}
+
+function mysql-top {
+  watch -n 1 "bash -c '. /etc/profile; mysql-ps $1'";
+}

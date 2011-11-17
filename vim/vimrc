@@ -487,9 +487,9 @@
   imap <silent> <F7> <C-o><F7>
 
   " conque bindings
-  cnoreabbrev sh ConqueTermSplit bash --login
-  cnoreabbrev irb ConqueTermSplit irb
-  cnoreabbrev py ConqueTermSplit ipython
+  command Sh ConqueTermSplit bash --login
+  command Irb ConqueTermSplit irb
+  command Py ConqueTermSplit ipython
 
 " }}}
 

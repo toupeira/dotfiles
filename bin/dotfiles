@@ -115,7 +115,7 @@ function git {
 }
 
 function validate {
-if ! [[ "$1" =~ ^($HOME|(/private)?/etc)($|/) ]]; then
+if ! [[ "$1" =~ ^($HOME|(/private|/usr/local)?/etc)($|/) ]]; then
     error "Path is not inside \$HOME or /etc: {{$1}}"
     return 1
   else
@@ -130,6 +130,8 @@ function target {
     local target="${1:${#HOME}+1}"
   elif [[ "$origin" =~ ^/private/etc/ ]]; then
     local target="${1:8}"
+  elif [[ "$origin" =~ ^/usr/local/etc/ ]]; then
+    local target="${1:10}"
   elif [[ "$origin" =~ ^/etc/ ]]; then
     local target="${1:1}"
   fi
