@@ -79,14 +79,18 @@ function system {
   local command="$1"
   shift
 
-  for arg in "$@"; do
-    local dir=`dirname -- "$arg"`
-    if [ -d "$dir" -a ! -w "$dir" ]; then
-      echo "not writable: $dir"
-      command="sudo $command"
-      break
-    fi
-  done
+  if [ "$command" = "chown" -o "$command" = "chgrp" ]; then
+    command="sudo $command"
+  else
+    for arg in "$@"; do
+      local dir=`dirname -- "$arg"`
+      if [ -d "$dir" -a ! -w "$dir" ]; then
+        echo "not writable: $dir"
+        command="sudo $command"
+        break
+      fi
+    done
+  fi
 
   [ $FORCE   -eq 1 ] && command="$command -f"
   [ $VERBOSE -eq 1 ] && command="$command -v" && echo "     executing: $command $@"
