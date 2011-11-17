@@ -587,8 +587,10 @@
     \ ]
 
   " only enable if a filetype is set
-  let g:acp_enableAtStartup = 0
-  autocmd FileType * AcpEnable
+  if exists(':AcpEnable')
+    let g:acp_enableAtStartup = 0
+    autocmd FileType * AcpEnable
+  endif
 
   " use <Tab> to complete words, and also handle snippets
   function! TabWrapper(...)
