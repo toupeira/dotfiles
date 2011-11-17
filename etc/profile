@@ -6,8 +6,7 @@ if [ -f /etc/environment ]; then
 fi
 
 [ -z "$BASH" ] && return
-
-[ -n "$PS1" ] && shopt -q login_shell && BASH_INTERACTIVE=1
+[ -n "$BASH_VERSION" -a -n "$PS1" ] && shopt -q login_shell && BASH_INTERACTIVE=1
 [ "`uname -s`" = "Darwin" ] && BASH_OSX=1
 
 if [ "$BASH_INTERACTIVE" ]; then
@@ -19,7 +18,7 @@ if [ "$BASH_INTERACTIVE" ]; then
     fi
   fi
 
-  if [ -f /etc/bash_completion ]; then
+  if [ -f /etc/bash_completion -a -z "$BASH_COMPLETION" ]; then
     . /etc/bash_completion
   fi
 fi
