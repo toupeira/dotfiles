@@ -51,7 +51,15 @@ function gem {
   command $gem "$@"
 }
 
-# Pass a file to a local GVim instance
+# GVim wrapper to pass a file to an existing session
+function gvi.add {
+  gvim --remote-silent "$@"
+  if which xwit >/dev/null; then
+    xwit -raise -focus -property WM_CLASS -names gvim
+  fi
+}
+
+# GVim wrapper to pass a file to a local instance
 if [ -n "$SSH_CONNECTION" ]; then
   unalias gvi
   function gvi {
