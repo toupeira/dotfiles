@@ -347,7 +347,7 @@ function run {
     push)
       local key=~/.ssh/id_rsa
       if [ -f "$key" -a "`uname -s`" != "Darwin" ]; then
-        ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
+        ssh-add -l | fgrep -q "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
       fi
       git push -v --progress "$@"
       ;;
