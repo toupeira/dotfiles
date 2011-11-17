@@ -42,7 +42,7 @@ if which sudo &>/dev/null; then
   alias sumv='sudo mv -vi'
   alias surm='sudo rm -v'
   alias suln='sudo ln -svfi'
-  alias sush='sudo -i'
+  alias sush='sudo bash --login'
   alias suown='sudo chown -vR 0:0'
   alias sumod='sudo chmod -vR 644'
 
