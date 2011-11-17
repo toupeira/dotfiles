@@ -202,7 +202,9 @@ function run {
             continue
           fi
 
-          if [ -d "$path" -a ! -e "$path/.install" ]; then
+          if [ -e "$path/.skip" ]; then
+            local status=0
+          elif [ -d "$path" -a ! -e "$path/.install" ]; then
             local status=255
           else
             run install "$path"
@@ -281,6 +283,7 @@ function run {
             continue
           fi
         else
+          # Path wasn't installed, try the children instead
           status=255
         fi
       done
