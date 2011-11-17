@@ -29,7 +29,7 @@ if [ -n "$SSH_AUTH_SOCK" ]; then
   function __load_key {
     local key=~/.ssh/id_rsa
     if [ -f "$key" ]; then
-      ssh-add -l | grep -q "$key" || ssh-add "$key" </dev/null
+      ssh-add -l | fgrep -q "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
     fi
   }
 
