@@ -23,8 +23,8 @@ endif
 
   set guioptions=aigrL
 
-  if !exists('g:gui_loaded')
-    let g:gui_loaded = 1
+  if !exists('s:gui_loaded')
+    let s:gui_loaded = 1
 
     set lines=60
     if &diff
@@ -53,20 +53,43 @@ endif
 " Keybindings
 " {{{
 
-  " ,M - toggle font size
+  " ,Z - toggle font size
   function! ToggleFontSize()
-    if exists('g:toggle_font_size')
-      unlet g:toggle_font_size
-      set guifont=Monospace\ 9 lines=50 columns=120
+    if exists('s:toggle_font_size')
+      let s:toggle_font_size_big = [ &guifont, &columns, &lines ]
+
+      execute 'set guifont=' . escape(s:toggle_font_size[0], ' ')
+      execute 'set columns=' . escape(s:toggle_font_size[1], ' ')
+      execute 'set lines='   . escape(s:toggle_font_size[2], ' ')
+
+      unlet s:toggle_font_size
     else
-      let g:toggle_font_size = 1
-      set guifont=Monospace\ 15 lines=40 columns=110
+      let s:toggle_font_size = [ &guifont, &columns, &lines ]
+
+      if exists('s:toggle_font_size_big')
+        execute 'set guifont=' . escape(s:toggle_font_size_big[0], ' ')
+        execute 'set columns=' . escape(s:toggle_font_size_big[1], ' ')
+        execute 'set lines='   . escape(s:toggle_font_size_big[2], ' ')
+
+        unlet s:toggle_font_size_big
+      else
+        if has('mac')
+          set guifont=Menlo\ Regular:h18
+        elseif has('unix')
+          set guifont=Monospace\ Bold\ 18
+        else
+          set guifont=DejaVu_Sans_Mono:h16:cANSI
+        endif
+
+        set columns=110 lines=40
+      endif
+
       winpos 290 100
     endif
     wincmd =
   endfunction
 
-  noremap <silent> <leader>M :call ToggleFontSize()<CR>
+  noremap <silent> <leader>Z :call ToggleFontSize()<CR>
   noremap <silent> <C-PageUp> :call ToggleFontSize()<CR>
   noremap <silent> <C-PageDown> :call ToggleFontSize()<CR>
 
