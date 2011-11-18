@@ -4,8 +4,8 @@ complete -o bashdefault -o default -F _root_command sudo watch
 complete -o bashdefault -o default -F _command start
 complete -F _pgrep psgrep
 
-complete -o bashdefault -o default -o nospace -F _git -W 'sync up update ca commitall init install add' dotfiles
-complete -o bashdefault -o default -o nospace -F _git pn dt
+complete -o bashdefault -o default -o nospace -F _git -W 'sync up update ca commitall init install add' dotfiles dt
+complete -o bashdefault -o default -o nospace -F _git pn
 
 complete -f -X '!*.deb' pkginstall
 
