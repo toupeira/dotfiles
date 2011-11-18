@@ -1,4 +1,4 @@
-# Check for interactive bash
+# Define helper variable for interactive shells
 [ -n "$BASH_VERSION" -a -n "$PS1" ] && BASH_INTERACTIVE=1
 
 # Check for interactive bash and Linux

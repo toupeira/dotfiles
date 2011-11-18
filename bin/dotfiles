@@ -200,7 +200,7 @@ function run {
       msg
       ;;
     init)
-      function add_paths {
+      function install_paths {
         for path in "$@"; do
           if [ ! -e "$path" ]; then
             continue
@@ -216,13 +216,13 @@ function run {
           fi
 
           if [ -d "$path" -a $status -eq 255 ]; then
-            add_paths "$path"/*
+            install_paths "$path"/*
           fi
         done
       }
 
       msg
-      add_paths "$DOTFILES"/*
+      install_paths "${1:-$DOTFILES}"/*
       msg
       ;;
     install)
