@@ -610,4 +610,11 @@
   endfunction
   autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
 
+  " shortcuts for session plugin
+  cnoreabbrev SS SaveSession
+  cnoreabbrev OS OpenSession
+  cnoreabbrev CS CloseSession
+  cnoreabbrev DS DeleteSession
+  cnoreabbrev VS ViewSession
+
 " }}}

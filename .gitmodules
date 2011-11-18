@@ -70,3 +70,6 @@
 [submodule "vim/bundle/autocomplpop"]
 	path = vim/bundle/autocomplpop
 	url = https://github.com/toupeira/vim-autocomplpop.git
+[submodule "vim/bundle/session"]
+	path = vim/bundle/session
+	url = https://github.com/xolox/vim-session.git
