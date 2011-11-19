@@ -32,6 +32,8 @@
   set encoding=utf-8
   set modeline
   set modelines=2
+  set undofile
+  set undodir=~/.vim/tmp/undo
 
   " interface
   set hidden
@@ -256,6 +258,13 @@
   endfunction
   command! -nargs=1 -complete=customlist,RuntimeFileCompletion E edit ~/.dotfiles/vim/<args>
 
+  " ignore wrapping lines when moving
+  noremap j gj
+  noremap k gk
+
+  " don't move on *
+  nnoremap * *<C-o>
+
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
 
@@ -265,7 +274,7 @@
   " toggle paste mode with F12
   set pastetoggle=<f12>
 
-  " emacs keybindings in console
+  " emacs keybindings
   cnoremap <C-a> <Home>
   cnoremap <C-e> <End>
 
@@ -609,11 +618,14 @@
   endfunction
   autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
 
-  " shortcuts for session plugin
+  " session plugin
+  let g:session_directory="~/.vim/tmp/sessions"
   cnoreabbrev SS SaveSession
   cnoreabbrev OS OpenSession
   cnoreabbrev CS CloseSession
   cnoreabbrev DS DeleteSession
   cnoreabbrev VS ViewSession
+
+  cnoreabbrev QS SaveSession \| quitall
 
 " }}}
