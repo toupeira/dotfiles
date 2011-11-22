@@ -1,5 +1,5 @@
 # Define helper variable for interactive shells
-[ -n "$BASH_VERSION" -a -n "$PS1" ] && BASH_INTERACTIVE=1
+[ -n "$BASH_VERSION" -a -n "$PS1" ] && shopt -q login_shell && BASH_INTERACTIVE=1
 
 # Check for interactive bash and Linux
 [ -z "$BASH_INTERACTIVE" -o "`uname -s`" != "Linux" ] && return

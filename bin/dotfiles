@@ -339,7 +339,7 @@ function run {
       local changes=`git status -s --ignore-submodules`
 
       if [ -n "$changes" ]; then
-        git status
+        git status --ignore-submodules
         echo
         abort
       fi
