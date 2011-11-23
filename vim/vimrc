@@ -195,6 +195,7 @@
   autocmd BufEnter *.red setf textile
   autocmd BufEnter Gemfile,*.plan setf ruby
   autocmd BufEnter ~/.devilspie/* setf lisp
+  autocmd BufEnter *.pac setf javascript
 
   " PHP syntax highlighting
   let php_htmlInStrings = 1
@@ -630,5 +631,9 @@
   cnoreabbrev VS ViewSession
 
   cnoreabbrev QS SaveSession \| quitall
+
+  " indent object
+  autocmd VimEnter * omap <silent>ai aI
+  autocmd VimEnter * vmap <silent>ai aI
 
 " }}}
