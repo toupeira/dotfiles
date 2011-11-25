@@ -23,3 +23,6 @@ alias ln='gln -svfi'
 
 # Don't load SSH key
 function __load_key { :; }
+
+# Gem doesn't need the sudo wrapper
+unset gem
