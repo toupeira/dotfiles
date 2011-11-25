@@ -32,8 +32,11 @@
   set encoding=utf-8
   set modeline
   set modelines=2
-  set undofile
-  set undodir=~/.vim/tmp/undo
+
+  if v:version > '702'
+    set undofile
+    set undodir=~/.vim/tmp/undo
+  endif
 
   " interface
   set hidden
@@ -265,6 +268,9 @@
 
   " don't move on *
   nnoremap * *<C-o>
+
+  " shortcut for :diffupdate
+  nnoremap du :diffupdate<CR>
 
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
