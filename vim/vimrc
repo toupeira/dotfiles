@@ -592,7 +592,7 @@
   let g:ConqueTerm_StartMessages = 0
 
   " autocomplpop
-  "let g:acp_mappingDriven = 1
+  let g:acp_enableAtStartup = 0
   let g:acp_completeoptPreview = 1
   let g:acp_behaviorKeywordLength = 3
   let g:acp_behaviorKeywordIgnores = [
@@ -601,11 +601,13 @@
     \ 'case', 'done',
     \ ]
 
-  " only enable if a filetype is set
-  if exists(':AcpEnable')
-    let g:acp_enableAtStartup = 0
-    autocmd FileType * AcpEnable
-  endif
+  " only enable when a filetype is set
+  function! ToggleAcp()
+    if exists(':AcpEnable')
+      AcpEnable
+    endif
+  endfunction
+  autocmd FileType * call ToggleAcp()
 
   " use <Tab> to complete words, and also handle snippets
   function! TabWrapper(...)
