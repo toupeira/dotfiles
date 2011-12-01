@@ -3,7 +3,7 @@
 
 # Show the login message
 function login_message {
-  if [ -z "$BASH_INTERACTIVE" ]; then
+  if [ -z "$BASH_LOGIN" ]; then
     return
   elif [ "$PWD" = "$HOME" ]; then
     if [ "$SSH_CONNECTION" -o -z "$DISPLAY" ]; then
