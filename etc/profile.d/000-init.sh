@@ -8,7 +8,7 @@
 if [ -z "$SSH_AUTH_SOCK" ]; then
   # Load SSH agent if necessary
   exec ssh-agent -- bash --login
-elif [ -z "$STY" -a -n "$SSH_CONNECTION" -a -x /usr/bin/screen ]; then
+elif [ -z "$STY" -a -n "$SSH_CONNECTION" -a -x /usr/bin/screen -a -f ~/.screenrc ]; then
   # Load Screen for SSH sessions
   exec screen -qRR
 fi
