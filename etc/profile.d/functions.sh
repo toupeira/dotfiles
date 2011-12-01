@@ -6,9 +6,16 @@ function login_message {
   if [ -z "$BASH_INTERACTIVE" ]; then
     return
   elif [ "$PWD" = "$HOME" ]; then
-    down
-    which fortune >/dev/null && fortune
-    echo; echo
+    if [ "$SSH_CONNECTION" -o -z "$DISPLAY" ]; then
+      [ -n "$STY" ] && cat /etc/motd
+      uptime
+      echo
+      echo -e "\033[0;36mWelcome \033[1;36m$USER\033[0;36m on \033[1;33m`hostname -f`\033[0m"
+    else
+      down
+      which fortune >/dev/null && fortune && echo
+    fi
+    echo
     date "+%A, %e. %B %Y  %k:%M"
     echo; eval ls; echo
   else

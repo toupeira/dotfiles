@@ -1,8 +1,9 @@
-# Define helper variable for interactive shells
-[ -n "$BASH_VERSION" -a -n "$PS1" ] && shopt -q login_shell && BASH_INTERACTIVE=1
+# Define helper variable for interactive and login shells
+[ -n "$BASH_VERSION" -a -n "$PS1" ] && BASH_INTERACTIVE=1
+[ -n "$BASH_INTERACTIVE" ] && shopt -q login_shell && BASH_LOGIN=1
 
-# Check for interactive bash and Linux
-[ -z "$BASH_INTERACTIVE" -o "`uname -s`" != "Linux" ] && return
+# Check for login shell and Linux
+[ -z "$BASH_LOGIN" -o "`uname -s`" != "Linux" ] && return
 
 if [ -z "$SSH_AUTH_SOCK" ]; then
   # Load SSH agent if necessary
