@@ -7,8 +7,6 @@ complete -F _pgrep psgrep
 complete -o bashdefault -o default -o nospace -F _git -W 'sync up update ca commitall init install add' dotfiles dt
 complete -o bashdefault -o default -o nospace -F _git pn
 
-complete -f -X '!*.deb' pkginstall
-
 _available() {
   COMPREPLY=( $(compgen -W "`apt-cache pkgnames ${COMP_WORDS[COMP_CWORD]} 2>/dev/null`") )
 }
