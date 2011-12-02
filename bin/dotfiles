@@ -80,6 +80,7 @@ function system {
   shift
 
   if [ "$command" = "chown" -o "$command" = "chgrp" ]; then
+    echo "[1m$command[0m requires sudo"
     command="sudo $command"
   else
     for arg in "$@"; do
