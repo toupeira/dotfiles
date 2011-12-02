@@ -23,6 +23,11 @@ endif
 
   set guioptions=aigrL
 
+  " don't use autoselect on OS X
+  if has('mac')
+    set guioptions-=a
+  endif
+
   if !exists('s:gui_loaded')
     let s:gui_loaded = 1
 

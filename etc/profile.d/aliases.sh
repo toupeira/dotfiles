@@ -43,7 +43,7 @@ if which sudo &>/dev/null; then
   alias surm='sudo rm -v'
   alias suln='sudo ln -svfi'
   alias sush='sudo bash --login'
-  alias suown='sudo chown -vR 0:0'
+  alias suown='sudo chown -vR root:root'
   alias sumod='sudo chmod -vR 644'
 
   # vim
