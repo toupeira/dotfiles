@@ -16,4 +16,4 @@ bindkey \033OQ stuff /
 bindkey \033OR stuff *
 bindkey \033OS stuff -
 bindkey \033Ol stuff +
-bindkey \033OM stuff 
+bindkey \033OM stuff ""
