@@ -72,9 +72,6 @@ activity ""
 # Fit to the current window size, useful with F5/reloads of the profile
 fit
 
-# Maintain SSH_AUTH_SOCK link
-setenv SSH_AUTH_SOCK $BYOBU_CONFIG_DIR/.ssh-agent
-
 # Window tabs, second to last line
 caption always "%1001`%?%-Lw%50L>%?%{=r}%n*%f %t%?(%u)%?%{-}%12`%?%+Lw%?%11` %=%12`%1002`%10`%<"
 

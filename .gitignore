@@ -1,2 +1,3 @@
 .*.swp
+byobu/.ssh-agent
 vim/tmp
