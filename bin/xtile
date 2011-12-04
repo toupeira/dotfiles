@@ -1,0 +1,43 @@
+#!/usr/bin/ruby
+
+$WIDTH = 1850
+$HEIGHT = 1065
+$X = 40
+$Y = 40
+
+$MODE = (ARGV[0] || 'maximize').to_sym
+
+$ID = `xwit -current -print | cut -d: -f1`.strip
+exit if $ID.empty?
+
+width, height = `xwininfo -id #{$ID} | awk '/Width:|Height:/ { print $2 }'`.split "\n"
+
+case $MODE
+when :maximize
+  if width.to_i >= $WIDTH - 100 and height.to_i >= $HEIGHT - 100
+    $WIDTH *= 0.7
+    $HEIGHT *= 0.95
+    $X += 40
+    $Y += 20
+  end
+when :left
+  $WIDTH /= 2
+  $WIDTH -= 8
+when :right
+  $X += $WIDTH / 2
+  $WIDTH /= 2
+when :top
+  $X += $WIDTH / 2
+  $WIDTH /= 2
+  $HEIGHT /= 2
+  $HEIGHT -= 14
+when :bottom
+  $X += $WIDTH / 2
+  $Y += $HEIGHT / 2
+  $Y += 14
+  $WIDTH /= 2
+  $HEIGHT /= 2
+  $HEIGHT -= 14
+end
+
+system("xwit -id #$ID -move #$X #$Y -resize #$WIDTH #$HEIGHT -sync -focus -warp 100 100")
