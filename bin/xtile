@@ -7,14 +7,14 @@ $Y = 40
 
 $MODE = (ARGV[0] || 'maximize').to_sym
 
-$ID = `xwit -current -print | cut -d: -f1`.strip
+$ID = `xprop -root _NET_ACTIVE_WINDOW`.strip.sub(/.*(0x\w+),.*/, '\1')
 exit if $ID.empty?
 
-width, height = `xwininfo -id #{$ID} | awk '/Width:|Height:/ { print $2 }'`.split "\n"
+width, height = `xwininfo -id #{$ID} | awk '/Width:|Height:/ { print $2 }'`.split("\n").map(&:to_i)
 
 case $MODE
 when :maximize
-  if width.to_i >= $WIDTH - 100 and height.to_i >= $HEIGHT - 100
+  if width >= $WIDTH - 100 and height >= $HEIGHT - 100
     $WIDTH *= 0.7
     $HEIGHT *= 0.95
     $X += 40
@@ -40,4 +40,6 @@ when :bottom
   $HEIGHT -= 14
 end
 
-system("xwit -id #$ID -move #$X #$Y -resize #$WIDTH #$HEIGHT -sync -focus -warp 100 100")
+system("xwit -id #$ID -move #$X #$Y -resize #$WIDTH #$HEIGHT -sync -focus -warp #{width / 2} #{height / 2}")
+width, height = `xwininfo -id #{$ID} | awk '/Width:|Height:/ { print $2 }'`.split("\n").map(&:to_i)
+system("xwit -id #$ID -focus -warp #{width / 2} #{height / 2}")
