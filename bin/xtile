@@ -2,6 +2,7 @@
 
 require 'yaml'
 require 'fileutils'
+require 'socket'
 
 %w[ xwininfo xprop xwit ].each do |command|
   unless system("which #{command} &>/dev/null")
@@ -67,19 +68,18 @@ class Xtile
   }
 
   WINDOWS = {}
-  CONTROL = "#{ENV['HOME']}/.xtile.control"
   CONFIG = "#{ENV['HOME']}/.xtile.conf"
+  SOCKET = "#{ENV['HOME']}/.xtile.sock"
 
   def self.tile(message)
-    run
-    pipe.puts message
+    client.send message, 0
   end
 
   def self.running?
-    File.exists? CONTROL
+    File.exists? SOCKET
   end
 
-  def self.run
+  def self.server
     return false if running?
 
     if fork
@@ -92,7 +92,9 @@ class Xtile
     at_exit { stop }
 
     begin
-      while mode = pipe.gets.strip
+      socket = UNIXServer.open(SOCKET)
+      while client = socket.accept
+        mode = client.recvfrom(100).first.strip
         perform_tile mode
       end
     ensure
@@ -101,7 +103,7 @@ class Xtile
   end
 
   def self.stop
-    FileUtils.rm_f CONTROL
+    FileUtils.rm_f SOCKET
   end
 
 private
@@ -125,14 +127,17 @@ private
            :height => data[3]
   end
 
-  def self.pipe
-    unless @pipe
-      puts "opening pipe"
-      `mkfifo "#{CONTROL}"` unless File.exists? CONTROL
-      @pipe = open(CONTROL, 'r+')
+  def self.client
+    unless @client
+      @client = UNIXSocket.open(SOCKET)
     end
 
-    @pipe
+    @client
+
+  rescue Errno::ENOENT, Errno::ECONNREFUSED
+    stop
+    server
+    retry
   end
 
   def self.screen_config
