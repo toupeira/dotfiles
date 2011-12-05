@@ -163,7 +163,25 @@ function run {
   shift
 
   case "$command" in
+    checkchanges)
+      local changes=`git status -s --ignore-submodules`
+
+      if [ -n "$changes" ]; then
+        git status --ignore-submodules
+        echo
+        abort
+        return 0
+      else
+        return 1
+      fi
+      ;;
     sync)
+      if run checkchanges; then
+        msg
+        status "{{Committing local changes...}}"
+        run commitall
+      fi
+
       msg
       status "{{Merging remote changes...}}"
       run pull
@@ -172,12 +190,6 @@ function run {
       status "{{Checking out submodules...}}"
       run submodule sync -q
       run submodule update --init -q
-
-      if git status -s | grep -q .; then
-        msg
-        status "{{Committing local changes...}}"
-        run commitall
-      fi
 
       if git status | grep -q ahead; then
         msg
@@ -337,12 +349,10 @@ function run {
       git ignore-errors commit -a -m "Sync dotfiles" "$@"
       ;;
     pull)
-      local changes=`git status -s --ignore-submodules`
-
-      if [ -n "$changes" ]; then
-        git status --ignore-submodules
-        echo
-        abort
+      if run checkchanges; then
+        changes=1
+      else
+        unset changes
       fi
 
       [ -n "$changes" ] && git stash save | grep -q "No local changes to save" && unset changes
