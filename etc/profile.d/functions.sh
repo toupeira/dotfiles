@@ -54,7 +54,7 @@ fi
 # Automatically run certain RubyGems commands with sudo
 function gem {
   local gem="gem"
-  [[ "$@" =~ (install|uninstall) ]] && gem="sudo gem"
+  [[ "$@" =~ (install|uninstall|cleanup) ]] && gem="sudo gem"
   command $gem "$@"
 }
 
