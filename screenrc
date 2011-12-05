@@ -1,4 +1,5 @@
 # Load Byobu
+setenv PKG byobu
 setenv BYOBU_BACKEND screen
 setenv BYOBU_PREFIX $HOME/.byobu
 setenv BYOBU_CONFIG_DIR $HOME/.byobu

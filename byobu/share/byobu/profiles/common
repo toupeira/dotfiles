@@ -26,7 +26,7 @@ vbell off
 msgwait 0
 msgminwait 0
 defutf8 on
-deflogin on
+nethack on
 
 # Define status commands
 #   Use prime number intervals, to decrease collisions, which

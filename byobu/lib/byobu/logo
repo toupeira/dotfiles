@@ -21,9 +21,13 @@
 
 get_distro() {
 	_RET=
+	local OSX_VERSION="/System/Library/CoreServices/SystemVersion.plist"
+
 	if [ -n "$DISTRO" ]; then
 		# Allow manual override of distro in $BYOBU_CONFIG_DIR/status
 		_RET="$DISTRO"
+	elif [ -r "$OSX_VERSION" ]; then
+	  _RET=`egrep -A1 "ProductName" "$OSX_VERSION" | fgrep '<string>' | $SED -r 's/.*>(.+)<.*/\1/'`
 	elif [ -r "/etc/issue" ]; then
 		# Otherwise, check /etc/issue
 		_RET=`grep -m1 "^[A-Za-z]" /etc/issue`
@@ -110,6 +114,10 @@ __logo() {
 		*xandros*)
 			logo=" X "
 			$MARKUP && printf "$(color W r)%s$(color -)" "$logo" || printf "$logo"
+		;;
+		*mac*)
+			logo=" OS X "
+			$MARKUP && printf "$(color b k r)%s$(color -)" "$logo" || printf "$logo"
 		;;
 		*)
 			logo="[B]"

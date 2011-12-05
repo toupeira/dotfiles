@@ -44,9 +44,9 @@ ___update_cache() {
 	# These are very computationally intensive processes.
 	# Background this work, have it write to the cache files,
 	# and let the next cache check pick up the results.
-	if [ -x /usr/lib/update-notifier/apt-check ]; then
+	if [ -x $BYOBU_PREFIX/lib/byobu/update-notifier/apt-check ]; then
 		# If apt-check binary exists, use it
-		/usr/lib/update-notifier/apt-check 2>&1 | awk '-F;' 'END { print $1, $2 }' > "$mycache" &
+		$BYOBU_PREFIX/lib/byobu/update-notifier/apt-check 2>&1 | awk '-F;' 'END { print $1, $2 }' > "$mycache" &
 	elif command -v apt-get >/dev/null; then
 		# If apt-get exists, use it
 		apt-get -s -o Debug::NoLocking=true upgrade | grep -c ^Inst > $mycache &

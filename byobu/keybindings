@@ -1,4 +1,1 @@
 source $HOME/.byobu/share/byobu/keybindings/screen-escape-keys
-escape ^``
-register x "^`"						#     | Goes with the F12 definition
-register x "^A"

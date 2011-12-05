@@ -31,7 +31,7 @@ __hostname() {
 		h=$(hostname -f 2>/dev/null || hostname)
 	fi
 
-	printf "$h" | sed -r "s/^([^\.]+)(.*)/$(color bold2)\1$(color -)\L\2/"
+	printf "$h" | $SED -r "s/^([^\.]+)(.*)/$(color bold2)\1$(color -)\L\2/"
 }
 
 # vi: syntax=sh ts=4 noexpandtab

@@ -25,9 +25,13 @@ __release_detail() {
 
 __release() {
 	local DISTRO="${DISTRO}" issue ver r i
+	local OSX_VERSION="/System/Library/CoreServices/SystemVersion.plist"
+
 	if [ -n "$DISTRO" ]; then
 		# user defined
 		true
+	elif [ -r "$OSX_VERSION" ]; then
+	  DISTRO=`egrep -A1 "ProductName|ProductUserVisibleVersion" "$OSX_VERSION" | fgrep '<string>' | $SED -r 's/.*>(.+)<.*/\1/' | tr "\n" " "`
 	elif [ -r "/etc/issue" ]; then
 		# lsb_release is *really* slow;  try to use /etc/issue first
 		read issue < /etc/issue

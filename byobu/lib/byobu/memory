@@ -24,6 +24,8 @@ __memory() {
 }
 
 __memory() {
+	[ -r /proc/meminfo ] || return
+
 	local free="" total="" buffers="" cached=""
 	local kb_main_used=0 buffers_plus_cached=0 fo_buffers=0 fo_cached=0
 	while read tok val unit; do
