@@ -67,7 +67,7 @@ class Xtile
   CONTROL = "#{ENV['HOME']}/.xtile.control"
 
   def self.tile(message)
-    run unless running?
+    run
     pipe.puts message
   end
 
@@ -76,6 +76,8 @@ class Xtile
   end
 
   def self.run
+    return false if running?
+
     if fork
       sleep 0.2
       return true
@@ -87,6 +89,8 @@ class Xtile
       perform_tile mode
     end
   end
+
+private
 
   def self.window_id
     `xprop -root _NET_ACTIVE_WINDOW`.strip.sub(/.*(0x\w+),.*/, '\1')
@@ -141,15 +145,14 @@ class Xtile
     system("xwit -id #{id} -sync -focus -warp #{options[:width] / 2} #{options[:height] / 2}")
   end
 
-  private
-    def self.pipe
-      unless @pipe
-        `mkfifo "#{CONTROL}"` unless File.exists? CONTROL
-        @pipe = open(CONTROL, 'r+')
-      end
-
-      @pipe
+  def self.pipe
+    unless @pipe
+      `mkfifo "#{CONTROL}"` unless File.exists? CONTROL
+      @pipe = open(CONTROL, 'r+')
     end
+
+    @pipe
+  end
 end
 
 Xtile.tile ARGV[0] || 'maximize'
