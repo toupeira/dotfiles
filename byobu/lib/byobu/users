@@ -34,7 +34,7 @@ __users() {
 	local remote=`pgrep -f "sshd:.*@" | wc -l`
 	local users="users"
 	[ $remote -eq 1 ] && users="user"
-	[ $remote   -gt 0 ] && printf "$(color b Y k)%d$(color -)$(color Y k) remote $users$(color -) " $remote
+	[ $remote -gt 0 ] && printf "$(color b Y k)%d$(color -)$(color Y k) remote $users$(color -) " $remote
 }
 
 # vi: syntax=sh ts=4 noexpandtab

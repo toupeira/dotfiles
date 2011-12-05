@@ -1,5 +1,5 @@
 # Check for interactive bash
-[ -z "$BASH_INTERACTIVE" ] && return
+[ -n "$BASH_INTERACTIVE" ] || return
 
 # Prompt configuration
 export PS1='\u@\h:\w\$ '

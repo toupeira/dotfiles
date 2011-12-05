@@ -1,5 +1,5 @@
 # Check for interactive bash
-[ -z "$BASH_INTERACTIVE" ] && return
+[ -n "$BASH_INTERACTIVE" ] || return
 
 # Show the login message
 function login_message {
@@ -13,7 +13,7 @@ function login_message {
       echo -e "\033[0;36mWelcome \033[1;36m$USER\033[0;36m on \033[1;33m`hostname -f`\033[0m"
     else
       down
-      which fortune >/dev/null && fortune && echo
+      has fortune && fortune && echo
     fi
     echo
     date "+%A, %e. %B %Y  %k:%M"
@@ -61,7 +61,7 @@ function gem {
 # GVim wrapper to pass a file to an existing session
 function gvi.add {
   gvim --remote-silent "$@"
-  if which xwit >/dev/null; then
+  if has xwit; then
     xwit -raise -focus -property WM_CLASS -names gvim
   fi
 }

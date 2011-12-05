@@ -1,8 +1,8 @@
 # Check for interactive bash
-[ -z "$BASH_INTERACTIVE" ] && return
+[ -n "$BASH_INTERACTIVE" ] || return
 
 # ls
-which dircolors &>/dev/null && eval `dircolors -b`
+has dircolors && eval `dircolors -b`
 alias ls='ls --color'
 alias ll='ls -lh'
 alias l='ls -A'
@@ -31,12 +31,9 @@ alias pkgremove='aptitude -Z remove'
 alias pkglist='dpkg -L'
 alias pkgname='apt-cache pkgnames'
 alias pkgsearch='apt-cache search'
-function pkgwhich {
-  dpkg -S `which "$1"`
-}
 
 # sudo aliases
-if which sudo &>/dev/null; then
+if has sudo; then
   # file management
   alias sucp='sudo cp -vi'
   alias sumv='sudo mv -vi'
@@ -83,6 +80,7 @@ if which sudo &>/dev/null; then
 fi
 
 # program aliases
+alias scr='screen -qRR'
 alias fortune='fortune -a'
 alias thesaurus='dict -d moby-thes'
 alias pstree='pstree -GUh'
@@ -92,11 +90,13 @@ alias fetchmail='fetchmail -v'
 alias wget='wget -c'
 alias gvi='gvim'
 alias gcc='gcc -Wall'
-alias sbcl='rlwrap sbcl'
-alias ocaml='rlwrap ocaml'
 alias gcc='gcc -Wall'
-alias cadaver='EDITOR="gvim -f" cadaver'
 alias psgrep='pgrep -fl'
 alias dt='dotfiles'
-which ack-grep &>/dev/null && alias ack='ack-grep'
-which xdg-open &>/dev/null && alias open='xdg-open'
+has ack-grep && alias ack='ack-grep'
+has xdg-open && alias open='xdg-open'
+
+if has rlwrap; then
+  has sbcl && alias sbcl='rlwrap sbcl'
+  has ocaml && alias ocaml='rlwrap ocaml'
+fi

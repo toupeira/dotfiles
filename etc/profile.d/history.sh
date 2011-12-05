@@ -1,5 +1,5 @@
 # Check for interactive bash
-[ -z "$BASH_INTERACTIVE" ] && return
+[ -n "$BASH_INTERACTIVE" ] || return
 
 # History settings
 shopt -s histappend

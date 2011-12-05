@@ -159,7 +159,6 @@ function origin {
 
 function run {
   local command="$1"
-  local status=0
   shift
 
   case "$command" in
@@ -213,15 +212,12 @@ function run {
           fi
 
           if [ -e "$path/.skip" ]; then
-            local status=0
-          elif [ -d "$path" -a ! -e "$path/.install" ]; then
-            local status=255
-          else
+            continue
+          elif [ ! -d "$path" -o -e "$path/.install" ]; then
             run install "$path"
-            local status=$?
           fi
 
-          if [ -d "$path" -a $status -eq 255 ]; then
+          if [ -d "$path" -a ! -L "`origin "$path"`" ]; then
             install_paths "$path"/*
           fi
         done
@@ -292,9 +288,6 @@ function run {
             error "Error while installing {{$origin}}"
             continue
           fi
-        else
-          # Path wasn't installed, try the children instead
-          status=255
         fi
       done
       ;;
@@ -358,8 +351,6 @@ function run {
       git ignore-errors $command "$@"
       ;;
   esac
-
-  return $status
 }
 
 DRYRUN=0

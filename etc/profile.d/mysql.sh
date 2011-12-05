@@ -1,5 +1,5 @@
 # Check for interactive bash and MySQL
-[ -z "$BASH_INTERACTIVE" ] || ! which mysql >/dev/null && return
+[ -n "$BASH_INTERACTIVE" ] && has mysql || return
 
 alias mysql='mysql -u root'
 
