@@ -1,70 +1,74 @@
 #!/usr/bin/ruby
 
+require 'yaml'
 require 'fileutils'
 
+%w[ xwininfo xprop xwit ].each do |command|
+  unless system("which #{command} &>/dev/null")
+    puts "Sorry, can't find the '#{command}' command."
+    exit 1
+  end
+end
+
 class Xtile
-  S = {
-    :width  => 1850,
-    :height => 1065,
-    :x      => 40,
-    :y      => 40,
-  }
+  Screen = {}
 
   TILING_MODES = {
-    :maximize => {},
+    :maximize => lambda {},
 
-    :left => {
-      :width  => S[:width] / 2 - 8,
+    :left => lambda {
+      return :width => Screen[:width] / 2 - 8
     },
 
-    :right => {
-      :width  => S[:width] / 2,
-      :x      => S[:x] + S[:width] / 2,
+    :right => lambda {
+      return :width  => Screen[:width] / 2,
+             :x      => Screen[:x] + Screen[:width] / 2
     },
 
-    :top => {
-      :height => S[:height] / 2,
+    :top => lambda {
+      return :height => Screen[:height] / 2
     },
 
-    :bottom => {
-      :height => S[:height] / 2,
-      :y      => S[:y] + S[:height] / 2,
+    :bottom => lambda {
+      return :height => Screen[:height] / 2,
+             :y      => Screen[:y] + Screen[:height] / 2
     },
 
-    :center => {
-      :width  => (S[:width] * 2 / 3.0).round,
-      :height => S[:height] - 2 * S[:y],
-      :x      => S[:width] / 2 - (S[:width] * 2 / 3.0).round / 2,
-      :y      => S[:y] * 2,
+    :center => lambda {
+      return :width  => (Screen[:width] * 2 / 3.0).round,
+             :height => Screen[:height] - 2 * Screen[:y],
+             :x      => Screen[:width] / 2 - (Screen[:width] * 2 / 3.0).round / 2,
+             :y      => Screen[:y] * 2
     },
 
-    :topleft => {
-      :width  => S[:width] / 2,
-      :height => S[:height] / 2 - 14,
+    :topleft => lambda {
+      return :width  => Screen[:width] / 2,
+             :height => Screen[:height] / 2 - 14
     },
 
-    :topright => {
-      :width  => S[:width] / 2,
-      :height => S[:height] / 2 - 14,
-      :x      => S[:x] + S[:width] / 2,
+    :topright => lambda {
+      return :width  => Screen[:width] / 2,
+             :height => Screen[:height] / 2 - 14,
+             :x      => Screen[:x] + Screen[:width] / 2
     },
 
-    :bottomleft => {
-      :width  => S[:width] / 2,
-      :height => S[:height] / 2 - 14,
-      :y      => S[:y] + S[:height] / 2,
+    :bottomleft => lambda {
+      return :width  => Screen[:width] / 2,
+             :height => Screen[:height] / 2 - 14,
+             :y      => Screen[:y] + Screen[:height] / 2
     },
 
-    :bottomright => {
-      :width  => S[:width] / 2,
-      :height => S[:height] / 2 - 14,
-      :x      => S[:x] + S[:width] / 2,
-      :y      => S[:y] + S[:height] / 2 + 14,
+    :bottomright => lambda {
+      return :width  => Screen[:width] / 2,
+             :height => Screen[:height] / 2 - 14,
+             :x      => Screen[:x] + Screen[:width] / 2,
+             :y      => Screen[:y] + Screen[:height] / 2 + 14
     },
   }
 
   WINDOWS = {}
   CONTROL = "#{ENV['HOME']}/.xtile.control"
+  CONFIG = "#{ENV['HOME']}/.xtile.conf"
 
   def self.tile(message)
     run
@@ -83,11 +87,21 @@ class Xtile
       return true
     end
 
-    at_exit { FileUtils.rm_f CONTROL }
+    Screen.merge! screen_config
 
-    while mode = pipe.gets.strip
-      perform_tile mode
+    at_exit { stop }
+
+    begin
+      while mode = pipe.gets.strip
+        perform_tile mode
+      end
+    ensure
+      stop
     end
+  end
+
+  def self.stop
+    FileUtils.rm_f CONTROL
   end
 
 private
@@ -97,7 +111,13 @@ private
   end
 
   def self.window_size(id)
-    data = `xwininfo -id #{id} | awk '/Absolute upper-left X:|Absolute upper-left Y:/ { print $4 } /Width:|Height:/ { print $2 }'`.split("\n").map(&:to_i)
+    if id == :root
+      id = '-root'
+    else
+      id = "-id #{id}"
+    end
+
+    data = `xwininfo #{id} | awk '/Absolute upper-left X:|Absolute upper-left Y:/ { print $4 } /Width:|Height:/ { print $2 }'`.split("\n").map(&:to_i)
 
     return :x => data[0],
            :y => data[1],
@@ -105,15 +125,38 @@ private
            :height => data[3]
   end
 
+  def self.pipe
+    unless @pipe
+      puts "opening pipe"
+      `mkfifo "#{CONTROL}"` unless File.exists? CONTROL
+      @pipe = open(CONTROL, 'r+')
+    end
+
+    @pipe
+  end
+
+  def self.screen_config
+    if File.exists? CONFIG
+      config = YAML.load_file CONFIG
+      config.is_a?(Hash) ? config : nil
+    else
+      screen = window_size(:root)
+      return :width  => screen[:width],
+             :height => screen[:height],
+             :x      => 0,
+             :y      => 0
+    end
+  end
+
   def self.perform_tile(mode)
-    unless options = TILING_MODES[mode.to_sym]
+    if mode.empty? or !options = TILING_MODES[mode.to_sym]
       puts "Invalid tiling mode '#{mode}'"
       return false
     end
 
     id = window_id
     current_options = window_size(id)
-    options = S.merge(options)
+    options = Screen.merge(options.call || {})
 
     unless window = WINDOWS[id]
       window = WINDOWS[id] = {}
@@ -143,15 +186,6 @@ private
 
     system("xwit -id #{id} -move #{options[:x]} #{options[:y]} -resize #{options[:width]} #{options[:height]}")
     system("xwit -id #{id} -sync -focus -warp #{options[:width] / 2} #{options[:height] / 2}")
-  end
-
-  def self.pipe
-    unless @pipe
-      `mkfifo "#{CONTROL}"` unless File.exists? CONTROL
-      @pipe = open(CONTROL, 'r+')
-    end
-
-    @pipe
   end
 end
 
