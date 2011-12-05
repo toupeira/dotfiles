@@ -163,20 +163,13 @@ function run {
   shift
 
   case "$command" in
-    checkchanges)
-      local changes=`git status -s --ignore-submodules`
-
-      if [ -n "$changes" ]; then
+    sync)
+      if git status -s | grep -q .; then
+        msg
         git status --ignore-submodules
         echo
         abort
-        return 0
-      else
-        return 1
-      fi
-      ;;
-    sync)
-      if run checkchanges; then
+
         msg
         status "{{Committing local changes...}}"
         run commitall
@@ -349,12 +342,7 @@ function run {
       git ignore-errors commit -a -m "Sync dotfiles" "$@"
       ;;
     pull)
-      if run checkchanges; then
-        changes=1
-      else
-        unset changes
-      fi
-
+      local changes=`git status -s --ignore-submodules`
       [ -n "$changes" ] && git stash save | grep -q "No local changes to save" && unset changes
       git pull -v --progress "$@"
       [ -n "$changes" ] && git stash pop -q
