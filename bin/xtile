@@ -1,13 +1,63 @@
 #!/usr/bin/ruby
 
-require 'yaml'
 require 'fileutils'
+require 'optparse'
 require 'socket'
+require 'yaml'
 
 %w[ xwininfo xprop xwit ].each do |command|
   unless system("which #{command} &>/dev/null")
     puts "Sorry, can't find the '#{command}' command."
     exit 1
+  end
+end
+
+def debug(*args); end
+
+def run
+  opts = OptionParser.new do |opts|
+    opts.banner = "Usage: #{File.basename $0} [OPTIONS] MODE"
+
+    opts.separator ""
+    opts.separator "Tiling Modes:"
+
+    modes = "  "
+    Xtile::TILING_MODES.keys.map(&:to_s).sort.each_with_index do |mode, i|
+      if i > 0 and i % 4 == 0
+        opts.separator modes
+        modes = "  "
+      end
+      modes << "#{mode}, "
+    end
+
+    opts.separator ""
+    opts.separator "Options:"
+
+    opts.on('-v', '--verbose', "Show debug information") do
+      def debug(context, *message)
+        message = message.map do |m|
+          m.is_a?(String) ? m : m.inspect
+        end
+
+        puts "#{File.basename $0}[#{$$}]: #{context}: #{message.join ' '}"
+      end
+    end
+
+    opts.on('-h', '--help', "Show this message") do
+      puts opts
+      exit
+    end
+
+    opts.separator ""
+  end
+
+  opts.parse!
+
+  if ARGV[0]
+    Xtile.tile ARGV[0]
+  else
+    puts opts
+    exit
   end
 end
 
@@ -79,31 +129,36 @@ class Xtile
     File.exists? SOCKET
   end
 
-  def self.server
+  def self.start_server
     return false if running?
 
     if fork
-      sleep 0.2
+      sleep 0.1
       return true
     end
 
     Screen.merge! screen_config
 
-    at_exit { stop }
+    at_exit { stop_server }
 
     begin
+      debug :daemon, "opening server socket..."
       socket = UNIXServer.open(SOCKET)
+
       while client = socket.accept
-        mode = client.recvfrom(100).first.strip
+        mode = client.recvfrom(100).first.strip.to_sym
         perform_tile mode
       end
     ensure
-      stop
+      stop_server
     end
   end
 
-  def self.stop
-    FileUtils.rm_f SOCKET
+  def self.stop_server
+    if File.exists? SOCKET
+      debug :daemon, "removing socket..."
+      FileUtils.rm_f SOCKET
+    end
   end
 
 private
@@ -135,16 +190,18 @@ private
     @client
 
   rescue Errno::ENOENT, Errno::ECONNREFUSED
-    stop
-    server
+    stop_server
+    start_server
     retry
   end
 
   def self.screen_config
     if File.exists? CONFIG
+      debug :daemon, "reading screen configuration from #{CONFIG}..."
       config = YAML.load_file CONFIG
       config.is_a?(Hash) ? config : nil
     else
+      debug :daemon, "using default screen configuration"
       screen = window_size(:root)
       return :width  => screen[:width],
              :height => screen[:height],
@@ -154,12 +211,13 @@ private
   end
 
   def self.perform_tile(mode)
-    if mode.empty? or !options = TILING_MODES[mode.to_sym]
-      puts "Invalid tiling mode '#{mode}'"
+    id = window_id
+
+    if !options = TILING_MODES[mode]
+      debug "window #{id}", "invalid tiling mode #{mode.inspect}"
       return false
     end
 
-    id = window_id
     current_options = window_size(id)
     options = Screen.merge(options.call || {})
 
@@ -168,25 +226,34 @@ private
     end
 
     # Check if the mode has changed
-    same_mode = window[:state] == mode
+    same_mode = window[:mode] == mode
 
-    # Check if the window is already in it's target position
+    # Check if the window is already in its new target position
     same_position = !current_options.detect do |key, value|
       (value - options[key].to_i).abs > 50
     end
 
-    # Check if the window was moved from its previous target position
-    position_changed = !window[:previous] || (same_mode && current_options.detect do |key, value|
-      (value - window[:previous][key].to_i).abs > 50
-    end)
-
-    if same_mode and same_position and window[:previous]
-      options = window[:options] = window[:previous]
-    elsif position_changed
-      window[:previous] = current_options
+    # Check if the window was moved from its last target position
+    window_moved = !window[:options] || current_options.detect do |key, value|
+      (value - window[:options][key].to_i).abs > 50
     end
 
-    window[:state] = mode
+    # Check if the normal position of the window has changed
+    position_changed = !window[:last] || (same_mode && current_options.detect do |key, value|
+      (value - window[:last][key].to_i).abs > 50
+    end)
+
+    if same_mode and same_position and window[:last]
+      mode = :restoring
+      options = window[:options] = window[:last]
+    elsif window_moved or position_changed
+      debug "window #{id}", :storing, current_options
+      window[:last] = current_options
+    end
+
+    debug "window #{id}", mode, options
+
+    window[:mode] = mode
     window[:options] = options
 
     system("xwit -id #{id} -move #{options[:x]} #{options[:y]} -resize #{options[:width]} #{options[:height]}")
@@ -194,4 +261,4 @@ private
   end
 end
 
-Xtile.tile ARGV[0] || 'maximize'
+run
