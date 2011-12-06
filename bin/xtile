@@ -15,50 +15,63 @@ end
 def debug(*args); end
 
 def run
-  opts = OptionParser.new do |opts|
-    opts.banner = "Usage: #{File.basename $0} [OPTIONS] MODE"
+  opts = OptionParser.new
 
-    opts.separator ""
-    opts.separator "Tiling Modes:"
+  usage = lambda {
+    puts opts
+    exit 255
+  }
 
-    modes = "  "
-    Xtile::TILING_MODES.keys.map(&:to_s).sort.each_with_index do |mode, i|
-      if i > 0 and i % 4 == 0
-        opts.separator modes
-        modes = "  "
-      end
-      modes << "#{mode}, "
+  opts.banner = "Usage: #{File.basename $0} [OPTIONS] MODE"
+
+  opts.separator ""
+  opts.separator "Tiling Modes:"
+
+  modes = "  "
+  Xtile::TILING_MODES.keys.map(&:to_s).sort.each_with_index do |mode, i|
+    if i > 0 and i % 4 == 0
+      opts.separator modes
+      modes = "  "
     end
-    opts.separator modes
-
-    opts.separator ""
-    opts.separator "Options:"
-
-    opts.on('-v', '--verbose', "Show debug information") do
-      def debug(context, *message)
-        message = message.map do |m|
-          m.is_a?(String) ? m : m.inspect
-        end
-
-        puts "#{File.basename $0}[#{$$}]: #{context}: #{message.join ' '}"
-      end
-    end
-
-    opts.on('-h', '--help', "Show this message") do
-      puts opts
-      exit
-    end
-
-    opts.separator ""
+    modes << "#{mode}, "
   end
+  opts.separator modes
+
+  opts.separator ""
+  opts.separator "Options:"
+
+  opts.on '-i', '--id WINDOW_ID', String, "Use specified window instead of current window" do |id|
+    @id = id
+  end
+
+  opts.on '-v', '--verbose', "Show debug information" do
+    def debug(*message)
+      message = message.map do |m|
+        m.is_a?(String) ? m : m.inspect
+      end
+
+      puts "#{File.basename $0}[#{$$}] #{message.join ' '}"
+    end
+  end
+
+  opts.on '-h', '--help', "Show this message", &usage
+
+  opts.separator ""
 
   opts.parse!
 
   if ARGV[0]
-    Xtile.tile ARGV[0]
+    Xtile.tile ARGV[0], @id
   else
-    puts opts
-    exit
+    usage.call
+  end
+
+rescue OptionParser::ParseError => e
+  if defined? usage
+    puts e.message
+    usage.call
+  else
+    raise e
   end
 end
 
@@ -122,12 +135,25 @@ class Xtile
   CONFIG = "#{ENV['HOME']}/.xtile.conf"
   SOCKET = "#{ENV['HOME']}/.xtile.sock"
 
-  def self.tile(message)
-    client.send message, 0
+  def self.tile(mode, id=nil)
+    @context = :client
+    client.send [ mode, id ].join("\t"), 0
   end
 
   def self.running?
-    File.exists? SOCKET
+    !!server_pid
+  end
+
+  def self.server_pid
+    if File.exist? SOCKET
+      pid = `lsof -F p "#{SOCKET}"`
+      if $?.exitstatus == 0
+        pid.sub! /\Ap(\d+).*/m, '\1'
+        pid = pid.to_i
+      else
+        nil
+      end
+    end
   end
 
   def self.start_server
@@ -138,17 +164,21 @@ class Xtile
       return true
     end
 
+    @context = :server
+
     Screen.merge! screen_config
 
     at_exit { stop_server }
 
     begin
-      debug :daemon, "opening server socket..."
+      debug "opening server socket..."
       socket = UNIXServer.open(SOCKET)
 
       while client = socket.accept
-        mode = client.recvfrom(100).first.strip.to_sym
-        perform_tile mode
+        message = client.recvfrom(100).first.strip
+
+        mode, id = message.split "\n"
+        perform_tile mode, id
       end
     ensure
       stop_server
@@ -156,9 +186,16 @@ class Xtile
   end
 
   def self.stop_server
-    if File.exists? SOCKET
-      debug :daemon, "removing socket..."
+    if running?
+      debug "removing socket..."
       FileUtils.rm_f SOCKET
+    end
+  end
+
+  def self.kill_server
+    if pid = server_pid
+      debug "killing server..."
+      Process.kill 'TERM', pid
     end
   end
 
@@ -175,12 +212,16 @@ private
       id = "-id #{id}"
     end
 
-    data = `xwininfo #{id} | awk '/Absolute upper-left X:|Absolute upper-left Y:/ { print $4 } /Width:|Height:/ { print $2 }'`.split("\n").map(&:to_i)
+    x, y, width, height, bleft, bright, btop, bbottom = `xwininfo -stats -wm #{id} | awk '
+      /Absolute upper-left X:|Absolute upper-left Y:/ { print $4 }
+      /Width:|Height:/ { print $2 }
+      /Frame extents:/ { print $3; print $4; print $5; print $6 }
+    '`.split(/\s+/).map(&:to_i)
 
-    return :x      => data[0],
-           :y      => data[1],
-           :width  => data[2],
-           :height => data[3]
+    return :x      => x - bleft, # subtract window borders
+           :y      => y - btop,  #
+           :width  => width,
+           :height => height
   end
 
   def self.client
@@ -193,11 +234,11 @@ private
 
   def self.screen_config
     if File.exists? CONFIG
-      debug :daemon, "reading screen configuration from #{CONFIG}..."
+      debug "reading screen configuration from #{CONFIG}..."
       config = YAML.load_file CONFIG
       config.is_a?(Hash) ? config : nil
     else
-      debug :daemon, "using default screen configuration"
+      debug "using default screen configuration"
       screen = window_size(:root)
       return :width  => screen[:width],
              :height => screen[:height],
@@ -206,11 +247,12 @@ private
     end
   end
 
-  def self.perform_tile(mode)
-    id = window_id
+  def self.perform_tile(mode, id=nil)
+    mode = mode.to_sym
+    id ||= window_id
 
     if !options = TILING_MODES[mode]
-      debug "window #{id}", "invalid tiling mode #{mode.inspect}"
+      debug "invalid tiling mode #{mode.inspect}", "window #{id}"
       return false
     end
 
@@ -241,11 +283,11 @@ private
       mode = :restoring
       options = window[:options] = window[:last]
     elsif window_moved or position_changed
-      debug "window #{id}", :storing, current_options
+      debug :storing, "window #{id}", current_options
       window[:last] = current_options
     end
 
-    debug "window #{id}", mode, options
+    debug mode, "window #{id}", options
 
     window[:mode] = mode
     window[:options] = options

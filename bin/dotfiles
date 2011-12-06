@@ -27,7 +27,9 @@ function usage {
   echo "  init               Install symlinks for all dotfiles"
   echo "  install PATH...    Install symlink for PATH"
   echo "  add PATH...        Add file to repository and replace it with a symlink"
-  echo "  *                  Excecute a Git subcommand inside the repository directory"
+  echo
+  echo "  PATH...            Edit the specified files inside the repository"
+  echo "  COMMAND...         Excecute a Git command inside the repository directory"
   echo
   exit 255
 }
@@ -348,7 +350,24 @@ function run {
       git push -v --progress "$@"
       ;;
     *)
-      git ignore-errors $command "$@"
+      if [ -f "$DOTFILES/$command" ]; then
+        files=( "$DOTFILES/$command" )
+        for file in "$@"; do
+          if [ -f "$file" ]; then
+            files=( "${files[@]}" "$DOTFILES/$file" )
+          else
+            usage
+          fi
+        done
+
+        if [ -n "$DISPLAY" ] && which gvim &>/dev/null; then
+          gvim "${files[@]}"
+        else
+          vim "${files[@]}"
+        fi
+      else
+        git ignore-errors $command "$@"
+      fi
       ;;
   esac
 }

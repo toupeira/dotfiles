@@ -120,6 +120,7 @@
   " highlight trailing whitespace
   autocmd VimEnter,BufRead,BufNewFile * highlight Whitespace ctermbg=236 guibg=#333333
   autocmd VimEnter,BufRead,BufNewFile * match Whitespace /\s\+$/
+  autocmd FileType conque_term match none
 
   " go to last cursor position when opening files
   if has('autocmd')
@@ -604,7 +605,11 @@
   " only enable when a filetype is set
   function! ToggleAcp()
     if exists(':AcpEnable')
-      AcpEnable
+      "if &filetype == 'conque_term'
+        "AcpDisable
+      "else
+        AcpEnable
+      "end
     endif
   endfunction
   autocmd FileType * call ToggleAcp()

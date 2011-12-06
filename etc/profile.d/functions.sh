@@ -1,6 +1,11 @@
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
+# Suppress the output from cd (caused by CDPATH being set)
+function cd {
+  command cd "$@" >/dev/null
+}
+
 # Show the login message
 function login_message {
   if [ -z "$BASH_LOGIN" ]; then

@@ -1,4 +1,5 @@
 export PATH=/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/games:/var/lib/gems/1.8/bin:~/bin
+export CDPATH=.:~
 
 export EDITOR="vim"
 export PAGER="less"
