@@ -29,6 +29,7 @@ def run
       end
       modes << "#{mode}, "
     end
+    opts.separator modes
 
     opts.separator ""
     opts.separator "Options:"
