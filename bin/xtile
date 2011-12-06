@@ -176,19 +176,14 @@ private
 
     data = `xwininfo #{id} | awk '/Absolute upper-left X:|Absolute upper-left Y:/ { print $4 } /Width:|Height:/ { print $2 }'`.split("\n").map(&:to_i)
 
-    return :x => data[0],
-           :y => data[1],
-           :width => data[2],
+    return :x      => data[0],
+           :y      => data[1],
+           :width  => data[2],
            :height => data[3]
   end
 
   def self.client
-    unless @client
-      @client = UNIXSocket.open(SOCKET)
-    end
-
-    @client
-
+    @client ||= UNIXSocket.open(SOCKET)
   rescue Errno::ENOENT, Errno::ECONNREFUSED
     stop_server
     start_server
@@ -221,9 +216,7 @@ private
     current_options = window_size(id)
     options = Screen.merge(options.call || {})
 
-    unless window = WINDOWS[id]
-      window = WINDOWS[id] = {}
-    end
+    window = (WINDOWS[id] ||= {})
 
     # Check if the mode has changed
     same_mode = window[:mode] == mode
