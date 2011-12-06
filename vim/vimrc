@@ -605,11 +605,7 @@
   " only enable when a filetype is set
   function! ToggleAcp()
     if exists(':AcpEnable')
-      "if &filetype == 'conque_term'
-        "AcpDisable
-      "else
-        AcpEnable
-      "end
+      AcpEnable
     endif
   endfunction
   autocmd FileType * call ToggleAcp()
