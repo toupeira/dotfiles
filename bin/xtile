@@ -192,7 +192,6 @@ class Xtile
     if running?
       debug "closing server socket..."
       @socket.close if @socket && !@socket.closed?
-      FileUtils.rm_f SOCKET
 
       debug "writing configuration to #{CONFIG}..."
       open CONFIG, 'w' do |file|
@@ -203,6 +202,8 @@ class Xtile
     else
       false
     end
+  ensure
+    FileUtils.rm_f SOCKET
   end
 
   def self.kill_server
