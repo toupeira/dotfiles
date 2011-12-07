@@ -54,13 +54,32 @@ def run
     end
   end
 
+  opts.separator ""
+
+  restart = false
+  opts.on '-r', '--restart', "Restart the background daemon" do
+    restart = true
+  end
+
+  opts.separator ""
+
   opts.on '-h', '--help', "Show this message", &usage
 
   opts.separator ""
 
   opts.parse!
 
-  if ARGV[0]
+  if restart
+    Xtile.kill_server
+    Xtile.start_server
+    if Xtile.running?
+      puts "Successfully restarted Xtile daemon."
+      exit true
+    else
+      puts "Couldn't restart Xtile daemon."
+      exit false
+    end
+  elsif ARGV[0]
     Xtile.tile ARGV[0], @id
   else
     usage.call
@@ -76,77 +95,147 @@ rescue OptionParser::ParseError => e
 end
 
 class Xtile
-  Screen = {}
-
   TILING_MODES = {
     :maximize => lambda {},
 
-    :left => lambda {
-      return :width => Screen[:width] / 2 - 8
+    :left => lambda { |s|
+      return :width => s[:width] / 2 - 8
     },
 
-    :right => lambda {
-      return :width  => Screen[:width] / 2,
-             :x      => Screen[:x] + Screen[:width] / 2
+    :right => lambda { |s|
+      return :width  => s[:width] / 2,
+             :x      => s[:x] + s[:width] / 2
     },
 
-    :top => lambda {
-      return :height => Screen[:height] / 2
+    :top => lambda { |s|
+      return :height => s[:height] / 2
     },
 
-    :bottom => lambda {
-      return :height => Screen[:height] / 2,
-             :y      => Screen[:y] + Screen[:height] / 2
+    :bottom => lambda { |s|
+      return :height => s[:height] / 2,
+             :y      => s[:y] + s[:height] / 2
     },
 
-    :center => lambda {
-      return :width  => (Screen[:width] * 2 / 3.0).round,
-             :height => Screen[:height] - 2 * Screen[:y],
-             :x      => Screen[:width] / 2 - (Screen[:width] * 2 / 3.0).round / 2,
-             :y      => Screen[:y] * 2
+    :center => lambda { |s|
+      return :width  => (s[:width] * 2 / 3.0).round,
+             :height => s[:height] - 2 * s[:y],
+             :x      => s[:width] / 2 - (s[:width] * 2 / 3.0).round / 2,
+             :y      => s[:y] * 2
     },
 
-    :topleft => lambda {
-      return :width  => Screen[:width] / 2,
-             :height => Screen[:height] / 2 - 14
+    :topleft => lambda { |s|
+      return :width  => s[:width] / 2,
+             :height => s[:height] / 2 - 14
     },
 
-    :topright => lambda {
-      return :width  => Screen[:width] / 2,
-             :height => Screen[:height] / 2 - 14,
-             :x      => Screen[:x] + Screen[:width] / 2
+    :topright => lambda { |s|
+      return :width  => s[:width] / 2,
+             :height => s[:height] / 2 - 14,
+             :x      => s[:x] + s[:width] / 2
     },
 
-    :bottomleft => lambda {
-      return :width  => Screen[:width] / 2,
-             :height => Screen[:height] / 2 - 14,
-             :y      => Screen[:y] + Screen[:height] / 2
+    :bottomleft => lambda { |s|
+      return :width  => s[:width] / 2,
+             :height => s[:height] / 2 - 14,
+             :y      => s[:y] + s[:height] / 2
     },
 
-    :bottomright => lambda {
-      return :width  => Screen[:width] / 2,
-             :height => Screen[:height] / 2 - 14,
-             :x      => Screen[:x] + Screen[:width] / 2,
-             :y      => Screen[:y] + Screen[:height] / 2 + 14
+    :bottomright => lambda { |s|
+      return :width  => s[:width] / 2,
+             :height => s[:height] / 2 - 14,
+             :x      => s[:x] + s[:width] / 2,
+             :y      => s[:y] + s[:height] / 2 + 14
     },
   }
 
-  WINDOWS = {}
   CONFIG = "#{ENV['HOME']}/.xtile.conf"
   SOCKET = "#{ENV['HOME']}/.xtile.sock"
 
   def self.tile(mode, id=nil)
-    @context = :client
-    client.send [ mode, id ].join("\t"), 0
+    if client.send [ mode, id ].join("\t"), 0
+      true
+    else
+      false
+    end
   end
 
   def self.running?
     !!server_pid
   end
 
+  def self.start_server
+    return false if running?
+
+    if fork
+      return wait_for { running? }
+    end
+
+    @config = load_configuration
+    @config[:screen] ||= {}
+    @config[:windows] ||= {}
+
+    at_exit { stop_server }
+
+    debug "opening server socket..."
+    @socket = UNIXServer.open(SOCKET)
+
+    while client = @socket.accept
+      message = client.recvfrom(100).first.strip
+
+      mode, id = message.split "\n"
+      perform_tile mode, id
+      cleanup
+    end
+  end
+
+  def self.stop_server
+    if running?
+      debug "closing server socket..."
+      @socket.close if @socket && !@socket.closed?
+      FileUtils.rm_f SOCKET
+
+      debug "writing configuration to #{CONFIG}..."
+      open CONFIG, 'w' do |file|
+        file.write @config.to_yaml
+      end
+
+      true
+    else
+      false
+    end
+  end
+
+  def self.kill_server
+    if pid = server_pid
+      debug "killing server..."
+      Process.kill 'TERM', pid
+      return wait_for { not running? }
+    end
+
+    not running?
+  end
+
+private
+
+  def self.output(command)
+    `#{command} 2>/dev/null`.strip
+  end
+
+  def self.wait_for(&block)
+    value = false
+
+    30.times do
+      sleep 0.1
+      value = block.call
+      break if value
+    end
+
+    return value
+  end
+
   def self.server_pid
     if File.exist? SOCKET
-      pid = `lsof -F p "#{SOCKET}"`
+      pid = output "lsof -F p '#{SOCKET}'"
       if $?.exitstatus == 0
         pid.sub! /\Ap(\d+).*/m, '\1'
         pid = pid.to_i
@@ -156,53 +245,12 @@ class Xtile
     end
   end
 
-  def self.start_server
-    return false if running?
-
-    if fork
-      sleep 0.1
-      return true
-    end
-
-    @context = :server
-
-    Screen.merge! screen_config
-
-    at_exit { stop_server }
-
-    begin
-      debug "opening server socket..."
-      socket = UNIXServer.open(SOCKET)
-
-      while client = socket.accept
-        message = client.recvfrom(100).first.strip
-
-        mode, id = message.split "\n"
-        perform_tile mode, id
-      end
-    ensure
-      stop_server
-    end
+  def self.window_list
+    output("xprop -root _NET_CLIENT_LIST").sub(/.*#/, '').strip.split(', ')
   end
 
-  def self.stop_server
-    if running?
-      debug "removing socket..."
-      FileUtils.rm_f SOCKET
-    end
-  end
-
-  def self.kill_server
-    if pid = server_pid
-      debug "killing server..."
-      Process.kill 'TERM', pid
-    end
-  end
-
-private
-
-  def self.window_id
-    `xprop -root _NET_ACTIVE_WINDOW`.strip.sub(/.*(0x\w+),.*/, '\1')
+  def self.active_window
+    output("xprop -root _NET_ACTIVE_WINDOW").sub(/.*(0x\w+),.*/, '\1')
   end
 
   def self.window_size(id)
@@ -212,11 +260,11 @@ private
       id = "-id #{id}"
     end
 
-    x, y, width, height, bleft, bright, btop, bbottom = `xwininfo -stats -wm #{id} | awk '
+    x, y, width, height, bleft, bright, btop, bbottom = output("xwininfo -stats -wm #{id} | awk '
       /Absolute upper-left X:|Absolute upper-left Y:/ { print $4 }
       /Width:|Height:/ { print $2 }
       /Frame extents:/ { print $3; print $4; print $5; print $6 }
-    '`.split(/\s+/).map(&:to_i)
+    '").split(/\s+/).map(&:to_i)
 
     return :x      => x - bleft, # subtract window borders
            :y      => y - btop,  #
@@ -232,68 +280,83 @@ private
     retry
   end
 
-  def self.screen_config
+  def self.load_configuration
     if File.exists? CONFIG
-      debug "reading screen configuration from #{CONFIG}..."
-      config = YAML.load_file CONFIG
-      config.is_a?(Hash) ? config : nil
+      debug "reading configuration from #{CONFIG}..."
+      config = YAML.load_file(CONFIG)
+      config.is_a?(Hash) ? config : {}
     else
-      debug "using default screen configuration"
+      debug "using default configuration"
       screen = window_size(:root)
-      return :width  => screen[:width],
-             :height => screen[:height],
-             :x      => 0,
-             :y      => 0
+      return :screen => {
+        :width  => screen[:width],
+        :height => screen[:height],
+        :x      => 0,
+        :y      => 0,
+      }
     end
   end
 
   def self.perform_tile(mode, id=nil)
     mode = mode.to_sym
-    id ||= window_id
+    id ||= active_window
 
-    if !options = TILING_MODES[mode]
+    if !props = TILING_MODES[mode]
       debug "invalid tiling mode #{mode.inspect}", "window #{id}"
       return false
     end
 
-    current_options = window_size(id)
-    options = Screen.merge(options.call || {})
+    current_props = window_size(id)
+    props = @config[:screen].merge(props.call(@config[:screen]) || {})
 
-    window = (WINDOWS[id] ||= {})
+    window = (@config[:windows][id] ||= {})
 
     # Check if the mode has changed
     same_mode = window[:mode] == mode
 
     # Check if the window is already in its new target position
-    same_position = !current_options.detect do |key, value|
-      (value - options[key].to_i).abs > 50
+    same_position = !current_props.detect do |key, value|
+      (value - props[key].to_i).abs > 50
     end
 
     # Check if the window was moved from its last target position
-    window_moved = !window[:options] || current_options.detect do |key, value|
-      (value - window[:options][key].to_i).abs > 50
+    window_moved = !window[:props] || current_props.detect do |key, value|
+      (value - window[:props][key].to_i).abs > 50
     end
 
     # Check if the normal position of the window has changed
-    position_changed = !window[:last] || (same_mode && current_options.detect do |key, value|
+    position_changed = !window[:last] || (same_mode && current_props.detect do |key, value|
       (value - window[:last][key].to_i).abs > 50
     end)
 
     if same_mode and same_position and window[:last]
       mode = :restoring
-      options = window[:options] = window[:last]
+      props = window[:props] = window[:last]
     elsif window_moved or position_changed
-      debug :storing, "window #{id}", current_options
-      window[:last] = current_options
+      debug :storing, "window #{id}", current_props
+      window[:last] = current_props
     end
 
-    debug mode, "window #{id}", options
+    debug mode, "window #{id}", props
 
     window[:mode] = mode
-    window[:options] = options
+    window[:props] = props
 
-    system("xwit -id #{id} -move #{options[:x]} #{options[:y]} -resize #{options[:width]} #{options[:height]}")
-    system("xwit -id #{id} -sync -focus -warp #{options[:width] / 2} #{options[:height] / 2}")
+    system("xwit -id #{id} -move #{props[:x]} #{props[:y]} -resize #{props[:width]} #{props[:height]}")
+    system("xwit -id #{id} -sync -focus -warp #{props[:width] / 2} #{props[:height] / 2}")
+  end
+
+  def self.cleanup(force=false, every=1000)
+    @counter ||= 0
+
+    if force or (@counter += 1) > every
+      @counter = 0
+
+      debug window_list.inspect
+      windows = @config[:windows].keys - window_list
+      windows.each { |w| @config[:windows].delete w }
+      debug "cleanup: removed #{windows.size} windows, kept #{@config[:windows].size}"
+    end
   end
 end
 
