@@ -31,7 +31,8 @@ IRB.conf[:IRB_RC] = proc do |conf|
 end
 
 def ls(*args)
-  system("ls --color #{args.join ' '}")
+  ls = system('which gls &>/dev/null') ? 'gls' : 'ls'
+  system("#{ls} --color #{args.join ' '}")
 end
 
 def cd(dir=ENV['HOME'])
