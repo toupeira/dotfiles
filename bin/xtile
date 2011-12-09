@@ -353,19 +353,14 @@ private
         @config = config if config.is_a?(Hash)
       end
 
-      # Load screen properties
-      screen = window_props(:root)
-
       # Set default configuration
       @config[:windows] ||= {}
-      @config[:screen] ||= {
-        :width  => screen[:width],
-        :height => screen[:height],
-        :x => 0,
-        :y => 0,
-      }
+      @config[:screen] ||= {}
+      @config[:screen][:x] ||= 0
+      @config[:screen][:y] ||= 0
 
-      # Always update screen properties
+      # Update screen size
+      screen = window_props(:root)
       @config[:screen][:width] = screen[:width]
       @config[:screen][:height] = screen[:height]
 
