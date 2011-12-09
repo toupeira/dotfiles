@@ -397,8 +397,6 @@ private
 
     # Add the window borders
     if border = current_props.delete(:border)
-      props[:x] += border[:left]
-      props[:y] += border[:right]
       props[:width]  -= border[:left] + border[:right]
       props[:height] -= border[:bottom] + border[:top]
     end
