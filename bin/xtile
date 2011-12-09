@@ -38,6 +38,9 @@ def run
   opts.separator modes
 
   opts.separator ""
+  opts.separator "Other Commands:"
+  opts.separator "  stop, restart"
+  opts.separator ""
   opts.separator "Options:"
 
   opts.on '-i', '--id WINDOW_ID', String, "Use specified window instead of current window" do |id|
@@ -54,22 +57,28 @@ def run
     end
   end
 
-  opts.separator ""
-
-  restart = false
-  opts.on '-r', '--restart', "Restart the background daemon" do
-    restart = true
-  end
-
-  opts.separator ""
-
   opts.on '-h', '--help', "Show this message", &usage
-
   opts.separator ""
 
   opts.parse!
 
-  if restart
+  case ARGV[0]
+  when 's', 'stop':
+    unless Xtile.running?
+      puts "Xtile daemon is not running."
+      exit false
+    end
+
+    Xtile.kill_server
+
+    if Xtile.running?
+      puts "Couldn't stop Xtile daemon."
+      exit true
+    else
+      puts "Successfully stopped Xtile daemon."
+      exit false
+    end
+  when 'r', 'restart':
     Xtile.kill_server
     Xtile.start_server
     if Xtile.running?
@@ -79,10 +88,14 @@ def run
       puts "Couldn't restart Xtile daemon."
       exit false
     end
-  elsif ARGV[0]
-    Xtile.tile ARGV[0], @id
-  else
+  when 'reset':
+    windows = Xtile.reset
+    puts "Purged #{windows} windows."
+    exit true
+  when nil:
     usage.call
+  else
+    Xtile.tile ARGV[0], @id
   end
 
 rescue OptionParser::ParseError => e
@@ -98,53 +111,66 @@ class Xtile
   TILING_MODES = {
     :maximize => lambda {},
 
-    :left => lambda { |s|
-      return :width => s[:width] / 2 - 8
+    :left => lambda { |s, w|
+      return :width => s[:width] / 2
     },
 
-    :right => lambda { |s|
-      return :width  => s[:width] / 2,
-             :x      => s[:x] + s[:width] / 2
+    :right => lambda { |s, w|
+      width = s[:width] / 2
+
+      return :width  => width,
+             :x      => s[:x] + width
     },
 
-    :top => lambda { |s|
+    :top => lambda { |s, w|
       return :height => s[:height] / 2
     },
 
-    :bottom => lambda { |s|
-      return :height => s[:height] / 2,
-             :y      => s[:y] + s[:height] / 2
+    :bottom => lambda { |s, w|
+      height = s[:height] / 2
+
+      return :height => height,
+             :y      => s[:y] + height
     },
 
-    :center => lambda { |s|
-      return :width  => (s[:width] * 2 / 3.0).round,
-             :height => s[:height] - 2 * s[:y],
-             :x      => s[:width] / 2 - (s[:width] * 2 / 3.0).round / 2,
-             :y      => s[:y] * 2
+    :center => lambda { |s, w|
+      width = (s[:width] * 0.8).round
+
+      return :width  => width,
+             :height => s[:height] - 0.5 * s[:y],
+             :x      => s[:width] / 2 - width / 2,
+             :y      => s[:y] * 1.25
     },
 
-    :topleft => lambda { |s|
+    :topleft => lambda { |s, w|
       return :width  => s[:width] / 2,
-             :height => s[:height] / 2 - 14
+             :height => s[:height] / 2
     },
 
-    :topright => lambda { |s|
-      return :width  => s[:width] / 2,
-             :height => s[:height] / 2 - 14,
-             :x      => s[:x] + s[:width] / 2
+    :topright => lambda { |s, w|
+      width = s[:width] / 2
+
+      return :width  => width,
+             :height => s[:height] / 2,
+             :x      => s[:x] + width
     },
 
-    :bottomleft => lambda { |s|
+    :bottomleft => lambda { |s, w|
+      height = s[:height] / 2
+
       return :width  => s[:width] / 2,
-             :height => s[:height] / 2 - 14,
-             :y      => s[:y] + s[:height] / 2
+             :height => height,
+             :y      => s[:y] + height
     },
 
-    :bottomright => lambda { |s|
-      return :width  => s[:width] / 2,
-             :height => s[:height] / 2 - 14,
-             :x      => s[:x] + s[:width] / 2,
-             :y      => s[:y] + s[:height] / 2 + 14
+    :bottomright => lambda { |s, w|
+      width = s[:width] / 2
+      height = s[:height] / 2
+
+      return :width  => width,
+             :height => height,
+             :x      => s[:x] + width,
+             :y      => s[:y] + height
     },
   }
 
@@ -170,10 +196,6 @@ class Xtile
       return wait_for { running? }
     end
 
-    @config = load_configuration
-    @config[:screen] ||= {}
-    @config[:windows] ||= {}
-
     at_exit { stop_server }
 
     debug "opening server socket..."
@@ -190,12 +212,16 @@ class Xtile
 
   def self.stop_server
     if running?
-      debug "closing server socket..."
-      @socket.close if @socket && !@socket.closed?
+      if @socket
+        debug "closing server socket..."
+        @socket.close unless @socket.closed?
+      end
 
-      debug "writing configuration to #{CONFIG}..."
-      open CONFIG, 'w' do |file|
-        file.write @config.to_yaml
+      if @config
+        debug "writing configuration to #{CONFIG}..."
+        open CONFIG, 'w' do |file|
+          file.write @config.to_yaml
+        end
       end
 
       true
@@ -216,6 +242,17 @@ class Xtile
     not running?
   end
 
+  def self.reset
+    if @config
+      debug "purging all stored windows..."
+      count = config[:windows].size
+      config[:windows] = {}
+      count
+    else
+      return false
+    end
+  end
+
 private
 
   def self.output(command)
@@ -232,6 +269,15 @@ private
     end
 
     return value
+  end
+
+  def self.changed(first, second, error_margin=2)
+    return true unless first and second
+
+    first.detect do |key, value|
+      diff = (value - second[key].to_i).abs
+      diff > error_margin
+    end
   end
 
   def self.server_pid
@@ -254,7 +300,7 @@ private
     output("xprop -root _NET_ACTIVE_WINDOW").sub(/.*(0x\w+),.*/, '\1')
   end
 
-  def self.window_size(id)
+  def self.window_props(id)
     if id == :root
       id = '-root'
     else
@@ -267,10 +313,26 @@ private
       /Frame extents:/ { print $3; print $4; print $5; print $6 }
     '").split(/\s+/).map(&:to_i)
 
-    return :x      => x - bleft, # subtract window borders
-           :y      => y - btop,  #
-           :width  => width,
-           :height => height
+    props = {
+      :width  => width,
+      :height => height,
+      :x      => x,
+      :y      => y,
+    }
+
+    if bleft
+      props[:x] -= bleft
+      props[:y] -= btop
+
+      props[:border] = {
+        :left   => bleft,
+        :right  => bright,
+        :top    => btop,
+        :bottom => bbottom,
+      }
+    end
+
+    props
   end
 
   def self.client
@@ -281,82 +343,114 @@ private
     retry
   end
 
-  def self.load_configuration
-    if File.exists? CONFIG
-      debug "reading configuration from #{CONFIG}..."
-      config = YAML.load_file(CONFIG)
-      config.is_a?(Hash) ? config : {}
-    else
-      debug "using default configuration"
-      screen = window_size(:root)
-      return :screen => {
+  def self.config
+    unless @config
+      @config ||= {}
+
+      if File.exists? CONFIG
+        debug "reading configuration from #{CONFIG}..."
+        config = YAML.load_file(CONFIG)
+        @config = config if config.is_a?(Hash)
+      end
+
+      # Load screen properties
+      screen = window_props(:root)
+
+      # Set default configuration
+      @config[:windows] ||= {}
+      @config[:screen] ||= {
         :width  => screen[:width],
         :height => screen[:height],
-        :x      => 0,
-        :y      => 0,
+        :x => 0,
+        :y => 0,
       }
+
+      # Always update screen properties
+      @config[:screen][:width] = screen[:width]
+      @config[:screen][:height] = screen[:height]
+
+      cleanup
     end
+
+    @config
   end
 
   def self.perform_tile(mode, id=nil)
     mode = mode.to_sym
     id ||= active_window
 
-    if !props = TILING_MODES[mode]
+    if !tiling_function = TILING_MODES[mode]
       debug "invalid tiling mode #{mode.inspect}", "window #{id}"
       return false
     end
 
-    current_props = window_size(id)
-    props = @config[:screen].merge(props.call(@config[:screen]) || {})
+    # Get the current window properties
+    current_props = window_props(id)
 
-    window = (@config[:windows][id] ||= {})
+    # Subtract the margin from the screen size
+    current_screen = config[:screen].dup
+    current_screen[:width]  -= 2 * config[:screen][:x]
+    current_screen[:height] -= 2 * config[:screen][:y]
+
+    # Call the tiling function
+    props = current_screen.merge(tiling_function.call(current_screen, current_props) || {})
+
+    # Add the window borders
+    if border = current_props.delete(:border)
+      props[:x] += border[:left]
+      props[:y] += border[:right]
+      props[:width]  -= border[:left] + border[:right]
+      props[:height] -= border[:bottom] + border[:top]
+    end
+
+    window = (config[:windows][id] ||= {})
 
     # Check if the mode has changed
     same_mode = window[:mode] == mode
 
-    # Check if the window is already in its new target position
-    same_position = !current_props.detect do |key, value|
-      (value - props[key].to_i).abs > 50
-    end
+    # Check if the window is not in its new target position
+    moved_from_target = changed(current_props, props)
 
     # Check if the window was moved from its last target position
-    window_moved = !window[:props] || current_props.detect do |key, value|
-      (value - window[:props][key].to_i).abs > 50
-    end
+    moved_from_last = changed(current_props, window[:last])
 
-    # Check if the normal position of the window has changed
-    position_changed = !window[:last] || (same_mode && current_props.detect do |key, value|
-      (value - window[:last][key].to_i).abs > 50
-    end)
+    # Check if the original position of the window has changed
+    moved_from_original = !window[:original] || (same_mode && changed(current_props, window[:original]))
 
-    if same_mode and same_position and window[:last]
-      mode = :restoring
-      props = window[:props] = window[:last]
-    elsif window_moved or position_changed
+    message = "tiling #{mode.inspect}"
+
+    if same_mode and !moved_from_target and window[:original]
+      mode = :original
+      message = "restoring"
+      props = window[:last] = window[:original]
+
+    elsif moved_from_last or moved_from_original
       debug :storing, "window #{id}", current_props
-      window[:last] = current_props
+      window[:original] = current_props
+
     end
 
-    debug mode, "window #{id}", props
+    debug message, "window #{id}", props
 
     window[:mode] = mode
-    window[:props] = props
+    window[:last] = props
 
+    # Move and resize the window
     system("xwit -id #{id} -move #{props[:x]} #{props[:y]} -resize #{props[:width]} #{props[:height]}")
+
+    # Move the mouse cursor to the center of the window
     system("xwit -id #{id} -sync -focus -warp #{props[:width] / 2} #{props[:height] / 2}")
   end
 
-  def self.cleanup(force=false, every=1000)
-    @counter ||= 0
+  def self.cleanup(force=false, cycles=1000)
+    if force or !@counter or (@counter -= 1).zero?
+      @counter = cycles
 
-    if force or (@counter += 1) > every
-      @counter = 0
+      # Purge all windows that don't exist anymore
+      windows = config[:windows].keys - window_list
+      windows.each { |w| config[:windows].delete w }
 
-      debug window_list.inspect
-      windows = @config[:windows].keys - window_list
-      windows.each { |w| @config[:windows].delete w }
-      debug "cleanup: removed #{windows.size} windows, kept #{@config[:windows].size}"
+      debug "cleanup: kept #{config[:windows].size} windows, purged #{windows.size}"
     end
   end
 end
