@@ -73,3 +73,6 @@
 [submodule "vim/bundle/session"]
 	path = vim/bundle/session
 	url = https://github.com/xolox/vim-session.git
+[submodule "vim/bundle/coffeescript"]
+	path = vim/bundle/coffeescript
+	url = https://github.com/kchmck/vim-coffee-script.git

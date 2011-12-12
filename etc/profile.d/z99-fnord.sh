@@ -1,3 +1,4 @@
+export RAILS_ENV=development
 export CDPATH=.:~:/etc/dotfiles:~/politnetz
 
 export LANG="de_CH.UTF-8"
