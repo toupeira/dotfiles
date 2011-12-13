@@ -172,6 +172,18 @@ class Xtile
              :x      => s[:x] + width,
              :y      => s[:y] + height
     },
+
+    :wideleft => lambda { |s, w|
+      return :width => s[:width] * 0.7
+    },
+
+    :wideright => lambda { |s, w|
+      width = s[:width] * 0.7
+
+      return :width => width,
+             :x     => s[:x] + s[:width] - width
+    },
+
   }
 
   CONFIG = "#{ENV['HOME']}/.xtile.conf"
