@@ -46,6 +46,7 @@
 	sw = checkout
 	un = reset HEAD
 	unstage = reset HEAD
+	staged = diff --cached
 
 	ci = commit -v
 	ca = commit -va

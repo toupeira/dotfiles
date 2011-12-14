@@ -242,6 +242,9 @@
   cnoreabbrev QA qa
   cnoreabbrev Qa qa
 
+  cnoreabbrev dg diffget
+  cnoreabbrev dp diffput
+
   " shortcut to edit runtime files
   function! RuntimeFileCompletion(A, L, P)
     let l:dir = getcwd()
