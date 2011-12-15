@@ -29,7 +29,7 @@ def run
 
   modes = "  "
   Xtile::TILING_MODES.keys.map(&:to_s).sort.each_with_index do |mode, i|
-    if i > 0 and i % 4 == 0
+    if i > 0 and i % 5 == 0
       opts.separator modes
       modes = "  "
     end
