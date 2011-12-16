@@ -269,6 +269,8 @@
   " ignore wrapping lines when moving
   noremap j gj
   noremap k gk
+  noremap gj j
+  noremap gk k
 
   " don't move on *
   nnoremap * *<C-o>
