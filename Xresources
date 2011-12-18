@@ -9,7 +9,7 @@ URxvt*scrollBar_right:	true
 URxvt*scrollTtyOutput:	false
 URxvt*scrollTtyKeypress:	true
 URxvt*depth:		32
-URxvt*background:	rgba:0000/0000/0000/dddd
+URxvt*background:	rgba:0000/0000/0000/d8d8
 URxvt*foreground:	#fff
 URxvt*fading:		25
 URxvt*title:		shell
