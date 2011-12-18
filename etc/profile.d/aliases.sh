@@ -93,7 +93,6 @@ alias gcc='gcc -Wall'
 alias gcc='gcc -Wall'
 alias psgrep='pgrep -fl'
 alias dt='dotfiles'
-has ack-grep && alias ack='ack-grep'
 has xdg-open && alias open='xdg-open'
 
 if has rlwrap; then
