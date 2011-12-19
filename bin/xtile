@@ -441,10 +441,10 @@ private
     window[:last] = props
 
     # Move and resize the window
-    system("xwit -id #{id} -move #{props[:x]} #{props[:y]} -resize #{props[:width]} #{props[:height]}")
+    system("xwit -id %s -move %d %d -resize %d %d" % [ id, props[:x], props[:y], props[:width], props[:height] ])
 
     # Move the mouse cursor to the center of the window
-    system("xwit -id #{id} -sync -focus -warp #{props[:width] / 2} #{props[:height] / 2}")
+    system("xwit -id %s -sync -focus -warp %d %d" % [ id, props[:width] / 2, props[:height] / 2 ])
   end
 
   def self.cleanup(force=false, cycles=1000)
