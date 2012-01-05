@@ -39,7 +39,7 @@ if has sudo; then
   alias sumv='sudo mv -vi'
   alias surm='sudo rm -v'
   alias suln='sudo ln -svfi'
-  alias sush='sudo bash --login'
+  alias sush='sudo -i'
   alias suown='sudo chown -vR root:root'
   alias sumod='sudo chmod -vR 644'
 
