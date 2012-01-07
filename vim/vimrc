@@ -556,6 +556,7 @@
   " syntastic
   let g:syntastic_enable_signs = 1
   let g:syntastic_disabled_filetypes = [ 'xhtml' ]
+  let g:syntastic_phpcs_disable = 1
 
   if !&diff
     let g:syntastic_auto_loc_list = 1
