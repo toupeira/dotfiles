@@ -1,11 +1,6 @@
 # Check for interactive bash and OS X
 [ -z "$BASH_VERSION" -o -z "$PS1" -o "`uname -s`" != "Darwin" ] && return
 
-# Add system paths
-if [ -x /usr/libexec/path_helper ]; then
-  eval `/usr/libexec/path_helper -s`
-fi
-
 # Homebrew aliases
 . /usr/local/Cellar/coreutils/*/aliases
 alias find='gfind'

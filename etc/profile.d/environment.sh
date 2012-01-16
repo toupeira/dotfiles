@@ -9,3 +9,8 @@ export GREP_OPTIONS="-i --color=auto --exclude=.svn --exclude=.git --exclude=.*.
 export ACK_OPTIONS="--smart-case --ignore-dir=tmp/cache --ignore-dir=tmp/files"
 export IRB_HISTORY_SIZE=3000
 export RI="--format ansi --no-pager"
+
+# Add system paths
+if [ -x /usr/libexec/path_helper ]; then
+  eval `/usr/libexec/path_helper -s`
+fi
