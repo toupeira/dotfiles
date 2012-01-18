@@ -46,6 +46,7 @@
   set scrolloff=5
   set virtualedit+=block
   set nostartofline
+  set display+=lastline
 
   " command prompt and status line
   set showcmd
@@ -599,7 +600,7 @@
   let g:acp_behaviorKeywordIgnores = [
     \ 'the', 'def', 'end',
     \ 'else', 'elsif', 'elif', 'endif', 'then',
-    \ 'case', 'done',
+    \ 'case', 'done', 'echo',
     \ ]
 
   " only enable when a filetype is set
@@ -641,5 +642,14 @@
   " indent object
   autocmd VimEnter * omap <silent>ai aI
   autocmd VimEnter * vmap <silent>ai aI
+
+  " powerline
+  if has('gui_running')
+    let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')
+    let Powerline_symbols = 'fancy'
+  else
+    let Powerline_cache_file = expand('~/.vim/tmp/powerline.term.cache')
+    let Powerline_symbols = 'compatible'
+  end
 
 " }}}

@@ -71,6 +71,20 @@ function gvi.add {
   fi
 }
 
+# Vim wrapper to open files matching a pattern (using ack)
+function ack.edit {
+  local files=`ack -l "$@"`
+  if [ -n "$files" ]; then
+    if [ -n "$DISPLAY" -a -z "$SSH_CONNECTION" ]; then
+      gvim $files
+    else
+      vim $files
+    fi
+  else
+    echo "No files found."
+  fi
+}
+
 # GVim wrapper to pass a file to a local instance
 if [ -n "$SSH_CONNECTION" ]; then
   unalias gvi

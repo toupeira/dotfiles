@@ -42,7 +42,7 @@ endif
     if has('mac')
       set guifont=Menlo\ Regular:h13
     elseif has('unix')
-      set guifont=Monospace\ 10
+      set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 10
     else
       set guifont=DejaVu_Sans_Mono:h9:cANSI
     endif
@@ -78,12 +78,14 @@ endif
 
         unlet s:toggle_font_size_big
       else
+        let l:font = substitute(&guifont, '[ :]h*\d.*', '', '')
+
         if has('mac')
-          set guifont=Menlo\ Regular:h18
+          let &guifont = l:font.':h18'
         elseif has('unix')
-          set guifont=Monospace\ Bold\ 18
+          let &guifont = l:font.' 18'
         else
-          set guifont=DejaVu_Sans_Mono:h16:cANSI
+          let &guifont = l:font.'h16:cANSI'
         endif
 
         set columns=110 lines=40
