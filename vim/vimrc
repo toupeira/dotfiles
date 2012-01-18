@@ -181,7 +181,7 @@
 " Custom Filetype Settings
 " {{{
 
-  autocmd FileType alsaconf,applescript,asm,autoit,context,css,dot,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,puppet,smarty,sql,plaintex,ruby,sh,svn,tex,textile,vb,vim,xhtml,xml,xslt setlocal ts=2 sts=2 sw=2 expandtab nocindent
+  autocmd FileType alsaconf,applescript,asm,autoit,context,css,dot,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,puppet,smarty,sql,plaintex,ruby,sh,svn,tex,textile,vb,vim,xhtml,xml,xslt,yaml setlocal ts=2 sts=2 sw=2 expandtab nocindent
   autocmd FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3 expandtab
   autocmd FileType python,sshconfig setlocal ts=4 sts=4 sw=4 expandtab
   autocmd FileType apache setlocal ts=4 sts=4 sw=4
