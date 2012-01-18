@@ -8,6 +8,8 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
+  call add(g:pathogen_disabled, 'powerline')
+
   " AutoComplPop requires Vim 7.2
   if v:version < '702'
     call add(g:pathogen_disabled, 'autocomplpop')
