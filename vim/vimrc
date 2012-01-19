@@ -8,8 +8,6 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
-  call add(g:pathogen_disabled, 'powerline')
-
   " AutoComplPop requires Vim 7.2
   if v:version < '702'
     call add(g:pathogen_disabled, 'autocomplpop')
@@ -90,27 +88,27 @@
   set visualbell
   set errorbells
 
-  " statusline
-  autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
-  autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
-  autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
+  " " statusline
+  " autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
+  " autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
+  " autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
 
-  set statusline=
+  " set statusline=
 
-  set stl+=%#StatusLineGray#\ %n\ %*              " buffer number
-  set stl+=%#StatusLineGreen#%{fugitive#statusline()[4:-2]}%* " Git status
-  set stl+=%#StatusLineRed#%r%*                   " read-only flag
-  set stl+=%#StatusLineRed#%m%*                   " modified flag
-  " if $SSH_CONNECTION != ""
-  "   set stl+=%{toupper(hostname())}:              " hostname
-  " endif
-  set stl+=\ %<\"%f\"\                            " file name
-  set stl+=%y                                     " file type
-  set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
-  set stl+=%{&bomb?',BOM':''}                     " BOM flag
-  set stl+=%{&ff!='unix'?','.toupper(&ff):''}]\   " file format
-  set stl+=%=                                     " left/right separator
-  set stl+=%-20.(%l/%L,%c%)\ %P                   " cursor position
+  " set stl+=%#StatusLineGray#\ %n\ %*              " buffer number
+  " set stl+=%#StatusLineGreen#%{fugitive#statusline()[4:-2]}%* " Git status
+  " set stl+=%#StatusLineRed#%r%*                   " read-only flag
+  " set stl+=%#StatusLineRed#%m%*                   " modified flag
+  " " if $SSH_CONNECTION != ""
+  " "   set stl+=%{toupper(hostname())}:              " hostname
+  " " endif
+  " set stl+=\ %<\"%f\"\                            " file name
+  " set stl+=%y                                     " file type
+  " set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
+  " set stl+=%{&bomb?',BOM':''}                     " BOM flag
+  " set stl+=%{&ff!='unix'?','.toupper(&ff):''}]\   " file format
+  " set stl+=%=                                     " left/right separator
+  " set stl+=%-20.(%l/%L,%c%)\ %P                   " cursor position
 
   " line numbers
   set number
