@@ -1,7 +1,8 @@
 call Pl#Statusline(
 	\ Pl#Segment("  %-2{Stl_GetMode()} ",
 		\ Pl#HiCurrent(   Pl#FG( 22), Pl#BG(148), Pl#Attr('bold')),
-		\ Pl#HiInsert(    Pl#FG( 23), Pl#BG(231), Pl#Attr('bold'))
+		\ Pl#HiInsert(    Pl#FG( 23), Pl#BG(231), Pl#Attr('bold')),
+		\ Pl#HiNonCurrent(Pl#FG( 245), Pl#BG(240), Pl#Attr('bold'))
 		\ ),
 	\
 	\ Pl#Segment("%{Stl_GetBranch('$branch')}",
@@ -9,20 +10,20 @@ call Pl#Statusline(
 		\
 		\ Pl#HiCurrent(   Pl#FG(250), Pl#BG(240)),
 		\ Pl#HiInsert(    Pl#FG(117), Pl#BG( 31)),
-		\ Pl#HiNonCurrent(Pl#FG(239), Pl#BG(235))
+		\ Pl#HiNonCurrent(Pl#FG(245), Pl#BG(236))
 		\ ),
 	\
 	\ Pl#SegmentGroup(
 		\ Pl#HiCurrent(   Pl#BG(240)),
 		\ Pl#HiInsert(    Pl#BG( 31)),
-		\ Pl#HiNonCurrent(Pl#BG(235)),
+		\ Pl#HiNonCurrent(Pl#BG(236)),
 		\
 		\ Pl#Segment("%{&readonly ? ' $ro' : ''}",
 			\ Pl#HiCurrent(   Pl#FG(196)),
 			\ Pl#HiInsert(    Pl#FG(196)),
 			\ Pl#HiNonCurrent(Pl#FG( 88))
 			\ ),
-		\ Pl#Segment(" %f ",
+		\ Pl#Segment(" %<%f ",
 			\ Pl#HiCurrent(   Pl#FG(231), Pl#Attr('bold')),
 			\ Pl#HiInsert(    Pl#FG(231), Pl#Attr('bold')),
 			\ Pl#HiNonCurrent(Pl#FG(245), Pl#Attr('bold'))
@@ -71,13 +72,13 @@ call Pl#Statusline(
 	\ Pl#Segment(" %3p%% ",
 		\ Pl#HiCurrent(   Pl#FG(250), Pl#BG(240)),
 		\ Pl#HiInsert(    Pl#FG(117), Pl#BG( 31)),
-		\ Pl#HiNonCurrent(Pl#FG(241), Pl#BG(234))
+		\ Pl#HiNonCurrent(Pl#FG(241), Pl#BG(236))
 		\ ),
 	\
 	\ Pl#SegmentGroup(
 		\ Pl#HiCurrent(   Pl#BG(252)),
 		\ Pl#HiInsert(    Pl#BG(117)),
-		\ Pl#HiNonCurrent(Pl#BG(235)),
+		\ Pl#HiNonCurrent(Pl#BG(238)),
 		\
 		\ Pl#Segment(" $line %l",
 			\ Pl#HiCurrent(   Pl#FG(236), Pl#Attr('bold')),
