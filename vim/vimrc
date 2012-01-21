@@ -644,6 +644,7 @@
   autocmd VimEnter * vmap <silent>ai aI
 
   " powerline
+  let Powerline_theme = 'desertink'
   if has('gui_running')
     let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')
     let Powerline_symbols = 'fancy'

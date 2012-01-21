@@ -1,7 +1,7 @@
 call Pl#Statusline(
 	\ Pl#Segment("  %-2{Stl_GetMode()} ",
 		\ Pl#HiCurrent(   Pl#FG( 22), Pl#BG(148), Pl#Attr('bold')),
-		\ Pl#HiInsert(    Pl#FG( 22), Pl#BG(231), Pl#Attr('bold'))
+		\ Pl#HiInsert(    Pl#FG( 23), Pl#BG(231), Pl#Attr('bold'))
 		\ ),
 	\
 	\ Pl#Segment("%{Stl_GetBranch('$branch')}",

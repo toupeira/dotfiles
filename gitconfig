@@ -37,31 +37,37 @@
 	sub = submodule
 
 	di = diff
+	dc = diff --cached
 	st = status
 	stat = status
-	ls = branch -av
 
-	br = branch
+	ls = branch -av
 	co = checkout
 	sw = checkout
+	nb = checkout -b
 	un = reset HEAD
 	unstage = reset HEAD
 	staged = diff --cached
 
+	all = add -A .
 	ci = commit -v
 	ca = commit -va
 	amend = commit -v --amend
 
-	logstat = log --stat
-	logdiff = log -p
-	oneline = log --pretty=format:\"%C(yellow)[%h]%Creset %Cred%an:%Creset %C(cyan)%s%Creset (%ar)\"
-	new = "!git oneline HEAD@{1}.. | grep --color=never ."
+	l = log --pretty=format:\"%C(yellow)[%h]%Creset %Cred%an:%Creset %C(cyan)%s%Creset (%ar)\"
+	lstat = log --stat
+	ldiff = log -p
+	new = "!git l HEAD@{1}.. | grep --color=never ."
 	news = log -p HEAD@{1}..
 
 	up = pull -v --progress
 	pu = push -v --progress
-	ff = merge HEAD@{u}
+	ff = merge --ff-only HEAD@{u}
+	mt = mergetool
 	reup = remote update
+
+	stl = stash list
+	std = stash drop
 
 	tig = "!tig"
 	gitg = "!gitg"
