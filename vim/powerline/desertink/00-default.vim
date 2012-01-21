@@ -2,7 +2,7 @@ call Pl#Statusline(
 	\ Pl#Segment("  %-2{Stl_GetMode()} ",
 		\ Pl#HiCurrent(   Pl#FG( 22), Pl#BG(148), Pl#Attr('bold')),
 		\ Pl#HiInsert(    Pl#FG( 23), Pl#BG(231), Pl#Attr('bold')),
-		\ Pl#HiNonCurrent(Pl#FG( 245), Pl#BG(240), Pl#Attr('bold'))
+		\ Pl#HiNonCurrent(Pl#FG( 248), Pl#BG(242), Pl#Attr('bold'))
 		\ ),
 	\
 	\ Pl#Segment("%{Stl_GetBranch('$branch')}",
@@ -10,13 +10,13 @@ call Pl#Statusline(
 		\
 		\ Pl#HiCurrent(   Pl#FG(250), Pl#BG(240)),
 		\ Pl#HiInsert(    Pl#FG(117), Pl#BG( 31)),
-		\ Pl#HiNonCurrent(Pl#FG(245), Pl#BG(236))
+		\ Pl#HiNonCurrent(Pl#FG(245), Pl#BG(238))
 		\ ),
 	\
 	\ Pl#SegmentGroup(
 		\ Pl#HiCurrent(   Pl#BG(240)),
 		\ Pl#HiInsert(    Pl#BG( 31)),
-		\ Pl#HiNonCurrent(Pl#BG(236)),
+		\ Pl#HiNonCurrent(Pl#BG(238)),
 		\
 		\ Pl#Segment("%{&readonly ? ' $ro' : ''}",
 			\ Pl#HiCurrent(   Pl#FG(196)),
@@ -56,7 +56,7 @@ call Pl#Statusline(
 	\ Pl#Split(
 		\ Pl#HiCurrent(   Pl#BG(236)),
 		\ Pl#HiInsert(    Pl#BG( 24)),
-		\ Pl#HiNonCurrent(Pl#BG(233))
+		\ Pl#HiNonCurrent(Pl#BG(236))
 		\ ),
 	\
 	\ Pl#Segment("%{&fileformat} %{(&fenc == '' ? &enc : &fenc)} ",
@@ -72,28 +72,28 @@ call Pl#Statusline(
 	\ Pl#Segment(" %3p%% ",
 		\ Pl#HiCurrent(   Pl#FG(250), Pl#BG(240)),
 		\ Pl#HiInsert(    Pl#FG(117), Pl#BG( 31)),
-		\ Pl#HiNonCurrent(Pl#FG(241), Pl#BG(236))
+		\ Pl#HiNonCurrent(Pl#FG(243), Pl#BG(238))
 		\ ),
 	\
 	\ Pl#SegmentGroup(
 		\ Pl#HiCurrent(   Pl#BG(252)),
 		\ Pl#HiInsert(    Pl#BG(117)),
-		\ Pl#HiNonCurrent(Pl#BG(238)),
+		\ Pl#HiNonCurrent(Pl#BG(240)),
 		\
 		\ Pl#Segment(" $line %l",
 			\ Pl#HiCurrent(   Pl#FG(236), Pl#Attr('bold')),
 			\ Pl#HiInsert(    Pl#FG( 23), Pl#Attr('bold')),
-			\ Pl#HiNonCurrent(Pl#FG(245))
+			\ Pl#HiNonCurrent(Pl#FG(247))
 			\ ),
 		\ Pl#Segment("/%L",
 			\ Pl#HiCurrent(   Pl#FG(237)),
 			\ Pl#HiInsert(    Pl#FG( 23)),
-			\ Pl#HiNonCurrent(Pl#FG(241))
+			\ Pl#HiNonCurrent(Pl#FG(243))
 			\ ),
 		\ Pl#Segment(":%-2c ",
 			\ Pl#HiCurrent(   Pl#FG(239)),
 			\ Pl#HiInsert(    Pl#FG( 23)),
-			\ Pl#HiNonCurrent(Pl#FG(241))
+			\ Pl#HiNonCurrent(Pl#FG(243))
 			\ )
 		\ )
 	\ )
