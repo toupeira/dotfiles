@@ -650,7 +650,7 @@
     let Powerline_symbols = 'fancy'
   else
     let Powerline_cache_file = expand('~/.vim/tmp/powerline.term.cache')
-    let Powerline_symbols = 'compatible'
+    let Powerline_symbols = 'unicode'
   end
 
 " }}}
