@@ -21,7 +21,7 @@ endif
 " Display Settings
 " {{{
 
-  set guioptions=aigrL
+  set guioptions=aigrLM
 
   " don't use autoselect on OS X
   if has('mac')

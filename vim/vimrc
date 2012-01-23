@@ -1,4 +1,4 @@
-" General Settings
+" Initialisation
 " {{{
 
   set nocompatible
@@ -25,6 +25,11 @@
   endif
 
   call pathogen#infect()
+
+  if has('gui_running')
+    " avoid loading the menu, has to be set before loading filetypes
+    set guioptions+=M
+  end
 
   " file handling
   set nobackup
@@ -347,17 +352,11 @@
   nnoremap <silent> ,8 :b8<CR>
   nnoremap <silent> ,9 :b9<CR>
 
-  " ,b - fuzzy find buffers
-  nnoremap <silent> ,b :FufBuffer<CR>
-
   " ,c - close current window
   nnoremap <silent> ,c :silent! close<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
-
-  " ,f - fuzzy find files
-  nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
 
   " ,F - toggle syntax folding
   function! ToggleFolding()
@@ -435,12 +434,6 @@
   endfunction
   nnoremap <silent> ,G :call GrepCurrentPath()<CR>
 
-  " ,i - toggle indent guides
-  nnoremap <silent> ,i :IndentGuidesToggle<CR>
-
-  " ,l - fuzzy find lines
-  nnoremap <silent> ,l :FufLine<CR>
-
   " ,n - next buffer
   nnoremap <silent> ,n :bnext<CR>
 
@@ -471,15 +464,6 @@
   " ,s - split horizontally
   nnoremap <silent> ,s :split<CR>
 
-  " ,S - show syntax attributes
-  nnoremap <silent> ,S :call SyntaxAttr()<CR>
-
-  " ,t - toggle tagbar
-  nnoremap <silent> ,t :TagbarToggle<CR>
-
-  " ,u - open gundo
-  nnoremap <silent> ,u :GundoToggle<CR>
-
   " ,v - split vertically
   nnoremap <silent> ,v :vsplit<CR>
 
@@ -488,12 +472,6 @@
 
   " ,W - clear trailing whitespace
   nnoremap <silent> ,W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
-
-  " ,x - toggle NERDTree
-  nnoremap <silent> ,x :NERDTreeToggle<CR>
-
-  " ,y - toggle yankring
-  nnoremap <silent> ,y :YRShow<CR>
 
   " F4 / F5 - change window height
   nnoremap <silent> <F4> <C-w>+
@@ -507,18 +485,12 @@
   nnoremap <silent> <F7> <C-w><
   imap <silent> <F7> <C-o><F7>
 
-  " conque bindings
-  command! Sh ConqueTermSplit bash --login
-  command! Irb ConqueTermSplit irb
-  command! Py ConqueTermSplit ipython
-
 " }}}
 
 " Plugin Settings
 " {{{
 
   runtime ftplugin/man.vim
-  runtime scripts/SyntaxAttr.vim
 
   " netrw
   let g:netrw_silent = 1
@@ -531,7 +503,7 @@
     let g:netrw_browsex_viewer = 'gnome-open'
   endif
 
-  " buffer explorer
+  " mini buffer explorer
   let g:miniBufExplSplitBelow = 0
   let g:miniBufExplForceSyntaxEnable = 0
   let g:miniBufExplMapCTabSwitchBufs = 1
@@ -549,10 +521,18 @@
   autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
   autocmd VimEnter,BufRead,BufNewFile * highlight MBEChanged ctermbg=88 guibg=#913d3b
 
+  " fuzzy finder
+  nnoremap <silent> ,b :FufBuffer<CR>
+  nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
+  nnoremap <silent> ,j :FufJumpList<CR>
+  nnoremap <silent> ,l :FufLine<CR>
+
   " nerd tree
   let g:NERDChristmasTree = 1
   let g:NERDTreeQuitOnOpen = 1
   let g:NERDTreeDirArrows = 1
+
+  nnoremap <silent> ,x :NERDTreeToggle<CR>
 
   " syntastic
   let g:syntastic_enable_signs = 1
@@ -569,6 +549,13 @@
   autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
   autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
 
+  nnoremap <silent> ,i :IndentGuidesToggle<CR>
+
+  " syntax attributes
+  runtime scripts/SyntaxAttr.vim
+
+  nnoremap <silent> ,S :call SyntaxAttr()<CR>
+
   " closetag
   autocmd BufEnter * runtime scripts/closetag.vim
 
@@ -584,14 +571,25 @@
   let g:tagbar_singleclick = 1
   let g:tagbar_usearrows = 1
 
+  nnoremap <silent> ,t :TagbarToggle<CR>
+
   " yankring
   let g:yankring_history_file = '.vim_yankring_history'
+
+  nnoremap <silent> ,y :YRShow<CR>
 
   " rails
   hi! link rubyRailsARMethod Statement
 
   " conque
   let g:ConqueTerm_StartMessages = 0
+
+  command! Sh ConqueTermSplit bash --login
+  command! Irb ConqueTermSplit irb
+  command! Py ConqueTermSplit ipython
+
+  " gundo
+  nnoremap <silent> ,u :GundoToggle<CR>
 
   " autocomplpop
   let g:acp_enableAtStartup = 0
@@ -630,14 +628,8 @@
   autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
 
   " session plugin
-  let g:session_directory="~/.vim/tmp/sessions"
-  cnoreabbrev SS SaveSession
-  cnoreabbrev OS OpenSession
-  cnoreabbrev CS CloseSession
-  cnoreabbrev DS DeleteSession
-  cnoreabbrev VS ViewSession
-
-  cnoreabbrev QS SaveSession \| quitall
+  let g:session_directory = "~/.vim/tmp/sessions"
+  let g:session_autosave = 'yes'
 
   " indent object
   autocmd VimEnter * omap <silent>ai aI
