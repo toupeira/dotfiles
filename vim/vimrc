@@ -242,6 +242,7 @@
 " {{{
 
   " command-mode aliases
+  cnoreabbrev E e
   cnoreabbrev W w
   cnoreabbrev WQ wq
   cnoreabbrev Q q
@@ -270,7 +271,7 @@
     execute "chdir ".l:dir
     return l:values
   endfunction
-  command! -nargs=1 -complete=customlist,RuntimeFileCompletion E edit ~/.dotfiles/vim/<args>
+  command! -nargs=1 -complete=customlist,RuntimeFileCompletion RC edit ~/.dotfiles/vim/<args>
 
   " don't move on *
   nnoremap * *<C-o>
