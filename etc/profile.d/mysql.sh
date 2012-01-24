@@ -21,5 +21,9 @@ function mysql-kill {
 }
 
 function mysql-top {
-  watch -n 1 "bash -c '. /etc/profile; mysql-ps $1'";
+  while true; do
+    clear
+    mysql-ps
+    sleep 1
+  done
 }
