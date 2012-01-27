@@ -94,6 +94,7 @@
   set errorbells
 
   " " statusline
+  " {{{
   " autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
   " autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
   " autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
@@ -114,6 +115,7 @@
   " set stl+=%{&ff!='unix'?','.toupper(&ff):''}]\   " file format
   " set stl+=%=                                     " left/right separator
   " set stl+=%-20.(%l/%L,%c%)\ %P                   " cursor position
+  " }}}
 
   " line numbers
   set number
@@ -184,7 +186,7 @@
 
 " }}}
 
-" Custom Filetype Settings
+" Filetype Settings
 " {{{
 
   autocmd FileType alsaconf,applescript,asm,autoit,context,css,dot,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,puppet,smarty,sql,plaintex,ruby,sh,svn,tex,textile,vb,vim,xhtml,xml,xslt,yaml setlocal ts=2 sts=2 sw=2 expandtab nocindent
@@ -210,38 +212,39 @@
   let php_special_functions = 1
   let php_alt_comparisons = 1
   let php_alt_AssignByReference = 1
-
   let php_folding = 1
 
   " Ruby block auto-completion
-  function! RubyEndToken()
-    let current_line = getline( '.' )
-    let braces_at_end = '{\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
-    let brackets_at_end = '[\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
-    let stuff_without_do = '^\s*\(class\|if\|unless\|begin\|case\|for\|module\|while\|until\|def\)'
-    let with_do = 'do\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
+  " {{{
+  " function! RubyEndToken()
+  "   let current_line = getline( '.' )
+  "   let braces_at_end = '{\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
+  "   let brackets_at_end = '[\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
+  "   let stuff_without_do = '^\s*\(class\|if\|unless\|begin\|case\|for\|module\|while\|until\|def\)'
+  "   let with_do = 'do\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
 
-    if match(current_line, braces_at_end) >= 0
-      return "\<CR>}\<C-O>O"
-    elseif match(current_line, brackets_at_end) >= 0
-      return "\<CR>\1\<C-O>O"
-    elseif match(current_line, stuff_without_do) >= 0
-      return "\<CR>end\<C-O>O"
-    elseif match(current_line, with_do) >= 0
-      return "\<CR>end\<C-O>O"
-    else
-      return "\<CR>"
-    endif
-  endfunction
-
+  "   if match(current_line, braces_at_end) >= 0
+  "     return "\<CR>}\<C-O>O"
+  "   elseif match(current_line, brackets_at_end) >= 0
+  "     return "\<CR>\1\<C-O>O"
+  "   elseif match(current_line, stuff_without_do) >= 0
+  "     return "\<CR>end\<C-O>O"
+  "   elseif match(current_line, with_do) >= 0
+  "     return "\<CR>end\<C-O>O"
+  "   else
+  "     return "\<CR>"
+  "   endif
+  " endfunction
+  "
   "autocmd FileType ruby inoremap <buffer> <CR> <C-R>=RubyEndToken()<CR>
+  " }}}
 
 " }}}
 
-" Keybindings
+" Commands
 " {{{
 
-  " command-mode aliases
+  " ignore case for common commands
   command! -bang E e<bang>
   command! -bang W w<bang>
   command! -bang WQ wq<bang>
@@ -249,11 +252,12 @@
   command! -bang QA qa<bang>
   command! -bang Qa qa<bang>
 
+  " shortcuts for visual mode
   command! Dg diffget
   command! Dp diffput
 
-  " shortcut to edit runtime files
-  function! RuntimeFileCompletion(A, L, P)
+  " shortcut to edit vim config files
+  function! VimConfigFileCompletion(A, L, P) " {{{
     let l:dir = getcwd()
     chdir ~/.dotfiles/vim/
 
@@ -270,11 +274,17 @@
 
     execute "chdir ".l:dir
     return l:values
-  endfunction
-  command! -nargs=1 -complete=customlist,RuntimeFileCompletion RC edit ~/.dotfiles/vim/<args>
+  endfunction " }}}
+  command! -nargs=1 -complete=customlist,VimConfigFileCompletion RC edit ~/.dotfiles/vim/<args>
 
-  " don't move on *
-  nnoremap * *<C-o>
+" }}}
+
+" Keybindings
+" {{{
+
+  " don't use exact searches for */#
+  noremap * g*
+  noremap # g#
 
   " shortcut for :diffupdate
   nnoremap du :diffupdate<CR>
@@ -405,7 +415,7 @@
   nnoremap <silent> ,g :call GrepCurrentFile()<CR>
 
   " ,G - grep the current path
-  function! GrepCurrentPath()
+  function! GrepCurrentPath() " {{{
     echohl Question
     let l:pattern = substitute(input("Grep path: /", expand('<cword>')), '"', '\"', '')
 
@@ -432,14 +442,14 @@
     endif
 
     echohl None
-  endfunction
+  endfunction " }}}
   nnoremap <silent> ,G :call GrepCurrentPath()<CR>
 
   " ,n - next buffer
   nnoremap <silent> ,n :bnext<CR>
 
   " ,N - toggle line numbers
-  function! ToggleLineNumbers()
+  function! ToggleLineNumbers() " {{{
     if &number
       set nonumber
     elseif &relativenumber
@@ -447,7 +457,7 @@
     else
       set relativenumber
     endif
-  endfunction
+  endfunction " }}}
   nnoremap <silent> ,N :call ToggleLineNumbers()<CR>
 
   " ,p - previous buffer
@@ -493,7 +503,95 @@
 
   runtime ftplugin/man.vim
 
+  " rails
+  hi! link rubyRailsARMethod Statement
+
+  " gundo
+  nnoremap <silent> ,u :GundoToggle<CR>
+
+  " closetag
+  autocmd BufEnter * runtime scripts/closetag.vim
+
+  " tcomment
+  let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
+
+  " syntax attributes
+  runtime scripts/SyntaxAttr.vim
+  nnoremap <silent> ,S :call SyntaxAttr()<CR>
+
+  " yankring
+  let g:yankring_history_file = '.vim_yankring_history'
+  nnoremap <silent> ,y :YRShow<CR>
+
+  " session plugin
+  let g:session_directory = "~/.vim/tmp/sessions"
+  let g:session_autosave = 'yes'
+
+  " indent object
+  autocmd VimEnter * omap <silent>ai aI
+  autocmd VimEnter * vmap <silent>ai aI
+
+  " fuzzy finder
+  " {{{
+  nnoremap <silent> ,b :FufBuffer<CR>
+  nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
+  nnoremap <silent> ,j :FufJumpList<CR>
+  nnoremap <silent> ,l :FufLine<CR>
+  " }}}
+
+  " nerd tree
+  " {{{
+  let g:NERDChristmasTree = 1
+  let g:NERDTreeQuitOnOpen = 1
+  let g:NERDTreeDirArrows = 1
+
+  nnoremap <silent> ,x :NERDTreeToggle<CR>
+  " }}}
+
+  " indent guides
+  " {{{
+  let g:indent_guides_auto_colors = 0
+  autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
+  autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
+
+  nnoremap <silent> ,i :IndentGuidesToggle<CR>
+  " }}}
+
+  " conque
+  " {{{
+  let g:ConqueTerm_StartMessages = 0
+
+  command! Sh ConqueTermSplit bash --login
+  command! Irb ConqueTermSplit irb
+  command! Py ConqueTermSplit ipython
+  " }}}
+
+  " syntastic
+  " {{{
+  let g:syntastic_enable_signs = 1
+  let g:syntastic_disabled_filetypes = [ 'xhtml' ]
+  let g:syntastic_phpcs_disable = 1
+
+  if !&diff
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_auto_jump = 0
+  endif
+  " }}}
+
+  " powerline
+  " {{{
+  let Powerline_theme = 'desertink'
+  if has('gui_running')
+    let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')
+    let Powerline_symbols = 'fancy'
+  else
+    let Powerline_cache_file = expand('~/.vim/tmp/powerline.term.cache')
+    let Powerline_symbols = 'unicode'
+  end
+  " }}}
+
   " netrw
+  " {{{
   let g:netrw_silent = 1
   let g:netrw_ftpmode = 'ascii'
   let g:netrw_longlist = 1
@@ -501,10 +599,25 @@
   let g:netrw_altv = 1
   let g:DrChipTopLvlMenu = 'Plugins.'
   if has('unix') && exists("$DISPLAY")
-    let g:netrw_browsex_viewer = 'gnome-open'
+    let g:netrw_browsex_viewer = 'xdg-open'
   endif
+  " }}}
+
+  " tagbar
+  " {{{
+  let g:tagbar_width = 31
+  let g:tagbar_autofocus = 1
+  let g:tagbar_sort = 0
+  let g:tagbar_compact = 1
+  let g:tagbar_expand = 1
+  let g:tagbar_singleclick = 1
+  let g:tagbar_usearrows = 1
+
+  nnoremap <silent> ,t :TagbarToggle<CR>
+  " }}}
 
   " mini buffer explorer
+  " {{{
   let g:miniBufExplSplitBelow = 0
   let g:miniBufExplForceSyntaxEnable = 0
   let g:miniBufExplMapCTabSwitchBufs = 1
@@ -521,78 +634,10 @@
   autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleChangedActive cterm=bold ctermbg=124 gui=bold guibg=#cc5653
   autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
   autocmd VimEnter,BufRead,BufNewFile * highlight MBEChanged ctermbg=88 guibg=#913d3b
-
-  " fuzzy finder
-  nnoremap <silent> ,b :FufBuffer<CR>
-  nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
-  nnoremap <silent> ,j :FufJumpList<CR>
-  nnoremap <silent> ,l :FufLine<CR>
-
-  " nerd tree
-  let g:NERDChristmasTree = 1
-  let g:NERDTreeQuitOnOpen = 1
-  let g:NERDTreeDirArrows = 1
-
-  nnoremap <silent> ,x :NERDTreeToggle<CR>
-
-  " syntastic
-  let g:syntastic_enable_signs = 1
-  let g:syntastic_disabled_filetypes = [ 'xhtml' ]
-  let g:syntastic_phpcs_disable = 1
-
-  if !&diff
-    let g:syntastic_auto_loc_list = 1
-    let g:syntastic_auto_jump = 0
-  endif
-
-  " indent guides
-  let g:indent_guides_auto_colors = 0
-  autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
-  autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
-
-  nnoremap <silent> ,i :IndentGuidesToggle<CR>
-
-  " syntax attributes
-  runtime scripts/SyntaxAttr.vim
-
-  nnoremap <silent> ,S :call SyntaxAttr()<CR>
-
-  " closetag
-  autocmd BufEnter * runtime scripts/closetag.vim
-
-  " tcomment
-  let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
-
-  " tagbar
-  let g:tagbar_width = 31
-  let g:tagbar_autofocus = 1
-  let g:tagbar_sort = 0
-  let g:tagbar_compact = 1
-  let g:tagbar_expand = 1
-  let g:tagbar_singleclick = 1
-  let g:tagbar_usearrows = 1
-
-  nnoremap <silent> ,t :TagbarToggle<CR>
-
-  " yankring
-  let g:yankring_history_file = '.vim_yankring_history'
-
-  nnoremap <silent> ,y :YRShow<CR>
-
-  " rails
-  hi! link rubyRailsARMethod Statement
-
-  " conque
-  let g:ConqueTerm_StartMessages = 0
-
-  command! Sh ConqueTermSplit bash --login
-  command! Irb ConqueTermSplit irb
-  command! Py ConqueTermSplit ipython
-
-  " gundo
-  nnoremap <silent> ,u :GundoToggle<CR>
+  " }}}
 
   " autocomplpop
+  " {{{
   let g:acp_enableAtStartup = 0
   let g:acp_completeoptPreview = 1
   let g:acp_behaviorKeywordLength = 3
@@ -627,23 +672,6 @@
     endif
   endfunction
   autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
-
-  " session plugin
-  let g:session_directory = "~/.vim/tmp/sessions"
-  let g:session_autosave = 'yes'
-
-  " indent object
-  autocmd VimEnter * omap <silent>ai aI
-  autocmd VimEnter * vmap <silent>ai aI
-
-  " powerline
-  let Powerline_theme = 'desertink'
-  if has('gui_running')
-    let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')
-    let Powerline_symbols = 'fancy'
-  else
-    let Powerline_cache_file = expand('~/.vim/tmp/powerline.term.cache')
-    let Powerline_symbols = 'unicode'
-  end
+  " }}}
 
 " }}}

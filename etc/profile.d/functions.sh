@@ -73,6 +73,7 @@ function gvi.add {
 
 # Vim wrapper to open files matching a pattern (using ack)
 function ack.edit {
+  [ "$1" = "-l" ] && shift
   local files=`ack -l "$@"`
   if [ -n "$files" ]; then
     if [ -n "$DISPLAY" -a -z "$SSH_CONNECTION" ]; then
