@@ -584,7 +584,7 @@
   " {{{
   let Powerline_theme = 'desertink'
   let Powerline_colorscheme = 'desertink'
-  let Powerline_cache_enabled = 0
+  let Powerline_cache_enabled = 1
 
   if has('gui_running')
     let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')
