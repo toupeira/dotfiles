@@ -2,6 +2,7 @@ let g:Powerline#Themes#desertink#theme = Pl#Theme#Create(
 	\ Pl#Theme#Buffer(''
 		\ , 'mode_indicator'
 		\ , 'fugitive:branch'
+    \ , 'filepath'
 		\ , 'fileinfo'
 		\ , 'syntastic:errors'
 		\ , Pl#Segment#Truncate()

@@ -582,9 +582,13 @@
 
   " powerline
   " {{{
+  let Powerline_cache_enabled = 0
+  if Powerline_cache_enabled == 0
+    silent !rm -f ~/.vim/tmp/powerline.*.cache
+  end
+
   let Powerline_theme = 'desertink'
   let Powerline_colorscheme = 'desertink'
-  let Powerline_cache_enabled = 1
 
   if has('gui_running')
     let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')

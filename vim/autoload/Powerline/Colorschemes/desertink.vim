@@ -19,11 +19,12 @@ let g:Powerline#Colorschemes#desertink#colorscheme = Pl#Colorscheme#Init([
 	\                           'fileencoding',
 	\                           'pwd',
 	\                           'filetype',
+  \                           'filepath',
 	\                           'charcode'],                            Pl#Hi#Create(Pl#Hi#Cterm(247, 236)        ), {                                                   'i': Pl#Hi#Create(Pl#Hi#Cterm(117,  24)        ), } ),
 	\ Pl#Colorscheme#HiSegment(['lineinfo'],                            Pl#Hi#Create(Pl#Hi#Cterm(236, 252), 'bold'), { 'N': Pl#Hi#Create(Pl#Hi#Cterm(247, 238), 'bold'), 'i': Pl#Hi#Create(Pl#Hi#Cterm( 23, 117), 'bold'), } ),
 	\ Pl#Colorscheme#HiSegment(['errors'],                              Pl#Hi#Create(Pl#Hi#Cterm(214, 236), 'bold'), {                                                   'i': Pl#Hi#Create(Pl#Hi#Cterm(214,  24), 'bold'), } ),
 	\ Pl#Colorscheme#HiSegment(['lineinfo.line.tot'],                   Pl#Hi#Create(Pl#Hi#Cterm(237     )        ), { 'N': Pl#Hi#Create(Pl#Hi#Cterm(243     )        ), 'i': Pl#Hi#Create(Pl#Hi#Cterm( 23     )        ), } ),
-	\ Pl#Colorscheme#HiSegment(['lineinfo.line.col'],                   Pl#Hi#Create(Pl#Hi#Cterm(236     )        ), { 'N': Pl#Hi#Create(Pl#Hi#Cterm(243     )        ), 'i': Pl#Hi#Create(Pl#Hi#Cterm( 23     )        ), } ),
+	\ Pl#Colorscheme#HiSegment(['lineinfo.line.col'],                   Pl#Hi#Create(Pl#Hi#Cterm(244     )        ), { 'N': Pl#Hi#Create(Pl#Hi#Cterm(241     )        ), 'i': Pl#Hi#Create(Pl#Hi#Cterm( 23     )        ), } ),
 	\
 	\ Pl#Colorscheme#HiSegment(['gundo:static_str.name',
 	\                           'command_t:static_str.name',
