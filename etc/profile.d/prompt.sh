@@ -2,7 +2,7 @@
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # Prompt configuration
-export PS1='\u@\h:\w\$ '
+export PS1='\[\033[0m\]\u@\h:\w\$ '
 
 # Use Git prompt if available
 if type __git_ps1 &>/dev/null; then

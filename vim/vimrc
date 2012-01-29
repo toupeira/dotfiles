@@ -38,6 +38,8 @@
   set modeline
   set modelines=2
 
+  set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
+
   if v:version > '702'
     set undofile
     set undodir=~/.vim/tmp/undo
@@ -197,7 +199,7 @@
   autocmd FileType tex,plaintex,context setlocal lbr
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
 
-  autocmd BufEnter /home/*/bin/*.run setf sh
+  autocmd BufEnter */bin/*.run setf sh
   autocmd BufEnter *.inc,*.thtml setf php
   autocmd BufEnter *.boo setf python
   autocmd BufEnter *.io setf io
@@ -581,6 +583,9 @@
   " powerline
   " {{{
   let Powerline_theme = 'desertink'
+  let Powerline_colorscheme = 'desertink'
+  let Powerline_cache_enabled = 0
+
   if has('gui_running')
     let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')
     let Powerline_symbols = 'fancy'
