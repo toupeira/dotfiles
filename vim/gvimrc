@@ -157,8 +157,8 @@ endif
   endif
 
   " CTRL-A is Visual-select all
-  noremap <C-A> ggVG
-  vnoremap <C-A> <C-C>ggVG
+  "noremap <C-A> ggVG
+  "vnoremap <C-A> <C-C>ggVG
 
   " restore 'cpoptions'
   set cpo&
