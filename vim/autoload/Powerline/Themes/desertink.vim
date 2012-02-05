@@ -8,6 +8,8 @@ let g:Powerline#Themes#desertink#theme = Pl#Theme#Create(
 		\ , Pl#Segment#Truncate()
 		\ , 'cfi:current_function'
 		\ , Pl#Segment#Split()
+		\ , 'rvm:string'
+		\ , 'virtualenv:statusline'
 		\ , 'fileformat'
 		\ , 'fileencoding'
 		\ , 'filetype'
@@ -38,6 +40,14 @@ let g:Powerline#Themes#desertink#theme = Pl#Theme#Create(
 	\
 	\ Pl#Theme#Buffer('ft_help'
 		\ , ['static_str.name', 'Help']
+		\ , 'filename'
+		\ , Pl#Segment#Truncate()
+		\ , Pl#Segment#Split()
+		\ , 'scrollpercent'
+	\ ),
+	\
+	\ Pl#Theme#Buffer('ft_vimpager'
+		\ , ['static_str.name', 'Pager']
 		\ , 'filename'
 		\ , Pl#Segment#Truncate()
 		\ , Pl#Segment#Split()
