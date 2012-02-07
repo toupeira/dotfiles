@@ -247,9 +247,9 @@
 " {{{
 
   " ignore case for common commands
-  command! -bang E e<bang>
-  command! -bang W w<bang>
-  command! -bang WQ wq<bang>
+  command! -nargs=1 -bang -complete=file E e<bang>
+  command! -nargs=1 -bang -complete=file W w<bang>
+  command! -nargs=1 -bang -complete=file WQ wq<bang>
   command! -bang Q q<bang>
   command! -bang QA qa<bang>
   command! -bang Qa qa<bang>
