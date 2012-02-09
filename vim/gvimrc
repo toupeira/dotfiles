@@ -63,7 +63,7 @@ endif
 " Keybindings
 " {{{
 
-  " ,Z - toggle font size
+  " Ctrl+PageUp/PageDown - toggle font size
   function! ToggleFontSize()
     if exists('s:toggle_font_size')
       let s:toggle_font_size_big = [ &guifont, &columns, &lines ]
@@ -101,7 +101,6 @@ endif
     wincmd =
   endfunction
 
-  noremap <silent> <leader>Z :call ToggleFontSize()<CR>
   noremap <silent> <C-PageUp> :call ToggleFontSize()<CR>
   noremap <silent> <C-PageDown> :call ToggleFontSize()<CR>
 
@@ -132,36 +131,53 @@ endif
   endif
   set cpo&vim
 
-  " CTRL-X is Cut
-  vnoremap <C-X> "+x
-  " CTRL-C is Copy
-  vnoremap <C-C> "+y
-  " CTRL-V is Paste
-  map <C-V>               "+gP
-  "cmap <C-V>              <C-R>+
+  if has('mac')
+    vnoremap <D-x> "+x
+    " Command-c is Copy
+    vnoremap <D-c> "+y
+    " Command-v is Paste
+    map <D-v>               "+gP
+    "cmap <D-v>              <C-R>+
 
-  " Pasting blockwise and linewise selections is not possible in Insert and
-  " Visual mode without the +virtualedit feature.  They are pasted as if they
-  " were characterwise instead.
-  " Uses the paste.vim autoload script.
+    " Pasting blockwise and linewise selections is not possible in Insert and
+    " Visual mode without the +virtualedit feature.  They are pasted as if they
+    " were characterwise instead.
+    " Uses the paste.vim autoload script.
 
-  exe 'inoremap <script> <C-V>' paste#paste_cmd['i']
-  exe 'vnoremap <script> <C-V>' paste#paste_cmd['v']
+    exe 'inoremap <script> <D-v>' paste#paste_cmd['i']
+    exe 'vnoremap <script> <D-v>' paste#paste_cmd['v']
+  else
+    " CTRL-x is Cut
+    vnoremap <C-x> "+x
+    " CTRL-c is Copy
+    vnoremap <C-c> "+y
+    " CTRL-v is Paste
+    map <C-v>               "+gP
+    "cmap <C-v>              <C-R>+
 
-  " Use <C-Q> to do what CTRL-V used to do
-  noremap <C-Q> <C-V>
-  inoremap <C-Q> <C-V>
-  cnoremap <C-Q> <C-V>
+    " Pasting blockwise and linewise selections is not possible in Insert and
+    " Visual mode without the +virtualedit feature.  They are pasted as if they
+    " were characterwise instead.
+    " Uses the paste.vim autoload script.
 
-  " For CTRL-V to work autoselect must be off.
+    exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
+    exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
+
+    " Use <C-q> to do what CTRL-V used to do
+    noremap <C-q> <C-v>
+    inoremap <C-q> <C-v>
+    cnoremap <C-q> <C-v>
+  end
+
+  " For CTRL-v to work autoselect must be off.
   " On Unix we have two selections, autoselect can be used.
   if !has('unix')
     set guioptions-=a
   endif
 
-  " CTRL-A is Visual-select all
-  "noremap <C-A> ggVG
-  "vnoremap <C-A> <C-C>ggVG
+  " CTRL-a is Visual-select all
+  "noremap <C-a> ggVG
+  "vnoremap <C-a> <C-C>ggVG
 
   " restore 'cpoptions'
   set cpo&
