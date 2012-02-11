@@ -1,5 +1,4 @@
 export RAILS_ENV=development
-export CDPATH=.:~:/etc/dotfiles
 
 export LANG="de_CH.UTF-8"
 export LC_MESSAGES="en_US.UTF-8"
