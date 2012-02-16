@@ -47,7 +47,6 @@
 	nb = checkout -b
 	un = reset HEAD
 	unstage = reset HEAD
-	staged = diff --cached
 
 	all = add -A .
 	ci = commit -v

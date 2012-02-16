@@ -48,11 +48,6 @@ endif
     endif
   endif
 
-  " workaround for display corruption on Linux
-  if has('unix') && !has('mac')
-    set ttyscroll=0
-  endif
-
   " tab bar
   hi TabLine guifg=LightGray guibg=#606060
   hi TabLineSel gui=bold guifg=White guibg=#808080
