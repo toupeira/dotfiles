@@ -21,6 +21,7 @@
   "predef"        : [  // Custom globals.
     "FB",
     "HTTP",
+    "pm",
     "politnetz"
   ],
 

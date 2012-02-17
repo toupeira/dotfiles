@@ -523,10 +523,6 @@
 
   " yankring
   let g:yankring_history_file = '.vim_yankring_history'
-  let g:yankring_paste_n_bkey = ''
-  let g:yankring_paste_n_akey = ''
-  nnoremap p :<C-U>YRPaste 'p'<CR>'[v']=
-  nnoremap P :<C-U>YRPaste 'P'<CR>'[v']=
   nnoremap <silent> ,y :YRShow<CR>
 
   " session plugin
