@@ -11,20 +11,8 @@ done
 if [ -n "$1" ]; then
   file="$1"
 else
-  echo "Usage: $0 FILE [PASSPHRASE] [CONTENT]"
+  echo "Usage: $0 FILE [PASSPHRASE] [CONTENT] [VIMOPTIONS]"
   exit 255
-fi
-
-if [ -n "$2" ]; then
-  passphrase="$2"
-else
-  key=~/.ssh/id_rsa
-  if [ -f "$key" ]; then
-    passphrase=`cat "$key"`
-  else
-    echo "No SSH key found in $key"
-    exit 1
-  fi
 fi
 
 script=`basename "$0"`
@@ -47,34 +35,72 @@ elif [ ! -w "$file" ]; then
   exit 1
 fi
 
+# Read passphrase
+if [ -n "$2" ]; then
+  # Use command-line parameter
+  passphrase="$2"
+else
+  # Use the default SSH key
+  key=~/.ssh/id_rsa
+  if [ -f "$key" ]; then
+    passphrase=`cat "$key"`
+  else
+    echo "No SSH key found in $key"
+    exit 1
+  fi
+fi
+
+# Create the tempfile
 suffix=`echo "${file##*.}"`
 tempfile=`mktemp --suffix=".$suffix"` || exit 1
+chmod 600 "$tempfile" || exit 1
 
-if [ -f "$file" ]; then
+# If the file exists, decrypt its content to the tempfile
+if [ -s "$file" ]; then
+  file_exists=1
+
   echo "$passphrase" | gpg -q -d --batch --yes --passphrase-fd 0 -o "$tempfile" "$file"
   status=$?
   if [ $status != 0 ]; then
     $shred $tempfile
     exit $status
   fi
+else
+  unset file_exists
 fi
 
+# Add the passed content to the tempfile
 if [ -n "$3" ]; then
   (echo -e "$3") >> "$tempfile"
 fi
 
-$vim + "$tempfile"
+# Edit the tempfile
+$vim $4 "$tempfile"
 
-if [ -s "$tempfile" ]; then
-  echo "Encrypting $file..."
-  echo "$passphrase" | gpg -q -c --force-mdc --batch --yes --passphrase-fd 0 -o "$file" "$tempfile"
-  status=$?
-  if [ $status != 0 ]; then
-    echo "Error while saving $file, keeping $tempfile."
-    exit $status
-  else
-    $shred "$tempfile"
+# Don't create empty files
+if [ ! "$file_exists" -a ! -s "$tempfile" ]; then
+  echo "File is empty, not creating $file"
+  rm "$tempfile"
+  exit 1
+fi
+
+# Delete empty files
+if [ ! -s "$tempfile" ]; then
+  read -p "File is empty, delete $file? [y/N] "
+  if [ "$REPLY" = "y" ]; then
+    rm "$tempfile"
+    $shred "$file"
+    exit 0
   fi
+fi
+
+# Encrypt the tempfile to its original location
+echo "Encrypting $file..."
+echo "$passphrase" | gpg -q -c --force-mdc --batch --yes --passphrase-fd 0 -o "$file" "$tempfile"
+status=$?
+if [ $status != 0 ]; then
+  echo "Error while saving $file, keeping $tempfile"
+  exit $status
 else
-  echo "Ignoring empty file."
+  $shred "$tempfile"
 fi

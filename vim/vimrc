@@ -186,7 +186,7 @@
 
   " folding
   set foldenable foldmethod=marker
-  autocmd Syntax * set foldmethod=marker
+  "autocmd Syntax * set foldmethod=marker
 
 " }}}
 
