@@ -201,6 +201,7 @@
   autocmd FileType tex,plaintex,context setlocal lbr
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
 
+  autocmd BufEnter *.md setf markdown
   autocmd BufEnter */bin/*.run setf sh
   autocmd BufEnter *.inc,*.thtml setf php
   autocmd BufEnter *.boo setf python
