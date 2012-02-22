@@ -298,8 +298,11 @@
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
 
-  " move to matching pair with Tab in visual mode
-  vmap <Tab> %
+  " indent with Tab/Shift+Tab in normal and visual mode
+  nnoremap <Tab> >>
+  nnoremap <S-Tab> <<
+  vnoremap <Tab> >
+  vnoremap <S-Tab> <
 
   " toggle paste mode with F12
   set pastetoggle=<f12>
