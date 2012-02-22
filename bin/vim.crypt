@@ -3,14 +3,20 @@
 if [ -n "$1" ]; then
   file="$1"
 else
-  echo "Usage: $0 FILE"
+  echo "Usage: $0 FILE [PASSPHRASE] [CONTENT]"
   exit 255
 fi
 
-key=~/.ssh/id_rsa
-if [ ! -f "$key" ]; then
-  echo "No SSH key found in $key"
-  exit 1
+if [ -n "$2" ]; then
+  passphrase="$2"
+else
+  key=~/.ssh/id_rsa
+  if [ -f "$key" ]; then
+    passphrase=`cat "$key"`
+  else
+    echo "No SSH key found in $key"
+    exit 1
+  fi
 fi
 
 script=`basename "$0"`
@@ -36,7 +42,7 @@ fi
 tempfile=`mktemp` || exit 1
 
 if [ -f "$file" ]; then
-  cat "$key" | gpg -q -d --batch --yes --passphrase-fd 0 -o "$tempfile" "$file"
+  echo "$passphrase" | gpg -q -d --batch --yes --passphrase-fd 0 -o "$tempfile" "$file"
   status=$?
   if [ $status != 0 ]; then
     $shred $tempfile
@@ -44,10 +50,18 @@ if [ -f "$file" ]; then
   fi
 fi
 
-$vim "$tempfile"
+if [ -n "$3" ]; then
+  if [ -s "$tempfile" ]; then
+    (echo; echo) >> "$tempfile"
+  fi
+
+  (echo -e "$3"; echo) >> "$tempfile"
+fi
+
+$vim + "$tempfile"
 
 echo "Encrypting $file..."
-cat "$key" | gpg -q -c --force-mdc --batch --yes --passphrase-fd 0 -o "$file" "$tempfile"
+echo "$passphrase" | gpg -q -c --force-mdc --batch --yes --passphrase-fd 0 -o "$file" "$tempfile"
 status=$?
 if [ $status != 0 ]; then
   echo "Error while saving $file, keeping $tempfile"
