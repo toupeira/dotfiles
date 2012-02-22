@@ -39,7 +39,8 @@ elif [ ! -w "$file" ]; then
   exit 1
 fi
 
-tempfile=`mktemp` || exit 1
+suffix=`echo "${file##*.}"`
+tempfile=`mktemp --suffix=".$suffix"` || exit 1
 
 if [ -f "$file" ]; then
   echo "$passphrase" | gpg -q -d --batch --yes --passphrase-fd 0 -o "$tempfile" "$file"
@@ -51,21 +52,21 @@ if [ -f "$file" ]; then
 fi
 
 if [ -n "$3" ]; then
-  if [ -s "$tempfile" ]; then
-    (echo; echo) >> "$tempfile"
-  fi
-
-  (echo -e "$3"; echo) >> "$tempfile"
+  (echo -e "$3") >> "$tempfile"
 fi
 
 $vim + "$tempfile"
 
-echo "Encrypting $file..."
-echo "$passphrase" | gpg -q -c --force-mdc --batch --yes --passphrase-fd 0 -o "$file" "$tempfile"
-status=$?
-if [ $status != 0 ]; then
-  echo "Error while saving $file, keeping $tempfile"
-  exit $status
+if [ -s "$tempfile" ]; then
+  echo "Encrypting $file..."
+  echo "$passphrase" | gpg -q -c --force-mdc --batch --yes --passphrase-fd 0 -o "$file" "$tempfile"
+  status=$?
+  if [ $status != 0 ]; then
+    echo "Error while saving $file, keeping $tempfile"
+    exit $status
+  else
+    $shred "$tempfile"
+  fi
 else
-  $shred "$tempfile"
+  echo "File empty, not saving $file"
 fi
