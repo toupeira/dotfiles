@@ -1,5 +1,13 @@
 #!/bin/bash
 
+# Use Homebrew GNU commands on OS X if available
+shopt -s expand_aliases
+for command in mktemp; do
+  if which g$command &>/dev/null; then
+    alias $command="g$command"
+  fi
+done
+
 if [ -n "$1" ]; then
   file="$1"
 else
@@ -62,11 +70,11 @@ if [ -s "$tempfile" ]; then
   echo "$passphrase" | gpg -q -c --force-mdc --batch --yes --passphrase-fd 0 -o "$file" "$tempfile"
   status=$?
   if [ $status != 0 ]; then
-    echo "Error while saving $file, keeping $tempfile"
+    echo "Error while saving $file, keeping $tempfile."
     exit $status
   else
     $shred "$tempfile"
   fi
 else
-  echo "File empty, not saving $file"
+  echo "Ignoring empty file."
 fi
