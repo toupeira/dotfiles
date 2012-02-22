@@ -1,0 +1,57 @@
+#!/bin/bash
+
+if [ -n "$1" ]; then
+  file="$1"
+else
+  echo "Usage: $0 FILE"
+  exit 255
+fi
+
+key=~/.ssh/id_rsa
+if [ ! -f "$key" ]; then
+  echo "No SSH key found in $key"
+  exit 1
+fi
+
+script=`basename "$0"`
+case "${script:0:1}" in
+  g) vim="gvim -f";;
+  m) vim="mvim -f";;
+  *) vim="vim";;
+esac
+
+if which shred &>/dev/null; then
+  shred="shred -u"
+else
+  shred="rm"
+fi
+
+if [ ! -f "$file" ]; then
+  echo "Creating new file $file..."
+elif [ ! -w "$file" ]; then
+  echo "$file is not writable."
+  exit 1
+fi
+
+tempfile=`mktemp` || exit 1
+
+if [ -f "$file" ]; then
+  cat "$key" | gpg -q -d --batch --yes --passphrase-fd 0 -o "$tempfile" "$file"
+  status=$?
+  if [ $status != 0 ]; then
+    $shred $tempfile
+    exit $status
+  fi
+fi
+
+$vim "$tempfile"
+
+echo "Encrypting $file..."
+cat "$key" | gpg -q -c --force-mdc --batch --yes --passphrase-fd 0 -o "$file" "$tempfile"
+status=$?
+if [ $status != 0 ]; then
+  echo "Error while saving $file, keeping $tempfile"
+  exit $status
+else
+  $shred "$tempfile"
+fi

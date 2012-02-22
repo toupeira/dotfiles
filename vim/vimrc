@@ -37,6 +37,7 @@
   set encoding=utf-8
   set modeline
   set modelines=2
+  set cryptmethod=blowfish
 
   set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
 
@@ -87,6 +88,7 @@
 
   " syntax highlighting
   syntax on
+  set conceallevel=2
 
   " color scheme
   colorscheme desertink
@@ -202,8 +204,6 @@
   autocmd BufEnter */bin/*.run setf sh
   autocmd BufEnter *.inc,*.thtml setf php
   autocmd BufEnter *.boo setf python
-  autocmd BufEnter *.io setf io
-  autocmd BufEnter *.red setf textile
   autocmd BufEnter Gemfile,*.plan setf ruby
   autocmd BufEnter ~/.devilspie/* setf lisp
   autocmd BufEnter *.pac setf javascript
@@ -287,6 +287,9 @@
   " don't use exact searches for */#
   noremap * g*
   noremap # g#
+
+  " repeat command for each line in selection
+  vnoremap . :normal .<CR>
 
   " shortcut for :diffupdate
   nnoremap du :diffupdate<CR>
