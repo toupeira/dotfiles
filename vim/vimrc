@@ -38,7 +38,9 @@
   set encoding=utf-8
   set modeline
   set modelines=2
-  set cryptmethod=blowfish
+  if v:version > '703'
+    set cryptmethod=blowfish
+  end
 
   set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
 
@@ -89,7 +91,9 @@
 
   " syntax highlighting
   syntax on
-  set conceallevel=2
+  if v:version > '703'
+    set conceallevel=2
+  end
 
   " color scheme
   colorscheme desertink
