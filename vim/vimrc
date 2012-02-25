@@ -44,7 +44,7 @@
 
   set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
 
-  if v:version > '702'
+  if has('persistent_undo')
     set undofile
     set undodir=~/.vim/tmp/undo
   endif
@@ -91,7 +91,7 @@
 
   " syntax highlighting
   syntax on
-  if v:version > '703'
+  if has('conceal')
     set conceallevel=2
   end
 
@@ -142,10 +142,8 @@
   autocmd FileType conque_term match none
 
   " go to last cursor position when opening files
-  if has('autocmd')
-    autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
-                           \| exe "normal g'\"" | endif
-  endif
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+                          \| exe "normal g'\"" | endif
 
   " window titles
   set title
