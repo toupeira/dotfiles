@@ -304,10 +304,14 @@
   inoremap <C-c> <Esc>
 
   " indent with Tab/Shift+Tab in normal and visual mode
-  nnoremap <Tab> >>
-  nnoremap <S-Tab> <<
-  vnoremap <Tab> >
-  vnoremap <S-Tab> <
+  nmap <Tab> >>
+  nmap <S-Tab> <<
+  vmap <Tab> >
+  vmap <S-Tab> <
+
+  " reselect visual block after indent
+  vnoremap > >gv
+  vnoremap < <gv
 
   " toggle paste mode with F12
   set pastetoggle=<f12>
