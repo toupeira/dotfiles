@@ -60,6 +60,7 @@
 	news = log -p HEAD@{1}..
 
 	up = pull -v --progress
+	upbase = pull -v --progress --rebase
 	pu = push -v --progress
 	ff = merge --ff-only HEAD@{u}
 	mt = mergetool
