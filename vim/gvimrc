@@ -134,7 +134,7 @@ endif
     vnoremap <D-c> "+y
     " Command-v is Paste
     map <D-v>               "+gP
-    "cmap <D-v>              <C-R>+
+    cmap <D-v>              <C-R>+
 
     " Pasting blockwise and linewise selections is not possible in Insert and
     " Visual mode without the +virtualedit feature.  They are pasted as if they
