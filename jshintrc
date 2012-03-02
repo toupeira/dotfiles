@@ -23,7 +23,9 @@
     "HTTP",
     "pm",
     "I18n",
-    "politnetz"
+    "politnetz",
+    "require",
+    "phantom"
   ],
 
   // Development.
