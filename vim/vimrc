@@ -549,6 +549,10 @@
   autocmd VimEnter * omap <silent>ai aI
   autocmd VimEnter * vmap <silent>ai aI
 
+  " unimpaired
+  vmap <C-a> [egv
+  vmap <C-z> ]egv
+
   " fuzzy finder
   " {{{
   nnoremap <silent> ,b :FufBuffer<CR>
