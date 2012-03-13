@@ -56,8 +56,8 @@
 	l = log --pretty=format:\"%C(yellow)[%h]%Creset %Cred%an:%Creset %C(cyan)%s%Creset (%ar)\"
 	lstat = log --stat
 	ldiff = log -p
-	new = "!git l HEAD@{1}.. | grep --color=never ."
-	news = log -p HEAD@{1}..
+	new = "!git l ORIG_HEAD.. | grep --color=never ."
+	news = log -p ORIG_HEAD..
 
 	up = pull -v --progress
 	upbase = pull -v --progress --rebase
