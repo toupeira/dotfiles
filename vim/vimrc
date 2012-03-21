@@ -253,9 +253,9 @@
 " {{{
 
   " ignore case for common commands
-  command! -nargs=? -bang -complete=file E e<bang>
-  command! -nargs=? -bang -complete=file W w<bang>
-  command! -nargs=? -bang -complete=file WQ wq<bang>
+  command! -nargs=? -bang -complete=file E e<bang> <args>
+  command! -nargs=? -bang -complete=file W w<bang> <args>
+  command! -nargs=? -bang -complete=file WQ wq<bang> <args>
   command! -bang Q q<bang>
   command! -bang QA qa<bang>
   command! -bang Qa qa<bang>
