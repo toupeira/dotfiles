@@ -94,6 +94,7 @@ alias gcc='gcc -Wall'
 alias psgrep='pgrep -fl'
 alias dt='dotfiles'
 has xdg-open && alias open='xdg-open'
+has 7z && ! has rar && alias rar='7z'
 
 if has rlwrap; then
   has sbcl && alias sbcl='rlwrap sbcl'
