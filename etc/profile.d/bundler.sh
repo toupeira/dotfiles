@@ -8,12 +8,13 @@ if [ "`type -t command_not_found_handle`" = "function" ]; then
 fi
 
 function command_not_found_handle {
-  local bin=".bundle/ruby/1.8/bin/$1"
+  local command="$1"
+  local bin=".bundle/ruby/1.8/bin/$command"
   shift
 
   if [ -x "$bin" ]; then
     bundle exec "$bin" "$@"
   else
-    echo "-bash: $1: command not found"
+    echo "-bash: $command: command not found"
   fi
 }

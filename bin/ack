@@ -2781,3 +2781,16 @@ sub close {
 
 
 1;
+ $self->{nexted};
+    $self->{nexted} = 1;
+
+    return App::Ack::Resource::Basic->new( $self->{filename} );
+}
+
+
+sub close {
+}
+
+
+
+1;
