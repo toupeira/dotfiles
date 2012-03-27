@@ -18,3 +18,12 @@ function command_not_found_handle {
     echo "-bash: $command: command not found"
   fi
 }
+
+# Add bundle exec wrappers for all executables
+for file in `find ~/{src,www}/*/.bundle/ruby/*/bin -maxdepth 1 -type f -executable 2>/dev/null | sort`; do
+  name=`basename $file`
+  if ! type -t "$name" >/dev/null; then
+    dir=`echo "$file" | sed -r 's|\.bundle/.*||'`
+    eval "function $name { inode=\`stat -c %i .\`; cd \"$dir\"; [ \"\`stat -c %i .\`\" != \$inode ] && pwd; bundle exec \"$name\" \"\$@\"; cd \"\$OLDPWD\"; }"
+  fi
+done
