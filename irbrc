@@ -9,7 +9,6 @@ begin
   require 'active_support/all'
 rescue LoadError => e
   puts e.message
-  exit
 end
 
 puts
@@ -17,7 +16,9 @@ puts `ruby -v`
 puts
 Kernel::at_exit { puts }
 
-Wirble.init :init_colors => true
+if defined? Wirble
+  Wirble.init :init_colors => true
+end
 
 IRB.conf[:AUTO_INDENT] = true
 IRB.conf[:IRB_RC] = proc do |conf|

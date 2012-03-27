@@ -303,9 +303,7 @@
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
 
-  " indent with Tab/Shift+Tab in normal and visual mode
-  nmap <Tab> >>
-  nmap <S-Tab> <<
+  " indent with Tab/Shift+Tab in visual mode
   vmap <Tab> >
   vmap <S-Tab> <
 
