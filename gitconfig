@@ -38,6 +38,7 @@
 
 	di = diff
 	dc = diff --cached
+	ds = diff --stat
 	st = status
 	stat = status
 
