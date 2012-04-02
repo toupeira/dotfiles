@@ -8,6 +8,12 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
+  " neocomplcache requires Vim 7.1
+  if v:version < '701'
+    call add(g:pathogen_disabled, 'neocomplcache')
+    call add(g:pathogen_disabled, 'neocomplcache-snippets-complete')
+  endif
+
   " Powerline requires Vim 7.2
   if v:version < '702'
     call add(g:pathogen_disabled, 'powerline')
