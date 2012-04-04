@@ -26,6 +26,12 @@
     call add(g:pathogen_disabled, 'gundo')
   endif
 
+  " Disable neocomplcache for SSH sessions
+  if $SSH_CONNECTION != ""
+    call add(g:pathogen_disabled, 'neocomplcache')
+    call add(g:pathogen_disabled, 'neocomplcache-snippets-complete')
+  endif
+
   call pathogen#infect()
 
   if has('gui_running')
