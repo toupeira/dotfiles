@@ -140,8 +140,8 @@
   set numberwidth=6
 
   " cursor line
-  "autocmd BufEnter,WinEnter * if bufname('%') != '-MiniBufExplorer-' && &buftype != 'quickfix' | setlocal cursorline | endif
-  "autocmd WinLeave * setlocal nocursorline nocursorcolumn
+  autocmd BufEnter,WinEnter * if bufname('%') != '-MiniBufExplorer-' && &buftype != 'quickfix' | setlocal cursorline | endif
+  autocmd WinLeave * setlocal nocursorline
 
   " highlight trailing whitespace
   autocmd VimEnter,BufRead,BufNewFile * highlight Whitespace ctermbg=236 guibg=#333333
@@ -684,7 +684,7 @@
     \ 'syntax_complete': 1,
   \ }
 
-  let g:neocomplcache_auto_completion_start_length = 3
+  let g:neocomplcache_auto_completion_start_length = 2
 
   if !exists('g:neocomplcache_omni_patterns')
     let g:neocomplcache_omni_patterns = {}
