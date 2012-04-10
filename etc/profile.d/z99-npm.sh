@@ -5,7 +5,7 @@
 for file in `find ~/{src,www}/*/node_modules/*/bin -maxdepth 1 -type f -executable 2>/dev/null | sort`; do
   name=`basename $file`
   if ! type -t "$name" >/dev/null; then
-    eval "function $name { run_npm \"$file\"; }"
+    eval "function $name { run_npm \"$file\" \"\$@\"; }"
   fi
 done
 
@@ -13,6 +13,7 @@ function run_npm {
   local file="$1"
   local name=`basename "$file"`
   local bin=`ls "node_modules/*/bin/$name" 2>/dev/null | head -1`
+  shift
 
   if [ -x "$bin" ]; then
     command "$bin" "$@"
