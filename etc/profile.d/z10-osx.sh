@@ -2,13 +2,10 @@
 [ -z "$BASH_VERSION" -o -z "$PS1" -o "`uname -s`" != "Darwin" ] && return
 
 # Homebrew aliases
-. /usr/local/Cellar/coreutils/*/aliases
 alias find='gfind'
 alias sed='gsed'
 alias gvim='mvim'
 alias gvimdiff='mvimdiff'
-
-unalias [ echo false kill printf pwd test true
 
 # Overwrite existing aliases to use GNU versions
 alias ls='gls --color'
