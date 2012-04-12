@@ -420,7 +420,7 @@
     if l:pattern != ""
       echohl ModeMsg
       echo "/ searching..."
-      execute 'silent grep "'.l:pattern.'" %'
+      execute 'silent grep '.shellescape(l:pattern).' %'
 
       let l:len = len(getqflist())
       if l:len > 0
@@ -451,7 +451,7 @@
 
       echohl Question
       echo "/ searching..."
-      execute 'silent grep -r "'.l:pattern.'" '.l:path
+      execute 'silent grep -r '.shellescape(l:pattern).' '.l:path
 
       let l:len = len(getqflist())
       if l:len > 0
