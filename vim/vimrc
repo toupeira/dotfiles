@@ -8,6 +8,9 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
+  " session doesn't work with minibufexpl
+  call add(g:pathogen_disabled, 'session')
+
   " Powerline and neocomplcache require Vim 7.2
   if v:version < '702'
     call add(g:pathogen_disabled, 'powerline')
