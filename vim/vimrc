@@ -699,13 +699,15 @@
   let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
 
 	" Recommended key-mappings.
-	" <CR>: close popup and save indent.
-	inoremap <expr><CR>  neocomplcache#close_popup() . "\<CR>"
-	" <C-h>, <BS>: close popup and delete backword char.
-	inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-	inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-	inoremap <expr><C-y>  neocomplcache#close_popup()
-	inoremap <expr><C-e>  neocomplcache#cancel_popup()
+  if index(g:pathogen_disabled, 'neocomplcache') == -1
+    " <CR>: close popup and save indent.
+    inoremap <expr><CR>  neocomplcache#close_popup() . "\<CR>"
+    " <C-h>, <BS>: close popup and delete backword char.
+    inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr><C-y>  neocomplcache#close_popup()
+    inoremap <expr><C-e>  neocomplcache#cancel_popup()
+  endif
 
   " use <Tab> to complete words, and also handle snippets
   function! TabWrapper(...)
