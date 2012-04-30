@@ -35,7 +35,7 @@ trap "rm -f $playlist" 0 1 2 3 9 10 15
 trap "iecset audio on >/dev/null" 0 1 2 3 9 10 15
 rm -f $playlist
 
-mplayer="mplayer2 -playlist $playlist"
+mplayer="mplayer -playlist $playlist"
 
 unset format options regex debug skipopen
 sort="cat"
