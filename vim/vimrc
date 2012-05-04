@@ -143,8 +143,10 @@
   set numberwidth=6
 
   " cursor line
-  autocmd BufEnter,WinEnter * if bufname('%') != '-MiniBufExplorer-' && &buftype != 'quickfix' | setlocal cursorline | endif
-  autocmd WinLeave * setlocal nocursorline
+  autocmd CursorHold *
+    \ if &buftype != 'quickfix' && bufname('%') != '-MiniBufExplorer-' | setlocal cursorline | endif
+  autocmd CursorMoved,InsertEnter *
+    \ if &l:cursorline | setlocal nocursorline | endif
 
   " highlight trailing whitespace
   autocmd VimEnter,BufRead,BufNewFile * highlight Whitespace ctermbg=236 guibg=#333333
