@@ -549,6 +549,10 @@
 
   " yankring
   let g:yankring_history_file = '.vim_yankring_history'
+  if !has('clipboard')
+    let g:yankring_manual_clipboard_check = 0
+  endif
+
   nnoremap <silent> ,y :YRShow<CR>
 
   " session plugin

@@ -6,3 +6,5 @@
 	css=.sass,.scss
 --type-add
 	html=.haml
+--type-set
+	puppet=.pp
