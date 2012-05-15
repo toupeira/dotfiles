@@ -11,7 +11,8 @@ shell -bash
 screen -t shell 0 -bash
 
 # Keybindings
-escape ^``
+escape ^\\
+bindkey ^`` stuff ^\\
 
 bindkey \033OQ stuff /
 bindkey \033OR stuff *
