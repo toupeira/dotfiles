@@ -185,7 +185,7 @@ function run {
       run submodule sync -q
       run submodule update --init -q
 
-      if git status | grep -q ahead; then
+      if git status | grep -q "Your branch is ahead"; then
         msg
         status "{{Pushing local changes...}}"
         run push
