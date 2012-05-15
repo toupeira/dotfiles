@@ -1,0 +1,21 @@
+#!/bin/bash
+
+filter_branches='/'
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -a) unset filter_branches;;
+    -f) filter_branches="$2"; shift;;
+  esac
+
+  shift
+done
+
+[ -n "$filter_branches" ] && filter_branches="| grep '$filter_branches'"
+
+
+branches=`git branch --color=never $filter_branches | cut -c 3-`
+
+for branch in $branches; do
+  d
+done
