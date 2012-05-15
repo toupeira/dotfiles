@@ -154,7 +154,7 @@
   autocmd FileType conque_term match none
 
   " go to last cursor position when opening files
-  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$")
+  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") && &ft != 'gitcommit'
                           \| exe "normal g'\"" | endif
 
   " window titles
