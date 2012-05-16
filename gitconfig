@@ -62,8 +62,8 @@
 
 	up = pull -v --progress
 	upbase = pull -v --progress --rebase
+	upall = pull-all -a
 	pu = push -v --progress
-	pa = pull-all -a
 	ff = merge --ff-only HEAD@{u}
 	mt = mergetool
 	reup = remote update
