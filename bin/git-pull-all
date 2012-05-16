@@ -21,7 +21,7 @@ fi
 
 echo
 echo "Fetching updates..."
-git fetch -v || exit 1
+git fetch -v --progress || exit 1
 echo
 
 for branch in $branches; do
