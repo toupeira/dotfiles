@@ -11,6 +11,12 @@
   " session doesn't work with minibufexpl
   call add(g:pathogen_disabled, 'session')
 
+  " TODO: delete these?
+  call add(g:pathogen_disabled, 'conque')
+  call add(g:pathogen_disabled, 'nerdtree')
+  call add(g:pathogen_disabled, 'tagbar')
+  call add(g:pathogen_disabled, 'yankring')
+
   " Powerline and neocomplcache require Vim 7.2
   if v:version < '702'
     call add(g:pathogen_disabled, 'powerline')
@@ -114,7 +120,7 @@
 
   " statusline
   " {{{
-  if index(g:pathogen_disabled, 'powerline')
+  if index(g:pathogen_disabled, 'powerline') > -1
     autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
     autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
     autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
@@ -151,7 +157,6 @@
   " highlight trailing whitespace
   autocmd VimEnter,BufRead,BufNewFile * highlight Whitespace ctermbg=236 guibg=#333333
   autocmd VimEnter,BufRead,BufNewFile * match Whitespace /\s\+$/
-  autocmd FileType conque_term match none
 
   " go to last cursor position when opening files
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") && &ft != 'gitcommit'
@@ -547,14 +552,6 @@
   runtime scripts/SyntaxAttr.vim
   nnoremap <silent> ,S :call SyntaxAttr()<CR>
 
-  " yankring
-  let g:yankring_history_file = '.vim_yankring_history'
-  if !has('clipboard')
-    let g:yankring_manual_clipboard_check = 0
-  endif
-
-  nnoremap <silent> ,y :YRShow<CR>
-
   " session plugin
   let g:session_directory = "~/.vim/tmp/sessions"
   let g:session_autosave = 'yes'
@@ -575,15 +572,6 @@
   nnoremap <silent> ,l :FufLine<CR>
   " }}}
 
-  " nerd tree
-  " {{{
-  let g:NERDChristmasTree = 1
-  let g:NERDTreeQuitOnOpen = 1
-  let g:NERDTreeDirArrows = 1
-
-  nnoremap <silent> ,x :NERDTreeToggle<CR>
-  " }}}
-
   " indent guides
   " {{{
   let g:indent_guides_auto_colors = 0
@@ -593,13 +581,39 @@
   nnoremap <silent> ,i :IndentGuidesToggle<CR>
   " }}}
 
+  " nerd tree
+  " {{{
+  if index(g:pathogen_disabled, 'nerdtree') == -1
+    let g:NERDChristmasTree = 1
+    let g:NERDTreeQuitOnOpen = 1
+    let g:NERDTreeDirArrows = 1
+
+    nnoremap <silent> ,x :NERDTreeToggle<CR>
+  endif
+  " }}}
+
   " conque
   " {{{
-  let g:ConqueTerm_StartMessages = 0
+  if index(g:pathogen_disabled, 'conque') == -1
+    autocmd FileType conque_term match none
+    let g:ConqueTerm_StartMessages = 0
 
-  command! Sh ConqueTermSplit bash --login
-  command! Irb ConqueTermSplit irb
-  command! Py ConqueTermSplit ipython
+    command! Sh ConqueTermSplit bash --login
+    command! Irb ConqueTermSplit irb
+    command! Py ConqueTermSplit ipython
+  endif
+  " }}}
+
+  " yankring
+  " {{{
+  if index(g:pathogen_disabled, 'yankring') == -1
+    let g:yankring_history_file = '.vim_yankring_history'
+    if !has('clipboard')
+      let g:yankring_manual_clipboard_check = 0
+    endif
+
+    nnoremap <silent> ,y :YRShow<CR>
+  endif
   " }}}
 
   " syntastic
@@ -618,20 +632,22 @@
 
   " powerline
   " {{{
-  let Powerline_cache_enabled = 1
-  if Powerline_cache_enabled == 0
-    call system('rm -f ~/.vim/tmp/powerline.*.cache')
-  end
+  if index(g:pathogen_disabled, 'powerline') == -1
+    let Powerline_cache_enabled = 1
+    if Powerline_cache_enabled == 0
+      call system('rm -f ~/.vim/tmp/powerline.*.cache')
+    end
 
-  let Powerline_theme = 'desertink'
-  let Powerline_colorscheme = 'desertink'
+    let Powerline_theme = 'desertink'
+    let Powerline_colorscheme = 'desertink'
 
-  if has('gui_running')
-    let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')
-    let Powerline_symbols = 'fancy'
-  else
-    let Powerline_cache_file = expand('~/.vim/tmp/powerline.term.cache')
-    let Powerline_symbols = 'unicode'
+    if has('gui_running')
+      let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')
+      let Powerline_symbols = 'fancy'
+    else
+      let Powerline_cache_file = expand('~/.vim/tmp/powerline.term.cache')
+      let Powerline_symbols = 'unicode'
+    end
   end
   " }}}
 
@@ -650,15 +666,17 @@
 
   " tagbar
   " {{{
-  let g:tagbar_width = 31
-  let g:tagbar_autofocus = 1
-  let g:tagbar_sort = 0
-  let g:tagbar_compact = 1
-  let g:tagbar_expand = 1
-  let g:tagbar_singleclick = 1
-  let g:tagbar_usearrows = 1
+  if index(g:pathogen_disabled, 'tagbar') == -1
+    let g:tagbar_width = 31
+    let g:tagbar_autofocus = 1
+    let g:tagbar_sort = 0
+    let g:tagbar_compact = 1
+    let g:tagbar_expand = 1
+    let g:tagbar_singleclick = 1
+    let g:tagbar_usearrows = 1
 
-  nnoremap <silent> ,t :TagbarToggle<CR>
+    nnoremap <silent> ,t :TagbarToggle<CR>
+  end
   " }}}
 
   " mini buffer explorer
@@ -683,29 +701,29 @@
 
   " neocomplcache
   " {{{
-  let g:neocomplcache_enable_at_startup = 1
-  let g:neocomplcache_enable_auto_select = 1
-  let g:neocomplcache_enable_smart_case = 1
-  let g:neocomplcache_enable_camel_case_completion = 1
-  let g:neocomplcache_enable_underbar_completion = 1
-
-  let g:neocomplcache_source_disable = {
-    \ 'syntax_complete': 1,
-  \ }
-
-  let g:neocomplcache_auto_completion_start_length = 2
-
-  if !exists('g:neocomplcache_omni_patterns')
-    let g:neocomplcache_omni_patterns = {}
-  endif
-
-  let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-  let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-  let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-  let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
-
-	" Recommended key-mappings.
   if index(g:pathogen_disabled, 'neocomplcache') == -1
+    let g:neocomplcache_enable_at_startup = 1
+    let g:neocomplcache_enable_auto_select = 1
+    let g:neocomplcache_enable_smart_case = 1
+    let g:neocomplcache_enable_camel_case_completion = 1
+    let g:neocomplcache_enable_underbar_completion = 1
+
+    let g:neocomplcache_source_disable = {
+      \ 'syntax_complete': 1,
+    \ }
+
+    let g:neocomplcache_auto_completion_start_length = 2
+
+    if !exists('g:neocomplcache_omni_patterns')
+      let g:neocomplcache_omni_patterns = {}
+    endif
+
+    let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+    let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
+    let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
+    let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+
+    " Recommended key-mappings.
     " <CR>: close popup and save indent.
     inoremap <expr><CR>  neocomplcache#close_popup() . "\<CR>"
     " <C-h>, <BS>: close popup and delete backword char.
@@ -713,26 +731,26 @@
     inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
     inoremap <expr><C-y>  neocomplcache#close_popup()
     inoremap <expr><C-e>  neocomplcache#cancel_popup()
-  endif
 
-  " use <Tab> to complete words, and also handle snippets
-  function! TabWrapper(...)
-    if a:0 == 0
-      if pumvisible()
-        " close the popup and expand snippets
-        return "\<C-y>\<C-R>=TabWrapper(1)\<CR>"
+    " use <Tab> to complete words, and also handle snippets
+    function! TabWrapper(...)
+      if a:0 == 0
+        if pumvisible()
+          " close the popup and expand snippets
+          return "\<C-y>\<C-R>=TabWrapper(1)\<CR>"
+        else
+          echomsg "2"
+          " popup is closed, use normal SnipMate behavior
+          return TriggerSnippet()
+        endif
       else
-        echomsg "2"
-        " popup is closed, use normal SnipMate behavior
-        return TriggerSnippet()
+        echomsg "3"
+        " expand snippets, but don't insert a <Tab>
+        return substitute(TriggerSnippet(), '\t', '', '')
       endif
-    else
-      echomsg "3"
-      " expand snippets, but don't insert a <Tab>
-      return substitute(TriggerSnippet(), '\t', '', '')
-    endif
-  endfunction
-  autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
+    endfunction
+    autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
+  endif
   " }}}
 
 " }}}
