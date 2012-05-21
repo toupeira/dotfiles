@@ -8,3 +8,5 @@
 	html=.haml
 --type-set
 	puppet=.pp
+--type-set
+	gettext=.po,.pot
