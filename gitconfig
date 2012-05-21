@@ -62,7 +62,7 @@
 
 	up = pull -v --progress
 	upbase = pull -v --progress --rebase
-	upall = pull-all -a
+	upall = pull-all
 	pu = push -v --progress
 	ff = merge --ff-only HEAD@{u}
 	mt = mergetool
