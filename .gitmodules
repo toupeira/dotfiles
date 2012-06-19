@@ -82,3 +82,6 @@
 [submodule "vim/bundle/neocomplcache-snippets-complete"]
 	path = vim/bundle/neocomplcache-snippets-complete
 	url = https://github.com/Shougo/neocomplcache-snippets-complete.git
+[submodule "vim/bundle/loremipsum"]
+	path = vim/bundle/loremipsum
+	url = https://github.com/vim-scripts/loremipsum
