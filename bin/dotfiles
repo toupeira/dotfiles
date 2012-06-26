@@ -2,6 +2,7 @@
 
 # The dotfiles repository
 DOTFILES=${DOTFILES:-~/.dotfiles}
+[ -L "$DOTFILES" ] && DOTFILES=`readlink -f "$DOTFILES"`
 
 # Use Homebrew GNU commands on OS X if available
 shopt -s expand_aliases
