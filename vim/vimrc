@@ -41,6 +41,7 @@
     call add(g:pathogen_disabled, 'neocomplcache-snippets-complete')
   endif
 
+  " Load all plugins
   call pathogen#infect()
 
   if has('gui_running')
@@ -60,9 +61,20 @@
 
   set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
 
+  " create temporary directory in ~/.vim/tmp
+  let s:tmpdir = expand("~/.vim/tmp")
+  if !isdirectory(s:tmpdir)
+    call mkdir(s:tmpdir, 'p')
+  endif
+
+  " enable persistent undo
   if has('persistent_undo')
     set undofile
     set undodir=~/.vim/tmp/undo
+
+    if !isdirectory(&undodir)
+      call mkdir(&undodir, 'p')
+    endif
   endif
 
   " interface

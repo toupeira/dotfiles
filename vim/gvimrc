@@ -42,7 +42,11 @@ endif
     if has('mac')
       set guifont=Menlo\ Regular:h13
     elseif has('unix')
-      set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 10
+      if hostname() == 'hagbard'
+        set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
+      else
+        set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 10
+      endif
     else
       set guifont=DejaVu_Sans_Mono:h9:cANSI
     endif

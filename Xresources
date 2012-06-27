@@ -67,3 +67,5 @@ SshAskpass*Dialog.title:		OpenSSH
 SshAskpass*Dialog.label:		Please enter your authentication passphrase:
 SshAskpass*okButton.label:		OK
 SshAskpass*cancelButton.label:		Cancel
+
+#include ".Xresources.local"
