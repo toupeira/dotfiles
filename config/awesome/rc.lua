@@ -41,10 +41,11 @@ end
 -- Themes define colours, icons, and wallpapers
 beautiful.init("/home/toupeira/.config/awesome/theme.lua")
 
--- This is used later as the default terminal and editor to run.
+-- Default applications
 terminal = "x-terminal-emulator"
 editor = os.getenv("EDITOR") or "editor"
 editor_cmd = terminal .. " -e " .. editor
+browser = "/home/toupeira/bin/iceweasel.run"
 
 -- Default modkey.
 -- Usually, Mod4 is the key with a logo between Control and Alt.
@@ -76,25 +77,32 @@ layouts =
 tags = {}
 for s = 1, screen.count() do
     -- Each screen has its own tag table.
-    tags[s] = awful.tag({ 1, 2, 3, 4 }, s, awful.layout.suit.tile.right)
+    tags[s] = awful.tag({ 1, 2, 3, 4, 5 }, s, awful.layout.suit.tile.right)
 end
 -- }}}
 
 -- {{{ Menu
 -- Create a laucher widget and a main menu
 myawesomemenu = {
-   { "manual", terminal .. " -e man awesome" },
-   { "edit config", editor_cmd .. " " .. awesome.conffile },
-   { "restart", awesome.restart },
-   { "quit", awesome.quit }
+   { "Restart", awesome.restart },
+   { "Edit config", "gvim " .. awesome.conffile },
+   { "Show manual", terminal .. " -e man awesome" }
 }
 
-mymainmenu = awful.menu({ items = { { "awesome", myawesomemenu, beautiful.awesome_icon },
-                                    { "Debian", debian.menu.Debian_menu.Debian },
-                                    { "Open Terminal", terminal },
-                                    { "Open Browser", "x-www-browser" }
-                                  }
-                        })
+mysystemmenu = {
+   { "Shutdown", "sudo /sbin/init 0" },
+   { "Reboot", "sudo /sbin/init 6" },
+   { "Logout", awesome.quit }
+}
+
+mymainmenu = awful.menu({ items = {
+    { "Awesome", myawesomemenu },
+    { "Debian", debian.menu.Debian_menu.Debian },
+    { "System", mysystemmenu },
+    { "--" },
+    { "Terminal", terminal },
+    { "Browser", browser }
+}})
 
 mylauncher = awful.widget.launcher({ image = image(beautiful.awesome_icon),
                                      menu = mymainmenu })
@@ -197,12 +205,12 @@ for s = 1, screen.count() do
         mylayoutbox[s],
         mytextclock,
         s == 1 and mysystray or nil,
-	batwidget,
-	separator,
-	memwidget,
-	separator,
-	cpuwidget,
-	separator,
+        batwidget,
+        separator,
+        memwidget,
+        separator,
+        cpuwidget,
+        separator,
         mytasklist[s],
         layout = awful.widget.layout.horizontal.rightleft
     }
@@ -250,7 +258,9 @@ globalkeys = awful.util.table.join(
         end),
 
     -- Standard program
+    awful.key({ "Mod1",           }, "grave", function () awful.util.spawn(terminal) end),
     awful.key({ modkey,           }, "Return", function () awful.util.spawn(terminal) end),
+    awful.key({ modkey,           }, "F1", function () awful.util.spawn(browser) end),
     awful.key({ modkey, "Control" }, "r", awesome.restart),
     awful.key({ modkey, "Shift"   }, "q", awesome.quit),
 
