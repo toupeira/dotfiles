@@ -340,7 +340,7 @@ function run {
     pull)
       local changes=`git status -s --ignore-submodules`
       [ -n "$changes" ] && git stash save | grep -q "No local changes to save" && unset changes
-      git pull -v --progress "$@"
+      git pull -v --progress --rebase "$@"
       [ -n "$changes" ] && git stash pop -q
       ;;
     push)
