@@ -48,8 +48,12 @@ function msg {
   fi
 }
 
-function status {
-  msg "$1" 2
+function status { msg "$1" 2; }
+function warning { msg "$1" 3; }
+
+function error {
+  STATUS=1
+  msg "$1" 1
 }
 
 function ask {
@@ -64,11 +68,6 @@ function ask_yes {
   msg "$1 [Y/n] " "$2" -n >&2
   read
   [ "$REPLY" != "N" -a "$REPLY" != "n" ]
-}
-
-function error {
-  STATUS=1
-  msg "$1" 1
 }
 
 function abort {
@@ -89,7 +88,7 @@ function system {
     for arg in "$@"; do
       local dir=`dirname -- "$arg"`
       if [ -d "$dir" -a ! -w "$dir" ]; then
-        echo "not writable: $dir"
+        warning "Using [1;33msudo[0m for directory '$dir'"
         command="sudo $command"
         break
       fi

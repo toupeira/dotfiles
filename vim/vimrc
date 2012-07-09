@@ -326,8 +326,9 @@
   " repeat command for each line in selection
   vnoremap . :normal .<CR>
 
-  " shortcut for :diffupdate
+  " shortcuts for diff
   nnoremap du :diffupdate<CR>
+  nnoremap dn ]c
 
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>

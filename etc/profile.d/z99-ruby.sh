@@ -1,6 +1,25 @@
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
+# Automatically use sudo for administrative RubyGems commands
+function __sudo_gem {
+  local version="$1"
+  local command="gem$version"
+  local home="/var/lib/gems/$version/"
+  shift
+
+  if [[ "$1" =~ (install|uninstall|update|cleanup) ]]; then
+    command="sudo GEM_HOME=$home $command"
+  fi
+
+  GEM_HOME=$home $command "$@"
+}
+
+# Aliases for different Ruby versions
+alias gem="__sudo_gem 1.8"
+alias gem1.8="__sudo_gem 1.8"
+alias gem1.9.1="__sudo_gem 1.9.1"
+
 # Add wrappers for all bundler executables
 for file in `find ~/{src,www}/*/.bundle/ruby/*/bin -maxdepth 1 -type f -executable 2>/dev/null | sort`; do
   name=`basename $file`
@@ -12,7 +31,7 @@ done
 function run_bundler {
   local file="$1"
   local name=`basename "$file"`
-  local bin=".bundle/ruby/1.8/bin/$name"
+  local bin=`command ls ".bundle/ruby/*/bin/$name" 2>/dev/null | head -1`
   shift
 
   if [ -x "$bin" ]; then

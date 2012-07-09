@@ -20,7 +20,6 @@ URxvt*iso14755_52:	false
 URxvt*visualBell:	true
 URxvt*matcher.button:	1
 URxvt*perl-ext-common:	selection,matcher
-URxvt*buffered:		false
 
 ! Red
 URxvt*color1:		#ee2233

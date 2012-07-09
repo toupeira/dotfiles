@@ -51,13 +51,6 @@ if [ -n "$SSH_AUTH_SOCK" ]; then
   }
 fi
 
-# Automatically run certain RubyGems commands with sudo
-function gem {
-  local gem="gem"
-  [[ "$@" =~ (install|uninstall|update|cleanup) ]] && gem="sudo gem"
-  command $gem "$@"
-}
-
 # GVim wrapper to pass a file to an existing session
 function gvi.add {
   gvim --remote-silent "$@"
