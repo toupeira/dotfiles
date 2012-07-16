@@ -5,7 +5,7 @@ alias mysql='mysql -u root'
 
 function mysql-ps {
   uptime
-  mysqladmin status || return 1
+  mysqladmin -u root status || return 1
   echo
 
   command="mysql -e 'SHOW FULL PROCESSLIST' -B | sort -k 5"
@@ -17,7 +17,7 @@ function mysql-ps {
 }
 
 function mysql-kill {
-  mysql -e "KILL $1"
+  mysql -u root -e "KILL $1"
 }
 
 function mysql-top {

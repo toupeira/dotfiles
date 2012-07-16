@@ -46,7 +46,7 @@ if [ -n "$SSH_AUTH_SOCK" ]; then
   }
 
   function git {
-    [[ "$@" =~ (clone|pull|push|fetch|remote\ up|up|pu|r\ up|reup) ]] && __load_key
+    [[ "$1" =~ (clone|pull|push|fetch|remote\ up|up|pu|r\ up|reup) ]] && __load_key
     command git "$@"
   }
 fi
