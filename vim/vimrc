@@ -246,6 +246,11 @@
   let g:rubycomplete_rails = 1
   let g:rubycomplete_buffer_loading = 1
 
+  " force initialisation of the ruby environment to avoid stack errors
+  if has('ruby')
+    silent! ruby nil
+  endif
+
   " PHP syntax highlighting
   let php_htmlInStrings = 1
   let php_baselib = 1
