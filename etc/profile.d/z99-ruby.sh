@@ -5,8 +5,18 @@
 function __sudo_gem {
   local version="$1"
   local command="gem$version"
-  local home="/var/lib/gems/$version/"
   shift
+
+  which -s "$command" || command="gem"
+
+  if [ -d /var/lib/gems ]; then
+    local home="/var/lib/gems/$version/"
+  elif [ -d /opt/ruby-enterprise/lib/ruby/gems ]; then
+    local home="/opt/ruby-enterprise/lib/ruby/gems/$version/"
+  else
+    echo "Can't find Gem path on this system!"
+    return 1
+  fi
 
   if [[ "$1" =~ (install|uninstall|update|cleanup) ]]; then
     command="sudo GEM_HOME=$home $command"
