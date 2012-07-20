@@ -6,7 +6,7 @@ require 'gtk2/base'
 class XShutdown < Gtk::Window
   ICONS = "/usr/share/icons/gnome/32x32/actions"
 
-  PREPARE = "[ -p ~/.quodlibet/control ] && timeout 2 quodlibet --quit; pgrep -x deluged && timeout 2 deluge-console halt;"
+  PREPARE = "[ -p ~/.quodlibet/control ] && timeout 3 quodlibet --quit; pgrep -x deluged && timeout 5 deluge-console halt;"
 
   ACTIONS = YAML.load('
 

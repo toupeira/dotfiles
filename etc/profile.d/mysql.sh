@@ -2,6 +2,8 @@
 [ -n "$BASH_INTERACTIVE" ] && has mysql || return
 
 alias mysql='mysql -u root'
+alias mysqladmin='mysqladmin -u root'
+alias mysqldump='mysqldump -u root'
 
 function mysql-ps {
   uptime
