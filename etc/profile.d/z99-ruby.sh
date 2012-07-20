@@ -7,7 +7,7 @@ function __sudo_gem {
   local command="gem$version"
   shift
 
-  which -s "$command" || command="gem"
+  which "$command" &>/dev/null || command="gem"
 
   if [ -d /var/lib/gems ]; then
     local home="/var/lib/gems/$version/"
