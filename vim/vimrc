@@ -301,6 +301,17 @@
   command! Dg diffget
   command! Dp diffput
 
+  " shortcut to google something
+  if has('mac')
+    let g:open_command = 'open'
+  elseif has('unix')
+    let g:open_command = 'xdg-open'
+  else
+    let g:open_command = 'start'
+  end
+  command! -nargs=+ Google call system(g:open_command.' "https://www.google.com/search?q=<args>"')
+  command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=<args>"')
+
   " shortcut to edit vim config files
   function! VimConfigFileCompletion(A, L, P) " {{{
     let l:dir = getcwd()
@@ -442,6 +453,7 @@
   " ,g - grep the current file
   function! GrepCurrentFile()
     if expand('%') == ''
+      echo "Can't grep unsaved file."
       return
     endif
 
