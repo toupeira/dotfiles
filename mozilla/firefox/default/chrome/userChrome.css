@@ -1,5 +1,10 @@
 @namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
 
+/* Don't use small fonts in Awesomebar */
+#PopupAutoCompleteRichResult[type="autocomplete-richlistbox"] * {
+  font-size: 1em !important;
+}
+
 /* Always show full findbar */
 .findbar-container > * {
   display: -moz-box !important;
