@@ -1,32 +1,20 @@
 #!/usr/bin/ruby
 
-require 'yaml'
 require 'gtk2/base'
 
 class XShutdown < Gtk::Window
   ICONS = "/usr/share/icons/gnome/32x32/actions"
 
-  PREPARE = "[ -p ~/.quodlibet/control ] && timeout 3 quodlibet --quit; pgrep -x deluged && timeout 5 deluge-console halt;"
+  ACTIONS = [
+    [ "_Shutdown", "gnome-shutdown",
+      "xfce4-session-logout --fast --halt" ],
 
-  ACTIONS = YAML.load('
+    [ "_Reboot", "gtk-refresh",
+      "xfce4-session-logout --fast --reboot" ],
 
-    - - _Shutdown
-      - gnome-shutdown
-      - xfce4-session-logout --halt
-
-    - - _Reboot
-      - gtk-refresh
-      - xfce4-session-logout --reboot
-
-    #- - _Hibernate
-    #  - appointment
-    #  - sudo hibernate
-
-    - - _Logout
-      - gnome-logout
-      - xfce4-session-logout --logout
-
-  ')
+    [ "_Logout", "gnome-logout",
+      "xfce4-session-logout --fast --logout" ],
+  ]
 
   def initialize
     super
@@ -61,7 +49,7 @@ class XShutdown < Gtk::Window
       button << align
       button.signal_connect('clicked') do
         Gtk.main_quit
-        system("(#{PREPARE} #{command}) &>/dev/null &")
+        system("(#{command}) &>/dev/null &")
       end
 
       hbox = Gtk::HBox.new(false, 4)

@@ -1,24 +1,25 @@
 #!/bin/sh
 cd ~/images/Screenshots || exit 1
 
+id="root"
+title="screenshot"
+date=`date +%Y-%m-%d-%H:%M:%S.%N`
+file="/tmp/$title-$date.png"
+
 case "$1" in
-  "") id="root";;
+  -root|"")
+    # default
+    ;;
   -current|-select)
     info=`xwit -print $1 | tail -1`
     id=`echo $info | cut -d: -f1`
+    echo "title: $info"
     title=`echo "$info" | sed -r "s/[^']+'(\w+).*/\1/"`
     ;;
-  * ) exec echo "Usage:  screenshot [-current|-select]";;
+  * )
+    exec echo "Usage:  screenshot [-root|-current|-select]"
+    ;;
 esac
 
-[ -z "$title" ] && title="screenshot"
-date=`date +%Y-%m-%d-%H:%M:%S`
-file="$title-$date.png"
-i=0
-while [ -f "$file" ]; do
-  let i+=1
-  file="$title-$date-$i.png"
-done
 echo " [1;34m>>>[0m writing [1m$file[0m..."
-
-import -window "$id" "png:$file" && eog "file://$PWD/$file" &>/dev/null &
+import -window "$id" "png:$file" && eog "file://$file" &>/dev/null &
