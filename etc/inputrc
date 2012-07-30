@@ -67,5 +67,4 @@ $endif
 
 set mark-symlinked-directories on
 set match-hidden-files off
-set show-all-if-ambiguous on
 set blink-matching-paren on
