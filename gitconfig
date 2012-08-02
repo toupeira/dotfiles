@@ -72,5 +72,5 @@
 	std = stash drop
 
 	tig = "!tig"
-	gitg = "!gitg"
-	gitx = "!gitx"
+	g = "!gitg &>/dev/null &"
+	x = "!gitx &>/dev/null &"
