@@ -1,6 +1,4 @@
 #!/bin/sh
-cd ~/images/Screenshots || exit 1
-
 id="root"
 title="screenshot"
 date=`date +%Y-%m-%d-%H:%M:%S.%N`

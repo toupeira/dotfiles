@@ -5,7 +5,7 @@
 --type-add
 	css=.sass,.scss
 --type-add
-	html=.haml
+	ruby=.haml,.builder
 --type-set
 	puppet=.pp
 --type-set
