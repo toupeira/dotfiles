@@ -242,6 +242,9 @@
   autocmd BufEnter ~/.devilspie/* setf lisp
   autocmd BufEnter *.pac setf javascript
 
+  " Ruby syntax highlighting
+  let g:ruby_operators = 1
+
   " Ruby auto-completion
   let g:rubycomplete_rails = 1
   let g:rubycomplete_buffer_loading = 1
