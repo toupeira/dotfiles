@@ -3,3 +3,9 @@
     line-height: 23px;
   }
 }
+
+@-moz-document domain(orange.ch) {
+  body {
+    font-family: sans-serif !important;
+  }
+}
