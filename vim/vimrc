@@ -11,10 +11,10 @@
   " session doesn't work with minibufexpl
   call add(g:pathogen_disabled, 'session')
 
-  " TODO: delete these?
+  " TODO delete these?
   call add(g:pathogen_disabled, 'conque')
   call add(g:pathogen_disabled, 'nerdtree')
-  call add(g:pathogen_disabled, 'yankring')
+  "call add(g:pathogen_disabled, 'yankring')
 
   " Powerline and neocomplcache require Vim 7.2
   if v:version < '702'
