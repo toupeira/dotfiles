@@ -9,3 +9,9 @@
     font-family: sans-serif !important;
   }
 }
+
+@-moz-document domain(newrelic.com) {
+  * {
+    font-family: sans-serif !important;
+  }
+}
