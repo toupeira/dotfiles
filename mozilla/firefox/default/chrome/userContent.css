@@ -15,3 +15,9 @@
     font-family: sans-serif !important;
   }
 }
+
+@-moz-document domain(todoist.com) {
+  #premium_promotion {
+    display: none;
+  }
+}
