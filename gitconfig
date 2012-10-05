@@ -71,6 +71,4 @@
 	stl = stash list
 	std = stash drop
 
-	tig = "!tig"
-	g = "!gitg &>/dev/null &"
-	x = "!gitx &>/dev/null &"
+	g = "!sh -c 'if [ \"`uname -s`\" = 'Darwin' ]; then gitx; elif [ -n \"$DISPLAY\" ]; then gitg; else tig; fi'"
