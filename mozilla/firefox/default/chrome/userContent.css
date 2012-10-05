@@ -1,4 +1,8 @@
 @-moz-document domain(pivotaltracker.com) {
+  #main {
+    width: 100%;
+  }
+
   .panel .details ul.subset > li div.left {
     line-height: 23px;
   }
