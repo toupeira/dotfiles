@@ -9,8 +9,8 @@ function _ps1_exit_code {
 
   if [ "$code" != '[0]' ]; then
     tput sc
-    tput cup $LINES $((COLUMNS-1-${#code}))
-    printf '\033[1;31m%s\033[0m ' "$code"
+    tput cup $LINES $((COLUMNS-3-${#code}))
+    printf '  \033[1;31m%s\033[0m ' "$code"
     tput rc
   fi
 }
