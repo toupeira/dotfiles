@@ -2,7 +2,18 @@
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # Prompt configuration
-export PS1='\[\033[0m\]\u@\h:\w\$ '
+export PS1='\[\033[0m\]\u@\h:\w\$ \[$(_ps1_exit_code)\]'
+
+function _ps1_exit_code {
+  local code="[$?]"
+
+  if [ "$code" != '[0]' ]; then
+    tput sc
+    tput cup $LINES $((COLUMNS-1-${#code}))
+    printf '\033[1;31m%s\033[0m ' "$code"
+    tput rc
+  fi
+}
 
 # Use Git prompt if available
 if type __git_ps1 &>/dev/null; then

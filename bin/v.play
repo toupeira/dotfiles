@@ -59,8 +59,8 @@ while [ $# -gt 0 ]; do
     -s ) mplayer="$mplayer -shuffle"; shift;;
     -o ) mplayer="$mplayer $2"; shift 2;;
     -size ) options="-size +$2"; shift 2;;
-    -x ) exclusive_regex='-v'; shift;;
-    -p ) shift; exec $0 -f -t -mono -x -re '/incomplete/' "$@";;
+    -x ) regex="$2"; exclusive_regex='-v'; shift 2;;
+    -p ) shift; exec $0 -f -t -mono -x '/incomplete/' "$@";;
     -t)
       sort="sort -rn"
       format="%T@ "
