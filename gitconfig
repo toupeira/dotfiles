@@ -72,3 +72,4 @@
 	std = stash drop
 
 	g = "!sh -c 'if [ \"`uname -s`\" = 'Darwin' ]; then (gitx &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg &>/dev/null &); else tig; fi'"
+	x = "!sh -c 'if [ \"`uname -s`\" = 'Darwin' ]; then (gitx -c &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg -c &>/dev/null &); else git ci; fi'"
