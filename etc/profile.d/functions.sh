@@ -77,34 +77,44 @@ function ack.edit {
 # GVim wrapper to pass a file to a local instance
 if [ -n "$SSH_CONNECTION" ]; then
   unalias gvi
+
   function gvi {
     local wait=1
 
-    while true; do
-      [ -n "$DISPLAY" -a -x /usr/bin/gvim ] || break
+    if [ -z "$DISPLAY" -o ! -x /usr/bin/gvim ]; then
+      echo "Can't find GVim instance..."
+      vim "$@"
+      return
+    fi
 
-      if gvim --serverlist | grep -q .; then
+    while true; do
+      # Check if a GVim server is running, this will be passed through X11 to the local instance
+      if command gvim --serverlist | grep -q .; then
         args=()
         options=
         for arg in "$@"; do
           if [ "${arg:0:1}" = "@" ]; then
             options="$options --servername ${arg:1}"
           else
+            # Transform file paths into scp:// URIs
             args=( "${args[@]}" "scp://$HOSTNAME/`readlink -f "$arg"`" )
           fi
         done
+
+        # Execute GVim in the root directory to avoid errors when the cwd
+        # doesn't exist on the local machine
         pushd / >/dev/null
-        gvim $options --remote "${args[@]}"
+        command gvim $options --remote "${args[@]}"
         popd >/dev/null
+
         return
       else
+        # Wait until a local GVim server can be found
         [ $wait -eq 1 ] && echo "Waiting for GVim server..."
         wait=0
         sleep 1
       fi
     done
-
-    vim "$@"
   }
 fi
 
