@@ -57,7 +57,7 @@
 	ca = commit -va
 	amend = commit -v --amend
 
-	l = log --pretty=format:\"%C(yellow)[%h]%Creset %Cred%an:%Creset %C(cyan)%s%Creset (%ar)\"
+	l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %Cred%an:%Creset %C(cyan)%s%Creset (%ar)\"
 	lstat = log --stat
 	ldiff = log -p
 	new = "!git l ORIG_HEAD.. | grep --color=never ."
