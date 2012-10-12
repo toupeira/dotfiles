@@ -7,6 +7,9 @@
 	autocrlf = input
 	excludesfile = ~/.gitexcludes
 
+[branch]
+	autosetuprebase = remote
+
 [color]
 	ui = auto
 
