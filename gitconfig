@@ -37,21 +37,19 @@
 [alias]
 	h = help
 	r = remote
+	br = branch
 	sub = submodule
 
 	di = diff
 	dc = diff --cached
 	ds = diff --stat
+
 	st = status
 	stat = status
-
 	ls = branch -av
-	co = checkout
-	sw = checkout
-	nb = checkout -b
-	un = reset HEAD
-	unstage = reset HEAD
 
+	co = checkout
+	unstage = reset HEAD
 	all = add -A .
 	ci = commit -v
 	ca = commit -va
@@ -69,10 +67,11 @@
 	pu = push -v --progress
 	ff = merge --ff-only HEAD@{u}
 	mt = mergetool
-	reup = remote update
+	rup = remote update
 
-	stl = stash list
+	sts = stash save
+	stp = stash pop
 	std = stash drop
+	stl = stash list
 
 	g = "!sh -c 'if [ \"`uname -s`\" = 'Darwin' ]; then (gitx &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg &>/dev/null &); else tig; fi'"
-	x = "!sh -c 'if [ \"`uname -s`\" = 'Darwin' ]; then (gitx -c &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg -c &>/dev/null &); else git ci; fi'"

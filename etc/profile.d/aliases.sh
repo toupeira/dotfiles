@@ -93,6 +93,7 @@ alias gcc='gcc -Wall'
 alias gcc='gcc -Wall'
 alias psgrep='pgrep -fl'
 alias dt='dotfiles'
+has git && alias g='git'
 has xdg-open && alias open='xdg-open'
 has 7z && ! has rar && alias rar='7z'
 
