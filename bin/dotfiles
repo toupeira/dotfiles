@@ -1,17 +1,55 @@
 #!/bin/bash
 
+# Use Homebrew GNU commands on OS X if available
+if [ "`uname -s`" = "Darwin" ]; then
+  shopt -s expand_aliases
+  for command in readlink sed; do
+    if which g$command &>/dev/null; then
+      alias $command="g$command"
+    fi
+  done
+fi
+
 # The dotfiles repository
 DOTFILES=${DOTFILES:-~/.dotfiles}
 [ -L "$DOTFILES" ] && DOTFILES=`readlink -f "$DOTFILES"`
 
-# Use Homebrew GNU commands on OS X if available
-shopt -s expand_aliases
-for command in readlink sed; do
-  if which g$command &>/dev/null; then
-    alias $command="g$command"
-  fi
-done
+if [ ! -d "$DOTFILES" ]; then
+  error "Dotfiles not found in {{$DOTFILES}}"
+  exit 1
+fi
 
+DRYRUN=0
+VERBOSE=0
+QUIET=0
+FORCE=0
+COMMAND=
+
+function main {
+  # Parse arguments
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -n|--dry-run) DRYRUN=1;;
+      -v|--verbose) VERBOSE=1;;
+      -q|--quiet)   QUIET=1;;
+      -f|--force)   FORCE=1;;
+      -*)           usage;;
+      *)
+        COMMAND=( "$@" )
+        break
+        ;;
+    esac
+    shift
+  done
+
+  if [ -n "$COMMAND" ]; then
+    STATUS=0
+    run "${COMMAND[@]}"
+    exit $STATUS
+  else
+    usage
+  fi
+}
 function usage {
   echo "Usage: `basename $0` [options] COMMAND [args]"
   echo
@@ -70,7 +108,7 @@ function ask_yes {
   [ "$REPLY" != "N" -a "$REPLY" != "n" ]
 }
 
-function abort {
+function ask_abort {
   STATUS=1
   if ! ask "Do you want to continue?" 1; then
     exit 1
@@ -96,8 +134,14 @@ function system {
   fi
 
   [ $FORCE   -eq 1 ] && command="$command -f"
-  [ $VERBOSE -eq 1 ] && command="$command -v" && echo "     executing: $command $@"
-  [ $DRYRUN  -eq 1 ]                          && echo "     executing: $command $@ [DRY RUN]" && return
+
+  if [ $VERBOSE -eq 1 ]; then
+    command="$command -v"
+    echo "     executing: $command $@"
+  elif [ $DRYRUN -eq 1 ]; then
+    echo "     executing: $command $@ [DRY RUN]"
+    return
+  fi
 
   $command "$@"
 }
@@ -107,11 +151,15 @@ function git {
     local onerror=":"
     shift
   else
-    local onerror="abort"
+    local onerror="ask_abort"
   fi
 
-  [ $VERBOSE -eq 1 ] && echo "    executing: git $@"
-  [ $DRYRUN  -eq 1 ] && echo "    executing: git $@ [DRY RUN]" && return
+  if [ $VERBOSE -eq 1 ]; then
+    echo "    executing: git $@"
+  elif [ $DRYRUN -eq 1 ]; then
+    echo "    executing: git ${args[@]} [DRY RUN]"
+    return
+  fi
 
   pushd "$DOTFILES" >/dev/null || exit 1
   command git "$@" || $onerror
@@ -169,7 +217,7 @@ function run {
         msg
         git status --ignore-submodules
         echo
-        abort
+        ask_abort
 
         msg
         status "{{Committing local changes...}}"
@@ -273,7 +321,7 @@ function run {
             if ask "Delete {{$origin}}?"; then
               system rm -r "$origin"
             else
-              abort
+              ask_abort
             fi
           elif [ -e "$origin" -o -L "$origin" ]; then
             system rm "$origin"
@@ -372,37 +420,4 @@ function run {
   esac
 }
 
-DRYRUN=0
-VERBOSE=0
-QUIET=0
-FORCE=0
-COMMAND=
-
-if [ ! -d "$DOTFILES" ]; then
-  error "Dotfiles not found in {{$DOTFILES}}"
-  exit 1
-fi
-
-# Parse arguments
-while [ $# -gt 0 ]; do
-  case "$1" in
-    -n|--dry-run) DRYRUN=1;;
-    -v|--verbose) VERBOSE=1;;
-    -q|--quiet)   QUIET=1;;
-    -f|--force)   FORCE=1;;
-    -*)           usage;;
-    *)
-      COMMAND=( "$@" )
-      break
-      ;;
-  esac
-  shift
-done
-
-if [ -n "$COMMAND" ]; then
-  STATUS=0
-  run "${COMMAND[@]}"
-  exit $STATUS
-else
-  usage
-fi
+main "$@"
