@@ -134,14 +134,8 @@ function system {
   fi
 
   [ $FORCE   -eq 1 ] && command="$command -f"
-
-  if [ $VERBOSE -eq 1 ]; then
-    command="$command -v"
-    echo "     executing: $command $@"
-  elif [ $DRYRUN -eq 1 ]; then
-    echo "     executing: $command $@ [DRY RUN]"
-    return
-  fi
+  [ $VERBOSE -eq 1 ] && command="$command -v" && echo "     executing: $command $@"
+  [ $DRYRUN  -eq 1 ]                          && echo "     executing: $command $@ [DRY RUN]" && return
 
   $command "$@"
 }
@@ -154,12 +148,8 @@ function git {
     local onerror="ask_abort"
   fi
 
-  if [ $VERBOSE -eq 1 ]; then
-    echo "    executing: git $@"
-  elif [ $DRYRUN -eq 1 ]; then
-    echo "    executing: git ${args[@]} [DRY RUN]"
-    return
-  fi
+  [ $VERBOSE -eq 1 ] && echo "    executing: git $@"
+  [ $DRYRUN  -eq 1 ] && echo "    executing: git $@ [DRY RUN]" && return
 
   pushd "$DOTFILES" >/dev/null || exit 1
   command git "$@" || $onerror
@@ -213,7 +203,7 @@ function run {
 
   case "$command" in
     sync)
-      if git status -s | grep -q .; then
+      if git ignore-errors status -s | grep -q .; then
         msg
         git status --ignore-submodules
         echo
