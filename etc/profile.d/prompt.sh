@@ -5,14 +5,18 @@
 export PS1='\[\033[0m\]\u@\h:\w\$ \[$(_ps1_exit_code)\]'
 
 function _ps1_exit_code {
-  local code="[$?]"
+  local status=$?
 
-  if [ "$code" != '[0]' ]; then
-    tput sc
-    tput cup $LINES $((COLUMNS-3-${#code}))
-    printf '  \033[1;31m%s\033[0m ' "$code"
-    tput rc
+  if [ $status -gt 0 ]; then
+    local code="[$status]"
+  else
+    local code="    "
   fi
+
+  tput sc
+  tput cup $LINES $((COLUMNS-5-${#code}))
+  printf '  \033[1;31m%s\033[0m ' "  $code"
+  tput rc
 }
 
 # Use Git prompt if available
