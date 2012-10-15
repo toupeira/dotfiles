@@ -23,6 +23,10 @@
 [difftool]
 	prompt = false
 
+[log]
+	abbrevCommit = true
+	decorate = true
+
 [merge]
 	stat = true
 	tool = gvimdiff
@@ -55,7 +59,7 @@
 	ca = commit -va
 	amend = commit -v --amend
 
-	l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %Cred%an:%Creset %C(cyan)%s%Creset (%ar)\"
+	l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
 	lstat = log --stat
 	ldiff = log -p
 	new = "!git l ORIG_HEAD.. | grep --color=never ."
