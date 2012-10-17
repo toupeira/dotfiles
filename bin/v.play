@@ -22,7 +22,7 @@ function add_path {
       -or -iname "*.flv"    -or -iname "*.img" \
       -or -iname "*.divx"   -or -iname "*.flac" \
       -or -iname "*.ram"    -or -iname "*.mpeg" \
-    \) | sort | egrep -i $exclusive_regex "$regex" >> $playlist
+    \) | sort | egrep -i $exclusive_regex "($regex)" >> $playlist
   elif [ -f "$path" ]; then
     realpath -- "$path" >> $playlist
   elif [ "$1" ]; then
@@ -59,8 +59,16 @@ while [ $# -gt 0 ]; do
     -s ) mplayer="$mplayer -shuffle"; shift;;
     -o ) mplayer="$mplayer $2"; shift 2;;
     -size ) options="-size +$2"; shift 2;;
-    -x ) regex="$2"; exclusive_regex='-v'; shift 2;;
     -p ) shift; exec $0 -f -t -mono -x '/incomplete/' "$@";;
+    -x )
+      exclusive_regex='-v'
+      if [ -n "$regex" ]; then
+        regex="$regex|$2"
+      else
+        regex="$2"
+      fi
+      shift 2
+      ;;
     -t)
       sort="sort -rn"
       format="%T@ "
