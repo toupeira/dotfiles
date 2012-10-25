@@ -53,6 +53,7 @@
 	ls = branch -av
 
 	co = checkout
+	sw = checkout
 	unstage = reset HEAD
 	all = add -A .
 	ci = commit -v
