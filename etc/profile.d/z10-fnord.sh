@@ -7,4 +7,4 @@ export LC_CTYPE="en_GB.UTF-8"
 export GDM_LANG="$LANG"
 
 export VDPAU_NVIDIA_SYNC_DISPLAY_DEVICE="DFP-1"
-#export __GL_SYNC_TO_VBLANK="1"
+export __GL_SYNC_TO_VBLANK="1"
