@@ -41,7 +41,7 @@ done
 function run_bundler {
   local file="$1"
   local name=`basename "$file"`
-  local bin=`command ls ".bundle/ruby/*/bin/$name" 2>/dev/null | head -1`
+  local bin=`command ls .bundle/ruby/*/bin/"$name" 2>/dev/null | head -1`
   shift
 
   if [ -x "$bin" ]; then
