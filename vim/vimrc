@@ -20,7 +20,7 @@
   if v:version < '702'
     call add(g:pathogen_disabled, 'powerline')
     call add(g:pathogen_disabled, 'neocomplcache')
-    call add(g:pathogen_disabled, 'neocomplcache-snippets-complete')
+    call add(g:pathogen_disabled, 'neosnippets')
   endif
 
   " FuzzyFinder/L9 require Vim 7.2 and floating-point support
@@ -37,7 +37,7 @@
   " Disable neocomplcache for SSH sessions
   if $SSH_CONNECTION != ""
     call add(g:pathogen_disabled, 'neocomplcache')
-    call add(g:pathogen_disabled, 'neocomplcache-snippets-complete')
+    call add(g:pathogen_disabled, 'neosnippets')
   endif
 
   " Load all plugins
