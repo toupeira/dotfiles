@@ -30,11 +30,16 @@ if executable("compass")
     let s:imports = "--compass"
 endif
 
+let s:cache = "--no-cache"
+if isdirectory("tmp/cache/sass")
+  let s:cache = "--cache-location tmp/cache/sass"
+endif
+
 function! SyntaxCheckers_sass_GetLocList()
     if !g:syntastic_sass_check_partials && expand('%:t')[0] == '_'
         return []
     end
-    let makeprg='filter "Undefined (variable\|mixin)" sass --no-cache '.s:imports.' --check '.shellescape(expand('%'))
+    let makeprg='filter "Undefined (variable\|mixin)" sass '.s:cache.' '.s:imports.' --check '.shellescape(expand('%'))
     let errorformat = '%ESyntax %trror:%m,%C        on line %l of %f,%Z%.%#'
     let errorformat .= ',%Wwarning on line %l:,%Z%m,Syntax %trror on line %l: %m'
     let loclist = SyntasticMake({ 'makeprg': makeprg, 'errorformat': errorformat })
