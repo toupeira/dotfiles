@@ -32,6 +32,9 @@
 	prompt = false
 	keepBackup = false
 
+[push]
+	default = matching
+
 [rebase]
 	stat = true
 
