@@ -778,12 +778,10 @@
           " close the popup and expand snippets
           return "\<C-y>\<C-R>=TabWrapper(1)\<CR>"
         else
-          echomsg "2"
           " popup is closed, use normal SnipMate behavior
           return TriggerSnippet()
         endif
       else
-        echomsg "3"
         " expand snippets, but don't insert a <Tab>
         return substitute(TriggerSnippet(), '\t', '', '')
       endif
