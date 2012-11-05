@@ -12,7 +12,7 @@ rescue LoadError => e
 end
 
 puts
-puts `ruby -v`
+puts "ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE} patchlevel #{RUBY_PATCHLEVEL}} [#{RUBY_PLATFORM}]"
 puts
 Kernel::at_exit { puts }
 
