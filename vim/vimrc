@@ -156,7 +156,11 @@
   " }}}
 
   " line numbers
-  set relativenumber
+  if exists('&relativenumber')
+    set relativenumber
+  else
+    set number
+  end
   set numberwidth=6
 
   " cursor line
@@ -521,7 +525,7 @@
   function! ToggleLineNumbers() " {{{
     if &number
       set nonumber
-    elseif &relativenumber
+    elseif !exists('&relativenumber') || &relativenumber
       set number
     else
       set relativenumber
