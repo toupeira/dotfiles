@@ -156,11 +156,7 @@
   " }}}
 
   " line numbers
-  if exists('&relativenumber')
-    set relativenumber
-  else
-    set number
-  end
+  set number
   set numberwidth=6
 
   " cursor line
