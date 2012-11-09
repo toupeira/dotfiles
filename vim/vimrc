@@ -580,6 +580,7 @@
 
   " closetag
   autocmd BufEnter * runtime scripts/closetag.vim
+  let g:closetag_html_style = 'html'
 
   " tcomment
   let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
