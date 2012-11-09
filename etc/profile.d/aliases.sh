@@ -56,9 +56,17 @@ if has sudo; then
   alias pkginstall='sudo dpkg -i'
   alias dpkg-reconfigure='sudo dpkg-reconfigure'
   alias update-alternatives='sudo update-alternatives'
-  alias invoke-rc.d='sudo invoke-rc.d'
-  alias update-rc.d='sudo update-rc.d'
   alias make-kpkg='sudo make-kpkg'
+  alias update-rc.d='sudo update-rc.d'
+  alias invoke-rc.d='sudo invoke-rc.d'
+
+  # ubuntu tools
+  if has initctl; then
+    alias start='sudo start'
+    alias stop='sudo stop'
+    alias reload='sudo reload'
+    alias restart='sudo restart'
+  fi
 
   # system tools
   alias init='sudo init'
