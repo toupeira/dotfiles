@@ -13,6 +13,9 @@
 [advice]
 	statusHints = false
 
+[branch]
+	autosetuprebase = remote
+
 [diff]
 	renames = copies
 	mnemonicprefix = true
