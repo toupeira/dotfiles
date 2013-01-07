@@ -5,6 +5,8 @@
 export PS1='\[\033[0m\]\u@\h:\w\$ \[$(_ps1_exit_code)\]'
 
 function _ps1_exit_code {
+  [ -n "$CYGWIN" ] && return
+
   local status=$?
 
   if [ $status -gt 0 ]; then

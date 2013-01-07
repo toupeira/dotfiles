@@ -10,7 +10,14 @@ function login_message {
       [ -n "$STY" ] && cat /etc/motd
       uptime
       echo
-      echo -e "\033[0;36mWelcome \033[1;36m$USER\033[0;36m on \033[1;33m`hostname -f`\033[0m"
+
+      if [ -n "$CYGWIN" ]; then
+        local hostname="$HOSTNAME"
+      else
+        local hostname=`hostname -f`
+      fi
+
+      echo -e "\033[0;36mWelcome \033[1;36m$USER\033[0;36m on \033[1;33m$hostname\033[0m"
     else
       down
       has fortune && fortune && echo
