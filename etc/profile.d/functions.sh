@@ -17,7 +17,7 @@ function login_message {
         local hostname=`hostname -f`
       fi
 
-      echo -e "\033[0;36mWelcome \033[1;36m$USER\033[0;36m on \033[1;33m$hostname\033[0m"
+      echo -e "\033[0;36mWelcome \033[1;36m${USERNAME:-$USER}\033[0;36m on \033[1;33m$hostname\033[0m"
     else
       down
       has fortune && fortune && echo
