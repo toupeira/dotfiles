@@ -1,3 +1,1 @@
-setlocal autoindent
-setlocal smartindent
-setlocal indentexpr=
+setlocal indentkeys-=*<Return>

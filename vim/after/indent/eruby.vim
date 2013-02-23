@@ -1,1 +1,1 @@
-setlocal indentexpr=
+setlocal indentkeys-=*<Return>
