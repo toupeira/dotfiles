@@ -216,7 +216,7 @@
   let b:match_ignorecase = 1
 
   " diffing
-  set diffopt+=iwhite
+  "set diffopt+=iwhite
 
   " folding
   set foldenable foldmethod=marker
