@@ -60,13 +60,14 @@ function usage {
   echo "  -f, --force        Assume yes for all questions"
   echo
   echo "Commands:"
-  echo "  sync               Update, commit and push"
-  echo "  up, update         Update submodules (fetch new commits)"
-  echo "  ca, commitall      Commit all changes"
   echo "  init               Install symlinks for all dotfiles"
   echo "  install PATH...    Install symlink for PATH"
   echo "  add PATH...        Add file to repository and replace it with a symlink"
+  echo "  ca, commitall      Commit all changes"
+  echo "  up, update         Update submodules (fetch new commits)"
+  echo "  sync               Update, commit and push"
   echo
+  echo "Other arguments:"
   echo "  PATH...            Edit the specified files inside the repository"
   echo "  COMMAND...         Excecute a Git command inside the repository directory"
   echo
@@ -247,7 +248,7 @@ function run {
     init)
       function install_paths {
         for path in "$@"; do
-          if [ ! -e "$path" ]; then
+          if [ ! -e "$path" -o "`basename "$path"`" = "README.md" ]; then
             continue
           fi
 
