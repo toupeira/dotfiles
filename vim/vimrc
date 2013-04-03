@@ -663,6 +663,8 @@
   let g:syntastic_php_checkers = [ 'php', 'phpmd' ]
   let g:syntastic_sh_checkers = [ 'sh' ]
 
+  let g:syntastic_puppet_lint_arguments = '--no-documentation-check'
+
   if !&diff
     let g:syntastic_auto_loc_list = 1
     let g:syntastic_auto_jump = 0
