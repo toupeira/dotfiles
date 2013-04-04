@@ -213,6 +213,7 @@ function run {
         run commitall
       fi
 
+      msg
       run pull
 
       if git status | fgrep -q "Your branch is ahead"; then
