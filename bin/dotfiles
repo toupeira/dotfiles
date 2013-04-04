@@ -54,22 +54,22 @@ function usage {
   echo "Usage: `basename $0` [options] COMMAND [args]"
   echo
   echo "Options:"
-  echo "  -n, --dry-run      Only show changes, without performing them"
-  echo "  -v, --verbose      Increase verbosity"
-  echo "  -q, --quiet        Suppress all normal output"
-  echo "  -f, --force        Assume yes for all questions"
+  echo "  -n, --dry-run   Only show changes, without performing them"
+  echo "  -v, --verbose   Increase verbosity"
+  echo "  -q, --quiet     Suppress all normal output"
+  echo "  -f, --force     Assume yes for all questions"
   echo
   echo "Commands:"
-  echo "  init               Install symlinks for all dotfiles"
-  echo "  install PATH...    Install symlink for PATH"
-  echo "  add PATH...        Add file to repository and replace it with a symlink"
-  echo "  ca, commitall      Commit all changes"
-  echo "  up, update         Update submodules (fetch new commits)"
-  echo "  sync               Update, commit and push"
+  echo "  init                  Install symlinks for all dotfiles"
+  echo "  install PATH...       Install symlink for PATH"
+  echo "  add PATH...           Add file to repository and replace it with a symlink"
+  echo "  ca, commitall         Commit all changes"
+  echo "  up, update [MODULE]   Update submodules (fetch new commits)"
+  echo "  sync                  Update, commit and push"
   echo
   echo "Other arguments:"
-  echo "  PATH...            Edit the specified files inside the repository"
-  echo "  COMMAND...         Excecute a Git command inside the repository directory"
+  echo "  PATH...      Edit the specified files inside the repository"
+  echo "  COMMAND...   Excecute a Git command inside the repository directory"
   echo
   exit 255
 }
@@ -135,10 +135,10 @@ function system {
   fi
 
   [ $FORCE   -eq 1 ] && command="$command -f"
-  [ $VERBOSE -eq 1 ] && command="$command -v" && echo "     executing: $command $@"
-  [ $DRYRUN  -eq 1 ]                          && echo "     executing: $command $@ [DRY RUN]" && return
+  [ $VERBOSE -eq 1 ] && command="$command -v" && echo "    executing: $command $@"
+  [ $DRYRUN  -eq 1 ]                          && echo "    executing: $command $@ [DRY RUN]" && return
 
-  $command "$@"
+  command $command "$@"
 }
 
 function git {
@@ -210,21 +210,12 @@ function run {
         echo
         ask_abort
 
-        msg
-        status "{{Committing local changes...}}"
         run commitall
       fi
 
-      msg
-      status "{{Merging remote changes...}}"
       run pull
 
-      msg
-      status "{{Checking out submodules...}}"
-      run submodule sync -q
-      run submodule update --init -q
-
-      if git status | grep -q "Your branch is ahead"; then
+      if git status | fgrep -q "Your branch is ahead"; then
         msg
         status "{{Pushing local changes...}}"
         run push
@@ -234,12 +225,32 @@ function run {
       ;;
     up|update)
       msg
-      status "{{Updating submodules...}}"
       run pull -q
-      run submodule sync -q
-      run submodule foreach git pull origin master
-      run commit -m "Update submodules" .gitmodules vim/bundle
-      if git status | grep -q "Your branch is ahead"; then
+
+      if [ -n "$1" ]; then
+        submodule="vim/bundle/$1"
+        shift
+
+        status "Updating submodule {{$submodule}}..."
+        message="Update submodule $submodule"
+
+        pushd "$DOTFILES/$submodule" >/dev/null || exit 1
+        [ -d ".git" ] || exec echo "Not a git repository: .git"
+
+        system git pull -v --progress origin master
+        popd >/dev/null
+      else
+        status "{{Updating all submodules...}}"
+        message="Update submodules"
+
+        run submodule foreach git pull -v --progress origin master
+      fi
+
+      if git status | fgrep -q ".gitmodules"; then
+        run commit -m "$message" .gitmodules vim/bundle
+      fi
+
+      if git status | fgrep -q "Your branch is ahead"; then
         run push
       fi
 
@@ -372,14 +383,22 @@ function run {
       done
       ;;
     ca|commitall)
+      status "{{Committing local changes...}}"
       git ignore-errors add -A .
       git ignore-errors commit -a -m "Sync dotfiles" "$@"
       ;;
     pull)
       local changes=`git status -s --ignore-submodules`
-      [ -n "$changes" ] && git stash save | grep -q "No local changes to save" && unset changes
+      [ -n "$changes" ] && git stash save | fgrep -q "No local changes to save" && unset changes
+
+      status "{{Merging remote changes...}}"
       git pull -v --progress --rebase "$@"
+
       [ -n "$changes" ] && git stash pop -q
+
+      status "{{Checking out submodules...}}"
+      run submodule sync -q
+      run submodule update --init -q
       ;;
     push)
       local key=~/.ssh/id_rsa
