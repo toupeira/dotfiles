@@ -187,6 +187,9 @@
     "set titlestring=%r%m\ %t\ \[%{substitute(expand('%:p:h'),\ $HOME,\ '~',\ 'g')}\]\ -\ %{v:servername}
   endif
 
+  " disable preview window for completion
+  set completeopt-=preview
+
 " }}}
 
 " Text Formatting
