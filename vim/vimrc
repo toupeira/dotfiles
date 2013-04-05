@@ -12,6 +12,7 @@
   call add(g:pathogen_disabled, 'session')
 
   " TODO delete these?
+  call add(g:pathogen_disabled, 'ctrlp')
   call add(g:pathogen_disabled, 'conque')
   call add(g:pathogen_disabled, 'nerdtree')
   call add(g:pathogen_disabled, 'tagbar')
@@ -589,6 +590,10 @@
   " tcomment
   let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
 
+  " tabular
+  noremap ,t :Tabular /
+  noremap ,t, :Tabular /, /l0<CR>
+
   " syntax attributes
   runtime scripts/SyntaxAttr.vim
   nnoremap <silent> ,S :call SyntaxAttr()<CR>
@@ -605,12 +610,27 @@
   vmap <C-a> [egv
   vmap <C-z> ]egv
 
+  " ctrlp finder
+  " {{{
+  if index(g:pathogen_disabled, 'ctrlp') == -1
+    let g:ctrlp_map = ',f'
+    let g:ctrlp_match_window_bottom = 0
+    let g:ctrlp_match_window_reversed = 0
+
+    nnoremap <silent> ,b :CtrlPBuffer<CR>
+  end
+  " }}}
+
   " fuzzy finder
   " {{{
-  nnoremap <silent> ,b :FufBuffer<CR>
-  nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
-  nnoremap <silent> ,j :FufJumpList<CR>
-  nnoremap <silent> ,l :FufLine<CR>
+  if index(g:pathogen_disabled, 'fuzzyfinder') == -1
+    let g:fuf_keyOpenSplit = '<C-x>'
+    let g:fuf_keyOpenVsplit = '<C-v>'
+
+    nnoremap <silent> ,b :FufBuffer<CR>
+    nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
+    nnoremap <silent> ,l :FufLine<CR>
+  end
   " }}}
 
   " indent guides
