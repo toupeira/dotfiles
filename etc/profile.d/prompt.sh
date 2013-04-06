@@ -2,7 +2,8 @@
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # Prompt configuration
-export PS1='\[\033[0m\]\u@\h:\w\$ \[$(_ps1_exit_code)\]'
+[ -n "$SSH_CONNECTION" ] && PS1_HOST='@\h'
+export PS1='\[\033[0m\]\u'$PS1_HOST':\w\$ \[$(_ps1_exit_code)\]'
 
 function _ps1_exit_code {
   local status=$?
