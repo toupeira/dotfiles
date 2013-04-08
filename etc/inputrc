@@ -65,6 +65,9 @@ $endif
 
 $endif
 
+set completion-ignore-case on
+set completion-map-case on
+
 set mark-symlinked-directories on
 set match-hidden-files off
 set blink-matching-paren on
