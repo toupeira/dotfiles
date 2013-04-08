@@ -238,6 +238,7 @@
   autocmd FileType mail setlocal ts=2 sts=2 sw=2 expandtab tw=80 lbr
   autocmd FileType tex,plaintex,context setlocal lbr
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
+  autocmd FileType crontab setlocal nobackup nowritebackup
 
   autocmd BufEnter *.md setf markdown
   autocmd BufEnter */bin/*.run setf sh
