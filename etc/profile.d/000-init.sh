@@ -10,6 +10,8 @@ function has {
 # Check for login shell and Linux
 [ -n "$BASH_LOGIN" -a "`uname -s`" = "Linux" ] || return
 
+shopt -s nocaseglob
+
 SSH_BYOBU=~/.byobu/.ssh-agent
 
 if [ -z "$SSH_AUTH_SOCK" ]; then
