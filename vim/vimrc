@@ -272,24 +272,39 @@
   " {{{
   function! RubyEndToken()
     let current_line = getline('.')
-    let braces_at_end = '{\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
-    let brackets_at_end = '[\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
+
+    let braces_at_end = '{[^}]*$'
+    let brackets_at_end = '[[^]]*$'
+    let parentheses_at_end = '([^)]*$'
+    let parentheses_and_braces_at_end = '({[^)}]*$'
+    let parentheses_and_brackets_at_end = '([[^)}]*$'
     let stuff_without_do = '^\s*\(class\|if\|unless\|begin\|case\|for\|module\|while\|until\|def\)'
     let with_do = 'do\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
 
-    let close_popup = neocomplcache#cancel_popup()
+    let close_popup = neocomplcache#cancel_popup() . "\<CR>"
 
-    if match(current_line, braces_at_end) >= 0
-      return close_popup . "\<CR>}\<C-O>O"
+    if match(current_line, parentheses_and_braces_at_end) >= 0
+      let token = "})"
+    elseif match(current_line, parentheses_and_brackets_at_end) >= 0
+      let token = "])"
+    elseif match(current_line, braces_at_end) >= 0
+      let token = "}"
     elseif match(current_line, brackets_at_end) >= 0
-      return close_popup . "\<CR>]\<C-O>O"
-    elseif match(current_line, stuff_without_do) >= 0
-      return close_popup . "\<CR>end\<C-O>O"
-    elseif match(current_line, with_do) >= 0
-      return close_popup . "\<CR>end\<C-O>O"
+      let token = "]"
+    elseif match(current_line, parentheses_at_end) >= 0
+      let token = ")"
+    elseif match(current_line, stuff_without_do) >= 0 || match(current_line, with_do) >= 0
+      let token = "end"
     else
-      return close_popup . "\<CR>"
+      let token = ""
     endif
+
+    let keys = neocomplcache#cancel_popup() . "\<CR>"
+    if !empty(token)
+      let keys .= token . "\<C-o>O"
+    endif
+
+    return keys
   endfunction
 
   autocmd FileType ruby inoremap <buffer> <CR> <C-R>=RubyEndToken()<CR>
