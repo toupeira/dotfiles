@@ -1,14 +1,19 @@
 # vim: ft=ruby
 
-begin
-  require 'rubygems'
-  require 'yaml'
-  require 'ostruct'
-  require 'open-uri'
-  require 'wirble'
-  require 'active_support/all'
-rescue LoadError => e
-  puts e.message
+%w[
+  rubygems
+  yaml
+  ostruct
+  open-uri
+  wirble
+  awesome_print
+  active_support/all
+].each do |lib|
+  begin
+    require lib
+  rescue LoadError => e
+    puts e.message
+  end
 end
 
 puts
@@ -18,6 +23,10 @@ Kernel::at_exit { puts }
 
 if defined? Wirble
   Wirble.init :init_colors => true
+end
+
+if defined? AwesomePrint
+  AwesomePrint.irb!
 end
 
 IRB.conf[:AUTO_INDENT] = true

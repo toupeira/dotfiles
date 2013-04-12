@@ -611,6 +611,8 @@
   " tabular
   noremap ,t :Tabular /
   noremap ,t, :Tabular /, /l0<CR>
+  noremap ,t= :Tabular /=<CR>
+  noremap ,t> :Tabular /=><CR>
 
   " syntax attributes
   runtime scripts/SyntaxAttr.vim
