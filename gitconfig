@@ -7,6 +7,9 @@
 	autocrlf = input
 	excludesfile = ~/.gitexcludes
 
+[url "git://github.com/"]
+	insteadOf = gh:
+
 [color]
 	ui = auto
 
