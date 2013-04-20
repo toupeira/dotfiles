@@ -162,10 +162,14 @@
   set numberwidth=6
 
   " cursor line
-  autocmd CursorHold *
-    \ if &buftype != 'quickfix' && bufname('%') != '-MiniBufExplorer-' | setlocal cursorline | endif
-  autocmd CursorMoved,InsertEnter,BufLeave *
-    \ if &l:cursorline | setlocal nocursorline | endif
+  if $SSH_CONNECTION != ""
+    autocmd CursorHold *
+      \ if &buftype != 'quickfix' && bufname('%') != '-MiniBufExplorer-' | setlocal cursorline | endif
+    autocmd CursorMoved,InsertEnter,BufLeave *
+      \ if &l:cursorline | setlocal nocursorline | endif
+  else
+    set cursorline
+  endif
 
   " highlight trailing whitespace
   autocmd VimEnter,BufRead,BufNewFile * highlight Whitespace ctermbg=236 guibg=#333333
