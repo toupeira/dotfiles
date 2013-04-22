@@ -168,7 +168,8 @@
     autocmd CursorMoved,InsertEnter,BufLeave *
       \ if &l:cursorline | setlocal nocursorline | endif
   else
-    set cursorline
+    autocmd BufEnter *
+      \ if &buftype != 'quickfix' && bufname('%') != '-MiniBufExplorer-' | setlocal cursorline | endif
   endif
 
   " highlight trailing whitespace
