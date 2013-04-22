@@ -4,8 +4,9 @@
 # Homebrew aliases
 alias find='gfind'
 alias sed='gsed'
-alias gvim='mvim'
-alias gvimdiff='mvimdiff'
+
+function gvim     { mvim "$@" >/dev/null; }
+function gvimdiff { mvimdiff "$@" >/dev/null; }
 
 # Overwrite existing aliases to use GNU versions
 alias ls='gls --color'
