@@ -34,6 +34,9 @@ alias pkgsearch='apt-cache search'
 
 # sudo aliases
 if has sudo; then
+  # expand aliases in arguments
+  alias sudo='sudo '
+
   # file management
   alias sucp='sudo cp -vi'
   alias sumv='sudo mv -vi'
