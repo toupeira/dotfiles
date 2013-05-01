@@ -23,50 +23,29 @@ URxvt*buffered:		false
 URxvt*background:	rgba:0000/0000/0000/d8d8
 URxvt*foreground:	#fff
 
-! ! Red
-! URxvt*color1:		#ee2233
-! URxvt*color9:		#ee3333
-! 
-! ! Green
-! URxvt*color2:		#85DA20
-! URxvt*color10:		#8FF814
-! 
-! ! Blue
-! URxvt*color4:		#6578ff
-! URxvt*color12:		#6876d9
-! 
-! ! Purple
-! URxvt*color5:		#fc54ff
-! URxvt*color13:		#fc54ff
+! Red
+URxvt*color1: #ee2233
+URxvt*color9: #ee3333
 
-! converted from Smyck.itermcolors
-URxvt*color0: #000000
-! URxvt*color1: #b74131
-URxvt*color10: #c4f036
-URxvt*color11: #fee14d
-! URxvt*color12: #8dcff0
-URxvt*color13: #f799ff
-URxvt*color14: #69d9cf
-URxvt*color15: #f7f7f7
+! Green
 URxvt*color2: #7da900
-URxvt*color3: #c4a400
-! URxvt*color4: #62a3c4
-URxvt*color5: #b98acc
-URxvt*color6: #207383
-URxvt*color7: #a0a0a0
-URxvt*color8: #7a7a7a
-! URxvt*color9: #d6837b
+URxvt*color10: #c4f036
 
-! URxvt*background: #1b1b1b
-! URxvt*foreground: #f7f7f7
+! Yellow
+URxvt*color3: #c4a400
+URxvt*color11: #fee14d
 
 ! Blue
-URxvt*color4:		#6578ff
-URxvt*color12:		#6876d9
+URxvt*color4: #6578ff
+URxvt*color12: #6876d9
 
-! Red
-URxvt*color1:		#ee2233
-URxvt*color9:		#ee3333
+! Purple
+URxvt*color5: #fc54ff
+URxvt*color13: #fc54ff
+
+! Cyan
+!URxvt*color6: #207383
+URxvt*color14: #69d9cf
 
 SshAskpass*grabKeyboard:		true
 SshAskpass*grabPointer:			true
