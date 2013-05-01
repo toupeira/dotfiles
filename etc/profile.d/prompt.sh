@@ -9,15 +9,14 @@ function _ps1_exit_code {
   local status=$?
   [ -n "$CYGWIN" ] && return
 
-  if [ $status -gt 0 ]; then
-    local code="[$status]"
-  else
-    local code="    "
-  fi
-
   tput sc
-  tput cup $LINES $((COLUMNS-5-${#code}))
-  printf '  \033[1;31m%s\033[0m ' "  $code"
+  if [ $status -gt 0 ]; then
+    tput cup $LINES $((COLUMNS-5-${#status}))
+    printf '  \033[1;30m[\033[1;31m%s\033[1;30m]\033[0m ' "$status"
+  else
+    tput cup $LINES $((COLUMNS-9))
+    printf '        '
+  fi
   tput rc
 }
 
