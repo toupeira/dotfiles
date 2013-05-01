@@ -20,7 +20,7 @@ URxvt*matcher.button:	1
 URxvt*perl-ext-common:	selection,matcher
 URxvt*buffered:		false
 
-URxvt*background:	rgba:0000/0000/0000/d8d8
+URxvt*background:	rgba:0000/0000/0000/e8e8
 URxvt*foreground:	#fff
 
 ! Red
