@@ -278,8 +278,8 @@
     let parentheses_at_end = '([^)]*$'
     let parentheses_and_braces_at_end = '({[^)}]*$'
     let parentheses_and_brackets_at_end = '([[^)}]*$'
-    let stuff_without_do = '^\s*\(class\|if\|unless\|begin\|case\|for\|module\|while\|until\|def\)'
-    let with_do = 'do\s*\(|\(,\|\s\|\w\)*|\s*\)\?$'
+    let stuff_without_do = '^\s*\(<%=\?\s*\)\?\%(class\|if\|unless\|begin\|case\|for\|module\|while\|until\|def\)\(.*%>$\)\?'
+    let with_do = '\sdo\s*\%(|\%(,\|\s\|\w\)*|\s*\)\?\(%>\)\?$'
 
     let close_popup = neocomplcache#cancel_popup() . "\<CR>"
 
@@ -293,10 +293,19 @@
       let token = "]"
     elseif match(current_line, parentheses_at_end) >= 0
       let token = ")"
-    elseif match(current_line, stuff_without_do) >= 0 || match(current_line, with_do) >= 0
-      let token = "end"
     else
-      let token = ""
+      let matches = matchlist(current_line, stuff_without_do)
+      if len(matches) == 0
+        let matches = matchlist(current_line, with_do)
+      endif
+
+      if len(matches) == 0
+        let token = ""
+      elseif &ft == 'eruby' && matches[1] != ''
+        let token = "<% end %>"
+      else
+        let token = "end"
+      endif
     endif
 
     let keys = neocomplcache#cancel_popup() . "\<CR>"
@@ -307,7 +316,7 @@
     return keys
   endfunction
 
-  autocmd FileType ruby inoremap <buffer> <CR> <C-R>=RubyEndToken()<CR>
+  autocmd FileType ruby,eruby inoremap <buffer> <CR> <C-R>=RubyEndToken()<CR>
   " }}}
 
 " }}}
