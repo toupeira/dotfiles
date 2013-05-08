@@ -50,6 +50,8 @@
 	br = branch
 	sub = submodule
 
+	shallow = clone --depth 1
+
 	di = diff
 	dc = diff --cached
 	ds = diff --stat
