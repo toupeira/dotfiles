@@ -1,9 +1,9 @@
 #!/bin/bash
 
 if [ "$1" = "restore" ]; then
-  alsactl restore
+  sudo alsactl restore
 elif [ "$1" = "low" ]; then
-  alsactl restore
+  sudo alsactl restore
   amixer -q set DAC 84
   amixer -q set DAC,1 84
 else
