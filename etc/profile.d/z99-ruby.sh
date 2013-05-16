@@ -45,8 +45,8 @@ function bundle_exec {
 
   # look for a .bundle directory
   while [ ! -d "$pwd/.bundle" ]; do
-    pwd=`readlink -f "$pwd/.."`
-    if [ "$pwd" = "/" ]; then
+    pwd=${pwd%/*}
+    if [ -z "$pwd" ]; then
       # no bundle found, run the command from the system
       command "$command"
       return
