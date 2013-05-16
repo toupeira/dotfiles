@@ -1,14 +1,15 @@
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
-# Automatically use sudo for administrative RubyGems commands
-function __sudo_gem {
+# Wrapper for RubyGems
+function gem_exec {
   local version="$1"
   local command="gem$version"
   shift
 
   which "$command" &>/dev/null || command="gem"
 
+  # use correct Gem path
   if [ -d /var/lib/gems ]; then
     local home="/var/lib/gems/$version/"
   elif [ -d /opt/ruby-enterprise/lib/ruby/gems ]; then
@@ -18,6 +19,7 @@ function __sudo_gem {
     return 1
   fi
 
+  # use sudo for administrative commands
   if [[ "$1" =~ (install|uninstall|update|cleanup) ]]; then
     command="sudo GEM_HOME=$home $command"
   fi
@@ -26,33 +28,31 @@ function __sudo_gem {
 }
 
 # Aliases for different Ruby versions
-alias gem="__sudo_gem 1.8"
-alias gem1.8="__sudo_gem 1.8"
-alias gem1.9.1="__sudo_gem 1.9.1"
+alias gem="gem_exec 1.8"
+alias gem1.8="gem_exec 1.8"
+alias gem1.9.1="gem_exec 1.9.1"
+alias gem2.0="gem_exec 2.0"
 
 # Add wrappers for all bundler executables
-for file in `find ~/{src,www}/*/.bundle/ruby/*/bin -maxdepth 1 -type f -executable 2>/dev/null | sort`; do
-  name=`basename $file`
-  if ! type -t "$name" >/dev/null; then
-    eval "function $name { run_bundler \"$file\" \"\$@\"; }"
-  fi
+for command in `find ~/{src,www}/*/.bundle/ruby/*/bin -maxdepth 1 -type f -executable -printf "%f\n" 2>/dev/null | sort | uniq`; do
+  eval "function $command { bundle_exec \"$command\" \"\$@\"; }"
 done
+unset command
 
-function run_bundler {
-  local file="$1"
-  local name=`basename "$file"`
-  local bin=`command ls .bundle/ruby/*/bin/"$name" 2>/dev/null | head -1`
-  shift
+function bundle_exec {
+  local pwd="$PWD"
+  local command="$1"
 
-  if [ -x "$bin" ]; then
-    bundle exec "$bin" "$@"
-  else
-    local dir=`echo "$file" | sed -r 's|\.bundle/.*||'`
-    inode=`stat -c %i .`
-    cd "$dir"
-    [ "`stat -c %i .`" != $inode ] && pwd
+  # look for a .bundle directory
+  while [ ! -d "$pwd/.bundle" ]; do
+    pwd=`readlink -f "$pwd/.."`
+    if [ "$pwd" = "/" ]; then
+      # no bundle found, run the command from the system
+      command "$command"
+      return
+    fi
+  done
 
-    bundle exec "$name" "$@"
-    cd "$OLDPWD"
-  fi
+  # pass the command to bundler
+  bundle exec "$command"
 }

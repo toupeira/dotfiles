@@ -2,28 +2,19 @@
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # Add wrappers for all npm executables
-for file in `find ~/{src,www}/*/node_modules/*/bin -maxdepth 1 -type f -executable 2>/dev/null | sort`; do
-  name=`basename $file`
-  if ! type -t "$name" >/dev/null; then
-    eval "function $name { run_npm \"$file\" \"\$@\"; }"
-  fi
+for command in `find ~/{src,www}/*/node_modules/*/bin -maxdepth 1 -type f -executable -printf "%f\n" 2>/dev/null | sort | uniq`; do
+  eval "function $command { npm_exec \"$command\" \"\$@\"; }"
 done
+unset command
 
-function run_npm {
-  local file="$1"
-  local name=`basename "$file"`
-  local bin=`ls "node_modules/*/bin/$name" 2>/dev/null | head -1`
-  shift
+function npm_exec {
+  local pwd="$PWD"
+  local command="$1"
+  local bin=`npm bin`/"$command"
 
   if [ -x "$bin" ]; then
     command "$bin" "$@"
   else
-    local dir=`echo "$file" | sed -r 's|node_modules/.*||'`
-    inode=`stat -c %i .`
-    cd "$dir"
-    [ "`stat -c %i .`" != $inode ] && pwd
-
-    command "$file" "$@"
-    cd "$OLDPWD"
+    command "$command"
   fi
 }
