@@ -11,10 +11,11 @@ function npm_exec {
   local pwd="$PWD"
   local command="$1"
   local bin=`npm bin`/"$command"
+  shift
 
   if [ -x "$bin" ]; then
     command "$bin" "$@"
   else
-    command "$command"
+    command "$command" "$@"
   fi
 }

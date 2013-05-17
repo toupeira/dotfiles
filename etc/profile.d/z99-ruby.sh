@@ -42,17 +42,18 @@ unset command
 function bundle_exec {
   local pwd="$PWD"
   local command="$1"
+  shift
 
   # look for a .bundle directory
   while [ ! -d "$pwd/.bundle" ]; do
     pwd=${pwd%/*}
     if [ -z "$pwd" ]; then
       # no bundle found, run the command from the system
-      command "$command"
+      command "$command" "$@"
       return
     fi
   done
 
   # pass the command to bundler
-  bundle exec "$command"
+  bundle exec "$command" "$@"
 }
