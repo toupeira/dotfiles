@@ -22,7 +22,6 @@
   if v:version < '702'
     call add(g:pathogen_disabled, 'powerline')
     call add(g:pathogen_disabled, 'neocomplcache')
-    call add(g:pathogen_disabled, 'neosnippets')
   endif
 
   " FuzzyFinder/L9 require Vim 7.2 and floating-point support
@@ -39,7 +38,6 @@
   " Disable neocomplcache for SSH sessions
   if $SSH_CONNECTION != ""
     call add(g:pathogen_disabled, 'neocomplcache')
-    call add(g:pathogen_disabled, 'neosnippets')
   endif
 
   " load all plugins
@@ -826,19 +824,14 @@
     inoremap <expr><C-y>  neocomplcache#close_popup()
     inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
-    " use <Tab> to complete words, and also handle snippets
+    " use <Tab> for autocompletion
     function! TabWrapper(...)
-      if a:0 == 0
-        if pumvisible()
-          " close the popup and expand snippets
-          return "\<C-y>\<C-R>=TabWrapper(1)\<CR>"
-        else
-          " popup is closed, use normal SnipMate behavior
-          return TriggerSnippet()
-        endif
+      if pumvisible()
+        " complete the word
+        return "\<C-y>"
       else
-        " expand snippets, but don't insert a <Tab>
-        return substitute(TriggerSnippet(), '\t', '', '')
+        " popup is closed, pass on the tab
+        return "\t"
       endif
     endfunction
     autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
