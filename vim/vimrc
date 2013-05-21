@@ -266,57 +266,6 @@
   let php_alt_AssignByReference = 1
   let php_folding = 1
 
-  " Ruby block auto-completion
-  " {{{
-  function! RubyEndToken()
-    let current_line = getline('.')
-
-    let braces_at_end = '{[^}]*$'
-    let brackets_at_end = '[[^]]*$'
-    let parentheses_at_end = '([^)]*$'
-    let parentheses_and_braces_at_end = '({[^)}]*$'
-    let parentheses_and_brackets_at_end = '([[^)}]*$'
-    let stuff_without_do = '^\s*\(<%=\?\s*\)\?\%(class\|if\|unless\|begin\|case\|for\|module\|while\|until\|def\)\(.*%>$\)\?'
-    let with_do = '\sdo\s*\%(|\%(,\|\s\|\w\)*|\s*\)\?\(%>\)\?$'
-
-    let close_popup = neocomplcache#cancel_popup() . "\<CR>"
-
-    if match(current_line, parentheses_and_braces_at_end) >= 0
-      let token = "})"
-    elseif match(current_line, parentheses_and_brackets_at_end) >= 0
-      let token = "])"
-    elseif match(current_line, braces_at_end) >= 0
-      let token = "}"
-    elseif match(current_line, brackets_at_end) >= 0
-      let token = "]"
-    elseif match(current_line, parentheses_at_end) >= 0
-      let token = ")"
-    else
-      let matches = matchlist(current_line, stuff_without_do)
-      if len(matches) == 0
-        let matches = matchlist(current_line, with_do)
-      endif
-
-      if len(matches) == 0
-        let token = ""
-      elseif &ft == 'eruby' && matches[1] != ''
-        let token = "<% end %>"
-      else
-        let token = "end"
-      endif
-    endif
-
-    let keys = neocomplcache#cancel_popup() . "\<CR>"
-    if !empty(token)
-      let keys .= token . "\<C-o>O"
-    endif
-
-    return keys
-  endfunction
-
-  autocmd FileType ruby,eruby inoremap <buffer> <CR> <C-R>=RubyEndToken()<CR>
-  " }}}
-
 " }}}
 
 " Commands
