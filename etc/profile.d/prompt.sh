@@ -2,8 +2,37 @@
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # Prompt configuration
-[ -n "$SSH_CONNECTION" ] && PS1_HOST='@\h'
-export PS1='\[\033[0m\]\u'$PS1_HOST':\w\$ \[$(_ps1_exit_code)\]'
+
+# colors
+_reset='\[\e[0m\]'           # Reset
+
+# regular
+_black='\[\e[0;30m\]'        # Black
+_red='\[\e[0;31m\]'          # Red
+_green='\[\e[0;32m\]'        # Green
+_yellow='\[\e[0;33m\]'       # Yellow
+_blue='\[\e[0;34m\]'         # Blue
+_purple='\[\e[0;35m\]'       # Purple
+_cyan='\[\e[0;36m\]'         # Cyan
+_white='\[\e[0;37m\]'        # White
+
+# bold
+_bblack='\[\e[1;30m\]'       # Black
+_bred='\[\e[1;31m\]'         # Red
+_bgreen='\[\e[1;32m\]'       # Green
+_byellow='\[\e[1;33m\]'      # Yellow
+_bblue='\[\e[1;34m\]'        # Blue
+_bpurple='\[\e[1;35m\]'      # Purple
+_bcyan='\[\e[1;36m\]'        # Cyan
+_bwhite='\[\e[1;37m\]'       # White
+
+if [ -n "$SSH_CONNECTION" ]; then
+  PS1_SSH="$_bblack@\h$_reset"
+else
+  unset PS1_SSH
+fi
+
+export PS1="$_reset\u$PS1_SSH:$_yellow\w$_reset\\$ \[\$(_ps1_exit_code)\]"
 
 function _ps1_exit_code {
   local status=$?
