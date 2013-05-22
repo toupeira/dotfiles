@@ -1,0 +1,22 @@
+#!/bin/sh
+
+if [ "$1" = "-n" ]; then
+  echo="echo"
+  shift
+else
+  echo=""
+fi
+
+source=`readlink -f "$1"`
+target=`realpath "$2"`
+
+[ "$source" = "$target" ] && echo "Source and target are the same." && exit 1
+
+$echo mv -v "$source" "$target" || exit 1
+
+if [ -d "$target" ]; then
+  name=`basename "$source"`
+  $echo ln -sv "$target/$name" "$source"
+else
+  $echo ln -sv "$target" "$source"
+fi
