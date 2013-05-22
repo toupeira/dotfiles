@@ -1,5 +1,7 @@
 --ignore-dir
 	.bundle
+--ignore-dir
+	tmp
 --type-add
 	js=.coffee
 --type-add
