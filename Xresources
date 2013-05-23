@@ -1,5 +1,6 @@
-Xft.dpi:		96
+!Xft.dpi:		96
 
+! Terminal settings
 URxvt*termName:		rxvt-256color
 URxvt*font:		-misc-fixed-medium-*-*-*-13-100-*-*-*-60-*-*
 URxvt*geometry:		90x36
@@ -16,10 +17,20 @@ URxvt*saveLines:	10000
 URxvt*iso14755:		false
 URxvt*iso14755_52:	false
 URxvt*visualBell:	true
-URxvt*matcher.button:	1
-URxvt*perl-ext-common:	selection,matcher
 URxvt*buffered:		false
 
+URxvt*perl-ext-common:	selection,searchable-scrollback,matcher,confirm-paste
+
+URxvt*matcher.button:	1
+URxvt.matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
+URxvt.matcher.pattern.2:  \\B(/\\S+?):(\\d+)(?=:|$)
+URxvt.matcher.launcher.2: gvim +$2 $1
+
+URxvt.keysym.C-Insert:    perl:matcher:last
+URxvt.keysym.M-Insert:    perl:matcher:list
+URxvt.keysym.M-s:         perl:searchable-scrollback:start
+
+! Colors
 URxvt*background:	rgba:0000/0000/0000/e8e8
 URxvt*foreground:	#fff
 
@@ -47,6 +58,7 @@ URxvt*color13: #fc54ff
 !URxvt*color6: #207383
 URxvt*color14: #69d9cf
 
+! SSH AskPass
 SshAskpass*grabKeyboard:		true
 SshAskpass*grabPointer:			true
 SshAskpass*font:			-*-lucida-medium-r-*-*-10-*-*-*-*-*-*-*

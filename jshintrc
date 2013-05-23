@@ -34,7 +34,6 @@
   "devel"         : true,   // Allow developments statements e.g. `console.log();`.
 
   // ECMAScript 5.
-  "es5"           : true,   // Allow ECMAScript 5 syntax.
   "strict"        : false,  // Require `use strict` pragma  in every file.
   "globalstrict"  : false,  // Allow global "use strict" (also enables 'strict').
 
@@ -45,6 +44,7 @@
   "boss"          : true,   // Tolerate assignments inside if, for & while. Usually conditions & loops are for comparison, not assignments.
   "curly"         : true,   // Require {} for every new block or scope.
   "eqeqeq"        : false,  // Require triple equals i.e. `===`.
+  "unused"        : true,   // Check for unused variables.
   "eqnull"        : false,  // Tolerate use of `== null`.
   "evil"          : false,  // Tolerate use of `eval`.
   "expr"          : false,  // Tolerate `ExpressionStatement` as Programs.
