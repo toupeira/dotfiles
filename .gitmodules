@@ -55,9 +55,6 @@
 [submodule "vim/bundle/puppet"]
 	path = vim/bundle/puppet
 	url = https://github.com/rodjek/vim-puppet.git
-[submodule "vim/bundle/conque"]
-	path = vim/bundle/conque
-	url = https://github.com/rson/vim-conque.git
 [submodule "vim/bundle/pathogen"]
 	path = vim/bundle/pathogen
 	url = https://github.com/tpope/vim-pathogen.git

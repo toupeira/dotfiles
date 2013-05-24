@@ -14,11 +14,6 @@ fi
 DOTFILES=${DOTFILES:-~/.dotfiles}
 [ -L "$DOTFILES" ] && DOTFILES=`readlink -f "$DOTFILES"`
 
-if [ ! -d "$DOTFILES" ]; then
-  error "Dotfiles not found in {{$DOTFILES}}"
-  exit 1
-fi
-
 DRYRUN=0
 VERBOSE=0
 QUIET=0
@@ -26,6 +21,11 @@ FORCE=0
 COMMAND=
 
 function main {
+  if [ ! -d "$DOTFILES" ]; then
+    error "Dotfiles not found in {{$DOTFILES}}"
+    exit 1
+  fi
+
   # Parse arguments
   while [ $# -gt 0 ]; do
     case "$1" in
