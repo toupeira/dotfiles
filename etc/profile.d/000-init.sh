@@ -10,6 +10,11 @@ function has {
 # Check for login shell and Linux
 [ -n "$BASH_LOGIN" -a "`uname -s`" = "Linux" ] || return
 
+# Tweak globbing
+shopt -s extglob
+shopt -s globstar
+
+# Set up Screen / Byobu
 SSH_BYOBU=~/.byobu/.ssh-agent
 
 if [ -z "$SSH_AUTH_SOCK" ]; then

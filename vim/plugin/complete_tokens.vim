@@ -1,4 +1,4 @@
-autocmd FileType ruby,eruby,javascript inoremap <buffer> <CR> <C-R>=CompleteTokens()<CR>
+autocmd FileType ruby,eruby,javascript,css,scss,puppet,c,cs,cpp,php inoremap <buffer> <CR> <C-R>=CompleteTokens()<CR>
 
 let g:complete_tokens = {
   \ 'global': [
