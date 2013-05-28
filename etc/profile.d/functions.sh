@@ -66,7 +66,7 @@ function gvi.add {
   fi
 }
 
-# Vim wrapper to open files matching a pattern (using ack)
+# Ack wrapper to edit files matching a pattern (using Vim)
 function ack.edit {
   [ "$1" = "-l" ] && shift
   local files=`ack -l "$@"`
@@ -79,6 +79,15 @@ function ack.edit {
   else
     echo "No files found."
   fi
+}
+
+# Ack wrapper to search through a Gem folder inside a Rails project
+function ack.rails {
+  local gem="$1"
+  local path=`bundle show "$gem"` || return $?
+  shift
+
+  ack "$@" "$path"
 }
 
 # GVim wrapper to pass a file to a local instance
