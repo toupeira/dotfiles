@@ -682,13 +682,15 @@
     let Powerline_theme = 'desertink'
     let Powerline_colorscheme = 'desertink'
 
-    if has('gui_running')
-      let Powerline_cache_file = expand('~/.vim/tmp/powerline.gui.cache')
+    if $POWERLINE_SYMBOLS != ""
+      let Powerline_symbols = $POWERLINE_SYMBOLS
+    elseif has('gui_running')
       let Powerline_symbols = 'fancy'
     else
-      let Powerline_cache_file = expand('~/.vim/tmp/powerline.term.cache')
       let Powerline_symbols = 'unicode'
     end
+
+    let Powerline_cache_file = expand('~/.vim/tmp/powerline.'.Powerline_symbols.'.cache')
   end
   " }}}
 
