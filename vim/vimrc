@@ -82,6 +82,8 @@
   set splitbelow
   set splitright
   set scrolloff=5
+  set sidescrolloff=8
+  set sidescroll=1
   set virtualedit+=block
   set nostartofline
   set display+=lastline

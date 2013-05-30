@@ -46,6 +46,7 @@ while [ $# -gt 0 ]; do
     -debug ) mplayer="echo $mplayer"; debug=1; trap - 0 1 2 3 9 10 15; shift;;
     -aid|-vid|-sid) mplayer="$mplayer $1 $2"; shift 2;;
     -playlist ) cat "$2" >> $playlist; shift 2;;
+    -volume ) mplayer="$mplayer -volume $2"; shift 2;;
     -mono ) mplayer="$mplayer -af pan=1:0.5:0.5"; shift;;
     -stereo ) mplayer="$mplayer -af pan=2:1:0:0:1"; shift;;
     -analog ) mplayer="$mplayer -ac a52,"; shift;;
@@ -60,7 +61,7 @@ while [ $# -gt 0 ]; do
     -s ) mplayer="$mplayer -shuffle"; shift;;
     -o ) mplayer="$mplayer $2"; shift 2;;
     -size ) options="-size +$2"; shift 2;;
-    -p ) shift; exec $0 -f -t -mono -normalize -x '/incomplete/' "$@";;
+    -p ) shift; exec $0 -f -t -mono -normalize -volume 5 -x '/incomplete/' "$@";;
     -x )
       exclusive_regex='-v'
       if [ -n "$regex" ]; then
