@@ -62,6 +62,9 @@
 
 	co = checkout
 	sw = checkout
+	ours = "!f() { git checkout --ours $@ && git add $@; }; f"
+	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+
 	unstage = reset HEAD
 	all = add -A .
 	ci = commit -v
@@ -71,8 +74,6 @@
 	l = log --all --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
 	lstat = log --stat
 	ldiff = log -p
-	new = "!git l ORIG_HEAD.. | grep --color=never ."
-	news = log -p ORIG_HEAD..
 
 	up = pull -v --progress
 	upbase = pull -v --progress --rebase
@@ -87,4 +88,4 @@
 	std = stash drop
 	stl = stash list
 
-	g = "!sh -c 'if [ \"`uname -s`\" = 'Darwin' ]; then (gitx &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg &>/dev/null &); else tig; fi'"
+	g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"
