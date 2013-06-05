@@ -1,5 +1,12 @@
 #!/bin/bash
 
+# Check for Bash 4
+if [ "${BASH_VERSION:0:1}" -lt 4 ]; then
+  echo "Sorry, this script requires Bash 4's hash tables!"
+  echo "You're running version $BASH_VERSION"
+  exit 1
+fi
+
 # Use Homebrew GNU commands on OS X if available
 if [ "`uname -s`" = "Darwin" ]; then
   shopt -s expand_aliases
@@ -104,6 +111,8 @@ function ask {
 }
 
 function ask_yes {
+  [ $FORCE -eq 1 ] && return
+
   msg "$1 [Y/n] " "$2" -n >&2
   read
   [ "$REPLY" != "N" -a "$REPLY" != "n" ]
@@ -120,14 +129,26 @@ function system {
   local command="$1"
   shift
 
+  # create an associative array to hold all commands and paths used for sudo,
+  # so we can avoid duplicate warnings for the same value
+  [ -v sudo_history ] || declare -gA sudo_history
+
   if [ "$command" = "chown" -o "$command" = "chgrp" ]; then
-    echo "[1m$command[0m requires sudo"
+    if [ -z "${sudo_history["$command"]}" ]; then
+      warning "Using [1;33msudo[0m for command [1m$command[0m"
+    fi
+
+    sudo_history["$command"]=1
     command="sudo $command"
   else
     for arg in "$@"; do
       local dir=`dirname -- "$arg"`
       if [ -d "$dir" -a ! -w "$dir" ]; then
-        warning "Using [1;33msudo[0m for directory '$dir'"
+        if [ -z "${sudo_history["$dir"]}" ]; then
+          warning "Using [1;33msudo[0m for directory [1m$dir[0m"
+        fi
+
+        sudo_history["$dir"]=1
         command="sudo $command"
         break
       fi
@@ -236,7 +257,7 @@ function run {
         message="Update submodule $submodule"
 
         pushd "$DOTFILES/$submodule" >/dev/null || exit 1
-        [ -d ".git" ] || exec echo "Not a git repository: .git"
+        [ -e ".git" ] || exec echo "Not a git repository: .git"
 
         system git pull -v --progress origin master
         popd >/dev/null
