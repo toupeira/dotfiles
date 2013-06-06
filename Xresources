@@ -22,7 +22,7 @@ URxvt*buffered:		false
 URxvt*perl-ext-common:	selection,searchable-scrollback,matcher,confirm-paste
 
 URxvt*matcher.button:	1
-URxvt.matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-]*[\\w/-]
+URxvt.matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w./?&@#-%=]*[\\w/-]
 URxvt.matcher.pattern.2:  \\B(/\\S+?):(\\d+)(?=:|$)
 URxvt.matcher.launcher.2: gvim +$2 $1
 
