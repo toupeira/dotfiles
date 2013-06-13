@@ -16,7 +16,6 @@ let g:complete_tokens = {
   \ 'eruby': [
     \ [ '^\s*<%=\?\s*\(class\|if\|unless\|begin\|case\|for\|module\|while\|until\|def\).*%>$', '<% end %>' ],
     \ [ '\sdo\s*\(|\(,\|\s\|\w\)*|\s*\)\?%>$', '<% end %>' ],
-    \ [ 'include', 'ruby' ]
   \ ],
 \ }
 
