@@ -1,0 +1,37 @@
+#!/bin/bash
+
+function sql {
+  sqlite3 -separator "	" ~/.config/darktable/library.db "$@"
+}
+
+if pgrep -x darktable; then
+  xwit -raise -focus -names "Darktable"
+else
+  echo "Cleaning database..."
+
+  sql "SELECT id, folder FROM film_rolls" | while read film_id folder; do
+    sql "SELECT id, filename FROM images WHERE film_id = $film_id" | while read id file; do
+      path="$folder/$file"
+      if [ ! -e "$path" ]; then
+        echo "Removing deleted image $path..."
+        sql "
+          DELETE FROM color_labels WHERE imgid = $id;
+          DELETE FROM history WHERE imgid = $id;
+          DELETE FROM tagged_images WHERE imgid = $id;
+          DELETE FROM images WHERE id = $id;
+        "
+
+        rm -vf "$path.xmp"
+      fi
+    done
+
+    if [ ! -e "$folder" ]; then
+      echo "Removing deleted film roll $folder..."
+      sql "DELETE FROM film_rolls where id = $film_id"
+    fi
+  done
+
+  [ "$1" = "clean" ] && exit
+
+  exec darktable "$@"
+fi

@@ -1,0 +1,85 @@
+#!/bin/bash
+
+PIPE=~/.quodlibet/control
+if [ ! -p $PIPE ] || ! lsof -n $PIPE &>/dev/null; then
+  echo "E: Quod Libet is not running."
+  exit 1
+fi
+
+CURRENT=~/.quodlibet/current
+
+function _ql {
+  echo "$1" > $PIPE
+}
+
+function _song {
+  awk -F= "/^$1=(.*)/ { print \$2 }" $CURRENT
+}
+
+command="$1"
+argument="$2"
+
+case "$command" in
+  play-file) command="add-file";;
+  queue) command="enqueue";;
+  rate) command="set-rating";;
+  playlist) command="dump-playlist";;
+  shuffle) command="order";;
+  fastforward)
+    command="seek"
+    argument="+0:5"
+    ;;
+  rewind)
+    command="seek"
+    argument="-0:5"
+    ;;
+esac
+
+case "$command" in
+  current)
+    cat $CURRENT
+    ;;
+  query|search)
+    if [ -n "$argument" ]; then
+      _ql "set-browser SearchBar"
+      _ql "query $argument"
+      _ql "set-browser PanedBrowser"
+      exit
+    else
+      echo "E: '$command' needs an argument."
+      exit 1
+    fi
+    ;;
+  status|dump-playlist|dump-queue)
+    tmp=`mktemp`
+    _ql "$command $tmp"
+    sleep 0.05
+    cat $tmp
+    rm -f $tmp
+    ;;
+  next|previous|play|pause|play-pause|hide-window|show-window|toggle-window|focus|quit)
+    _ql "$command"
+    ;;
+    seek|order|repeat|volume|query|add-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue)
+    case "$command" in
+      shuffle|order|repeat) argument=${argument:-toggle};;
+    esac
+
+    if [ -n "$argument" ]; then
+      _ql "$command $argument"
+    else
+      echo "E: '$command' needs an argument."
+      exit 1
+    fi
+    ;;
+  volume-up)
+    _ql "volume +"
+    ;;
+  volume-down)
+    _ql "volume -"
+    ;;
+  *)
+    echo "E: unknown command '$command'."
+    exit 1
+    ;;
+esac
