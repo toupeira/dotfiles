@@ -105,8 +105,10 @@ endif
   inoremap <silent> <C-PageUp> <C-O>:call ToggleFontSize()<CR>
   inoremap <silent> <C-PageDown> <C-O>:call ToggleFontSize()<CR>
 
-  " cursor movements with Alt key in insert mode and console
+  " don't use Alt for menus
   set winaltkeys=no
+
+  " cursor movements with Alt key in insert mode and console
   inoremap <M-h> <C-o>h
   inoremap <M-j> <C-o>j
   inoremap <M-k> <C-o>k
@@ -124,67 +126,5 @@ endif
 
   cnoremap <M-f> <C-Right>
   cnoremap <M-b> <C-Left>
-
-  " Copy & Paste shortcuts
-  " set the 'cpoptions' to its Vim default
-  if 1    " only do this when compiled with expression evaluation
-    let s:save_cpo = &cpoptions
-  endif
-  set cpo&vim
-
-  if has('mac')
-    vnoremap <D-x> "+x
-    " Command-c is Copy
-    vnoremap <D-c> "+y
-    " Command-v is Paste
-    map <D-v>               "+gP
-    cmap <D-v>              <C-R>+
-
-    " Pasting blockwise and linewise selections is not possible in Insert and
-    " Visual mode without the +virtualedit feature.  They are pasted as if they
-    " were characterwise instead.
-    " Uses the paste.vim autoload script.
-
-    exe 'inoremap <script> <D-v>' paste#paste_cmd['i']
-    exe 'vnoremap <script> <D-v>' paste#paste_cmd['v']
-  else
-    " CTRL-x is Cut
-    vnoremap <C-x> "+x
-    " CTRL-c is Copy
-    vnoremap <C-c> "+y
-    " CTRL-v is Paste
-    map <C-v>               "+gP
-    "cmap <C-v>              <C-R>+
-
-    " Pasting blockwise and linewise selections is not possible in Insert and
-    " Visual mode without the +virtualedit feature.  They are pasted as if they
-    " were characterwise instead.
-    " Uses the paste.vim autoload script.
-
-    exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
-    exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
-
-    " Use <C-q> to do what CTRL-V used to do
-    noremap <C-q> <C-v>
-    inoremap <C-q> <C-v>
-    cnoremap <C-q> <C-v>
-  end
-
-  " For CTRL-v to work autoselect must be off.
-  " On Unix we have two selections, autoselect can be used.
-  if !has('unix')
-    set guioptions-=a
-  endif
-
-  " CTRL-a is Visual-select all
-  "noremap <C-a> ggVG
-  "vnoremap <C-a> <C-C>ggVG
-
-  " restore 'cpoptions'
-  set cpo&
-  if 1
-    let &cpoptions = s:save_cpo
-    unlet s:save_cpo
-  endif
 
 " }}}

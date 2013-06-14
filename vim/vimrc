@@ -322,6 +322,9 @@
 " Keybindings
 " {{{
 
+  " shortcut for desktop clipboard
+  noremap + "+
+
   " don't use exact searches for */#
   noremap * g*
   noremap # g#
