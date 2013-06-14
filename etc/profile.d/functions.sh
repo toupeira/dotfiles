@@ -7,7 +7,7 @@ function login_message {
     return
   elif [ "$PWD" = "$HOME" ]; then
     if [ "$SSH_CONNECTION" -o -z "$DISPLAY" ]; then
-      [ -n "$STY" ] && cat /etc/motd
+      [ -f /etc/motd ] && cat /etc/motd
       uptime
       echo
 
