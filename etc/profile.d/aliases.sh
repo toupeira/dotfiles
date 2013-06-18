@@ -79,7 +79,7 @@ if has sudo; then
   alias ip6tables='sudo ip6tables'
   alias tcpdump='sudo tcpdump'
   alias ethtool='sudo ethtool'
-  alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+"'
+  alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+|:\w+"'
   alias jnettop='sudo jnettop'
   alias ifconfig='sudo ifconfig'
   alias ifup='sudo ifup'
