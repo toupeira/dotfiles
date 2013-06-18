@@ -94,9 +94,6 @@
 [submodule "vim/bundle/ruby"]
 	path = vim/bundle/ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
-[submodule "vim/bundle/signify"]
-	path = vim/bundle/signify
-	url = https://github.com/mhinz/vim-signify.git
 [submodule "vim/bundle/colorizer"]
 	path = vim/bundle/colorizer
 	url = https://github.com/lilydjwg/colorizer.git

@@ -592,10 +592,6 @@
   vmap <C-a> [egv
   vmap <C-z> ]egv
 
-  " signify
-  let g:signify_vcs_list = [ 'git' ]
-  let g:signify_update_on_bufenter = 1
-
   " ctrlp finder
   " {{{
   if index(g:pathogen_disabled, 'ctrlp') == -1
