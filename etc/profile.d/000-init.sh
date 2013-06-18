@@ -27,7 +27,6 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     echo "Found SSH agent"
     export SSH_AUTH_SOCK="$socket"
     export SSH_AGENT_PID=${SSH_AUTH_SOCK##*.}
-    read -t 0.1
   elif [ -n "$SSH_CONNECTION" -o -z "$DISPLAY" ]; then
     # Start a new SSH agent for SSH connections and local console sessions
     echo "Starting SSH agent"
