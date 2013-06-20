@@ -23,7 +23,7 @@ SSH_BYOBU=~/.byobu/.ssh-agent
 if [ -z "$SSH_AUTH_SOCK" ]; then
   # Try to connect to a running SSH agent
   socket=`ls -t /tmp/ssh-*/agent.[0-9]* 2>/dev/null | head -1`
-  if [ -S "$socket" ]; then
+  if [ -S "$socket" -a -O "$socket" ]; then
     echo "Found SSH agent"
     export SSH_AUTH_SOCK="$socket"
     export SSH_AGENT_PID=${SSH_AUTH_SOCK##*.}
@@ -31,7 +31,7 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     # Start a new SSH agent for SSH connections and local console sessions
     echo "Starting SSH agent"
     exec ssh-agent -- bash --login
-  else
+  elif [ "$UID" != "0" ]; then
     # If there's no SSH agent running in a desktop environment there's something wrong
     echo "Couldn't find SSH agent"
     read -t 0.4
