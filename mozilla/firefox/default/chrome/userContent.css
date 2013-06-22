@@ -35,3 +35,15 @@
     border-bottom: 1px solid #e3d0ae !important;
   }
 }
+
+@-moz-document domain(www.google.com) {
+  li.gbtn, li.gbtsb { display: none !important; }
+}
+
+@-moz-document domain(mail.google.com) {
+  li.gbtn, li.gbtsb { display: none !important; }
+}
+
+@-moz-document domain(www.google.ch) {
+  li.gbtn, li.gbtsb { display: none !important; }
+}
