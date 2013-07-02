@@ -65,7 +65,7 @@ if [[ "$TERM" =~ ^(rxvt|xterm-256color|screen-bce) ]]; then
   if [ "$STY" ]; then
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]0;$HOSTNAME:$_pwd\007\033k$_pwd\033\\"'
   elif [ "$SSH_CONNECTION" ]; then
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;@$HOSTNAME:$_pwd\007\033]2;$USER@$HOSTNAME:$_pwd\007"'
+    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;$HOSTNAME:$_pwd\007\033]2;$USER@$HOSTNAME:$_pwd\007"'
   else
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;$_pwd\007\033]2;$_pwd\007"'
   fi
