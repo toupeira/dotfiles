@@ -12,15 +12,12 @@
   call add(g:pathogen_disabled, 'session')
 
   " TODO delete these?
-  call add(g:pathogen_disabled, 'ctrlp')
-  call add(g:pathogen_disabled, 'conque')
-  call add(g:pathogen_disabled, 'nerdtree')
-  call add(g:pathogen_disabled, 'tagbar')
-  "call add(g:pathogen_disabled, 'yankring')
+  "call add(g:pathogen_disabled, 'tagbar')
+  call add(g:pathogen_disabled, 'fuzzyfinder')
+  call add(g:pathogen_disabled, 'yankring')
 
-  " Powerline and neocomplcache require Vim 7.2
+  " neocomplcache requires Vim 7.2
   if v:version < '702'
-    call add(g:pathogen_disabled, 'powerline')
     call add(g:pathogen_disabled, 'neocomplcache')
   endif
 
@@ -30,8 +27,9 @@
     call add(g:pathogen_disabled, 'fuzzyfinder')
   endif
 
-  " Gundo requires Vim 7.3 and Python
+  " Powerline and Gundo require Vim 7.3 and Python
   if v:version < '703' || !has('python')
+    call add(g:pathogen_disabled, 'powerline')
     call add(g:pathogen_disabled, 'gundo')
   endif
 
@@ -570,11 +568,11 @@
   let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
 
   " tabular
-  noremap ,t :Tabular /
-  noremap ,t, :Tabular /, /l0<CR>
-  noremap ,t= :Tabular /=<CR>
-  noremap ,t> :Tabular /=><CR>
-  noremap ,t: :Tabular /:/l0r1<CR>
+  noremap ,a :Tabular /
+  noremap ,a, :Tabular /, /l0<CR>
+  noremap ,a= :Tabular /=<CR>
+  noremap ,a> :Tabular /=><CR>
+  noremap ,a: :Tabular /:/l0r1<CR>
 
   " syntax attributes
   runtime scripts/SyntaxAttr.vim
@@ -598,6 +596,8 @@
     let g:ctrlp_map = ',f'
     let g:ctrlp_match_window_bottom = 0
     let g:ctrlp_match_window_reversed = 0
+    let g:ctrlp_clear_cache_on_exit = 0
+    let g:ctrlp_default_input = 1
 
     nnoremap <silent> ,b :CtrlPBuffer<CR>
   end
@@ -679,23 +679,36 @@
   " powerline
   " {{{
   if index(g:pathogen_disabled, 'powerline') == -1
-    let Powerline_cache_enabled = 1
-    if Powerline_cache_enabled == 0
-      call system('rm -f ~/.vim/tmp/powerline.*.cache')
+    set runtimepath+=~/.dotfiles/vim/bundle/powerline/powerline/bindings/vim
+
+    if !has('gui_running')
+      let g:powerline_config_overrides = {
+        \ "common": {
+          \ "dividers": {
+            \ "left":  { "hard": " ", "soft": "| " },
+            \ "right": { "hard": " ", "soft": " |" }
+          \ }
+        \ }
+      \ }
     end
 
-    let Powerline_theme = 'desertink'
-    let Powerline_colorscheme = 'desertink'
+    " let Powerline_cache_enabled = 1
+    " if Powerline_cache_enabled == 0
+    "   call system('rm -f ~/.vim/tmp/powerline.*.cache')
+    " end
 
-    if $POWERLINE_SYMBOLS != ""
-      let Powerline_symbols = $POWERLINE_SYMBOLS
-    elseif has('gui_running')
-      let Powerline_symbols = 'fancy'
-    else
-      let Powerline_symbols = 'unicode'
-    end
+    " let Powerline_theme = 'desertink'
+    " let Powerline_colorscheme = 'desertink'
 
-    let Powerline_cache_file = expand('~/.vim/tmp/powerline.'.Powerline_symbols.'.cache')
+    " if $POWERLINE_SYMBOLS != ""
+    "   let Powerline_symbols = $POWERLINE_SYMBOLS
+    " elseif has('gui_running')
+    "   let Powerline_symbols = 'fancy'
+    " else
+    "   let Powerline_symbols = 'unicode'
+    " end
+
+    " let Powerline_cache_file = expand('~/.vim/tmp/powerline.'.Powerline_symbols.'.cache')
   end
   " }}}
 

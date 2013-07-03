@@ -7,9 +7,6 @@
 [submodule "vim/bundle/snipmate"]
 	path = vim/bundle/snipmate
 	url = https://github.com/msanders/snipmate.vim.git
-[submodule "vim/bundle/nerdtree"]
-	path = vim/bundle/nerdtree
-	url = https://github.com/scrooloose/nerdtree.git
 [submodule "vim/bundle/syntastic"]
 	path = vim/bundle/syntastic
 	url = https://github.com/scrooloose/syntastic.git
@@ -69,7 +66,7 @@
 	url = https://github.com/kchmck/vim-coffee-script.git
 [submodule "vim/bundle/powerline"]
 	path = vim/bundle/powerline
-	url = https://github.com/Lokaltog/vim-powerline.git
+	url = https://github.com/Lokaltog/powerline.git
 [submodule "vim/bundle/matchtag"]
 	path = vim/bundle/matchtag
 	url = https://github.com/gregsexton/MatchTag.git
