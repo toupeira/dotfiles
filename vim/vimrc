@@ -12,7 +12,6 @@
   call add(g:pathogen_disabled, 'session')
 
   " TODO delete these?
-  "call add(g:pathogen_disabled, 'tagbar')
   call add(g:pathogen_disabled, 'fuzzyfinder')
   call add(g:pathogen_disabled, 'yankring')
 
