@@ -359,6 +359,16 @@
   cnoremap <C-n> <Up>
   cnoremap <C-p> <Down>
 
+  " switch buffers with Shift+Tab / Ctrl+Shift+Tab
+  noremap <C-Tab> :MBEbn<CR>
+  noremap <C-S-Tab> :MBEbp<CR>
+
+  " navigate windows with Ctrl+jkhl
+  noremap <C-j> <C-w>j
+  noremap <C-k> <C-w>k
+  noremap <C-h> <C-w>h
+  noremap <C-l> <C-w>l
+
   " ,q / ,e - toggle quickfix window and location list
   function! GetBufferList()
     redir =>buflist
@@ -742,21 +752,17 @@
   " mini buffer explorer
   " {{{
   let g:miniBufExplSplitBelow = 0
-  let g:miniBufExplForceSyntaxEnable = 0
-  let g:miniBufExplMapCTabSwitchBufs = 1
-  let g:miniBufExplMapWindowNavVim = 1
-  let g:miniBufExplMapWindowNavArrows = 1
-  let g:miniBufExplMaxSize = 0
-  let g:miniBufExplModSelTarget = 1
-  let g:miniBufExplTabWrap = 1
   let g:miniBufExplUseSingleClick = 1
-  let g:miniBufExplCheckDupeBufs = 0
+  let g:miniBufExplTabWrap = 1
+  let g:miniBufExplSetUT = 1
 
-  autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
-  autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleActive cterm=bold ctermbg=28 gui=bold guibg=#368736
-  autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleChangedActive cterm=bold ctermbg=124 gui=bold guibg=#cc5653
-  autocmd VimEnter,BufRead,BufNewFile * highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
-  autocmd VimEnter,BufRead,BufNewFile * highlight MBEChanged ctermbg=88 guibg=#913d3b
+  highlight link MBENormal Comment
+  highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
+  highlight MBEVisibleActiveNormal cterm=bold ctermbg=28 gui=bold guibg=#368736
+  highlight MBEVisibleActiveChanged cterm=bold ctermbg=124 gui=bold guibg=#cc5653
+  highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
+  highlight MBEChanged ctermbg=88 guibg=#913d3b
+  let g:did_minibufexplorer_syntax_inits = 1
   " }}}
 
   " neocomplcache
