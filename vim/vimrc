@@ -673,7 +673,46 @@
   if index(g:pathogen_disabled, 'powerline') == -1
     set runtimepath+=~/.dotfiles/vim/bundle/powerline/powerline/bindings/vim
 
+    let g:powerline_theme_overrides__default = {
+      \ "segment_data": {
+        \ "line_percent": {
+          \ "args": { "gradient": 0 }
+        \ },
+        \ "mode": {
+          \ "args": {
+            \ "override": {
+              \ "n" : " n ",
+              \ "no": " n·oper ",
+              \ "v" : "visual",
+              \ "V" : "v·line",
+              \ "^V": "v·block",
+              \ "s" : "select",
+              \ "S" : "s·line",
+              \ "^S": "s·block",
+              \ "i" : "insert",
+              \ "R" : "replace",
+              \ "Rv": "v·replace",
+              \ "c" : "cmd",
+              \ "cv": "vim·ex",
+              \ "ce": "ex",
+              \ "r" : "prompt",
+              \ "rm": "more",
+              \ "r?": "confirm",
+              \ "!" : "!"
+            \ }
+          \ }
+        \ },
+        \ "modified_indicator": {
+          \ "args": { "text": "+" }
+        \ }
+      \ }
+    \ }
+
     if !has('gui_running')
+      let g:powerline_theme_overrides__default['segment_data']['line_current_symbol'] = {
+        \ "contents": "LN"
+      \ }
+
       let g:powerline_config_overrides = {
         \ "common": {
           \ "dividers": {
