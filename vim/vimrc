@@ -437,7 +437,8 @@
   nnoremap <silent> ,F :call ToggleFolding()<CR>
 
   " ,g - grep the current file
-  let &grepprg = "ack --noheading --nocolor -H"
+  let &grepprg = "ack --noheading --nocolor --with-filename --column"
+
   function! GrepCurrentFile()
     if expand('%') == ''
       echo "Can't grep unsaved file."
