@@ -29,10 +29,9 @@
     call add(g:pathogen_disabled, 'fuzzyfinder')
   endif
 
-  " Powerline and Gundo require Vim 7.3 and Python
+  " Powerline requires Vim 7.3 and Python
   if v:version < '703' || !has('python')
     call add(g:pathogen_disabled, 'powerline')
-    call add(g:pathogen_disabled, 'gundo')
   endif
 
   " Disable neocomplcache for SSH sessions
@@ -566,8 +565,8 @@
   " rails
   hi! link rubyRailsARMethod Statement
 
-  " gundo
-  nnoremap <silent> ,u :GundoToggle<CR>
+  " undotree
+  nnoremap <silent> ,u :UndotreeToggle<CR>
 
   " closetag
   autocmd BufEnter * runtime scripts/closetag.vim
