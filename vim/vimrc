@@ -12,6 +12,7 @@
   call add(g:pathogen_disabled, 'session')
 
   " TODO delete these?
+  call add(g:pathogen_disabled, 'unite')
   call add(g:pathogen_disabled, 'fuzzyfinder')
   call add(g:pathogen_disabled, 'yankring')
 
@@ -106,15 +107,6 @@
 " Display Settings
 " {{{
 
-  if &term == 'screen-bce'
-    " enable 256 color support for screen
-    set t_Co=256
-
-    " don't clear screen on exit
-    "set t_ti=
-    "set t_te=
-  endif
-
   " syntax highlighting
   syntax on
   if has('conceal')
@@ -174,7 +166,7 @@
 
   " window titles
   set title
-  if &term == 'screen-bce' || &term == 'rxvt-unicode'
+  if match($TERM, '^screen-') == 0
     set t_ts=k
     set t_fs=\
   endif
@@ -445,6 +437,7 @@
   nnoremap <silent> ,F :call ToggleFolding()<CR>
 
   " ,g - grep the current file
+  let &grepprg = "ack --noheading --nocolor -H"
   function! GrepCurrentFile()
     if expand('%') == ''
       echo "Can't grep unsaved file."
@@ -599,16 +592,29 @@
   vmap <C-a> [egv
   vmap <C-z> ]egv
 
-  " ctrlp finder
+  " unite
+  if index(g:pathogen_disabled, 'unite') == -1
+    let g:unite_source_rec_async_command = 'ack --noheading --nocolor -f'
+    nnoremap <silent> ,f :Unite -complete -start-insert file_rec/async:!<CR>
+    nnoremap <silent> ,b :Unite -start-insert buffer<CR>
+    nnoremap <silent> ,l :Unite -start-insert line<CR>
+
+    let g:unite_source_history_yank_enable = 1
+    nnoremap <silent> ,y :Unite -start-insert history/yank<CR>
+  end
+
+  " ctrlp
   " {{{
   if index(g:pathogen_disabled, 'ctrlp') == -1
-    let g:ctrlp_map = ',f'
     let g:ctrlp_match_window_bottom = 0
     let g:ctrlp_match_window_reversed = 0
     let g:ctrlp_clear_cache_on_exit = 0
-    let g:ctrlp_default_input = 1
+    "let g:ctrlp_default_input = 1
+    let g:ctrlp_root_markers = [ 'Rakefile', 'Gemfile' ]
 
+    let g:ctrlp_map = ',f'
     nnoremap <silent> ,b :CtrlPBuffer<CR>
+    nnoremap <silent> ,l :CtrlPLine<CR>
   end
   " }}}
 
@@ -631,29 +637,6 @@
   autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
 
   nnoremap <silent> ,i :IndentGuidesToggle<CR>
-  " }}}
-
-  " nerd tree
-  " {{{
-  if index(g:pathogen_disabled, 'nerdtree') == -1
-    let g:NERDChristmasTree = 1
-    let g:NERDTreeQuitOnOpen = 1
-    let g:NERDTreeDirArrows = 1
-
-    nnoremap <silent> ,x :NERDTreeToggle<CR>
-  endif
-  " }}}
-
-  " conque
-  " {{{
-  if index(g:pathogen_disabled, 'conque') == -1
-    autocmd FileType conque_term match none
-    let g:ConqueTerm_StartMessages = 0
-
-    command! Sh ConqueTermSplit bash --login
-    command! Irb ConqueTermSplit irb
-    command! Py ConqueTermSplit ipython
-  endif
   " }}}
 
   " yankring
@@ -749,7 +732,7 @@
   end
   " }}}
 
-  " mini buffer explorer
+  " minibufexplorer
   " {{{
   let g:miniBufExplSplitBelow = 0
   let g:miniBufExplUseSingleClick = 1
@@ -771,44 +754,52 @@
     let g:neocomplcache_enable_at_startup = 1
     let g:neocomplcache_enable_auto_select = 1
     let g:neocomplcache_enable_smart_case = 1
-    let g:neocomplcache_enable_camel_case_completion = 1
-    let g:neocomplcache_enable_underbar_completion = 1
+    let g:neocomplcache_auto_completion_start_length = 2
 
     let g:neocomplcache_source_disable = {
       \ 'syntax_complete': 1,
     \ }
-
-    let g:neocomplcache_auto_completion_start_length = 2
 
     if !exists('g:neocomplcache_omni_patterns')
       let g:neocomplcache_omni_patterns = {}
     endif
 
     let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-    let g:neocomplcache_omni_patterns.php = '[^. \t]->\h\w*\|\h\w*::'
-    let g:neocomplcache_omni_patterns.c = '\%(\.\|->\)\h\w*'
-    let g:neocomplcache_omni_patterns.cpp = '\h\w*\%(\.\|->\)\h\w*\|\h\w*::'
+    let g:neocomplcache_omni_patterns.php  = '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+    let g:neocomplcache_omni_patterns.c    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+    let g:neocomplcache_omni_patterns.cpp  = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
 
     " Recommended key-mappings.
-    " <CR>: cancel popup and save indent.
-    inoremap <expr><CR>  neocomplcache#cancel_popup() . "\<CR>"
+    " <CR>: close popup and save indent.
+    inoremap <silent> <CR> <C-r>=neocomplcache#smart_close_popup()<CR><CR>
+    " <TAB>: completion.
+    inoremap <expr><TAB>  pumvisible() ? "\<C-y>" : "\<TAB>"
     " <C-h>, <BS>: close popup and delete backword char.
     inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
     inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
     inoremap <expr><C-y>  neocomplcache#close_popup()
     inoremap <expr><C-e>  neocomplcache#cancel_popup()
 
-    " use <Tab> for autocompletion
-    function! TabWrapper(...)
-      if pumvisible()
-        " complete the word
-        return "\<C-y>"
-      else
-        " popup is closed, pass on the tab
-        return "\t"
-      endif
-    endfunction
-    autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
+    " " Recommended key-mappings.
+    " " <CR>: cancel popup and save indent.
+    " inoremap <expr> <CR> neocomplcache#cancel_popup() . "\<CR>"
+    " " <C-h>, <BS>: close popup and delete backword char.
+    " inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
+    " inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
+    " inoremap <expr><C-y>  neocomplcache#close_popup()
+    " inoremap <expr><C-e>  neocomplcache#cancel_popup()
+
+    " " use <Tab> for autocompletion
+    " function! TabWrapper(...)
+    "   if pumvisible()
+    "     " complete the word
+    "     return "\<C-y>"
+    "   else
+    "     " popup is closed, pass on the tab
+    "     return "\t"
+    "   endif
+    " endfunction
+    " autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
   endif
   " }}}
 

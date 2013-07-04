@@ -1,3 +1,8 @@
+if exists("g:loaded_complete_tokens") || &cp
+  finish
+endif
+let g:loaded_complete_tokens = 1
+
 autocmd FileType ruby,eruby,javascript,css,scss,puppet,c,cs,cpp,php inoremap <buffer> <CR> <C-R>=CompleteTokens()<CR>
 
 let g:complete_tokens = {
