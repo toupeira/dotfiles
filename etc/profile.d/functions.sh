@@ -66,10 +66,10 @@ function gvi.add {
   fi
 }
 
-# Ack wrapper to edit files matching a pattern (using Vim)
-function ack.edit {
+# Ag wrapper to edit files matching a pattern (using Vim)
+function ag.edit {
   [ "$1" = "-l" ] && shift
-  local files=`ack -l "$@"`
+  local files=`ag -l "$@"`
   if [ -n "$files" ]; then
     if [ -n "$DISPLAY" -a -z "$SSH_CONNECTION" ]; then
       gvim $files
@@ -81,13 +81,13 @@ function ack.edit {
   fi
 }
 
-# Ack wrapper to search through a Gem folder inside a Rails project
-function ack.rails {
+# Ag wrapper to search through a Gem folder inside a Rails project
+function ag.rails {
   local gem="$1"
   local path=`bundle show "$gem"` || return $?
   shift
 
-  ack "$@" "$path"
+  ag "$@" "$path"
 }
 
 # GVim wrapper to pass a file to a local instance

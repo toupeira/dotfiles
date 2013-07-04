@@ -3,6 +3,8 @@
 --ignore-dir
 	tmp
 --type-add
+	txt=.txt
+--type-add
 	js=.coffee
 --type-add
 	css=.sass,.scss

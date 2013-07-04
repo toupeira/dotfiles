@@ -2,7 +2,9 @@
 " {{{
 
   set nocompatible
-  let $LANG = "en"
+
+  let s:has_ag  = executable('ag')
+  let s:has_ack = executable('ack')
 
   " load all bundles
   runtime bundle/pathogen/autoload/pathogen.vim
@@ -12,7 +14,7 @@
   call add(g:pathogen_disabled, 'session')
 
   " TODO delete these?
-  call add(g:pathogen_disabled, 'unite')
+  call add(g:pathogen_disabled, 'ctrlp')
   call add(g:pathogen_disabled, 'fuzzyfinder')
   call add(g:pathogen_disabled, 'yankring')
 
@@ -437,7 +439,11 @@
   nnoremap <silent> ,F :call ToggleFolding()<CR>
 
   " ,g - grep the current file
-  let &grepprg = "ack --noheading --nocolor --with-filename --column"
+  if s:has_ag
+    let &grepprg = "ag --nogroup --nocolor"
+  elseif s:has_ack
+    let &grepprg = "ack --noheading --nocolor --with-filename --column"
+  endif
 
   function! GrepCurrentFile()
     if expand('%') == ''
@@ -595,13 +601,33 @@
 
   " unite
   if index(g:pathogen_disabled, 'unite') == -1
-    let g:unite_source_rec_async_command = 'ack --noheading --nocolor -f'
-    nnoremap <silent> ,f :Unite -complete -start-insert file_rec/async:!<CR>
-    nnoremap <silent> ,b :Unite -start-insert buffer<CR>
-    nnoremap <silent> ,l :Unite -start-insert line<CR>
-
+    let g:unite_data_directory = '~/.vim/tmp/unite'
+    let g:unite_source_rec_max_cache_files = 5000
     let g:unite_source_history_yank_enable = 1
-    nnoremap <silent> ,y :Unite -start-insert history/yank<CR>
+
+    if s:has_ag
+      let g:unite_source_rec_async_command = 'ag -l --nocolor .'
+    elseif s:has_ack
+      let g:unite_source_rec_async_command = 'ack -f --nofilter'
+    end
+
+    " use fuzzy matching for all sources
+    call unite#filters#matcher_default#use(['matcher_fuzzy'])
+    "call unite#filters#sorter_default#use(['sorter_rank'])
+
+    function! s:unite_buffers()
+      imap <buffer> <Tab> <CR>
+      inoremap <buffer> <C-c> <Esc>:bd!<CR>
+    endfunction
+
+    autocmd FileType unite call s:unite_buffers()
+
+    nnoremap <silent> ,f :Unite file:%:h         -auto-resize -start-insert<CR>
+    nnoremap <silent> ,F :Unite file_rec/async:! -auto-resize -start-insert<CR>
+    nnoremap <silent> ,m :Unite file_mru         -auto-resize -start-insert<CR>
+    nnoremap <silent> ,b :Unite buffer           -auto-resize -start-insert<CR>
+    nnoremap <silent> ,l :Unite line             -auto-resize -start-insert<CR>
+    nnoremap <silent> ,y :Unite history/yank     -auto-resize -start-insert<CR>
   end
 
   " ctrlp
@@ -680,9 +706,9 @@
       let g:powerline_theme_overrides__default = {
         \ 'segment_data': {
           \ 'line_current_symbol': {
-              \ 'contents': "LN ",
-          \ },
-        \ },
+              \ 'contents': "LN "
+          \ }
+        \ }
       \ }
 
       let g:powerline_config_overrides = {
@@ -695,24 +721,6 @@
       \ }
       " }}}
     end
-
-    " let Powerline_cache_enabled = 1
-    " if Powerline_cache_enabled == 0
-    "   call system('rm -f ~/.vim/tmp/powerline.*.cache')
-    " end
-
-    " let Powerline_theme = 'desertink'
-    " let Powerline_colorscheme = 'desertink'
-
-    " if $POWERLINE_SYMBOLS != ""
-    "   let Powerline_symbols = $POWERLINE_SYMBOLS
-    " elseif has('gui_running')
-    "   let Powerline_symbols = 'fancy'
-    " else
-    "   let Powerline_symbols = 'unicode'
-    " end
-
-    " let Powerline_cache_file = expand('~/.vim/tmp/powerline.'.Powerline_symbols.'.cache')
   end
   " }}}
 
