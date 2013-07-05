@@ -205,6 +205,7 @@
   set shiftround
 
   " matching
+  set matchpairs=(:),{:},[:],<:>
   set showmatch
   runtime macros/matchit.vim
   let b:match_ignorecase = 1
@@ -579,6 +580,10 @@
   vmap <C-a> [egv
   vmap <C-z> ]egv
 
+  " delimitmate
+  let g:delimitMate_quotes = "\" ' ` * | %"
+  autocmd FileType vim let b:delimitMate_quotes = "' ` * | %"
+
   " unite
   if index(g:pathogen_disabled, 'unite') == -1
     let g:unite_data_directory = '~/.vim/tmp/unite'
@@ -623,7 +628,7 @@
     autocmd FileType unite call s:unite_buffers()
 
     function! UniteWrapper(action)
-      return ":\<C-u>Unite -no-split -auto-resize -start-insert " . a:action . "\<CR>"
+      return ":\<C-u>Unite -no-split -start-insert " . a:action . "\<CR>"
     endfunction
 
     " <Space> - switch buffers, open most recently edited files, and recursively find files in the current project root
@@ -790,33 +795,12 @@
     " <CR>: close popup and save indent.
     inoremap <silent> <CR> <C-r>=neocomplcache#smart_close_popup()<CR><CR>
     " <TAB>: completion.
-    inoremap <expr><TAB>  pumvisible() ? "\<C-y>" : "\<TAB>"
+    inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
     " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-    inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-    inoremap <expr><C-y>  neocomplcache#close_popup()
-    inoremap <expr><C-e>  neocomplcache#cancel_popup()
-
-    " " Recommended key-mappings.
-    " " <CR>: cancel popup and save indent.
-    " inoremap <expr> <CR> neocomplcache#cancel_popup() . "\<CR>"
-    " " <C-h>, <BS>: close popup and delete backword char.
-    " inoremap <expr><C-h> neocomplcache#smart_close_popup()."\<C-h>"
-    " inoremap <expr><BS> neocomplcache#smart_close_popup()."\<C-h>"
-    " inoremap <expr><C-y>  neocomplcache#close_popup()
-    " inoremap <expr><C-e>  neocomplcache#cancel_popup()
-
-    " " use <Tab> for autocompletion
-    " function! TabWrapper(...)
-    "   if pumvisible()
-    "     " complete the word
-    "     return "\<C-y>"
-    "   else
-    "     " popup is closed, pass on the tab
-    "     return "\t"
-    "   endif
-    " endfunction
-    " autocmd VimEnter * inoremap <Tab> <C-R>=TabWrapper()<CR>
+    inoremap <expr> <C-h> neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-h>"
+    inoremap <expr> <C-y> neocomplcache#close_popup()
+    inoremap <expr> <C-e> neocomplcache#cancel_popup()
   endif
   " }}}
 
