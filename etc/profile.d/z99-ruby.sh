@@ -44,6 +44,11 @@ function bundle_exec {
   local command="$1"
   shift
 
+  # override user name when running Capistrano (for Airbrake + NewRelic)
+  if [ "$command" = "cap" -a "$USER" = "toupeira" ]; then
+    export USER="markus"
+  fi
+
   # look for a .bundle directory
   while [ ! -d "$pwd/.bundle" ]; do
     pwd=${pwd%/*}
