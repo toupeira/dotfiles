@@ -13,20 +13,9 @@
   " session doesn't work with minibufexpl
   call add(g:pathogen_disabled, 'session')
 
-  " TODO delete these?
-  call add(g:pathogen_disabled, 'tagbar')
-  call add(g:pathogen_disabled, 'ctrlp')
-  call add(g:pathogen_disabled, 'fuzzyfinder')
-
   " neocomplcache requires Vim 7.2
   if v:version < '702'
     call add(g:pathogen_disabled, 'neocomplcache')
-  endif
-
-  " FuzzyFinder/L9 require Vim 7.2 and floating-point support
-  if v:version < '702' || !has('float')
-    call add(g:pathogen_disabled, 'l9')
-    call add(g:pathogen_disabled, 'fuzzyfinder')
   endif
 
   " Powerline requires Vim 7.3 and Python
@@ -325,7 +314,8 @@
 
   " shortcuts for diff
   nnoremap du :diffupdate<CR>
-  nnoremap dn ]c
+  nnoremap dj ]c
+  nnoremap dk [c
 
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
@@ -644,33 +634,6 @@
     nnoremap <silent><expr> ,t UniteWrapper('outline')
   end
 
-  " ctrlp
-  " {{{
-  if index(g:pathogen_disabled, 'ctrlp') == -1
-    let g:ctrlp_match_window_bottom = 0
-    let g:ctrlp_match_window_reversed = 0
-    let g:ctrlp_clear_cache_on_exit = 0
-    "let g:ctrlp_default_input = 1
-    let g:ctrlp_root_markers = [ 'Rakefile', 'Gemfile' ]
-
-    let g:ctrlp_map = ',f'
-    nnoremap <silent> ,b :CtrlPBuffer<CR>
-    nnoremap <silent> ,l :CtrlPLine<CR>
-  end
-  " }}}
-
-  " fuzzy finder
-  " {{{
-  if index(g:pathogen_disabled, 'fuzzyfinder') == -1
-    let g:fuf_keyOpenSplit  = '<C-x>'
-    let g:fuf_keyOpenVsplit = '<C-v>'
-
-    nnoremap <silent> ,b :FufBuffer<CR>
-    nnoremap <silent> ,f :FufFileWithCurrentBufferDir<CR>
-    nnoremap <silent> ,l :FufLine<CR>
-  end
-  " }}}
-
   " indent guides
   " {{{
   let g:indent_guides_auto_colors = 0
@@ -737,21 +700,6 @@
   if has('unix') && exists("$DISPLAY")
     let g:netrw_browsex_viewer = 'xdg-open'
   endif
-  " }}}
-
-  " tagbar
-  " {{{
-  if index(g:pathogen_disabled, 'tagbar') == -1
-    let g:tagbar_width = 31
-    let g:tagbar_autofocus = 1
-    let g:tagbar_sort = 0
-    let g:tagbar_compact = 1
-    let g:tagbar_expand = 1
-    let g:tagbar_singleclick = 1
-    let g:tagbar_usearrows = 1
-
-    nnoremap <silent> ,t :TagbarToggle<CR>
-  end
   " }}}
 
   " minibufexplorer

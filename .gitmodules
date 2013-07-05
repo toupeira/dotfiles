@@ -25,18 +25,9 @@
 [submodule "vim/bundle/unimpaired"]
 	path = vim/bundle/unimpaired
 	url = https://github.com/tpope/vim-unimpaired.git
-[submodule "vim/bundle/l9"]
-	path = vim/bundle/l9
-	url = https://github.com/vim-scripts/L9.git
-[submodule "vim/bundle/fuzzyfinder"]
-	path = vim/bundle/fuzzyfinder
-	url = https://github.com/toupeira/vim-fuzzyfinder.git
 [submodule "vim/bundle/minibufexpl"]
 	path = vim/bundle/minibufexpl
 	url = https://github.com/fholgado/minibufexpl.vim.git
-[submodule "vim/bundle/tagbar"]
-	path = vim/bundle/tagbar
-	url = https://github.com/majutsushi/tagbar
 [submodule "vim/bundle/rails"]
 	path = vim/bundle/rails
 	url = https://github.com/tpope/vim-rails.git
@@ -79,9 +70,6 @@
 [submodule "vim/bundle/tabular"]
 	path = vim/bundle/tabular
 	url = https://github.com/godlygeek/tabular.git
-[submodule "vim/bundle/ctrlp"]
-	path = vim/bundle/ctrlp
-	url = https://github.com/kien/ctrlp.vim.git
 [submodule "vim/bundle/ruby"]
 	path = vim/bundle/ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
@@ -112,3 +100,6 @@
 [submodule "vim/bundle/unite-outline"]
 	path = vim/bundle/unite-outline
 	url = https://github.com/Shougo/unite-outline.git
+[submodule "vim/bundle/numbers"]
+	path = vim/bundle/numbers
+	url = https://github.com/myusuf3/numbers.vim.git
