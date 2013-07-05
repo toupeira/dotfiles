@@ -23,6 +23,7 @@ alias rgrep='grep -r --exclude=.svn --exclude=.git --exclude=.*.swp'
 alias cgrep='GREP_OPTIONS= grep'
 alias mime='file -i'
 alias killbg='kill -9 %1'
+alias ag='ag --smart-case'
 
 # debian aliases
 alias pkget='aptitude -Z install'

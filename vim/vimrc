@@ -414,9 +414,9 @@
 
   " ,g - grep the current file
   if s:has_ag
-    let &grepprg = "ag --nogroup"
+    let &grepprg = "ag --smart-case --nogroup"
   elseif s:has_ack
-    let &grepprg = "ack --noheading --with-filename --column"
+    let &grepprg = "ack --smart-case --noheading --with-filename --column"
   endif
 
   function! GrepCurrentFile()
