@@ -600,7 +600,7 @@
     call unite#filters#sorter_default#use(['sorter_rank'])
 
     " only show the 5 most recently edited files
-    call unite#custom#source('file_mru', 'max_candidates', 5)
+    call unite#custom#source('file_mru', 'max_candidates', 10)
 
     function! s:unite_buffers()
       " use ; to leave insert mode
