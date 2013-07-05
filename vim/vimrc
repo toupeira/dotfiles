@@ -16,7 +16,6 @@
   " TODO delete these?
   call add(g:pathogen_disabled, 'ctrlp')
   call add(g:pathogen_disabled, 'fuzzyfinder')
-  call add(g:pathogen_disabled, 'yankring')
 
   " neocomplcache requires Vim 7.2
   if v:version < '702'
@@ -439,9 +438,9 @@
 
   " ,g - grep the current file
   if s:has_ag
-    let &grepprg = "ag --nogroup --nocolor"
+    let &grepprg = "ag --nogroup"
   elseif s:has_ack
-    let &grepprg = "ack --noheading --nocolor --with-filename --column"
+    let &grepprg = "ack --noheading --with-filename --column"
   endif
 
   function! GrepCurrentFile()
@@ -604,29 +603,50 @@
     let g:unite_source_rec_max_cache_files = 5000
     let g:unite_source_history_yank_enable = 1
 
+    " speed up recursive file searches
     if s:has_ag
-      let g:unite_source_rec_async_command = 'ag -l --nocolor .'
+      let g:unite_source_rec_async_command = 'ag -l .'
     elseif s:has_ack
       let g:unite_source_rec_async_command = 'ack -f --nofilter'
     end
 
-    " use fuzzy matching for all sources
+    " enable fuzzy matching for all sources
     call unite#filters#matcher_default#use(['matcher_fuzzy'])
-    "call unite#filters#sorter_default#use(['sorter_rank'])
+
+    " sort results by match rank
+    call unite#filters#sorter_default#use(['sorter_rank'])
+
+    " only show the 5 most recently edited files
+    call unite#custom#source('file_mru', 'max_candidates', 5)
 
     function! s:unite_buffers()
-      imap <buffer> <Tab> <CR>
-      inoremap <buffer> <C-c> <Esc>:bd!<CR>
+      " use <Tab> to narrow down paths and open files
+      nmap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
+      imap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
+
+      " use <C-k> to choose custom actions
+      nmap <silent><buffer> <C-k> <Plug>(unite_choose_action)
+      imap <silent><buffer> <C-k> <Plug>(unite_choose_action)
+
+      " use <C-c> to close Unite
+      imap <silent><buffer> <C-c> <Esc>:call unite#all_quit_session()<CR>
     endfunction
 
+    " automatically map the above keys in all Unite buffers
     autocmd FileType unite call s:unite_buffers()
 
-    nnoremap <silent> ,f :Unite file:%:h         -auto-resize -start-insert<CR>
-    nnoremap <silent> ,F :Unite file_rec/async:! -auto-resize -start-insert<CR>
-    nnoremap <silent> ,m :Unite file_mru         -auto-resize -start-insert<CR>
-    nnoremap <silent> ,b :Unite buffer           -auto-resize -start-insert<CR>
-    nnoremap <silent> ,l :Unite line             -auto-resize -start-insert<CR>
-    nnoremap <silent> ,y :Unite history/yank     -auto-resize -start-insert<CR>
+    function! UniteWrapper(action)
+      return ":Unite -auto-resize -start-insert " . a:action . "\<CR>"
+    endfunction
+
+    " switch buffers, open most recently edited files, and recursively find files in the current project root
+    nnoremap <silent><expr> ,f UniteWrapper('buffer file_mru file_rec/async:!')
+
+    " open a file using shell-style directory completion, using the current file's directory as starting point
+    nnoremap <silent><expr> ,F UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h'))
+
+    " show yank history
+    nnoremap <silent><expr> ,y UniteWrapper('history/yank')
   end
 
   " ctrlp
@@ -663,18 +683,6 @@
   autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
 
   nnoremap <silent> ,i :IndentGuidesToggle<CR>
-  " }}}
-
-  " yankring
-  " {{{
-  if index(g:pathogen_disabled, 'yankring') == -1
-    let g:yankring_history_file = '.vim_yankring_history'
-    if !has('clipboard')
-      let g:yankring_manual_clipboard_check = 0
-    endif
-
-    nnoremap <silent> ,y :YRShow<CR>
-  endif
   " }}}
 
   " syntastic

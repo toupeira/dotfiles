@@ -42,7 +42,7 @@
 		"left": [
 			{
 				"name": "mode",
-				"exclude_modes": []
+				"exclude_modes": ["nc"]
 			},
 			{
 				"name": "paste_indicator",
