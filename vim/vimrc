@@ -571,7 +571,7 @@
   vmap <C-z> ]egv
 
   " delimitmate
-  let g:delimitMate_quotes = "\" ' ` * | %"
+  let g:delimitMate_quotes = "\" ' ` | %"
   autocmd FileType vim let b:delimitMate_quotes = "' ` * | %"
 
   " unite
