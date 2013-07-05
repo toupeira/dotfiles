@@ -109,3 +109,6 @@
 [submodule "vim/bundle/undotree"]
 	path = vim/bundle/undotree
 	url = https://github.com/mbbill/undotree.git
+[submodule "vim/bundle/unite-outline"]
+	path = vim/bundle/unite-outline
+	url = https://github.com/h1mesuke/unite-outline.git

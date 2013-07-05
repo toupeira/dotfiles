@@ -14,6 +14,7 @@
   call add(g:pathogen_disabled, 'session')
 
   " TODO delete these?
+  call add(g:pathogen_disabled, 'tagbar')
   call add(g:pathogen_disabled, 'ctrlp')
   call add(g:pathogen_disabled, 'fuzzyfinder')
 
@@ -420,22 +421,6 @@
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
 
-  " ,F - toggle syntax folding
-  function! ToggleFolding()
-    if &foldcolumn == 0
-      if &filetype == 'python'
-        setlocal foldmethod=indent
-      else
-        setlocal foldmethod=syntax
-      endif
-      setlocal foldcolumn=3
-    else
-      setlocal foldcolumn=0 foldmethod=marker
-    endif
-  endfunction
-
-  nnoremap <silent> ,F :call ToggleFolding()<CR>
-
   " ,g - grep the current file
   if s:has_ag
     let &grepprg = "ag --nogroup"
@@ -521,9 +506,6 @@
   " ,p - previous buffer
   nnoremap <silent> ,p :bprevious<CR>
 
-  " ,P - toggle paste
-  nnoremap <silent> ,P :set paste!<CR>
-
   " ,r - reload current buffer
   nnoremap <silent> ,r :edit<CR>
 
@@ -601,6 +583,7 @@
   if index(g:pathogen_disabled, 'unite') == -1
     let g:unite_data_directory = '~/.vim/tmp/unite'
     let g:unite_source_rec_max_cache_files = 5000
+    let g:unite_source_file_mru_long_limit = 5000
     let g:unite_source_history_yank_enable = 1
 
     " speed up recursive file searches
@@ -620,15 +603,19 @@
     call unite#custom#source('file_mru', 'max_candidates', 5)
 
     function! s:unite_buffers()
+      " use ; to leave insert mode
+      inoremap ; <Esc>
+
       " use <Tab> to narrow down paths and open files
       nmap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
       imap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
 
-      " use <C-k> to choose custom actions
-      nmap <silent><buffer> <C-k> <Plug>(unite_choose_action)
-      imap <silent><buffer> <C-k> <Plug>(unite_choose_action)
+      " use <C-a> to choose custom actions
+      nmap <silent><buffer> <C-a> <Plug>(unite_choose_action)
+      imap <silent><buffer> <C-a> <Plug>(unite_choose_action)
 
       " use <C-c> to close Unite
+      nmap <silent><buffer> <C-c> :call unite#all_quit_session()<CR>
       imap <silent><buffer> <C-c> <Esc>:call unite#all_quit_session()<CR>
     endfunction
 
@@ -636,17 +623,20 @@
     autocmd FileType unite call s:unite_buffers()
 
     function! UniteWrapper(action)
-      return ":Unite -auto-resize -start-insert " . a:action . "\<CR>"
+      return ":\<C-u>Unite -no-split -auto-resize -start-insert " . a:action . "\<CR>"
     endfunction
 
-    " switch buffers, open most recently edited files, and recursively find files in the current project root
-    nnoremap <silent><expr> ,f UniteWrapper('buffer file_mru file_rec/async:!')
+    " <Space> - switch buffers, open most recently edited files, and recursively find files in the current project root
+    nnoremap <silent><expr> <Space> UniteWrapper('buffer file_mru:all file_rec/async:!')
 
-    " open a file using shell-style directory completion, using the current file's directory as starting point
-    nnoremap <silent><expr> ,F UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h'))
+    " ,f - open a file using shell-style directory completion, using the current file's directory as starting point
+    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h'))
 
-    " show yank history
+    " ,y - show yank history
     nnoremap <silent><expr> ,y UniteWrapper('history/yank')
+
+    " ,t - show outline
+    nnoremap <silent><expr> ,t UniteWrapper('outline')
   end
 
   " ctrlp
@@ -667,7 +657,7 @@
   " fuzzy finder
   " {{{
   if index(g:pathogen_disabled, 'fuzzyfinder') == -1
-    let g:fuf_keyOpenSplit = '<C-x>'
+    let g:fuf_keyOpenSplit  = '<C-x>'
     let g:fuf_keyOpenVsplit = '<C-v>'
 
     nnoremap <silent> ,b :FufBuffer<CR>
@@ -712,17 +702,17 @@
       " {{{
       let g:powerline_theme_overrides__default = {
         \ 'segment_data': {
-          \ 'line_current_symbol': {
-              \ 'contents': "LN "
-          \ }
+          \ 'branch': { 'before': "@ " },
+          \ 'line_current_symbol': { 'contents': "" },
+          \ 'readonly_indicator': { 'args': { 'text': '#'} }
         \ }
       \ }
 
       let g:powerline_config_overrides = {
         \ "common": {
           \ "dividers": {
-            \ "left":  { "hard": " ", "soft": "| " },
-            \ "right": { "hard": " ", "soft": " |" }
+            \ "left":  { "hard": " ", "soft": "> " },
+            \ "right": { "hard": " ", "soft": " <" }
           \ }
         \ }
       \ }
