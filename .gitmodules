@@ -100,3 +100,6 @@
 [submodule "vim/bundle/unite-outline"]
 	path = vim/bundle/unite-outline
 	url = https://github.com/Shougo/unite-outline.git
+[submodule "vim/bundle/ansiesc"]
+	path = vim/bundle/ansiesc
+	url = https://github.com/vim-scripts/AnsiEsc.vim.git
