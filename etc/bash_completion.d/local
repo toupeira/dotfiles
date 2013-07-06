@@ -3,17 +3,9 @@
 complete -o bashdefault -o default -F _root_command sudo watch
 complete -o bashdefault -o default -F _command start
 complete -F _pgrep psgrep
-
-. /usr/share/bash-completion/completions/git
-__git_complete dt _git
-
 complete -F _gem18 gem
 
-_projects() {
-  COMPREPLY=( $(compgen -W "`find ~/src -mindepth 1 -maxdepth 1 -name "${COMP_WORDS[COMP_CWORD]}*" -printf '%f '`") )
-}
-complete -F _projects src
-
+# Debian completions
 _packages_available() {
   COMPREPLY=( $(compgen -W "`apt-cache pkgnames ${COMP_WORDS[COMP_CWORD]} 2>/dev/null`") )
 }
@@ -23,3 +15,43 @@ _packages_installed() {
   COMPREPLY=( $(compgen -W "`dglob ${COMP_WORDS[COMP_CWORD]}`") )
 }
 complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
+
+# Git completions
+
+. /usr/share/bash-completion/completions/git
+__git_complete dt _git
+
+
+_git_edit() {
+  __git_has_doubledash && return
+
+  local cmdline="$COMP_LINE"
+  local cmd="${cmdline%% *}"
+
+  if [ "`type -t $cmd`" = "alias" ]; then
+    cmdline=`alias $cmd | cut -d\' -f2`
+    cmd="${cmdline%% *}"
+  fi
+
+  argument=`echo "$cmdline" | awk '{ print $2 }'`
+  if [ "$cmd" = "src" -a -n "$argument" ]; then
+    pushd ~/src/"$argument" >/dev/null
+
+    COMPREPLY=( $( compgen -f -- $cur ) )
+    if [ -z "$COMPREPLY" ]; then
+      git-edit --complete $cur
+    fi
+    popd >/dev/null
+  else
+    COMPREPLY=( $( compgen -f -- $cur ) )
+  fi
+}
+
+_src_projects() {
+  if [ "$COMP_CWORD" = "1" ]; then
+    COMPREPLY=( $(compgen -W "`find ~/src -mindepth 1 -maxdepth 1 -name "${COMP_WORDS[COMP_CWORD]}*" -printf '%f '`") )
+  else
+    _git_ed
+  fi
+}
+complete -F _src_projects src

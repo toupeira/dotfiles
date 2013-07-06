@@ -440,7 +440,7 @@ function run {
           fi
         done
 
-        sensible-vim "${files[@]}"
+        sensible-editor "${files[@]}"
       else
         git ignore-errors $command "$@"
       fi

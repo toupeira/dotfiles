@@ -7,7 +7,7 @@ else
 fi
 
 if whatis "$page" &>/dev/null; then
-  exec sensible-vim +"Man $*" +"wincmd o"
+  exec sensible-editor +"Man $*" +"wincmd o"
 else
   exec whatis "$page"
 fi

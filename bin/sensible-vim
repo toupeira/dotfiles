@@ -1,6 +1,11 @@
 #!/bin/sh
 if [ -n "$DISPLAY" -a -z "$SSH_CONNECTION" ] && which gvim &>/dev/null; then
-  exec gvim "$@"
+  if [ -t 0 ]; then
+    unset options
+  else
+    options="-f"
+  fi
+  exec gvim $options "$@"
 else
   exec vim "$@"
 fi

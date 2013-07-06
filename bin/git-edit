@@ -1,50 +1,145 @@
 #!/bin/bash
 
-function msg {
-  local msg="$1"
-  local color=${2:-4}
-  local args="$3"
-  echo $args " [1;3${color}m>[0m $msg"
-}
+if [ "$1" = "--complete" ]; then
+  COMPLETE=1
+  shift
+else
+  unset COMPLETE
+fi
 
-function status  { msg "[1;37m$1[0m" 2; }
-function error   { msg "$1" 1; }
+# cursor movement
+SAVE=`echo -ne '\e[s'`
+RESTORE=`echo -ne '\e[u'`
+UP=`echo -ne '\e[1F'`
+ERASE=`echo -ne '\e[2K'`
+DOWN=`echo -ne '\e[1E'`
+HIDE=`echo -ne '\e[?25l'`
+SHOW=`echo -ne '\e[?25h'`
 
-function ask {
-  msg "[1;37m$1[0m [Y/n] " "${2:-6}" -n >&2
-  read
-  echo
-  [ "$REPLY" != "N" -a "$REPLY" != "n" ]
+# colors
+RESET=`echo -ne '\e[0m'`
+WHITE=`echo -ne '\e[1;37m'`
+RED=`echo -ne '\e[1;31m'`
+GREEN=`echo -ne '\e[1;32m'`
+YELLOW=`echo -ne '\e[1;33m'`
+CYAN=`echo -ne '\e[1;36m'`
+
+function sensible-echo {
+  if [ -n "$COMPLETE" ]; then
+    echo -ne "$@"
+    local count=`echo -ne "$@" | wc -l`
+    [ $count -eq 0 ] && echo -ne "$DOWN"
+  else
+    echo -e "$@"
+  fi
 }
 
 if [ $# -gt 0 ]; then
   # search for files matching the passed pattern
-  pattern="$1"
+  action="matching"
+  title=" for $GREEN\"$1\"$RESET"
+
+  pattern=`echo "$1" | sed -r 's|\.|.*|g' | sed -r 's|/|.*/|g'`
+
+  if [[ "$pattern" =~ .*#[0-9]+$ ]]; then
+    number=`echo "$pattern"  | sed -r 's/.*#([0-9]+)$/\1/'`
+    pattern=`echo "$pattern" | sed -r 's/#([0-9]+)$//'`
+  else
+    unset number
+  fi
+
   files=`ag -l --ignore db/archive . | egrep "$pattern" | sort`
 
-  if [ -z "$files" ]; then
-    error "No files found for pattern [1;37m\"$1\"[0m"
+  if [ -n "$number" ]; then
+    files=`echo "$files" | head -n "$number" | tail -1`
+  fi
+
+  display_files=`echo "$files" | sed -r "s|($pattern)|$GREEN\1$RESET|g"`
+
+  if [ -z "$files" -a -z "$COMPLETE" ]; then
+    sensible-echo " $RED>$RESET No matches for $GREEN\"$1\"$RESET"
     exit 1
   fi
 else
-  # look for changed files
-  git status
-  files=`git status -s | awk '{ print $2 }'`
-  [ -z "$files" ] && exit
+  # look for modified files
+  action="modified"
+  title=""
+
+  display_files=`git -c color.ui=always status -s`
+  files=`echo "$display_files" | awk '{ print $2 }'`
+  [ -z "$files" ] && git status && exit
 fi
 
-count=`echo "$files" | wc -l`
+lines=`tput lines`
+columns=`tput cols`
 
-if [ $count -eq 1 ]; then
+count=`echo "$files" | grep -c .`
+limit=$((lines - 5))
+
+if [ $# -gt 0 -a $count -gt $limit ]; then
+  display_files=`echo -e "$display_files" | head -n $limit`
+  size=$((limit + 1))
+else
+  size=$count
+fi
+
+let size+=3
+
+if [ $count -eq 1 -a -z "$COMPLETE" ]; then
+  echo -e " $GREEN>$RESET Editing $WHITE$files$RESET"
   sensible-vim "$files"
-elif [ $count -gt 1 ]; then
-  echo
+elif [ $count -gt 1 -o -n "$COMPLETE" ]; then
   dir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
-  status "Found `echo "$files" | wc -l` files in [1;36m$dir[1;37m:[0m"
-  echo "$files" | sed -r 's/^/    - /' | sed -r "s|($pattern)|[1;32m\1[0m|g"
-  echo
+  display_files=`echo -e "$display_files" | sed -r -e "s/$/$RESET/"` # -e "s/^(.{$((columns-4))}).{4,}$/\1.../"`
 
-  if ask "Edit?"; then
-    sensible-vim $files
+  if [ -n "$COMPLETE" ]; then
+    # save cursor position and restore on exit
+    echo -ne "$SAVE"
+    trap "echo -ne \"$RESTORE\"" 0 1 2 3 9 15
+    # hide the cursor and restore on exit
+    echo -ne "$HIDE"
+    trap "echo -ne \"$SHOW\"" 0 1 2 3 9 15
+
+    # erase everything except the current line
+    while [ $lines -gt 0 ]; do
+      let lines--
+
+      # move up a line
+      echo -ne "$UP"
+      # erase line
+      echo -ne "$ERASE"
+    done
+
+    # restore cursor position
+    echo -ne "$RESTORE"
+    # move up a line for each line to be displayed
+    echo -ne "\033[${size}F"
+  fi
+
+  sensible-echo
+  if [ $count -eq 0 ]; then
+    sensible-echo " $RED>$RESET No matches for $GREEN\"$1\"$RESET"
+  else
+    sensible-echo " $GREEN>$WHITE Found $YELLOW$count$WHITE $action files$title$WHITE in $CYAN[$dir]$RESET"
+    sensible-echo "$display_files" | nl -s '  ' | sed -r "s/^(\s*)([0-9]*)/\1$YELLOW[\2]$RESET/"
+
+    if [ $count -gt $limit ]; then
+      sensible-echo "           ($((count - limit)) more...)"
+    fi
+  fi
+
+  if [ -n "$COMPLETE" ]; then
+    echo -ne "$RESTORE"
+    exit
+  fi
+
+  echo -n " $GREEN>>>$RESET "
+  read
+  if [[ "$REPLY" =~ ^[0-9]+$ ]]; then
+    file=`echo "$files" | head -n "$REPLY" | tail -1`
+    echo -e " $GREEN>$RESET Editing $WHITE$file$RESET"
+    sensible-editor "$file"
+  else
+    sensible-editor $files
   fi
 fi

@@ -71,7 +71,7 @@ function ag.edit {
   [ "$1" = "-l" ] && shift
   local files=`ag -l "$@"`
   if [ -n "$files" ]; then
-    sensible-vim $files
+    sensible-editor $files
   else
     echo "No files found."
   fi

@@ -31,8 +31,8 @@ function add_path {
 }
 
 playlist=`mktemp /tmp/playlist.XXXXXX`
-trap "rm -f $playlist" 0 1 2 3 9 10 15
-trap "iecset audio on >/dev/null" 0 1 2 3 9 10 15
+trap "rm -f $playlist" 0 1 2 3 9 15
+trap "iecset audio on >/dev/null" 0 1 2 3 9 15
 rm -f $playlist
 
 mplayer="mplayer -playlist $playlist"
@@ -43,7 +43,7 @@ tail="cat"
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    -debug ) mplayer="echo $mplayer"; debug=1; trap - 0 1 2 3 9 10 15; shift;;
+    -debug ) mplayer="echo $mplayer"; debug=1; trap - 0 1 2 3 9 15; shift;;
     -aid|-vid|-sid) mplayer="$mplayer $1 $2"; shift 2;;
     -playlist ) cat "$2" >> $playlist; shift 2;;
     -volume ) mplayer="$mplayer -volume $2"; shift 2;;
