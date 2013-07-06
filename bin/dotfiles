@@ -227,7 +227,7 @@ function run {
     sync)
       if git ignore-errors status -s | grep -q .; then
         msg
-        git status --ignore-submodules
+        git status
         echo
         ask_abort
 
