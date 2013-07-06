@@ -113,9 +113,9 @@
   " statusline
   " {{{
   if index(g:pathogen_disabled, 'powerline') > -1
-    autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
-    autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
-    autocmd VimEnter,BufRead,BufNewFile * highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
+    autocmd VimEnter,Colorscheme * highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
+    autocmd VimEnter,Colorscheme * highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
+    autocmd VimEnter,Colorscheme * highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
 
     set statusline=
 
@@ -147,8 +147,8 @@
     \ if &l:cursorline | setlocal nocursorline | endif
 
   " highlight trailing whitespace
-  autocmd VimEnter,BufRead,BufNewFile * highlight Whitespace ctermbg=236 guibg=#333333
-  autocmd VimEnter,BufRead,BufNewFile * match Whitespace /\s\+$/
+  autocmd VimEnter,Colorscheme * highlight Whitespace ctermbg=236 guibg=#333333
+  autocmd VimEnter,Colorscheme * match Whitespace /\s\+$/
 
   " go to last cursor position when opening files
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") && &ft != 'gitcommit'
@@ -220,13 +220,13 @@
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd FileType crontab setlocal nobackup nowritebackup
 
-  autocmd BufEnter *.md setf markdown
-  autocmd BufEnter */bin/*.run setf sh
-  autocmd BufEnter *.inc,*.thtml setf php
-  autocmd BufEnter *.boo setf python
-  autocmd BufEnter Gemfile,*.plan setf ruby
-  autocmd BufEnter ~/.devilspie/* setf lisp
-  autocmd BufEnter *.pac setf javascript
+  autocmd BufNewFile,BufRead *.md setf markdown
+  autocmd BufNewFile,BufRead */bin/*.run setf sh
+  autocmd BufNewFile,BufRead *.inc,*.thtml setf php
+  autocmd BufNewFile,BufRead *.boo setf python
+  autocmd BufNewFile,BufRead Gemfile,*.plan setf ruby
+  autocmd BufNewFile,BufRead ~/.devilspie/* setf lisp
+  autocmd BufNewFile,BufRead *.pac setf javascript
 
   " Ruby syntax highlighting
   let g:ruby_operators = 1
@@ -550,6 +550,8 @@
   " tabular
   noremap ,a :Tabular /
   noremap ,a, :Tabular /, /l0<CR>
+  noremap ,a{ :Tabular /{<CR>
+  noremap ,a} :Tabular /}<CR>
   noremap ,a= :Tabular /=<CR>
   noremap ,a> :Tabular /=><CR>
   noremap ,a: :Tabular /:/l0r1<CR>
@@ -569,10 +571,6 @@
   " unimpaired
   vmap <C-a> [egv
   vmap <C-z> ]egv
-
-  " delimitmate
-  let g:delimitMate_quotes = "\" ' ` | %"
-  autocmd FileType vim let b:delimitMate_quotes = "' ` * | %"
 
   " unite
   if index(g:pathogen_disabled, 'unite') == -1
@@ -599,7 +597,7 @@
 
     function! s:unite_buffers()
       " use ; to leave insert mode
-      inoremap ; <Esc>
+      inoremap <silent><buffer> ; <Esc>
 
       " use <Tab> to narrow down paths and open files
       nmap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
@@ -617,30 +615,30 @@
     " automatically map the above keys in all Unite buffers
     autocmd FileType unite call s:unite_buffers()
 
-    function! UniteWrapper(action)
-      return ":\<C-u>Unite -no-split -start-insert " . a:action . "\<CR>"
+    function! UniteWrapper(action, arguments)
+      return ":\<C-u>Unite -no-split " . a:action . " " . a:arguments . "\<CR>"
     endfunction
 
     " <Space> - switch buffers, open most recently edited files, and recursively find files in the current project root
-    nnoremap <silent><expr> <Space> UniteWrapper('buffer file_mru:all file_rec/async:!')
+    nnoremap <silent><expr> <Space> UniteWrapper('buffer file_mru:all file_rec/async:!', '-start-insert')
 
     " ,f - open a file using shell-style directory completion, using the current file's directory as starting point
-    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h'))
+    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h'), '-start-insert')
 
     " ,y - show yank history
-    nnoremap <silent><expr> ,y UniteWrapper('history/yank')
+    nnoremap <silent><expr> ,y UniteWrapper('history/yank', '')
 
     " ,t - show outline
-    nnoremap <silent><expr> ,t UniteWrapper('outline')
+    nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
   end
 
   " indent guides
   " {{{
+  let g:indent_guides_enable_on_vim_startup = 1
   let g:indent_guides_auto_colors = 0
-  autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
-  autocmd VimEnter,BufRead,BufNewFile * highlight IndentGuidesEven ctermbg=236 guibg=#333333
-
-  nnoremap <silent> ,i :IndentGuidesToggle<CR>
+  let g:indent_guides_exclude_filetypes = [ 'text', 'conf', 'help', 'man', 'minibufexpl', 'unite' ]
+  autocmd VimEnter,Colorscheme * highlight IndentGuidesOdd  ctermbg=235 guibg=#2a2a2a
+  autocmd VimEnter,Colorscheme * highlight IndentGuidesEven ctermbg=236 guibg=#333333
   " }}}
 
   " syntastic

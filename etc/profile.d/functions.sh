@@ -71,11 +71,7 @@ function ag.edit {
   [ "$1" = "-l" ] && shift
   local files=`ag -l "$@"`
   if [ -n "$files" ]; then
-    if [ -n "$DISPLAY" -a -z "$SSH_CONNECTION" ]; then
-      gvim $files
-    else
-      vim $files
-    fi
+    sensible-vim $files
   else
     echo "No files found."
   fi
@@ -90,7 +86,7 @@ function ag.rails {
   ag "$@" "$path"
 }
 
-# GVim wrapper to pass a file to a local instance
+# GVim wrapper for SSH connections to pass a file to a local instance
 if [ -n "$SSH_CONNECTION" ]; then
   unalias gvi
 
@@ -134,21 +130,29 @@ if [ -n "$SSH_CONNECTION" ]; then
   }
 fi
 
-# Mount a loopback device
-function mount.loop {
-  mount="/mnt/loop"
-  [ -n "$2" ] && mount="$2"
+# Git wrapper for project directories
+function src {
+  local project="$1"
+  shift
 
-  if [ ! -n "$1" ]; then
-    echo "Usage: mount.loop IMAGE [MOUNTPOINT]"
+  if [ -z "$project" ]; then
+    echo "Usage: src PROJECT [GIT-COMMAND] [GIT-ARGS]"
     return 255
-  elif [ ! -f "$1" ]; then
-    echo "Image $1 not found."
+  fi
+
+  local path=~/src/"$project"
+
+  if [ -f "$path" ]; then
+    xdg-open "$path"
+  elif [ ! -d "$path" ]; then
+    echo "$path does not exist"
     return 1
-  elif mountpoint -q "$mount"; then
-    echo "$mount is already mounted."
-    return 1
+  elif [ -n "$1" ]; then
+    pushd "$path" >/dev/null
+    git "$@"
+    popd >/dev/null
   else
-    sudo mount -v -o loop "$1" "$mount" | tail -1
+    # switch to the project directory if no arguments were passed
+    cd "$path" || return 1
   fi
 }

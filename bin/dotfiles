@@ -440,11 +440,7 @@ function run {
           fi
         done
 
-        if [ -n "$DISPLAY" ] && which gvim &>/dev/null; then
-          gvim "${files[@]}"
-        else
-          vim "${files[@]}"
-        fi
+        sensible-vim "${files[@]}"
       else
         git ignore-errors $command "$@"
       fi

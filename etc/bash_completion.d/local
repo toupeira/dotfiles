@@ -4,16 +4,22 @@ complete -o bashdefault -o default -F _root_command sudo watch
 complete -o bashdefault -o default -F _command start
 complete -F _pgrep psgrep
 
-#complete -o bashdefault -o default -o nospace -F __git__wrap__git_main -W 'sync up update ca commitall init install add' dotfiles dt
+. /usr/share/bash-completion/completions/git
+__git_complete dt _git
 
 complete -F _gem18 gem
 
-_available() {
+_projects() {
+  COMPREPLY=( $(compgen -W "`find ~/src -mindepth 1 -maxdepth 1 -name "${COMP_WORDS[COMP_CWORD]}*" -printf '%f '`") )
+}
+complete -F _projects src
+
+_packages_available() {
   COMPREPLY=( $(compgen -W "`apt-cache pkgnames ${COMP_WORDS[COMP_CWORD]} 2>/dev/null`") )
 }
-complete -F _available pkget
+complete -F _packages_available pkget
 
-_installed() {
+_packages_installed() {
   COMPREPLY=( $(compgen -W "`dglob ${COMP_WORDS[COMP_CWORD]}`") )
 }
-complete -F _installed pkglist pkgpurge pkgremove debbugs debpackages
+complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages

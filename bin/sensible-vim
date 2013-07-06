@@ -1,0 +1,6 @@
+#!/bin/sh
+if [ -n "$DISPLAY" -a -z "$SSH_CONNECTION" ] && which gvim &>/dev/null; then
+  exec gvim "$@"
+else
+  exec vim "$@"
+fi

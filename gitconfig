@@ -88,5 +88,10 @@
 	std = stash drop
 	stl = stash list
 
+	# shell wrapper, pass the command through
+	sh = "!f() { \"$@\"; }; f"
+
+	# try to run a GUI, or tig on terminals
 	g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"
-	ed = "!f() { local files=`git status -s`; [ $? -eq 0 ] || return $?; gvim `echo \"$files\" | awk '{ print $2}'`; }; f"
+
+	ed = edit

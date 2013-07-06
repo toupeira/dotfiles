@@ -17,6 +17,7 @@
       "args": {
         "override": {
           "n" : " n ",
+          "nc": "   ",
           "no": " n·oper ",
           "v" : "visual",
           "V" : "v·line",
@@ -42,16 +43,16 @@
 		"left": [
 			{
 				"name": "mode",
-				"exclude_modes": ["nc"]
+				"exclude_modes": []
 			},
 			{
 				"name": "paste_indicator",
-				"exclude_modes": ["nc"],
+				"exclude_modes": [],
 				"priority": 10
 			},
 			{
 				"name": "branch",
-				"exclude_modes": ["nc"],
+				"exclude_modes": [],
 				"priority": 30
 			},
 			{
