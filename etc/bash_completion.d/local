@@ -17,8 +17,6 @@ _packages_installed() {
 complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
 
 # Git completions
-
-. /usr/share/bash-completion/completions/git
 __git_complete dotfiles _git
 __git_complete dt _git
 
@@ -45,12 +43,14 @@ _git_edit() {
   fi
 
   if [ -z "$cur" ]; then
-    git-edit --complete
-    COMPREPLY=( '' )
+    if git-edit --complete; then
+      COMPREPLY=( '' )
+    fi
   else
-    COMPREPLY=( $(compgen -f -- $cur) )
+    COMPREPLY=( $(compgen -o default -- $cur) )
     if [ -z "$COMPREPLY" ]; then
       git-edit --complete $cur
+      COMPREPLY=( '' )
     fi
   fi
 

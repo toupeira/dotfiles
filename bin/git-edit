@@ -9,17 +9,28 @@ if [ "$1" = "--complete" ]; then
 fi
 
 # colors
-RESET=`echo -ne '\e[0m'`
-WHITE=`echo -ne '\e[1;37m'`
-RED=`echo -ne '\e[1;31m'`
-GREEN=`echo -ne '\e[1;32m'`
-YELLOW=`echo -ne '\e[1;33m'`
-CYAN=`echo -ne '\e[1;36m'`
+RESET=$(echo -ne '\e[0m')
+WHITE=$(echo -ne '\e[1;37m')
+RED=$(echo -ne '\e[1;31m')
+GREEN=$(echo -ne '\e[1;32m')
+YELLOW=$(echo -ne '\e[1;33m')
+CYAN=$(echo -ne '\e[1;36m')
+
+# cursor movement
+SAVE=$(echo -ne '\e[s')
+RESTORE=$(echo -ne '\e[u')
+ERASE=$(echo -ne '\e[2K')
 
 if [[ "$1" =~ ^[0-9]+$ ]]; then
   # use the number as the selected choice
   choice="$1"
   shift
+fi
+
+if [ -n "$complete" ]; then
+  echo
+  echo -ne "$SAVE"
+  echo -n " $GREEN>$WHITE Loading...$RESET"
 fi
 
 if [ $# -gt 0 ]; then
@@ -39,7 +50,7 @@ if [ $# -gt 0 ]; then
     result=" $GREEN>$WHITE Found $YELLOW$count$WHITE matches in $CYAN[$dir]$RESET"
     #result="$CYAN[$dir] $YELLOW$count$WHITE matches"
   else
-    result=" $RED>$RESET No matches for $GREEN\"$1\"$RESET in $CYAN[$dir]$RESET"
+    result=" $RED>$RESET No matches for $GREEN'$1'$RESET in $CYAN[$dir]$RESET"
   fi
 else
   # look for changed files
@@ -50,7 +61,7 @@ else
   if [ -z "$files" ]; then
     result=" $RED>$WHITE No changes in $CYAN[$dir]$RESET"
   else
-    result=" $GREEN>$WHITE Found $YELLOW$count$WHITE changed files in $CYAN[$dir]$RESET"
+    result=" $GREEN>$WHITE Found $YELLOW$count$WHITE changes in $CYAN[$dir]$RESET"
   fi
 fi
 
@@ -72,11 +83,14 @@ if [ -z "$complete" ]; then
     sensible-editor $files
   fi
 else
+  echo -ne "$RESTORE"
+  echo -ne "$ERASE"
+
   exec 1>&2
 
   columns=`tput cols`
   lines=`tput lines`
-  limit=$((lines - 5))
+  limit=$((lines - 4))
   [ $count -lt $limit ] && limit=$count
 
   # trim results to number of lines
@@ -87,7 +101,8 @@ else
   # trim lines to number of columns
   display_files=`echo -e "$display_files" | sed -r -e "s/$/$RESET/" -e "s/^(.{$((columns-8))}).{8,}$/\1.../"`
 
-  echo -e "\n\n$result"
+  [ $# -gt 0 -o $count -gt 0 ] && echo
+  echo -e "$result"
   if [ $count -gt 0 ]; then
     echo "$display_files" | nl -s ' ' | sed -r "s/^\s{$((2 - ${#limit}))}(\s*)([0-9]*)/\1$YELLOW[\2]$RESET/"
   fi
@@ -96,10 +111,14 @@ else
     echo "      ($((count - limit)) more...)"
   fi
 
-  echo -ne " $GREEN>>>$RESET "
-  if [ $# -eq 0 ]; then
-    echo -n "$choice"
+  if [ $# -gt 0 -o $count -gt 0 ]; then
+    echo -ne " $GREEN>>>$RESET "
+    if [ $# -eq 0 ]; then
+      echo -n "$choice"
+    else
+      echo -n "$1"
+    fi
   else
-    echo -n "$1"
+    exit 1
   fi
 fi

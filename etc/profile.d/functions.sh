@@ -156,3 +156,12 @@ function sw {
     cd "$path" || return 1
   fi
 }
+
+# Helper to create an alias for sw with Git completion
+function sw_alias {
+  local alias="$1"
+  local project="$2"
+
+  alias $alias="sw $project"
+  __git_complete $alias _git
+}
