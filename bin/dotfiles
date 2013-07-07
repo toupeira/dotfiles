@@ -430,20 +430,7 @@ function run {
       git push -v --progress "$@"
       ;;
     *)
-      if [ -f "$DOTFILES/$command" ]; then
-        files=( "$DOTFILES/$command" )
-        for file in "$@"; do
-          if [ -f "$file" ]; then
-            files=( "${files[@]}" "$DOTFILES/$file" )
-          else
-            usage
-          fi
-        done
-
-        sensible-editor "${files[@]}"
-      else
-        git ignore-errors $command "$@"
-      fi
+      git ignore-errors $command "$@"
       ;;
   esac
 }

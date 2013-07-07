@@ -314,8 +314,6 @@
 
   " shortcuts for diff
   nnoremap du :diffupdate<CR>
-  nnoremap dj ]c
-  nnoremap dk [c
 
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>

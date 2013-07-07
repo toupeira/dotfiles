@@ -130,13 +130,13 @@ if [ -n "$SSH_CONNECTION" ]; then
   }
 fi
 
-# Git wrapper for project directories
-function src {
+# Switch project directories and run Git commands in them
+function sw {
   local project="$1"
   shift
 
   if [ -z "$project" ]; then
-    echo "Usage: src PROJECT [GIT-COMMAND] [GIT-ARGS]"
+    echo "Usage: sw PROJECT [GIT-COMMAND] [GIT-ARGS]"
     return 255
   fi
 
