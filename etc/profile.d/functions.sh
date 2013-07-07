@@ -133,20 +133,24 @@ fi
 # Switch project directories and run Git commands in them
 function sw {
   if [[ "$1" =~ ^(st|status)$ ]]; then
-    for dir in `find ~/src -mindepth 1 -maxdepth 1 -type d`; do
+    unset has_changes
+
+    for dir in ~/src/*; do
       [ -d "$dir/.git" ] || continue
 
       pushd "$dir" >/dev/null
-      changes=`git status -s | grep -c .`
+      local changes=`git status -s | grep -c .`
+      local has_changes=1
 
       if [ $changes -gt 0 ]; then
         echo
-        echo -e " \e[1;32m>\e[1;33m $changes\e[1;37m changes in \e[1;36m[$PWD]\e[0m" | sed -r "s|$HOME|~|"
+        echo -e " \e[1;32m>\e[1;33m $changes\e[1;37m changes in \e[1;36m[`realpath "$PWD"`]\e[0m" | sed -r "s|$HOME|~|"
         git -c color.ui=always "$@" | sed -r 's/^/    /'
       fi
       popd >/dev/null
     done
-    echo
+
+    [ -n "$has_changes" ] && echo
     return
   fi
 
