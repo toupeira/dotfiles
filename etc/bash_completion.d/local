@@ -37,10 +37,16 @@ _git_edit() {
   if [ "$cmd" = "src" -a -n "$argument" ]; then
     pushd ~/src/"$argument" >/dev/null
 
-    COMPREPLY=( $( compgen -f -- $cur ) )
-    if [ -z "$COMPREPLY" ]; then
-      git-edit --complete $cur
+    if [ -z "$cur" ]; then
+      git-edit --complete
+      COMPREPLY=( '' )
+    else
+      COMPREPLY=( $( compgen -f -- $cur ) )
+      if [ -z "$COMPREPLY" ]; then
+        git-edit --complete $cur
+      fi
     fi
+
     popd >/dev/null
   else
     COMPREPLY=( $( compgen -f -- $cur ) )
