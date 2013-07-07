@@ -17,8 +17,8 @@ _packages_installed() {
 complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
 
 # Git completions
-__git_complete dotfiles _git
-__git_complete dt _git
+__git_complete_nodefault dotfiles _git
+__git_complete_nodefault dt _git
 
 _git_edit() {
   __git_has_doubledash && return
@@ -43,14 +43,11 @@ _git_edit() {
   fi
 
   if [ -z "$cur" ]; then
-    if git-edit --complete; then
-      COMPREPLY=( '' )
-    fi
+    git-edit --complete
   else
     COMPREPLY=( $(compgen -o default -- $cur) )
     if [ -z "$COMPREPLY" ]; then
       git-edit --complete $cur
-      COMPREPLY=( '' )
     fi
   fi
 

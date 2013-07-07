@@ -163,5 +163,5 @@ function sw_alias {
   local project="$2"
 
   alias $alias="sw $project"
-  __git_complete $alias _git
+  __git_complete_nodefault $alias _git
 }

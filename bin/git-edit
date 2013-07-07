@@ -37,9 +37,9 @@ if [ $# -gt 0 ]; then
   # search for files matching the passed pattern
   pattern=`echo "$1" | sed -r 's|\.|.*|g' | sed -r 's|/|.*/|g'`
 
-  if [[ "$pattern" =~ \#[0-9]+$ ]]; then
-    choice=`echo "$pattern"  | sed -r 's/.*#([0-9]+)$/\1/'`
-    pattern=`echo "$pattern" | sed -r 's/#[0-9]+$//'`
+  if [[ "$pattern" =~ \#[0-9]*$ ]]; then
+    choice=`echo "$pattern"  | sed -r 's/.*#([0-9]*)$/\1/'`
+    pattern=`echo "$pattern" | sed -r 's/#[0-9]*$//'`
   fi
 
   files=`ag -l --ignore db/archive . | egrep "$pattern" | sort`
@@ -48,9 +48,8 @@ if [ $# -gt 0 ]; then
 
   if [ -n "$files" ]; then
     result=" $GREEN>$WHITE Found $YELLOW$count$WHITE matches in $CYAN[$dir]$RESET"
-    #result="$CYAN[$dir] $YELLOW$count$WHITE matches"
   else
-    result=" $RED>$RESET No matches for $GREEN'$1'$RESET in $CYAN[$dir]$RESET"
+    result=" $RED>$WHITE No matches for $GREEN'$1'$WHITE in $CYAN[$dir]$RESET"
   fi
 else
   # look for changed files
@@ -101,24 +100,22 @@ else
   # trim lines to number of columns
   display_files=`echo -e "$display_files" | sed -r -e "s/$/$RESET/" -e "s/^(.{$((columns-8))}).{8,}$/\1.../"`
 
-  [ $# -gt 0 -o $count -gt 0 ] && echo
+  echo
   echo -e "$result"
-  if [ $count -gt 0 ]; then
+  if [ $count -eq 1 -a -n "$choice" ]; then
+    echo "$display_files" | sed -r "s/^/    $YELLOW[$choice]$RESET /"
+  elif [ $count -gt 0 ]; then
     echo "$display_files" | nl -s ' ' | sed -r "s/^\s{$((2 - ${#limit}))}(\s*)([0-9]*)/\1$YELLOW[\2]$RESET/"
   fi
 
   if [ $count -gt $limit ]; then
-    echo "      ($((count - limit)) more...)"
+    echo "          ($((count - limit)) more...)"
   fi
 
-  if [ $# -gt 0 -o $count -gt 0 ]; then
-    echo -ne " $GREEN>>>$RESET "
-    if [ $# -eq 0 ]; then
-      echo -n "$choice"
-    else
-      echo -n "$1"
-    fi
+  echo -ne " $GREEN>>>$RESET "
+  if [ $# -eq 0 ]; then
+    echo -n "$choice"
   else
-    exit 1
+    echo -n "$1"
   fi
 fi
