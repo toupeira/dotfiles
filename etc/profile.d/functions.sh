@@ -132,15 +132,33 @@ fi
 
 # Switch project directories and run Git commands in them
 function sw {
+  if [[ "$1" =~ ^(st|status)$ ]]; then
+    for dir in `find ~/src -mindepth 1 -maxdepth 1 -type d`; do
+      [ -d "$dir/.git" ] || continue
+
+      pushd "$dir" >/dev/null
+      changes=`git status -s | grep -c .`
+
+      if [ $changes -gt 0 ]; then
+        echo
+        echo -e " \e[1;32m>\e[1;33m $changes\e[1;37m changes in \e[1;36m[$PWD]\e[0m" | sed -r "s|$HOME|~|"
+        git -c color.ui=always "$@" | sed -r 's/^/    /'
+      fi
+      popd >/dev/null
+    done
+    echo
+    return
+  fi
+
   local project="$1"
+  local path=~/src/"$project"
   shift
 
   if [ -z "$project" ]; then
     echo "Usage: sw PROJECT [GIT-COMMAND] [GIT-ARGS]"
+    echo "       sw status"
     return 255
   fi
-
-  local path=~/src/"$project"
 
   if [ -f "$path" ]; then
     xdg-open "$path"
