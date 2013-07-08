@@ -9,9 +9,6 @@ if [ $bmajor -gt 4 ] || [ $bmajor -eq 4 -a $bminor -ge 1 ]; then
     if shopt -q progcomp && [ -r /etc/bash_completion ]; then
         # Source Git helpers
         . /usr/share/bash-completion/completions/git
-        function __git_complete_nodefault {
-          complete  -o nospace -F __git_wrap__git_main "$1"
-        }
 
         # Source completion code.
         . /etc/bash_completion

@@ -17,8 +17,8 @@ _packages_installed() {
 complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
 
 # Git completions
-__git_complete_nodefault dotfiles _git
-__git_complete_nodefault dt _git
+__git_complete dotfiles _git
+__git_complete dt _git
 
 _src_projects() {
   COMPREPLY=( $(compgen -W "`find ~/src -mindepth 1 -maxdepth 1 -name "${COMP_WORDS[COMP_CWORD]}*" -printf '%f '`") )
@@ -28,6 +28,9 @@ complete -F _src_projects src
 _git_edit() {
   local cmdline="$COMP_LINE"
   local cmd="${cmdline%% *}"
+
+  # disable default completion
+  compopt +o bashdefault +o default
 
   # expand aliases
   while [ "`type -t $cmd`" = "alias" ]; do

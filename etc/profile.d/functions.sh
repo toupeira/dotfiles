@@ -186,5 +186,5 @@ function src_alias {
   local project="$2"
 
   alias $alias="src $project"
-  __git_complete_nodefault $alias _git
+  __git_complete $alias _git
 }
