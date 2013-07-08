@@ -3,17 +3,6 @@ function has {
   which "$1" &>/dev/null
 }
 
-# Define PATH first so we can reliably check for commands
-export PATH="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/games:/var/lib/gems/1.8/bin"
-if [ -d ~/bin ]; then
-  export PATH="$PATH":~/bin
-fi
-
-# Add OS X system paths
-if [ -x /usr/libexec/path_helper ]; then
-  eval `/usr/libexec/path_helper -s`
-fi
-
 # Define helper variable for interactive and login shells
 [ -n "$BASH_VERSION" -a -n "$PS1" ] && BASH_INTERACTIVE=1
 [ -n "$BASH_INTERACTIVE" ] && shopt -q login_shell && BASH_LOGIN=1
