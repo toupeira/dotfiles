@@ -112,12 +112,13 @@ function match_git_log {
 
 function match_git_diff {
   type="diff"
-  matches=`$GIT diff-tree --no-commit-id --name-only -r "${commit:-HEAD}" --stat 2>/dev/null`
+  local diff="$GIT diff-tree -r --stat --no-commit-id ${commit:-HEAD}"
+  matches=`$diff --name-only`
 
   if [ $? -ne 0 ]; then
     title="Unknown or ambiguous commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
-    display_matches=`echo "$matches" | truncate`
+    display_matches=`$diff --color | fgrep '|' | sed -r 's/^\s*//'`
     title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT" | truncate $COLUMNS`
   else
     title="No changes in commit $YELLOW[$commit]$WHITE"
@@ -125,7 +126,7 @@ function match_git_diff {
 }
 
 function display_matches {
-  echo "$title $GRAY[$type] [$pattern]$RESET"
+  echo "$title $GRAY[$type]$RESET"
   if [ $count -gt 0 ]; then
     if [ $count -eq 1 -a -n "$choice" ]; then
       display_matches=$(echo "$display_matches" | sed -r "s/^/`printf "%6d" $choice` /")
