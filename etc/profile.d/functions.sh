@@ -131,8 +131,8 @@ if [ -n "$SSH_CONNECTION" ]; then
 fi
 
 # Switch project directories and run Git commands in them
-function sw {
-  if [[ "$1" =~ ^(st|status)$ ]]; then
+function src {
+  if [[ "$1" =~ ^(|st|status)$ ]]; then
     unset has_changes
 
     for dir in ~/src/*; do
@@ -160,8 +160,8 @@ function sw {
   shift
 
   if [ -z "$project" ]; then
-    echo "Usage: sw PROJECT [GIT-COMMAND] [GIT-ARGS]"
-    echo "       sw status"
+    echo "Usage: src PROJECT [GIT-COMMAND] [GIT-ARGS]"
+    echo "       src status"
     return 255
   fi
 
@@ -180,11 +180,11 @@ function sw {
   fi
 }
 
-# Helper to create an alias for sw with Git completion
-function sw_alias {
+# Helper to create an alias for src with Git completion
+function src_alias {
   local alias="$1"
   local project="$2"
 
-  alias $alias="sw $project"
+  alias $alias="src $project"
   __git_complete_nodefault $alias _git
 }

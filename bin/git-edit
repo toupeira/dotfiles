@@ -11,7 +11,7 @@ fi
 
 # default Git options
 GIT="git -c color.ui=always"
-GIT_FORMAT="%C(yellow)[%h] %C(white)%s%C(green)%d%Creset"
+GIT_FORMAT="%C(yellow)[%h] %C(white)%s"
 GIT_LOG=10
 
 # colors
@@ -24,6 +24,8 @@ CYAN=$(echo -ne '\e[1;36m')
 GRAY=$(echo -ne '\e[1;30m')
 
 # cursor movement
+COLUMNS=`tput cols`
+LINES=`tput lines`
 SAVE=$(echo -ne '\e[s')
 RESTORE=$(echo -ne '\e[u')
 ERASE=$(echo -ne '\e[2K')
@@ -36,6 +38,12 @@ function is_git {
   git rev-parse &>/dev/null
 }
 
+function truncate {
+  local length="${1:-$((COLUMNS - 8))}"
+
+  sed -r "s/^(.{$((length - 4))}).{4,}$/\1.../"
+}
+
 function match_files {
   type="files"
 
@@ -44,7 +52,7 @@ function match_files {
   matches=`ag -l --ignore db/archive . --file-search-regex "$pattern" | sort`
 
   if [ -n "$matches" ]; then
-    display_matches=`echo "$matches" | sed -r "s|($pattern)|$RED\1$RESET|g"`
+    display_matches=`echo "$matches" | truncate | sed -r "s|($pattern)|$RED\1$RESET|g"`
     title="Found %count matches in %dir"
   else
     title="No matches in %dir"
@@ -69,8 +77,7 @@ function match_git_log {
   matches=`$log --pretty=format:"%h"`
 
   if [ -n "$matches" ]; then
-    display_matches=`$log --pretty=format:"$GIT_FORMAT"`
-
+    display_matches=`$log --pretty=format:"$GIT_FORMAT" | truncate $((COLUMNS + 2))`
     title="Latest commits in %dir"
   else
     title="No commits in %dir"
@@ -84,8 +91,8 @@ function match_git_diff {
   if [ $? -ne 0 ]; then
     title="Unknown commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
-    display_matches="$matches"
-    title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT"`
+    display_matches=`echo "$matches" | truncate`
+    title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT" | truncate $COLUMNS`
   else
     title="No changes in commit $YELLOW[$commit]$WHITE"
   fi
@@ -153,7 +160,7 @@ elif [ "${input:0:1}" = "@" ]; then
   match_git_log
 
   if [ -n "$commit" ]; then
-    if [[ "$commit" =~ ^[0-8]{,3}$ ]]; then
+    if [[ "$commit" =~ ^[0-9]{,3}$ ]]; then
       commit=`echo "$matches" | pick $commit`
     fi
     match_git_diff
@@ -178,9 +185,7 @@ else
 fi
 
 # trim results to number of lines
-columns=`tput cols`
-lines=`tput lines`
-[ -v limit ] || limit=$((lines - 8))
+[ -v limit ] || limit=$((LINES - 8))
 [ $count -lt $limit ] && limit=$count
 
 if [ $count -gt $limit -a -z "$showall" ]; then
