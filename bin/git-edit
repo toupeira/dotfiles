@@ -78,11 +78,11 @@ function match_files {
   type="files"
 
   # expand '.' to '.*' and '/' to '.*/
-  pattern=`echo "$pattern" | sed -r -e 's|\.|.*|g' -e 's|/|.*/|g'`
+  pattern=`echo "$pattern" | sed -r -e 's#(^|[^\])\.($|[^\*])#\1.*\2#g' -e 's#(^|[^/])/#\1.*/#g'`
   matches=`ag -l --ignore db/archive . --file-search-regex "$pattern" | sort`
 
   if [ -n "$matches" ]; then
-    display_matches=`echo "$matches" | truncate | sed -r "s|($pattern)|$RED\1$RESET|g"`
+    display_matches=`echo "$matches" | truncate | sed -r "s#($pattern)#$RED\1$RESET#g"`
     title="Found %count matches in %dir"
   else
     title="No matches in %dir"
