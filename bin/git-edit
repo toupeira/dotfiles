@@ -179,6 +179,10 @@ if ! is_git; then
   match_files
 elif [ -z "$pattern" ]; then
   match_git_status
+  if [ -z "$matches" ]; then
+    match_git_log
+    [ -n "$complete" ] && echo -n "@" >&3
+  fi
 elif [ "${input:0:1}" = "@" ]; then
   commit="$pattern"
   GIT_LOG=0
