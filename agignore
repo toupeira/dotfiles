@@ -1,1 +1,14 @@
+# binaries
 *.pdf
+*.avi
+*.mkv
+*.wmv
+
+# home
+tmp
+src/archive
+Dropbox
+
+# Rails
+public/system
+public/assets

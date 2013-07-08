@@ -1,6 +1,7 @@
 #!/bin/bash
 
-unset type matches display_matches count complete choice commit
+unset type matches display_matches count
+unset complete showall choice commit
 dir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
 
 if [ "$1" = "--complete" ]; then
@@ -20,6 +21,7 @@ RED=$(echo -ne '\e[1;31m')
 GREEN=$(echo -ne '\e[1;32m')
 YELLOW=$(echo -ne '\e[1;33m')
 CYAN=$(echo -ne '\e[1;36m')
+GRAY=$(echo -ne '\e[1;30m')
 
 # cursor movement
 SAVE=$(echo -ne '\e[s')
@@ -30,13 +32,18 @@ function pick {
   head -n "$1" | tail -n 1
 }
 
+function is_git {
+  git rev-parse &>/dev/null
+}
+
 function match_files {
+  type="files"
+
   # expand '.' to '.*' and '/' to '.*/
-  pattern=`echo "$pattern" | sed -r 's|\.|.*|g' | sed -r 's|/|.*/|g'`
-  matches=`ag -l --ignore db/archive . | egrep "$pattern" | sort`
+  pattern=`echo "$pattern" | sed -r -e 's|\.|.*|g' -e 's|/|.*/|g'`
+  matches=`ag -l --ignore db/archive . --file-search-regex "$pattern" | sort`
 
   if [ -n "$matches" ]; then
-    type="files"
     display_matches=`echo "$matches" | sed -r "s|($pattern)|$RED\1$RESET|g"`
     title="Found %count matches in %dir"
   else
@@ -45,11 +52,11 @@ function match_files {
 }
 
 function match_git_status {
+  type="status"
   display_matches=`$GIT status -s`
-  matches=`echo "$display_matches" | awk '{ print $2 }'`
+  matches=`echo "$display_matches" | sed -r 's/.* ([^ ]+)$/\1/'`
 
   if [ -n "$matches" ]; then
-    type="git_status"
     title="Found %count changes in %dir"
   else
     title="No changes in %dir"
@@ -57,11 +64,11 @@ function match_git_status {
 }
 
 function match_git_log {
+  type="log"
   local log="$GIT log -n $GIT_LOG --all"
   matches=`$log --pretty=format:"%h"`
 
   if [ -n "$matches" ]; then
-    type="git_log"
     display_matches=`$log --pretty=format:"$GIT_FORMAT"`
 
     title="Latest commits in %dir"
@@ -71,12 +78,12 @@ function match_git_log {
 }
 
 function match_git_diff {
+  type="diff"
   matches=`$GIT diff-tree --no-commit-id --name-only -r "${commit:-HEAD}" --stat 2>/dev/null`
 
   if [ $? -ne 0 ]; then
     title="Unknown commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
-    type="git_diff"
     display_matches="$matches"
     title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT"`
   else
@@ -85,7 +92,7 @@ function match_git_diff {
 }
 
 function display_matches {
-  echo "$title"
+  echo "$title $GRAY[$type]$RESET"
   if [ $count -gt 0 ]; then
     if [ $count -eq 1 -a -n "$choice" ]; then
       echo "$display_matches" | sed -r "s/^/    $YELLOW[$choice]$RESET /"
@@ -93,14 +100,15 @@ function display_matches {
       echo "$display_matches" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]*)/ \1$YELLOW[\2]$RESET/"
     fi
 
-    if [ $count -gt $limit ]; then
-      echo "          ($((count - limit)) more...)"
+    if [ $count -gt $limit -a -z "$showall" ]; then
+      echo "         ($((count - limit)) more...)"
     fi
   fi
 }
 
-# show a loading prompt
+# show a loading prompt for auto-completion
 if [ -n "$complete" ]; then
+  echo
   echo
   echo -ne "$SAVE"
   echo -n " $GREEN>$WHITE Loading...$RESET"
@@ -109,6 +117,13 @@ fi
 input="$1"
 pattern="$1"
 choice="$2"
+
+# show all matches if the input ends with !
+if [ "${input:$((${#input} - 1))}" = "!" ]; then
+  showall=1
+  input="${input:0:$((${#input} - 1))}"
+  pattern="$input"
+fi
 
 if echo -n "$input" | egrep -q '(^|.*#)[0-9]*$'; then
   # use the given number as the selected choice
@@ -122,7 +137,9 @@ if echo -n "$input" | egrep -q '(^|.*#)[0-9]*$'; then
   fi
 fi
 
-if [ -z "$input" ]; then
+if ! is_git; then
+  match_files
+elif [ -z "$input" ]; then
   match_git_status
 elif [ "${input:0:1}" = "@" ]; then
   commit="$pattern"
@@ -163,15 +180,15 @@ fi
 # trim results to number of lines
 columns=`tput cols`
 lines=`tput lines`
-[ -v limit ] || limit=$((lines - 4))
+[ -v limit ] || limit=$((lines - 8))
 [ $count -lt $limit ] && limit=$count
 
-if [ $# -gt 0 -a $count -gt $limit ]; then
+if [ $count -gt $limit -a -z "$showall" ]; then
   display_matches=`echo -e "$display_matches" | head -n $limit`
 fi
 
-# trim lines to number of columns
-display_matches=`echo -e "$display_matches" | sed -r "s/^(.{$((columns-8))}).{8,}$/\1.../"`
+# trim line widhts to number of columns
+#display_matches=`echo "$display_matches" | sed -r "s/^(.{10}).{8,}\$/\1.../"`
 
 # select the given choice
 if [ -n "$choice" ]; then
@@ -184,19 +201,18 @@ if [ -n "$complete" ]; then
   # clear loading prompt
   echo -ne "$RESTORE"
   echo -ne "$ERASE"
-  echo
 
   display_matches
 
   echo -ne " $GREEN>>>$RESET $input"
 else
-  if [ $count -eq 0 -o "$type" = "git_log" ]; then
+  if [ $count -eq 0 -o "$type" = "log" ]; then
     display_matches
   elif [ $count -eq 1 ]; then
     echo -e " $GREEN>$RESET Editing $WHITE$matches$RESET"
     sensible-editor "$matches"
   else
-    read -p " $CYAN>$WHITE Edit $YELLOW$count$WHITE matches?$RESET [Y/n] "
+    read -p " $CYAN>$WHITE Edit $YELLOW$count$WHITE files?$RESET [Y/n] "
     [ "$REPLY" = "n" -o "$REPLY" = "N" ] && exit
     sensible-editor $matches
   fi

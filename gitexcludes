@@ -1,3 +1,15 @@
+# temporary files
+.DS_Store
+
+# Vim
 .*.sw?
 doc/tags
 doc/tags-*
+
+# Rails
+.bundle
+.sass-cache
+log/*.log
+tmp/**/*
+tmp/*.cache
+tmp/rspec_guard_result

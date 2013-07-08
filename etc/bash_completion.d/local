@@ -17,44 +17,56 @@ _packages_installed() {
 complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
 
 # Git completions
-__git_complete_nodefault dotfiles _git
-__git_complete_nodefault dt _git
+if has dotfiles; then
+  __git_complete_nodefault dotfiles _git
+  __git_complete_nodefault dt _git
+fi
 
-_git_edit() {
-  __git_has_doubledash && return
+if has sw; then
+  _sw_projects() {
+    COMPREPLY=( $(compgen -W "`find ~/src -mindepth 1 -maxdepth 1 -name "${COMP_WORDS[COMP_CWORD]}*" -printf '%f '`") )
+  }
+  complete -F _sw_projects sw
+fi
 
-  local cmdline="$COMP_LINE"
-  local cmd="${cmdline%% *}"
+if has git-edit; then
+  _git_edit() {
+    local cmdline="$COMP_LINE"
+    local cmd="${cmdline%% *}"
 
-  # expand aliases
-  while [ "`type -t $cmd`" = "alias" ]; do
-    cmdline=`alias $cmd | cut -d\' -f2`
-    cmd="${cmdline%% *}"
-  done
+    # expand aliases
+    while [ "`type -t $cmd`" = "alias" ]; do
+      cmdline=`alias $cmd | cut -d\' -f2`
+      cmd="${cmdline%% *}"
+    done
 
-  argument=`echo "$cmdline" | awk '{ print $2 }'`
-  if [ "$cmd" = "sw" -a -n "$argument" ]; then
-    pushd ~/src/"$argument" >/dev/null
-  elif [ "$cmd" = "dotfiles" ]; then
-    pushd ${DOTFILES:-~/.dotfiles} >/dev/null
-  else
-    COMPREPLY=( $(compgen -o default -- $cur) )
-    return
-  fi
-
-  if [ -z "$cur" ]; then
-    git-edit --complete
-  else
-    COMPREPLY=( $(compgen -o default -- $cur) )
-    if [ -z "$COMPREPLY" ]; then
-      git-edit --complete $cur
+    local argument=`echo "$cmdline" | awk '{ print $2 }'`
+    if [ "$cmd" = "sw" -a -n "$argument" ]; then
+      pushd ~/src/"$argument" >/dev/null
+      local popd=1
+    elif [ "$cmd" = "dotfiles" ]; then
+      pushd ${DOTFILES:-~/.dotfiles} >/dev/null
+      local popd=1
     fi
+
+    if [ -z "$cur" ]; then
+      git-edit --complete
+    else
+      COMPREPLY=( $(compgen -o default -- $cur) )
+      if [ -z "$COMPREPLY" ]; then
+        git-edit --complete $cur
+      fi
+    fi
+
+    [ -n "$popd" ] && popd >/dev/null
+  }
+
+  if has ed; then
+    _ed() {
+      cur=${COMP_WORDS[COMP_CWORD]}
+      _git_edit
+    }
+
+    complete -F _ed ed
   fi
-
-  popd >/dev/null
-}
-
-_sw_projects() {
-  COMPREPLY=( $(compgen -W "`find ~/src -mindepth 1 -maxdepth 1 -name "${COMP_WORDS[COMP_CWORD]}*" -printf '%f '`") )
-}
-complete -F _sw_projects sw
+fi
