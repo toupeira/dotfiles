@@ -1,43 +1,8 @@
 #!/bin/bash
 
-unset type matches display_matches count
+unset type matches pretty_matches common_match count
 unset list showall complete expand choice commit
 dir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
-
-function usage {
-  echo "Usage: git-edit [-l|--list] [-a|--all] [-c|--complete] [PATTERN] [CHOICE]"
-  exit 255
-}
-
-for arg in "$@"; do
-  if [ "${arg:0:1}" = "-" ]; then
-    case "$arg" in
-      -l|--list)
-        list=1
-        shift
-        ;;
-      -a|--all)
-        showall=1
-        shift
-        ;;
-      -c|--complete)
-        complete=1
-        shift
-        exec 3>&1
-        exec 1>&2
-        ;;
-      -e|--expand)
-        expand=1
-        shift
-        ;;
-      -*)
-        usage
-        ;;
-    esac
-  else
-    break
-  fi
-done
 
 # default Git options
 GIT="git -c color.ui=always"
@@ -58,7 +23,180 @@ COLUMNS=`tput cols`
 LINES=`tput lines`
 SAVE=$(echo -ne '\e[s')
 RESTORE=$(echo -ne '\e[u')
+SHOW=$(echo -ne '\e[?25h')
+HIDE=$(echo -ne '\e[?25l')
 ERASE=$(echo -ne '\e[2K')
+BACK=$(echo -ne '\e[D')
+
+function main {
+  for arg in "$@"; do
+    if [ "${arg:0:1}" = "-" ]; then
+      case "$arg" in
+        -l|--list)     list=1; shift;;
+        -a|--all)      showall=1; shift;;
+        -c|--complete) complete=1; shift; exec 3>&1; exec 1>&2;;
+        -e|--expand)   expand=1; shift;;
+        -*) usage;;
+      esac
+    else
+      break
+    fi
+  done
+
+  # show a loading prompt for auto-completion
+  if [ -n "$complete" ]; then
+    LOADING=1
+    echo
+    echo
+    echo -ne "$SAVE$HIDE"
+    echo -n " $GREEN>$WHITE Scanning...  $RESET"
+
+    (
+      sleep 0.2
+      while true; do
+        for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅ ▄ ▃; do
+          echo -ne "$BACK$GREEN$char$RESET"
+          sleep 0.05
+        done
+      done
+    ) 2>/dev/null &
+
+    trap "echo -ne \"$RESET$SHOW\"; kill \$! 2>/dev/null; wait \$! 2>/dev/null; exit" 0 1 2 3 9 15
+  fi
+
+  input="$1"
+  pattern="$1"
+  choice="$2"
+
+  if [ -n "$choice" ] && [[ "$choice" =~ [^0-9] ]]; then
+    usage
+  fi
+
+  # expand completions when the pattern ends with '%'
+  if [ "${pattern:$((${#pattern} - 1))}" = "%" ]; then
+    expand=1
+    pattern="${pattern:0:$((${#pattern} - 1))}"
+  fi
+
+  # check for trailing numbers
+  if echo -n "$pattern" | egrep -q '(^|.*#)[0-9]*$'; then
+    # use the given number as the selected choice
+    choice=`echo "$pattern"  | sed -r 's/(^|.*#)([0-9]*)$/\2/'`
+    pattern=`echo "$pattern" | sed -r 's/#?[0-9]*$//'`
+
+    if [ -z "$pattern" ]; then
+      shift
+      pattern="$1"
+    fi
+  fi
+
+  # show all matches if the pattern ends with '!'
+  if [ "${pattern:$((${#pattern} - 1))}" = "!" ]; then
+    showall=1
+    pattern="${pattern:0:$((${#pattern} - 1))}"
+  fi
+
+  if ! is_git; then
+    match_files
+  elif [ -z "$pattern" ]; then
+    match_git_status
+    if [ -z "$matches" ]; then
+      match_git_log
+      [ -n "$complete" ] && input="@"
+      #[ -n "$complete" ] && echo -n "@" >&3
+    fi
+  elif [ "${input:0:1}" = "@" ]; then
+    commit="$pattern"
+    GIT_LOG=0
+    while [ "${commit:0:1}" = "@" ]; do
+      commit=${commit:1}
+      let GIT_LOG+=10
+    done
+    limit=$GIT_LOG
+
+    match_git_log
+
+    if [ -n "$commit" ]; then
+      if [[ "$commit" =~ ^[0-9]{,3}$ ]]; then
+        commit=`echo "$matches" | pick $commit`
+      fi
+      match_git_diff
+    fi
+  else
+    match_files
+  fi
+
+  count=`echo "$matches" | grep -c .`
+  [ $count -eq 0 ] && pretty_matches=
+
+  # expand variables in title
+  title=$(echo "$title" | sed -r \
+    -e "s|%count|$YELLOW$count$WHITE|g" \
+    -e "s|%dir|$CYAN[$dir]$WHITE|g"
+  )
+
+  if [ $count -eq 0 ]; then
+    title=" $RED>$WHITE $title$RESET"
+  else
+    title=" $GREEN>$WHITE $title$RESET"
+  fi
+
+  if [ -n "$showall" ]; then
+    limit="$count"
+  else
+    # trim results to number of lines
+    [ -v limit ] || limit=$((LINES - 4))
+    [ $count -lt $limit ] && limit=$count
+    [ $limit -le 0 ] && limit=1
+
+    if [ $count -gt $limit ]; then
+      pretty_matches=`echo -e "$pretty_matches" | head -n $limit`
+    fi
+  fi
+
+  # select the given choice
+  if [ -n "$choice" ]; then
+    count=1
+    matches=`echo "$matches" | pick $choice`
+    pretty_matches=`echo "$pretty_matches" | pick $choice`
+  fi
+
+  if [ -n "$list" ]; then
+    show_matches
+  elif [ -n "$complete" ]; then
+    # clear loading prompt
+    kill $! 2>/dev/null
+    wait $! 2>/dev/null
+    echo -ne "$RESTORE$SHOW"
+    echo -ne "$ERASE"
+
+    show_matches
+
+    echo -ne " $GREEN>>>$RESET $input"
+
+    if [ -n "$expand" ]; then
+      echo -n "$matches" >&3
+    elif [ -n "$common_match" -a "`common $input $common_match`" = "$input" ]; then
+      echo -n "$common_match" >&3
+    fi
+  else
+    if [ $count -eq 0 -o "$type" = "log" ]; then
+      show_matches
+    elif [ $count -eq 1 ]; then
+      echo -e " $GREEN>>>$WHITE Editing $GREEN$matches$WHITE"
+      sensible-editor "$matches"
+    else
+      read -p " $CYAN>>>$WHITE Edit $YELLOW$count$WHITE files?$RESET [Y/n] "
+      [ "$REPLY" = "n" -o "$REPLY" = "N" ] && exit
+      sensible-editor $matches
+    fi
+  fi
+}
+
+function usage {
+  echo "Usage: git-edit [-l|--list] [-a|--all] [-c|--complete] [PATTERN] [CHOICE]"
+  exit 255
+}
 
 function pick {
   head -n "$1" | tail -n 1
@@ -78,11 +216,18 @@ function match_files {
   type="files"
 
   # expand '.' to '.*' and '/' to '.*/
-  pattern=`echo "$pattern" | sed -r -e 's#(^|[^\])\.($|[^\*])#\1.*\2#g' -e 's#(^|[^/])/#\1.*/#g'`
+  pattern=`echo "$pattern" | sed -r -e 's#(^|[^\])\.($|[^\*])#\1.*\2#g' -e 's#(^|[^/])/+#\1.*/#g'`
   matches=`ag -l --ignore db/archive . --file-search-regex "$pattern" | sort`
 
   if [ -n "$matches" ]; then
-    display_matches=`echo "$matches" | truncate | sed -r "s#($pattern)#$RED\1$RESET#g"`
+    common_match=`common $matches`
+    if [ -n "$common_match" -a ${#common_match} -gt ${#pattern} ]; then
+      pattern="$common_match"
+    else
+      unset common_match
+    fi
+
+    pretty_matches=`echo "$matches" | truncate | sed -r "s#($pattern)#$RED\1$RESET#g"`
     title="Found %count matches in %dir"
   else
     title="No matches in %dir"
@@ -91,8 +236,8 @@ function match_files {
 
 function match_git_status {
   type="status"
-  display_matches=`$GIT status -s`
-  matches=`echo "$display_matches" | sed -r 's/.* ([^ ]+)$/\1/'`
+  pretty_matches=`$GIT status -s`
+  matches=`echo "$pretty_matches" | sed -r 's/.* ([^ ]+)$/\1/'`
 
   if [ -n "$matches" ]; then
     title="Found %count changes in %dir"
@@ -107,7 +252,7 @@ function match_git_log {
   matches=`$log --pretty=format:"%h"`
 
   if [ -n "$matches" ]; then
-    display_matches=`$log --pretty=format:"$GIT_FORMAT" | truncate $((COLUMNS + 2))`
+    pretty_matches=`$log --pretty=format:"$GIT_FORMAT" | truncate $((COLUMNS + 2))`
     title="Latest commits in %dir"
   else
     title="No commits in %dir"
@@ -122,23 +267,18 @@ function match_git_diff {
   if [ $? -ne 0 ]; then
     title="Unknown or ambiguous commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
-    display_matches=`$diff --color | fgrep '|' | sed -r 's/^\s*//'`
+    pretty_matches=`$diff --color | fgrep '|' | sed -r 's/^\s*//'`
     title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT" | truncate $COLUMNS`
   else
     title="No changes in commit $YELLOW[$commit]$WHITE"
   fi
 }
 
-function display_matches {
+function show_matches {
   echo "$title $GRAY[$type]$RESET"
-  if [ $count -gt 0 ]; then
-    if [ $count -eq 1 -a -n "$choice" ]; then
-      display_matches=$(echo "$display_matches" | sed -r "s/^/`printf "%6d" $choice` /")
-    elif [ $count -gt 0 ]; then
-      display_matches=$(echo "$display_matches" | nl -s ' ')
-    fi
 
-    echo "$display_matches" | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$YELLOW[\2]$RESET/"
+  if [ $count -gt 1 -o "$type" = "log" ]; then
+    echo "$pretty_matches" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$YELLOW[\2]$RESET/"
 
     if [ $count -gt $limit -a -z "$showall" ]; then
       echo "         ($((count - limit)) more...)"
@@ -146,133 +286,4 @@ function display_matches {
   fi
 }
 
-# show a loading prompt for auto-completion
-if [ -n "$complete" ]; then
-  echo
-  echo
-  echo -ne "$SAVE"
-  echo -n " $GREEN>$WHITE Loading...$RESET"
-fi
-
-input="$1"
-pattern="$1"
-choice="$2"
-
-if [ -n "$choice" ] && [[ "$choice" =~ [^0-9] ]]; then
-  usage
-fi
-
-# expand completions when the pattern ends with '%'
-if [ "${pattern:$((${#pattern} - 1))}" = "%" ]; then
-  expand=1
-  pattern="${pattern:0:$((${#pattern} - 1))}"
-fi
-
-# check for trailing numbers
-if echo -n "$pattern" | egrep -q '(^|.*#)[0-9]*$'; then
-  # use the given number as the selected choice
-  choice=`echo "$pattern"  | sed -r 's/(^|.*#)([0-9]*)$/\2/'`
-  pattern=`echo "$pattern" | sed -r 's/#?[0-9]*$//'`
-
-  if [ -z "$pattern" ]; then
-    shift
-    pattern="$1"
-  fi
-fi
-
-# show all matches if the pattern ends with '!'
-if [ "${pattern:$((${#pattern} - 1))}" = "!" ]; then
-  showall=1
-  pattern="${pattern:0:$((${#pattern} - 1))}"
-fi
-
-if ! is_git; then
-  match_files
-elif [ -z "$pattern" ]; then
-  match_git_status
-  if [ -z "$matches" ]; then
-    match_git_log
-    [ -n "$complete" ] && echo -n "@" >&3
-  fi
-elif [ "${input:0:1}" = "@" ]; then
-  commit="$pattern"
-  GIT_LOG=0
-  while [ "${commit:0:1}" = "@" ]; do
-    commit=${commit:1}
-    let GIT_LOG+=10
-  done
-  limit=$GIT_LOG
-
-  match_git_log
-
-  if [ -n "$commit" ]; then
-    if [[ "$commit" =~ ^[0-9]{,3}$ ]]; then
-      commit=`echo "$matches" | pick $commit`
-    fi
-    match_git_diff
-  fi
-else
-  match_files
-fi
-
-count=`echo "$matches" | grep -c .`
-[ $count -eq 0 ] && display_matches=
-
-# expand variables in title
-title=$(echo "$title" | sed -r \
-  -e "s|%count|$YELLOW$count$WHITE|g" \
-  -e "s|%dir|$CYAN[$dir]$WHITE|g"
-)
-
-if [ $count -eq 0 ]; then
-  title=" $RED>$WHITE $title$RESET"
-else
-  title=" $GREEN>$WHITE $title$RESET"
-fi
-
-if [ -n "$showall" ]; then
-  limit="$count"
-else
-  # trim results to number of lines
-  [ -v limit ] || limit=$((LINES - 4))
-  [ $count -lt $limit ] && limit=$count
-  [ $limit -le 0 ] && limit=1
-
-  if [ $count -gt $limit ]; then
-    display_matches=`echo -e "$display_matches" | head -n $limit`
-  fi
-fi
-
-# select the given choice
-if [ -n "$choice" ]; then
-  count=1
-  matches=`echo "$matches" | pick $choice`
-  display_matches=`echo "$display_matches" | pick $choice`
-fi
-
-if [ -n "$list" ]; then
-  display_matches
-elif [ -n "$complete" ]; then
-  # clear loading prompt
-  echo -ne "$RESTORE"
-  echo -ne "$ERASE"
-
-  display_matches
-
-  echo -ne " $GREEN>>>$RESET $input"
-
-  if [ -n "$expand" ]; then
-    echo "$matches" >&3
-  fi
-else
-  if [ $count -eq 0 -o "$type" = "log" ]; then
-    display_matches
-  elif [ $count -eq 1 ]; then
-    echo -e " $GREEN>>>$WHITE Editing $GREEN$matches$WHITE"
-    sensible-editor "$matches"
-  else
-    read -p " $CYAN>>>$WHITE Edit $YELLOW$count$WHITE files?$RESET [Y/n] "
-    [ "$REPLY" = "n" -o "$REPLY" = "N" ] && exit
-    sensible-editor $matches
-  fi
-fi
+main "$@"

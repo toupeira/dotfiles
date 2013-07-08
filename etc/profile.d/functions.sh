@@ -165,11 +165,15 @@ function src {
     return 255
   fi
 
-  if [ -f "$path" ]; then
-    xdg-open "$path"
-  elif [ ! -d "$path" ]; then
+  if [ ! -e "$path" ]; then
     echo "$path does not exist"
     return 1
+  elif [ "$1" = "path" ]; then
+    echo "$path"
+  elif [ -f "$path" ]; then
+    sensible-editor "$path"
+  elif [ ! -d "$path" ]; then
+    echo "Unsupported path $path"
   elif [ -n "$1" ]; then
     pushd "$path" >/dev/null
     git "$@"
@@ -186,5 +190,5 @@ function src_alias {
   local project="$2"
 
   alias $alias="src $project"
-  __git_complete $alias _git
+  __git_complete_in_workdir $alias _git `src "$project" path`
 }

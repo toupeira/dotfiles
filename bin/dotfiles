@@ -17,10 +17,6 @@ if [ "`uname -s`" = "Darwin" ]; then
   done
 fi
 
-# The dotfiles repository
-DOTFILES=${DOTFILES:-~/.dotfiles}
-[ -L "$DOTFILES" ] && DOTFILES=`readlink -f "$DOTFILES"`
-
 DRYRUN=0
 VERBOSE=0
 QUIET=0
@@ -28,8 +24,25 @@ FORCE=0
 COMMAND=
 
 function main {
-  if [ ! -d "$DOTFILES" ]; then
-    error "Dotfiles not found in {{$DOTFILES}}"
+  # find the dotfiles repository
+  if [ -z "$DOTFILES" ]; then
+    if [ -d /etc/dotfiles ]; then
+      DOTFILES=/etc/dotfiles
+    elif [ -d ~/.dotfiles ]; then
+      DOTFILES=~/.dotfiles
+    else
+      error "Can't find repository in /etc/dotfiles or $HOME/.dotfiles, please set \$DOTFILES"
+      exit 1
+    fi
+  fi
+
+  # resolve symlinks
+  while [ -L "$DOTFILES" ]; do
+    DOTFILES=`readlink -f "$DOTFILES"`
+  done
+
+  if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
+    error "Can't find dotfiles script in repository, please check your \$DOTFILES"
     exit 1
   fi
 
@@ -57,6 +70,7 @@ function main {
     usage
   fi
 }
+
 function usage {
   echo "Usage: `basename $0` [options] COMMAND [args]"
   echo
@@ -73,10 +87,10 @@ function usage {
   echo "  ca, commitall         Commit all changes"
   echo "  up, update [MODULE]   Update submodules (fetch new commits)"
   echo "  sync                  Update, commit and push"
+  echo "  path                  Show the path to the dotfiles repository"
   echo
   echo "Other arguments:"
-  echo "  PATH...      Edit the specified files inside the repository"
-  echo "  COMMAND...   Excecute a Git command inside the repository directory"
+  echo "  COMMAND [ARGS]...     Excecute a Git command inside the dotfiles repository"
   echo
   exit 255
 }
@@ -224,6 +238,9 @@ function run {
   shift
 
   case "$command" in
+    path)
+      echo "$DOTFILES"
+      ;;
     sync)
       if git ignore-errors status -s | grep -q .; then
         msg
