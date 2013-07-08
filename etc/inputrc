@@ -69,7 +69,10 @@ set completion-ignore-case on
 set completion-map-case on
 set show-all-if-ambiguous on
 set show-all-if-unmodified on
+set skip-completed-text on
+set visible-stats on
 
+set mark-directories on
 set mark-symlinked-directories on
 set match-hidden-files off
 set blink-matching-paren on

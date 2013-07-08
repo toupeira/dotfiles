@@ -45,11 +45,11 @@ _git_edit() {
   fi
 
   if [ -z "$cur" ]; then
-    git-edit --complete
+    COMPREPLY=( $(git-edit --complete) )
   else
-    COMPREPLY=( $(compgen -o default -- $cur) )
+    COMPREPLY=( $(compgen -o bashdefault -o default -- $cur) )
     if [ -z "$COMPREPLY" ]; then
-      git-edit --complete $cur
+      COMPREPLY=( $(git-edit --complete $cur) )
     fi
   fi
 

@@ -1,13 +1,39 @@
 #!/bin/bash
 
 unset type matches display_matches count
-unset complete showall choice commit
+unset list showall complete choice commit
 dir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
 
-if [ "$1" = "--complete" ]; then
-  complete=1
-  shift
-fi
+function usage {
+  echo "Usage: git-edit [-l|--list] [-a|--all] [-c|--complete] [PATTERN] [CHOICE]"
+  exit 255
+}
+
+for arg in "$@"; do
+  if [ "${arg:0:1}" = "-" ]; then
+    case "$arg" in
+      -l|--list)
+        list=1
+        shift
+        ;;
+      -a|--all)
+        showall=1
+        shift
+        ;;
+      -c|--complete)
+        complete=1
+        shift
+        exec 3>&1
+        exec 1>&2
+        ;;
+      -*)
+        usage
+        ;;
+    esac
+  else
+    break
+  fi
+done
 
 # default Git options
 GIT="git -c color.ui=always"
@@ -89,7 +115,7 @@ function match_git_diff {
   matches=`$GIT diff-tree --no-commit-id --name-only -r "${commit:-HEAD}" --stat 2>/dev/null`
 
   if [ $? -ne 0 ]; then
-    title="Unknown commit $YELLOW[$commit]$WHITE"
+    title="Unknown or ambiguous commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
     display_matches=`echo "$matches" | truncate`
     title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT" | truncate $COLUMNS`
@@ -99,13 +125,15 @@ function match_git_diff {
 }
 
 function display_matches {
-  echo "$title $GRAY[$type]$RESET"
+  echo "$title $GRAY[$type] [$pattern]$RESET"
   if [ $count -gt 0 ]; then
     if [ $count -eq 1 -a -n "$choice" ]; then
-      echo "$display_matches" | sed -r "s/^/    $YELLOW[$choice]$RESET /"
+      display_matches=$(echo "$display_matches" | sed -r "s/^/`printf "%6d" $choice` /")
     elif [ $count -gt 0 ]; then
-      echo "$display_matches" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]*)/ \1$YELLOW[\2]$RESET/"
+      display_matches=$(echo "$display_matches" | nl -s ' ')
     fi
+
+    echo "$display_matches" | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$YELLOW[\2]$RESET/"
 
     if [ $count -gt $limit -a -z "$showall" ]; then
       echo "         ($((count - limit)) more...)"
@@ -125,13 +153,11 @@ input="$1"
 pattern="$1"
 choice="$2"
 
-# show all matches if the input ends with !
-if [ "${input:$((${#input} - 1))}" = "!" ]; then
-  showall=1
-  input="${input:0:$((${#input} - 1))}"
-  pattern="$input"
+if [ -n "$choice" ] && [[ "$choice" =~ [^0-9] ]]; then
+  usage
 fi
 
+# check for trailing numbers
 if echo -n "$input" | egrep -q '(^|.*#)[0-9]*$'; then
   # use the given number as the selected choice
   choice=`echo "$input"  | sed -r 's/(^|.*#)([0-9]*)$/\2/'`
@@ -139,14 +165,19 @@ if echo -n "$input" | egrep -q '(^|.*#)[0-9]*$'; then
 
   if [ -z "$pattern" ]; then
     shift
-    input="$1"
     pattern="$1"
   fi
 fi
 
+# show all matches if the pattern ends with !
+if [ "${pattern:$((${#pattern} - 1))}" = "!" ]; then
+  showall=1
+  pattern="${pattern:0:$((${#pattern} - 1))}"
+fi
+
 if ! is_git; then
   match_files
-elif [ -z "$input" ]; then
+elif [ -z "$pattern" ]; then
   match_git_status
 elif [ "${input:0:1}" = "@" ]; then
   commit="$pattern"
@@ -184,16 +215,18 @@ else
   title=" $GREEN>$WHITE $title$RESET"
 fi
 
-# trim results to number of lines
-[ -v limit ] || limit=$((LINES - 8))
-[ $count -lt $limit ] && limit=$count
+if [ -n "$showall" ]; then
+  limit="$count"
+else
+  # trim results to number of lines
+  [ -v limit ] || limit=$((LINES - 4))
+  [ $count -lt $limit ] && limit=$count
+  [ $limit -le 0 ] && limit=1
 
-if [ $count -gt $limit -a -z "$showall" ]; then
-  display_matches=`echo -e "$display_matches" | head -n $limit`
+  if [ $count -gt $limit ]; then
+    display_matches=`echo -e "$display_matches" | head -n $limit`
+  fi
 fi
-
-# trim line widhts to number of columns
-#display_matches=`echo "$display_matches" | sed -r "s/^(.{10}).{8,}\$/\1.../"`
 
 # select the given choice
 if [ -n "$choice" ]; then
@@ -202,7 +235,9 @@ if [ -n "$choice" ]; then
   display_matches=`echo "$display_matches" | pick $choice`
 fi
 
-if [ -n "$complete" ]; then
+if [ -n "$list" ]; then
+  display_matches
+elif [ -n "$complete" ]; then
   # clear loading prompt
   echo -ne "$RESTORE"
   echo -ne "$ERASE"
