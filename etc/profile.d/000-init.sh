@@ -22,7 +22,7 @@ SSH_BYOBU=~/.byobu/.ssh-agent
 
 if [ -z "$SSH_AUTH_SOCK" ]; then
   # Try to connect to a running SSH agent
-  socket=`ls -t /tmp/ssh-*/agent.[0-9]* 2>/dev/null | head -1`
+  socket=`command ls -t /tmp/ssh-*/agent.[0-9]* 2>/dev/null | head -1`
   if [ -S "$socket" -a -O "$socket" ]; then
     echo "Found SSH agent"
     export SSH_AUTH_SOCK="$socket"
