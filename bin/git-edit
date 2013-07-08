@@ -268,12 +268,11 @@ else
   if [ $count -eq 0 -o "$type" = "log" ]; then
     display_matches
   elif [ $count -eq 1 ]; then
-    echo -e " $GREEN>>>$WHITE Editing $YELLOW$matches$WHITE"
+    echo -e " $GREEN>>>$WHITE Editing $GREEN$matches$WHITE"
     sensible-editor "$matches"
   else
     read -p " $CYAN>>>$WHITE Edit $YELLOW$count$WHITE files?$RESET [Y/n] "
     [ "$REPLY" = "n" -o "$REPLY" = "N" ] && exit
-    echo -e " $GREEN>>>$WHITE Editing $YELLOW$count$WHITE files"
     sensible-editor $matches
   fi
 fi

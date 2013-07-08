@@ -61,4 +61,4 @@ _ed() {
   _git_edit
 }
 
-complete -F _ed ed
+complete -o nospace -F _ed ed
