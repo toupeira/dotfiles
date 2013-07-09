@@ -132,7 +132,22 @@ fi
 
 # Switch project directories and run Git commands in them
 function src {
-  if [[ "$1" =~ ^(|st|status)$ ]]; then
+  if [ "$1" = "each" ]; then
+    shift
+    for dir in ~/src/*; do
+      echo -e "# \e[0;36m$dir\e[0m" | sed -r "s|$HOME|~|"
+      exec 3>&1
+      `cd "$dir"; $@ 1>&3`
+
+      local status=$?
+      if [ $status -ne 0 ]; then
+        echo -e "# \e[1;31mexit code $status\e[0m"
+      fi
+      echo
+    done
+
+    return
+  elif [[ "$1" =~ ^(|st|status)$ ]]; then
     echo
     for dir in ~/src/*; do
       [ -d "$dir/.git" ] || continue
@@ -152,6 +167,7 @@ function src {
       fi
     done
     echo
+
     return
   fi
 
@@ -168,7 +184,7 @@ function src {
   if [ ! -e "$path" ]; then
     echo "$path does not exist"
     return 1
-  elif [ "$1" = "path" ]; then
+  elif [ "$1" = "--path" ]; then
     echo "$path"
   elif [ -f "$path" ]; then
     sensible-editor "$path"
@@ -191,5 +207,5 @@ function src_alias {
   local project="$2"
 
   alias $alias="src $project"
-  __git_edit_complete $alias _git `src "$project" path`
+  __git_edit_complete $alias _git `src "$project" --path`
 }

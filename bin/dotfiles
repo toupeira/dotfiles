@@ -53,6 +53,7 @@ function main {
       -v|--verbose) VERBOSE=1;;
       -q|--quiet)   QUIET=1;;
       -f|--force)   FORCE=1;;
+         --path)    echo "$DOTFILES"; exit;;
       -*)           usage;;
       *)
         COMMAND=( "$@" )
@@ -79,6 +80,7 @@ function usage {
   echo "  -v, --verbose   Increase verbosity"
   echo "  -q, --quiet     Suppress all normal output"
   echo "  -f, --force     Assume yes for all questions"
+  echo "      --path      Show path to the dotfiles repository and exit"
   echo
   echo "Commands:"
   echo "  init                  Install symlinks for all dotfiles"
@@ -87,7 +89,6 @@ function usage {
   echo "  ca, commitall         Commit all changes"
   echo "  up, update [MODULE]   Update submodules (fetch new commits)"
   echo "  sync                  Update, commit and push"
-  echo "  path                  Show the path to the dotfiles repository"
   echo
   echo "Other arguments:"
   echo "  COMMAND [ARGS]...     Excecute a Git command inside the dotfiles repository"
@@ -238,9 +239,6 @@ function run {
   shift
 
   case "$command" in
-    path)
-      echo "$DOTFILES"
-      ;;
     sync)
       if git ignore-errors status -s | grep -q .; then
         msg

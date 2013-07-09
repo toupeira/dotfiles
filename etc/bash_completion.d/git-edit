@@ -1,4 +1,4 @@
-#!/bin/bash
+#!bash
 
 # completion for git-edit subcommand
 function _git_edit {
@@ -7,7 +7,7 @@ function _git_edit {
   # disable default completion for __git_edit_complete
   unset __GIT_COMPLETE_DEFAULT
 
-  __git_complete_in_workdir git-edit --complete $cur
+  __git_complete_in_workdir git-edit --complete "$cur"
 }
 
 # helper to generate completions inside the configured working directory
@@ -46,7 +46,6 @@ function __git_edit_func_wrap {
 }
 
 function _ed {
-  cur=${COMP_WORDS[COMP_CWORD]}
-  _git_edit
+  __git_edit_func_wrap _git_edit
 }
 complete -o nospace -F _ed ed

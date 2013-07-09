@@ -18,6 +18,10 @@ YELLOW=$(echo -ne '\e[1;33m')
 CYAN=$(echo -ne '\e[1;36m')
 GRAY=$(echo -ne '\e[1;30m')
 
+DARKRED=$(echo -ne '\e[0;31m')
+DARKGREEN=$(echo -ne '\e[0;32m')
+DARKCYAN=$(echo -ne '\e[0;36m')
+
 # cursor movement
 COLUMNS=`tput cols`
 LINES=`tput lines`
@@ -26,8 +30,10 @@ SAVE=$(echo -ne '\e[s')
 RESTORE=$(echo -ne '\e[u')
 SHOW=$(echo -ne '\e[?25h')
 HIDE=$(echo -ne '\e[?25l')
-ERASE=$(echo -ne '\e[2K')
+
 BACK=$(echo -ne '\e[D')
+FORWARD=$(echo -ne '\e[C')
+ERASE=$(echo -ne '\e[2K')
 
 function main {
   for arg in "$@"; do
@@ -48,7 +54,7 @@ function main {
   choice="$2"
   limit=$((LINES - 4))
 
-  if [ -n "$choice" ] && [[ "$choice" =~ [^0-9] ]]; then
+  if [ -n "$choice" ] && ! [[ "$choice" =~ ^[0-9]+$ ]]; then
     usage
   fi
 
@@ -71,24 +77,27 @@ function main {
   fi
 
   # show a loading prompt for auto-completion
-  if [ -n "$complete" -a -z "$choice" ]; then
-    LOADING=1
+  if [ -n "$complete" ]; then
     echo
-    echo
-    echo -ne "$SAVE$HIDE"
-    echo -n " $GREEN>$WHITE Scanning...  $RESET"
+    [ -z "$choice" ] && echo
+    echo -n "$SAVE$HIDE"
+    echo -n " $GREEN>>>$RESET "
 
     (
-      sleep 0.2
+      sleep 0.3
+
+      echo -n "Scanning...$RESET "
       while true; do
-        for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅ ▄ ▃; do
-          echo -ne "$BACK$GREEN$char$RESET"
-          sleep 0.05
+        for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅; do
+          echo -n "$DARKGREEN$char$RESET$BACK"
+          sleep 0.04
         done
+
+        echo -n "$GREEN●$RESET"
       done
     ) 2>/dev/null &
 
-    trap "echo -ne \"$RESET$SHOW\"; kill \$! 2>/dev/null; wait \$! 2>/dev/null; exit" 0 1 2 3 9 15
+    trap "echo -n \"$RESET$SHOW\"; kill \$! 2>/dev/null; wait \$! 2>/dev/null; exit" 0 1 2 3 9 15
   fi
 
   if ! is_git; then
@@ -130,9 +139,9 @@ function main {
   )
 
   if [ $count -eq 0 ]; then
-    title=" $RED>$WHITE $title$RESET"
+    title=" $DARKRED>>>$WHITE $title$RESET"
   else
-    title=" $GREEN>$WHITE $title$RESET"
+    title=" $GREEN>>>$WHITE $title$RESET"
   fi
 
   if [ -n "$showall" ]; then
@@ -159,19 +168,17 @@ function main {
     unset choice
     show_matches
   elif [ -n "$complete" ]; then
-    if [ -n "$choice" ]; then
-      echo
-    else
-      # clear loading prompt
-      kill $! 2>/dev/null
-      wait $! 2>/dev/null
-      echo -ne "$RESTORE$SHOW"
-      echo -ne "$ERASE"
-    fi
+    # clear loading prompt
+    kill $! 2>/dev/null
+    wait $! 2>/dev/null
+    echo -n "$RESTORE$SHOW"
+    echo -n "$ERASE"
 
     show_matches
 
-    echo -ne " $GREEN>>>$RESET $WHITE$input$RESET"
+    echo -n " $GREEN>>>$RESET "
+    [ $count -gt 0 ] && echo -n "$RED"
+    echo -n "$input$RESET"
 
     if [ -n "$expand" ]; then
       feed_completion "$matches"
@@ -212,11 +219,21 @@ function is_git {
 function truncate {
   local length="${1:-$((COLUMNS - 8))}"
 
-  sed -r "s/^(.{$((length - 4))}).{4,}$/\1.../"
+  if [ "$2" = "head" ]; then
+    sed -r "s/^.{4,}(.{$((length - 4))})$/...\1/"
+  else
+    sed -r "s/^(.{$((length - 4))}).{4,}$/\1.../"
+  fi
 }
 
 function match_files {
   type="files"
+
+  if [ -e "$pattern" ]; then
+    matches="$pattern"
+    expand=1
+    return
+  fi
 
   # expand '.' to '.*' and '/' to '.*/
   pattern=`echo "$pattern" | sed -r -e 's#(^|[^\])\.($|[^\*])#\1.*\2#g' -e 's#(^|[^/])/+#\1.*/#g'`
@@ -236,7 +253,7 @@ function match_files {
     pretty_matches=`echo "$matches" | truncate | sed -r "s#($pattern)#$RED\1$RESET#g"`
     title="Found %count matches in %dir"
   else
-    title="No matches in %dir"
+    title="${RED}No matches in %dir"
   fi
 }
 
@@ -281,9 +298,13 @@ function match_git_diff {
 }
 
 function show_matches {
-  [ -n "$choice" -a $count -eq 1 -a "$type" != "log" ] && return
+  if [ -n "$choice" -o $count -eq 1 ] && [ "$type" != "log" ]; then
+    return
+  fi
 
-  echo "$title $GRAY[$type]$RESET"
+  echo -n "$title $GRAY[$type"
+  [ -n "$input" ] && echo -n "~$input" | truncate 20 head
+  echo "]$RESET"
 
   if [ $count -gt 0 -o "$type" = "log" ]; then
     echo "$pretty_matches" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$YELLOW[\2]$RESET/"
