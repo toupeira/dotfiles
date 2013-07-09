@@ -234,7 +234,7 @@ function truncate {
 function match_files {
   type="files"
 
-  if [ -e "$pattern" ]; then
+  if [ -f "$pattern" ]; then
     matches="$pattern"
     expand=1
     return

@@ -33,13 +33,20 @@ function __git_edit_complete {
 function __git_edit_func_wrap {
   local cur=${COMP_WORDS[COMP_CWORD]}
 
-  __GIT_COMPLETE_WORKDIR="$2"
   __GIT_COMPLETE_DEFAULT=1
+  __GIT_COMPLETE_WORKDIR="$2"
 
   __git_func_wrap $1
 
   if [ -z "$COMPREPLY" -a -n "$__GIT_COMPLETE_DEFAULT" ]; then
     __git_complete_in_workdir compgen -o bashdefault -o default -o nospace -- "$cur"
+
+    local prefix="$__GIT_COMPLETE_WORKDIR"
+    [ -n "$prefix" ] && prefix="$prefix/"
+
+    if [ ${#COMPREPLY[@]} -eq 1 -a -d "$prefix${COMPREPLY[0]}" ]; then
+      COMPREPLY=( "${COMPREPLY[0]}/" )
+    fi
   fi
 
   unset __GIT_COMPLETE_WORKDIR __GIT_COMPLETE_DEFAULT
