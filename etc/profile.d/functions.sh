@@ -190,5 +190,5 @@ function src_alias {
   local project="$2"
 
   alias $alias="src $project"
-  __git_complete_in_workdir $alias _git `src "$project" path`
+  __git_edit_complete $alias _git `src "$project" path`
 }

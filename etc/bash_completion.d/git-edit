@@ -1,0 +1,52 @@
+#!/bin/bash
+
+# completion for git-edit subcommand
+function _git_edit {
+  # disable default completion for __git_complete
+  compopt +o bashdefault +o default
+  # disable default completion for __git_edit_complete
+  unset __GIT_COMPLETE_DEFAULT
+
+  __git_complete_in_workdir git-edit --complete $cur
+}
+
+# helper to generate completions inside the configured working directory
+function __git_complete_in_workdir {
+  COMPREPLY=( $( [ -n "$__GIT_COMPLETE_WORKDIR" ] && cd "$__GIT_COMPLETE_WORKDIR"; $@ ) )
+}
+
+# helper to add Git completions to a command
+function __git_edit_complete {
+  # first argument is the command that should be completed
+  local command="$1"
+  # second argument is the name of the Git completion function, same as for __git_complete
+  local subcommand="${2:-_git}"
+  # third argument, if given, will be used as the working directory to get the completions from
+  local workdir="$3"
+
+	local wrapper="__git_edit_wrap_${command}_${subcommand}"
+	eval "$wrapper () { __git_edit_func_wrap $subcommand \"$workdir\" ; }"
+	complete -o nospace -F $wrapper $command 2>/dev/null \
+		|| complete -o nospace -F $wrapper $command
+}
+
+function __git_edit_func_wrap {
+  local cur=${COMP_WORDS[COMP_CWORD]}
+
+  __GIT_COMPLETE_WORKDIR="$2"
+  __GIT_COMPLETE_DEFAULT=1
+
+  __git_func_wrap $1
+
+  if [ -z "$COMPREPLY" -a -n "$__GIT_COMPLETE_DEFAULT" ]; then
+    __git_complete_in_workdir compgen -o bashdefault -o default -o nospace -- "$cur"
+  fi
+
+  unset __GIT_COMPLETE_WORKDIR __GIT_COMPLETE_DEFAULT
+}
+
+function _ed {
+  cur=${COMP_WORDS[COMP_CWORD]}
+  _git_edit
+}
+complete -o nospace -F _ed ed

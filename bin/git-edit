@@ -1,6 +1,6 @@
 #!/bin/bash
 
-unset type matches pretty_matches common_match count
+unset type matches pretty_matches prefix count
 unset list showall complete expand choice commit
 dir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
 
@@ -21,6 +21,7 @@ GRAY=$(echo -ne '\e[1;30m')
 # cursor movement
 COLUMNS=`tput cols`
 LINES=`tput lines`
+
 SAVE=$(echo -ne '\e[s')
 RESTORE=$(echo -ne '\e[u')
 SHOW=$(echo -ne '\e[?25h')
@@ -35,7 +36,6 @@ function main {
         -l|--list)     list=1; shift;;
         -a|--all)      showall=1; shift;;
         -c|--complete) complete=1; shift; exec 3>&1; exec 1>&2;;
-        -e|--expand)   expand=1; shift;;
         -*) usage;;
       esac
     else
@@ -43,39 +43,13 @@ function main {
     fi
   done
 
-  # show a loading prompt for auto-completion
-  if [ -n "$complete" ]; then
-    LOADING=1
-    echo
-    echo
-    echo -ne "$SAVE$HIDE"
-    echo -n " $GREEN>$WHITE Scanning...  $RESET"
-
-    (
-      sleep 0.2
-      while true; do
-        for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅ ▄ ▃; do
-          echo -ne "$BACK$GREEN$char$RESET"
-          sleep 0.05
-        done
-      done
-    ) 2>/dev/null &
-
-    trap "echo -ne \"$RESET$SHOW\"; kill \$! 2>/dev/null; wait \$! 2>/dev/null; exit" 0 1 2 3 9 15
-  fi
-
   input="$1"
   pattern="$1"
   choice="$2"
+  limit=$((LINES - 4))
 
   if [ -n "$choice" ] && [[ "$choice" =~ [^0-9] ]]; then
     usage
-  fi
-
-  # expand completions when the pattern ends with '%'
-  if [ "${pattern:$((${#pattern} - 1))}" = "%" ]; then
-    expand=1
-    pattern="${pattern:0:$((${#pattern} - 1))}"
   fi
 
   # check for trailing numbers
@@ -96,14 +70,34 @@ function main {
     pattern="${pattern:0:$((${#pattern} - 1))}"
   fi
 
+  # show a loading prompt for auto-completion
+  if [ -n "$complete" -a -z "$choice" ]; then
+    LOADING=1
+    echo
+    echo
+    echo -ne "$SAVE$HIDE"
+    echo -n " $GREEN>$WHITE Scanning...  $RESET"
+
+    (
+      sleep 0.2
+      while true; do
+        for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅ ▄ ▃; do
+          echo -ne "$BACK$GREEN$char$RESET"
+          sleep 0.05
+        done
+      done
+    ) 2>/dev/null &
+
+    trap "echo -ne \"$RESET$SHOW\"; kill \$! 2>/dev/null; wait \$! 2>/dev/null; exit" 0 1 2 3 9 15
+  fi
+
   if ! is_git; then
     match_files
   elif [ -z "$pattern" ]; then
     match_git_status
     if [ -z "$matches" ]; then
       match_git_log
-      [ -n "$complete" ] && input="@"
-      #[ -n "$complete" ] && echo -n "@" >&3
+      [ -n "$complete" ] && feed_completion "@$choice"
     fi
   elif [ "${input:0:1}" = "@" ]; then
     commit="$pattern"
@@ -118,7 +112,7 @@ function main {
 
     if [ -n "$commit" ]; then
       if [[ "$commit" =~ ^[0-9]{,3}$ ]]; then
-        commit=`echo "$matches" | pick $commit`
+        commit=`echo "$matches" | pick_line $commit`
       fi
       match_git_diff
     fi
@@ -126,7 +120,7 @@ function main {
     match_files
   fi
 
-  count=`echo "$matches" | grep -c .`
+  [ -z "$count" ]  && count=`echo "$matches" | grep -c .`
   [ $count -eq 0 ] && pretty_matches=
 
   # expand variables in title
@@ -145,7 +139,6 @@ function main {
     limit="$count"
   else
     # trim results to number of lines
-    [ -v limit ] || limit=$((LINES - 4))
     [ $count -lt $limit ] && limit=$count
     [ $limit -le 0 ] && limit=1
 
@@ -157,27 +150,33 @@ function main {
   # select the given choice
   if [ -n "$choice" ]; then
     count=1
-    matches=`echo "$matches" | pick $choice`
-    pretty_matches=`echo "$pretty_matches" | pick $choice`
+    matches=`echo "$matches" | pick_line $choice`
+    pretty_matches=`echo "$pretty_matches" | pick_line $choice`
+    [ "$type" != "log" ] && expand=1
   fi
 
   if [ -n "$list" ]; then
+    unset choice
     show_matches
   elif [ -n "$complete" ]; then
-    # clear loading prompt
-    kill $! 2>/dev/null
-    wait $! 2>/dev/null
-    echo -ne "$RESTORE$SHOW"
-    echo -ne "$ERASE"
+    if [ -n "$choice" ]; then
+      echo
+    else
+      # clear loading prompt
+      kill $! 2>/dev/null
+      wait $! 2>/dev/null
+      echo -ne "$RESTORE$SHOW"
+      echo -ne "$ERASE"
+    fi
 
     show_matches
 
-    echo -ne " $GREEN>>>$RESET $input"
+    echo -ne " $GREEN>>>$RESET $WHITE$input$RESET"
 
     if [ -n "$expand" ]; then
-      echo -n "$matches" >&3
-    elif [ -n "$common_match" -a "`common $input $common_match`" = "$input" ]; then
-      echo -n "$common_match" >&3
+      feed_completion "$matches"
+    elif [ -n "$prefix" ]; then
+      feed_completion "$prefix"
     fi
   else
     if [ $count -eq 0 -o "$type" = "log" ]; then
@@ -198,7 +197,11 @@ function usage {
   exit 255
 }
 
-function pick {
+function feed_completion {
+  echo "$@" >&3
+}
+
+function pick_line {
   head -n "$1" | tail -n 1
 }
 
@@ -217,14 +220,17 @@ function match_files {
 
   # expand '.' to '.*' and '/' to '.*/
   pattern=`echo "$pattern" | sed -r -e 's#(^|[^\])\.($|[^\*])#\1.*\2#g' -e 's#(^|[^/])/+#\1.*/#g'`
-  matches=`ag -l --ignore db/archive . --file-search-regex "$pattern" | sort`
+  matches=`ag -l . --file-search-regex "$pattern" | sort`
+  count=`echo "$matches" | grep -c .`
 
   if [ -n "$matches" ]; then
-    common_match=`common $matches`
-    if [ -n "$common_match" -a ${#common_match} -gt ${#pattern} ]; then
-      pattern="$common_match"
-    else
-      unset common_match
+    if [ $count -le $limit ]; then
+      prefix=`echo "$matches" | prefix`
+      if [ -n "$prefix" -a ${#prefix} -gt ${#input} ] && echo "$prefix" | egrep -q "$pattern"; then
+        pattern="$prefix"
+      else
+        unset prefix
+      fi
     fi
 
     pretty_matches=`echo "$matches" | truncate | sed -r "s#($pattern)#$RED\1$RESET#g"`
@@ -275,9 +281,11 @@ function match_git_diff {
 }
 
 function show_matches {
-  echo "$title $GRAY[$type]$RESET"
+  [ -n "$choice" -a $count -eq 1 -a "$type" != "log" ] && return
 
-  if [ $count -gt 1 -o "$type" = "log" ]; then
+  echo "$title $GRAY[$type] [prefix:$prefix]$RESET"
+
+  if [ $count -gt 0 -o "$type" = "log" ]; then
     echo "$pretty_matches" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$YELLOW[\2]$RESET/"
 
     if [ $count -gt $limit -a -z "$showall" ]; then

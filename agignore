@@ -7,8 +7,10 @@
 # home
 tmp
 src/archive
+src/*-clone
 Dropbox
 
 # Rails
+db/archive
 public/system
 public/assets
