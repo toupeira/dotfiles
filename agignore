@@ -5,10 +5,15 @@
 *.wmv
 
 # home
-tmp
-src/archive
-src/*-clone
-Dropbox
+./tmp
+./backups
+./games
+./movies
+./music
+./series
+./src/archive
+./src/*-clone
+./Dropbox
 
 # Rails
 db/archive

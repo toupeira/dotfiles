@@ -197,7 +197,7 @@ function start_loading {
         sleep 0.04
       done
 
-      echo -n "$DARKGREEN■$RESET"
+      echo -n "$DARKGREEN■$RESET "
     done
   ) 2>/dev/null &
 
@@ -276,7 +276,7 @@ function match_git_status {
 
 function match_git_log {
   type="log"
-  local log="$GIT log -n $GIT_LOG --all"
+  local log="$GIT log -n $GIT_LOG --all --no-merges"
   matches=`$log --pretty=format:"%h"`
 
   if [ -n "$matches" ]; then
@@ -298,7 +298,7 @@ function match_git_diff {
     pretty_matches=`$diff --color | fgrep '|' | sed -r 's/^\s*//'`
     title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT" | truncate $COLUMNS`
   else
-    title="No changes in commit $YELLOW[$commit]$WHITE"
+    title="No changed files in commit $YELLOW[$commit]$WHITE"
   fi
 }
 
