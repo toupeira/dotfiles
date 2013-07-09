@@ -283,7 +283,7 @@ function match_git_diff {
 function show_matches {
   [ -n "$choice" -a $count -eq 1 -a "$type" != "log" ] && return
 
-  echo "$title $GRAY[$type] [prefix:$prefix]$RESET"
+  echo "$title $GRAY[$type]$RESET"
 
   if [ $count -gt 0 -o "$type" = "log" ]; then
     echo "$pretty_matches" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$YELLOW[\2]$RESET/"
