@@ -585,10 +585,10 @@
     end
 
     " enable fuzzy matching for all sources
-    call unite#filters#matcher_default#use(['matcher_fuzzy'])
+    "call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
     " sort results by match rank
-    call unite#filters#sorter_default#use(['sorter_rank'])
+    "call unite#filters#sorter_default#use(['sorter_rank'])
 
     " only show the 5 most recently edited files
     call unite#custom#source('file_mru', 'max_candidates', 10)
