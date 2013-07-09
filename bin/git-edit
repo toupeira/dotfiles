@@ -163,7 +163,8 @@ function main {
   else
     if [ $count -eq 0 -o "$type" = "log" ]; then
       show_matches
-    elif [ $count -eq 1 ]; then
+    elif [ $count -eq 0 -o -z "$showall" ]; then
+      matches=`echo "$matches" | head -1`
       echo -e " $GREEN>>>$WHITE Editing $GREEN$matches$WHITE"
       sensible-editor "$matches"
     else
