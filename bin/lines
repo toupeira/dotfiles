@@ -1,0 +1,149 @@
+#!/usr/bin/env ruby
+
+require 'optparse'
+
+module Lines
+  def self.run!
+    options = OptionParser.new
+
+    options.banner = "Usage: #{File.basename $0} COMMAND [ARGUMENTS]"
+
+    options.separator ""
+    options.separator "Commands:"
+
+    commands = Commands.all.map(&:to_s)
+
+    commands.sort.each do |command|
+      if description = Commands.describe(command)
+        options.separator description
+      end
+    end
+
+    options.separator ""
+    options.separator "Options:"
+    options.on '-h', '--help', "Show this message" do
+      usage! options
+    end
+
+    options.separator ""
+    options.parse!
+
+    command, arguments = ARGV.shift, ARGV
+    unless commands.include? command
+      usage! options
+    end
+
+    arguments.each_with_index do |argument, i|
+      if argument =~ /^\d+$/
+        arguments[i] = argument.to_i
+      end
+    end
+
+    lines = STDIN.lines.map(&:strip)
+
+    begin
+      result = Commands.send(command, lines, *arguments)
+    rescue ArgumentError
+      usage! options
+    end
+
+    if result.is_a? Array
+      result.each do |line|
+        puts line
+      end
+    elsif result and result != ''
+      puts result
+    end
+
+  rescue OptionParser::ParseError => exception
+    if defined? options
+      puts exception.message
+      usage! options
+    else
+      raise exception
+    end
+  end
+
+  def self.usage!(options=nil)
+    puts options if options
+    exit 255
+  end
+
+  module Commands
+    class << self
+      def all
+        singleton_methods.map(&:to_sym) - [ :all, :describe ]
+      end
+
+      def describe(command)
+        @@descriptions.each do |method, description, arguments|
+          if method.to_s == command.to_s
+            return "  %-10s %-23s %s" % [ method, arguments, description ]
+         end
+        end
+      end
+
+      @@descriptions = [
+        [ :pop    , "Only output the last line"                     ],
+        [ :push   , "Append a line to the output",  "LINE"          ],
+        [ :reverse, "Reverse the order of the lines"                ],
+        [ :shift  , "Only output the first line"                    ],
+        [ :shuffle, "Randomize the output"                          ],
+        [ :slice  , "Slice the output",             "START [COUNT]" ],
+        [ :unshift, "Prepend a line to the output", "LINE"          ],
+      ]
+
+      @@descriptions.each do |method, *rest|
+        define_method(method) do |lines, *args|
+          lines.send method, *args
+        end
+      end
+
+      @@descriptions << [ :prefix, "Find the longest common prefix" ]
+      def prefix(lines)
+        shortest = lines.to_a.min_by(&:length)
+        maxlen = shortest.length
+
+        maxlen.downto(0) do |len|
+          substring = shortest[0, len]
+          return substring if lines.all? { |line| line.include? substring }
+        end
+      end
+
+      @@descriptions << [:substring, "Find the longest common substring" ]
+      def substring(lines)
+        shortest = lines.to_a.min_by(&:length)
+        maxlen = shortest.length
+
+        maxlen.downto(0) do |len|
+          0.upto(maxlen - len) do |start|
+            substring = shortest[start, len]
+            return substring if lines.all? { |line| line.include? substring }
+          end
+        end
+      end
+
+      @@descriptions << [:truncate, "Cut off long lines and add ellipsis", "[WIDTH] [MODE]" ]
+      def truncate(lines, width=72, mode='head')
+        lines.each_with_index do |line, i|
+          size = line.size
+          if size > width
+            width -= 4
+            lines[i] = if mode == 'head'
+              " ...#{line[(size - width)..-1]}"
+            elsif mode and mode.strip != ''
+              $stderr.puts "Invalid mode '$mode'"
+              usage! options
+            else
+              "#{line[0..width]}..."
+            end
+          end
+        end
+      end
+
+    end
+  end
+
+end
+
+Lines.run!

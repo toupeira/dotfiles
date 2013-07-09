@@ -236,7 +236,7 @@ private
     if File.exist? SOCKET
       pid = output "lsof -F p '#{SOCKET}'"
       if $?.exitstatus == 0
-        pid.sub! /\Ap(\d+).*/m, '\1'
+        pid.sub!(/\Ap(\d+).*/m, '\1')
         pid = pid.to_i
       else
         nil
@@ -511,12 +511,12 @@ def run
     end
   end
 
-rescue OptionParser::ParseError => e
+rescue OptionParser::ParseError => exception
   if defined? usage
-    puts e.message
+    puts exception.message
     usage.call
   else
-    raise e
+    raise exception
   end
 end
 

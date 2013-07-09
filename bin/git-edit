@@ -32,7 +32,6 @@ SHOW=$(echo -ne '\e[?25h')
 HIDE=$(echo -ne '\e[?25l')
 
 BACK=$(echo -ne '\e[D')
-FORWARD=$(echo -ne '\e[C')
 ERASE=$(echo -ne '\e[2K')
 
 function main {
@@ -42,6 +41,7 @@ function main {
         -l|--list)     list=1; shift;;
         -a|--all)      showall=1; shift;;
         -c|--complete) complete=1; shift; exec 3>&1; exec 1>&2;;
+           --spin)     shift; input="$1"; start_loading; read;;
         -*) usage;;
       esac
     else
@@ -180,34 +180,8 @@ function usage {
   exit 255
 }
 
-function start_loading {
-  echo
-  echo -n "$SAVE"
-  echo -n " $GREEN>>>$RESET "
-  if [ -n "$input" ]; then
-    echo -n "$RED$input$RESET "
-  else
-    echo -n "Scanning... "
-  fi
-  echo -n "$HIDE"
-
-  (
-    while true; do
-      for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅ ▄; do
-        echo -n "$DARKGREEN$char$RESET$BACK"
-        sleep 0.04
-      done
-
-      echo -n "$DARKGREEN■$RESET "
-    done
-  ) 2>/dev/null &
-
-  trap "stop_loading; exit" 1 2 3 9 15
-}
-
-function stop_loading {
-  kill $! 2>/dev/null
-  echo -n "$RESTORE$SHOW"
+function is_git {
+  git rev-parse &>/dev/null
 }
 
 function feed_completion {
@@ -216,10 +190,6 @@ function feed_completion {
 
 function pick_line {
   head -n "$1" | tail -n 1
-}
-
-function is_git {
-  git rev-parse &>/dev/null
 }
 
 function truncate {
@@ -321,6 +291,38 @@ function show_matches {
       echo "         ($((count - limit)) more...)"
     fi
   fi
+}
+
+function start_loading {
+  [ -n "$complete" ] && echo
+
+  echo -n "$SAVE"
+  echo -n " $GREEN>>>$RESET "
+  if [ -n "$input" ]; then
+    echo -n "$RED$input$RESET "
+  else
+    echo -n "Scanning... "
+  fi
+
+  echo -n "$HIDE$DARKGREEN"
+
+  (
+    while true; do
+      for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅ ▄; do
+        echo -n "$char$BACK"
+        sleep 0.04
+      done
+
+      echo -n "■ "
+    done
+  ) 2>/dev/null &
+
+  trap "stop_loading; exit" 1 2 3 9 15
+}
+
+function stop_loading {
+  kill $! 2>/dev/null
+  echo -n "$RESET$RESTORE$SHOW"
 }
 
 main "$@"

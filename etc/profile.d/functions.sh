@@ -130,6 +130,15 @@ if [ -n "$SSH_CONNECTION" ]; then
   }
 fi
 
+# Switch to dotfiles repository if no arguments are passed
+function dotfiles {
+  if [ $# -eq 0 ]; then
+    cd "`dotfiles --path`"
+  else
+    command dotfiles "$@"
+  fi
+}
+
 # Switch project directories and run Git commands in them
 function src {
   if [ "$1" = "each" ]; then
