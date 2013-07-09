@@ -55,9 +55,6 @@
 [submodule "vim/bundle/matchtag"]
 	path = vim/bundle/matchtag
 	url = https://github.com/gregsexton/MatchTag.git
-[submodule "vim/bundle/neocomplcache"]
-	path = vim/bundle/neocomplcache
-	url = https://github.com/Shougo/neocomplcache.git
 [submodule "vim/bundle/loremipsum"]
 	path = vim/bundle/loremipsum
 	url = https://github.com/vim-scripts/loremipsum
@@ -100,3 +97,6 @@
 [submodule "vim/bundle/ansiesc"]
 	path = vim/bundle/ansiesc
 	url = https://github.com/vim-scripts/AnsiEsc.vim.git
+[submodule "vim/bundle/neocomplete"]
+	path = vim/bundle/neocomplete
+	url = https://github.com/Shougo/neocomplete.vim.git

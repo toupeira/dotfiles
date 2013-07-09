@@ -13,9 +13,9 @@
   " session doesn't work with minibufexpl
   call add(g:pathogen_disabled, 'session')
 
-  " neocomplcache requires Vim 7.2
+  " neocomplete requires Vim 7.2
   if v:version < '702'
-    call add(g:pathogen_disabled, 'neocomplcache')
+    call add(g:pathogen_disabled, 'neocomplete')
   endif
 
   " Powerline requires Vim 7.3 and Python
@@ -23,9 +23,9 @@
     call add(g:pathogen_disabled, 'powerline')
   endif
 
-  " Disable neocomplcache for SSH sessions
+  " Disable neocomplete for SSH sessions
   if $SSH_CONNECTION != ""
-    call add(g:pathogen_disabled, 'neocomplcache')
+    call add(g:pathogen_disabled, 'neocomplete')
   endif
 
   " load all plugins
@@ -714,37 +714,36 @@
   let g:did_minibufexplorer_syntax_inits = 1
   " }}}
 
-  " neocomplcache
+  " neocomplete
   " {{{
-  if index(g:pathogen_disabled, 'neocomplcache') == -1
-    let g:neocomplcache_enable_at_startup = 1
-    let g:neocomplcache_enable_auto_select = 1
-    let g:neocomplcache_enable_smart_case = 1
-    let g:neocomplcache_auto_completion_start_length = 2
+  if index(g:pathogen_disabled, 'neocomplete') == -1
+    let g:neocomplete#enable_at_startup = 1
+    let g:neocomplete#enable_auto_select = 1
+    let g:neocomplete#enable_smart_case = 1
+    let g:neocomplete#auto_completion_start_length = 2
 
-    let g:neocomplcache_source_disable = {
-      \ 'syntax_complete': 1,
-    \ }
+    call neocomplete#custom#source('syntax', 'disabled', 1)
+    call neocomplete#custom#source('syntax', 'disabled_filetypes', { '_' : 1 })
 
-    if !exists('g:neocomplcache_omni_patterns')
-      let g:neocomplcache_omni_patterns = {}
+    if !exists('g:neocomplete#sources#omni#input_patterns')
+      let g:neocomplete#sources#omni#input_patterns = {}
     endif
 
-    let g:neocomplcache_omni_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-    let g:neocomplcache_omni_patterns.php  = '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-    let g:neocomplcache_omni_patterns.c    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
-    let g:neocomplcache_omni_patterns.cpp  = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+    let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
+    let g:neocomplete#sources#omni#input_patterns.php  = '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+    let g:neocomplete#sources#omni#input_patterns.c    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+    let g:neocomplete#sources#omni#input_patterns.cpp  = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
 
     " Recommended key-mappings.
     " <CR>: close popup and save indent.
-    inoremap <silent> <CR> <C-r>=neocomplcache#smart_close_popup()<CR><CR>
+    inoremap <silent> <CR> <C-r>=neocomplete#smart_close_popup()<CR><CR>
     " <TAB>: completion.
     inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
     " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr> <C-h> neocomplcache#smart_close_popup()."\<C-h>"
-    inoremap <expr> <BS>  neocomplcache#smart_close_popup()."\<C-h>"
-    inoremap <expr> <C-y> neocomplcache#close_popup()
-    inoremap <expr> <C-e> neocomplcache#cancel_popup()
+    inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr> <C-y> neocomplete#close_popup()
+    inoremap <expr> <C-e> neocomplete#cancel_popup()
   endif
   " }}}
 
