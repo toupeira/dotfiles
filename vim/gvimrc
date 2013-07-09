@@ -108,25 +108,6 @@ endif
   " don't use Alt for menus
   set winaltkeys=no
 
-  " cursor movements with Alt key in insert mode and console
-  inoremap <M-h> <C-o>h
-  inoremap <M-j> <C-o>j
-  inoremap <M-k> <C-o>k
-  inoremap <M-l> <C-o>l
-
-  cnoremap <M-h> <Left>
-  cnoremap <M-l> <Right>
-  cnoremap <M-j> <Down>
-  cnoremap <M-k> <Up>
-
-  inoremap <M-f> <C-o>e<Right>
-  inoremap <M-b> <C-o>b
-  inoremap <M-F> <C-o>E<Right>
-  inoremap <M-B> <C-o>B
-
-  cnoremap <M-f> <C-Right>
-  cnoremap <M-b> <C-Left>
-
   " Copy & Paste shortcuts
   " set the 'cpoptions' to its Vim default
   if 1    " only do this when compiled with expression evaluation
@@ -155,8 +136,8 @@ endif
     " CTRL-c is Copy
     vnoremap <C-c> "+y
     " CTRL-v is Paste
-    map <C-v>               "+gP
-    "cmap <C-v>              <C-R>+
+    noremap <C-v>               "+gP
+    cnoremap <C-v>              <C-r>+
 
     " Pasting blockwise and linewise selections is not possible in Insert and
     " Visual mode without the +virtualedit feature.  They are pasted as if they

@@ -76,29 +76,7 @@ function main {
     pattern="${pattern:0:$((${#pattern} - 1))}"
   fi
 
-  # show a loading prompt for auto-completion
-  if [ -n "$complete" ]; then
-    echo
-    [ -z "$choice" ] && echo
-    echo -n "$SAVE$HIDE"
-    echo -n " $GREEN>>>$RESET "
-
-    (
-      sleep 0.3
-
-      echo -n "Scanning...$RESET "
-      while true; do
-        for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅; do
-          echo -n "$DARKGREEN$char$RESET$BACK"
-          sleep 0.04
-        done
-
-        echo -n "$GREEN●$RESET"
-      done
-    ) 2>/dev/null &
-
-    trap "echo -n \"$RESET$SHOW\"; kill \$! 2>/dev/null; wait \$! 2>/dev/null; exit" 0 1 2 3 9 15
-  fi
+  [ -n "$complete" ] && start_loading
 
   if ! is_git; then
     match_files
@@ -168,10 +146,7 @@ function main {
     unset choice
     show_matches
   elif [ -n "$complete" ]; then
-    # clear loading prompt
-    kill $! 2>/dev/null
-    wait $! 2>/dev/null
-    echo -n "$RESTORE$SHOW"
+    stop_loading
     echo -n "$ERASE"
 
     show_matches
@@ -202,6 +177,36 @@ function main {
 function usage {
   echo "Usage: git-edit [-l|--list] [-a|--all] [-c|--complete] [PATTERN] [CHOICE]"
   exit 255
+}
+
+function start_loading {
+  echo
+  echo -n "$SAVE"
+  echo -n " $GREEN>>>$RESET "
+  if [ -n "$input" ]; then
+    echo -n "$RED$input$RESET "
+  else
+    echo -n "Scanning... "
+  fi
+  echo -n "$HIDE"
+
+  (
+    while true; do
+      for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅ ▄; do
+        echo -n "$DARKGREEN$char$RESET$BACK"
+        sleep 0.04
+      done
+
+      echo -n "$DARKGREEN■$RESET"
+    done
+  ) 2>/dev/null &
+
+  trap "stop_loading; exit" 1 2 3 9 15
+}
+
+function stop_loading {
+  kill $! 2>/dev/null
+  echo -n "$RESTORE$SHOW"
 }
 
 function feed_completion {
@@ -298,12 +303,14 @@ function match_git_diff {
 }
 
 function show_matches {
-  if [ -n "$choice" -o $count -eq 1 ] && [ "$type" != "log" ]; then
+  if [ $count -eq 1 ] && [ -n "$choice" -o "$type" = "files" ]; then
     return
   fi
 
-  echo -n "$title $GRAY[$type"
-  [ -n "$input" ] && echo -n "~$input" | truncate 20 head
+  echo
+  echo -n "$title "
+  echo -n "$GRAY[$type"
+  [ $count -eq 0 -a -n "$input" ] && echo -n "~$input" | truncate 20 head
   echo "]$RESET"
 
   if [ $count -gt 0 -o "$type" = "log" ]; then
