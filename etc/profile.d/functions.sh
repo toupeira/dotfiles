@@ -183,6 +183,7 @@ function src {
     cd "$path" || return 1
   fi
 }
+alias st='src status'
 
 # Helper to create an alias for src with Git completion
 function src_alias {
