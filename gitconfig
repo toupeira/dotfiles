@@ -88,11 +88,13 @@
 	std = stash drop
 	stl = stash list
 
-	# shell wrapper
+	# shell wrappers
 	sh = "!f() { \"$@\"; }; f"
+	ag = "!f() { ag --smart-case \"$@\"; }; f"
 
-	# ag wrapper
-	ag = "!f() { ag \"$@\"; }; f"
+	rcon = "!f() { bundle exec rails console \"$@\"; }; f"
+	rlog = "!f() { tail -f log/development.log; }; f"
+	rgen = "!f() { bundle exec rails generate \"$@\"; }; f"
 
 	# try to run a GUI, or tig on terminals
 	g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"
