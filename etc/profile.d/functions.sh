@@ -138,13 +138,14 @@ function src {
       [ -d "$dir/.git" ] || continue
 
       local changes=`cd "$dir"; git status -s | grep -c .`
-      local other=`cd "$dir"; git status | grep -v "^# On branch .*" | fgrep -vx "nothing to commit, working directory clean"`
+      local unmerged=`cd "$dir"; git status | grep -v "^# On branch .*" | fgrep -vx "nothing to commit, working directory clean"`
 
-      if [ $changes -eq 0 -a -z "$other" ]; then
-        echo -e " \e[0;32m>\e[0m No changes in \e[0;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
-      else
+      if [ $changes -gt 0 -o -n "$unmerged" ]; then
+        [ $changes -eq 0 ] && changes="Unmerged"
         echo -e " \e[1;32m>\e[1;33m $changes\e[1;37m changes in \e[1;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
         (cd "$dir"; git -c color.ui=always status | sed -r 's/^/    /')
+      else
+        echo -e " \e[0;32m>\e[0m No changes in \e[0;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
       fi
     done
     echo
