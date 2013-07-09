@@ -149,6 +149,9 @@ function src {
     return
   elif [[ "$1" =~ ^(|st|status)$ ]]; then
     echo
+    local first=1
+    local last=0
+
     for dir in ~/src/*; do
       [ -d "$dir/.git" ] || continue
 
@@ -157,14 +160,26 @@ function src {
 
       if [ $changes -gt 0 -o -n "$unmerged" ]; then
         local label="changes"
-        [ $changes -eq 1 ] && label="change"
-        [ $changes -eq 0 ] && changes="Unmerged"
-        echo -e " \e[1;32m>\e[1;33m $changes\e[1;37m $label in \e[1;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
 
+        if [ $changes -gt 0 ]; then
+          local label="changes"
+          [ $changes -eq 1 ] && label="change"
+          label="\e[1;33m$changes\e[1;37m $label"
+        else
+          label="Unmerged changes"
+        fi
+
+        [ -z "$first" ] && echo
+        echo -e " \e[1;32m>\e[1;37m $label in \e[1;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
         (cd "$dir"; git -c color.ui=always status | sed -r 's/^/    /')
       else
+        [ $last -gt 0 ] && echo
         echo -e " \e[0;32m>\e[0m No changes in \e[0;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
       fi
+
+      unset first
+      last=$changes
+      [ -n "$unmerged" ] && let last++
     done
     echo
 
