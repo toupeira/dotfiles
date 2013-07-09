@@ -141,7 +141,7 @@ function src {
       local unmerged=`cd "$dir"; git status | grep -v "^# On branch .*" | fgrep -vx "nothing to commit, working directory clean"`
 
       if [ $changes -gt 0 -o -n "$unmerged" ]; then
-        [ $changes -eq 0 ] && changes="\e[1;35mUnmerged"
+        [ $changes -eq 0 ] && changes="Unmerged"
         echo -e " \e[1;32m>\e[1;33m $changes\e[1;37m changes in \e[1;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
         (cd "$dir"; git -c color.ui=always status | sed -r 's/^/    /')
       else
