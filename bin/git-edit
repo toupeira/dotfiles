@@ -243,7 +243,7 @@ function match_files {
 
   # expand '.' to '.*' and '/' to '.*/
   pattern=`echo "$pattern" | sed -r -e 's#(^|[^\])\.($|[^\*])#\1.*\2#g' -e 's#(^|[^/])/+#\1.*/#g'`
-  matches=`ag -l . --file-search-regex "$pattern" | sort`
+  matches=`ag . -l --file-search-regex "$pattern" 2>/dev/null | sort`
   count=`echo "$matches" | grep -c .`
 
   if [ -n "$matches" ]; then
