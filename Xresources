@@ -31,7 +31,7 @@ URxvt.keysym.M-Insert:    perl:matcher:list
 URxvt.keysym.M-s:         perl:searchable-scrollback:start
 
 ! Colors
-URxvt*background:	rgba:0000/0000/0000/e8e8
+URxvt*background:	rgba:0000/0000/0000/f3f3
 URxvt*foreground:	#fff
 
 ! Red

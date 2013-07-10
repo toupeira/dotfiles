@@ -7,7 +7,7 @@ function _git_edit {
   # disable default completion for __git_edit_complete
   unset __GIT_COMPLETE_DEFAULT
 
-  __git_complete_in_workdir git-edit --complete "$cur"
+  COMPREPLY=( "$( [ -n "$__GIT_COMPLETE_WORKDIR" ] && cd "$__GIT_COMPLETE_WORKDIR"; git-edit --complete "$cur" )" )
 }
 
 # helper to generate completions inside the configured working directory
@@ -39,14 +39,9 @@ function __git_edit_func_wrap {
   __git_func_wrap $1
 
   if [ -z "$COMPREPLY" -a -n "$__GIT_COMPLETE_DEFAULT" ]; then
-    __git_complete_in_workdir compgen -o bashdefault -o default -o nospace -- "$cur"
-
-    local prefix="$__GIT_COMPLETE_WORKDIR"
-    [ -n "$prefix" ] && prefix="$prefix/"
-
-    if [ ${#COMPREPLY[@]} -eq 1 -a -d "$prefix${COMPREPLY[0]}" ]; then
-      COMPREPLY=( "${COMPREPLY[0]}/" )
-    fi
+    [ -n "$__GIT_COMPLETE_WORKDIR" ] && pushd "$__GIT_COMPLETE_WORKDIR" >/dev/null
+    _filedir
+    [ -n "$__GIT_COMPLETE_WORKDIR" ] && popd >/dev/null
   fi
 
   unset __GIT_COMPLETE_WORKDIR __GIT_COMPLETE_DEFAULT

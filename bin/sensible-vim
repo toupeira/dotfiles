@@ -1,4 +1,12 @@
 #!/bin/sh
+
+# Detect binary filetypes
+if [ $# -gt 0 ]; then
+  if file -L --brief --mime-type "$@" | grep -qP '^((?!text/).+|text/rtf)$'; then
+    exec xdg-open "$@"
+  fi
+fi
+
 if [ -n "$DISPLAY" -a -z "$SSH_CONNECTION" ] && which gvim &>/dev/null; then
   if [ -t 0 ]; then
     unset options

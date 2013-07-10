@@ -1,7 +1,18 @@
 # binaries
+*.gif
+*.jpg
 *.pdf
+*.png
+*.tiff
+
+*.flac
+*.mp3
+*.ogg
+
+*.asf
 *.avi
 *.mkv
+*.mp4
 *.wmv
 
 # home
@@ -11,10 +22,11 @@
 ./movies
 ./music
 ./series
+./Dropbox
+
 ./src/archive
 ./src/upstream
-./src/*-clone
-./Dropbox
+src/*-clone
 
 # Rails
 db/archive

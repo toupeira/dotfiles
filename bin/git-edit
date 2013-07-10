@@ -1,10 +1,11 @@
 #!/bin/bash
 
-unset type matches pretty_matches prefix count
-unset list showall complete expand choice commit
+unset type matches pretty_matches count
+unset list showall complete completion choice commit
 dir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
 
-# default Git options
+# default options
+AG="ag --nocolor --smart-case"
 GIT="git -c color.ui=always"
 GIT_FORMAT="%C(yellow)[%h] %C(white)%s"
 GIT_LOG=10
@@ -76,7 +77,12 @@ function main {
     pattern="${pattern:0:$((${#pattern} - 1))}"
   fi
 
-  [ -n "$complete" ] && start_loading
+  if [ -z "$complete" -a -z "$input" -a -z "$list" ]; then
+    # don't edit files with no arguments
+    usage
+  elif [ -n "$complete" ]; then
+    start_loading
+  fi
 
   if ! is_git; then
     match_files
@@ -139,12 +145,11 @@ function main {
     count=1
     matches=`echo "$matches" | pick_line $choice`
     pretty_matches=`echo "$pretty_matches" | pick_line $choice`
-    [ "$type" != "log" ] && expand=1
+    [ "$type" != "log" ] && completion="$matches"
   fi
 
   if [ -n "$list" ]; then
-    unset choice
-    show_matches
+    echo "$matches"
   elif [ -n "$complete" ]; then
     stop_loading
     echo -n "$ERASE"
@@ -152,13 +157,11 @@ function main {
     show_matches
 
     echo -n " $GREEN>>>$RESET "
-    [ $count -gt 0 ] && echo -n "$RED"
+    [ $count -gt 0 -a -z "$completion" ] && echo -n "$RED"
     echo -n "$input$RESET"
 
-    if [ -n "$expand" ]; then
-      feed_completion "$matches"
-    elif [ -n "$prefix" ]; then
-      feed_completion "$prefix"
+    if [ -n "$completion" ]; then
+      feed_completion "$completion"
     fi
   else
     if [ $count -eq 0 -o "$type" = "log" ]; then
@@ -176,7 +179,7 @@ function main {
 }
 
 function usage {
-  echo "Usage: git-edit [-l|--list] [-a|--all] [-c|--complete] [PATTERN] [CHOICE]"
+  echo "Usage: git-edit [-l|--list] [-a|--all] [-c|--complete] INPUT [CHOICE]"
   exit 255
 }
 
@@ -185,7 +188,7 @@ function is_git {
 }
 
 function feed_completion {
-  echo "$@" >&3
+  echo "$@" | sed -r 's/ /\\ /g' >&3
 }
 
 function pick_line {
@@ -196,7 +199,7 @@ function truncate {
   local length="${1:-$((COLUMNS - 8))}"
 
   if [ "$2" = "head" ]; then
-    sed -r "s/^.{4,}(.{$((length - 4))})$/...\1/"
+    sed -r "s/^.{4,}(.{$((length - 4))})$/ ...\1/"
   else
     sed -r "s/^(.{$((length - 4))}).{4,}$/\1.../"
   fi
@@ -207,26 +210,31 @@ function match_files {
 
   if [ -f "$pattern" ]; then
     matches="$pattern"
-    expand=1
+    completion="$pattern"
     return
   fi
 
   # expand '.' to '.*' and '/' to '.*/
   pattern=`echo "$pattern" | sed -r -e 's#(^|[^\])\.($|[^\*])#\1.*\2#g' -e 's#(^|[^/])/+#\1.*/#g'`
-  matches=`ag . -l --file-search-regex "$pattern" 2>/dev/null | sort`
+  matches=`$AG . -l --file-search-regex "$pattern" 2>/dev/null | sort`
   count=`echo "$matches" | grep -c .`
 
   if [ -n "$matches" ]; then
     if [ $count -le $limit ]; then
-      prefix=`echo "$matches" | lines prefix`
+      local prefix=`echo "$matches" | lines prefix`
       if [ -n "$prefix" -a ${#prefix} -gt ${#input} ] && echo "$prefix" | egrep -q "$pattern"; then
+        completion="$prefix"
         pattern="$prefix"
-      else
-        unset prefix
       fi
     fi
 
-    pretty_matches=`echo "$matches" | truncate | sed -r "s#($pattern)#$RED\1$RESET#g"`
+    pretty_matches=$(
+      echo "$matches" \
+        | truncate "" head \
+        | sed -r "s#($pattern)#$RED\1$RESET#g" \
+        | sed -r "s/$/$RESET/"
+    )
+
     title="Found %count matches in %dir"
   else
     title="${RED}No matches in %dir"
@@ -267,7 +275,7 @@ function match_git_diff {
     title="Unknown or ambiguous commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
     pretty_matches=`$diff --color | fgrep '|' | sed -r 's/^\s*//'`
-    title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT" | truncate $COLUMNS`
+    title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT" | truncate`
   else
     title="No changed files in commit $YELLOW[$commit]$WHITE"
   fi
