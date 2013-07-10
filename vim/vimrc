@@ -186,7 +186,7 @@
   set nocindent
 
   " avoid auto-indenting hash signs
-  inoremap # x<C-H>#
+  "inoremap # x<C-H>#
 
   " tabs
   set noexpandtab
@@ -253,13 +253,21 @@
 " Commands
 " {{{
 
-  " ignore case for common commands
-  command! -nargs=? -bang -complete=file E e<bang> <args>
-  command! -nargs=? -bang -complete=file W w<bang> <args>
-  command! -nargs=? -bang -complete=file WQ wq<bang> <args>
-  command! -bang Q q<bang>
-  command! -bang QA qa<bang>
-  command! -bang Qa qa<bang>
+  " Replace a builtin command using cabbrev
+  " http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
+  function! CommandAbolish(abbreviation, expansion)
+    execute 'cabbrev ' . a:abbreviation . ' <c-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "' . a:expansion . '" : "' . a:abbreviation . '"<CR>'
+endfunction
+  command! -nargs=+ CommandAbolish call CommandAbolish(<f-args>)
+
+  CommandAbolish E e
+  CommandAbolish Q Q
+  CommandAbolish QA qa
+  CommandAbolish Qa qa
+  CommandAbolish qA qa
+  CommandAbolish WQ wq
+  CommandAbolish Wq wq
+  CommandAbolish wQ wq
 
   " shortcuts for visual mode
   command! Dg diffget
@@ -328,18 +336,6 @@
 
   " toggle paste mode with F12
   set pastetoggle=<f12>
-
-  " emacs keybindings
-  cnoremap <C-a> <Home>
-  cnoremap <C-e> <End>
-
-  " scroll in insert mode
-  inoremap <C-e> <C-o><C-e>
-  inoremap <C-y> <C-o><C-y>
-
-  " autocomplete search history in command mode
-  cnoremap <C-n> <Up>
-  cnoremap <C-p> <Down>
 
   " switch buffers with Shift+Tab / Ctrl+Shift+Tab
   noremap <C-Tab> :MBEbn<CR>
@@ -538,12 +534,8 @@
   " undotree
   nnoremap <silent> ,u :UndotreeToggle<CR>
 
-  " closetag
-  autocmd BufEnter * runtime scripts/closetag.vim
-  let g:closetag_html_style = 'html'
-
-  " tcomment
-  let g:tcomment_types = {'php': {'commentstring_rx': '\%%(//\|#\) %s', 'commentstring': '# %s'}}
+  " ragtag
+  imap <C-]> <C-x>/
 
   " tabular
   noremap ,a :Tabular /

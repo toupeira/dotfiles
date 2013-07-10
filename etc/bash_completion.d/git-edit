@@ -5,25 +5,22 @@ function _git_edit {
   # disable default completion for __git_complete
   compopt +o bashdefault +o default
   # disable default completion for __git_edit_complete
-  unset __GIT_COMPLETE_DEFAULT
+  unset __GIT_EDIT_FALLBACK
 
-  # only run if the line has changed since the last completion
-  if [ "$COMP_LINE" = "$__GIT_COMPLETE_LAST_LINE" ]; then
+  # don't run if the line hasn't changed since the last completion
+  if [ -v __GIT_EDIT_LAST -a "$COMP_LINE" = "$__GIT_EDIT_LAST" ]; then
     return
-  else
-    __GIT_COMPLETE_LAST_LINE="$COMP_LINE"
+  fi
 
-    # clear the last line when the prompt is displayed
-    if ! [[ "$PROMPT_COMMAND" =~ __GIT_COMPLETE_LAST_LINE ]]; then
-      [ -n "$PROMPT_COMMAND" ] && PROMPT_COMMAND="$PROMPT_COMMAND;"
-      PROMPT_COMMAND="$PROMPT_COMMAND unset __GIT_COMPLETE_LAST_LINE"
-    fi
+  # set up a callback to be called after completion has finished
+  if ! [[ "$PROMPT_COMMAND" =~ __git_edit_reset_prompt ]]; then
+    [ -n "$PROMPT_COMMAND" ] && PROMPT_COMMAND="$PROMPT_COMMAND;"
+    PROMPT_COMMAND="$PROMPT_COMMAND __git_edit_reset_prompt"
   fi
 
   # find the position of the edit command
   local edit_pos=0
   local pos
-
   for (( pos = 0; pos < ${#words[@]}; pos++ )); do
     local w=${words[pos]}
     if [ "$w" = "edit" -o "$w" = "ed" ]; then
@@ -40,12 +37,19 @@ function _git_edit {
     unset choice
   fi
 
-  COMPREPLY=( "$( [ -n "$__GIT_COMPLETE_WORKDIR" ] && cd "$__GIT_COMPLETE_WORKDIR"; git-edit --complete "$cur" $choice )" )
+  COMPREPLY=( "$( [ -n "$__GIT_EDIT_WORKDIR" ] && cd "$__GIT_EDIT_WORKDIR"; git-edit --complete "$cur" $choice )" )
+
+  export __GIT_EDIT_LAST="$COMP_LINE"
+}
+
+function __git_edit_reset_prompt {
+  # clear the last completion input
+  unset __GIT_EDIT_LAST
 }
 
 # helper to generate completions inside the configured working directory
 function __git_complete_in_workdir {
-  COMPREPLY=( $( [ -n "$__GIT_COMPLETE_WORKDIR" ] && cd "$__GIT_COMPLETE_WORKDIR"; $@ ) )
+  COMPREPLY=( $( [ -n "$__GIT_EDIT_WORKDIR" ] && cd "$__GIT_EDIT_WORKDIR"; $@ ) )
 }
 
 # helper to add Git completions to a command
@@ -66,18 +70,18 @@ function __git_edit_complete {
 function __git_edit_func_wrap {
   local cur=${COMP_WORDS[COMP_CWORD]}
 
-  __GIT_COMPLETE_DEFAULT=1
-  __GIT_COMPLETE_WORKDIR="$2"
+  __GIT_EDIT_FALLBACK=1
+  __GIT_EDIT_WORKDIR="$2"
 
   __git_func_wrap $1
 
-  if [ -z "$COMPREPLY" -a -n "$__GIT_COMPLETE_DEFAULT" ]; then
-    [ -n "$__GIT_COMPLETE_WORKDIR" ] && pushd "$__GIT_COMPLETE_WORKDIR" >/dev/null
+  if [ -z "$COMPREPLY" -a -n "$__GIT_EDIT_FALLBACK" ]; then
+    [ -n "$__GIT_EDIT_WORKDIR" ] && pushd "$__GIT_EDIT_WORKDIR" >/dev/null
     _filedir
-    [ -n "$__GIT_COMPLETE_WORKDIR" ] && popd >/dev/null
+    [ -n "$__GIT_EDIT_WORKDIR" ] && popd >/dev/null
   fi
 
-  unset __GIT_COMPLETE_WORKDIR __GIT_COMPLETE_DEFAULT
+  unset __GIT_EDIT_WORKDIR __GIT_EDIT_FALLBACK
 }
 
 function _ed {

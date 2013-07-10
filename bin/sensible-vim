@@ -2,8 +2,13 @@
 
 # Detect binary filetypes
 if [ $# -gt 0 ]; then
-  if file -L --brief --mime-type "$@" | grep -qP '^((?!text/).+|text/rtf)$'; then
-    exec xdg-open "$@"
+  mimetypes=`file -L --brief --mime-type "$@" | grep -vx 'inode/directory' | grep -P '^((?!text/).+|text/rtf)$'`
+  if [ -n "$mimetypes" ]; then
+    echo -e "Using \e[1;37mxdg-open\e[0m for \e[1;33m$mimetypes\e[0m"
+    for file in "$@"; do
+      exec xdg-open "$file"
+    done
+    exit
   fi
 fi
 

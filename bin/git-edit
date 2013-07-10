@@ -19,6 +19,7 @@ GRAY=$(echo -ne '\e[1;30m')
 
 DARKRED=$(echo -ne '\e[0;31m')
 DARKGREEN=$(echo -ne '\e[0;32m')
+DARKYELLOW=$(echo -ne '\e[0;33m')
 DARKCYAN=$(echo -ne '\e[0;36m')
 
 # cursor movement
@@ -105,7 +106,7 @@ function main {
     pattern="${pattern:0:$((${#pattern} - 1))}"
   fi
 
-  if [ -z "$complete" -a -z "$input" -a -z "$list" ]; then
+  if [ -z "$input" -a -z "$complete" -a -z "$list" ]; then
     # don't edit files with no arguments
     usage
   elif [ -n "$complete" ]; then
@@ -207,6 +208,7 @@ function main {
       else
         echo -e " $GREEN>>>$WHITE Running $CYAN'${command[@]}'$WHITE on $GREEN$matches$WHITE"
       fi
+
       "${command[@]}" "$matches"
     else
       if [ -z "$force" ]; then
@@ -225,7 +227,7 @@ function main {
           "${command[@]}" "$match"
         done
       else
-        "${command[@]}" "$matches"
+        "${command[@]}" "${matches[@]}"
       fi
     fi
   fi
@@ -278,8 +280,10 @@ function pick_line {
 }
 
 function output {
-  IFS=$'\n'
-  echo "$*"
+  if [ $# -gt 0 ]; then
+    IFS=$'\n'
+    echo "$*"
+  fi
 }
 
 function truncate {
@@ -331,10 +335,10 @@ function match_files {
 
 function match_git_status {
   type="status"
-  mapfile -t pretty_matches < <($GIT status -s)
+  mapfile -t pretty_matches < <($GIT status -s | grep -vP '^[^a-z]+mD\e')
   mapfile -t matches < <(output "${pretty_matches[@]}" | sed -r 's/.* ([^ ]+)$/\1/')
 
-  if [ ${#matches[@]} ]; then
+  if [ ${#matches[@]} -gt 0 ]; then
     title="Found %count changes in %dir"
   else
     title="No changes in %dir"
@@ -381,26 +385,28 @@ function show_matches {
   echo "]$RESET"
 
   if [ $count -gt 0 -o "$type" = "log" ]; then
-    output "${pretty_matches[@]}" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$YELLOW[\2]$RESET/"
+    output "${pretty_matches[@]}" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$DARKYELLOW[$YELLOW\2$DARKYELLOW]$RESET/"
 
     if [ $count -gt $limit -a -z "$showall" ]; then
-      echo "         ($((count - limit)) more...)"
+      echo "         $GRAY($RESET$((count - limit))$GRAY more...)$RESET"
     fi
   fi
 }
 
 function start_loading {
-  [ -n "$complete" ] && echo
+  if [ -v __GIT_EDIT_LAST ]; then
+    [ -n "$complete" ] && echo
+    echo -n "$SAVE"
+    echo -n " $GREEN>>>$RED "
 
-  echo -n "$SAVE"
-  echo -n " $GREEN>>>$RESET "
-  if [ -n "$input" ]; then
-    echo -n "$RED$input$RESET "
-  else
-    echo -n "Scanning... "
+    if [ -n "$input" ]; then
+      echo -n "$input "
+    fi
+  elif [ -n "$input" ]; then
+    echo -n " "
   fi
 
-  echo -n "$HIDE$DARKGREEN"
+  echo -n "$HIDE$RED"
 
   (
     while true; do
@@ -417,8 +423,9 @@ function start_loading {
 
 function stop_loading {
   if [ -n "$loading" ]; then
-    kill $loading 2>/dev/null
-    echo -n "$RESET$RESTORE$SHOW"
+    kill -9 $loading 2>/dev/null
+    [ -v __GIT_EDIT_LAST ] && echo -n "$RESTORE"
+    echo -n "$RESET$SHOW"
     unset loading
   fi
 }

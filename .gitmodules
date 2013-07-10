@@ -100,3 +100,21 @@
 [submodule "vim/bundle/neocomplete"]
 	path = vim/bundle/neocomplete
 	url = https://github.com/Shougo/neocomplete.vim.git
+[submodule "vim/bundle/abolish"]
+	path = vim/bundle/abolish
+	url = https://github.com/tpope/vim-abolish.git
+[submodule "vim/bundle/commentary"]
+	path = vim/bundle/commentary
+	url = https://github.com/tpope/vim-commentary.git
+[submodule "vim/bundle/eunuch"]
+	path = vim/bundle/eunuch
+	url = https://github.com/tpope/vim-eunuch.git
+[submodule "vim/bundle/characterize"]
+	path = vim/bundle/characterize
+	url = https://github.com/tpope/vim-characterize
+[submodule "vim/bundle/ragtag"]
+	path = vim/bundle/ragtag
+	url = https://github.com/tpope/vim-ragtag.git
+[submodule "vim/bundle/rsi"]
+	path = vim/bundle/rsi
+	url = https://github.com/tpope/vim-rsi.git
