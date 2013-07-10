@@ -12,6 +12,7 @@
 ./music
 ./series
 ./src/archive
+./src/upstream
 ./src/*-clone
 ./Dropbox
 
