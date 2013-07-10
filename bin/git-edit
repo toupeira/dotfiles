@@ -218,7 +218,7 @@ function match_files {
 
   if [ -n "$matches" ]; then
     if [ $count -le $limit ]; then
-      prefix=`echo "$matches" | prefix`
+      prefix=`echo "$matches" | lines prefix`
       if [ -n "$prefix" -a ${#prefix} -gt ${#input} ] && echo "$prefix" | egrep -q "$pattern"; then
         pattern="$prefix"
       else

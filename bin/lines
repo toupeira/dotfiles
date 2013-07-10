@@ -4,9 +4,11 @@ require 'optparse'
 
 module Lines
   def self.run!
+    $name = File.basename $0
+
     options = OptionParser.new
 
-    options.banner = "Usage: #{File.basename $0} COMMAND [ARGUMENTS]"
+    options.banner = "Usage: #{$name} COMMAND [ARGUMENTS]"
 
     options.separator ""
     options.separator "Commands:"
@@ -28,23 +30,23 @@ module Lines
     options.separator ""
     options.parse!
 
-    command, arguments = ARGV.shift, ARGV
-    unless commands.include? command
+    $command, $arguments = ARGV.shift, ARGV
+    unless commands.include? $command
       usage! options
     end
 
-    arguments.each_with_index do |argument, i|
+    $arguments.each_with_index do |argument, i|
       if argument =~ /^\d+$/
-        arguments[i] = argument.to_i
+        $arguments[i] = argument.to_i
       end
     end
 
-    lines = STDIN.lines.map(&:strip)
+    $lines = STDIN.lines.map(&:strip)
 
     begin
-      result = Commands.send(command, lines, *arguments)
-    rescue ArgumentError
-      usage! options
+      result = Commands.send($command, $lines, *$arguments)
+    rescue ArgumentError => exception
+      usage! options, exception
     end
 
     if result.is_a? Array
@@ -57,15 +59,18 @@ module Lines
 
   rescue OptionParser::ParseError => exception
     if defined? options
-      puts exception.message
-      usage! options
+      usage! options, exception
     else
       raise exception
     end
   end
 
-  def self.usage!(options=nil)
-    puts options if options
+  def self.usage!(options=nil, exception=nil)
+    if exception
+      puts "-#{$command}: #{exception.class}: #{exception.message}"
+    elsif options
+      puts options
+    end
     exit 255
   end
 
