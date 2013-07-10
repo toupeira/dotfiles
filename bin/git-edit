@@ -1,8 +1,6 @@
-#!/bin/bash
+#!/usr/bin/env bash
 
-unset type matches pretty_matches count
-unset list showall complete completion choice commit
-dir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
+workdir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
 
 # default options
 AG="ag --nocolor --smart-case"
@@ -36,13 +34,18 @@ BACK=$(echo -ne '\e[D')
 ERASE=$(echo -ne '\e[2K')
 
 function main {
+  unset list showall force complete
+  unset input pattern selection command
+  unset loading
+
   for arg in "$@"; do
     if [ "${arg:0:1}" = "-" ]; then
       case "$arg" in
         -l|--list)     list=1; shift;;
         -a|--all)      showall=1; shift;;
+        -f|--force)    force=1; shift;;
         -c|--complete) complete=1; shift; exec 3>&1; exec 1>&2;;
-           --spin)     shift; input="$1"; start_loading; read;;
+           --spin)     shift; input="$1"; start_loading; read; stop_loading; exit;;
         -*) usage;;
       esac
     else
@@ -51,24 +54,49 @@ function main {
   done
 
   input="$1"
-  pattern="$1"
-  choice="$2"
-  limit=$((LINES - 4))
+  shift
 
-  if [ -n "$choice" ] && ! [[ "$choice" =~ ^[0-9]+$ ]]; then
-    usage
+  if [ -f "$1" ]; then
+    input="$1"
+    shift
+  elif [[ "$1" =~ ^[0-9]+$ ]]; then
+    output_selection=1
+    selection="$1"
+    shift
   fi
+
+  case "$1" in
+    edit|edi|ed|"")
+      shift
+      command=( sensible-editor "$@" )
+      ;;
+    diff|dif|di|d)
+      shift
+      command=( git diff "$@" )
+      command_run_each=1
+      ;;
+    add|ad|a)
+      shift
+      command=( git add "$2" )
+      ;;
+    each|eac|ea)
+      command_run_each=1
+      shift
+      ;;
+    *)
+      command=( "$@" )
+      shift $#
+      ;;
+  esac
+
+  pattern="$input"
+  limit=$((LINES - 4))
 
   # check for trailing numbers
   if echo -n "$pattern" | egrep -q '(^|.*#)[0-9]*$'; then
-    # use the given number as the selected choice
-    choice=`echo "$pattern"  | sed -r 's/(^|.*#)([0-9]*)$/\2/'`
+    # use the given number as the selection
+    selection=`echo "$pattern"  | sed -r 's/(^|.*#)([0-9]*)$/\2/'`
     pattern=`echo "$pattern" | sed -r 's/#?[0-9]*$//'`
-
-    if [ -z "$pattern" ]; then
-      shift
-      pattern="$1"
-    fi
   fi
 
   # show all matches if the pattern ends with '!'
@@ -88,9 +116,9 @@ function main {
     match_files
   elif [ -z "$pattern" ]; then
     match_git_status
-    if [ -z "$matches" ]; then
+    if [ ${#matches[@]} -eq 0 ]; then
       match_git_log
-      [ -n "$complete" ] && feed_completion "@$choice"
+      [ -n "$complete" ] && feed_completion "@$selection"
     fi
   elif [ "${input:0:1}" = "@" ]; then
     commit="$pattern"
@@ -105,7 +133,7 @@ function main {
 
     if [ -n "$commit" ]; then
       if [[ "$commit" =~ ^[0-9]{,3}$ ]]; then
-        commit=`echo "$matches" | pick_line $commit`
+        commit=${matches[$commit]}
       fi
       match_git_diff
     fi
@@ -113,13 +141,13 @@ function main {
     match_files
   fi
 
-  [ -z "$count" ]  && count=`echo "$matches" | grep -c .`
+  [ -z "$count" ]  && count=${#matches[@]}
   [ $count -eq 0 ] && pretty_matches=
 
   # expand variables in title
   title=$(echo "$title" | sed -r \
     -e "s|%count|$YELLOW$count$WHITE|g" \
-    -e "s|%dir|$CYAN[$dir]$WHITE|g"
+    -e "s|%dir|$CYAN[$workdir]$WHITE|g"
   )
 
   if [ $count -eq 0 ]; then
@@ -136,20 +164,20 @@ function main {
     [ $limit -le 0 ] && limit=1
 
     if [ $count -gt $limit ]; then
-      pretty_matches=`echo -e "$pretty_matches" | head -n $limit`
+      mapfile -t pretty_matches < <( output "${pretty_matches[@]:0:$limit}" )
     fi
   fi
 
-  # select the given choice
-  if [ -n "$choice" ]; then
+  # use the selection if set
+  if [ -n "$selection" ]; then
     count=1
-    matches=`echo "$matches" | pick_line $choice`
-    pretty_matches=`echo "$pretty_matches" | pick_line $choice`
+    matches=${matches[$((selection - 1))]}
+    pretty_matches=${pretty_matches[$((selection - 1))]}
     [ "$type" != "log" ] && completion="$matches"
   fi
 
   if [ -n "$list" ]; then
-    echo "$matches"
+    output "${matches[@]}"
   elif [ -n "$complete" ]; then
     stop_loading
     echo -n "$ERASE"
@@ -158,7 +186,12 @@ function main {
 
     echo -n " $GREEN>>>$RESET "
     [ $count -gt 0 -a -z "$completion" ] && echo -n "$RED"
-    echo -n "$input$RESET"
+    if [ -n "$output_selection" ]; then
+      echo -n "$selection"
+    else
+      echo -n "$input"
+    fi
+    echo -n "$RESET"
 
     if [ -n "$completion" ]; then
       feed_completion "$completion"
@@ -166,20 +199,69 @@ function main {
   else
     if [ $count -eq 0 -o "$type" = "log" ]; then
       show_matches
-    elif [ $count -eq 0 -o -z "$showall" ]; then
-      matches=`echo "$matches" | head -1`
-      echo -e " $GREEN>>>$WHITE Editing $GREEN$matches$WHITE"
-      sensible-editor "$matches"
+      return
+    elif [ $count -eq 1 -o -z "$showall" ]; then
+      matches=${matches[0]}
+      if [ "${command[0]}" = "sensible-editor" ]; then
+        echo -e " $GREEN>>>$WHITE Editing $GREEN$matches$WHITE"
+      else
+        echo -e " $GREEN>>>$WHITE Running $CYAN'${command[@]}'$WHITE on $GREEN$matches$WHITE"
+      fi
+      "${command[@]}" "$matches"
     else
-      read -p " $CYAN>>>$WHITE Edit $YELLOW$count$WHITE files?$RESET [Y/n] "
-      [ "$REPLY" = "n" -o "$REPLY" = "N" ] && exit
-      sensible-editor $matches
+      if [ -z "$force" ]; then
+        if [ "${command[0]}" = "sensible-editor" ]; then
+          echo -n " $CYAN>>>$WHITE Edit $YELLOW$count$WHITE files?$RESET [Y/n] "
+        else
+          echo -n " $CYAN>>>$WHITE Run $CYAN'${command[@]}'$WHITE on $YELLOW$count$WHITE files?$RESET [Y/n] "
+        fi
+
+        read
+        [ "$REPLY" = "n" -o "$REPLY" = "N" ] && exit
+      fi
+
+      if [ -n "$command_run_each" ]; then
+        echo "$matches" | while read match; do
+          "${command[@]}" "$match"
+        done
+      else
+        "${command[@]}" "$matches"
+      fi
     fi
   fi
 }
 
 function usage {
-  echo "Usage: git-edit [-l|--list] [-a|--all] [-c|--complete] INPUT [CHOICE]"
+  echo "Usage: git-edit [-l|--list] [-a|--all] [-f|--force] [-c|--complete] INPUT [SELECTION] [each] [COMMAND [ARGS..]]"
+  echo
+  echo "Options":
+  echo "  -l, --list       Output all matches (unformatted)"
+  echo "  -a, --all        Show all matches (formatted)"
+  echo "  -f, --force      Assume yes for all questions"
+  echo "  -c, --complete   Completion mode"
+  echo
+  echo "Input formats:"
+  echo "  @                Show Git log (repeat @ to show more entries)"
+  echo "  @NUMBER, @HASH   Show changed files for the selected commit "
+  echo "  *                Path or fuzzy match pattern"
+  echo
+  echo "Fuzzy matching:"
+  echo "  .               Expands to .*"
+  echo "  /               Expands to .*/"
+  echo
+  echo "Selection:"
+  echo "  INPUT#NUMBER    Append the number to the first argument"
+  echo "  INPUT NUMBER    Pass selection as second argument"
+  echo
+  echo "Commands:"
+  echo "  edit            Run 'sensible-editor' (default)"
+  echo "  diff            Run 'git diff'"
+  echo "  add             Run 'git add'"
+  echo
+  echo "  *               Run any command on the files"
+  echo "  each *          Run command on each file separately"
+  echo
+
   exit 255
 }
 
@@ -193,6 +275,11 @@ function feed_completion {
 
 function pick_line {
   head -n "$1" | tail -n 1
+}
+
+function output {
+  IFS=$'\n'
+  echo "$*"
 }
 
 function truncate {
@@ -216,20 +303,21 @@ function match_files {
 
   # expand '.' to '.*' and '/' to '.*/
   pattern=`echo "$pattern" | sed -r -e 's#(^|[^\])\.($|[^\*])#\1.*\2#g' -e 's#(^|[^/])/+#\1.*/#g'`
-  matches=`$AG . -l --file-search-regex "$pattern" 2>/dev/null | sort`
-  count=`echo "$matches" | grep -c .`
+  mapfile -t matches < <($AG . -l --file-search-regex "$pattern" 2>/dev/null | sort)
 
-  if [ -n "$matches" ]; then
+  count=${#matches[@]}
+
+  if [ $count -gt 0 ]; then
     if [ $count -le $limit ]; then
-      local prefix=`echo "$matches" | lines prefix`
+      local prefix=`output "${matches[@]}" | lines prefix`
       if [ -n "$prefix" -a ${#prefix} -gt ${#input} ] && echo "$prefix" | egrep -q "$pattern"; then
         completion="$prefix"
         pattern="$prefix"
       fi
     fi
 
-    pretty_matches=$(
-      echo "$matches" \
+    mapfile -t pretty_matches < <(
+      output "${matches[@]}" \
         | truncate "" head \
         | sed -r "s#($pattern)#$RED\1$RESET#g" \
         | sed -r "s/$/$RESET/"
@@ -243,10 +331,10 @@ function match_files {
 
 function match_git_status {
   type="status"
-  pretty_matches=`$GIT status -s`
-  matches=`echo "$pretty_matches" | sed -r 's/.* ([^ ]+)$/\1/'`
+  mapfile -t pretty_matches < <($GIT status -s)
+  mapfile -t matches < <(output "${pretty_matches[@]}" | sed -r 's/.* ([^ ]+)$/\1/')
 
-  if [ -n "$matches" ]; then
+  if [ ${#matches[@]} ]; then
     title="Found %count changes in %dir"
   else
     title="No changes in %dir"
@@ -256,10 +344,10 @@ function match_git_status {
 function match_git_log {
   type="log"
   local log="$GIT log -n $GIT_LOG --all --no-merges"
-  matches=`$log --pretty=format:"%h"`
+  mapfile -t matches < <($log --pretty=format:"%h")
 
   if [ -n "$matches" ]; then
-    pretty_matches=`$log --pretty=format:"$GIT_FORMAT" | truncate $((COLUMNS + 2))`
+    mapfile -t pretty_matches < <($log --pretty=format:"$GIT_FORMAT" | truncate $((COLUMNS + 2)))
     title="Latest commits in %dir"
   else
     title="No commits in %dir"
@@ -269,12 +357,12 @@ function match_git_log {
 function match_git_diff {
   type="diff"
   local diff="$GIT diff-tree -r --stat --no-commit-id ${commit:-HEAD}"
-  matches=`$diff --name-only 2>/dev/null`
+  mapfile -t matches < <($diff --name-only 2>/dev/null)
 
   if [ $? -ne 0 ]; then
     title="Unknown or ambiguous commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
-    pretty_matches=`$diff --color | fgrep '|' | sed -r 's/^\s*//'`
+    mapfile -t pretty_matches < <($diff --color | fgrep '|' | sed -r 's/^\s*//')
     title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT" | truncate`
   else
     title="No changed files in commit $YELLOW[$commit]$WHITE"
@@ -282,7 +370,7 @@ function match_git_diff {
 }
 
 function show_matches {
-  if [ $count -eq 1 ] && [ -n "$choice" -o "$type" = "files" ]; then
+  if [ $count -eq 1 ] && [ -n "$selection" -o "$type" = "files" ]; then
     return
   fi
 
@@ -293,7 +381,7 @@ function show_matches {
   echo "]$RESET"
 
   if [ $count -gt 0 -o "$type" = "log" ]; then
-    echo "$pretty_matches" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$YELLOW[\2]$RESET/"
+    output "${pretty_matches[@]}" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$YELLOW[\2]$RESET/"
 
     if [ $count -gt $limit -a -z "$showall" ]; then
       echo "         ($((count - limit)) more...)"
@@ -316,21 +404,23 @@ function start_loading {
 
   (
     while true; do
-      for char in ▁ ▃ ▄ ▅ ▆ ▇ █ ▇ ▆ ▅ ▄; do
+      for char in ◐ ◓ ◑ ◒; do
         echo -n "$char$BACK"
-        sleep 0.04
+        sleep 0.1
       done
-
-      echo -n "■ "
     done
   ) 2>/dev/null &
 
-  trap "stop_loading; exit" 1 2 3 9 15
+  loading=$!
+  trap "stop_loading; exit" 0 1 2 3 9 15
 }
 
 function stop_loading {
-  kill $! 2>/dev/null
-  echo -n "$RESET$RESTORE$SHOW"
+  if [ -n "$loading" ]; then
+    kill $loading 2>/dev/null
+    echo -n "$RESET$RESTORE$SHOW"
+    unset loading
+  fi
 }
 
 main "$@"

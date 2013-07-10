@@ -7,7 +7,40 @@ function _git_edit {
   # disable default completion for __git_edit_complete
   unset __GIT_COMPLETE_DEFAULT
 
-  COMPREPLY=( "$( [ -n "$__GIT_COMPLETE_WORKDIR" ] && cd "$__GIT_COMPLETE_WORKDIR"; git-edit --complete "$cur" )" )
+  # only run if the line has changed since the last completion
+  if [ "$COMP_LINE" = "$__GIT_COMPLETE_LAST_LINE" ]; then
+    return
+  else
+    __GIT_COMPLETE_LAST_LINE="$COMP_LINE"
+
+    # clear the last line when the prompt is displayed
+    if ! [[ "$PROMPT_COMMAND" =~ __GIT_COMPLETE_LAST_LINE ]]; then
+      [ -n "$PROMPT_COMMAND" ] && PROMPT_COMMAND="$PROMPT_COMMAND;"
+      PROMPT_COMMAND="$PROMPT_COMMAND unset __GIT_COMPLETE_LAST_LINE"
+    fi
+  fi
+
+  # find the position of the edit command
+  local edit_pos=0
+  local pos
+
+  for (( pos = 0; pos < ${#words[@]}; pos++ )); do
+    local w=${words[pos]}
+    if [ "$w" = "edit" -o "$w" = "ed" ]; then
+      edit_pos=$pos
+      break
+    fi
+  done
+
+  # pass the previous pattern if a number is given
+  if [ $cword -gt $((edit_pos + 1)) ] && [[ "$cur" =~ ^[0-9]+$ ]]; then
+    local choice="$cur"
+    local cur="$prev"
+  else
+    unset choice
+  fi
+
+  COMPREPLY=( "$( [ -n "$__GIT_COMPLETE_WORKDIR" ] && cd "$__GIT_COMPLETE_WORKDIR"; git-edit --complete "$cur" $choice )" )
 }
 
 # helper to generate completions inside the configured working directory
