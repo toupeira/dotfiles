@@ -260,13 +260,13 @@ function truncate {
 
 # collect matches for the given pattern
 function match_pattern {
-  if [ -z "$pattern" -a is_git ]; then
+  if [ -z "$pattern" ] && is_git; then
     match_git_status
     if [ ${#matches[@]} -eq 0 ]; then
       match_git_log
       [ -n "$complete" ] && feed_completion "@$selection"
     fi
-  elif [ "${input:0:1}" = "@" ]; then
+  elif [ "${pattern:0:1}" = "@" ]; then
     if ! is_git; then
       title="Not a Git repository"
       return
@@ -280,8 +280,19 @@ function match_pattern {
     done
 
     if [ "${commit:0:1}" = "!" ]; then
+      showall=1
       commit=${commit:1}
+    fi
+
+    if [ -n "$showall" ]; then
       GIT_LOG=-1
+    elif [ -n "$selection" ]; then
+      GIT_LOG=$((selection + 1))
+    fi
+
+    if [[ "$commit" =~ ^[0-9]{1,5}$ ]]; then
+      local commit_selection=$commit
+      GIT_LOG=$commit_selection
     fi
 
     local original_limit=$limit
@@ -290,9 +301,8 @@ function match_pattern {
     match_git_log
 
     if [ -n "$commit" ]; then
-      if [[ "$commit" =~ ^[0-9]{,5}$ ]]; then
-        local commit_selection=$commit
-        commit=${matches[$((commit - 1))]}
+      if [ -n "$commit_selection" ]; then
+        commit=${matches[$((commit_selection - 1))]}
       fi
 
       limit=$original_limit
@@ -301,7 +311,7 @@ function match_pattern {
       if [ -n "$commit" ]; then
         match_git_diff "$commit"
       else
-        title="Invalid commit selection '$commit_selection'"
+        title="Invalid commit '$commit_selection'"
       fi
     fi
   else
@@ -384,15 +394,18 @@ function match_git_diff {
     title="Unknown or ambiguous commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
     mapfile -t pretty_matches < <($diff --color | fgrep '|' | sed -r 's/^\s*//')
-    title="%count changes in `$GIT show $commit -s --pretty=format:"%C(yellow)[%h] %s" | truncate`"
+    title=`$GIT show $commit -s --pretty=format:"%C(yellow)[%h] %s" | truncate`
   else
-    title="No changed files in commit $YELLOW[$commit]$WHITE"
+    title="${RED}No changed files in commit $YELLOW[$commit]$WHITE"
   fi
 }
 
 function show_completion {
   stop_loading
-  echo -n "$ERASE"
+
+  if [ -v __GIT_EDIT_LAST -o $count -ne 1 ]; then
+    echo -n "$ERASE"
+  fi
 
   # don't show matches when a selection is given,
   # or when a file match only returns one result
@@ -414,7 +427,10 @@ function show_completion {
   fi
 
   # show the completion prompt
-  echo -n " $GREEN>>>$RESET "
+  if [ -v __GIT_EDIT_LAST -o $count -ne 1 ]; then
+    echo -n " $GREEN>>>$RESET "
+  fi
+
   [ $count -gt 0 -a -z "$completion" ] && echo -n "$RED"
 
   if [ -n "$output_selection" ]; then
@@ -433,7 +449,7 @@ function show_completion {
 
 function start_loading {
   if [ -v __GIT_EDIT_LAST ]; then
-    [ -n "$complete" ] && echo
+    echo
     echo -n "$SAVE"
     echo -n " $GREEN>>>$RED "
 
@@ -444,12 +460,12 @@ function start_loading {
     echo -n " "
   fi
 
-  echo -n "$HIDE$RED"
+  echo -n "$HIDE$RED  "
 
   (
     while true; do
       for char in ◐ ◓ ◑ ◒; do
-        echo -n "$char$BACK"
+        echo -n "$HIDE$BACK$BACK$char $SHOW"
         sleep 0.1
       done
     done
@@ -461,8 +477,12 @@ function start_loading {
 
 function stop_loading {
   if [ -n "$loading" ]; then
-    kill -9 $loading 2>/dev/null
-    [ -v __GIT_EDIT_LAST ] && echo -n "$RESTORE"
+    kill $loading 2>/dev/null
+
+    if [ -v __GIT_EDIT_LAST ]; then
+      echo -n "$RESTORE"
+    fi
+
     echo -n "$RESET$SHOW"
     unset loading
   fi
