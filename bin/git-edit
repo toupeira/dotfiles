@@ -54,6 +54,7 @@ function main {
     fi
   done
 
+  original_args=( "$@" )
   input="$1"
   shift
 
@@ -405,6 +406,14 @@ function show_completion {
 
   if [ -v __GIT_EDIT_LAST -o $count -ne 1 ]; then
     echo -n "$ERASE"
+  elif [ $count -eq 1 -a -n "$completion" ]; then
+    local args="${original_args[@]}"
+    local backtrack=$((3 + ${#args}))
+
+    local i
+    for (( i = 0; i < $backtrack; i++ )); do
+      echo -n "$BACK"
+    done
   fi
 
   # don't show matches when a selection is given,
