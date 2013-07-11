@@ -42,8 +42,19 @@ function main {
       -l|--list)     list=1;;
       -a|--all)      showall=1;;
       -f|--force)    force=1;;
-      -c|--complete) complete=1; exec 3>&1; exec 1>&2;;
-      --spin) start_loading; read; stop_loading; exit;;
+      -c|--complete)
+        complete=1
+        # redirect stdout to stderr, and open FD 3 to output completions to stdout
+        exec 3>&1
+        exec 1>&2
+        ;;
+      --spin)
+        start_loading
+        trap "echo; exit" 2
+        read
+        stop_loading
+        exit
+        ;;
       -*) usage;;
     esac
 
@@ -152,6 +163,7 @@ function main {
   if [ -n "$list" ]; then
     output "${matches[@]}"
   elif [ -n "$complete" ]; then
+    stop_loading
     show_completion
   else
     if [ $count -eq 0 -o "$type" = "log" ]; then
@@ -427,7 +439,7 @@ function match_git_diff {
 }
 
 function show_completion {
-  stop_loading
+  echo -n "$RESTORE  $BACK$BACK"
 
   if [ $count -eq 1 ]; then
     local args="${original_input[@]}"
@@ -508,7 +520,6 @@ function start_loading {
 function stop_loading {
   if [ -n "$loading" ]; then
     kill $loading 2>/dev/null
-    echo -n "$RESTORE  $BACK$BACK"
     echo -n "$RESET$SHOW"
     unset loading
   fi
