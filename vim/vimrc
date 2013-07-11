@@ -425,7 +425,7 @@ endfunction
     if l:pattern != ""
       echohl ModeMsg
       echo "/ searching..."
-      execute 'silent grep '.shellescape(l:pattern).' %'
+      execute 'silent grep '.shellescape(l:pattern).' % /dev/null'
 
       let l:len = len(getqflist())
       if l:len > 0

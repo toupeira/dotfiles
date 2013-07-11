@@ -246,12 +246,12 @@ function output {
 
 # truncate lines to the given length
 function truncate {
-  local length="${1:-$((COLUMNS - 8))}"
+  local length="${1:-$((COLUMNS - 9))}"
 
   if [ "$2" = "head" ]; then
-    sed -r "s/^.{4,}(.{$((length - 4))})$/ ...\1/"
+    sed -r "s/^.{5,}(.{$((length - 4))})$/ ...\1/"
   else
-    sed -r "s/^(.{$((length - 4))}).{4,}$/\1.../"
+    sed -r "s/^(.{$((length - 3))}).{5,}$/\1.../"
   fi
 }
 
@@ -387,7 +387,7 @@ function match_git_log {
   if [ -n "$matches" ]; then
     mapfile -t pretty_matches < <(
       $log --pretty=format:"%C(yellow)[%h] %C(black bold)%ar:%Creset %s" \
-        | truncate $((COLUMNS + 2))
+        | truncate $((COLUMNS + 5))
     )
     title="Latest commits in %dir"
   else
@@ -411,7 +411,7 @@ function match_git_diff {
         | sed -r -e 's/^\s*//' \
                  -e "s/\|(.*[0-9]+)?/$GRAY|$DARKCYAN\1$RESET/"
     )
-    title=`echo "${pretty_matches[0]}" | truncate`
+    title=`echo "${pretty_matches[0]}" | truncate $((COLUMNS - 3))`
     pretty_matches=( "${pretty_matches[@]:1:$((${#pretty_matches[@]} - 2))}" )
   else
     title="${RED}No changed files in commit $YELLOW[$commit]$WHITE"
