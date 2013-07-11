@@ -26,35 +26,31 @@ DARKCYAN=$(echo -ne '\e[0;36m')
 COLUMNS=`tput cols`
 LINES=`tput lines`
 
+BACK=$(echo -ne '\e[D')
 SAVE=$(echo -ne '\e[s')
 RESTORE=$(echo -ne '\e[u')
 SHOW=$(echo -ne '\e[?25h')
 HIDE=$(echo -ne '\e[?25l')
-
-BACK=$(echo -ne '\e[D')
-ERASE=$(echo -ne '\e[2K')
 
 function main {
   unset list showall force complete
   unset input pattern selection command
   unset loading
 
-  for arg in "$@"; do
-    if [ "${arg:0:1}" = "-" ]; then
-      case "$arg" in
-        -l|--list)     list=1; shift;;
-        -a|--all)      showall=1; shift;;
-        -f|--force)    force=1; shift;;
-        -c|--complete) complete=1; shift; exec 3>&1; exec 1>&2;;
-           --spin)     shift; input="$1"; start_loading; read; stop_loading; exit;;
-        -*) usage;;
-      esac
-    else
-      break
-    fi
+  while [ "${1:0:1}" = "-" ]; do
+    case "$1" in
+      -l|--list)     list=1;;
+      -a|--all)      showall=1;;
+      -f|--force)    force=1;;
+      -c|--complete) complete=1; exec 3>&1; exec 1>&2;;
+      --spin) start_loading; read; stop_loading; exit;;
+      -*) usage;;
+    esac
+
+    shift
   done
 
-  original_args=( "$@" )
+  original_input=( "$@" )
   input="$1"
   shift
 
@@ -139,7 +135,7 @@ function main {
     [ $limit -le 0 ] && limit=1
 
     if [ $count -gt $limit ]; then
-      mapfile -t pretty_matches < <( output "${pretty_matches[@]:0:$limit}" )
+      pretty_matches=( "${pretty_matches[@]:0:$limit}" )
     fi
   fi
 
@@ -334,7 +330,9 @@ function match_files {
     echo "$pattern" | sed -r -e 's#\.+\**#.*#g' -e 's#/+#.*/#g'
   )
 
-  mapfile -t matches < <($AG . -l --file-search-regex "$pattern" 2>/dev/null | sort)
+  mapfile -t matches < <(
+    $AG . -l --file-search-regex "$pattern" 2>/dev/null | sort
+  )
 
   count=${#matches[@]}
 
@@ -362,8 +360,14 @@ function match_files {
 
 function match_git_status {
   type="status"
-  mapfile -t pretty_matches < <($GIT status -s | grep -vP '^[^a-z]+mD\e')
-  mapfile -t matches < <(output "${pretty_matches[@]}" | sed -r 's/.* ([^ ]+)$/\1/')
+
+  mapfile -t pretty_matches < <(
+    $GIT status -s | grep -vP '^[^a-z]+mD\e'
+  )
+
+  mapfile -t matches < <(
+    output "${pretty_matches[@]}" | sed -r 's/.* ([^ ]+)$/\1/'
+  )
 
   if [ ${#matches[@]} -gt 0 ]; then
     title="Found %count changes in %dir"
@@ -376,10 +380,15 @@ function match_git_log {
   type="log"
 
   local log="$GIT log -n $GIT_LOG --all --no-merges"
-  mapfile -t matches < <($log --pretty=format:"%h")
+  mapfile -t matches < <(
+    $log --pretty=format:"%h"
+  )
 
   if [ -n "$matches" ]; then
-    mapfile -t pretty_matches < <($log --pretty=format:"%C(yellow)[%h] %C(black bold)%ar:%Creset %s" | truncate $((COLUMNS + 2)))
+    mapfile -t pretty_matches < <(
+      $log --pretty=format:"%C(yellow)[%h] %C(black bold)%ar:%Creset %s" \
+        | truncate $((COLUMNS + 2))
+    )
     title="Latest commits in %dir"
   else
     title="No commits in %dir"
@@ -388,14 +397,22 @@ function match_git_log {
 
 function match_git_diff {
   type="diff"
-  local diff="$GIT diff-tree -r --stat --no-commit-id ${commit:-HEAD}"
-  mapfile -t matches < <($diff -z --name-only 2>/dev/null | tr "\0" "\n")
+  local show="$GIT show --pretty=format:"" ${commit:-HEAD}"
+  mapfile -t matches < <(
+    $show --name-only 2>/dev/null | tr "\0" "\n" | grep .
+  )
 
   if [ $? -ne 0 ]; then
     title="Unknown or ambiguous commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
-    mapfile -t pretty_matches < <($diff --color | fgrep '|' | sed -r 's/^\s*//')
-    title=`$GIT show $commit -s --pretty=format:"%C(yellow)[%h] %s" | truncate`
+    mapfile -t pretty_matches < <(
+      $show --color --stat=$((COLUMNS - 7)) \
+            --pretty=format:"%C(yellow)[%h]%C(white) %s" \
+        | sed -r -e 's/^\s*//' \
+                 -e "s/\|(.*[0-9]+)?/$GRAY|$DARKCYAN\1$RESET/"
+    )
+    title=`echo "${pretty_matches[0]}" | truncate`
+    pretty_matches=( "${pretty_matches[@]:1:$((${#pretty_matches[@]} - 2))}" )
   else
     title="${RED}No changed files in commit $YELLOW[$commit]$WHITE"
   fi
@@ -404,11 +421,9 @@ function match_git_diff {
 function show_completion {
   stop_loading
 
-  if [ -v __GIT_EDIT_LAST -o $count -ne 1 ]; then
-    echo -n "$ERASE"
-  elif [ $count -eq 1 -a -n "$completion" ]; then
-    local args="${original_args[@]}"
-    local backtrack=$((3 + ${#args}))
+  if [ $count -eq 1 ]; then
+    local args="${original_input[@]}"
+    local backtrack=${#args}
 
     local i
     for (( i = 0; i < $backtrack; i++ )); do
@@ -416,9 +431,16 @@ function show_completion {
     done
   fi
 
+  if [ $count -eq 1 ] && [ -n "$selection" -o "$type" = "files" ]; then
+    unset show_prompt
+  else
+    local show_prompt=1
+  fi
+
   # don't show matches when a selection is given,
   # or when a file match only returns one result
-  if [ $count -ne 1 ] || [ -z "$selection" -a "$type" != "files" ]; then
+  if [ -n "$show_prompt" ]; then
+    echo
     echo -ne "\n$title $GRAY[$type"
     # show the pattern when no match was found
     if [ $count -eq 0 -a -n "$pattern" ]; then
@@ -436,7 +458,7 @@ function show_completion {
   fi
 
   # show the completion prompt
-  if [ -v __GIT_EDIT_LAST -o $count -ne 1 ]; then
+  if [ -n "$show_prompt" ]; then
     echo -n " $GREEN>>>$RESET "
   fi
 
@@ -457,21 +479,12 @@ function show_completion {
 }
 
 function start_loading {
-  if [ -v __GIT_EDIT_LAST ]; then
-    echo
-    echo -n "$SAVE"
-    echo -n " $GREEN>>>$RED "
-
-    if [ -n "$input" ]; then
-      echo -n "$input "
-    fi
-  elif [ -n "$input" ]; then
-    echo -n " "
-  fi
-
-  echo -n "$HIDE$RED  "
+  echo -n "$SAVE"
 
   (
+    [ -n "$input" ] && echo -n " "
+    echo -n "$HIDE$RED  "
+
     while true; do
       for char in ◐ ◓ ◑ ◒; do
         echo -n "$HIDE$BACK$BACK$char $SHOW"
@@ -487,11 +500,7 @@ function start_loading {
 function stop_loading {
   if [ -n "$loading" ]; then
     kill $loading 2>/dev/null
-
-    if [ -v __GIT_EDIT_LAST ]; then
-      echo -n "$RESTORE"
-    fi
-
+    echo -n "$RESTORE  $BACK$BACK"
     echo -n "$RESET$SHOW"
     unset loading
   fi
