@@ -5,7 +5,7 @@ workdir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
 # default options
 AG="ag --nocolor --smart-case"
 GIT="git -c color.ui=always"
-GIT_FORMAT="%C(yellow)[%h] %C(white)%s"
+GIT_FORMAT="%C(yellow)[%h] %C(black bold)%ar:%Creset %s"
 GIT_LOG=10
 
 # colors
@@ -113,34 +113,7 @@ function main {
     start_loading
   fi
 
-  if ! is_git; then
-    match_files
-  elif [ -z "$pattern" ]; then
-    match_git_status
-    if [ ${#matches[@]} -eq 0 ]; then
-      match_git_log
-      [ -n "$complete" ] && feed_completion "@$selection"
-    fi
-  elif [ "${input:0:1}" = "@" ]; then
-    commit="$pattern"
-    GIT_LOG=0
-    while [ "${commit:0:1}" = "@" ]; do
-      commit=${commit:1}
-      let GIT_LOG+=10
-    done
-    limit=$GIT_LOG
-
-    match_git_log
-
-    if [ -n "$commit" ]; then
-      if [[ "$commit" =~ ^[0-9]{,3}$ ]]; then
-        commit=${matches[$commit]}
-      fi
-      match_git_diff
-    fi
-  else
-    match_files
-  fi
+  match_pattern
 
   [ -z "$count" ]  && count=${#matches[@]}
   [ $count -eq 0 ] && pretty_matches=
@@ -180,26 +153,10 @@ function main {
   if [ -n "$list" ]; then
     output "${matches[@]}"
   elif [ -n "$complete" ]; then
-    stop_loading
-    echo -n "$ERASE"
-
-    show_matches
-
-    echo -n " $GREEN>>>$RESET "
-    [ $count -gt 0 -a -z "$completion" ] && echo -n "$RED"
-    if [ -n "$output_selection" ]; then
-      echo -n "$selection"
-    else
-      echo -n "$input"
-    fi
-    echo -n "$RESET"
-
-    if [ -n "$completion" ]; then
-      feed_completion "$completion"
-    fi
+    show_completion
   else
     if [ $count -eq 0 -o "$type" = "log" ]; then
-      show_matches
+      output "${matches[@]}"
       return
     elif [ $count -eq 1 -o -z "$showall" ]; then
       matches=${matches[0]}
@@ -234,35 +191,40 @@ function main {
 }
 
 function usage {
-  echo "Usage: git-edit [-l|--list] [-a|--all] [-f|--force] [-c|--complete] INPUT [SELECTION] [each] [COMMAND [ARGS..]]"
-  echo
-  echo "Options":
-  echo "  -l, --list       Output all matches (unformatted)"
-  echo "  -a, --all        Show all matches (formatted)"
-  echo "  -f, --force      Assume yes for all questions"
-  echo "  -c, --complete   Completion mode"
-  echo
-  echo "Input formats:"
-  echo "  @                Show Git log (repeat @ to show more entries)"
-  echo "  @NUMBER, @HASH   Show changed files for the selected commit "
-  echo "  *                Path or fuzzy match pattern"
-  echo
-  echo "Fuzzy matching:"
-  echo "  .               Expands to .*"
-  echo "  /               Expands to .*/"
-  echo
-  echo "Selection:"
-  echo "  INPUT#NUMBER    Append the number to the first argument"
-  echo "  INPUT NUMBER    Pass selection as second argument"
-  echo
-  echo "Commands:"
-  echo "  edit            Run 'sensible-editor' (default)"
-  echo "  diff            Run 'git diff'"
-  echo "  add             Run 'git add'"
-  echo
-  echo "  *               Run any command on the files"
-  echo "  each *          Run command on each file separately"
-  echo
+  if [ -z "$complete" ]; then
+    cat <<EOF
+Usage: git-edit [OPTIONS] INPUT [SELECTION] [each] [COMMAND [ARGS..]]
+
+Options:
+  -l, --list       Output all matches (unformatted)
+  -a, --all        Show all matches (formatted)
+  -f, --force      Assume yes for all questions
+  -c, --complete   Completion mode
+
+Input formats:
+  @                Show Git log (repeat @ to show more entries)
+  @NUMBER, @HASH   Show changed files for the selected commit
+  *                Path or fuzzy match pattern
+
+  Fuzzy matching:
+    .               Expands to .*
+    /               Expands to .*/
+
+Selection:
+  INPUT#NUMBER    Append the number to the first argument
+  INPUT NUMBER    Pass selection as second argument
+  INPUT!          Show all files
+
+Commands:
+  edit            Run 'sensible-editor' (default)
+  diff            Run 'git diff'
+  add             Run 'git add'
+
+  *               Run any command on the files
+  each *          Run command on each file separately
+
+EOF
+  fi
 
   exit 255
 }
@@ -271,14 +233,13 @@ function is_git {
   git rev-parse &>/dev/null
 }
 
+# output a string to the redirected stdout,
+# which will cause the input to be replaced by it
 function feed_completion {
   echo "$@" | sed -r 's/ /\\ /g' >&3
 }
 
-function pick_line {
-  head -n "$1" | tail -n 1
-}
-
+# output array members separated by newlines
 function output {
   if [ $# -gt 0 ]; then
     IFS=$'\n'
@@ -286,6 +247,7 @@ function output {
   fi
 }
 
+# truncate lines to the given length
 function truncate {
   local length="${1:-$((COLUMNS - 8))}"
 
@@ -293,6 +255,57 @@ function truncate {
     sed -r "s/^.{4,}(.{$((length - 4))})$/ ...\1/"
   else
     sed -r "s/^(.{$((length - 4))}).{4,}$/\1.../"
+  fi
+}
+
+# collect matches for the given pattern
+function match_pattern {
+  if [ -z "$pattern" -a is_git ]; then
+    match_git_status
+    if [ ${#matches[@]} -eq 0 ]; then
+      match_git_log
+      [ -n "$complete" ] && feed_completion "@$selection"
+    fi
+  elif [ "${input:0:1}" = "@" ]; then
+    if ! is_git; then
+      title="Not a Git repository"
+      return
+    fi
+
+    commit="$pattern"
+    GIT_LOG=0
+    while [ "${commit:0:1}" = "@" ]; do
+      commit=${commit:1}
+      let GIT_LOG+=10
+    done
+
+    if [ "${commit:0:1}" = "!" ]; then
+      commit=${commit:1}
+      GIT_LOG=-1
+    fi
+
+    local original_limit=$limit
+    limit=$GIT_LOG
+
+    match_git_log
+
+    if [ -n "$commit" ]; then
+      if [[ "$commit" =~ ^[0-9]{,5}$ ]]; then
+        local commit_selection=$commit
+        commit=${matches[$((commit - 1))]}
+      fi
+
+      limit=$original_limit
+      unset count matches pretty_matches
+
+      if [ -n "$commit" ]; then
+        match_git_diff "$commit"
+      else
+        title="Invalid commit selection '$commit_selection'"
+      fi
+    fi
+  else
+    match_files
   fi
 }
 
@@ -306,7 +319,10 @@ function match_files {
   fi
 
   # expand '.' to '.*' and '/' to '.*/
-  pattern=`echo "$pattern" | sed -r -e 's#(^|[^\])\.($|[^\*])#\1.*\2#g' -e 's#(^|[^/])/+#\1.*/#g'`
+  pattern=$(
+    echo "$pattern" | sed -r -e 's#\.+\**#.*#g' -e 's#/+#.*/#g'
+  )
+
   mapfile -t matches < <($AG . -l --file-search-regex "$pattern" 2>/dev/null | sort)
 
   count=${#matches[@]}
@@ -347,11 +363,12 @@ function match_git_status {
 
 function match_git_log {
   type="log"
+
   local log="$GIT log -n $GIT_LOG --all --no-merges"
   mapfile -t matches < <($log --pretty=format:"%h")
 
   if [ -n "$matches" ]; then
-    mapfile -t pretty_matches < <($log --pretty=format:"$GIT_FORMAT" | truncate $((COLUMNS + 2)))
+    mapfile -t pretty_matches < <($log --pretty=format:"%C(yellow)[%h] %C(black bold)%ar:%Creset %s" | truncate $((COLUMNS + 2)))
     title="Latest commits in %dir"
   else
     title="No commits in %dir"
@@ -361,35 +378,56 @@ function match_git_log {
 function match_git_diff {
   type="diff"
   local diff="$GIT diff-tree -r --stat --no-commit-id ${commit:-HEAD}"
-  mapfile -t matches < <($diff --name-only 2>/dev/null)
+  mapfile -t matches < <($diff -z --name-only 2>/dev/null | tr "\0" "\n")
 
   if [ $? -ne 0 ]; then
     title="Unknown or ambiguous commit $YELLOW[$commit]$WHITE"
   elif [ -n "$matches" ]; then
     mapfile -t pretty_matches < <($diff --color | fgrep '|' | sed -r 's/^\s*//')
-    title=`$GIT show $commit -s --pretty=format:"$GIT_FORMAT" | truncate`
+    title="%count changes in `$GIT show $commit -s --pretty=format:"%C(yellow)[%h] %s" | truncate`"
   else
     title="No changed files in commit $YELLOW[$commit]$WHITE"
   fi
 }
 
-function show_matches {
-  if [ $count -eq 1 ] && [ -n "$selection" -o "$type" = "files" ]; then
-    return
+function show_completion {
+  stop_loading
+  echo -n "$ERASE"
+
+  # don't show matches when a selection is given,
+  # or when a file match only returns one result
+  if [ $count -ne 1 ] || [ -z "$selection" -a "$type" != "files" ]; then
+    echo -ne "\n$title $GRAY[$type"
+    # show the pattern when no match was found
+    if [ $count -eq 0 -a -n "$pattern" ]; then
+      echo -n "~$pattern" | truncate 20 head
+    fi
+    echo "]$RESET"
+
+    if [ $count -gt 0 ]; then
+      output "${pretty_matches[@]}" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$DARKYELLOW[$YELLOW\2$DARKYELLOW]$RESET/"
+
+      if [ $count -gt $limit -a -z "$showall" ]; then
+        echo "         $GRAY($RESET$((count - limit))$GRAY more...)$RESET"
+      fi
+    fi
   fi
 
-  echo
-  echo -n "$title "
-  echo -n "$GRAY[$type"
-  [ $count -eq 0 -a -n "$input" ] && echo -n "~$input" | truncate 20 head
-  echo "]$RESET"
+  # show the completion prompt
+  echo -n " $GREEN>>>$RESET "
+  [ $count -gt 0 -a -z "$completion" ] && echo -n "$RED"
 
-  if [ $count -gt 0 -o "$type" = "log" ]; then
-    output "${pretty_matches[@]}" | nl -s ' ' | sed -r "s/^\s{2}(\s*)([0-9]+)/ \1$DARKYELLOW[$YELLOW\2$DARKYELLOW]$RESET/"
+  if [ -n "$output_selection" ]; then
+    # output the selected match
+    echo -n "$selection"
+  else
+    # output the input
+    echo -n "$input"
+  fi
+  echo -n "$RESET"
 
-    if [ $count -gt $limit -a -z "$showall" ]; then
-      echo "         $GRAY($RESET$((count - limit))$GRAY more...)$RESET"
-    fi
+  if [ -n "$completion" ]; then
+    feed_completion "$completion"
   fi
 }
 
