@@ -90,12 +90,15 @@
 
 	# shell wrappers
 	sh = "!f() { \"$@\"; }; f"
-	ag = "!f() { ag --smart-case \"$@\"; }; f"
+	ag = "!ag --smart-case"
 
-	rails = "!f() { bundle exec rails \"$@\"; }; f"
-	rcon  = "!f() { bundle exec rails console \"$@\"; }; f"
-	rgen  = "!f() { bundle exec rails generate \"$@\"; }; f"
-	rlog  = "!f() { tail -f $(git rev-parse --show-toplevel 2>/dev/null)/log/development.log; }; f"
+	rake  = "!bundle exec rake"
+	rails = "!bundle exec rails"
+	rcon  = "!bundle exec rails console"
+	rgen  = "!bundle exec rails generate"
+	rlog  = "!f() { local file=${1:-development.log}; tail -f $(git rev-parse --show-toplevel 2>/dev/null)/log/$file*; }; f"
+
+	guard = "!bundle exec guard"
 
 	# try to run a GUI, or tig on terminals
 	g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"

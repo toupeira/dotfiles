@@ -115,9 +115,7 @@ if [ -n "$SSH_CONNECTION" ]; then
 
         # Execute GVim in the root directory to avoid errors when the cwd
         # doesn't exist on the local machine
-        pushd / >/dev/null
-        command gvim $options --remote "${args[@]}"
-        popd >/dev/null
+        (cd /; command gvim $options --remote "${args[@]}")
 
         return
       else
@@ -145,8 +143,7 @@ function src {
     shift
     for dir in ~/src/*; do
       echo -e "# \e[0;36m$dir\e[0m" | sed -r "s|$HOME|~|"
-      exec 3>&1
-      `cd "$dir"; $@ 1>&3`
+      (cd "$dir" || exit 1; $@)
 
       local status=$?
       if [ $status -ne 0 ]; then
@@ -180,7 +177,7 @@ function src {
 
         [ -z "$first" ] && echo
         echo -e " \e[1;32m>\e[1;37m \e[1;33m$label in \e[1;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
-        (cd "$dir"; git -c color.ui=always status | sed -r 's/^/    /')
+        (cd "$dir" || exit 1; git -c color.ui=always status | sed -r 's/^/    /')
       else
         [ $last -gt 0 ] && echo
         echo -e " \e[0;32m>\e[0m No changes in \e[0;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
@@ -215,9 +212,7 @@ function src {
   elif [ ! -d "$path" ]; then
     echo "Unsupported path $path"
   elif [ -n "$1" ]; then
-    pushd "$path" >/dev/null
-    git "$@"
-    popd >/dev/null
+    (cd "$path" || exit 1; git "$@")
   else
     # switch to the project directory if no arguments were passed
     cd "$path" || return 1

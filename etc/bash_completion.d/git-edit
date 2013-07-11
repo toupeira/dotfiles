@@ -37,7 +37,12 @@ function _git_edit {
     unset choice
   fi
 
-  COMPREPLY=( "$( [ -n "$__GIT_EDIT_WORKDIR" ] && cd "$__GIT_EDIT_WORKDIR"; git-edit --complete "$cur" $choice )" )
+  COMPREPLY=( "$(
+    if [ -n "$__GIT_EDIT_WORKDIR" ]; then
+      cd "$__GIT_EDIT_WORKDIR" || exit 1
+    fi
+    git-edit --complete "$cur" $choice
+  )" )
 
   export __GIT_EDIT_LAST="$COMP_LINE"
 }
@@ -45,11 +50,6 @@ function _git_edit {
 function __git_edit_reset_prompt {
   # clear the last completion input
   unset __GIT_EDIT_LAST
-}
-
-# helper to generate completions inside the configured working directory
-function __git_complete_in_workdir {
-  COMPREPLY=( $( [ -n "$__GIT_EDIT_WORKDIR" ] && cd "$__GIT_EDIT_WORKDIR"; $@ ) )
 }
 
 # helper to add Git completions to a command

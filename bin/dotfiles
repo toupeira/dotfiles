@@ -188,10 +188,9 @@ function git {
   [ $VERBOSE -eq 1 ] && echo "    executing: git $@"
   [ $DRYRUN  -eq 1 ] && echo "    executing: git $@ [DRY RUN]" && return
 
-  pushd "$DOTFILES" >/dev/null || exit 1
-  command git "$@" || $onerror
+  (cd "$DOTFILES" || exit 1; command git "$@")
   local status=$?
-  popd >/dev/null
+  [ $status -eq 0 ] || $onerror
 
   return $status
 }
@@ -271,11 +270,11 @@ function run {
         status "Updating submodule {{$submodule}}..."
         message="Update submodule $submodule"
 
-        pushd "$DOTFILES/$submodule" >/dev/null || exit 1
-        [ -e ".git" ] || exec echo "Not a git repository: .git"
-
-        system git pull -v --progress origin master
-        popd >/dev/null
+        (
+          cd "$DOTFILES/$submodule" || exit 1
+          [ -e ".git" ] || exec echo "Not a git repository: .git"
+          system git pull -v --progress origin master
+        )
       else
         status "{{Updating all submodules...}}"
         message="Update submodules"

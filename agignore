@@ -16,19 +16,12 @@
 *.wmv
 
 # home
-./tmp
-./backups
-./games
-./movies
-./music
-./series
-./Dropbox
-
-./src/archive
-./src/upstream
 src/*-clone
+src/**/public/system
+src/**/tmp
+src/archive
+src/puppet/modules/base/files/vim
+src/upstream
 
 # Rails
 db/archive
-public/system
-public/assets

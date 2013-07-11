@@ -3,7 +3,7 @@
 workdir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
 
 # default options
-AG="ag --nocolor --smart-case"
+AG="ag --nocolor --smart-case --follow"
 GIT="git -c color.ui=always"
 GIT_FORMAT="%C(yellow)[%h] %C(black bold)%ar:%Creset %s"
 GIT_LOG=10
@@ -122,9 +122,9 @@ function main {
   )
 
   if [ $count -eq 0 ]; then
-    title=" $DARKRED>>>$WHITE $title$RESET"
+    title=" $DARKRED>$WHITE $title$RESET"
   else
-    title=" $GREEN>>>$WHITE $title$RESET"
+    title=" $GREEN>$WHITE $title$RESET"
   fi
 
   if [ -n "$showall" ]; then
@@ -141,6 +141,8 @@ function main {
 
   # use the selection if set
   if [ -n "$selection" ]; then
+    [ $selection -gt $count ] && usage
+
     count=1
     matches=${matches[$((selection - 1))]}
     pretty_matches=${pretty_matches[$((selection - 1))]}
@@ -158,9 +160,9 @@ function main {
     elif [ $count -eq 1 -o -z "$showall" ]; then
       matches=${matches[0]}
       if [ "${command[0]}" = "sensible-editor" ]; then
-        echo -e " $GREEN>>>$WHITE Editing $GREEN$matches$WHITE"
+        echo -e " $GREEN>$WHITE Editing $GREEN$matches$WHITE"
       else
-        echo -e " $GREEN>>>$WHITE Running $CYAN'${command[@]}'$WHITE on $GREEN$matches$WHITE"
+        echo -e " $GREEN>$WHITE Running $CYAN'${command[@]}'$WHITE on $GREEN$matches$WHITE"
       fi
 
       "${command[@]}" "$matches"
@@ -330,8 +332,14 @@ function match_files {
     echo "$pattern" | sed -r -e 's#\.+\**#.*#g' -e 's#/+#.*/#g'
   )
 
+  if [ "$PWD" = "$HOME" ]; then
+    local dirs="${__GIT_EDIT_HOME_DIRS:-bin src tmp}"
+  else
+    unset dirs
+  fi
+
   mapfile -t matches < <(
-    $AG . -l --file-search-regex "$pattern" 2>/dev/null | sort
+    $AG . $dirs -l --file-search-regex "$pattern" 2>/dev/null | sort
   )
 
   count=${#matches[@]}
