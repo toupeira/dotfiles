@@ -52,11 +52,6 @@ endif
     endif
   endif
 
-  " tab bar
-  hi TabLine guifg=LightGray guibg=#606060
-  hi TabLineSel gui=bold guifg=White guibg=#808080
-  hi TabLineFill gui=underline guifg=LightGray guibg=grey20 guibg=#505050
-
 " }}}
 
 " Keybindings

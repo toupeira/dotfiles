@@ -36,7 +36,13 @@
     set guioptions+=M
   end
 
+" }}}
+
+" General Settings
+" {{{
+
   " file handling
+  set hidden
   set nobackup
   set autowrite
   set encoding=utf-8
@@ -46,7 +52,14 @@
     set cryptmethod=blowfish
   end
 
+  " searching
+  set ignorecase
+  set smartcase
+  set incsearch
+  set hlsearch
+
   set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
+  set dictionary=/usr/share/dict/words
 
   " create temporary directory in ~/.vim/tmp
   let s:tmpdir = expand("~/.vim/tmp")
@@ -64,17 +77,38 @@
     endif
   endif
 
+" }}}
+
+" Display Settings
+" {{{
+
   " interface
-  set hidden
+  syntax on
+  colorscheme desertink
   set lazyredraw
+  set visualbell
+  set errorbells
+
+  " windows
   set splitbelow
   set splitright
+
+  " disable preview window for completion
+  set completeopt-=preview
+
+  " buffers
+  set number
+  set numberwidth=6
   set scrolloff=5
   set sidescrolloff=8
   set sidescroll=1
   set virtualedit+=block
   set nostartofline
   set display+=lastline
+
+  if has('conceal')
+    set conceallevel=2
+  end
 
   " command prompt and status line
   set showcmd
@@ -85,60 +119,6 @@
   set wildmenu
   set wildmode=longest:full,full
   set wildignore=*.pyc,*.o,*.lo,*.la,*.exe,*.swp,*.db,*.bak,*.old,*.dat,*.,tmp,*.mdb,*~,~*
-
-  " searching
-  set ignorecase
-  set smartcase
-  set incsearch
-  set hlsearch
-
-" }}}
-
-" Display Settings
-" {{{
-
-  " syntax highlighting
-  syntax on
-  if has('conceal')
-    set conceallevel=2
-  end
-
-  " color scheme
-  colorscheme desertink
-
-  " visual bell
-  set visualbell
-  set errorbells
-
-  " statusline
-  " {{{
-  if index(g:pathogen_disabled, 'powerline') > -1
-    autocmd VimEnter,Colorscheme * highlight StatusLineGray  cterm=bold ctermfg=231 ctermbg=241 gui=bold guifg=white guibg=#666666
-    autocmd VimEnter,Colorscheme * highlight StatusLineRed   cterm=bold ctermfg=231 ctermbg=88 gui=bold guifg=white guibg=#913d3b
-    autocmd VimEnter,Colorscheme * highlight StatusLineGreen cterm=bold ctermfg=231 ctermbg=28 gui=bold guifg=white guibg=#368736
-
-    set statusline=
-
-    set stl+=%#StatusLineGray#\ %n\ %*              " buffer number
-    set stl+=%#StatusLineGreen#%{fugitive#statusline()[4:-2]}%* " Git status
-    set stl+=%#StatusLineRed#%r%*                   " read-only flag
-    set stl+=%#StatusLineRed#%m%*                   " modified flag
-    " if $SSH_CONNECTION != ""
-    "   set stl+=%{toupper(hostname())}:              " hostname
-    " endif
-    set stl+=\ %<\"%f\"\                            " file name
-    set stl+=%y                                     " file type
-    set stl+=[%{strlen(&fenc)?&fenc:&enc}           " file encoding
-    set stl+=%{&bomb?',BOM':''}                     " BOM flag
-    set stl+=%{&ff!='unix'?','.toupper(&ff):''}]\   " file format
-    set stl+=%=                                     " left/right separator
-    set stl+=%-20.(%l/%L,%c%)\ %P                   " cursor position
-  endif
-  " }}}
-
-  " line numbers
-  set number
-  set numberwidth=6
 
   " cursor line
   " autocmd CursorHold *
@@ -166,9 +146,6 @@
   else
     "set titlestring=%r%m\ %t\ \[%{substitute(expand('%:p:h'),\ $HOME,\ '~',\ 'g')}\]\ -\ %{v:servername}
   endif
-
-  " disable preview window for completion
-  set completeopt-=preview
 
 " }}}
 

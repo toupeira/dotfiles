@@ -215,7 +215,6 @@ Options:
 
 Input formats:
   @                Show Git log (repeat @ to show more entries)
-  @NUMBER, @HASH   Show changed files for the selected commit
   *                Path or fuzzy match pattern
 
   Fuzzy matching:
@@ -223,9 +222,14 @@ Input formats:
     /               Expands to .*/
 
 Selection:
-  INPUT#NUMBER    Append the number to the first argument
-  INPUT NUMBER    Pass selection as second argument
+  INPUT#NUMBER    Select a file by number
+  INPUT NUMBER    Select a file by number (as second argument)
   INPUT!          Show all files
+
+  @!              Show all log entries
+  @NUMBER, @HASH  Show changed files for a commit
+  @INPUT#NUMBER   Select file from commit by number
+  @INPUT NUMBER   Select file from commit by number (as second argument)
 
 Commands:
   edit            Run 'sensible-editor' (default)
@@ -233,7 +237,7 @@ Commands:
   add             Run 'git add'
 
   *               Run any command on the files
-  each *          Run command on each file separately
+  each *          Run command on each file individually
 
 EOF
   fi
