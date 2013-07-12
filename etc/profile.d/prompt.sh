@@ -26,16 +26,15 @@ _bpurple='\[\e[1;35m\]'      # Purple
 _bcyan='\[\e[1;36m\]'        # Cyan
 _bwhite='\[\e[1;37m\]'       # White
 
+PS1_USER="$_bblack\u"
 if [ -n "$SSH_CONNECTION" ]; then
-  PS1_USER="\u"
-  PS1_HOST="$_bblack@\h$_reset"
+  PS1_HOST="$_byellow@\h"
 else
-  PS1_USER="$_bblack\u$_reset"
   unset PS1_HOST
 fi
-[ "$UID" = "0" ] && PS1_USER="$_bred\u$_reset"
+[ "$UID" = "0" ] && PS1_USER="$_bred\u"
 
-export PS1="$_reset$PS1_USER$PS1_HOST:$_yellow\w$_reset\\$ \[\$(_ps1_exit_code)\]"
+export PS1="$_reset$PS1_USER$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_reset \[\$(_ps1_exit_code)\]"
 
 function _ps1_exit_code {
   local status=$?
@@ -58,7 +57,7 @@ if type __git_ps1 &>/dev/null; then
   export GIT_PS1_SHOWSTASHSTATE=1
   export GIT_PS1_SHOWUNTRACKEDFILES=1
 
-  export GIT_PS1='$(__git_ps1 "[\[\033[1;32m\]%s\[\033[0m\]] ")'
+  export GIT_PS1='$(__git_ps1 "\[\033[0;32m\][\[\033[1;32m\]%s\[\033[0;32m\]]\[\033[0m\] ")'
   export SUDO_PS1=$PS1
   export PS1=$PS1$GIT_PS1
 fi

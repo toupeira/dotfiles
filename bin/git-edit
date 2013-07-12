@@ -123,14 +123,14 @@ function main {
   # expand variables in title
   if is_git && [ -f /usr/lib/git-core/git-sh-prompt ]; then
     . /usr/lib/git-core/git-sh-prompt
-    branch=" $RESET`__git_ps1 "[$GREEN%s$RESET]"`"
+    branch=" $RESET`__git_ps1 "$DARKGREEN[$GREEN%s$DARKGREEN]$RESET"`"
   else
     unset branch
   fi
 
   title=$(echo "$title" | sed -r \
     -e "s|%count|$YELLOW$count$WHITE|g" \
-    -e "s|%dir|$CYAN[$workdir]$WHITE$branch|g"
+    -e "s|%dir|$DARKCYAN[$CYAN$workdir$DARKCYAN]$WHITE$branch|g"
   )
 
   if [ $count -eq 0 ]; then
