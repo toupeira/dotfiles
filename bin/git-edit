@@ -444,15 +444,15 @@ function match_git_diff {
 }
 
 function show_completion {
-  tput rc
+  #tput rc
 
   # overwrite the spinner
-  echo -n "  "
-  tput cub 2
+  echo -n "   "
+  tput cub 3
 
-  # if there's only one match backtrack over the input, to make sure
+  # if there's a completion backtrack over the input, to make sure
   # the completion will end up in the correct position
-  if [ $count -eq 1 ]; then
+  if [ -n "$completion" ]; then
     local args="${original_input[@]}"
     tput cub ${#args}
   fi
@@ -505,16 +505,15 @@ function show_completion {
 }
 
 function start_loading {
-  tput sc
+  #tput sc
 
   (
-    [ -n "$input" ] && echo -n " "
-    echo -n "$RED  "
+    echo -n "$RED"
 
     while true; do
       for char in ◐ ◓ ◑ ◒; do
-        tput cub 2
-        echo -n "$char "
+        echo -n "  $char"
+        tput cub 3
         sleep 0.1
       done
     done
