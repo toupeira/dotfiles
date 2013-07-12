@@ -26,13 +26,10 @@ _bpurple='\[\e[1;35m\]'      # Purple
 _bcyan='\[\e[1;36m\]'        # Cyan
 _bwhite='\[\e[1;37m\]'       # White
 
-if [ -n "$SSH_CONNECTION" ]; then
-  PS1_SSH="$_bblack@\h$_reset"
-else
-  unset PS1_SSH
-fi
+unset PS1_HOST
+[ -n "$SSH_CONNECTION" ] && PS1_HOST="$_bblack@\h$_reset"
 
-export PS1="$_reset\u$PS1_SSH:$_yellow\w$_reset\\$ \[\$(_ps1_exit_code)\]"
+export PS1="$_reset\u$PS1_HOST:$_yellow\w$_reset\\$ \[\$(_ps1_exit_code)\]"
 
 function _ps1_exit_code {
   local status=$?

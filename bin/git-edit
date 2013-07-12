@@ -26,12 +26,6 @@ DARKCYAN=$(echo -ne '\e[0;36m')
 COLUMNS=`tput cols`
 LINES=`tput lines`
 
-BACK=$(echo -ne '\e[D')
-SAVE=$(echo -ne '\e[s')
-RESTORE=$(echo -ne '\e[u')
-SHOW=$(echo -ne '\e[?25h')
-HIDE=$(echo -ne '\e[?25l')
-
 function main {
   unset list showall force complete
   unset input pattern selection command
@@ -127,9 +121,16 @@ function main {
   [ $count -eq 0 ] && pretty_matches=
 
   # expand variables in title
+  if is_git && [ -f /usr/lib/git-core/git-sh-prompt ]; then
+    . /usr/lib/git-core/git-sh-prompt
+    branch=" $RESET`__git_ps1 "[$GREEN%s$RESET]"`"
+  else
+    unset branch
+  fi
+
   title=$(echo "$title" | sed -r \
     -e "s|%count|$YELLOW$count$WHITE|g" \
-    -e "s|%dir|$CYAN[$workdir]$WHITE|g"
+    -e "s|%dir|$CYAN[$workdir]$WHITE$branch|g"
   )
 
   if [ $count -eq 0 ]; then
@@ -241,7 +242,7 @@ EOF
 }
 
 function is_git {
-  git rev-parse &>/dev/null
+  git rev-parse --is-inside-work-tree &>/dev/null
 }
 
 # output a string to the redirected stdout,
@@ -439,16 +440,17 @@ function match_git_diff {
 }
 
 function show_completion {
-  echo -n "$RESTORE  $BACK$BACK"
+  tput rc
 
+  # overwrite the spinner
+  echo -n "  "
+  tput cub 2
+
+  # if there's only one match backtrack over the input, to make sure
+  # the completion will end up in the correct position
   if [ $count -eq 1 ]; then
     local args="${original_input[@]}"
-    local backtrack=${#args}
-
-    local i
-    for (( i = 0; i < $backtrack; i++ )); do
-      echo -n "$BACK"
-    done
+    tput cub ${#args}
   fi
 
   if [ $count -eq 1 ] && [ -n "$selection" -o "$type" = "files" ]; then
@@ -499,15 +501,16 @@ function show_completion {
 }
 
 function start_loading {
-  echo -n "$SAVE"
+  tput sc
 
   (
     [ -n "$input" ] && echo -n " "
-    echo -n "$HIDE$RED  "
+    echo -n "$RED  "
 
     while true; do
       for char in ◐ ◓ ◑ ◒; do
-        echo -n "$HIDE$BACK$BACK$char $SHOW"
+        tput cub 2
+        echo -n "$char "
         sleep 0.1
       done
     done
@@ -520,7 +523,7 @@ function start_loading {
 function stop_loading {
   if [ -n "$loading" ]; then
     kill $loading 2>/dev/null
-    echo -n "$RESET$SHOW"
+    echo -n "$RESET"
     unset loading
   fi
 }
