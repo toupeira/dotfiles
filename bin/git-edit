@@ -161,7 +161,7 @@ function main {
     [ "$type" != "log" ] && completion="$matches"
   fi
 
-  if [ -n "$list" ]; then
+  if [ -n "$list" -o ! -t 1 ]; then
     output "${matches[@]}"
   elif [ -n "$complete" ]; then
     stop_loading

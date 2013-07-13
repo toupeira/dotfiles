@@ -3,7 +3,7 @@
 ! Terminal settings
 URxvt*termName:		rxvt-256color
 URxvt*font:		-misc-fixed-medium-*-*-*-13-100-*-*-*-60-*-*
-URxvt*geometry:		90x36
+URxvt*geometry:		100x42
 URxvt*utmpInhibit:	true
 URxvt*loginShell:	true
 URxvt*scrollBar_right:	true
