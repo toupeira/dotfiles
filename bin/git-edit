@@ -108,8 +108,7 @@ function main {
     pattern="${pattern:0:$((${#pattern} - 1))}"
   fi
 
-  if [ -z "$input" -a -z "$complete" -a -z "$list" ]; then
-    # don't edit files with no arguments
+  if [ -z "$input" -a -z "$complete" -a -z "$list" -a ! -v __GIT_EDIT_LAST ]; then
     usage
   elif [ -n "$complete" ]; then
     start_loading

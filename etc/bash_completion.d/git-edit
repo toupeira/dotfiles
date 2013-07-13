@@ -38,9 +38,7 @@ function _git_edit {
   fi
 
   COMPREPLY=( "$(
-    if [ -n "$__GIT_EDIT_WORKDIR" ]; then
-      cd "$__GIT_EDIT_WORKDIR" || exit 1
-    fi
+    cd "${__GIT_EDIT_WORKDIR:-.}" || exit 1
     git-edit --complete "$cur" $choice
   )" )
 
@@ -76,9 +74,9 @@ function __git_edit_func_wrap {
   __git_func_wrap $1
 
   if [ -z "$COMPREPLY" -a -n "$__GIT_EDIT_FALLBACK" ]; then
-    [ -n "$__GIT_EDIT_WORKDIR" ] && pushd "$__GIT_EDIT_WORKDIR" >/dev/null
+    pushd "${__GIT_EDIT_WORKDIR:-.}" >/dev/null
     _filedir
-    [ -n "$__GIT_EDIT_WORKDIR" ] && popd >/dev/null
+    popd >/dev/null
   fi
 
   unset __GIT_EDIT_WORKDIR __GIT_EDIT_FALLBACK
