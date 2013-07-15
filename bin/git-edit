@@ -179,12 +179,8 @@ function main {
 
       "${command[@]}" "$matches"
     else
-      if [ -z "$force" ]; then
-        if [ "${command[0]}" = "sensible-editor" ]; then
-          echo -n " $CYAN>>>$WHITE Edit $YELLOW$count$WHITE files?$RESET [Y/n] "
-        else
-          echo -n " $CYAN>>>$WHITE Run $CYAN'${command[@]}'$WHITE on $YELLOW$count$WHITE files?$RESET [Y/n] "
-        fi
+      if [ -z "$force" -a "${command[0]}" != "sensible-editor" ]; then
+        echo -n " $CYAN>>>$WHITE Run $CYAN'${command[@]}'$WHITE on $YELLOW$count$WHITE files?$RESET [Y/n] "
 
         read
         [ "$REPLY" = "n" -o "$REPLY" = "N" ] && exit

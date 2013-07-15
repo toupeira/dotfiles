@@ -34,6 +34,9 @@ URxvt.keysym.M-s:         perl:searchable-scrollback:start
 URxvt*background:	rgba:0000/0000/0000/f3f3
 URxvt*foreground:	#fff
 
+! Black
+URxvt*color8: #666666
+
 ! Red
 URxvt*color1: #ee2233
 URxvt*color9: #ee3333
