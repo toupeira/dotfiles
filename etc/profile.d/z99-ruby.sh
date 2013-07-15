@@ -20,7 +20,7 @@ function gem_exec {
   fi
 
   # use sudo for administrative commands
-  if [[ "$1" =~ (install|uninstall|update|cleanup) ]]; then
+  if [[ "$1" =~ (install|uninstall|update|clean) ]]; then
     command="sudo GEM_HOME=$home $command"
   fi
 

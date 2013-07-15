@@ -33,10 +33,23 @@ alias pkglist='dpkg -L'
 alias pkgname='apt-cache pkgnames'
 alias pkgsearch='apt-cache search'
 
+# vim aliases
+alias vi='CMD=vim sensible-vim'
+alias vim='CMD=vim sensible-vim'
+alias gvim='sensible-vim'
+alias gvi='gvim'
+
 # sudo aliases
 if has sudo; then
   # expand aliases in arguments
   alias sudo='sudo '
+
+  # vim
+  alias suvi='sudo CMD=vim ~/bin/sensible-vim'
+  alias sugvi='sudo CMD=vim ~/bin/sensible-vim'
+  alias sudiff='sudo vimdiff'
+  alias sugdiff='sudo gvimdiff'
+  alias visudo='sudo visudo'
 
   # file management
   alias sucp='sudo cp -vi'
@@ -46,13 +59,6 @@ if has sudo; then
   alias sush='sudo -i'
   alias suown='sudo chown -vR root:root'
   alias sumod='sudo chmod -vR 644'
-
-  # vim
-  alias suvi='sudo vim'
-  alias sugvi='sudo gvim'
-  alias sudiff='sudo vimdiff'
-  alias sugdiff='sudo gvimdiff'
-  alias visudo='sudo visudo'
 
   # debian tools
   alias apt-get='sudo apt-get'
@@ -99,7 +105,6 @@ alias pstree='pstree -GUh'
 alias ftrace='strace -fe trace=file'
 alias ptrace='strace -fe trace=process'
 alias fetchmail='fetchmail -v'
-alias gvi='gvim'
 alias gcc='gcc -Wall'
 alias gcc='gcc -Wall'
 alias psgrep='pgrep -fl'
