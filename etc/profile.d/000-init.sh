@@ -20,7 +20,7 @@ shopt -s globstar
 # Set up Screen / Byobu
 SSH_BYOBU=~/.byobu/.ssh-agent
 
-if [ -z "$SSH_AUTH_SOCK" ]; then
+if [ -z "$SSH_AUTH_SOCK" -a "$UID" != "0" ]; then
   # Try to connect to a running SSH agent
   socket=`command ls -t /tmp/ssh-*/agent.[0-9]* 2>/dev/null | head -1`
   if [ -S "$socket" -a -O "$socket" ]; then
@@ -31,7 +31,7 @@ if [ -z "$SSH_AUTH_SOCK" ]; then
     # Start a new SSH agent for SSH connections and local console sessions
     echo "Starting SSH agent"
     exec ssh-agent -- bash --login
-  elif [ "$UID" != "0" ]; then
+  else
     # If there's no SSH agent running in a desktop environment there's something wrong
     echo "Couldn't find SSH agent"
     read -t 0.4
