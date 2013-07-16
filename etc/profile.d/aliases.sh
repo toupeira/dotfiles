@@ -95,6 +95,10 @@ if has sudo; then
   alias fdisk='sudo fdisk'
   alias parted='sudo parted'
   alias lvm='sudo lvm'
+
+  # rails
+  alias passenger-status='sudo passenger-status'
+  alias passenger-memory-stats='sudo passenger-memory-stats'
 fi
 
 # program aliases
