@@ -5,7 +5,6 @@
 [core]
 	eol = lf
 	autocrlf = input
-	excludesfile = ~/.gitexcludes
 
 [url "git://github.com/"]
 	insteadOf = gh:
