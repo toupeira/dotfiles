@@ -86,8 +86,8 @@
   syntax on
   colorscheme desertink
   set lazyredraw
-  set visualbell
   set errorbells
+  set visualbell t_vb= " disable bells
 
   " windows
   set splitbelow

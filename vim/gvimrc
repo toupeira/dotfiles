@@ -21,7 +21,9 @@ endif
 " Display Settings
 " {{{
 
+  " interface
   set guioptions=aigrLM
+  set visualbell t_vb= " disable bells, reset when starting GUI
 
   " don't use autoselect on OS X
   if has('mac')
