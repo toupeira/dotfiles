@@ -26,15 +26,12 @@ _bpurple='\[\e[1;35m\]'      # Purple
 _bcyan='\[\e[1;36m\]'        # Cyan
 _bwhite='\[\e[1;37m\]'       # White
 
-PS1_USER="$_bblack\u"
-if [ -n "$SSH_CONNECTION" ]; then
-  PS1_HOST="$_byellow@\h"
-else
-  unset PS1_HOST
-fi
-[ "$UID" = "0" ] && PS1_USER="$_bred\u"
+PS1_USER="\u"
+PS1_HOST=""
+[ -n "$SSH_CONNECTION" ] && PS1_HOST="@\h"
+[ "$UID" = "0" ] && PS1_USER="$_bred$PS1_USER"
 
-export PS1="$_reset$PS1_USER$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_reset \[\$(_ps1_exit_code)\]"
+export PS1="$_reset$_bblack$PS1_USER$_byellow$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_reset \[\$(_ps1_exit_code)\]"
 
 function _ps1_exit_code {
   local status=$?
