@@ -106,12 +106,6 @@ endif
   set winaltkeys=no
 
   " Copy & Paste shortcuts
-  " set the 'cpoptions' to its Vim default
-  if 1    " only do this when compiled with expression evaluation
-    let s:save_cpo = &cpoptions
-  endif
-  set cpo&vim
-
   if has('mac')
     vnoremap <D-x> "+x
     " Command-c is Copy
@@ -159,12 +153,5 @@ endif
   " CTRL-a is Visual-select all
   "noremap <C-a> ggVG
   "vnoremap <C-a> <C-C>ggVG
-
-  " restore 'cpoptions'
-  set cpo&
-  if 1
-    let &cpoptions = s:save_cpo
-    unlet s:save_cpo
-  endif
 
 " }}}

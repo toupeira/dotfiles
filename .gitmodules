@@ -118,3 +118,6 @@
 [submodule "vim/bundle/rsi"]
 	path = vim/bundle/rsi
 	url = https://github.com/tpope/vim-rsi.git
+[submodule "urxvt/urxvt-perls"]
+	path = urxvt/urxvt-perls
+	url = https://github.com/muennich/urxvt-perls.git

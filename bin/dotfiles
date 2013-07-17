@@ -264,7 +264,8 @@ function run {
       run pull -q
 
       if [ -n "$1" ]; then
-        submodule="vim/bundle/$1"
+        local submodule="$1"
+        [[ "$submodule" =~ / ]] || submodule="vim/bundle/$submodule"
         shift
 
         status "Updating submodule {{$submodule}}..."
@@ -282,8 +283,9 @@ function run {
         run submodule foreach git pull -v --progress origin master
       fi
 
-      if git status | grep -q "\b(\.gitmodules|vim/bundle)\b"; then
-        run commit -m "$message" .gitmodules vim/bundle
+      local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)"`
+      if [ -n "$changes" ]; then
+        run commit -m "$message" "$changes"
       fi
 
       if git status | fgrep -q "Your branch is ahead"; then
