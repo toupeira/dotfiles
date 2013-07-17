@@ -274,18 +274,25 @@ function run {
         (
           cd "$DOTFILES/$submodule" || exit 1
           [ -e ".git" ] || exec echo "Not a git repository: .git"
-          system git pull -v --progress origin master
+
+          if [[ "$submodule" =~ vim/bundle/(powerline|minibufexpl) ]]; then
+            local branch="develop"
+          else
+            local branch="master"
+          fi
+
+          system git pull -v --progress origin "$branch"
         )
       else
         status "{{Updating all submodules...}}"
         message="Update submodules"
 
-        run submodule foreach git pull -v --progress origin master
+        run submodule foreach 'if [[ "$path" =~ vim/bundle/(powerline|minibufexpl) ]]; then echo "Skipping $path..."; else git pull -v --progress origin master; fi'
       fi
 
-      local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)"`
+      local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $3 }'`
       if [ -n "$changes" ]; then
-        run commit -m "$message" "$changes"
+        run commit -m "$message" $changes
       fi
 
       if git status | fgrep -q "Your branch is ahead"; then
