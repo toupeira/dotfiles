@@ -282,7 +282,7 @@ function run {
         run submodule foreach git pull -v --progress origin master
       fi
 
-      if git status | fgrep -q ".gitmodules"; then
+      if git status | grep -q "\b(\.gitmodules|vim/bundle)\b"; then
         run commit -m "$message" .gitmodules vim/bundle
       fi
 
