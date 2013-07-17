@@ -3,6 +3,9 @@
 ! Terminal settings
 URxvt*termName:		rxvt-256color
 URxvt*font:		-misc-fixed-medium-*-*-*-13-100-*-*-*-60-*-*
+!URxvt*font:		xft:DejaVu Sans Mono for Powerline:size=9
+!URxvt*boldFont:		xft:DejaVu Sans Mono for Powerline:size=9:style=bold
+!URxvt*letterSpace:	-1
 URxvt*geometry:		100x42
 URxvt*utmpInhibit:	true
 URxvt*loginShell:	true
