@@ -34,10 +34,12 @@ alias pkgname='apt-cache pkgnames'
 alias pkgsearch='apt-cache search'
 
 # vim aliases
-alias vi='CMD=vim sensible-vim'
-alias vim='CMD=vim sensible-vim'
-alias gvim='sensible-vim'
-alias gvi='gvim'
+if has sensible-vim; then
+  alias vi='CMD=vim sensible-vim'
+  alias vim='CMD=vim sensible-vim'
+  alias gvim='sensible-vim'
+  alias gvi='gvim'
+fi
 
 # sudo aliases
 if has sudo; then

@@ -38,6 +38,33 @@ function down {
   done
 }
 
+# Move a file or directory and replace it by a symlink to the new location
+function mvln {
+  if [ "$1" = "-n" ]; then
+    local echo="echo"
+    shift
+  else
+    local echo=""
+  fi
+
+  local source=`readlink -f "$1" 2>/dev/null`
+  local target=`realpath "$2" 2>/dev/null`
+  [ -z "$target" ] && target="$2"
+
+  [ -z "$source" -o -z "$target" ] && echo "Usage: mvln [-n] SOURCE TARGET" && return 1
+  [ ! -e "$source" ] && echo "$source: No such file or directory" && return 1
+  [ "$source" = "$target" ] && echo "Source and target are the same." && return 1
+
+  $echo mv -v "$source" "$target" || return 1
+
+  if [ -d "$target" ]; then
+    local name=`basename "$source"`
+    $echo ln -sv "$target/$name" "$source"
+  else
+    $echo ln -sv "$target" "$source"
+  fi
+}
+
 # Automatically load key for SSH and Git commands
 if [ -n "$SSH_AUTH_SOCK" ]; then
   function __load_key {
@@ -88,7 +115,7 @@ function ag.rails {
 
 # GVim wrapper for SSH connections to pass a file to a local instance
 if [ -n "$SSH_CONNECTION" ]; then
-  unalias gvi
+  [ "`type -t gvi`" = "alias" ] && unalias gvi
 
   function gvi {
     local wait=1

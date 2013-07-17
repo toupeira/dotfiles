@@ -25,8 +25,10 @@ complete -o bashdefault -o default -F _command start
 complete -F _pgrep psgrep
 complete -F _gem18 gem
 
-__git_edit_complete dotfiles _git `dotfiles --path`
-__git_edit_complete dt _git       `dotfiles --path`
+if has dotfiles; then
+  __git_edit_complete dotfiles _git `dotfiles --path`
+  __git_edit_complete dt _git       `dotfiles --path`
+fi
 
 # Debian completions
 function _packages_available {

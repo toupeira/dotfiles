@@ -13,19 +13,19 @@
   " session doesn't work with minibufexpl
   call add(g:pathogen_disabled, 'session')
 
-  " neocomplete requires Vim 7.2
-  if v:version < '702'
+  " neocomplete requires Vim 7.3 and Lua
+  if v:version < '703' || !has('lua')
+    call add(g:pathogen_disabled, 'neocomplete')
+  endif
+
+  " Disable neocomplete for SSH sessions
+  if $SSH_CONNECTION != ""
     call add(g:pathogen_disabled, 'neocomplete')
   endif
 
   " Powerline requires Vim 7.3 and Python
   if v:version < '703' || !has('python')
     call add(g:pathogen_disabled, 'powerline')
-  endif
-
-  " Disable neocomplete for SSH sessions
-  if $SSH_CONNECTION != ""
-    call add(g:pathogen_disabled, 'neocomplete')
   endif
 
   " load all plugins
@@ -617,7 +617,8 @@ endfunction
   let g:syntastic_php_checkers = [ 'php', 'phpmd' ]
   let g:syntastic_sh_checkers = [ 'sh' ]
 
-  let g:syntastic_puppet_lint_arguments = '--no-documentation-check'
+  let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
+  let g:systastic_puppet_puppetlint_args = '--no-documentation-check'
 
   if !&diff
     let g:syntastic_auto_loc_list = 1
