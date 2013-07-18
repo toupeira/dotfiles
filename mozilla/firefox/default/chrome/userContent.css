@@ -47,3 +47,15 @@
 @-moz-document domain(www.google.ch) {
   li.gbtn, li.gbtsb { display: none !important; }
 }
+
+@-moz-document domain(trello.com) {
+  .list-title .num-cards {
+    display: inline !important;
+    font-weight: bold !important;
+    float: right !important;
+  }
+
+  .list-title.editing .num-cards {
+    display:none !important;
+  }
+}
