@@ -48,7 +48,7 @@ if has sudo; then
 
   # vim
   alias suvi='sudo CMD=vim ~/bin/sensible-vim'
-  alias sugvi='sudo CMD=vim ~/bin/sensible-vim'
+  alias sugvi='sudo ~/bin/sensible-vim'
   alias sudiff='sudo vimdiff'
   alias sugdiff='sudo gvimdiff'
   alias visudo='sudo visudo'
