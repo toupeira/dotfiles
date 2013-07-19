@@ -1,14 +1,13 @@
 #!/bin/sh
 
-unset options
-
 if [ -n "$CMD" ]; then
-  command="$CMD"
+  vim="$CMD"
 elif [ -n "$DISPLAY" -a -z "$SSH_CONNECTION" ] && which gvim &>/dev/null; then
-  [ -t 0 ] || options="-f"
-  command="gvim"
+  vim="gvim"
+elif [ "`uname -s`" = "Darwin" ] && which mvim &>/dev/null; then
+  vim="mvim"
 else
-  command="vim"
+  vim="vim"
 fi
 
 # Strip line numbers from filenames
@@ -32,4 +31,4 @@ done
 #   fi
 # fi
 
-exec $command $options "${args[@]}" $line
+exec $vim "${args[@]}" $line

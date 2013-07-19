@@ -15,13 +15,6 @@ else
   exit 255
 fi
 
-script=`basename "$0"`
-case "${script:0:1}" in
-  g) vim="gvim -f";;
-  m) vim="mvim -f";;
-  *) vim="vim";;
-esac
-
 if which shred &>/dev/null; then
   shred="shred -u"
 else
@@ -75,7 +68,7 @@ if [ -n "$3" ]; then
 fi
 
 # Edit the tempfile
-$vim $4 "$tempfile"
+sensible-vim $4 "$tempfile"
 
 # Don't create empty files
 if [ ! "$file_exists" -a ! -s "$tempfile" ]; then
