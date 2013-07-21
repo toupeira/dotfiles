@@ -1,12 +1,15 @@
 # temporary files
 .DS_Store
 
-# Vim
+# binary files
+*.pyc
+
+# vim
 .*.sw?
 doc/tags
 doc/tags-*
 
-# Rails
+# rails
 .bundle
 .sass-cache
 log/*.log
