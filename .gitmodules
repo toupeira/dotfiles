@@ -121,3 +121,6 @@
 [submodule "urxvt/urxvt-perls"]
 	path = urxvt/urxvt-perls
 	url = https://github.com/muennich/urxvt-perls.git
+[submodule "vim/bundle/vimlint"]
+	path = vim/bundle/vimlint
+	url = https://github.com/dbakker/vim-lint.git

@@ -36,18 +36,6 @@
   }
 }
 
-@-moz-document domain(www.google.com) {
-  li.gbtn, li.gbtsb { display: none !important; }
-}
-
-@-moz-document domain(mail.google.com) {
-  li.gbtn, li.gbtsb { display: none !important; }
-}
-
-@-moz-document domain(www.google.ch) {
-  li.gbtn, li.gbtsb { display: none !important; }
-}
-
 @-moz-document domain(trello.com) {
   .list-title .num-cards {
     display: inline !important;

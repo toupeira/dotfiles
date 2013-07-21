@@ -295,7 +295,7 @@ endfunction
   noremap # g#
 
   " repeat command for each line in selection
-  vnoremap . :normal .<CR>
+  xnoremap . :normal .<CR>
 
   " shortcuts for diff
   nnoremap du :diffupdate<CR>
@@ -308,8 +308,8 @@ endfunction
   vmap <S-Tab> <
 
   " reselect visual block after indent
-  vnoremap > >gv
-  vnoremap < <gv
+  xnoremap > >gv
+  xnoremap < <gv
 
   " toggle paste mode with F12
   set pastetoggle=<f12>
