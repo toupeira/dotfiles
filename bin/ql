@@ -36,7 +36,7 @@ case "$command" in
   start-hidden)
     if is_running; then
       echo "Quod Libet is already running."
-      exit
+      command="hide-window"
     else
       unset command
       quodlibet &>/dev/null &
