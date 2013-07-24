@@ -619,7 +619,6 @@ endfunction
 
   let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
   let g:systastic_puppet_puppetlint_args = '--no-documentation-check'
-  let g:syntastic_ruby_exec = 'ruby1.9.1'
 
   if !&diff
     let g:syntastic_auto_loc_list = 1
