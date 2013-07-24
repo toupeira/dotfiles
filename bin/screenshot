@@ -20,4 +20,4 @@ case "$1" in
 esac
 
 echo " [1;34m>>>[0m writing [1m$file[0m..."
-import -window "$id" "png:$file" && eog "file://$file" &>/dev/null &
+import -window "$id" "png:$file" && xdg-open "file://$file" &>/dev/null &

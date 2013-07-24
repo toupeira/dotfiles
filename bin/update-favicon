@@ -22,7 +22,13 @@ icon = {
 icon[:url] = "data:#{icon[:mime_type]};base64,#{Base64.encode64(icon[:data]).gsub("\n", "")}"
 
 db = SQLite3::Database.new(database)
-bookmark_id, icon[:id] = db.get_first_row('SELECT id, favicon_id FROM moz_places WHERE url = ?', url)
+
+if url =~ /^\d+$/
+  bookmark_id = url.to_i
+  icon[:id] = db.get_first_value('SELECT favicon_id FROM moz_places WHERE id = ?', bookmark_id)
+else
+  bookmark_id, icon[:id] = db.get_first_row('SELECT id, favicon_id FROM moz_places WHERE url = ?', url)
+end
 
 unless bookmark_id
   puts "Can't find bookmark for URL \"#{url}\""

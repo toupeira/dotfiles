@@ -7,13 +7,15 @@ if [ -z "$1" ]; then
   exec aosd "You're on workspace $((active+1))"
 elif [ "$1" = "+" ]; then
   if [ $((active+1)) -eq $workspaces ]; then
-    active=0
+    exit
+    #active=0
   else
     let active++
   fi
 elif [ "$1" = "-" ]; then
   if [ $active -eq 0 ]; then
-    active=$((workspaces-1))
+    exit
+    #active=$((workspaces-1))
   else
     let active--
   fi
@@ -25,4 +27,4 @@ else
 fi
 
 wmctrl -s $((active))
-aosd -o '--fade-full 750' "Workspace $((active+1))"
+#aosd -o '--fade-full 750' "Workspace $((active+1))"
