@@ -29,7 +29,7 @@ if [ -z "$SSH_AUTH_SOCK" -a "$UID" != "0" ]; then
     export SSH_AGENT_PID=${SSH_AUTH_SOCK##*.}
   elif [ -n "$SSH_CONNECTION" -o -z "$DISPLAY" ]; then
     # Start a new SSH agent for SSH connections and local console sessions
-    echo "Starting SSH agent"
+    [ "$TERM" = "linux" ] || echo "Starting SSH agent"
     exec ssh-agent -- bash --login
   else
     # If there's no SSH agent running in a desktop environment there's something wrong
