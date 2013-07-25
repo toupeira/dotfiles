@@ -437,22 +437,6 @@ def run
   opts.banner = "Usage: #{File.basename $0} [OPTIONS] MODE"
 
   opts.separator ""
-  opts.separator "Tiling Modes:"
-
-  modes = "  "
-  Lazytile::TILING_MODES.keys.map(&:to_s).sort.each_with_index do |mode, i|
-    if i > 0 and i % 5 == 0
-      opts.separator modes
-      modes = "  "
-    end
-    modes << "#{mode}, "
-  end
-  opts.separator modes
-
-  opts.separator ""
-  opts.separator "Other Commands:"
-  opts.separator "  status, start, stop, restart"
-  opts.separator ""
   opts.separator "Options:"
 
   opts.on '-i', '--id WINDOW_ID', String, "Use specified window instead of current window" do |id|
@@ -470,6 +454,23 @@ def run
   end
 
   opts.on '-h', '--help', "Show this message", &usage
+
+  opts.separator ""
+  opts.separator "Tiling Modes:"
+
+  modes = "  "
+  Lazytile::TILING_MODES.keys.map(&:to_s).sort.each_with_index do |mode, i|
+    if i > 0 and i % 5 == 0
+      opts.separator modes
+      modes = "  "
+    end
+    modes << "#{mode}, "
+  end
+  opts.separator modes
+
+  opts.separator ""
+  opts.separator "Other Commands:"
+  opts.separator "  status, start, stop, restart"
   opts.separator ""
 
   opts.parse!
