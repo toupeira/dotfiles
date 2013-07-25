@@ -58,52 +58,7 @@ class Lazytile
       height = s[:height] / 2
 
       return :height => height,
-             :y      => s[:y] + height
-    },
-
-    # Fill the center of the screen, with margin on all sides
-    :center => lambda { |s, w|
-      width = (s[:width] * 0.8).round
-
-      return :width  => width,
-             :height => s[:height] - 0.5 * s[:y],
-             :x      => s[:width] / 2 - width / 2,
-             :y      => s[:y] * 1.25
-    },
-
-    # Fill the top left corner of the screen
-    :topleft => lambda { |s, w|
-      return :width  => s[:width] / 2,
-             :height => s[:height] / 2
-    },
-
-    # Fill the top right corner of the screen
-    :topright => lambda { |s, w|
-      width = s[:width] / 2
-
-      return :width  => width,
-             :height => s[:height] / 2,
-             :x      => s[:x] + width
-    },
-
-    # Fill the bottom left corner of the screen
-    :bottomleft => lambda { |s, w|
-      height = s[:height] / 2
-
-      return :width  => s[:width] / 2,
-             :height => height,
-             :y      => s[:y] + height
-    },
-
-    # Fill the bottom right corner of the screen
-    :bottomright => lambda { |s, w|
-      width = s[:width] / 2
-      height = s[:height] / 2
-
-      return :width  => width,
-             :height => height,
-             :x      => s[:x] + width,
-             :y      => s[:y] + height
+        :y      => s[:y] + height
     },
 
     # Fill the left two thirds of the screen
@@ -116,7 +71,65 @@ class Lazytile
       width = s[:width] * 0.7
 
       return :width => width,
-             :x     => s[:x] + s[:width] - width
+        :x     => s[:x] + s[:width] - width
+    },
+
+    # Fill the top two thirds of the screen
+    :widetop => lambda { |s, w|
+      return :height => s[:height] * 0.7
+    },
+
+    # Fill the bottom two thirds of the screen
+    :widebottom => lambda { |s, w|
+      height = s[:height] * 0.7
+
+      return :height => height,
+        :y     => s[:y] + s[:height] - height
+    },
+
+    # Fill the center of the screen, with margin on all sides
+    :center => lambda { |s, w|
+      width = (s[:width] * 0.8).round
+
+      return :width  => width,
+        :height => s[:height] - 0.5 * s[:y],
+        :x      => s[:width] / 2 - width / 2,
+        :y      => s[:y] * 1.25
+    },
+
+    # Fill the top left corner of the screen
+    :topleft => lambda { |s, w|
+      return :width  => s[:width] / 2,
+        :height => s[:height] / 2
+    },
+
+    # Fill the top right corner of the screen
+    :topright => lambda { |s, w|
+      width = s[:width] / 2
+
+      return :width  => width,
+        :height => s[:height] / 2,
+        :x      => s[:x] + width
+    },
+
+    # Fill the bottom left corner of the screen
+    :bottomleft => lambda { |s, w|
+      height = s[:height] / 2
+
+      return :width  => s[:width] / 2,
+        :height => height,
+        :y      => s[:y] + height
+    },
+
+    # Fill the bottom right corner of the screen
+    :bottomright => lambda { |s, w|
+      width = s[:width] / 2
+      height = s[:height] / 2
+
+      return :width  => width,
+        :height => height,
+        :x      => s[:x] + width,
+        :y      => s[:y] + height
     },
 
   }
@@ -133,25 +146,25 @@ class Lazytile
     end
   end
 
-  # Check if the server process is running
+  # Check if the daemon process is running
   def self.running?
-    !!server_pid
+    !!daemon_pid
   end
 
-  # Fork the server process
-  def self.start_server
+  # Fork the daemon process
+  def self.start_daemon
     return false if running?
 
     if fork
-      # In the client process, wait until the server is running
+      # In the client process, wait until the daemon is running
       return wait_for { running? }
     end
 
-    # In the server process
+    # In the daemon process
 
-    at_exit { stop_server }
+    at_exit { stop_daemon }
 
-    debug "opening server socket..."
+    debug "opening daemon socket..."
     @socket = UNIXServer.open(SOCKET)
 
     # Listen for messages
@@ -165,12 +178,12 @@ class Lazytile
     end
   end
 
-  # Stop the server process
-  def self.stop_server
+  # Stop the daemon process
+  def self.stop_daemon
     if running?
       # Close the socket
       if @socket
-        debug "closing server socket..."
+        debug "closing daemon socket..."
         @socket.close unless @socket.closed?
       end
 
@@ -190,10 +203,10 @@ class Lazytile
     FileUtils.rm_f SOCKET
   end
 
-  # Forcefully kill the server process
-  def self.kill_server
-    if pid = server_pid
-      debug "killing server..."
+  # Forcefully kill the daemon process
+  def self.kill_daemon
+    if pid = daemon_pid
+      debug "killing daemon..."
       Process.kill 'TERM', pid
       return wait_for { not running? }
     end
@@ -201,7 +214,7 @@ class Lazytile
     not running?
   end
 
-private
+  private
 
   # Capture the stdout of a command
   def self.output(command)
@@ -231,8 +244,8 @@ private
     end
   end
 
-  # Detect the pid of the server process listening to the socket
-  def self.server_pid
+  # Detect the pid of the daemon process listening to the socket
+  def self.daemon_pid
     if File.exist? SOCKET
       pid = output "lsof -F p '#{SOCKET}'"
       if $?.exitstatus == 0
@@ -297,9 +310,9 @@ private
   def self.client
     @client ||= UNIXSocket.open(SOCKET)
   rescue Errno::ENOENT, Errno::ECONNREFUSED
-    # Restart the server on socket errors
-    stop_server
-    start_server
+    # Restart the daemon on socket errors
+    stop_daemon
+    start_daemon
     retry
   end
 
@@ -462,19 +475,19 @@ def run
   opts.parse!
 
   case arg = ARGV[0]
-  # Show the server status
+  # Show the daemon status
   when 's', 'status':
     puts "Lazytile daemon is#{Lazytile.running? ? '' : ' not'} running."
     exit
 
-  # Kill the server
+  # Kill the daemon
   when 'stop':
     unless Lazytile.running?
       puts "Lazytile daemon is not running."
       exit false
     end
 
-    Lazytile.kill_server
+    Lazytile.kill_daemon
 
     if Lazytile.running?
       puts "Couldn't stop Lazytile daemon."
@@ -484,11 +497,11 @@ def run
       exit false
     end
 
-  # Restart the server
+  # Restart the daemon
   when 'r', 'start', 'restart':
     running = Lazytile.running?
-    Lazytile.kill_server
-    Lazytile.start_server
+    Lazytile.kill_daemon
+    Lazytile.start_daemon
     if Lazytile.running?
       puts "Successfully #{running ? 'restarted' : 'started'} Lazytile daemon."
       exit true
