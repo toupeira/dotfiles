@@ -62,7 +62,7 @@
   set dictionary=/usr/share/dict/words
 
   " create temporary directory in ~/.vim/tmp
-  let s:tmpdir = expand("~/.vim/tmp")
+  let s:tmpdir = expand("~") . "/.vim/tmp"
   if !isdirectory(s:tmpdir)
     call mkdir(s:tmpdir, 'p')
   endif
@@ -590,7 +590,7 @@ endfunction
     nnoremap <silent><expr> ,b UniteWrapper('buffer file_mru:all file_rec/async:!', '-start-insert')
 
     " ,f - open a file using shell-style directory completion, using the current file's directory as starting point
-    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h'), '-start-insert')
+    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file/new', '-start-insert')
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y UniteWrapper('history/yank', '')

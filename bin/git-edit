@@ -37,7 +37,7 @@ COLUMNS=`tput cols`
 LINES=`tput lines`
 
 function main {
-  unset list showall force complete
+  unset list showall editall force complete
   unset input pattern selection command
   unset loading
 
@@ -115,6 +115,7 @@ function main {
   # show all matches if the pattern ends with '!'
   if [ "${pattern:$((${#pattern} - 1))}" = "!" ]; then
     showall=1
+    editall=1
     pattern="${pattern:0:$((${#pattern} - 1))}"
   fi
 
@@ -177,9 +178,8 @@ function main {
     show_completion
   else
     if [ $count -eq 0 -o "$type" = "log" ]; then
-      output "${matches[@]}"
       return
-    elif [ $count -eq 1 -o -z "$showall" ]; then
+    elif [ $count -eq 1 -o -z "$editall" ]; then
       matches=${matches[0]}
       if [ "${command[0]}" = "sensible-editor" ]; then
         echo -e " $GREEN>$WHITE Editing $GREEN$matches$WHITE"
@@ -361,7 +361,7 @@ function match_files {
   fi
 
   mapfile -t matches < <(
-    $AG . $dirs -l --file-search-regex "$pattern" 2>/dev/null | sort
+    $AG . $dirs -l --file-search-regex "$pattern" 2>/dev/null | awk '{ print length, $0 }' | sort -n | cut -d" " -f2-
   )
 
   count=${#matches[@]}
@@ -443,6 +443,7 @@ function match_git_diff {
     )
     title=`echo "${pretty_matches[0]}" | truncate $((COLUMNS - 3))`
     pretty_matches=( "${pretty_matches[@]:1:$((${#pretty_matches[@]} - 2))}" )
+    editall=1
   else
     title="${RED}No changed files in commit $YELLOW[$commit]$WHITE"
   fi
