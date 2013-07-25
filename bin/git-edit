@@ -1,5 +1,15 @@
 #!/usr/bin/env bash
 
+# Use Homebrew GNU commands on OS X if available
+if [ "`uname -s`" = "Darwin" ]; then
+  shopt -s expand_aliases
+  for command in readlink sed; do
+    if which g$command &>/dev/null; then
+      alias $command="g$command"
+    fi
+  done
+fi
+
 workdir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
 
 # default options
@@ -382,7 +392,7 @@ function match_git_status {
   type="status"
 
   mapfile -t pretty_matches < <(
-    $GIT status -s | grep -vP '^[^a-z]+mD\e'
+    $GIT status -s | egrep -v '^[^a-z]+mD\b'
   )
 
   mapfile -t matches < <(
