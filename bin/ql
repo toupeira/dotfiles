@@ -40,12 +40,12 @@ case "$command" in
     else
       unset command
       quodlibet &>/dev/null &
-      for i in `seq 1 200`; do
+      for i in `seq 1 300`; do
         if is_running; then
           command="hide-window"
           break
         fi
-        sleep 0.1
+        sleep 0.2
       done
 
       if [ -z "$command" ]; then
