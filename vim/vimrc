@@ -554,12 +554,12 @@ endfunction
     end
 
     " enable fuzzy matching for all sources
-    " call unite#filters#matcher_default#use(['matcher_fuzzy'])
+    "call unite#filters#matcher_default#use(['matcher_fuzzy'])
 
     " sort results by match rank
-    " call unite#filters#sorter_default#use(['sorter_rank'])
+    call unite#filters#sorter_default#use(['sorter_length'])
 
-    " only show the 5 most recently edited files
+    " limit results for recently edited files
     call unite#custom#source('file_mru', 'max_candidates', 10)
 
     function! s:unite_buffers()
@@ -586,11 +586,11 @@ endfunction
       return ":\<C-u>Unite -no-split " . a:action . " " . a:arguments . "\<CR>"
     endfunction
 
-    " ,b - switch buffers, open most recently edited files, and recursively find files in the current project root
-    nnoremap <silent><expr> ,b UniteWrapper('buffer file_mru:all file_rec/async:!', '-start-insert')
+    " ,b - switch buffers and open most recently edited files
+    nnoremap <silent><expr> ,b UniteWrapper('buffer file_mru:all', '-start-insert')
 
-    " ,f - open a file using shell-style directory completion, using the current file's directory as starting point
-    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file/new', '-start-insert')
+    " ,f - open files in the current working directory
+    nnoremap <silent><expr> ,f UniteWrapper('file file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new', '-start-insert')
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y UniteWrapper('history/yank', '')

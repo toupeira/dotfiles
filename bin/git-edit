@@ -59,6 +59,12 @@ function main {
         stop_loading
         exit
         ;;
+      --)
+        shift
+        command_args=( "$@" )
+        shift $#
+        break
+        ;;
       -*) usage;;
     esac
 
@@ -102,6 +108,12 @@ function main {
       ;;
   esac
 
+  if [ -v command_args ]; then
+    echo "command was '${command[@]}'"
+    command=( "${command[@]}" "${command_args[@]}" )
+    echo "command is now '${command[@]}'"
+  fi
+
   pattern="$input"
   limit=$((LINES - 4))
 
@@ -120,7 +132,7 @@ function main {
   fi
 
   if [ -z "$input" -a -z "$complete" -a -z "$list" -a ! -v __GIT_EDIT_LAST ]; then
-    usage
+    exec "${command[@]}" "$@"
   elif [ -n "$complete" ]; then
     start_loading
   fi
@@ -129,25 +141,6 @@ function main {
 
   [ -z "$count" ]  && count=${#matches[@]}
   [ $count -eq 0 ] && pretty_matches=
-
-  # expand variables in title
-  if is_git && [ -f /usr/lib/git-core/git-sh-prompt ]; then
-    . /usr/lib/git-core/git-sh-prompt
-    branch=" $RESET`__git_ps1 "$DARKGREEN[$GREEN%s$DARKGREEN]$RESET"`"
-  else
-    unset branch
-  fi
-
-  title=$(echo "$title" | sed -r \
-    -e "s|%count|$YELLOW$count$WHITE|g" \
-    -e "s|%dir|$DARKCYAN[$CYAN$workdir$DARKCYAN]$WHITE$branch|g"
-  )
-
-  if [ $count -eq 0 ]; then
-    title=" $DARKRED>$WHITE $title$RESET"
-  else
-    title=" $GREEN>$WHITE $title$RESET"
-  fi
 
   if [ -n "$showall" ]; then
     limit="$count"
@@ -161,9 +154,12 @@ function main {
     fi
   fi
 
-  # use the selection if set
+  # use the selected match
   if [ -n "$selection" ]; then
-    [ $selection -gt $count ] && usage
+    if [ $selection -gt $count ]; then
+      echo "Only got $count matches."
+      exit 1
+    fi
 
     count=1
     matches=${matches[$((selection - 1))]}
@@ -176,33 +172,33 @@ function main {
   elif [ -n "$complete" ]; then
     stop_loading
     show_completion
-  else
-    if [ $count -eq 0 -o "$type" = "log" ]; then
-      return
-    elif [ $count -eq 1 -o -z "$editall" ]; then
-      matches=${matches[0]}
-      if [ "${command[0]}" = "sensible-editor" ]; then
-        echo -e " $GREEN>$WHITE Editing $GREEN$matches$WHITE"
-      else
-        echo -e " $GREEN>$WHITE Running $CYAN'${command[@]}'$WHITE on $GREEN$matches$WHITE"
-      fi
-
-      "${command[@]}" "$matches"
+  elif [ "$type" = "log" ]; then
+    return
+  elif [ $count -eq 0 ]; then
+    return
+  elif [ $count -eq 1 -o -z "$editall" ]; then
+    matches=${matches[0]}
+    if [ "${command[0]}" = "sensible-editor" ]; then
+      echo -e " $GREEN>$WHITE Editing $GREEN$matches$WHITE"
     else
-      if [ -z "$force" -a "${command[0]}" != "sensible-editor" ]; then
-        echo -n " $CYAN>>>$WHITE Run $CYAN'${command[@]}'$WHITE on $YELLOW$count$WHITE files?$RESET [Y/n] "
+      echo -e " $GREEN>$WHITE Running $CYAN'${command[@]}'$WHITE on $GREEN$matches$WHITE"
+    fi
 
-        read
-        [ "$REPLY" = "n" -o "$REPLY" = "N" ] && exit
-      fi
+    "${command[@]}" "$matches"
+  else
+    if [ -z "$force" -a "${command[0]}" != "sensible-editor" ]; then
+      echo -n " $CYAN>>>$WHITE Run $CYAN'${command[@]}'$WHITE on $YELLOW$count$WHITE files?$RESET [Y/n] "
 
-      if [ -n "$command_run_each" ]; then
-        echo "$matches" | while read match; do
-          "${command[@]}" "$match"
-        done
-      else
-        "${command[@]}" "${matches[@]}"
-      fi
+      read
+      [ "$REPLY" = "n" -o "$REPLY" = "N" ] && exit
+    fi
+
+    if [ -n "$command_run_each" ]; then
+      echo "$matches" | while read match; do
+        "${command[@]}" "$match"
+      done
+    else
+      "${command[@]}" "${matches[@]}"
     fi
   fi
 }
@@ -463,7 +459,10 @@ function show_completion {
     tput cub ${#args}
   fi
 
-  if [ $count -eq 1 ] && [ -n "$selection" -o "$type" = "files" ]; then
+  if [ $count -eq 0 ]; then
+    echo -ne "\a"
+    return
+  elif [ $count -eq 1 ] && [ -n "$selection" -o "$type" = "files" ]; then
     unset show_prompt
   else
     local show_prompt=1
@@ -472,6 +471,25 @@ function show_completion {
   # don't show matches when a selection is given,
   # or when a file match only returns one result
   if [ -n "$show_prompt" ]; then
+    # expand variables in title
+    if is_git && [ -f /usr/lib/git-core/git-sh-prompt ]; then
+      . /usr/lib/git-core/git-sh-prompt
+      branch=" $RESET`__git_ps1 "$DARKGREEN[$GREEN%s$DARKGREEN]$RESET"`"
+    else
+      unset branch
+    fi
+
+    title=$(echo "$title" | sed -r \
+      -e "s|%count|$YELLOW$count$WHITE|g" \
+      -e "s|%dir|$DARKCYAN[$CYAN$workdir$DARKCYAN]$WHITE$branch|g"
+    )
+
+    if [ $count -eq 0 ]; then
+      title=" $DARKRED>$WHITE $title$RESET"
+    else
+      title=" $GREEN>$WHITE $title$RESET"
+    fi
+
     echo
     echo -ne "\n$title $GRAY[$type"
     # show the pattern when no match was found
