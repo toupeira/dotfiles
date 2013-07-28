@@ -39,7 +39,9 @@ case "$command" in
       command="hide-window"
     else
       unset command
-      quodlibet &>/dev/null &
+      shift
+      quodlibet "$@" &>/dev/null &
+
       for i in `seq 1 300`; do
         if is_running; then
           command="hide-window"
