@@ -590,7 +590,7 @@ endfunction
     nnoremap <silent><expr> ,b UniteWrapper('buffer file_mru:all', '-start-insert')
 
     " ,f - open files in the current working directory
-    nnoremap <silent><expr> ,f UniteWrapper('file file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new', '-start-insert')
+    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new', '-start-insert')
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y UniteWrapper('history/yank', '')
@@ -699,10 +699,11 @@ endfunction
       let g:neocomplete#sources#omni#input_patterns = {}
     endif
 
-    let g:neocomplete#sources#omni#input_patterns.ruby = '[^. *\t]\.\w*\|\h\w*::'
-    let g:neocomplete#sources#omni#input_patterns.php  = '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-    let g:neocomplete#sources#omni#input_patterns.c    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
-    let g:neocomplete#sources#omni#input_patterns.cpp  = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+    let g:neocomplete#sources#omni#input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::'
+    let g:neocomplete#sources#omni#input_patterns.python = '[^. \t]\.\w*'
+    let g:neocomplete#sources#omni#input_patterns.php    = '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+    let g:neocomplete#sources#omni#input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+    let g:neocomplete#sources#omni#input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
 
     " Recommended key-mappings.
     " <CR>: close popup and save indent.
@@ -715,6 +716,11 @@ endfunction
     inoremap <expr> <C-y> neocomplete#close_popup()
     inoremap <expr> <C-e> neocomplete#cancel_popup()
   endif
+  " }}}
+
+  " jedi
+  " {{{
+  let g:jedi#auto_vim_configuration = 0
   " }}}
 
 " }}}
