@@ -539,6 +539,12 @@ endfunction
   vmap <C-a> [egv
   vmap <C-z> ]egv
 
+  " colorizer
+  let g:colorizer_startup = 0
+  if has('gui_running')
+    autocmd GUIEnter * silent ColorToggle
+  end
+
   " unite
   if index(g:pathogen_disabled, 'unite') == -1
     let g:unite_data_directory = '~/.vim/tmp/unite'
