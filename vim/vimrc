@@ -531,10 +531,6 @@ endfunction
   let g:session_directory = "~/.vim/tmp/sessions"
   let g:session_autosave = 'yes'
 
-  " indent object
-  autocmd VimEnter * omap <silent>ai aI
-  autocmd VimEnter * vmap <silent>ai aI
-
   " unimpaired
   vmap <C-a> [egv
   vmap <C-z> ]egv
@@ -542,7 +538,7 @@ endfunction
   " colorizer
   let g:colorizer_startup = 0
   if has('gui_running')
-    autocmd GUIEnter * silent ColorToggle
+    autocmd GUIEnter css,scss silent ColorToggle
   end
 
   " unite
