@@ -560,6 +560,8 @@ endfunction
     " sort results by match rank
     call unite#filters#sorter_default#use(['sorter_length'])
     call unite#custom#source('action', 'sorters', 'sorter_nothing')
+    call unite#custom#source('history/yank', 'sorters', 'sorter_nothing')
+    call unite#custom#source('outline', 'sorters', 'sorter_nothing')
 
     " limit results for recently edited files
     call unite#custom#source('file_mru', 'max_candidates', 10)
