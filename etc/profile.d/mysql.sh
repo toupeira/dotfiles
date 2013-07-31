@@ -26,6 +26,6 @@ function mysql-top {
   while true; do
     clear
     mysql-ps
-    sleep 1
+    read -n 1 -t 1
   done
 }

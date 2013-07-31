@@ -557,11 +557,9 @@ endfunction
       let g:unite_source_rec_async_command = 'ack -f --nofilter'
     end
 
-    " enable fuzzy matching for all sources
-    "call unite#filters#matcher_default#use(['matcher_fuzzy'])
-
     " sort results by match rank
     call unite#filters#sorter_default#use(['sorter_length'])
+    call unite#custom#source('action', 'sorters', 'sorter_nothing')
 
     " limit results for recently edited files
     call unite#custom#source('file_mru', 'max_candidates', 10)
