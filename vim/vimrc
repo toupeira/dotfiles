@@ -540,7 +540,7 @@ endfunction
   " colorizer
   let g:colorizer_startup = 0
   if has('gui_running')
-    autocmd GUIEnter css,scss silent ColorToggle
+    autocmd FileType css,scss silent ColorToggle
   end
 
   " unite
