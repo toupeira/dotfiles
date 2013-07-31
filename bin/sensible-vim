@@ -25,6 +25,7 @@ if [ ${#args[@]} -gt 0 ]; then
     if [ -f "$file" ]; then
       mimetype=$(
         file -L --brief --mime-type -- "$file" \
+          | fgrep -vx 'application/xml' \
           | fgrep -vx 'image/svg+xml' \
           | egrep -vx 'inode/(directory|x-empty)' \
           | grep -P '^((?!text/).+|text/rtf)$'

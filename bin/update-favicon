@@ -35,6 +35,8 @@ unless bookmark_id
   exit 1
 end
 
+icon[:id] = nil if icon[:id] == ''
+
 unless icon[:id] or icon[:id] = db.get_first_value('SELECT id FROM moz_favicons WHERE url = ?', icon[:url])
   db.execute('INSERT INTO moz_favicons (url) VALUES (?)', icon[:url])
   icon[:id] = db.last_insert_row_id
