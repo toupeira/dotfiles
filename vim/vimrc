@@ -513,8 +513,8 @@ endfunction
 
   " ragtag
   imap <C-]> <C-x>/
-  silent! iunmap <C-v>%
-  silent! iunmap <C-v>&
+  autocmd User Ragtag silent! iunmap <buffer> <C-v>%
+  autocmd User Ragtag silent! iunmap <buffer> <C-v>&
 
   " tabular
   noremap ,a :Tabular /
