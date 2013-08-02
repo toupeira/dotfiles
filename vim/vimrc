@@ -377,8 +377,22 @@ endfunction
   nnoremap <silent> ,8 :b8<CR>
   nnoremap <silent> ,9 :b9<CR>
 
-  " ,c - close current window
-  nnoremap <silent> ,c :silent! close<CR>
+  " ,c - close current window, or delete the buffer if it's the only window
+  function! CloseWindowOrBuffer()
+    if index(g:pathogen_disabled, 'minibufexpl') == -1
+      let l:main_windows = 2
+    else
+      let l:main_windows = 1
+    end
+
+    " detect splits
+    if winnr('$') > l:main_windows
+      wincmd c
+    else
+      bd
+    endif
+  endfunction
+  nnoremap <silent> ,c :call CloseWindowOrBuffer()<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
@@ -557,16 +571,18 @@ endfunction
       let g:unite_source_rec_async_command = 'ack -f --nofilter'
     end
 
-    " sort results by match rank
-    call unite#filters#sorter_default#use(['sorter_length'])
-    call unite#custom#source('action', 'sorters', 'sorter_nothing')
-    call unite#custom#source('history/yank', 'sorters', 'sorter_nothing')
-    call unite#custom#source('outline', 'sorters', 'sorter_nothing')
+    " sort file results by length
+    call unite#custom#source('file', 'sorters', 'sorter_length')
+    call unite#custom#source('file_rec/async', 'sorters', 'sorter_length')
+    call unite#custom#source('file_mru', 'sorters', 'sorter_length')
 
     " limit results for recently edited files
     call unite#custom#source('file_mru', 'max_candidates', 10)
 
-    function! s:unite_buffers()
+    " map our keys in all Unite buffers
+    autocmd FileType unite call s:unite_buffer_mappings()
+
+    function! s:unite_buffer_mappings()
       " use ; to leave insert mode
       inoremap <silent><buffer> ; <Esc>
 
@@ -574,32 +590,29 @@ endfunction
       nmap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
       imap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
 
-      " use <C-a> to choose custom actions
-      nmap <silent><buffer> <C-a> <Plug>(unite_choose_action)
-      imap <silent><buffer> <C-a> <Plug>(unite_choose_action)
+      " use <C-Tab> to choose custom actions
+      imap <silent><buffer> <C-Tab> <Plug>(unite_choose_action)
 
       " use <C-c> to close Unite
-      nmap <silent><buffer> <C-c> :call unite#all_quit_session()<CR>
-      imap <silent><buffer> <C-c> <Esc>:call unite#all_quit_session()<CR>
+      nmap <silent><buffer> <C-c> <Plug>(unite_exit)
+      imap <silent><buffer> <C-c> <Plug>(unite_exit)
     endfunction
 
-    " automatically map the above keys in all Unite buffers
-    autocmd FileType unite call s:unite_buffers()
-
+    " wrapper for default Unite arguments
     function! UniteWrapper(action, arguments)
       return ":\<C-u>Unite -no-split " . a:action . " " . a:arguments . "\<CR>"
     endfunction
 
+    " ,f - open files in the current working directory or project tree
+    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new', '-start-insert')
+
     " ,b - switch buffers and open most recently edited files
     nnoremap <silent><expr> ,b UniteWrapper('buffer file_mru:all', '-start-insert')
-
-    " ,f - open files in the current working directory
-    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new', '-start-insert')
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y UniteWrapper('history/yank', '')
 
-    " ,t - show outline
+    " ,t - show file outline
     nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
   end
 
