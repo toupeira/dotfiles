@@ -127,7 +127,7 @@
   "   \ if &l:cursorline | setlocal nocursorline | endif
 
   " highlight trailing whitespace
-  autocmd VimEnter,Colorscheme * highlight Whitespace ctermbg=236 guibg=#333333
+  autocmd VimEnter,Colorscheme * highlight Whitespace ctermbg=235 guibg=#333333
   autocmd VimEnter,Colorscheme * match Whitespace /\s\+$/
 
   " go to last cursor position when opening files
@@ -616,13 +616,11 @@ endfunction
     nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
   end
 
-  " indent guides
+  " indentline
   " {{{
-  let g:indent_guides_enable_on_vim_startup = 1
-  let g:indent_guides_auto_colors = 0
-  let g:indent_guides_exclude_filetypes = [ 'text', 'conf', 'help', 'man', 'minibufexpl', 'unite' ]
-  autocmd VimEnter,Colorscheme * highlight IndentGuidesOdd  ctermbg=235 guibg=#252525
-  autocmd VimEnter,Colorscheme * highlight IndentGuidesEven ctermbg=236 guibg=#292929
+  let g:indentLine_char = '│'
+  let g:indentLine_color_term = 235
+  let g:indentLine_color_gui = '#333333'
   " }}}
 
   " syntastic

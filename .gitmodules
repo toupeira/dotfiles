@@ -13,9 +13,6 @@
 [submodule "vim/bundle/fugitive"]
 	path = vim/bundle/fugitive
 	url = https://github.com/tpope/vim-fugitive.git
-[submodule "vim/bundle/indent-guides"]
-	path = vim/bundle/indent-guides
-	url = https://github.com/nathanaelkane/vim-indent-guides.git
 [submodule "vim/bundle/repeat"]
 	path = vim/bundle/repeat
 	url = https://github.com/tpope/vim-repeat.git
@@ -133,3 +130,6 @@
 [submodule "vim/bundle/textobj-parameter"]
 	path = vim/bundle/textobj-parameter
 	url = https://github.com/sgur/vim-textobj-parameter.git
+[submodule "vim/bundle/indentline"]
+	path = vim/bundle/indentline
+	url = https://github.com/Yggdroot/indentLine.git
