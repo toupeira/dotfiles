@@ -133,3 +133,6 @@
 [submodule "vim/bundle/indentline"]
 	path = vim/bundle/indentline
 	url = https://github.com/Yggdroot/indentLine.git
+[submodule "vim/bundle/gitshade"]
+	path = vim/bundle/gitshade
+	url = https://github.com/joeytwiddle/git_shade.vim.git

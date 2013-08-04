@@ -232,19 +232,19 @@
 
   " Replace a builtin command using cabbrev
   " http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
-  function! CommandAbolish(abbreviation, expansion)
+  function! CommandAlias(abbreviation, expansion)
     execute 'cabbrev ' . a:abbreviation . ' <c-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "' . a:expansion . '" : "' . a:abbreviation . '"<CR>'
 endfunction
-  command! -nargs=+ CommandAbolish call CommandAbolish(<f-args>)
+  command! -nargs=+ CommandAlias call CommandAlias(<f-args>)
 
-  CommandAbolish E e
-  CommandAbolish Q Q
-  CommandAbolish QA qa
-  CommandAbolish Qa qa
-  CommandAbolish qA qa
-  CommandAbolish WQ wq
-  CommandAbolish Wq wq
-  CommandAbolish wQ wq
+  CommandAlias E e
+  CommandAlias Q Q
+  CommandAlias QA qa
+  CommandAlias Qa qa
+  CommandAlias qA qa
+  CommandAlias WQ wq
+  CommandAlias Wq wq
+  CommandAlias wQ wq
 
   " shortcuts for visual mode
   command! Dg diffget
@@ -557,6 +557,20 @@ endfunction
     autocmd FileType css,scss silent ColorToggle
   end
 
+  " gitshade
+  " {{{
+  let g:GitShade_ColorGradient = 'black_to_red'
+  let g:GitShade_ColorWhat = 'bg'
+  command! Gshade GitShade
+  " }}}
+
+  " indentline
+  " {{{
+  let g:indentLine_char = '│'
+  let g:indentLine_color_term = 235
+  let g:indentLine_color_gui = '#333333'
+  " }}}
+
   " unite
   if index(g:pathogen_disabled, 'unite') == -1
     let g:unite_data_directory = '~/.vim/tmp/unite'
@@ -616,13 +630,6 @@ endfunction
     nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
   end
 
-  " indentline
-  " {{{
-  let g:indentLine_char = '│'
-  let g:indentLine_color_term = 235
-  let g:indentLine_color_gui = '#333333'
-  " }}}
-
   " syntastic
   " {{{
   let g:syntastic_check_on_open = 1
@@ -639,6 +646,8 @@ endfunction
     let g:syntastic_auto_loc_list = 1
     let g:syntastic_auto_jump = 0
   endif
+
+  autocmd User Fugitive let b:syntastic_skip_checks = 1
   " }}}
 
   " powerline
