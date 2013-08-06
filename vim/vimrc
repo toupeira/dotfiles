@@ -88,6 +88,7 @@
   set lazyredraw
   set errorbells
   set visualbell t_vb= " disable bells
+  set synmaxcol=120 " disable syntax highlighting on long lines
 
   " windows
   set splitbelow
