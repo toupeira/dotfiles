@@ -136,3 +136,6 @@
 [submodule "vim/bundle/gitshade"]
 	path = vim/bundle/gitshade
 	url = https://github.com/joeytwiddle/git_shade.vim.git
+[submodule "vim/bundle/html5"]
+	path = vim/bundle/html5
+	url = https://github.com/othree/html5.vim.git
