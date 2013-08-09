@@ -38,7 +38,7 @@
 	keepBackup = false
 
 [push]
-	default = matching
+	default = simple
 
 [rebase]
 	stat = true
@@ -77,10 +77,13 @@
 	up = pull -v --progress
 	upbase = pull -v --progress --rebase
 	upall = pull-all
-	pu = push -v --progress
 	ff = merge --ff-only HEAD@{u}
 	mt = mergetool
 	rup = remote update
+
+	pu   = push -v --progress
+	pua  = push -v --progress --all
+	poof = push -v --progress --force
 
 	sts = stash save
 	stp = stash pop
