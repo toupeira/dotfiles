@@ -143,6 +143,7 @@
   endif
 
   if $STY
+    " show filename in screen title
     set titlestring=%t\ %m
   else
     "set titlestring=%r%m\ %t\ \[%{substitute(expand('%:p:h'),\ $HOME,\ '~',\ 'g')}\]\ -\ %{v:servername}
@@ -202,7 +203,7 @@
   autocmd BufNewFile,BufRead */bin/*.run setf sh
   autocmd BufNewFile,BufRead *.inc,*.thtml setf php
   autocmd BufNewFile,BufRead *.boo setf python
-  autocmd BufNewFile,BufRead Gemfile,*.plan setf ruby
+  autocmd BufNewFile,BufRead Gemfile setf ruby
   autocmd BufNewFile,BufRead ~/.devilspie/* setf lisp
   autocmd BufNewFile,BufRead *.pac setf javascript
 
@@ -247,11 +248,11 @@ endfunction
   CommandAlias Wq wq
   CommandAlias wQ wq
 
-  " shortcuts for visual mode
+  " diff shortcuts for visual mode
   command! Dg diffget
   command! Dp diffput
 
-  " shortcut to google something
+  " shortcuts for online searches
   if has('mac')
     let g:open_command = 'open'
   elseif has('unix')
@@ -260,6 +261,7 @@ endfunction
     let g:open_command = 'start'
   end
   command! -nargs=+ Google call system(g:open_command.' "https://www.google.com/search?q=<args>"')
+  command! -nargs=+ Dict call system(g:open_command.' "http://dict.leo.org/?lp=ende&search=<args>"')
   command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=<args>"')
 
   " shortcut to edit vim config files
@@ -363,24 +365,24 @@ endfunction
   endfunction
   autocmd FileType qf call ResizeWindow(2, 20)
 
-  " ,/, F2 - remove highlighted search
+  " ,/ and F2 - remove highlighted search
   nnoremap <silent> ,/ :noh<CR>
   nnoremap <silent> <F2> :noh<CR>
 
-  " ,1-9 - quick buffer switching
-  nnoremap <silent> ,1 :b1<CR>
-  nnoremap <silent> ,2 :b2<CR>
-  nnoremap <silent> ,3 :b3<CR>
-  nnoremap <silent> ,4 :b4<CR>
-  nnoremap <silent> ,5 :b5<CR>
-  nnoremap <silent> ,6 :b6<CR>
-  nnoremap <silent> ,7 :b7<CR>
-  nnoremap <silent> ,8 :b8<CR>
-  nnoremap <silent> ,9 :b9<CR>
+  " ,1-9 and ,01-99 - quick buffer switching
+  for i in range(1, 9)
+    execute "nnoremap <silent>  ," . i . " :b" . i . "<CR>"
+  endfor
+  for i in range(1, 99)
+    execute "nnoremap <silent>  ,0" . i . " :b0" . i . "<CR>"
+  endfor
 
   " ,c - close current window, or delete the buffer if it's the only window
   function! CloseWindowOrBuffer()
-    if index(g:pathogen_disabled, 'minibufexpl') == -1
+    " get number of visible buffers
+    let l:buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+
+    if l:buffers > 1 && index(g:pathogen_disabled, 'minibufexpl') == -1
       let l:main_windows = 2
     else
       let l:main_windows = 1
@@ -397,6 +399,30 @@ endfunction
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
+
+  " ,n - next buffer
+  nnoremap <silent> ,n :bnext<CR>
+
+  " ,p - previous buffer
+  nnoremap <silent> ,p :bprevious<CR>
+
+  " ,r - reload current buffer
+  nnoremap <silent> ,r :edit<CR>
+
+  " ,R - reload vimrc
+  nnoremap <silent> ,R :runtime! vimrc gvimrc<CR>:let &ft=&ft<CR>:nohlsearch<CR>
+
+  " ,s - split horizontally
+  nnoremap <silent> ,s :split<CR>
+
+  " ,v - split vertically
+  nnoremap <silent> ,v :vsplit<CR>
+
+  " ,w - write file
+  nnoremap <silent> ,w :write<CR>
+
+  " ,W - clear trailing whitespace
+  nnoremap <silent> ,W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
 
   " ,g - grep the current file
   if s:has_ag
@@ -465,9 +491,6 @@ endfunction
   endfunction " }}}
   nnoremap <silent> ,G :call GrepCurrentPath()<CR>
 
-  " ,n - next buffer
-  nnoremap <silent> ,n :bnext<CR>
-
   " ,N - toggle line numbers
   function! ToggleLineNumbers() " {{{
     if &number
@@ -479,27 +502,6 @@ endfunction
     endif
   endfunction " }}}
   nnoremap <silent> ,N :call ToggleLineNumbers()<CR>
-
-  " ,p - previous buffer
-  nnoremap <silent> ,p :bprevious<CR>
-
-  " ,r - reload current buffer
-  nnoremap <silent> ,r :edit<CR>
-
-  " ,R - reload vimrc
-  nnoremap <silent> ,R :runtime! vimrc gvimrc<CR>:let &ft=&ft<CR>:nohlsearch<CR>
-
-  " ,s - split horizontally
-  nnoremap <silent> ,s :split<CR>
-
-  " ,v - split vertically
-  nnoremap <silent> ,v :vsplit<CR>
-
-  " ,w - write file
-  nnoremap <silent> ,w :write<CR>
-
-  " ,W - clear trailing whitespace
-  nnoremap <silent> ,W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
 
   " F4 / F5 - change window height
   nnoremap <silent> <F4> <C-w>+
@@ -518,20 +520,63 @@ endfunction
 " Plugin Settings
 " {{{
 
+  " man {{{
   runtime ftplugin/man.vim
+  " }}}
 
-  " rails
+  " rails {{{
   hi! link rubyRailsARMethod Statement
+  " }}}
 
-  " undotree
+  " undotree {{{
   nnoremap <silent> ,u :UndotreeToggle<CR>
+  " }}}
 
-  " ragtag
+  " jedi {{{
+  let g:jedi#auto_vim_configuration = 0
+  " }}}
+
+  " syntax attributes {{{
+  runtime scripts/SyntaxAttr.vim
+  nnoremap <silent> ,S :call SyntaxAttr()<CR>
+  " }}}
+
+  " session plugin {{{
+  let g:session_directory = "~/.vim/tmp/sessions"
+  let g:session_autosave = 'yes'
+  " }}}
+
+  " unimpaired {{{
+  vmap <C-a> [egv
+  vmap <C-z> ]egv
+  " }}}
+
+  " ragtag {{{
   imap <C-]> <C-x>/
   autocmd User Ragtag silent! iunmap <buffer> <C-v>%
   autocmd User Ragtag silent! iunmap <buffer> <C-v>&
+  " }}}
 
-  " tabular
+  " gitshade {{{
+  let g:GitShade_ColorGradient = 'black_to_red'
+  let g:GitShade_ColorWhat = 'bg'
+  command! Gshade GitShade
+  " }}}
+
+  " indentline {{{
+  let g:indentLine_char = '│'
+  let g:indentLine_color_term = 235
+  let g:indentLine_color_gui = '#333333'
+  " }}}
+
+  " colorizer {{{
+  let g:colorizer_startup = 0
+  if has('gui_running')
+    autocmd FileType css,scss silent ColorToggle
+  end
+  " }}}
+
+  " tabular {{{
   noremap ,a :Tabular /
   noremap ,a, :Tabular /, /l0<CR>
   noremap ,a{ :Tabular /{<CR>
@@ -539,40 +584,116 @@ endfunction
   noremap ,a= :Tabular /=<CR>
   noremap ,a> :Tabular /=><CR>
   noremap ,a: :Tabular /:/l0r1<CR>
+  " }}}
 
-  " syntax attributes
-  runtime scripts/SyntaxAttr.vim
-  nnoremap <silent> ,S :call SyntaxAttr()<CR>
+  " netrw {{{
+  let g:netrw_silent = 1
+  let g:netrw_ftpmode = 'ascii'
+  let g:netrw_longlist = 1
+  let g:netrw_winsize = 40
+  let g:netrw_altv = 1
+  let g:DrChipTopLvlMenu = 'Plugins.'
+  if has('unix') && exists("$DISPLAY")
+    let g:netrw_browsex_viewer = 'xdg-open'
+  endif
+  " }}}
 
-  " session plugin
-  let g:session_directory = "~/.vim/tmp/sessions"
-  let g:session_autosave = 'yes'
+  " minibufexplorer {{{
+  let g:miniBufExplSplitBelow = 0
+  let g:miniBufExplUseSingleClick = 1
+  let g:miniBufExplTabWrap = 1
+  let g:miniBufExplSetUT = 1
 
-  " unimpaired
-  vmap <C-a> [egv
-  vmap <C-z> ]egv
+  highlight link MBENormal Comment
+  highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
+  highlight MBEVisibleActiveNormal cterm=bold ctermbg=28 gui=bold guibg=#368736
+  highlight MBEVisibleActiveChanged cterm=bold ctermbg=124 gui=bold guibg=#cc5653
+  highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
+  highlight MBEChanged ctermbg=88 guibg=#913d3b
+  let g:did_minibufexplorer_syntax_inits = 1
+  " }}}
 
-  " colorizer
-  let g:colorizer_startup = 0
-  if has('gui_running')
-    autocmd FileType css,scss silent ColorToggle
+  " syntastic {{{
+  let g:syntastic_check_on_open = 1
+  let g:syntastic_enable_signs = 1
+
+  let g:syntastic_javascript_checkers = [ 'jshint' ]
+  let g:syntastic_php_checkers = [ 'php', 'phpmd' ]
+  let g:syntastic_sh_checkers = [ 'sh' ]
+
+  let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
+  let g:systastic_puppet_puppetlint_args = '--no-documentation-check'
+
+  if !&diff
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_auto_jump = 0
+  endif
+
+  autocmd User Fugitive let b:syntastic_skip_checks = 1
+  " }}}
+
+  " powerline {{{
+  if index(g:pathogen_disabled, 'powerline') == -1
+    set runtimepath+=~/.dotfiles/vim/bundle/powerline/powerline/bindings/vim
+
+    " terminal tweaks
+    if !has('gui_running')
+      " {{{
+      let g:powerline_theme_overrides__default = {
+        \ 'segment_data': {
+          \ 'branch': { 'before': "@ " },
+          \ 'line_current_symbol': { 'contents': "" },
+          \ 'readonly_indicator': { 'args': { 'text': '#'} }
+        \ }
+      \ }
+
+      let g:powerline_config_overrides = {
+        \ "common": {
+          \ "dividers": {
+            \ "left":  { "hard": " ", "soft": "> " },
+            \ "right": { "hard": " ", "soft": " <" }
+          \ }
+        \ }
+      \ }
+      " }}}
+    end
   end
-
-  " gitshade
-  " {{{
-  let g:GitShade_ColorGradient = 'black_to_red'
-  let g:GitShade_ColorWhat = 'bg'
-  command! Gshade GitShade
   " }}}
 
-  " indentline
-  " {{{
-  let g:indentLine_char = '│'
-  let g:indentLine_color_term = 235
-  let g:indentLine_color_gui = '#333333'
+  " neocomplete {{{
+  if index(g:pathogen_disabled, 'neocomplete') == -1
+    let g:neocomplete#enable_at_startup = 1
+    let g:neocomplete#enable_auto_select = 1
+    let g:neocomplete#enable_smart_case = 1
+    let g:neocomplete#auto_completion_start_length = 2
+
+    call neocomplete#custom#source('syntax', 'disabled', 1)
+    call neocomplete#custom#source('syntax', 'disabled_filetypes', { '_' : 1 })
+
+    if !exists('g:neocomplete#sources#omni#input_patterns')
+      let g:neocomplete#sources#omni#input_patterns = {}
+    endif
+
+    let g:neocomplete#sources#omni#input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::'
+    let g:neocomplete#sources#omni#input_patterns.python = '[^. \t]\.\w*'
+    let g:neocomplete#sources#omni#input_patterns.php    = '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+    let g:neocomplete#sources#omni#input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
+    let g:neocomplete#sources#omni#input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+
+    " Recommended key-mappings.
+    " <CR>: close popup and save indent.
+    inoremap <silent> <CR> <C-r>=neocomplete#smart_close_popup()<CR><CR>
+    " <TAB>: completion.
+    inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
+    " <C-h>, <BS>: close popup and delete backword char.
+    inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
+    inoremap <expr> <C-y> neocomplete#close_popup()
+    inoremap <expr> <C-e> neocomplete#cancel_popup()
+  endif
   " }}}
 
-  " unite
+  " unite {{{
   if index(g:pathogen_disabled, 'unite') == -1
     let g:unite_data_directory = '~/.vim/tmp/unite'
     let g:unite_source_rec_max_cache_files = 5000
@@ -630,122 +751,6 @@ endfunction
     " ,t - show file outline
     nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
   end
-
-  " syntastic
-  " {{{
-  let g:syntastic_check_on_open = 1
-  let g:syntastic_enable_signs = 1
-
-  let g:syntastic_javascript_checkers = [ 'jshint' ]
-  let g:syntastic_php_checkers = [ 'php', 'phpmd' ]
-  let g:syntastic_sh_checkers = [ 'sh' ]
-
-  let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
-  let g:systastic_puppet_puppetlint_args = '--no-documentation-check'
-
-  if !&diff
-    let g:syntastic_auto_loc_list = 1
-    let g:syntastic_auto_jump = 0
-  endif
-
-  autocmd User Fugitive let b:syntastic_skip_checks = 1
-  " }}}
-
-  " powerline
-  " {{{
-  if index(g:pathogen_disabled, 'powerline') == -1
-    set runtimepath+=~/.dotfiles/vim/bundle/powerline/powerline/bindings/vim
-
-    " terminal tweaks
-    if !has('gui_running')
-      " {{{
-      let g:powerline_theme_overrides__default = {
-        \ 'segment_data': {
-          \ 'branch': { 'before': "@ " },
-          \ 'line_current_symbol': { 'contents': "" },
-          \ 'readonly_indicator': { 'args': { 'text': '#'} }
-        \ }
-      \ }
-
-      let g:powerline_config_overrides = {
-        \ "common": {
-          \ "dividers": {
-            \ "left":  { "hard": " ", "soft": "> " },
-            \ "right": { "hard": " ", "soft": " <" }
-          \ }
-        \ }
-      \ }
-      " }}}
-    end
-  end
-  " }}}
-
-  " netrw
-  " {{{
-  let g:netrw_silent = 1
-  let g:netrw_ftpmode = 'ascii'
-  let g:netrw_longlist = 1
-  let g:netrw_winsize = 40
-  let g:netrw_altv = 1
-  let g:DrChipTopLvlMenu = 'Plugins.'
-  if has('unix') && exists("$DISPLAY")
-    let g:netrw_browsex_viewer = 'xdg-open'
-  endif
-  " }}}
-
-  " minibufexplorer
-  " {{{
-  let g:miniBufExplSplitBelow = 0
-  let g:miniBufExplUseSingleClick = 1
-  let g:miniBufExplTabWrap = 1
-  let g:miniBufExplSetUT = 1
-
-  highlight link MBENormal Comment
-  highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
-  highlight MBEVisibleActiveNormal cterm=bold ctermbg=28 gui=bold guibg=#368736
-  highlight MBEVisibleActiveChanged cterm=bold ctermbg=124 gui=bold guibg=#cc5653
-  highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
-  highlight MBEChanged ctermbg=88 guibg=#913d3b
-  let g:did_minibufexplorer_syntax_inits = 1
-  " }}}
-
-  " neocomplete
-  " {{{
-  if index(g:pathogen_disabled, 'neocomplete') == -1
-    let g:neocomplete#enable_at_startup = 1
-    let g:neocomplete#enable_auto_select = 1
-    let g:neocomplete#enable_smart_case = 1
-    let g:neocomplete#auto_completion_start_length = 2
-
-    call neocomplete#custom#source('syntax', 'disabled', 1)
-    call neocomplete#custom#source('syntax', 'disabled_filetypes', { '_' : 1 })
-
-    if !exists('g:neocomplete#sources#omni#input_patterns')
-      let g:neocomplete#sources#omni#input_patterns = {}
-    endif
-
-    let g:neocomplete#sources#omni#input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::'
-    let g:neocomplete#sources#omni#input_patterns.python = '[^. \t]\.\w*'
-    let g:neocomplete#sources#omni#input_patterns.php    = '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-    let g:neocomplete#sources#omni#input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
-    let g:neocomplete#sources#omni#input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-
-    " Recommended key-mappings.
-    " <CR>: close popup and save indent.
-    inoremap <silent> <CR> <C-r>=neocomplete#smart_close_popup()<CR><CR>
-    " <TAB>: completion.
-    inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
-    " <C-h>, <BS>: close popup and delete backword char.
-    inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
-    inoremap <expr> <C-y> neocomplete#close_popup()
-    inoremap <expr> <C-e> neocomplete#cancel_popup()
-  endif
-  " }}}
-
-  " jedi
-  " {{{
-  let g:jedi#auto_vim_configuration = 0
   " }}}
 
 " }}}
