@@ -619,7 +619,7 @@ endfunction
     endfunction
 
     " ,f - open files in the current working directory or project tree
-    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new' . (expand('%') == '' ? '' : ':'.expand('%:h')), '-start-insert')
+    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new' . (expand('%') == '' ? '' : ':'.escape(expand('%:h'), ' ')), '-start-insert')
 
     " ,b - switch buffers and open most recently edited files
     nnoremap <silent><expr> ,b UniteWrapper('buffer file_mru:all', '-start-insert')
