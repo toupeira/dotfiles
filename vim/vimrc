@@ -6,7 +6,7 @@
   let s:has_ag  = executable('ag')
   let s:has_ack = executable('ack')
 
-  " load all bundles
+  " set up pathogen
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
@@ -28,7 +28,7 @@
     call add(g:pathogen_disabled, 'powerline')
   endif
 
-  " load all plugins
+  " load bundles
   call pathogen#infect()
 
   if has('gui_running')
@@ -42,6 +42,7 @@
 " {{{
 
   " file handling
+  filetype plugin indent on
   set hidden
   set nobackup
   set autowrite
@@ -159,7 +160,6 @@
   set whichwrap+=<,>,[,],h,l
 
   " indents
-  filetype plugin indent on
   set autoindent
   set smartindent
   set nocindent
@@ -431,19 +431,19 @@ endfunction
     let &grepprg = "ack --smart-case --noheading --with-filename --column"
   endif
 
-  function! GrepCurrentFile()
-    if expand('%') == ''
+  function! GrepWrapper(path)
+    if a:path == '%' && expand('%') == ''
       echo "Can't grep unsaved file."
       return
     endif
 
-    echohl ModeMsg
-    let l:pattern = substitute(input("Grep file: /", expand('<cword>')), '"', '\"', '')
+    echohl Question
+    let l:pattern = substitute(input("Grep " . (a:path == '%' ? 'buffer' : 'recursive') . ": /", expand('<cword>')), '"', '\"', '')
 
     if l:pattern != ""
-      echohl ModeMsg
+      echohl Question
       echo "/ searching..."
-      execute 'silent grep '.shellescape(l:pattern).' % /dev/null'
+      execute 'silent grep ' . shellescape(l:pattern) . ' ' . a:path . ' /dev/null'
 
       let l:len = len(getqflist())
       if l:len > 0
@@ -452,44 +452,16 @@ endfunction
         echo l:len l:len == 1 ? "match" : "matches" "found"
       else
         echohl ErrorMsg
-        echo "Pattern not found in current file: ".l:pattern
+        echo "Pattern not found: ".l:pattern
       endif
     endif
 
     echohl None
   endfunction
-  nnoremap <silent> ,g :call GrepCurrentFile()<CR>
+  nnoremap <silent> ,g :call GrepWrapper('%')<CR>
 
   " ,G - grep the current path
-  function! GrepCurrentPath() " {{{
-    echohl Question
-    let l:pattern = substitute(input("Grep path: /", expand('<cword>')), '"', '\"', '')
-
-    if l:pattern != ""
-      if exists('b:rails_root')
-        let l:path = b:rails_root.'/{app,config,lib,vendor/plugins,public/javascripts,public/stylesheets}'
-      else
-        let l:path = '.'
-      endif
-
-      echohl Question
-      echo "/ searching..."
-      execute 'silent grep -r '.shellescape(l:pattern).' '.l:path
-
-      let l:len = len(getqflist())
-      if l:len > 0
-        copen
-        redraw
-        echo l:len l:len == 1 ? "match" : "matches" "found"
-      else
-        echohl ErrorMsg
-        echo "Pattern not found in current path: ".l:pattern
-      endif
-    endif
-
-    echohl None
-  endfunction " }}}
-  nnoremap <silent> ,G :call GrepCurrentPath()<CR>
+  nnoremap <silent> ,G :call GrepWrapper('.')<CR>
 
   " ,N - toggle line numbers
   function! ToggleLineNumbers() " {{{
@@ -536,6 +508,10 @@ endfunction
   let g:jedi#auto_vim_configuration = 0
   " }}}
 
+  " javascript-libraries-syntax {{{
+  let g:used_javascript_libs = 'jquery,requirejs'
+  " }}}
+
   " syntax attributes {{{
   runtime scripts/SyntaxAttr.vim
   nnoremap <silent> ,S :call SyntaxAttr()<CR>
@@ -547,8 +523,15 @@ endfunction
   " }}}
 
   " unimpaired {{{
-  vmap <C-a> [egv
-  vmap <C-z> ]egv
+  nmap <C-Up> [e
+  nmap <C-Down> ]e
+  vmap <C-Up> [egv
+  vmap <C-Down> ]egv
+
+  nmap <Esc>Oa [e
+  nmap <Esc>Ob ]e
+  vmap <Esc>Oa [egv
+  vmap <Esc>Ob ]egv
   " }}}
 
   " ragtag {{{
@@ -667,8 +650,8 @@ endfunction
     let g:neocomplete#enable_smart_case = 1
     let g:neocomplete#auto_completion_start_length = 2
 
-    call neocomplete#custom#source('syntax', 'disabled', 1)
-    call neocomplete#custom#source('syntax', 'disabled_filetypes', { '_' : 1 })
+    "call neocomplete#custom#source('syntax', 'disabled', 1)
+    "call neocomplete#custom#source('syntax', 'disabled_filetypes', { '_' : 1 })
 
     if !exists('g:neocomplete#sources#omni#input_patterns')
       let g:neocomplete#sources#omni#input_patterns = {}
@@ -703,8 +686,14 @@ endfunction
     " speed up recursive file searches
     if s:has_ag
       let g:unite_source_rec_async_command = 'ag -l .'
+      let g:unite_source_grep_command = 'ag'
+      let g:unite_source_grep_default_opts = '--nocolor --nogroup -S'
+      let g:unite_source_grep_recursive_opt = ''
     elseif s:has_ack
       let g:unite_source_rec_async_command = 'ack -f --nofilter'
+      let g:unite_source_grep_command = 'ack'
+      let g:unite_source_grep_default_opts = '--no-color --no-heading'
+      let g:unite_source_grep_recursive_opt = ''
     end
 
     " sort file results by length
