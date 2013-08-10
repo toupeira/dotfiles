@@ -234,10 +234,10 @@
 
   " Replace a builtin command using cabbrev
   " http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
-  function! CommandAlias(abbreviation, expansion)
+  function! s:CommandAlias(abbreviation, expansion)
     execute 'cabbrev ' . a:abbreviation . ' <c-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "' . a:expansion . '" : "' . a:abbreviation . '"<CR>'
 endfunction
-  command! -nargs=+ CommandAlias call CommandAlias(<f-args>)
+  command! -nargs=+ CommandAlias call <SID>CommandAlias(<f-args>)
 
   CommandAlias E e
   CommandAlias Q Q
@@ -265,7 +265,7 @@ endfunction
   command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=<args>"')
 
   " shortcut to edit vim config files
-  function! VimConfigFileCompletion(A, L, P) " {{{
+  function! s:VimConfigFileCompletion(A, L, P) " {{{
     let l:dir = getcwd()
     chdir ~/.dotfiles/vim/
 
@@ -283,7 +283,7 @@ endfunction
     execute "chdir ".l:dir
     return l:values
   endfunction " }}}
-  command! -nargs=1 -complete=customlist,VimConfigFileCompletion RC edit ~/.dotfiles/vim/<args>
+  command! -nargs=1 -complete=customlist,<SID>VimConfigFileCompletion RC edit ~/.dotfiles/vim/<args>
 
 " }}}
 
@@ -328,15 +328,15 @@ endfunction
   noremap <C-l> <C-w>l
 
   " ,q / ,e - toggle quickfix window and location list
-  function! GetBufferList()
+  function! s:GetBufferList()
     redir =>buflist
     silent! ls
     redir END
     return buflist
   endfunction
 
-  function! ToggleList(bufname, pfx)
-    let buflist = GetBufferList()
+  function! s:ToggleList(bufname, pfx)
+    let buflist = <SID>GetBufferList()
     for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
       if bufwinnr(bufnum) != -1
         exec(a:pfx.'close')
@@ -355,30 +355,29 @@ endfunction
     endif
   endfunction
 
-  nnoremap <silent> ,q :call ToggleList('Quickfix List', 'c')<CR>
-  nnoremap <silent> ,e :call ToggleList('Location List', 'l')<CR>
+  nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
+  nnoremap <silent> ,e :call <SID>ToggleList('Location List', 'l')<CR>
 
   " resize quickfix windows to their content, or 20 lines maximum
-  function! ResizeWindow(min, max)
+  function! s:ResizeWindow(min, max)
     let l:max = min([a:max, &lines / 3])
     execute max([a:min, min([l:max, line('$') + 1])]).'wincmd _'
   endfunction
-  autocmd FileType qf call ResizeWindow(2, 20)
+  autocmd FileType qf call <SID>ResizeWindow(2, 20)
 
   " ,/ and F2 - remove highlighted search
   nnoremap <silent> ,/ :noh<CR>
   nnoremap <silent> <F2> :noh<CR>
 
-  " ,1-9 and ,01-99 - quick buffer switching
+  " <count>! and ,1-9 - quick buffer switching
+  nnoremap ! :<C-u>b<C-r>=v:count<CR><CR>
+
   for i in range(1, 9)
     execute "nnoremap <silent>  ," . i . " :b" . i . "<CR>"
   endfor
-  for i in range(1, 99)
-    execute "nnoremap <silent>  ,0" . i . " :b0" . i . "<CR>"
-  endfor
 
-  " ,c - close current window, or delete the buffer if it's the only window
-  function! CloseWindowOrBuffer()
+  " ,c - close current window
+  function! s:CloseWindowOrBuffer()
     " get number of visible buffers
     let l:buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
 
@@ -391,11 +390,11 @@ endfunction
     " detect splits
     if winnr('$') > l:main_windows
       wincmd c
-    else
-      bd
+    " else
+    "   bd
     endif
   endfunction
-  nnoremap <silent> ,c :call CloseWindowOrBuffer()<CR>
+  nnoremap <silent> ,c :call <SID>CloseWindowOrBuffer()<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
@@ -431,7 +430,7 @@ endfunction
     let &grepprg = "ack --smart-case --noheading --with-filename --column"
   endif
 
-  function! GrepWrapper(path)
+  function! s:GrepWrapper(path)
     if a:path == '%' && expand('%') == ''
       echo "Can't grep unsaved file."
       return
@@ -458,13 +457,13 @@ endfunction
 
     echohl None
   endfunction
-  nnoremap <silent> ,g :call GrepWrapper('%')<CR>
+  nnoremap <silent> ,g :call <SID>GrepWrapper('%')<CR>
 
   " ,G - grep the current path
-  nnoremap <silent> ,G :call GrepWrapper('.')<CR>
+  nnoremap <silent> ,G :call <SID>GrepWrapper('.')<CR>
 
   " ,N - toggle line numbers
-  function! ToggleLineNumbers() " {{{
+  function! s:ToggleLineNumbers() " {{{
     if &number
       set nonumber
     elseif !exists('&relativenumber') || &relativenumber
@@ -473,7 +472,7 @@ endfunction
       set relativenumber
     endif
   endfunction " }}}
-  nnoremap <silent> ,N :call ToggleLineNumbers()<CR>
+  nnoremap <silent> ,N :call <SID>ToggleLineNumbers()<CR>
 
   " F4 / F5 - change window height
   nnoremap <silent> <F4> <C-w>+
@@ -705,7 +704,7 @@ endfunction
     call unite#custom#source('file_mru', 'max_candidates', 10)
 
     " map our keys in all Unite buffers
-    autocmd FileType unite call s:unite_buffer_mappings()
+    autocmd FileType unite call <SID>unite_buffer_mappings()
 
     function! s:unite_buffer_mappings()
       " use ; to leave insert mode
@@ -724,21 +723,21 @@ endfunction
     endfunction
 
     " wrapper for default Unite arguments
-    function! UniteWrapper(action, arguments)
+    function! s:UniteWrapper(action, arguments)
       return ":\<C-u>Unite -no-split " . a:action . " " . a:arguments . "\<CR>"
     endfunction
 
     " ,f - open files in the current working directory or project tree
-    nnoremap <silent><expr> ,f UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new' . (expand('%') == '' ? '' : ':'.escape(expand('%:h'), ' ')), '-start-insert')
+    nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new' . (expand('%') == '' ? '' : ':'.escape(expand('%:h'), ' ')), '-start-insert')
 
     " ,b - switch buffers and open most recently edited files
-    nnoremap <silent><expr> ,b UniteWrapper('buffer file_mru:all', '-start-insert')
+    nnoremap <silent><expr> ,b <SID>UniteWrapper('buffer file_mru:all', '-start-insert')
 
     " ,y - show yank history
-    nnoremap <silent><expr> ,y UniteWrapper('history/yank', '')
+    nnoremap <silent><expr> ,y <SID>UniteWrapper('history/yank', '')
 
     " ,t - show file outline
-    nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
+    nnoremap <silent><expr> ,t <SID>UniteWrapper('outline', '-start-insert')
   end
   " }}}
 
