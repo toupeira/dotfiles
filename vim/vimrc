@@ -482,10 +482,6 @@ endfunction
   hi! link rubyRailsARMethod Statement
   " }}}
 
-  " undotree {{{
-  nnoremap <silent> ,u :UndotreeToggle<CR>
-  " }}}
-
   " jedi {{{
   let g:jedi#auto_vim_configuration = 0
   " }}}
@@ -496,6 +492,11 @@ endfunction
 
   " project {{{
   let g:project_enable_welcome = 0
+  " }}}
+
+  " undotree {{{
+  let g:undotree_SetFocusWhenToggle = 1
+  nnoremap <silent> ,u :UndotreeToggle<CR>
   " }}}
 
   " syntax attributes {{{
