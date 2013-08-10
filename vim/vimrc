@@ -369,12 +369,16 @@ endfunction
   nnoremap <silent> ,/ :noh<CR>
   nnoremap <silent> <F2> :noh<CR>
 
-  " <count>! and ,1-9 - quick buffer switching
-  nnoremap ! :<C-u>b<C-r>=v:count<CR><CR>
-
+  " ,1-9 - switch buffers
   for i in range(1, 9)
     execute "nnoremap <silent>  ," . i . " :b" . i . "<CR>"
   endfor
+
+  " <count>! - switch buffers
+  nnoremap <expr> ! v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "!"
+
+  " <count>~ - delete buffers
+  nnoremap <expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
   " ,c - close current window
   function! s:CloseWindowOrBuffer()
