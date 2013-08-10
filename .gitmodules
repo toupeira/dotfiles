@@ -142,3 +142,9 @@
 [submodule "vim/bundle/javascript-libraries-syntax"]
 	path = vim/bundle/javascript-libraries-syntax
 	url = https://github.com/othree/javascript-libraries-syntax.vim.git
+[submodule "vim/bundle/eighties"]
+	path = vim/bundle/eighties
+	url = https://github.com/justincampbell/vim-eighties.git
+[submodule "vim/bundle/movar"]
+	path = vim/bundle/movar
+	url = https://github.com/robmiller/vim-movar.git
