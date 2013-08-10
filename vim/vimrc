@@ -10,7 +10,7 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
-  " session doesn't work with minibufexpl
+  call add(g:pathogen_disabled, 'powerline')
   call add(g:pathogen_disabled, 'session')
 
   " neocomplete requires Vim 7.3 and Lua
@@ -34,7 +34,7 @@
   if has('gui_running')
     " avoid loading the menu, has to be set before loading filetypes
     set guioptions+=M
-  end
+  endif
 
 " }}}
 
@@ -51,7 +51,7 @@
   set modelines=2
   if v:version > '703'
     set cryptmethod=blowfish
-  end
+  endif
 
   " searching
   set ignorecase
@@ -110,7 +110,7 @@
 
   if has('conceal')
     set conceallevel=2
-  end
+  endif
 
   " command prompt and status line
   set showcmd
@@ -259,7 +259,7 @@ endfunction
     let g:open_command = 'xdg-open'
   else
     let g:open_command = 'start'
-  end
+  endif
   command! -nargs=+ Google call system(g:open_command.' "https://www.google.com/search?q=<args>"')
   command! -nargs=+ Dict call system(g:open_command.' "http://dict.leo.org/?lp=ende&search=<args>"')
   command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=<args>"')
@@ -368,7 +368,7 @@ endfunction
       let l:main_windows = 2
     else
       let l:main_windows = 1
-    end
+    endif
 
     " detect splits
     if winnr('$') > l:main_windows
@@ -542,7 +542,7 @@ endfunction
   let g:colorizer_startup = 0
   if has('gui_running')
     autocmd FileType css,scss silent ColorToggle
-  end
+  endif
   " }}}
 
   " tabular {{{
@@ -625,8 +625,8 @@ endfunction
         \ }
       \ }
       " }}}
-    end
-  end
+    endif
+  endif
   " }}}
 
   " neocomplete {{{
@@ -662,6 +662,48 @@ endfunction
   endif
   " }}}
 
+  " airline {{{
+  if index(g:pathogen_disabled, 'airline') == -1
+    let g:airline_theme = 'desertink'
+    let g:airline_detect_paste = 0
+    let g:airline_detect_iminsert = 0
+    let g:airline_detect_whitespace = 0
+    let g:airline_enable_tagbar = 0
+
+    if has('gui_running')
+      let g:airline_powerline_fonts = 1
+    else
+      " unicode symbols
+      let g:airline_left_sep = '»'
+      let g:airline_left_sep = '▶'
+      let g:airline_right_sep = '«'
+      let g:airline_right_sep = '◀'
+      let g:airline_linecolumn_prefix = '␊ '
+      let g:airline_linecolumn_prefix = '␤ '
+      let g:airline_linecolumn_prefix = '¶ '
+      let g:airline_branch_prefix = '@ '
+      let g:airline_paste_symbol = 'ρ'
+      let g:airline_paste_symbol = 'Þ'
+      let g:airline_paste_symbol = '∥'
+      let g:airline_whitespace_symbol = 'Ξ'
+    endif
+
+    let g:airline_mode_map = {
+      \ 'n'  : 'n',
+      \ 'nc' : '·',
+      \ 'i'  : 'i',
+      \ 'R'  : 'r',
+      \ 'v'  : 'v',
+      \ 'V'  : 'V',
+      \ 'c'  : 'cmd',
+      \ '' : '^v',
+      \ 's'  : 's',
+      \ 'S'  : 'S',
+      \ '' : '^s',
+      \ }
+  endif
+  " }}}
+
   " unite {{{
   if index(g:pathogen_disabled, 'unite') == -1
     let g:unite_data_directory = '~/.vim/tmp/unite'
@@ -681,7 +723,7 @@ endfunction
       let g:unite_source_grep_command = 'ack'
       let g:unite_source_grep_default_opts = '--no-color --no-heading'
       let g:unite_source_grep_recursive_opt = ''
-    end
+    endif
 
     " shortcut for bookmarks
     command! -nargs=? -complete=file Bookmark UniteBookmarkAdd <args>

@@ -148,3 +148,6 @@
 [submodule "vim/bundle/movar"]
 	path = vim/bundle/movar
 	url = https://github.com/robmiller/vim-movar.git
+[submodule "vim/bundle/airline"]
+	path = vim/bundle/airline
+	url = https://github.com/bling/vim-airline.git

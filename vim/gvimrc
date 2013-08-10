@@ -38,7 +38,7 @@ endif
       set columns=200
     else
       set columns=120
-    end
+    endif
 
     " font
     if has('mac')
@@ -142,7 +142,7 @@ endif
     noremap <C-q> <C-v>
     inoremap <C-q> <C-v>
     cnoremap <C-q> <C-v>
-  end
+  endif
 
   " For CTRL-v to work autoselect must be off.
   " On Unix we have two selections, autoselect can be used.
