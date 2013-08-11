@@ -297,9 +297,13 @@ endfunction
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
 
-  " move to next/previous block with Tab/Shift+Tab in normal mode
-  nnoremap <silent> <Tab> }:silent! PreserveSearch '/[^ \t]/'<CR>^
-  nnoremap <silent> <S-Tab> {{:silent! PreserveSearch '/[^ \t]/'<CR>^
+  " Tab and Shift+Tab - move to next/previous block
+  nnoremap <silent> <Tab> m`}:silent! PreserveSearch '/[^ \t]/'<CR>^
+  nnoremap <silent> <S-Tab> m`{{:silent! PreserveSearch '/[^ \t]/'<CR>^
+
+  " Ctrl-Tab and Ctrl-Shift+Tab - move to next/previous block with same indent
+  nnoremap <silent><expr> <C-Tab> "m`:silent! PreserveSearch '/^" . repeat(' ', indent('.')) . "[^ \t]'<CR>^"
+  nnoremap <silent><expr> <C-S-Tab> "m`:silent! PreserveSearch '?^" . repeat(' ', indent('.')) . "[^ \t]'<CR>^"
 
   " indent with Tab/Shift+Tab in visual mode
   vmap <Tab> >
@@ -311,10 +315,6 @@ endfunction
 
   " toggle paste mode with F12
   set pastetoggle=<f12>
-
-  " switch buffers with Shift+Tab / Ctrl+Shift+Tab
-  noremap <C-Tab> :MBEbn<CR>
-  noremap <C-S-Tab> :MBEbp<CR>
 
   " navigate windows with Ctrl+jkhl
   noremap <C-j> <C-w>j
@@ -403,12 +403,6 @@ endfunction
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
-
-  " ,n - next buffer
-  nnoremap <silent> ,n :bnext<CR>
-
-  " ,p - previous buffer
-  nnoremap <silent> ,p :bprevious<CR>
 
   " ,r - reload current buffer
   nnoremap <silent> ,r :edit<CR>
@@ -625,6 +619,10 @@ endfunction
   let g:miniBufExplUseSingleClick = 1
   let g:miniBufExplTabWrap = 1
   let g:miniBufExplSetUT = 1
+  let g:miniBufExplCycleArround = 1
+
+  nnoremap <silent> ,n :MBEbn<CR>
+  nnoremap <silent> ,p :MBEbp<CR>
 
   highlight link MBENormal Comment
   highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
