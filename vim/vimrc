@@ -527,11 +527,24 @@ endfunction
   let g:indentLine_color_gui = '#333333'
   " }}}
 
+  " rooter {{{
+  let g:rooter_manual_only = 1
+  let g:rooter_change_directory_for_non_project_files = 1
+  autocmd BufNewFile,BufRead * :Rooter
+  " }}}
+
   " colorizer {{{
   let g:colorizer_startup = 0
   if has('gui_running')
     autocmd FileType css,scss silent ColorToggle
   endif
+  " }}}
+
+  " cycle {{{
+  autocmd FileType *    call AddCycleGroup('global', [ 'return', 'break', 'continue' ])
+  autocmd FileType ruby call AddCycleGroup('global', [ 'return', 'break', 'continue', 'next', 'retry' ])
+  autocmd FileType sh   call AddCycleGroup('sh', [ 'if', 'elif', 'else', 'fi' ])
+  autocmd FileType sh   call AddCycleGroup('sh', [ 'do', 'then' ])
   " }}}
 
   " tabular {{{

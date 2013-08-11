@@ -151,3 +151,9 @@
 [submodule "vim/bundle/easymotion"]
 	path = vim/bundle/easymotion
 	url = https://github.com/Lokaltog/vim-easymotion.git
+[submodule "vim/bundle/cycle"]
+	path = vim/bundle/cycle
+	url = https://github.com/zef/vim-cycle.git
+[submodule "vim/bundle/rooter"]
+	path = vim/bundle/rooter
+	url = https://github.com/airblade/vim-rooter.git
