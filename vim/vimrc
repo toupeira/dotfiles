@@ -10,7 +10,6 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
-  call add(g:pathogen_disabled, 'powerline')
   call add(g:pathogen_disabled, 'session')
 
   " neocomplete requires Vim 7.3 and Lua
@@ -21,11 +20,6 @@
   " Disable neocomplete for SSH sessions
   if $SSH_CONNECTION != ""
     call add(g:pathogen_disabled, 'neocomplete')
-  endif
-
-  " Powerline requires Vim 7.3 and Python
-  if v:version < '703' || !has('python')
-    call add(g:pathogen_disabled, 'powerline')
   endif
 
   " load bundles
@@ -606,34 +600,6 @@ endfunction
   endif
 
   autocmd User Fugitive let b:syntastic_skip_checks = 1
-  " }}}
-
-  " powerline {{{
-  if index(g:pathogen_disabled, 'powerline') == -1
-    set runtimepath+=~/.dotfiles/vim/bundle/powerline/powerline/bindings/vim
-
-    " terminal tweaks
-    if !has('gui_running')
-      " {{{
-      let g:powerline_theme_overrides__default = {
-        \ 'segment_data': {
-          \ 'branch': { 'before': "@ " },
-          \ 'line_current_symbol': { 'contents': "" },
-          \ 'readonly_indicator': { 'args': { 'text': '#'} }
-        \ }
-      \ }
-
-      let g:powerline_config_overrides = {
-        \ "common": {
-          \ "dividers": {
-            \ "left":  { "hard": " ", "soft": "> " },
-            \ "right": { "hard": " ", "soft": " <" }
-          \ }
-        \ }
-      \ }
-      " }}}
-    endif
-  endif
   " }}}
 
   " neocomplete {{{

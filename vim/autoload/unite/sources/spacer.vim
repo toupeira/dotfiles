@@ -34,7 +34,7 @@ endfunction"}}}
 let s:spacer = {
       \ 'name' : 'spacer',
       \ 'description' : 'draws a blank line',
-      \ 'default_action' : 'nop',
+      \ 'default_action' : 'preview',
       \ 'default_kind' : 'common',
       \}
 
