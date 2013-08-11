@@ -246,9 +246,9 @@
 
   " Replace a builtin command using cabbrev
   " http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
-  function! s:CommandAlias(abbreviation, expansion)
+  function! s:CommandAlias(abbreviation, expansion) " {{{
     execute 'cabbrev ' . a:abbreviation . ' <c-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "' . a:expansion . '" : "' . a:abbreviation . '"<CR>'
-endfunction
+endfunction " }}}
   command! -nargs=+ CommandAlias call <SID>CommandAlias(<f-args>)
 
   CommandAlias E e
@@ -298,8 +298,52 @@ endfunction
   inoremap <C-c> <Esc>
 
   " Tab and Shift+Tab - move to next/previous block
-  nnoremap <silent> <Tab> m`}:silent! PreserveSearch '/[^ \t]/'<CR>^
-  nnoremap <silent> <S-Tab> m`{{:silent! PreserveSearch '/[^ \t]/'<CR>^
+  function! s:MoveAlong(...) " {{{
+    let l:movement    = a:1
+    let l:syntax      = a:0 > 1 ? a:2 : []
+    let l:skip_syntax = a:0 > 2 ? a:3 : [ 'Comment' ]
+    let l:skip_words  = a:0 > 3 ? a:4 : [ 'end' ]
+
+    normal m`
+
+    while 1
+      silent! execute "normal " . l:movement
+
+      let l:line = line('.')
+      let l:col  = col('.')
+
+      if l:line == line('$')
+        break
+      elseif empty(getline(l:line))
+        continue
+      endif
+
+      let l:word = expand('<cword>')
+      let l:line_syntax = synIDattr(synIDtrans(synID(l:line, l:col, 1)), 'name')
+
+      if !empty(l:skip_words)
+        if match(l:word, '[^ \t]') == -1 || index(l:skip_words, l:word) > -1
+          continue
+        endif
+      endif
+
+      if !empty(l:syntax)
+        if index(l:syntax, l:line_syntax) == -1
+          continue
+        endif
+      endif
+
+      if !empty(l:skip_syntax)
+        if index(l:skip_syntax, l:line_syntax) > -1
+          continue
+        endif
+      endif
+
+      break
+    endwhile
+  endfunction " }}}
+  nnoremap <silent> <Tab> :call <SID>MoveAlong('zoj^')<CR>
+  nnoremap <silent> <S-Tab> :call <SID>MoveAlong('zok^')<CR>
 
   " Ctrl-Tab and Ctrl-Shift+Tab - move to next/previous block with same indent
   nnoremap <silent><expr> <C-Tab> "m`:silent! PreserveSearch '/^" . repeat(' ', indent('.')) . "[^ \t]'<CR>^"
@@ -323,15 +367,15 @@ endfunction
   noremap <C-l> <C-w>l
 
   " ,q / ,e - toggle quickfix window and location list
-  function! s:GetBufferList()
+  function! GetBufferList() " {{{
     redir =>buflist
     silent! ls
     redir END
     return buflist
-  endfunction
+  endfunction " }}}
 
-  function! s:ToggleList(bufname, pfx)
-    let buflist = <SID>GetBufferList()
+  function! s:ToggleList(bufname, pfx) " {{{
+    let buflist = GetBufferList()
     for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
       if bufwinnr(bufnum) != -1
         exec(a:pfx.'close')
@@ -348,16 +392,16 @@ endfunction
     if winnr() != winnr
       wincmd p
     endif
-  endfunction
+  endfunction " }}}
 
   nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
   nnoremap <silent> ,e :call <SID>ToggleList('Location List', 'l')<CR>
 
   " resize quickfix windows to their content, or 20 lines maximum
-  function! s:ResizeWindow(min, max)
+  function! s:ResizeWindow(min, max) " {{{
     let l:max = min([a:max, &lines / 3])
     execute max([a:min, min([l:max, line('$') + 1])]).'wincmd _'
-  endfunction
+  endfunction " }}}
   autocmd FileType qf call <SID>ResizeWindow(2, 20)
 
   " Ctrl-c and F2 - remove highlighted search
@@ -376,24 +420,22 @@ endfunction
   nnoremap <expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
   " ,c - close current window, unless it's the only one
-  function! s:CloseWindowOrBuffer()
+  function! s:CloseWindow() " {{{
     " get number of visible buffers
     let l:buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
 
+    " get number of default windows
     if l:buffers > 1 && index(g:pathogen_disabled, 'minibufexpl') == -1
       let l:main_windows = 2
     else
       let l:main_windows = 1
     endif
 
-    " detect splits
     if winnr('$') > l:main_windows
       wincmd c
-    " else
-    "   bd
     endif
-  endfunction
-  nnoremap <silent> ,c :call <SID>CloseWindowOrBuffer()<CR>
+  endfunction " }}}
+  nnoremap <silent> ,c :call <SID>CloseWindow()<CR>
 
   " ,x - close the current buffer
   nnoremap <silent> ,x :bd<CR>
@@ -423,12 +465,12 @@ endfunction
   nnoremap <silent> ,W :write!<CR>
 
   " ,$ - clear trailing whitespace
-  function! s:ClearTrailingWhitespace()
+  function! s:ClearTrailingWhitespace() " {{{
     Preserve 'silent %s/\s\s*$//e'
     echohl Question
     echo "Trailing whitespace cleared"
     echohl none
-  endfunction
+  endfunction " }}}
   nnoremap <silent> ,$ :call <SID>ClearTrailingWhitespace()<CR>
 
   " ,g - grep the current file
@@ -438,7 +480,7 @@ endfunction
     let &grepprg = "ack --smart-case --noheading --with-filename --column"
   endif
 
-  function! s:GrepWrapper(path)
+  function! s:GrepWrapper(path) " {{{
     if a:path == '%' && empty(expand('%'))
       echo "Can't grep unsaved file."
       return
@@ -464,7 +506,7 @@ endfunction
     endif
 
     echohl None
-  endfunction
+  endfunction " }}}
   nnoremap <silent> ,g :call <SID>GrepWrapper('%')<CR>
 
   " ,G - grep the current path
@@ -768,7 +810,7 @@ endfunction
     " map our keys in all Unite buffers
     autocmd FileType unite call <SID>unite_buffer_mappings()
 
-    function! s:unite_buffer_mappings()
+    function! s:unite_buffer_mappings() " {{{
       " use ; to toggle insert mode
       nmap <silent><buffer> ; i
       inoremap <silent><buffer> ; <Esc>
@@ -788,7 +830,7 @@ endfunction
       " use ' to start quick-match mode
       nmap <silent><buffer> ' <Plug>(unite_quick_match_default_action)
       imap <silent><buffer> ' <Plug>(unite_quick_match_default_action)
-    endfunction
+    endfunction " }}}
 
     " wrapper for default Unite arguments
     function! s:UniteWrapper(action, arguments)
