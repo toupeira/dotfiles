@@ -655,6 +655,7 @@ endfunction
     let g:airline_detect_iminsert = 0
     let g:airline_detect_whitespace = 0
     let g:airline_enable_tagbar = 0
+    let g:airline_section_y = "%{strlen(&fenc)>0?&fenc.':':''}%{strlen(&ff)>0?&ff:''}"
 
     if has('gui_running')
       let g:airline_powerline_fonts = 1
@@ -688,6 +689,7 @@ endfunction
       \ '' : '^s',
       \ }
 
+    " always show mode and branch
     function! AirlineForceLeft()
       let w:airline_render_left = 1
     endfunction
