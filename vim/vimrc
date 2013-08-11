@@ -509,16 +509,10 @@ endfunction
   let g:session_autosave = 'yes'
   " }}}
 
-  " unimpaired {{{
-  nmap <C-Up> [e
-  nmap <C-Down> ]e
-  vmap <C-Up> [egv
-  vmap <C-Down> ]egv
-
-  nmap <Esc>Oa [e
-  nmap <Esc>Ob ]e
-  vmap <Esc>Oa [egv
-  vmap <Esc>Ob ]egv
+  " easymotion {{{
+  let g:EasyMotion_leader_key = ',m'
+  map ,j ,mj
+  map ,k ,mk
   " }}}
 
   " ragtag {{{
@@ -566,6 +560,18 @@ endfunction
   if has('unix') && exists("$DISPLAY")
     let g:netrw_browsex_viewer = 'xdg-open'
   endif
+  " }}}
+
+  " unimpaired {{{
+  nmap <C-Up> [e
+  nmap <C-Down> ]e
+  vmap <C-Up> [egv
+  vmap <C-Down> ]egv
+
+  nmap <Esc>Oa [e
+  nmap <Esc>Ob ]e
+  vmap <Esc>Oa [egv
+  vmap <Esc>Ob ]egv
   " }}}
 
   " minibufexplorer {{{
@@ -702,6 +708,11 @@ endfunction
       \ 'S'  : 'S',
       \ '' : '^s',
       \ }
+
+    function! AirlineForceLeft()
+      let w:airline_render_left = 1
+    endfunction
+    autocmd VimEnter * call add(g:airline_statusline_funcrefs, function('AirlineForceLeft'))
   endif
   " }}}
 
@@ -770,10 +781,10 @@ endfunction
     nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new' . (expand('%') == '' ? '' : ':'.escape(expand('%:h'), ' ')), '-start-insert')
 
     " ,b - buffers, bookmarks, and recently edited files
-    nnoremap <silent><expr> ,b <SID>UniteWrapper('buffer bookmark file_mru:all', '-start-insert')
+    nnoremap <silent><expr> ,b <SID>UniteWrapper('spacer buffer spacer bookmark spacer file_mru:all', '-start-insert')
 
     " ,B - bookmarks and recently edited files
-    nnoremap <silent><expr> ,B <SID>UniteWrapper('bookmark file_mru:all', '')
+    nnoremap <silent><expr> ,B <SID>UniteWrapper('spacer bookmark spacer file_mru:all', '')
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y <SID>UniteWrapper('history/yank', '')

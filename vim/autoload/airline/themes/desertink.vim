@@ -28,6 +28,11 @@ let s:V1 = [ '#080808' , '#ffaf00' , 232 , 214 ] " gray3          & brightestora
 " Replace mode                                   " fg             & bg
 let s:RE = [ '#ffffff' , '#d70000' , 231 , 160 ] " white          & brightred
 
+" Inactive mode
+let s:IA1 = [ '#777777' , '#4a4a4a' , 240 , 237     , '' ]
+let s:IA2 = [ '#777777' , '#3a3a3a' , 242 , 236     , '' ]
+let s:IA3 = [ '#999999' , s:N3[1]   , 244 , s:N3[3] , '' ]
+
 let s:file = copy(s:N3)
 
 let g:airline#themes#desertink#normal = airline#themes#generate_color_map(s:N1, s:N2, s:N3, s:file)
@@ -45,6 +50,4 @@ let g:airline#themes#desertink#replace = copy(airline#themes#desertink#normal)
 let g:airline#themes#desertink#replace.mode           = [ s:RE[0] , s:RE[1] , s:RE[2] , s:RE[3] , '' ]
 let g:airline#themes#desertink#replace.mode_separator = [ s:RE[1] , s:N2[1] , s:RE[3] , s:N2[3] , '' ]
 
-
-let s:IA = [ s:N2[1]   , s:N3[1]   , s:N2[3]   , s:N3[3]   , ''     ]
-let g:airline#themes#desertink#inactive = airline#themes#generate_color_map(s:IA, s:IA, s:IA, s:file)
+let g:airline#themes#desertink#inactive = airline#themes#generate_color_map(s:IA1, s:IA2, s:IA3, s:file)
