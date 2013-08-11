@@ -124,7 +124,7 @@
 
   " highlight trailing whitespace
   autocmd VimEnter,Colorscheme * highlight Whitespace ctermbg=235 guibg=#333333
-  autocmd VimEnter,Colorscheme * match Whitespace /\s\+$/
+  autocmd VimEnter,Colorscheme * match Whitespace /[^ \t]\s\+$/
 
   " go to last cursor position when opening files
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") && &ft != 'gitcommit'
@@ -301,9 +301,10 @@ endfunction " }}}
   function! s:MoveAlong(...) " {{{
     let l:movement    = a:1
     let l:syntax      = a:0 > 1 ? a:2 : []
-    let l:skip_syntax = a:0 > 2 ? a:3 : [ 'Comment' ]
-    let l:skip_words  = a:0 > 3 ? a:4 : [ 'end' ]
+    let l:skip_syntax = a:0 > 2 ? a:3 : [ 'Comment', 'Noise' ]
+    let l:skip_words  = a:0 > 3 ? a:4 : [ 'else', 'end', '} else {' ]
 
+    " add current position to jumplist
     normal m`
 
     while 1
@@ -319,27 +320,32 @@ endfunction " }}}
       endif
 
       let l:word = expand('<cword>')
+      let l:text = substitute(getline('.'), ' ', '', 'g')
       let l:line_syntax = synIDattr(synIDtrans(synID(l:line, l:col, 1)), 'name')
 
-      if !empty(l:skip_words)
-        if match(l:word, '[^ \t]') == -1 || index(l:skip_words, l:word) > -1
+      if match(l:text, '[^ \t]') == -1
+        continue
+      endif
+
+      if !empty(l:skip_words) && index(l:skip_words, l:text) > -1
+        continue
+      endif
+
+      if !empty(l:syntax) && index(l:syntax, l:line_syntax) == -1
+        continue
+      endif
+
+      if !empty(l:skip_syntax) && index(l:skip_syntax, l:line_syntax) > -1
+        if l:line_syntax == 'Comment' || l:text == l:word
           continue
         endif
       endif
 
-      if !empty(l:syntax)
-        if index(l:syntax, l:line_syntax) == -1
-          continue
-        endif
+      if l:line_syntax == 'Noise' && l:text != l:word
+        return <SID>MoveAlong('w', [], [ 'Noise' ], [])
+      else
+        break
       endif
-
-      if !empty(l:skip_syntax)
-        if index(l:skip_syntax, l:line_syntax) > -1
-          continue
-        endif
-      endif
-
-      break
     endwhile
   endfunction " }}}
   nnoremap <silent> <Tab> :call <SID>MoveAlong('zoj^')<CR>
