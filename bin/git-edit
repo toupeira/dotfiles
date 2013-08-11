@@ -52,6 +52,10 @@ function main {
         exec 3>&1
         exec 1>&2
         ;;
+      -e|--command)
+        command=( "$2" )
+        shift
+        ;;
       --spin)
         start_loading
         trap "echo; exit" 2
@@ -84,34 +88,34 @@ function main {
     shift
   fi
 
-  case "$1" in
-    edit|edi|ed|"")
-      shift
-      command=( sensible-editor "$@" )
-      ;;
-    diff|dif|di|d)
-      shift
-      command=( git diff "$@" )
-      command_run_each=1
-      ;;
-    add|ad|a)
-      shift
-      command=( git add "$2" )
-      ;;
-    each|eac|ea)
-      command_run_each=1
-      shift
-      ;;
-    *)
-      command=( "$@" )
-      shift $#
-      ;;
-  esac
+  if [ -n "$1" -o -z "$command" ]; then
+    case "$1" in
+      edit|edi|ed|"")
+        shift
+        command=( sensible-editor "$@" )
+        ;;
+      diff|dif|di|d)
+        shift
+        command=( git -c pager.diff=false diff "$@" )
+        command_run_each=1
+        ;;
+      add|ad|a)
+        shift
+        command=( git add "$2" )
+        ;;
+      each|eac|ea)
+        command_run_each=1
+        shift
+        ;;
+      *)
+        command=( "$@" )
+        shift $#
+        ;;
+    esac
+  fi
 
   if [ -v command_args ]; then
-    echo "command was '${command[@]}'"
     command=( "${command[@]}" "${command_args[@]}" )
-    echo "command is now '${command[@]}'"
   fi
 
   pattern="$input"
@@ -181,7 +185,7 @@ function main {
     if [ "${command[0]}" = "sensible-editor" ]; then
       echo -e " $GREEN>$WHITE Editing $GREEN$matches$WHITE"
     else
-      echo -e " $GREEN>$WHITE Running $CYAN'${command[@]}'$WHITE on $GREEN$matches$WHITE"
+      echo -e " $GREEN>$WHITE Running $CYAN'${command[@]}'$WHITE with $GREEN$matches$WHITE"
     fi
 
     "${command[@]}" "$matches"
