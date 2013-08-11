@@ -226,6 +226,24 @@
 " Commands
 " {{{
 
+  " helper to preserve search and cursor position
+  function! s:Preserve(command) " {{{
+    let l:search=@/
+    let l:line = line('.')
+    let l:column = col('.')
+    execute a:command
+    let @/ = l:search
+    call cursor(l:line, l:column)
+  endfunction " }}}
+  command! -nargs=1 Preserve call <SID>Preserve(<args>)
+
+  function! s:PreserveSearch(command) " {{{
+    let l:search=@/
+    execute a:command
+    let @/ = l:search
+  endfunction " }}}
+  command! -nargs=1 PreserveSearch call <SID>PreserveSearch(<args>)
+
   " Replace a builtin command using cabbrev
   " http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
   function! s:CommandAlias(abbreviation, expansion)
@@ -278,6 +296,10 @@ endfunction
 
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
+
+  " move to next/previous block with Tab/Shift+Tab in normal mode
+  nnoremap <silent> <Tab> }:silent! PreserveSearch '/[^ \t]/'<CR>^
+  nnoremap <silent> <S-Tab> {{:silent! PreserveSearch '/[^ \t]/'<CR>^
 
   " indent with Tab/Shift+Tab in visual mode
   vmap <Tab> >
@@ -338,7 +360,7 @@ endfunction
   endfunction
   autocmd FileType qf call <SID>ResizeWindow(2, 20)
 
-  " <Ctrl-c> and F2 - remove highlighted search
+  " Ctrl-c and F2 - remove highlighted search
   nnoremap <silent> <C-c> :nohlsearch<CR>
   nnoremap <silent> <F2> :nohlsearch<CR>
 
@@ -353,7 +375,7 @@ endfunction
   " <count>~ - delete buffers
   nnoremap <expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
-  " ,c - close current window
+  " ,c - close current window, unless it's the only one
   function! s:CloseWindowOrBuffer()
     " get number of visible buffers
     let l:buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
@@ -372,6 +394,12 @@ endfunction
     endif
   endfunction
   nnoremap <silent> ,c :call <SID>CloseWindowOrBuffer()<CR>
+
+  " ,x - close the current buffer
+  nnoremap <silent> ,x :bd<CR>
+
+  " ,X - write and close the current buffer
+  nnoremap <silent> ,X :x<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
@@ -397,8 +425,17 @@ endfunction
   " ,w - write file
   nnoremap <silent> ,w :write<CR>
 
-  " ,W - clear trailing whitespace
-  nnoremap <silent> ,W mw:%s/\s\s*$//e<CR>:nohlsearch<CR>`w:echohl Question<CR>:echo "Trailing whitespace cleared"<CR>:echohl none<CR>
+  " ,W - force write file
+  nnoremap <silent> ,W :write!<CR>
+
+  " ,$ - clear trailing whitespace
+  function! s:ClearTrailingWhitespace()
+    Preserve 'silent %s/\s\s*$//e'
+    echohl Question
+    echo "Trailing whitespace cleared"
+    echohl none
+  endfunction
+  nnoremap <silent> ,$ :call <SID>ClearTrailingWhitespace()<CR>
 
   " ,g - grep the current file
   if s:has_ag
@@ -507,8 +544,8 @@ endfunction
   let g:EasyMotion_leader_key = ',m'
   map ,j ,mj
   map ,k ,mk
-  map <expr> ,* empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>,mn'
-  map <expr> ,# empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>,mN'
+  map <expr> ,* empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mn'
+  map <expr> ,# empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mN'
   " }}}
 
   " ragtag {{{
@@ -761,13 +798,13 @@ endfunction
     endfunction
 
     " ,f - files in the current working directory or project tree
-    nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:h') . ' file/new' . (empty(expand('%')) ? '' : ':'.fnameescape(expand('%:h'))), '-start-insert')
+    nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-start-insert')
 
     " ,b - buffers, bookmarks, and recently edited files
     nnoremap <silent><expr> ,b <SID>UniteWrapper('spacer buffer spacer bookmark spacer file_mru:all', '-start-insert')
 
-    " ,B - bookmarks and recently edited files
-    nnoremap <silent><expr> ,B <SID>UniteWrapper('spacer bookmark spacer file_mru:all', '')
+    " ,<Space> - bookmarks and recently edited files
+    nnoremap <silent><expr> ,<Space> <SID>UniteWrapper('spacer bookmark spacer file_mru:all', '')
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y <SID>UniteWrapper('history/yank', '')
@@ -775,10 +812,10 @@ endfunction
     " ,t - show file outline
     nnoremap <silent><expr> ,t <SID>UniteWrapper('outline', '-start-insert')
 
-    " run ,B on startup if no arguments were given
+    " run ,<Space> on startup if no arguments were given
     au VimEnter *
       \ if !argc() && (line2byte('$') == -1) && (v:progname =~? '^[gm]\=vim\%[\.exe]$') |
-      \   execute "normal ,B" |
+      \   execute "normal , " |
       \ endif
   endif
   " }}}
