@@ -18,7 +18,7 @@
   endif
 
   " Disable neocomplete for SSH sessions
-  if $SSH_CONNECTION != ""
+  if !empty($SSH_CONNECTION)
     call add(g:pathogen_disabled, 'neocomplete')
   endif
 
@@ -338,9 +338,9 @@ endfunction
   endfunction
   autocmd FileType qf call <SID>ResizeWindow(2, 20)
 
-  " ,/ and F2 - remove highlighted search
-  nnoremap <silent> ,/ :noh<CR>
-  nnoremap <silent> <F2> :noh<CR>
+  " <Ctrl-c> and F2 - remove highlighted search
+  nnoremap <silent> <C-c> :nohlsearch<CR>
+  nnoremap <silent> <F2> :nohlsearch<CR>
 
   " ,1-9 - switch buffers
   for i in range(1, 9)
@@ -408,7 +408,7 @@ endfunction
   endif
 
   function! s:GrepWrapper(path)
-    if a:path == '%' && expand('%') == ''
+    if a:path == '%' && empty(expand('%'))
       echo "Can't grep unsaved file."
       return
     endif
@@ -416,7 +416,7 @@ endfunction
     echohl Question
     let l:pattern = substitute(input("Grep " . (a:path == '%' ? 'buffer' : 'recursive') . ": /", expand('<cword>')), '"', '\"', '')
 
-    if l:pattern != ""
+    if !empty(l:pattern)
       echohl Question
       echo "/ searching..."
       execute 'silent grep ' . shellescape(l:pattern) . ' ' . a:path . ' /dev/null'
@@ -507,6 +507,8 @@ endfunction
   let g:EasyMotion_leader_key = ',m'
   map ,j ,mj
   map ,k ,mk
+  map <expr> ,* empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>,mn'
+  map <expr> ,# empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>,mN'
   " }}}
 
   " ragtag {{{
@@ -759,7 +761,7 @@ endfunction
     endfunction
 
     " ,f - files in the current working directory or project tree
-    nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (expand('%') == '' ? '' : ':%:h') . ' file_rec/async:!' . (expand('%') == '' ? '' : ':%:h') . ' file/new' . (expand('%') == '' ? '' : ':'.escape(expand('%:h'), ' ')), '-start-insert')
+    nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:h') . ' file/new' . (empty(expand('%')) ? '' : ':'.fnameescape(expand('%:h'))), '-start-insert')
 
     " ,b - buffers, bookmarks, and recently edited files
     nnoremap <silent><expr> ,b <SID>UniteWrapper('spacer buffer spacer bookmark spacer file_mru:all', '-start-insert')
