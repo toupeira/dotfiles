@@ -847,7 +847,7 @@ endfunction " }}}
     nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-start-insert')
 
     " ,b - buffers, bookmarks, and recently edited files
-    nnoremap <silent><expr> ,b <SID>UniteWrapper('spacer buffer spacer bookmark spacer file_mru:all', '-start-insert')
+    nnoremap <silent><expr> ,b <SID>UniteWrapper('spacer buffer spacer file_mru:all', '-start-insert')
 
     " ,<Space> - bookmarks and recently edited files
     nnoremap <silent><expr> ,<Space> <SID>UniteWrapper('spacer bookmark spacer file_mru:all', '')
