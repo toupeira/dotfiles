@@ -678,6 +678,7 @@ endfunction " }}}
   " airline {{{
   if index(g:pathogen_disabled, 'airline') == -1
     let g:airline_theme = 'desertink'
+    let g:airline_inactive_collapse = 0
     let g:airline_detect_paste = 0
     let g:airline_detect_iminsert = 0
     let g:airline_detect_whitespace = 0
@@ -703,8 +704,8 @@ endfunction " }}}
     endif
 
     let g:airline_mode_map = {
+      \ '__' : ' ',
       \ 'n'  : 'n',
-      \ 'nc' : '·',
       \ 'i'  : 'i',
       \ 'R'  : 'r',
       \ 'v'  : 'v',
@@ -715,12 +716,6 @@ endfunction " }}}
       \ 'S'  : 'S',
       \ '' : '^s',
       \ }
-
-    " always show mode and branch
-    function! AirlineForceLeft()
-      let w:airline_render_left = 1
-    endfunction
-    autocmd VimEnter * call add(g:airline_statusline_funcrefs, function('AirlineForceLeft'))
   endif
   " }}}
 
