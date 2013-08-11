@@ -108,3 +108,6 @@
 
 	ed = edit
 	vi = edit --command vim
+	vim = edit --command vim
+	gvi = edit --command gvim
+	gvim = edit --command gvim
