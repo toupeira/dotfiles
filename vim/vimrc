@@ -297,7 +297,7 @@ endfunction " }}}
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
 
-  " Tab and Shift+Tab - move to next/previous block
+  " Tab and Shift+Tab - move to next/previous useful line
   function! s:MoveAlong(...) " {{{
     let l:movement    = a:1
     let l:syntax      = a:0 > 1 ? a:2 : []
@@ -351,7 +351,7 @@ endfunction " }}}
   nnoremap <silent> <Tab> :call <SID>MoveAlong('zoj^')<CR>
   nnoremap <silent> <S-Tab> :call <SID>MoveAlong('zok^')<CR>
 
-  " Ctrl-Tab and Ctrl-Shift+Tab - move to next/previous block with same indent
+  " Ctrl-Tab and Ctrl-Shift+Tab - move to next/previous line with same indent
   nnoremap <silent><expr> <C-Tab> "m`:silent! PreserveSearch '/^" . repeat(' ', indent('.')) . "[^ \t]'<CR>^"
   nnoremap <silent><expr> <C-S-Tab> "m`:silent! PreserveSearch '?^" . repeat(' ', indent('.')) . "[^ \t]'<CR>^"
 
