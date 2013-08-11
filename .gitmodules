@@ -160,3 +160,6 @@
 [submodule "vim/bundle/pasta"]
 	path = vim/bundle/pasta
 	url = https://github.com/sickill/vim-pasta.git
+[submodule "vim/bundle/movealong"]
+	path = vim/bundle/movealong
+	url = https://github.com:toupeira/vim-movealong.git

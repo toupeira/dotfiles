@@ -297,64 +297,6 @@ endfunction " }}}
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
 
-  " Tab and Shift+Tab - move to next/previous useful line
-  function! s:MoveAlong(...) " {{{
-    let l:movement    = a:1
-    let l:syntax      = a:0 > 1 ? a:2 : []
-    let l:skip_syntax = a:0 > 2 ? a:3 : [ 'Comment', 'Noise' ]
-    let l:skip_words  = a:0 > 3 ? a:4 : [ 'else', 'end', '} else {' ]
-
-    " add current position to jumplist
-    normal m`
-
-    while 1
-      silent! execute "normal " . l:movement
-
-      let l:line = line('.')
-      let l:col  = col('.')
-
-      if l:line == line('$')
-        break
-      elseif empty(getline(l:line))
-        continue
-      endif
-
-      let l:word = expand('<cword>')
-      let l:text = substitute(getline('.'), ' ', '', 'g')
-      let l:line_syntax = synIDattr(synIDtrans(synID(l:line, l:col, 1)), 'name')
-
-      if match(l:text, '[^ \t]') == -1
-        continue
-      endif
-
-      if !empty(l:skip_words) && index(l:skip_words, l:text) > -1
-        continue
-      endif
-
-      if !empty(l:syntax) && index(l:syntax, l:line_syntax) == -1
-        continue
-      endif
-
-      if !empty(l:skip_syntax) && index(l:skip_syntax, l:line_syntax) > -1
-        if l:line_syntax == 'Comment' || l:text == l:word
-          continue
-        endif
-      endif
-
-      if l:line_syntax == 'Noise' && l:text != l:word
-        return <SID>MoveAlong('w', [], [ 'Noise' ], [])
-      else
-        break
-      endif
-    endwhile
-  endfunction " }}}
-  nnoremap <silent> <Tab> :call <SID>MoveAlong('zoj^')<CR>
-  nnoremap <silent> <S-Tab> :call <SID>MoveAlong('zok^')<CR>
-
-  " Ctrl-Tab and Ctrl-Shift+Tab - move to next/previous line with same indent
-  nnoremap <silent><expr> <C-Tab> "m`:silent! PreserveSearch '/^" . repeat(' ', indent('.')) . "[^ \t]'<CR>^"
-  nnoremap <silent><expr> <C-S-Tab> "m`:silent! PreserveSearch '?^" . repeat(' ', indent('.')) . "[^ \t]'<CR>^"
-
   " indent with Tab/Shift+Tab in visual mode
   vmap <Tab> >
   vmap <S-Tab> <
