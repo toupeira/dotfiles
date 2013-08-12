@@ -575,9 +575,8 @@ endfunction " }}}
   " rooter {{{
   let g:rooter_manual_only = 1
   let g:rooter_change_directory_for_non_project_files = 1
-  let g:rooter_patterns = [ '.git', '.git/' ]
   let g:rooter_patterns = [ '.git', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/' ]
-  autocmd BufNewFile,BufRead * :Rooter
+  autocmd BufEnter * :Rooter
   " }}}
 
   " tabular {{{
