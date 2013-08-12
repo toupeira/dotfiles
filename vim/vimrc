@@ -228,19 +228,19 @@
 
   " helper to preserve search and cursor position
   function! s:Preserve(command) " {{{
-    let l:search=@/
-    let l:line = line('.')
-    let l:column = col('.')
+    let search=@/
+    let line = line('.')
+    let column = col('.')
     execute a:command
-    let @/ = l:search
-    call cursor(l:line, l:column)
+    let @/ = search
+    call cursor(line, column)
   endfunction " }}}
   command! -nargs=1 Preserve call <SID>Preserve(<args>)
 
   function! s:PreserveSearch(command) " {{{
-    let l:search=@/
+    let search=@/
     execute a:command
-    let @/ = l:search
+    let @/ = search
   endfunction " }}}
   command! -nargs=1 PreserveSearch call <SID>PreserveSearch(<args>)
 
@@ -355,8 +355,8 @@ endfunction " }}}
 
   " resize quickfix windows to their content, or 20 lines maximum
   function! s:ResizeWindow(min, max) " {{{
-    let l:max = min([a:max, &lines / 3])
-    execute max([a:min, min([l:max, line('$') + 1])]).'wincmd _'
+    let max = min([a:max, &lines / 3])
+    execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
   endfunction " }}}
   autocmd FileType qf call <SID>ResizeWindow(2, 20)
 
@@ -378,16 +378,16 @@ endfunction " }}}
   " ,c - close current window, unless it's the only one
   function! s:CloseWindow() " {{{
     " get number of visible buffers
-    let l:buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+    let buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
 
     " get number of default windows
-    if l:buffers > 1 && index(g:pathogen_disabled, 'minibufexpl') == -1
-      let l:main_windows = 2
+    if buffers > 1 && index(g:pathogen_disabled, 'minibufexpl') == -1
+      let main_windows = 2
     else
-      let l:main_windows = 1
+      let main_windows = 1
     endif
 
-    if winnr('$') > l:main_windows
+    if winnr('$') > main_windows
       wincmd c
     endif
   endfunction " }}}
@@ -443,21 +443,21 @@ endfunction " }}}
     endif
 
     echohl Question
-    let l:pattern = substitute(input("Grep " . (a:path == '%' ? 'buffer' : 'recursive') . ": /", expand('<cword>')), '"', '\"', '')
+    let pattern = substitute(input("Grep " . (a:path == '%' ? 'buffer' : 'recursive') . ": /", expand('<cword>')), '"', '\"', '')
 
-    if !empty(l:pattern)
+    if !empty(pattern)
       echohl Question
       echo "/ searching..."
-      execute 'silent grep ' . shellescape(l:pattern) . ' ' . a:path . ' /dev/null'
+      execute 'silent grep ' . shellescape(pattern) . ' ' . a:path . ' /dev/null'
 
-      let l:len = len(getqflist())
-      if l:len > 0
+      let len = len(getqflist())
+      if len > 0
         copen
         redraw
-        echo l:len l:len == 1 ? "match" : "matches" "found"
+        echo len (len == 1 ? "match" : "matches" "found")
       else
         echohl ErrorMsg
-        echo "Pattern not found: ".l:pattern
+        echo "Pattern not found: ".pattern
       endif
     endif
 
@@ -558,12 +558,6 @@ endfunction " }}}
   let g:indentLine_color_gui = '#333333'
   " }}}
 
-  " rooter {{{
-  let g:rooter_manual_only = 1
-  let g:rooter_change_directory_for_non_project_files = 1
-  autocmd BufNewFile,BufRead * :silent! Rooter
-  " }}}
-
   " colorizer {{{
   let g:colorizer_startup = 0
   if has('gui_running')
@@ -576,6 +570,14 @@ endfunction " }}}
   autocmd FileType ruby call AddCycleGroup('global', [ 'return', 'break', 'continue', 'next', 'retry' ])
   autocmd FileType sh   call AddCycleGroup('sh', [ 'if', 'elif', 'else', 'fi' ])
   autocmd FileType sh   call AddCycleGroup('sh', [ 'do', 'then' ])
+  " }}}
+
+  " rooter {{{
+  let g:rooter_manual_only = 1
+  let g:rooter_change_directory_for_non_project_files = 1
+  let g:rooter_patterns = [ '.git', '.git/' ]
+  let g:rooter_patterns = [ '.git', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/' ]
+  autocmd BufNewFile,BufRead * :Rooter
   " }}}
 
   " tabular {{{

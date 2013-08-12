@@ -79,14 +79,14 @@ endif
 
         unlet s:toggle_font_size_big
       else
-        let l:font = substitute(&guifont, '[ :]h*\d.*', '', '')
+        let font = substitute(&guifont, '[ :]h*\d.*', '', '')
 
         if has('mac')
-          let &guifont = l:font.':h18'
+          let &guifont = font.':h18'
         elseif has('unix')
-          let &guifont = l:font.' 18'
+          let &guifont = font.' 18'
         else
-          let &guifont = l:font.'h16:cANSI'
+          let &guifont = font.'h16:cANSI'
         endif
 
         set columns=110 lines=40
