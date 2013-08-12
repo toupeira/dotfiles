@@ -162,4 +162,4 @@
 	url = https://github.com/sickill/vim-pasta.git
 [submodule "vim/bundle/movealong"]
 	path = vim/bundle/movealong
-	url = https://github.com:toupeira/vim-movealong.git
+	url = https://github.com/toupeira/vim-movealong.git

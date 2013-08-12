@@ -252,13 +252,21 @@ endfunction " }}}
   command! -nargs=+ CommandAlias call <SID>CommandAlias(<f-args>)
 
   CommandAlias E e
+  CommandAlias E! e!
   CommandAlias Q Q
+  CommandAlias Q! Q!
   CommandAlias QA qa
   CommandAlias Qa qa
   CommandAlias qA qa
+  CommandAlias QA! qa!
+  CommandAlias Qa! qa!
+  CommandAlias qA! qa!
   CommandAlias WQ wq
   CommandAlias Wq wq
   CommandAlias wQ wq
+  CommandAlias WQ! wq!
+  CommandAlias Wq! wq!
+  CommandAlias wQ! wq!
 
   " diff shortcuts for visual mode
   command! Dg diffget
