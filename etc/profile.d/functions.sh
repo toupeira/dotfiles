@@ -157,10 +157,18 @@ fi
 
 # Switch to dotfiles repository if no arguments are passed
 function dotfiles {
+  local path=`command dotfiles --path`
+
   if [ $# -eq 0 ]; then
-    cd "`dotfiles --path`"
+    cd "$path"
   elif [ $# -eq 2 ] && [[ "$1" =~ ^b(u(n(d(l(e)?)?)?)?)?$ ]]; then
-    cd "`dotfiles --path`/vim/bundle/$2"
+    if [ -d "$path/$2" ]; then
+      cd "$path/$2"
+    elif [ -d "$path/vim/bundle/$2" ]; then
+      cd "$path/vim/bundle/$2"
+    else
+      cd "`command ls -d "$path/vim/bundle/$2"* "$path/$2"* 2>/dev/null | head -1`"
+    fi
   else
     command dotfiles "$@"
   fi
