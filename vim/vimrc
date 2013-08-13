@@ -392,10 +392,10 @@ endfunction " }}}
   nnoremap <silent> ,c :call <SID>CloseWindow()<CR>
 
   " ,x - close the current buffer
-  nnoremap <silent> ,x :lclose<CR>bd<CR>
+  nnoremap <silent> ,x :lclose<CR>:bd<CR>
 
   " ,X - write and close the current buffer
-  nnoremap <silent> ,X :lclose<CR>x<CR>
+  nnoremap <silent> ,X :lclose<CR>:x<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
