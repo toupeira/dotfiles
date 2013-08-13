@@ -159,6 +159,8 @@ fi
 function dotfiles {
   if [ $# -eq 0 ]; then
     cd "`dotfiles --path`"
+  elif [ $# -eq 2 ] && [[ "$1" =~ ^b(u(n(d(l(e)?)?)?)?)?$ ]]; then
+    cd "`dotfiles --path`/vim/bundle/$2"
   else
     command dotfiles "$@"
   fi
