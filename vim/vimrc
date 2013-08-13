@@ -289,6 +289,9 @@ endfunction " }}}
 " Keybindings
 " {{{
 
+  " disable Ex mode
+  noremap Q <nop>
+
   " shortcut for desktop clipboard
   noremap + "+
 
@@ -360,17 +363,11 @@ endfunction " }}}
   endfunction " }}}
   autocmd FileType qf call <SID>ResizeWindow(2, 20)
 
-  " Ctrl-c and F2 - remove highlighted search
+  " Ctrl-c - remove highlighted search
   nnoremap <silent> <C-c> :nohlsearch<CR>
-  nnoremap <silent> <F2> :nohlsearch<CR>
 
-  " ,1-9 - switch buffers
-  for i in range(1, 9)
-    execute "nnoremap <silent>  ," . i . " :b" . i . "<CR>"
-  endfor
-
-  " <count>! - switch buffers
-  nnoremap <expr> ! v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "!"
+  " <count>` - switch buffers
+  nnoremap <expr> ` v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "`"
 
   " <count>~ - delete buffers
   nnoremap <expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
@@ -450,14 +447,14 @@ endfunction " }}}
       echo "/ searching..."
       execute 'silent grep ' . shellescape(pattern) . ' ' . a:path . ' /dev/null'
 
-      let len = len(getqflist())
-      if len > 0
+      let matches = len(getqflist())
+      if matches > 0
         copen
         redraw
-        echo len (len == 1 ? "match" : "matches" "found")
+        echo matches . (matches == 1 ? "match" : "matches found")
       else
         echohl ErrorMsg
-        echo "Pattern not found: ".pattern
+        echo "Pattern not found: " . pattern
       endif
     endif
 
@@ -515,6 +512,10 @@ endfunction " }}}
 
   " project {{{
   let g:project_enable_welcome = 0
+  " }}}
+
+  " movealong {{{
+  let g:movealong_default_keys = 1
   " }}}
 
   " undotree {{{
