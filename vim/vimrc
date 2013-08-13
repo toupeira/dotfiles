@@ -367,10 +367,10 @@ endfunction " }}}
   nnoremap <silent> <C-c> :nohlsearch<CR>
 
   " <count>` - switch buffers
-  nnoremap <expr> ` v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "`"
+  nnoremap <silent><expr> ` v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "`"
 
   " <count>~ - delete buffers
-  nnoremap <expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
+  nnoremap <silent><expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
   " ,c - close current window, unless it's the only one
   function! s:CloseWindow() " {{{
@@ -385,16 +385,17 @@ endfunction " }}}
     endif
 
     if winnr('$') > main_windows
+      lclose
       wincmd c
     endif
   endfunction " }}}
   nnoremap <silent> ,c :call <SID>CloseWindow()<CR>
 
   " ,x - close the current buffer
-  nnoremap <silent> ,x :bd<CR>
+  nnoremap <silent> ,x :lclose<CR>bd<CR>
 
   " ,X - write and close the current buffer
-  nnoremap <silent> ,X :x<CR>
+  nnoremap <silent> ,X :lclose<CR>x<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
@@ -647,8 +648,6 @@ endfunction " }}}
     let g:syntastic_auto_loc_list = 1
     let g:syntastic_auto_jump = 0
   endif
-
-  autocmd User Fugitive let b:syntastic_skip_checks = 1
   " }}}
 
   " neocomplete {{{
