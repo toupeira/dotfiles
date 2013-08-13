@@ -116,6 +116,9 @@
   set wildmode=longest:full,full
   set wildignore=*.pyc,*.o,*.lo,*.la,*.exe,*.swp,*.db,*.bak,*.old,*.dat,*.,tmp,*.mdb,*~,~*
 
+  " automatically open quickfix window after commands that modify the quickfix list
+  autocmd QuickFixCmdPost *grep* copen
+
   " cursor line
   " autocmd CursorHold *
   "   \ if &buftype != 'quickfix' && bufname('%') != '-MiniBufExplorer-' | setlocal cursorline | endif
@@ -450,9 +453,8 @@ endfunction " }}}
 
       let matches = len(getqflist())
       if matches > 0
-        copen
         redraw
-        echo matches . (matches == 1 ? "match" : "matches found")
+        echo matches . " " . (matches == 1 ? "match" : "matches") . " found"
       else
         echohl ErrorMsg
         echo "Pattern not found: " . pattern
