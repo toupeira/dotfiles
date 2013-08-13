@@ -29,3 +29,7 @@ Run the `dotfiles` wrapper script to interactively create symlinks for all paths
 
     Other arguments:
       COMMAND [ARGS]...     Excecute a Git command inside the dotfiles repository
+
+
+[![Bitdeli Badge](https://d2weczhvl823v0.cloudfront.net/toupeira/dotfiles/trend.png)](https://bitdeli.com/free "Bitdeli Badge")
+
