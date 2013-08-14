@@ -734,13 +734,13 @@ endfunction " }}}
     endif
 
     let g:airline_mode_map = {
-      \ '__' : ' ',
+      \ '__' : '#',
       \ 'n'  : 'n',
       \ 'i'  : 'i',
       \ 'R'  : 'r',
       \ 'v'  : 'v',
       \ 'V'  : 'V',
-      \ 'c'  : 'cmd',
+      \ 'c'  : 'c',
       \ '' : '^v',
       \ 's'  : 's',
       \ 'S'  : 'S',
