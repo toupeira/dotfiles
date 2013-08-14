@@ -53,6 +53,12 @@
   set incsearch
   set hlsearch
 
+  if s:has_ag
+    let &grepprg = "ag --smart-case --nogroup"
+  elseif s:has_ack
+    let &grepprg = "ack --smart-case --noheading --with-filename --column"
+  endif
+
   set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
   set dictionary=/usr/share/dict/words
 
@@ -90,7 +96,7 @@
   set splitright
 
   " disable preview window for completion
-  set completeopt-=preview
+  "set completeopt-=preview
 
   " buffers
   set number
@@ -117,7 +123,7 @@
   set wildignore=*.pyc,*.o,*.lo,*.la,*.exe,*.swp,*.db,*.bak,*.old,*.dat,*.,tmp,*.mdb,*~,~*
 
   " automatically open quickfix window after commands that modify the quickfix list
-  autocmd QuickFixCmdPost *grep* copen
+  autocmd QuickFixCmdPost *grep* if len(getqflist()) | copen | endif
 
   " cursor line
   " autocmd CursorHold *
@@ -180,7 +186,7 @@
 
   " folding
   set foldenable foldmethod=marker
-  "autocmd Syntax * set foldmethod=marker
+  autocmd Syntax * set foldmethod=marker
 
 " }}}
 
@@ -230,6 +236,7 @@
 " {{{
 
   " helper to preserve search and cursor position
+  command! -nargs=1 Preserve call <SID>Preserve(<args>)
   function! s:Preserve(command) " {{{
     let search=@/
     let line = line('.')
@@ -238,21 +245,20 @@
     let @/ = search
     call cursor(line, column)
   endfunction " }}}
-  command! -nargs=1 Preserve call <SID>Preserve(<args>)
 
+  command! -nargs=1 PreserveSearch call <SID>PreserveSearch(<args>)
   function! s:PreserveSearch(command) " {{{
     let search=@/
     execute a:command
     let @/ = search
   endfunction " }}}
-  command! -nargs=1 PreserveSearch call <SID>PreserveSearch(<args>)
 
   " Replace a builtin command using cabbrev
   " http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
+  command! -nargs=+ CommandAlias call <SID>CommandAlias(<f-args>)
   function! s:CommandAlias(abbreviation, expansion) " {{{
     execute 'cabbrev ' . a:abbreviation . ' <c-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "' . a:expansion . '" : "' . a:abbreviation . '"<CR>'
 endfunction " }}}
-  command! -nargs=+ CommandAlias call <SID>CommandAlias(<f-args>)
 
   CommandAlias E e
   CommandAlias E! e!
@@ -328,14 +334,15 @@ endfunction " }}}
   noremap <C-h> <C-w>h
   noremap <C-l> <C-w>l
 
-  " ,q / ,e - toggle quickfix window and location list
+  " ,q and ,e - toggle quickfix window and location list
+  nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
+  nnoremap <silent> ,e :call <SID>ToggleList('Location List', 'l')<CR>
   function! GetBufferList() " {{{
     redir =>buflist
     silent! ls
     redir END
     return buflist
   endfunction " }}}
-
   function! s:ToggleList(bufname, pfx) " {{{
     let buflist = GetBufferList()
     for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
@@ -344,11 +351,17 @@ endfunction " }}}
         return
       endif
     endfor
-    if a:pfx == 'l' && len(getloclist(0)) == 0
-        echohl ErrorMsg
-        echo "Location List is Empty."
-        return
+
+    if a:pfx == 'c' && !len(getqflist())
+      echohl Question
+      echo "Quickfix list is empty."
+      return
+    elseif a:pfx == 'l' && !len(getloclist(0))
+      echohl Question
+      echo "Location list is empty."
+      return
     endif
+
     let winnr = winnr()
     exec(a:pfx.'open')
     if winnr() != winnr
@@ -356,15 +369,12 @@ endfunction " }}}
     endif
   endfunction " }}}
 
-  nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
-  nnoremap <silent> ,e :call <SID>ToggleList('Location List', 'l')<CR>
-
   " resize quickfix windows to their content, or 20 lines maximum
+  autocmd FileType qf call <SID>ResizeWindow(2, 20)
   function! s:ResizeWindow(min, max) " {{{
     let max = min([a:max, &lines / 3])
     execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
   endfunction " }}}
-  autocmd FileType qf call <SID>ResizeWindow(2, 20)
 
   " Ctrl-c - remove highlighted search
   nnoremap <silent> <C-c> :nohlsearch<CR>
@@ -376,6 +386,7 @@ endfunction " }}}
   nnoremap <silent><expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
   " ,c - close current window, unless it's the only one
+  nnoremap <silent> ,c :call <SID>CloseWindow()<CR>
   function! s:CloseWindow() " {{{
     " get number of visible buffers
     let buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
@@ -392,7 +403,6 @@ endfunction " }}}
       wincmd c
     endif
   endfunction " }}}
-  nnoremap <silent> ,c :call <SID>CloseWindow()<CR>
 
   " ,x - close the current buffer
   nnoremap <silent> ,x :lclose<CR>:bd<CR>
@@ -422,21 +432,35 @@ endfunction " }}}
   nnoremap <silent> ,W :write!<CR>
 
   " ,$ - clear trailing whitespace
+  nnoremap <silent> ,$ :call <SID>ClearTrailingWhitespace()<CR>
   function! s:ClearTrailingWhitespace() " {{{
     Preserve 'silent %s/\s\s*$//e'
     echohl Question
     echo "Trailing whitespace cleared"
     echohl none
   endfunction " }}}
-  nnoremap <silent> ,$ :call <SID>ClearTrailingWhitespace()<CR>
 
-  " ,g - grep the current file
-  if s:has_ag
-    let &grepprg = "ag --smart-case --nogroup"
-  elseif s:has_ack
-    let &grepprg = "ack --smart-case --noheading --with-filename --column"
-  endif
+  " ,F - toggle fold method
+  nnoremap <silent> ,F :call ToggleFoldMethod()<CR>
+  function! ToggleFoldMethod() " {{{
+    if &foldcolumn == 0
+      echohl Question
+      echomsg "Folding..."
+      echohl none
+      if &filetype == 'python'
+        setlocal foldmethod=indent
+      else
+        setlocal foldmethod=syntax
+      endif
+      setlocal foldcolumn=3
+    else
+      setlocal foldcolumn=0 foldmethod=marker
+    endif
+  endfunction " }}}
 
+  " ,g and ,G - grep the current file or path
+  nnoremap <silent> ,g :call <SID>GrepWrapper('%')<CR>
+  nnoremap <silent> ,G :call <SID>GrepWrapper('.')<CR>
   function! s:GrepWrapper(path) " {{{
     if a:path == '%' && empty(expand('%'))
       echo "Can't grep unsaved file."
@@ -449,26 +473,23 @@ endfunction " }}}
     if !empty(pattern)
       echohl Question
       echo "/ searching..."
-      execute 'silent grep ' . shellescape(pattern) . ' ' . a:path . ' /dev/null'
+      execute 'silent! grep ' . shellescape(pattern) . ' ' . a:path . ' /dev/null'
+      redraw!
 
       let matches = len(getqflist())
       if matches > 0
-        redraw
         echo matches . " " . (matches == 1 ? "match" : "matches") . " found"
       else
-        echohl ErrorMsg
+        echohl WarningMsg
         echo "Pattern not found: " . pattern
       endif
     endif
 
     echohl None
   endfunction " }}}
-  nnoremap <silent> ,g :call <SID>GrepWrapper('%')<CR>
-
-  " ,G - grep the current path
-  nnoremap <silent> ,G :call <SID>GrepWrapper('.')<CR>
 
   " ,N - toggle line numbers
+  nnoremap <silent> ,N :call <SID>ToggleLineNumbers()<CR>
   function! s:ToggleLineNumbers() " {{{
     if &number
       set nonumber
@@ -478,7 +499,6 @@ endfunction " }}}
       set relativenumber
     endif
   endfunction " }}}
-  nnoremap <silent> ,N :call <SID>ToggleLineNumbers()<CR>
 
   " F4 / F5 - change window height
   nnoremap <silent> <F4> <C-w>+
@@ -762,7 +782,6 @@ endfunction " }}}
 
     " map our keys in all Unite buffers
     autocmd FileType unite call <SID>unite_buffer_mappings()
-
     function! s:unite_buffer_mappings() " {{{
       " use ; to toggle insert mode
       nmap <silent><buffer> ; i
