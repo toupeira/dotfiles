@@ -119,7 +119,7 @@
   set history=1000
   set report=0
   set wildmenu
-  set wildmode=longest:full,full
+  set wildmode=list:longest,full
   set wildignore=*.pyc,*.o,*.lo,*.la,*.exe,*.swp,*.db,*.bak,*.old,*.dat,*.,tmp,*.mdb,*~,~*
 
   " automatically open quickfix window after commands that modify the quickfix list

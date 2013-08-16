@@ -42,7 +42,9 @@ function _git_edit {
     git-edit --complete "$cur" $choice
   )" )
 
-  export __GIT_EDIT_LAST="$COMP_LINE"
+  if [ $? -eq 0 ]; then
+    export __GIT_EDIT_LAST="$COMP_LINE"
+  fi
 }
 
 function __git_edit_reset_prompt {

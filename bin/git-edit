@@ -464,17 +464,18 @@ function show_completion {
   fi
 
   if [ $count -eq 0 ]; then
+    # output bell if there are no matches
     echo -ne "\a"
     return
   elif [ $count -eq 1 ] && [ -n "$selection" -o "$type" = "files" ]; then
-    unset show_prompt
+    # don't show matches when a number was passed,
+    # or when a file match only returns one result
+    unset show_matches
   else
-    local show_prompt=1
+    local show_matches=1
   fi
 
-  # don't show matches when a selection is given,
-  # or when a file match only returns one result
-  if [ -n "$show_prompt" ]; then
+  if [ -n "$show_matches" ]; then
     # expand variables in title
     if is_git && [ -f /usr/lib/git-core/git-sh-prompt ]; then
       . /usr/lib/git-core/git-sh-prompt
@@ -512,7 +513,7 @@ function show_completion {
   fi
 
   # show the completion prompt
-  if [ -n "$show_prompt" ]; then
+  if [ -n "$show_matches" ]; then
     echo -n " $GREEN>>>$RESET "
   fi
 
@@ -530,6 +531,14 @@ function show_completion {
   if [ -n "$completion" ]; then
     feed_completion "$completion"
   fi
+
+  if [ -n "$show_matches" ]; then
+    exit 0
+  else
+    # signal for shell completion to indicate that there
+    # was no output besides the completed word
+    exit 100
+  fi
 }
 
 function start_loading {
@@ -538,6 +547,7 @@ function start_loading {
   (
     echo -n "$RED"
 
+    sleep 0.1
     while true; do
       for char in ◐ ◓ ◑ ◒; do
         echo -n "  $char"
