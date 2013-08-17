@@ -161,6 +161,7 @@
   set selection=inclusive
   set backspace=indent,eol,start
   set whichwrap+=<,>,[,],h,l
+  set iskeyword+=$
 
   " indents
   set autoindent
@@ -406,10 +407,10 @@ endfunction " }}}
   endfunction " }}}
 
   " ,x - close the current buffer
-  nnoremap <silent> ,x :lclose<CR>:bd<CR>
+  nnoremap <silent> ,x :lclose<CR>:MBEbd<CR>
 
   " ,X - write and close the current buffer
-  nnoremap <silent> ,X :lclose<CR>:x<CR>
+  nnoremap <silent> ,X :lclose<CR>:w<CR>:MBEbd<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
@@ -810,17 +811,14 @@ endfunction " }}}
 
     " wrapper for default Unite arguments
     function! s:UniteWrapper(action, arguments)
-      return ":\<C-u>Unite -no-split " . a:action . " " . a:arguments . "\<CR>"
+      return ":\<C-u>silent! Unite -no-split " . a:action . " " . a:arguments . "\<CR>"
     endfunction
 
-    " ,f - files in the current working directory or project tree
+    " ,f - show files in the current working directory and project tree
     nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-start-insert')
 
-    " ,b - buffers, bookmarks, and recently edited files
-    nnoremap <silent><expr> ,b <SID>UniteWrapper('spacer buffer spacer file_mru:all', '-start-insert')
-
-    " ,<Space> - bookmarks and recently edited files
-    nnoremap <silent><expr> ,<Space> <SID>UniteWrapper('spacer bookmark spacer file_mru:all', '')
+    " ,<Space> - show Git changes, open buffers, and recently edited files
+    nnoremap <silent><expr> ,<Space> <SID>UniteWrapper('git_untracked git_modified spacer buffer spacer file_mru:all', '')
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y <SID>UniteWrapper('history/yank', '')
