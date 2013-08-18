@@ -26,6 +26,8 @@ _bpurple='\[\e[1;35m\]'      # Purple
 _bcyan='\[\e[1;36m\]'        # Cyan
 _bwhite='\[\e[1;37m\]'       # White
 
+[ -n "$CONQUE" ] && unset _bblack
+
 PS1_USER="\u"
 PS1_HOST=""
 [ -n "$SSH_CONNECTION" ] && PS1_HOST="@\h"
@@ -35,7 +37,7 @@ export PS1="$_reset$_bblack$PS1_USER$_byellow$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_
 
 function _ps1_exit_code {
   local status=$?
-  [ -n "$CYGWIN" ] && return
+  [ -n "$CYGWIN" -o "$CONQUE" ] && return
 
   tput sc
   if [ $status -gt 0 ]; then

@@ -645,6 +645,15 @@ endfunction " }}}
   map <expr> ,# empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mN'
   " }}}
 
+  " conque {{{
+  let g:ConqueTerm_ReadUnfocused = 1
+
+  command! Shell silent ConqueTermSplit bash --login
+  command! Rlog silent! ConqueTermSplit tail -f log/development.log
+  command! Irb silent ConqueTermSplit irb
+  command! Ipython silent ConqueTermSplit ipython
+  " }}}
+
   " tabular {{{
   noremap ,a :Tabular /
   noremap ,a, :Tabular /, /l0<CR>
