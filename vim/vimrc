@@ -405,8 +405,9 @@ endfunction " }}}
   nnoremap <silent><expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
   " ,c - close current window, unless it's the only one
-  nnoremap <silent> ,c :call <SID>CloseWindow()<CR>
-  function! s:CloseWindow() " {{{
+  nnoremap <silent> ,c :call <SID>CloseWindow(0)<CR>
+  nnoremap <silent> ,C :call <SID>CloseWindow(1)<CR>
+  function! s:CloseWindow(resize) " {{{
     " get number of visible buffers
     let buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
 
@@ -418,6 +419,17 @@ endfunction " }}}
     endif
 
     if winnr('$') > main_windows
+      if a:resize
+        let height = winheight(0) + 2 + (main_windows == 2 ? 2 : 0)
+        let width = winwidth(0)
+
+        if height < &lines
+          let &lines = &lines / 6 * 5
+        elseif width < &columns
+          let &columns = &columns / 3 * 2
+        endif
+      endif
+
       lclose
       wincmd c
     endif
@@ -441,8 +453,14 @@ endfunction " }}}
   " ,s - split horizontally
   nnoremap <silent> ,s :split<CR>
 
+  " ,S - split horizontally, increase window height
+  nnoremap <silent> ,S :let &lines = &lines * 6 / 5<CR>:split<CR>
+
   " ,v - split vertically
   nnoremap <silent> ,v :vsplit<CR>
+
+  " ,V - split vertically, increase window width
+  nnoremap <silent> ,V :let &columns = &columns * 3 / 2<CR>:echomsg &columns<CR>:vsplit<CR>
 
   " ,w - write file
   nnoremap <silent> ,w :write<CR>
@@ -563,11 +581,6 @@ endfunction " }}}
   " undotree {{{
   let g:undotree_SetFocusWhenToggle = 1
   nnoremap <silent> ,u :UndotreeToggle<CR>
-  " }}}
-
-  " syntax attributes {{{
-  runtime scripts/SyntaxAttr.vim
-  nnoremap <silent> ,S :call SyntaxAttr()<CR>
   " }}}
 
   " session plugin {{{

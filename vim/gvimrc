@@ -22,7 +22,7 @@ endif
 " {{{
 
   " interface
-  set guioptions=aigrLM
+  set guioptions=aigM
   set visualbell t_vb= " disable bells, reset when starting GUI
 
   " don't use autoselect on OS X
