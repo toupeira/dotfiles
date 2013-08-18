@@ -348,10 +348,10 @@ endfunction " }}}
   set pastetoggle=<f12>
 
   " navigate windows with Ctrl+jkhl
-  noremap <C-j> <C-w>j
-  noremap <C-k> <C-w>k
-  noremap <C-h> <C-w>h
-  noremap <C-l> <C-w>l
+  nnoremap <C-j> <C-w>j
+  nnoremap <C-k> <C-w>k
+  nnoremap <C-h> <C-w>h
+  nnoremap <C-l> <C-w>l
 
   " ,q and ,e - toggle quickfix window and location list
   nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
@@ -644,17 +644,8 @@ endfunction " }}}
   " }}}
 
   " unimpaired {{{
-  nmap <C-Up> [e
-  nmap <C-Down> ]e
-  vmap <C-Up> [egv
-  vmap <C-Down> ]egv
-
-  if !has('gui_running')
-    nmap <Esc>Oa [e
-    nmap <Esc>Ob ]e
-    vmap <Esc>Oa [egv
-    vmap <Esc>Ob ]egv
-  endif
+  vmap <C-j> ]egv
+  vmap <C-k> [egv
   " }}}
 
   " minibufexplorer {{{
