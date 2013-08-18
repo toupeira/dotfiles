@@ -336,7 +336,7 @@ endfunction " }}}
       return "V"
     elseif mode ==# ''
       echomsg "block"
-      return "<C-q>"
+      return "\<C-v>"
     endif
   endfunction " }}}
 
