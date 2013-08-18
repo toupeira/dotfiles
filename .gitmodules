@@ -221,3 +221,6 @@
 [submodule "vim/bundle/unite-giti"]
 	path = vim/bundle/unite-giti
 	url = https://github.com/kmnk/vim-unite-giti.git
+[submodule "vim/bundle/eighties"]
+	path = vim/bundle/eighties
+	url = https://github.com/justincampbell/vim-eighties.git

@@ -575,12 +575,15 @@ endfunction " }}}
   let g:session_autosave = 'yes'
   " }}}
 
-  " easymotion {{{
-  let g:EasyMotion_leader_key = ',m'
-  map ,j ,mj
-  map ,k ,mk
-  map <expr> ,* empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mn'
-  map <expr> ,# empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mN'
+  " unimpaired {{{
+  vmap <C-j> ]egv
+  vmap <C-k> [egv
+  " }}}
+
+  " eighties {{{
+  let g:loaded_eighties = 1
+  command! EightiesResize if !&diff | call eighties#EightiesResize() | endif
+  autocmd WinEnter * EightiesResize
   " }}}
 
   " ragtag {{{
@@ -601,6 +604,12 @@ endfunction " }}}
   let g:indentLine_color_gui = '#333333'
   " }}}
 
+  " rooter {{{
+  let g:rooter_manual_only = 1
+  let g:rooter_change_directory_for_non_project_files = 1
+  autocmd BufEnter * :Rooter
+  " }}}
+
   " colorizer {{{
   let g:colorizer_startup = 0
   if has('gui_running')
@@ -615,10 +624,12 @@ endfunction " }}}
   autocmd FileType sh   call AddCycleGroup('sh', [ 'do', 'then' ])
   " }}}
 
-  " rooter {{{
-  let g:rooter_manual_only = 1
-  let g:rooter_change_directory_for_non_project_files = 1
-  autocmd BufEnter * :Rooter
+  " easymotion {{{
+  let g:EasyMotion_leader_key = ',m'
+  map ,j ,mj
+  map ,k ,mk
+  map <expr> ,* empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mn'
+  map <expr> ,# empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mN'
   " }}}
 
   " tabular {{{
@@ -643,9 +654,21 @@ endfunction " }}}
   endif
   " }}}
 
-  " unimpaired {{{
-  vmap <C-j> ]egv
-  vmap <C-k> [egv
+  " syntastic {{{
+  let g:syntastic_check_on_open = 1
+  let g:syntastic_enable_signs = 1
+
+  let g:syntastic_javascript_checkers = [ 'jshint' ]
+  let g:syntastic_php_checkers = [ 'php', 'phpmd' ]
+  let g:syntastic_sh_checkers = [ 'sh' ]
+
+  let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
+  let g:systastic_puppet_puppetlint_args = '--no-documentation-check'
+
+  if !&diff
+    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_auto_jump = 0
+  endif
   " }}}
 
   " minibufexplorer {{{
@@ -665,23 +688,6 @@ endfunction " }}}
   highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
   highlight MBEChanged ctermbg=88 guibg=#913d3b
   let g:did_minibufexplorer_syntax_inits = 1
-  " }}}
-
-  " syntastic {{{
-  let g:syntastic_check_on_open = 1
-  let g:syntastic_enable_signs = 1
-
-  let g:syntastic_javascript_checkers = [ 'jshint' ]
-  let g:syntastic_php_checkers = [ 'php', 'phpmd' ]
-  let g:syntastic_sh_checkers = [ 'sh' ]
-
-  let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
-  let g:systastic_puppet_puppetlint_args = '--no-documentation-check'
-
-  if !&diff
-    let g:syntastic_auto_loc_list = 1
-    let g:syntastic_auto_jump = 0
-  endif
   " }}}
 
   " neocomplete {{{
