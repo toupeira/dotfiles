@@ -2,17 +2,9 @@
 	path = vim/bundle/desertink
 	url = https://github.com/toupeira/vim-desertink.git
 	ignore = dirty
-[submodule "vim/bundle/snipmate"]
-	path = vim/bundle/snipmate
-	url = https://github.com/msanders/snipmate.vim.git
-	ignore = dirty
 [submodule "vim/bundle/syntastic"]
 	path = vim/bundle/syntastic
 	url = https://github.com/scrooloose/syntastic.git
-	ignore = dirty
-[submodule "vim/bundle/tcomment"]
-	path = vim/bundle/tcomment
-	url = https://github.com/tomtom/tcomment_vim.git
 	ignore = dirty
 [submodule "vim/bundle/fugitive"]
 	path = vim/bundle/fugitive
