@@ -814,6 +814,10 @@ endfunction " }}}
       nmap <silent><buffer> <C-a> <Plug>(unite_choose_action)
       imap <silent><buffer> <C-a> <Plug>(unite_choose_action)
 
+      " use <C-n> and <C-p> to move between lines in normal mode too
+      noremap <silent><buffer> <C-n> j
+      noremap <silent><buffer> <C-p> k
+
       " use ' to start quick-match mode
       nmap <silent><buffer> ' <Plug>(unite_quick_match_default_action)
       imap <silent><buffer> ' <Plug>(unite_quick_match_default_action)
@@ -828,7 +832,7 @@ endfunction " }}}
     nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-start-insert')
 
     " ,<Space> - show Git changes, open buffers, and recently edited files
-    nnoremap <silent><expr> ,<Space> <SID>UniteWrapper('git_untracked git_modified spacer buffer spacer file_mru:all', '')
+    nnoremap <silent><expr> ,<Space> <SID>UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'spacer buffer spacer file_mru:all', '')
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y <SID>UniteWrapper('history/yank', '')
