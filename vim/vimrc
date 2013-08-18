@@ -323,6 +323,23 @@ endfunction " }}}
   vmap <Tab> >
   vmap <S-Tab> <
 
+  " keep cursor at end of selection when yanking
+  xnoremap <silent><expr> y "ygv" . <SID>LeaveVisualMode()
+  xnoremap <silent><expr> Y "Ygv" . <SID>LeaveVisualMode()
+  function! s:LeaveVisualMode() " {{{
+    let mode = mode()
+    if mode ==# 'v'
+      echomsg "small"
+      return "v"
+    elseif mode ==# 'V'
+      echomsg "big"
+      return "V"
+    elseif mode ==# ''
+      echomsg "block"
+      return "<C-q>"
+    endif
+  endfunction " }}}
+
   " reselect visual block after indent
   xnoremap > >gv
   xnoremap < <gv
@@ -632,10 +649,12 @@ endfunction " }}}
   vmap <C-Up> [egv
   vmap <C-Down> ]egv
 
-  nmap <Esc>Oa [e
-  nmap <Esc>Ob ]e
-  vmap <Esc>Oa [egv
-  vmap <Esc>Ob ]egv
+  if !has('gui_running')
+    nmap <Esc>Oa [e
+    nmap <Esc>Ob ]e
+    vmap <Esc>Oa [egv
+    vmap <Esc>Ob ]egv
+  endif
   " }}}
 
   " minibufexplorer {{{
