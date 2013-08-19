@@ -58,10 +58,6 @@
 	path = vim/bundle/loremipsum
 	url = https://github.com/vim-scripts/loremipsum
 	ignore = dirty
-[submodule "vim/bundle/neosnippet"]
-	path = vim/bundle/neosnippet
-	url = https://github.com/Shougo/neosnippet.git
-	ignore = dirty
 [submodule "vim/bundle/markdown"]
 	path = vim/bundle/markdown
 	url = https://github.com/tpope/vim-markdown.git
