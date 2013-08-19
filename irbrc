@@ -29,15 +29,17 @@ if defined? AwesomePrint
   AwesomePrint.irb!
 end
 
-IRB.conf[:AUTO_INDENT] = true
-IRB.conf[:IRB_RC] = proc do |conf|
-  prompt = "#{conf.irb_name}[#{conf.workspace.main}] "
-  leader = " " * prompt.size
-  conf.prompt_i = "%N[%m] >>> "
-  conf.prompt_s = leader + " .. "
-  conf.prompt_n = conf.prompt_c = "%N[%m]  .. "
-  conf.return_format = " :: %s\n"
-  print "\033]0;#{prompt}\007"
+if defined? IRB
+  IRB.conf[:AUTO_INDENT] = true
+  IRB.conf[:IRB_RC] = proc do |conf|
+    prompt = "#{conf.irb_name}[#{conf.workspace.main}] "
+    leader = " " * prompt.size
+    conf.prompt_i = "%N[%m] >>> "
+    conf.prompt_s = leader + " .. "
+    conf.prompt_n = conf.prompt_c = "%N[%m]  .. "
+    conf.return_format = " :: %s\n"
+    print "\033]0;#{prompt}\007"
+  end
 end
 
 def ls(*args)
