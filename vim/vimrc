@@ -823,6 +823,9 @@ endfunction " }}}
     " limit results for recently edited files
     call unite#custom#source('file_mru', 'max_candidates', 10)
 
+    " ignored files for file_mru
+    call unite#custom#source('file_mru', 'ignore_pattern', 'COMMIT_EDITMSG')
+
     " map our keys in all Unite buffers
     autocmd FileType unite call <SID>unite_buffer_mappings()
     function! s:unite_buffer_mappings() " {{{
