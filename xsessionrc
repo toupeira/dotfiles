@@ -1,1 +1,2 @@
 . /etc/profile.d/001-environment.sh
+[ -f ~/.profile.d/environment.sh ] && . ~/.profile.d/environment.sh

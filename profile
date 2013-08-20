@@ -4,9 +4,12 @@
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
 
-# the default umask is set in /etc/profile; for setting the umask
-# for ssh logins, install and configure the libpam-umask package.
-#umask 022
+export LANG="de_CH.UTF-8"
+export LC_MESSAGES="en_GB.UTF-8"
+export LC_NUMERIC="en_GB.UTF-8"
+export LC_CTYPE="en_GB.UTF-8"
+
+export RAILS_ENV=development
 
 if [ -d ~/.profile.d ]; then
   for i in ~/.profile.d/*.sh; do
