@@ -589,8 +589,8 @@ endfunction " }}}
   " }}}
 
   " unimpaired {{{
-  vmap <C-j> ]egv
-  vmap <C-k> [egv
+  vmap <C-j> ]egv=gv
+  vmap <C-k> [egv=gv
   " }}}
 
   " eighties {{{
@@ -677,7 +677,7 @@ endfunction " }}}
   " }}}
 
   " syntastic {{{
-  let g:syntastic_check_on_open = 1
+  let g:syntastic_check_on_open = 0
   let g:syntastic_enable_signs = 1
 
   let g:syntastic_javascript_checkers = [ 'jshint' ]
@@ -688,7 +688,7 @@ endfunction " }}}
   let g:systastic_puppet_puppetlint_args = '--no-documentation-check'
 
   if !&diff
-    let g:syntastic_auto_loc_list = 1
+    let g:syntastic_auto_loc_list = 0
     let g:syntastic_auto_jump = 0
   endif
   " }}}
@@ -864,6 +864,9 @@ endfunction " }}}
 
     " ,<Space> - show Git changes, open buffers, and recently edited files
     nnoremap <silent><expr> ,<Space> <SID>UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'spacer buffer spacer file_mru:all', '')
+
+    " ,b - run ,<Space> and start insert mode
+    nmap <silent> ,b ,<Space>i
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y <SID>UniteWrapper('history/yank', '')
