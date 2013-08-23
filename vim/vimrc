@@ -194,7 +194,7 @@
 " Filetype Settings
 " {{{
 
-  autocmd FileType alsaconf,applescript,asm,autoit,coffee,context,css,dot,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,puppet,smarty,sql,plaintex,ruby,scss,sh,svn,tex,text,textile,vb,vim,xhtml,xml,xslt,yaml setlocal ts=2 sts=2 sw=2 expandtab nocindent
+  autocmd FileType alsaconf,applescript,asm,autoit,coffee,context,css,dot,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,puppet,smarty,sql,plaintex,ruby,scss,sh,svn,tex,text,textile,vb,vim,vimwiki,xhtml,xml,xslt,yaml setlocal ts=2 sts=2 sw=2 expandtab nocindent
   autocmd FileType css,scss setlocal iskeyword+=%
   autocmd FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3 expandtab
   autocmd FileType python,lua,sshconfig setlocal ts=4 sts=4 sw=4 expandtab
@@ -638,9 +638,9 @@ endfunction " }}}
   " }}}
 
   " easymotion {{{
-  let g:EasyMotion_leader_key = ',m'
-  map ,j ,mj
-  map ,k ,mk
+  let g:EasyMotion_leader_key = ',M'
+  map ,j ,Mj
+  map ,k ,Mk
   map <expr> ,* empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mn'
   map <expr> ,# empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mN'
   " }}}
@@ -688,7 +688,7 @@ endfunction " }}}
   let g:systastic_puppet_puppetlint_args = '--no-documentation-check'
 
   if !&diff
-    let g:syntastic_auto_loc_list = 0
+    let g:syntastic_auto_loc_list = 1
     let g:syntastic_auto_jump = 0
   endif
   " }}}
@@ -736,7 +736,7 @@ endfunction " }}}
     " <CR>: close popup and save indent.
     inoremap <silent> <CR> <C-r>=neocomplete#smart_close_popup()<CR><CR>
     " <TAB>: completion.
-    inoremap <expr> <TAB> pumvisible() ? "\<C-y>" : "\<TAB>"
+    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
     " <C-h>, <BS>: close popup and delete backword char.
     inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
     inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
@@ -817,14 +817,14 @@ endfunction " }}}
     call unite#custom#source('file', 'sorters', 'sorter_length')
     call unite#custom#source('file_rec/async', 'sorters', 'sorter_length')
 
-    " sort buffers by number
-    call unite#custom#source('buffer', 'sorters', 'sorter_reverse')
-
     " limit results for recently edited files
     call unite#custom#source('file_mru', 'max_candidates', 10)
 
     " ignored files for file_mru
     call unite#custom#source('file_mru', 'ignore_pattern', 'COMMIT_EDITMSG')
+
+    " sort buffers by number
+    call unite#custom#source('buffer', 'sorters', 'sorter_reverse')
 
     " map our keys in all Unite buffers
     autocmd FileType unite call <SID>unite_buffer_mappings()
@@ -856,17 +856,17 @@ endfunction " }}}
 
     " wrapper for default Unite arguments
     function! s:UniteWrapper(action, arguments)
-      return ":\<C-u>silent! Unite -no-split " . a:action . " " . a:arguments . "\<CR>"
+      return ":\<C-u>silent! Unite -no-split -toggle " . a:action . " " . a:arguments . "\<CR>"
     endfunction
 
     " ,f - show files in the current working directory and project tree
-    nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-start-insert')
+    nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-buffer-name=unite-files -start-insert')
 
-    " ,<Space> - show Git changes, open buffers, and recently edited files
-    nnoremap <silent><expr> ,<Space> <SID>UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'spacer buffer spacer file_mru:all', '')
+    " ,<Space> - show Git changes and recently edited files
+    nnoremap <silent><expr> ,<Space> <SID>UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'file_mru:all', '-buffer-name=unite-changes')
 
-    " ,b - run ,<Space> and start insert mode
-    nmap <silent> ,b ,<Space>i
+    " ,b - show open buffers
+    nnoremap <silent><expr> ,b <SID>UniteWrapper('buffer', '-buffer-name=unite-buffers')
 
     " ,y - show yank history
     nnoremap <silent><expr> ,y <SID>UniteWrapper('history/yank', '')
