@@ -14,3 +14,21 @@
 #addonbar-closebutton {
   visibility: collapse !important;
 }
+
+/* Hide AdBlock Plus context menu */
+@-moz-document url("chrome://browser/content/browser.xul"),
+url("chrome://navigator/content/navigator.xul"),
+url("chrome://messenger/content/messenger.xul"),
+url("chrome://messenger/content/messageWindow.xul")
+{
+  #abp-menuitem,
+  #abp-image-menuitem,
+  #abp-object-menuitem,
+  #abp-media-menuitem,
+  #abp-frame-menuitem,
+  #abp-removeWhitelist-menuitem,
+  .abp-contextmenuitem
+  {
+    display: none !important;
+  }
+}
