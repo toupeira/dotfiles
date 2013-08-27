@@ -31,11 +31,15 @@
 
 [merge]
 	stat = true
-	tool = gvimdiff
+	tool = git-vimdiff
 
 [mergetool]
 	prompt = false
 	keepBackup = false
+
+[mergetool.git-vimdiff]
+	cmd = git-vimdiff sensible-vim $BASE $LOCAL $REMOTE $MERGED
+	trustExitCode = true
 
 [push]
 	default = simple
