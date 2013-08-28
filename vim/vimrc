@@ -730,7 +730,7 @@ endfunction " }}}
     " <CR>: close popup and save indent.
     inoremap <silent> <CR> <C-r>=neocomplete#smart_close_popup()<CR><CR>
     " <TAB>: completion.
-    inoremap <expr> <Tab> pumvisible() ? "\<C-n>" : "\<Tab>"
+    inoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<Tab>"
     " <C-h>, <BS>: close popup and delete backword char.
     inoremap <expr> <C-h> neocomplete#smart_close_popup()."\<C-h>"
     inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
