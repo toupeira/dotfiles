@@ -17,11 +17,6 @@
     call add(g:pathogen_disabled, 'neocomplete')
   endif
 
-  " Disable neocomplete for SSH sessions
-  if !empty($SSH_CONNECTION)
-    call add(g:pathogen_disabled, 'neocomplete')
-  endif
-
   " load bundles
   call pathogen#infect()
 
