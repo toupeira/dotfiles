@@ -593,12 +593,6 @@ endfunction " }}}
   vmap <C-k> [egv=gv
   " }}}
 
-  " eighties {{{
-  let g:loaded_eighties = 1
-  command! EightiesResize if !&diff | call eighties#EightiesResize() | endif
-  autocmd WinEnter * EightiesResize
-  " }}}
-
   " ragtag {{{
   imap <C-]> <C-x>/
   autocmd User Ragtag silent! iunmap <buffer> <C-v>%

@@ -210,10 +210,6 @@
 	path = vim/bundle/unite-giti
 	url = https://github.com/kmnk/vim-unite-giti.git
 	ignore = dirty
-[submodule "vim/bundle/eighties"]
-	path = vim/bundle/eighties
-	url = https://github.com/justincampbell/vim-eighties.git
-	ignore = dirty
 [submodule "vim/bundle/conque"]
 	path = vim/bundle/conque
 	url = https://github.com/basepi/vim-conque.git
