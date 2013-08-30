@@ -584,8 +584,8 @@ endfunction " }}}
   " }}}
 
   " unimpaired {{{
-  vmap <C-j> ]egv=gv
-  vmap <C-k> [egv=gv
+  map <C-n> ]egv=gv
+  map <C-p> [egv=gv
   " }}}
 
   " ragtag {{{
