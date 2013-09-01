@@ -9,7 +9,7 @@ function _ql {
 }
 
 function is_running {
-  [ -p $PIPE ] && lsof -n $PIPE &>/dev/null
+  [ -p $PIPE ] #&& lsof -n $PIPE &>/dev/null
 }
 
 function _song {
