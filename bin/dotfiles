@@ -282,12 +282,18 @@ function run {
           fi
 
           system git pull -v --progress origin "$branch"
+
+          if [ "$submodule" = "vim/bundle/vimproc" ]; then
+            make -C "$DOTFILES/$submodule"
+          fi
         )
       else
         status "{{Updating all submodules...}}"
         message="Update submodules"
 
         run submodule foreach 'if [[ "$path" =~ vim/bundle/(powerline|minibufexpl) ]]; then echo "Skipping $path..."; else git pull -v --progress origin master; fi'
+
+        make -C "$DOTFILES/vim/bundle/vimproc"
       fi
 
       local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $3 }'`

@@ -703,6 +703,7 @@ endfunction " }}}
 
   " neocomplete {{{
   if index(g:pathogen_disabled, 'neocomplete') == -1
+    let g:neocomplete#data_directory = '~/.vim/tmp/neocomplete'
     let g:neocomplete#enable_at_startup = 1
     let g:neocomplete#enable_auto_select = 1
     let g:neocomplete#enable_smart_case = 1
