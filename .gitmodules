@@ -217,3 +217,4 @@
 [submodule "vim/bundle/pairs"]
 	path = vim/bundle/pairs
 	url = https://github.com/kurkale6ka/vim-pairs.git
+	ignore = dirty

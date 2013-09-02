@@ -2,10 +2,6 @@
 	name = Markus Koller
 	email = markus-koller@gmx.ch
 
-[core]
-	eol = lf
-	autocrlf = input
-
 [url "git://github.com/"]
 	insteadOf = gh:
 
@@ -31,7 +27,7 @@
 
 [merge]
 	stat = true
-	tool = git-vimdiff
+	#tool = git-vimdiff
 
 [mergetool]
 	prompt = false
