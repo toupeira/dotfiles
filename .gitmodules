@@ -22,10 +22,6 @@
 	path = vim/bundle/unimpaired
 	url = https://github.com/tpope/vim-unimpaired.git
 	ignore = dirty
-[submodule "vim/bundle/minibufexpl"]
-	path = vim/bundle/minibufexpl
-	url = https://github.com/fholgado/minibufexpl.vim.git
-	ignore = dirty
 [submodule "vim/bundle/rails"]
 	path = vim/bundle/rails
 	url = https://github.com/tpope/vim-rails.git

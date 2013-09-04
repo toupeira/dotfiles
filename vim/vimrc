@@ -122,7 +122,7 @@
 
   " cursor line
   " autocmd CursorHold *
-  "   \ if &buftype != 'quickfix' && bufname('%') != '-MiniBufExplorer-' | setlocal cursorline | endif
+  "   \ if &buftype != 'quickfix' | setlocal cursorline | endif
   " autocmd CursorMoved,InsertEnter,BufLeave *
   "   \ if &l:cursorline | setlocal nocursorline | endif
 
@@ -399,6 +399,12 @@ endfunction " }}}
   " <count>~ - delete buffers
   nnoremap <silent><expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
+  " ,n - next buffer
+  nnoremap <silent> ,n :bn<CR>
+
+  " ,p - previous buffer
+  nnoremap <silent> ,p :bp<CR>
+
   " ,c - close current window, unless it's the only one
   nnoremap <silent> ,c :call <SID>CloseWindow(0)<CR>
   nnoremap <silent> ,C :call <SID>CloseWindow(1)<CR>
@@ -406,16 +412,9 @@ endfunction " }}}
     " get number of visible buffers
     let buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
 
-    " get number of default windows
-    if buffers > 1 && index(g:pathogen_disabled, 'minibufexpl') == -1
-      let main_windows = 2
-    else
-      let main_windows = 1
-    endif
-
-    if winnr('$') > main_windows
+    if winnr('$') > 1
       if a:resize
-        let height = winheight(0) + 2 + (main_windows == 2 ? 2 : 0)
+        let height = winheight(0) + 3 " 2 for statusline and 1 for tabline
         let width = winwidth(0)
 
         if height < &lines
@@ -431,10 +430,10 @@ endfunction " }}}
   endfunction " }}}
 
   " ,x - close the current buffer
-  nnoremap <silent> ,x :lclose<CR>:MBEbd<CR>
+  nnoremap <silent> ,x :lclose<CR>:bd<CR>
 
   " ,X - write and close the current buffer
-  nnoremap <silent> ,X :lclose<CR>:w<CR>:MBEbd<CR>
+  nnoremap <silent> ,X :lclose<CR>:w<CR>:bd<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
@@ -682,25 +681,6 @@ endfunction " }}}
   endif
   " }}}
 
-  " minibufexplorer {{{
-  let g:miniBufExplSplitBelow = 0
-  let g:miniBufExplUseSingleClick = 1
-  let g:miniBufExplTabWrap = 1
-  let g:miniBufExplSetUT = 1
-  let g:miniBufExplCycleArround = 1
-
-  nnoremap <silent> ,n :MBEbn<CR>
-  nnoremap <silent> ,p :MBEbp<CR>
-
-  highlight link MBENormal Comment
-  highlight MBEVisibleNormal ctermbg=22 guibg=#265f26
-  highlight MBEVisibleActiveNormal cterm=bold ctermbg=28 gui=bold guibg=#368736
-  highlight MBEVisibleActiveChanged cterm=bold ctermbg=124 gui=bold guibg=#cc5653
-  highlight MBEVisibleChanged ctermbg=88 guibg=#913d3b
-  highlight MBEChanged ctermbg=88 guibg=#913d3b
-  let g:did_minibufexplorer_syntax_inits = 1
-  " }}}
-
   " neocomplete {{{
   if index(g:pathogen_disabled, 'neocomplete') == -1
     let g:neocomplete#data_directory = '~/.vim/tmp/neocomplete'
@@ -750,6 +730,26 @@ endfunction " }}}
 
     let g:airline#extensions#syntastic#enabled = 0
     let g:airline#extensions#tagbar#enabled = 0
+
+    let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#fnamemod = ':t'
+
+    function! airline#extensions#tabline#get_buffer_name(nr)
+      let name = bufname(a:nr)
+      let label = a:nr . ' '
+
+      if empty(name)
+        let label .= '[No Name]'
+      else
+        let label .= fnamemodify(name, ':t')
+      endif
+
+      if getbufvar(a:nr, '&modified') == 1
+        let label .= '[+]'
+      endif
+
+      return label
+    endfunction
 
     if has('gui_running')
       let g:airline_powerline_fonts = 1
