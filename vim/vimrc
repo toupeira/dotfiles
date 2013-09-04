@@ -733,23 +733,7 @@ endfunction " }}}
 
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#fnamemod = ':t'
-
-    function! airline#extensions#tabline#get_buffer_name(nr)
-      let name = bufname(a:nr)
-      let label = a:nr . ' '
-
-      if empty(name)
-        let label .= '[No Name]'
-      else
-        let label .= fnamemodify(name, ':t')
-      endif
-
-      if getbufvar(a:nr, '&modified') == 1
-        let label .= '[+]'
-      endif
-
-      return label
-    endfunction
+    let g:airline#extensions#tabline#buffer_nr_show = 1
 
     if has('gui_running')
       let g:airline_powerline_fonts = 1
