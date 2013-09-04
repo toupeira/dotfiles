@@ -195,6 +195,17 @@ function git {
   return $status
 }
 
+function make {
+  local dir="$1"
+  shift
+
+  status "Compiling {{$dir}}"
+  if ! system make -BC "$dir" "$@" &>/dev/null; then
+    error "Error while compiling {{$dir}}"
+    ask_abort
+  fi
+}
+
 function validate {
   if ! [[ "$1" =~ ^($HOME|(/private|/usr/local)?/etc)($|/) ]]; then
     error "Path is not inside \$HOME or /etc: {{$1}}"
@@ -284,7 +295,7 @@ function run {
           system git pull -v --progress origin "$branch"
 
           if [ "$submodule" = "vim/bundle/vimproc" ]; then
-            make -C "$DOTFILES/$submodule"
+            make "$DOTFILES/$submodule"
           fi
         )
       else
@@ -293,7 +304,7 @@ function run {
 
         run submodule foreach 'if [[ "$path" =~ vim/bundle/(powerline|minibufexpl) ]]; then echo "Skipping $path..."; else git pull -v --progress origin master; fi'
 
-        make -C "$DOTFILES/vim/bundle/vimproc"
+        make "$DOTFILES/vim/bundle/vimproc"
       fi
 
       local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $3 }'`

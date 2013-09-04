@@ -414,7 +414,7 @@ endfunction " }}}
 
     if winnr('$') > 1
       if a:resize
-        let height = winheight(0) + 3 " 2 for statusline and 1 for tabline
+        let height = winheight(0) + 2 + 1 " add statusline and tabline height
         let width = winwidth(0)
 
         if height < &lines
@@ -726,6 +726,8 @@ endfunction " }}}
     let g:airline_detect_paste = 0
     let g:airline_detect_iminsert = 0
     let g:airline_detect_whitespace = 0
+
+    " show file format and encoding separated by a colon
     let g:airline_section_y = "%{strlen(&fenc)>0?&fenc.':':''}%{strlen(&ff)>0?&ff:''}"
 
     let g:airline#extensions#syntastic#enabled = 0
@@ -735,7 +737,7 @@ endfunction " }}}
     let g:airline#extensions#tabline#fnamemod = ':t'
     let g:airline#extensions#tabline#buffer_nr_show = 1
 
-    if has('gui_running')
+    if has('gui_running') || exists('$POWERLINE_FONT')
       let g:airline_powerline_fonts = 1
     else
       " unicode symbols
@@ -761,10 +763,10 @@ endfunction " }}}
       \ 'v'  : 'v',
       \ 'V'  : 'V',
       \ 'c'  : 'c',
-      \ '' : '^v',
+      \ '' : 'v•b',
       \ 's'  : 's',
       \ 'S'  : 'S',
-      \ '' : '^s',
+      \ '' : 's•b',
       \ }
   endif
   " }}}
