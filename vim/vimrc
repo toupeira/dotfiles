@@ -688,6 +688,7 @@ endfunction " }}}
     let g:neocomplete#enable_auto_select = 1
     let g:neocomplete#enable_smart_case = 1
     let g:neocomplete#auto_completion_start_length = 2
+    let g:neocomplete#force_overwrite_completefunc = 1
 
     "call neocomplete#custom#source('syntax', 'disabled', 1)
     "call neocomplete#custom#source('syntax', 'disabled_filetypes', { '_' : 1 })
@@ -838,24 +839,24 @@ endfunction " }}}
     endfunction " }}}
 
     " wrapper for default Unite arguments
-    function! s:UniteWrapper(action, arguments)
+    function! UniteWrapper(action, arguments)
       return ":\<C-u>silent! Unite -no-split -toggle " . a:action . " " . a:arguments . "\<CR>"
     endfunction
 
     " ,f - show files in the current working directory and project tree
-    nnoremap <silent><expr> ,f <SID>UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-buffer-name=unite-files -start-insert')
+    nnoremap <silent><expr> ,f UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-buffer-name=unite-files -start-insert')
 
     " ,<Space> - show Git changes and recently edited files
-    nnoremap <silent><expr> ,<Space> <SID>UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'file_mru:all', '-buffer-name=unite-changes')
+    nnoremap <silent><expr> ,<Space> UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'file_mru:all', '-buffer-name=unite-changes')
 
     " ,b - show open buffers
-    nnoremap <silent><expr> ,b <SID>UniteWrapper('buffer', '-buffer-name=unite-buffers')
+    nnoremap <silent><expr> ,b UniteWrapper('buffer', '-buffer-name=unite-buffers -start-insert')
 
     " ,y - show yank history
-    nnoremap <silent><expr> ,y <SID>UniteWrapper('history/yank', '')
+    nnoremap <silent><expr> ,y UniteWrapper('history/yank', '-buffer-name=unite-yank-history')
 
     " ,t - show file outline
-    nnoremap <silent><expr> ,t <SID>UniteWrapper('outline', '-start-insert')
+    nnoremap <silent><expr> ,t UniteWrapper('outline', '-buffer-name unite-outline -start-insert')
 
     " run ,<Space> on startup if no arguments were given
     au VimEnter *
