@@ -414,7 +414,7 @@ endfunction " }}}
 
     if winnr('$') > 1
       if a:resize
-        let height = winheight(0) + 2 + 1 " add statusline and tabline height
+        let height = winheight(0) + 2 + (&showtabline ? 1 : 0) " add statusline and tabline height
         let width = winwidth(0)
 
         if height < &lines
@@ -736,6 +736,7 @@ endfunction " }}}
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#fnamemod = ':t'
     let g:airline#extensions#tabline#buffer_nr_show = 1
+    let g:airline#extensions#tabline#buffer_min_count = 1
 
     if has('gui_running') || exists('$POWERLINE_FONT')
       let g:airline_powerline_fonts = 1
