@@ -10,8 +10,6 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
-  call add(g:pathogen_disabled, 'session')
-
   " neocomplete requires Vim 7.3 and Lua
   if v:version < '703' || !has('lua')
     call add(g:pathogen_disabled, 'neocomplete')
@@ -580,11 +578,6 @@ endfunction " }}}
   " undotree {{{
   let g:undotree_SetFocusWhenToggle = 1
   nnoremap <silent> ,u :UndotreeToggle<CR>
-  " }}}
-
-  " session plugin {{{
-  let g:session_directory = "~/.vim/tmp/sessions"
-  let g:session_autosave = 'yes'
   " }}}
 
   " unimpaired {{{

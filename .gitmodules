@@ -34,14 +34,6 @@
 	path = vim/bundle/pathogen
 	url = https://github.com/tpope/vim-pathogen.git
 	ignore = dirty
-[submodule "vim/bundle/syntaxattr"]
-	path = vim/bundle/syntaxattr
-	url = https://github.com/vim-scripts/SyntaxAttr.vim.git
-	ignore = dirty
-[submodule "vim/bundle/session"]
-	path = vim/bundle/session
-	url = https://github.com/xolox/vim-session.git
-	ignore = dirty
 [submodule "vim/bundle/coffeescript"]
 	path = vim/bundle/coffeescript
 	url = https://github.com/kchmck/vim-coffee-script.git
@@ -217,3 +209,12 @@
 [submodule "vim/bundle/signature"]
 	path = vim/bundle/signature
 	url = https://github.com/kshenoy/vim-signature.git
+	ignore = dirty
+[submodule "vim/bundle/obsession"]
+	path = vim/bundle/obsession
+	url = https://github.com/tpope/vim-obsession.git
+	ignore = dirty
+[submodule "vim/bundle/scriptease"]
+	path = vim/bundle/scriptease
+	url = https://github.com/tpope/vim-scriptease.git
+	ignore = dirty
