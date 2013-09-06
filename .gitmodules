@@ -214,3 +214,6 @@
 	path = vim/bundle/pairs
 	url = https://github.com/kurkale6ka/vim-pairs.git
 	ignore = dirty
+[submodule "vim/bundle/signature"]
+	path = vim/bundle/signature
+	url = https://github.com/kshenoy/vim-signature.git

@@ -572,6 +572,10 @@ endfunction " }}}
   let g:movealong_default_keys = 1
   " }}}
 
+  " signature {{{
+  let g:SignatureMarkTextHL = 'SpecialKey'
+  " }}}
+
   " undotree {{{
   let g:undotree_SetFocusWhenToggle = 1
   nnoremap <silent> ,u :UndotreeToggle<CR>
@@ -690,18 +694,23 @@ endfunction " }}}
     let g:neocomplete#auto_completion_start_length = 2
     let g:neocomplete#force_overwrite_completefunc = 1
 
-    "call neocomplete#custom#source('syntax', 'disabled', 1)
-    "call neocomplete#custom#source('syntax', 'disabled_filetypes', { '_' : 1 })
-
-    if !exists('g:neocomplete#sources#omni#input_patterns')
-      let g:neocomplete#sources#omni#input_patterns = {}
+    " always use completions from all buffers
+    if !exists('g:neocomplete#same_filetypes')
+      let g:neocomplete#same_filetypes = {}
     endif
+    let g:neocomplete#same_filetypes._ = '_'
 
-    let g:neocomplete#sources#omni#input_patterns.ruby   = '[^. *\t]\.\w*\|\h\w*::'
-    let g:neocomplete#sources#omni#input_patterns.python = '[^. \t]\.\w*'
-    let g:neocomplete#sources#omni#input_patterns.php    = '[^. \t]->\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
-    let g:neocomplete#sources#omni#input_patterns.c      = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?'
-    let g:neocomplete#sources#omni#input_patterns.cpp    = '[^.[:digit:] *\t]\%(\.\|->\)\%(\h\w*\)\?\|\h\w*::\%(\h\w*\)\?'
+    " enable omni-completion for Ruby and PHP
+    call neocomplete#util#set_default_dictionary(
+          \'g:neocomplete#sources#omni#input_patterns', 'ruby',
+          \'[^. *\t]\.\h\w*\|\h\w*::\w*')
+    call neocomplete#util#set_default_dictionary(
+          \'g:neocomplete#sources#omni#input_patterns',
+          \'php',
+          \'[^. \t]->\h\w*\|\h\w*::\w*')
+
+    " from neocomplete.txt:
+    " ---------------------
 
     " Plugin key-mappings.
     inoremap <expr> <C-g> neocomplete#undo_completion()
