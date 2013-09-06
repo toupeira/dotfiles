@@ -336,17 +336,17 @@ endfunction " }}}
   endfunction " }}}
 
   " reselect visual block after indent
-  xnoremap > >gv
-  xnoremap < <gv
+  xnoremap <silent> > >gv
+  xnoremap <silent> < <gv
 
   " toggle paste mode with F12
   set pastetoggle=<f12>
 
   " navigate windows with Ctrl+jkhl
-  nnoremap <C-j> <C-w>j
-  nnoremap <C-k> <C-w>k
-  nnoremap <C-h> <C-w>h
-  nnoremap <C-l> <C-w>l
+  nnoremap <silent> <C-j> <C-w>j
+  nnoremap <silent> <C-k> <C-w>k
+  nnoremap <silent> <C-h> <C-w>h
+  nnoremap <silent> <C-l> <C-w>l
 
   " ,q and ,e - toggle quickfix window and location list
   nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
