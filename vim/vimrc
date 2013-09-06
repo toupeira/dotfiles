@@ -794,7 +794,7 @@ endfunction " }}}
     if s:has_ag
       let g:unite_source_rec_async_command = 'ag -l .'
       let g:unite_source_grep_command = 'ag'
-      let g:unite_source_grep_default_opts = '--nocolor --nogroup -S'
+      let g:unite_source_grep_default_opts = '--smart-case --nogroup --nocolor --line-numbers'
       let g:unite_source_grep_recursive_opt = ''
     elseif s:has_ack
       let g:unite_source_rec_async_command = 'ack -f --nofilter'
@@ -865,7 +865,10 @@ endfunction " }}}
     nnoremap <silent><expr> ,y UniteWrapper('history/yank', '-buffer-name=unite-yank-history')
 
     " ,t - show file outline
-    nnoremap <silent><expr> ,t UniteWrapper('outline', '-buffer-name unite-outline -start-insert')
+    nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
+
+    " ,T - show TODO and FIXME notes
+    nnoremap <silent><expr> ,T UniteWrapper('grep:.::(TODO\|FIXME)', '')
 
     " run ,<Space> on startup if no arguments were given
     au VimEnter *
