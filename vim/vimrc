@@ -574,6 +574,7 @@ endfunction " }}}
 
   " signature {{{
   let g:SignatureMarkTextHL = 'SpecialKey'
+  let g:SignatureEnableDefaultMappings = 2
   " }}}
 
   " undotree {{{
