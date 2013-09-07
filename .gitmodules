@@ -218,3 +218,9 @@
 	path = vim/bundle/scriptease
 	url = https://github.com/tpope/vim-scriptease.git
 	ignore = dirty
+[submodule "tmux/powerline-theme"]
+	path = tmux/powerline-theme
+	url = https://github.com/jooize/tmux-powerline-theme.git
+[submodule "tmux/powerline"]
+	path = tmux/powerline
+	url = https://github.com/Lokaltog/powerline.git
