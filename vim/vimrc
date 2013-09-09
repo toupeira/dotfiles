@@ -311,6 +311,7 @@ endfunction " }}}
 
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
+  autocmd CmdWinEnter * nnoremap <buffer> <C-c> :
 
   " indent with Tab/Shift+Tab in visual mode
   vmap <Tab> >
@@ -422,8 +423,12 @@ endfunction " }}}
         endif
       endif
 
-      lclose
-      wincmd c
+      if bufname('%') == '[Command Line]'
+        close
+      else
+        lclose
+        wincmd c
+      endif
     endif
   endfunction " }}}
 
@@ -454,10 +459,10 @@ endfunction " }}}
   " ,V - split vertically, increase window width
   nnoremap <silent> ,V :let &columns = &columns * 3 / 2<CR>:echomsg &columns<CR>:vsplit<CR>
 
-  " ,w - write file
-  nnoremap <silent> ,w :write<CR>
+  " ,w - write all files
+  nnoremap <silent> ,w :wall<CR>
 
-  " ,W - force write file
+  " ,W - force write current file
   nnoremap <silent> ,W :write!<CR>
 
   " ,$ - clear trailing whitespace
@@ -863,7 +868,7 @@ endfunction " }}}
     nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
 
     " ,T - show TODO and FIXME notes
-    nnoremap <silent><expr> ,T UniteWrapper('grep:.::(TODO\|FIXME)', '')
+    nnoremap <silent><expr> ,T UniteWrapper('grep:.:-p\ .todoignore:(TODO\|FIXME)', '')
 
     " run ,<Space> on startup if no arguments were given
     au VimEnter *

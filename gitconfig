@@ -65,7 +65,7 @@
 	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 
 	unstage = reset HEAD
-	all = add -A .
+	all = add -A
 	ci = commit -v
 	ca = commit -va
 	amend = commit -v --amend
