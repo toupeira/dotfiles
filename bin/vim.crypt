@@ -68,7 +68,7 @@ if [ -n "$3" ]; then
 fi
 
 # Edit the tempfile
-sensible-vim $4 "$tempfile"
+sensible-vim -f $4 "$tempfile"
 
 # Don't create empty files
 if [ ! "$file_exists" -a ! -s "$tempfile" ]; then
@@ -81,7 +81,7 @@ fi
 if [ ! -s "$tempfile" ]; then
   read -p "File is empty, delete $file? [y/N] "
   if [ "$REPLY" = "y" ]; then
-    rm "$tempfile"
+    rm -f "$tempfile"
     $shred "$file"
     exit 0
   fi
