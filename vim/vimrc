@@ -868,7 +868,7 @@ endfunction " }}}
     nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
 
     " ,T - show TODO and FIXME notes
-    nnoremap <silent><expr> ,T UniteWrapper('grep:.:-p\ .todoignore:(TODO\|FIXME)', '')
+    nnoremap <silent><expr> ,T empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? ":echoerr 'Not a git repository: ' . getcwd()\<CR>" : UniteWrapper('grep:.:-p\ .todoignore:(TODO\|FIXME)', '')
 
     " run ,<Space> on startup if no arguments were given
     au VimEnter *
