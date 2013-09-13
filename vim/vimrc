@@ -318,22 +318,9 @@ endfunction " }}}
   vmap <Tab> >
   vmap <S-Tab> <
 
-  " keep cursor at end of selection when yanking
-  xnoremap <silent><expr> y "ygv" . <SID>LeaveVisualMode()
-  xnoremap <silent><expr> Y "Ygv" . <SID>LeaveVisualMode()
-  function! s:LeaveVisualMode() " {{{
-    let mode = mode()
-    if mode ==# 'v'
-      echomsg "small"
-      return "v"
-    elseif mode ==# 'V'
-      echomsg "big"
-      return "V"
-    elseif mode ==# ''
-      echomsg "block"
-      return "\<C-v>"
-    endif
-  endfunction " }}}
+  " keep cursor position when yanking in visual mode
+  xnoremap <silent><expr> y "ygv" . mode()
+  xnoremap <silent><expr> Y "Ygv" . mode()
 
   " reselect visual block after indent
   xnoremap <silent> > >gv
@@ -461,7 +448,7 @@ endfunction " }}}
   nnoremap <silent> ,V :let &columns = &columns * 3 / 2<CR>:echomsg &columns<CR>:vsplit<CR>
 
   " ,w - write all files
-  nnoremap <silent> ,w :wall<CR>
+  nnoremap <silent> ,w :write<CR>
 
   " ,W - force write current file
   nnoremap <silent> ,W :write!<CR>
@@ -576,6 +563,12 @@ endfunction " }}}
   let g:movealong_default_keys = 1
   " }}}
 
+  " gitv {{{
+  let g:Gitv_OpenHorizontal = 1
+  let g:Gitv_WipeAllOnClose = 1
+  let g:Gitv_DoNotMapCtrlKey = 1
+  " }}}
+
   " signature {{{
   let g:SignatureMarkTextHL = 'SpecialKey'
   let g:SignatureEnableDefaultMappings = 2
@@ -654,6 +647,7 @@ endfunction " }}}
   noremap ,a= :Tabular /=<CR>
   noremap ,a> :Tabular /=><CR>
   noremap ,a: :Tabular /:/l0r1<CR>
+  noremap ,a\|= :Tabular /\|\|=/<CR>
   " }}}
 
   " netrw {{{
