@@ -166,10 +166,6 @@
 	path = vim/bundle/movealong
 	url = https://github.com/toupeira/vim-movealong.git
 	ignore = dirty
-[submodule "vim/bundle/extradite"]
-	path = vim/bundle/extradite
-	url = https://github.com/int3/vim-extradite.git
-	ignore = dirty
 [submodule "vim/bundle/unite-giti"]
 	path = vim/bundle/unite-giti
 	url = https://github.com/kmnk/vim-unite-giti.git
