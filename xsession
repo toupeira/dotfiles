@@ -8,7 +8,7 @@ rm -rf ~/.local/share/Trash &
 
 if [ -p ~/.quodlibet/control ]; then
   (
-    timeout 3 quodlibet --quit
+    timeout 5 quodlibet --quit
     killall quodlibet
     killall -9 quodlibet
   ) &>/dev/null &
