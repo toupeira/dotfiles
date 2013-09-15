@@ -94,7 +94,6 @@
   " buffers
   set number
   set numberwidth=6
-  set relativenumber
   set scrolloff=5
   set sidescrolloff=8
   set sidescroll=1
