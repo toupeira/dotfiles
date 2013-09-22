@@ -27,6 +27,7 @@
 
 [merge]
 	stat = true
+	tool = gvimdiff
 	#tool = git-vimdiff
 
 [mergetool]
