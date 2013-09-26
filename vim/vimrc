@@ -81,7 +81,7 @@
   colorscheme desertink
   set errorbells
   set visualbell t_vb= " disable bells
-  set synmaxcol=200 " disable syntax highlighting on long lines
+  set synmaxcol=500 " disable syntax highlighting on long lines
   set lazyredraw
 
   " windows
