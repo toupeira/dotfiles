@@ -385,11 +385,27 @@ endfunction " }}}
   " <count>~ - delete buffers
   nnoremap <silent><expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
-  " ,n - next buffer
-  nnoremap <silent> ,n :bn<CR>
+  " ,n / ,p - next/previous buffer
+  nnoremap <silent> ,n :call SwitchBuffer(1)<CR>
+  nnoremap <silent> ,p :call SwitchBuffer(-1)<CR>
+  function! SwitchBuffer(delta)
+    let buffers  = []
+    for nr in range(1, bufnr('$'))
+      if buflisted(nr) && getbufvar(nr, 'current_syntax') != 'qf'
+        call add(buffers, nr)
+      end
+    endfor
 
-  " ,p - previous buffer
-  nnoremap <silent> ,p :bp<CR>
+    let position = index(buffers, bufnr('%')) + a:delta
+
+    if position < 0
+      let position = len(buffers) - 1
+    elseif position > len(buffers) - 1
+      let position = 0
+    endif
+
+    execute 'buffer' . buffers[position]
+  endfunction
 
   " ,c - close current window, unless it's the only one
   nnoremap <silent> ,c :call <SID>CloseWindow(0)<CR>
@@ -489,7 +505,7 @@ endfunction " }}}
     endif
 
     echohl Question
-    let pattern = substitute(input("Grep " . (a:path == '%' ? 'buffer' : 'recursive') . ": /"), '"', '\"', '')
+    let pattern = substitute(input("Grep " . (a:path == '%' ? 'buffer' : 'recursive') . ": /", expand('<cword>')), '"', '\"', '')
 
     if !empty(pattern)
       echohl Question
