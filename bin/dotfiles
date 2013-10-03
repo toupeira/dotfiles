@@ -195,7 +195,7 @@ function git {
   return $status
 }
 
-function make {
+function build {
   local dir="$1"
   shift
 
@@ -204,6 +204,10 @@ function make {
     error "Error while compiling {{$dir}}"
     ask_abort
   fi
+}
+
+function build_all {
+  build "$DOTFILES/vim/bundle/vimproc"
 }
 
 function validate {
@@ -295,7 +299,7 @@ function run {
           system git pull -v --progress origin "$branch"
 
           if [ "$submodule" = "vim/bundle/vimproc" ]; then
-            make "$DOTFILES/$submodule"
+            build "$DOTFILES/$submodule"
           fi
         )
       else
@@ -304,7 +308,7 @@ function run {
 
         run submodule foreach 'if [[ "$path" =~ powerline$ ]]; then branch="develop"; else branch="master"; fi; git pull -v --progress origin "$branch"'
 
-        make "$DOTFILES/vim/bundle/vimproc"
+        build_all
       fi
 
       local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $3 }'`
@@ -461,6 +465,7 @@ function run {
       status "{{Checking out submodules...}}"
       run submodule sync -q
       run submodule update --init -q
+      build_all
       ;;
     push)
       local key=~/.ssh/id_rsa
