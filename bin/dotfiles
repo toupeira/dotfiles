@@ -195,21 +195,6 @@ function git {
   return $status
 }
 
-function build {
-  local dir="$1"
-  shift
-
-  status "Compiling {{$dir}}"
-  if ! system make -BC "$dir" "$@" &>/dev/null; then
-    error "Error while compiling {{$dir}}"
-    ask_abort
-  fi
-}
-
-function build_all {
-  build "$DOTFILES/vim/bundle/vimproc"
-}
-
 function validate {
   if ! [[ "$1" =~ ^($HOME|(/private|/usr/local)?/etc)($|/) ]]; then
     error "Path is not inside \$HOME or /etc: {{$1}}"
@@ -473,6 +458,19 @@ function run {
         ssh-add -l | fgrep -q "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
       fi
       git push -v --progress "$@"
+      ;;
+    build)
+      local dir="$1"
+      shift
+
+      status "Compiling {{$dir}}"
+      if ! system make -BC "$dir" "$@" &>/dev/null; then
+        error "Error while compiling {{$dir}}"
+        ask_abort
+      fi
+      ;;
+    build_all)
+      run build "$DOTFILES/vim/bundle/vimproc"
       ;;
     *)
       git ignore-errors $command "$@"
