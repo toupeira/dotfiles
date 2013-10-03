@@ -6,7 +6,7 @@ function _gem_exec {
   local command="$1"
   shift
 
-  if [[ "$1" =~ (install|uninstall|update|clean) ]]; then
+  if [[ "$1" =~ (install|uninstall|update|clean|pristine) ]]; then
     command="sudo $command"
   fi
 
