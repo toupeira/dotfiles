@@ -293,7 +293,7 @@ function run {
 
         run submodule foreach 'if [[ "$path" =~ powerline$ ]]; then branch="develop"; else branch="master"; fi; git pull -v --progress origin "$branch"'
 
-        build_all
+        run build_all
       fi
 
       local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $3 }'`
@@ -450,7 +450,7 @@ function run {
       status "{{Checking out submodules...}}"
       run submodule sync -q
       run submodule update --init -q
-      build_all
+      run build_all
       ;;
     push)
       local key=~/.ssh/id_rsa
