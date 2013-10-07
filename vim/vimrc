@@ -3,6 +3,11 @@
 
   set nocompatible
 
+  " force old regex engine
+  if exists('+re')
+    set re=1
+  endif
+
   let s:has_ag  = executable('ag')
   let s:has_ack = executable('ack')
 
@@ -207,6 +212,7 @@
 
   " Ruby syntax highlighting
   let g:ruby_operators = 1
+  let g:ruby_no_expensive = 1
 
   " Ruby auto-completion
   " let g:rubycomplete_rails = 1
