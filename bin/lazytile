@@ -1,4 +1,4 @@
-#!/usr/bin/ruby
+#!/usr/bin/env ruby1.8
 
 require 'fileutils'
 require 'optparse'
