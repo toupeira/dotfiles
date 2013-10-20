@@ -204,6 +204,13 @@ function validate {
   fi
 }
 
+function load_key {
+  local key=~/.ssh/id_rsa
+  if [ -f "$key" -a "`uname -s`" != "Darwin" ]; then
+    ssh-add -l | fgrep -q "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
+  fi
+}
+
 function target {
   local origin="$1"
 
@@ -443,6 +450,7 @@ function run {
       [ -n "$changes" ] && git stash save | fgrep -q "No local changes to save" && unset changes
 
       status "{{Merging remote changes...}}"
+      load_key
       git pull -v --progress --rebase "$@"
 
       [ -n "$changes" ] && git stash pop -q
@@ -453,10 +461,7 @@ function run {
       run build_all
       ;;
     push)
-      local key=~/.ssh/id_rsa
-      if [ -f "$key" -a "`uname -s`" != "Darwin" ]; then
-        ssh-add -l | fgrep -q "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
-      fi
+      load_key
       git push -v --progress "$@"
       ;;
     build)
