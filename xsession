@@ -6,13 +6,7 @@ x-session-manager
 # clean up
 rm -rf ~/.local/share/Trash &
 
-if [ -p ~/.quodlibet/control ]; then
-  (
-    timeout 5 quodlibet --quit
-    killall quodlibet
-    killall -9 quodlibet
-  ) &>/dev/null &
-fi
+ql quit &>/dev/null &
 
 if pgrep -x deluged; then
   (

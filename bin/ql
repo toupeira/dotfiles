@@ -84,7 +84,7 @@ case "$command" in
     cat $tmp
     rm -f $tmp
     ;;
-  next|previous|play|pause|play-pause|hide-window|show-window|toggle-window|focus|quit)
+  next|previous|play|pause|play-pause|hide-window|show-window|toggle-window|focus)
     _ql "$command"
     ;;
     seek|order|repeat|volume|query|add-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue)
@@ -104,6 +104,11 @@ case "$command" in
     ;;
   volume-down)
     _ql "volume -"
+    ;;
+  quit)
+    timeout 10 quodlibet --quit
+    killall quodlibet &>/dev/null
+    killall -9 quodlibet &>/dev/null
     ;;
   *)
     echo "E: unknown command '$command'."
