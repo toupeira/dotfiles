@@ -24,7 +24,6 @@ if [ -z "$SSH_AUTH_SOCK" -a "$UID" != "0" ]; then
   # Try to connect to a running SSH agent
   socket=`command ls -t /tmp/ssh-*/agent.[0-9]* 2>/dev/null | head -1`
   if [ -S "$socket" -a -O "$socket" ]; then
-    echo "Found SSH agent"
     export SSH_AUTH_SOCK="$socket"
     export SSH_AGENT_PID=${SSH_AUTH_SOCK##*.}
   elif [ -n "$SSH_CONNECTION" -o -z "$DISPLAY" ]; then
