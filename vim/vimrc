@@ -203,7 +203,7 @@
   autocmd FileType crontab setlocal nobackup nowritebackup
 
   autocmd BufNewFile,BufRead *.md setf markdown
-  autocmd BufNewFile,BufRead */bin/*.run setf sh
+  autocmd BufEnter *.run setf sh
   autocmd BufNewFile,BufRead *.inc,*.thtml setf php
   autocmd BufNewFile,BufRead *.boo setf python
   autocmd BufNewFile,BufRead Gemfile setf ruby

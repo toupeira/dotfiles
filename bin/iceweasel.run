@@ -3,9 +3,9 @@ if pgrep -x iceweasel >/dev/null; then
   if [ $# -eq 0 ]; then
     xwit -raise -focus -property WM_CLASS -names Navigator
   else
-    exec iceweasel "$@"
+    iceweasel "$@" &>/dev/null &
   fi
 else
   sqlite3 ~/.mozilla/firefox/default/content-prefs.sqlite 'DELETE FROM prefs WHERE settingID = 1'
-  exec iceweasel "$@"
+  iceweasel "$@" &>/dev/null &
 fi
