@@ -631,6 +631,11 @@ endfunction " }}}
   autocmd BufEnter * :Rooter
   " }}}
 
+  " matchparen {{{
+  let g:matchparen_timeout = 10
+  let g:matchparen_insert_timeout = 10
+  " }}}
+
   " colorizer {{{
   let g:colorizer_startup = 0
   if has('gui_running')
