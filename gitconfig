@@ -82,9 +82,9 @@
 	mt = mergetool
 	rup = remote update
 
-	pu   = push -v --progress
-	pua  = push -v --progress --all
-	poof = push -v --progress --force
+	pu   = -c push.default=simple   push -v --progress
+	pua  = -c push.default=matching push -v --progress
+	poof = -c push.default=simple   push -v --progress --force
 
 	sts = stash save
 	stp = stash pop

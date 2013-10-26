@@ -61,8 +61,8 @@ while [ $# -gt 0 ]; do
     -o ) mplayer="$mplayer $2"; shift 2;;
     -size ) options="-size +$2"; shift 2;;
     -p ) shift;
-      amixer.sync 'DAC 60' 'DAC,1 60'
-      exec $0 -f -t -mono -volume 5 -x '/incomplete/' "$@";;
+      amixer.sync low
+      exec $0 -f -t -mono -volume 15 -x '/incomplete/' "$@";;
     -x )
       exclusive_regex='-v'
       if [ -n "$regex" ]; then
