@@ -2,7 +2,7 @@
 
 function usage {
   echo "Usage:  v.play [-ftnrst] [-re REGEX] [-a ASPECT] [-size SIZE]"
-  echo "               [-debug] [-playlist PLAYLIST] [-mono|-stereo]"
+  echo "               [-debug|-output] [-playlist PLAYLIST] [-mono|-stereo]"
   echo "               [-o MPLAYER-OPTIONS] [-fo FIND-OPTIONS] PATH..."
   exit 255
 }
@@ -44,6 +44,7 @@ tail="cat"
 while [ $# -gt 0 ]; do
   case "$1" in
     -debug ) mplayer="echo $mplayer"; debug=1; trap - 0 1 2 3 9 15; shift;;
+    -output) mplayer="cat $playlist"; shift;;
     -aid|-vid|-sid) mplayer="$mplayer $1 $2"; shift 2;;
     -playlist ) cat "$2" >> $playlist; shift 2;;
     -volume ) mplayer="$mplayer -volume $2"; shift 2;;
