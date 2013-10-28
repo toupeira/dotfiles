@@ -1,11 +1,24 @@
 #!/bin/bash
 
+if amixer get DAC &>/dev/null; then
+  channels="DAC,0 DAC,1"
+  volume_pattern="Mono:"
+  level_max=127
+  level_low=84
+else
+  channels="Master"
+  volume_pattern="Front Left: Playback"
+  level_max=31
+  level_low=23
+fi
+
 if [ "$1" = "restore" ]; then
   sudo alsactl restore
 elif [ "$1" = "low" ]; then
   sudo alsactl restore
-  amixer -q set DAC 84
-  amixer -q set DAC,1 84
+  for channel in $channels; do
+    amixer -q set $channel $level_low
+  done
 else
   if pgrep -ox amixer.sync | fgrep -vx $$ | grep -q .; then
     exit
@@ -16,11 +29,15 @@ else
   done
 fi
 
-volume=`amixer get DAC | awk '/Mono: [0-9]+/ { print }'`
-db=`echo "$volume" | awk '{ print $4 }'`
-volume=`echo "$volume" | awk '{ print $2 }'`
-let percent=(volume*100/127)
-let volume=(volume+1)/4
+if ! which aosd_cat >/dev/null; then
+  exit
+fi
+
+channel=`amixer get $channels 2>/dev/null | awk "/$volume_pattern [0-9]+/ { print }" | sed -r "s/^\s+$volume_pattern//"`
+db=`echo "$channel" | awk '{ print $3 }'`
+volume=`echo "$channel" | awk '{ print $1 }'`
+let percent=(volume*100/level_max)
+let volume=(percent*1000/3125)
 
 (
   echo -n "$db "

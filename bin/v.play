@@ -63,7 +63,7 @@ while [ $# -gt 0 ]; do
     -size ) options="-size +$2"; shift 2;;
     -p ) shift;
       amixer.sync low
-      exec $0 -f -t -mono -volume 15 -x '/incomplete/' "$@";;
+      exec $0 -f -t -volume 15 -x '/incomplete/' "$@";;
     -x )
       exclusive_regex='-v'
       if [ -n "$regex" ]; then
@@ -108,7 +108,6 @@ while [ $# -gt 0 ]; do
       ;;
   esac
 done
-
 
 if [ -s $playlist ]; then
   if [ "$skipopen" ]; then
