@@ -33,28 +33,40 @@ case "$command" in
     command="seek"
     argument="-0:5"
     ;;
-  start-hidden)
+  start)
     if is_running; then
       echo "Quod Libet is already running."
-      command="hide-window"
+      exit 1
     else
-      unset command
       shift
       quodlibet "$@" &>/dev/null &
 
       for i in `seq 1 300`; do
         if is_running; then
-          command="hide-window"
-          break
+          query=`head -1 ~/.quodlibet/lists/queries.saved 2>/dev/null`
+          if [ -n "$query" ]; then
+            _ql "query $query"
+          fi
+
+          exit 0
         fi
+
         sleep 0.2
       done
 
-      if [ -z "$command" ]; then
-        echo "E: Couldn't start Quod Libet, giving up."
-        exit 1
-      fi
+      echo "E: Couldn't start Quod Libet, giving up."
+      exit 1
     fi
+    ;;
+  start-hidden)
+    shift
+
+    if $0 start "$@"; then
+      command="hide-window"
+    else
+      exit 1
+    fi
+    ;;
 esac
 
 if ! is_running; then
@@ -87,7 +99,7 @@ case "$command" in
   next|previous|play|pause|play-pause|hide-window|show-window|toggle-window|focus)
     _ql "$command"
     ;;
-    seek|order|repeat|volume|query|add-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue)
+  seek|order|repeat|volume|query|add-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue)
     case "$command" in
       shuffle|order|repeat) argument=${argument:-toggle};;
     esac
