@@ -2,8 +2,8 @@
 
 function usage {
   echo "Usage:  v.play [-ftnrst] [-re REGEX] [-a ASPECT] [-size SIZE]"
-  echo "               [-debug|-output] [-playlist PLAYLIST] [-mono|-stereo]"
-  echo "               [-o MPLAYER-OPTIONS] [-fo FIND-OPTIONS] PATH..."
+  echo "               [-debug|-output] [-playlist PLAYLIST]"
+  echo "               [-o PLAYER-OPTIONS] [-fo FIND-OPTIONS] PATH..."
   exit 255
 }
 
@@ -35,34 +35,31 @@ trap "rm -f $playlist" 0 1 2 3 9 15
 trap "iecset audio on >/dev/null" 0 1 2 3 9 15
 rm -f $playlist
 
-mplayer="mplayer -playlist $playlist"
+player="mpv -playlist $playlist"
 
-unset format options regex exclusive_regex debug skipopen
+unset format options regex exclusive_regex debug
 sort="cat"
 tail="cat"
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    -debug ) mplayer="echo $mplayer"; debug=1; trap - 0 1 2 3 9 15; shift;;
-    -output) mplayer="cat $playlist"; shift;;
-    -aid|-vid|-sid) mplayer="$mplayer $1 $2"; shift 2;;
+    -debug ) player="echo $player"; debug=1; trap - 0 1 2 3 9 15; shift;;
+    -output) player="cat $playlist"; shift;;
+    -aid|-vid|-sid) player="$player -$1 $2"; shift 2;;
     -playlist ) cat "$2" >> $playlist; shift 2;;
-    -volume ) mplayer="$mplayer -volume $2"; shift 2;;
-    -mono ) mplayer="$mplayer -af pan=1:0.5:0.5"; shift;;
-    -stereo ) mplayer="$mplayer -af pan=2:1:0:0:1"; shift;;
-    -analog ) mplayer="$mplayer -ac a52,"; shift;;
-    -so ) skipopen=1; shift;;
+    -volume ) player="$player --volume $2"; shift 2;;
     -re ) regex="$2"; shift 2;;
     -fo ) options="$2"; shift 2;;
-    -f ) mplayer="$mplayer -fs"; shift;;
-    -a ) mplayer="$mplayer -aspect $2"; shift 2;;
-    -n ) mplayer="$mplayer -ac dummy"; shift;;
-    -r ) mplayer="$mplayer -loop 0"; shift;;
-    -s ) mplayer="$mplayer -shuffle"; shift;;
-    -o ) mplayer="$mplayer $2"; shift 2;;
+    -f ) player="$player --fs"; shift;;
+    -a ) player="$player --aspect $2"; shift 2;;
+    -n ) player="$player --no-audio"; shift;;
+    -r ) player="$player --loop 0"; shift;;
+    -s ) player="$player --shuffle"; shift;;
+    -o ) player="$player $2"; shift 2;;
     -size ) options="-size +$2"; shift 2;;
-    -p ) shift;
-      amixer.sync low
+    -p )
+      shift
+      echo -- "$@" | fgrep -q ' -n' || amixer.sync low
       exec $0 -f -t -volume 15 -x '/incomplete/' "$@";;
     -x )
       exclusive_regex='-v'
@@ -89,10 +86,10 @@ while [ $# -gt 0 ]; do
       shift
       ;;
     -* )
-      mplayer="$mplayer $1"
+      player="$player $1"
       shift
       if [ -n "$2" -a ! -e "$2" ]; then
-        mplayer="$mplayer \"$2\""
+        player="$player \"$2\""
         shift
       fi
       ;;
@@ -110,33 +107,7 @@ while [ $# -gt 0 ]; do
 done
 
 if [ -s $playlist ]; then
-  if [ "$skipopen" ]; then
-    echo
-    echo "Filtering incomplete files:"
-    (while read file; do
-      size=`du --block-size=1 --apparent-size "$file" | cut -f1`
-      used=`du --block-size=1 "$file" | cut -f1`
-      let done=(used*10)/size
-
-      if [ $done -gt 5 ]; then
-        echo "$file"
-      else
-        echo "  - Skipping $file" >&2
-      fi
-    done < <(cat $playlist)) > $playlist.tmp
-
-    old=`grep -c . $playlist`
-    new=`grep -c . $playlist.tmp`
-    let diff=old-new
-    [ $diff -gt 0 ] && echo
-    echo "Removed $diff incomplete files."
-    echo
-    sleep 1
-
-    mv $playlist.tmp $playlist
-  fi
-
-  $mplayer
+  $player
   [ "$debug" ] || rm -f $playlist
 else
   echo "Playlist empty."
