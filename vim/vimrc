@@ -632,8 +632,8 @@ endfunction " }}}
   " }}}
 
   " matchparen {{{
-  let g:matchparen_timeout = 10
-  let g:matchparen_insert_timeout = 10
+  let g:matchparen_timeout = 50
+  let g:matchparen_insert_timeout = 50
   " }}}
 
   " colorizer {{{
