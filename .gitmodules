@@ -226,3 +226,6 @@
 	path = vim/bundle/rspec
 	url = https://github.com/sheerun/rspec.vim.git
 	ignore = dirty
+[submodule "vim/bundle/bufkill"]
+	path = vim/bundle/bufkill
+	url = https://github.com/mattdbridges/bufkill.vim.git

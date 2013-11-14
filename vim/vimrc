@@ -442,10 +442,10 @@ endfunction " }}}
   endfunction " }}}
 
   " ,x - close the current buffer
-  nnoremap <silent> ,x :lclose<CR>:bd<CR>
+  nnoremap <silent> ,x :lclose<CR>:BD<CR>
 
   " ,X - write and close the current buffer
-  nnoremap <silent> ,X :lclose<CR>:w<CR>:bd<CR>
+  nnoremap <silent> ,X :lclose<CR>:w<CR>:BD<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
