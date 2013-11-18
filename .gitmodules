@@ -229,3 +229,4 @@
 [submodule "vim/bundle/bufkill"]
 	path = vim/bundle/bufkill
 	url = https://github.com/mattdbridges/bufkill.vim.git
+	ignore = dirty
