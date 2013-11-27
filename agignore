@@ -25,3 +25,4 @@ src/upstream
 
 # Rails
 db/archive
+app/assets/javascripts/ace
