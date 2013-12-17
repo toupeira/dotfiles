@@ -303,7 +303,7 @@ function run {
         run build_all
       fi
 
-      local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $3 }'`
+      local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $2 }'`
       if [ -n "$changes" ]; then
         run commit -m "$message" $changes
       fi
