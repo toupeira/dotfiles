@@ -1,25 +1,3 @@
-@-moz-document domain(pivotaltracker.com) {
-  #main {
-    width: 100%;
-  }
-
-  .panel .details ul.subset > li div.left {
-    line-height: 23px;
-  }
-}
-
-@-moz-document domain(orange.ch) {
-  body {
-    font-family: sans-serif !important;
-  }
-}
-
-@-moz-document domain(newrelic.com) {
-  * {
-    font-family: sans-serif !important;
-  }
-}
-
 @-moz-document domain(todoist.com) {
   #premium_promotion {
     display: none;
