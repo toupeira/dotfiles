@@ -42,7 +42,10 @@ case "$command" in
       quodlibet "$@" &>/dev/null &
 
       for i in `seq 1 300`; do
+        sleep 0.2
+
         if is_running; then
+          sleep 0.5
           query=`head -1 ~/.quodlibet/lists/queries.saved 2>/dev/null`
           if [ -n "$query" ]; then
             _ql "query $query"
@@ -50,8 +53,6 @@ case "$command" in
 
           exit 0
         fi
-
-        sleep 0.2
       done
 
       echo "E: Couldn't start Quod Libet, giving up."
