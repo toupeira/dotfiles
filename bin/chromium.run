@@ -2,5 +2,5 @@
 if [ $# -eq 0 ] && pgrep -x chromium &>/dev/null; then
   xwit -raise -focus -property WM_CLASS -names chromium
 else
-  chromium "$@" &>/dev/null &
+  chromium --disk-cache-size=50000 "$@" &>/dev/null &
 fi
