@@ -1,7 +1,6 @@
 #!/bin/bash
 
-keep='.*'
-unset force dryrun
+unset force keep dryrun
 
 while [ "${1:0:1}" = "-" ]; do
   case "$1" in
