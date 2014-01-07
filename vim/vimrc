@@ -534,13 +534,7 @@ endfunction " }}}
   " ,N - toggle line numbers
   nnoremap <silent> ,N :call <SID>ToggleLineNumbers()<CR>
   function! s:ToggleLineNumbers() " {{{
-    if &number
-      set nonumber
-    elseif !exists('&relativenumber') || &relativenumber
-      set number
-    else
-      set relativenumber
-    endif
+    let &number=!&number
   endfunction " }}}
 
   " F4 / F5 - change window height
