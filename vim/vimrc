@@ -15,6 +15,10 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
+  " https://github.com/davidhalter/jedi-vim/issues/179
+  " https://github.com/Shougo/neocomplete.vim/issues/18
+  call add(g:pathogen_disabled, 'jedi')
+
   " neocomplete requires Vim 7.3 and Lua
   if v:version < '703' || !has('lua')
     call add(g:pathogen_disabled, 'neocomplete')
