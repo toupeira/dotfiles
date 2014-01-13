@@ -86,7 +86,7 @@
   colorscheme desertink
   set errorbells
   set visualbell t_vb= " disable bells
-  set synmaxcol=500 " disable syntax highlighting on long lines
+  set synmaxcol=1000 " disable syntax highlighting on long lines
   set lazyredraw
 
   " windows
@@ -201,6 +201,7 @@
   autocmd FileType tex,plaintex,context setlocal lbr
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd FileType crontab setlocal nobackup nowritebackup
+  autocmd FileType puppet setlocal commentstring=#%s
 
   autocmd BufNewFile,BufRead *.md setf markdown
   autocmd BufEnter *.run setf sh
