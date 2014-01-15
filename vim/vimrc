@@ -646,14 +646,6 @@ endfunction " }}}
   autocmd FileType sh   call AddCycleGroup('sh', [ 'do', 'then' ])
   " }}}
 
-  " easymotion {{{
-  let g:EasyMotion_leader_key = ',M'
-  map ,j ,Mj
-  map ,k ,Mk
-  map <expr> ,* empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mn'
-  map <expr> ,# empty(expand('<cword>')) ? '' : '/' . fnameescape(expand('<cword>')) . '<CR>:nohlsearch<CR>,mN'
-  " }}}
-
   " conque {{{
   let g:ConqueTerm_ReadUnfocused = 1
 

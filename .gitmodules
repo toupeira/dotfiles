@@ -146,10 +146,6 @@
 	path = vim/bundle/airline
 	url = https://github.com/bling/vim-airline.git
 	ignore = dirty
-[submodule "vim/bundle/easymotion"]
-	path = vim/bundle/easymotion
-	url = https://github.com/Lokaltog/vim-easymotion.git
-	ignore = dirty
 [submodule "vim/bundle/cycle"]
 	path = vim/bundle/cycle
 	url = https://github.com/zef/vim-cycle.git
@@ -229,4 +225,8 @@
 [submodule "vim/bundle/bufkill"]
 	path = vim/bundle/bufkill
 	url = https://github.com/mattdbridges/bufkill.vim.git
+	ignore = dirty
+[submodule "vim/bundle/sneak"]
+	path = vim/bundle/sneak
+	url = https://github.com/justinmk/vim-sneak.git
 	ignore = dirty
