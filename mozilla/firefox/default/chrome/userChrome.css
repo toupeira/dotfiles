@@ -1,4 +1,7 @@
-@namespace url("http://www.mozilla.org/keymaster/gatekeeper/there.is.only.xul");
+/* Fix monospace font sizes in devtools */
+.devtools-monospace {
+  font-size: 100% !important;
+}
 
 /* Don't use small fonts in Awesomebar */
 #PopupAutoCompleteRichResult[type="autocomplete-richlistbox"] * {
@@ -8,9 +11,4 @@
 /* Always show full findbar */
 .findbar-container > * {
   display: -moz-box !important;
-}
-
-/* Remove close button on add-on bar */
-#addonbar-closebutton {
-  visibility: collapse !important;
 }
