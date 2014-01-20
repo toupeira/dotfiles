@@ -19,6 +19,8 @@
   "dojo"          : false,
 
   "predef"        : [  // Custom globals.
+    "Window",
+    "HTMLDocument",
     "FB",
     "Raphael",
     "pm",
