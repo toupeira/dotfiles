@@ -646,6 +646,16 @@ endfunction " }}}
   autocmd FileType sh   call AddCycleGroup('sh', [ 'do', 'then' ])
   " }}}
 
+  " sneak {{{
+  let g:sneak#use_ic_scs = 1
+  let g:sneak#map_netrw = 0
+
+  nmap ,j <Plug>SneakForward
+  nmap ,k <Plug>SneakBackward
+  xmap ,j <Plug>VSneakForward
+  xmap ,k <Plug>VSneakBackward
+  " }}}
+
   " conque {{{
   let g:ConqueTerm_ReadUnfocused = 1
 
