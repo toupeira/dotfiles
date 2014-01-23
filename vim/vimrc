@@ -731,6 +731,12 @@ endfunction " }}}
           \'php',
           \'[^. \t]->\h\w*\|\h\w*::\w*')
 
+    " disable for Python
+    call neocomplete#util#set_default_dictionary(
+          \'g:neocomplete#sources#omni#input_patterns',
+          \'python',
+          \'')
+
     " from neocomplete.txt:
     " ---------------------
 
