@@ -341,6 +341,11 @@ endfunction " }}}
   nnoremap <silent> <C-h> <C-w>h
   nnoremap <silent> <C-l> <C-w>l
 
+  " alias Ctrl-v as Ctrl-q
+  noremap <C-q> <C-v>
+  inoremap <C-q> <C-v>
+  cnoremap <C-q> <C-v>
+
   " ,q and ,e - toggle quickfix window and location list
   nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
   nnoremap <silent> ,e :call <SID>ToggleList('Location List', 'l')<CR>

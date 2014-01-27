@@ -142,11 +142,6 @@ endif
 
     exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
     exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
-
-    " Use <C-q> to do what CTRL-V used to do
-    noremap <C-q> <C-v>
-    inoremap <C-q> <C-v>
-    cnoremap <C-q> <C-v>
   endif
 
   " For CTRL-v to work autoselect must be off.
