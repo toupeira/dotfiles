@@ -85,6 +85,7 @@
 	pu   = -c push.default=simple   push -v --progress
 	pua  = -c push.default=matching push -v --progress
 	poof = -c push.default=simple   push -v --progress --force
+	pub  = "!f() { local target=$1; shift; git push . HEAD:$target $@; }; f"
 
 	sts = stash save
 	stp = stash pop
