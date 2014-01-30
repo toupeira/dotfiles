@@ -104,18 +104,14 @@ if has sudo; then
 fi
 
 # program aliases
-alias scr='screen -qRR'
-alias fortune='fortune -a'
+alias s='git status'
 alias thesaurus='dict -d moby-thes'
 alias pstree='pstree -GUh'
 alias ftrace='strace -fe trace=file'
 alias ptrace='strace -fe trace=process'
-alias fetchmail='fetchmail -v'
-alias gcc='gcc -Wall'
-alias gcc='gcc -Wall'
 alias psgrep='pgrep -fl'
 alias dt='dotfiles'
-alias s='git status'
+alias smem='smem -kt'
 has xdg-open && alias open='xdg-open'
 has 7z && ! has rar && alias rar='7z'
 has git-edit && alias ed='git-edit'
