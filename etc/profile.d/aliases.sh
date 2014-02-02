@@ -105,7 +105,6 @@ fi
 
 # program aliases
 alias s='git status'
-alias thesaurus='dict -d moby-thes'
 alias pstree='pstree -GUh'
 alias ftrace='strace -fe trace=file'
 alias ptrace='strace -fe trace=process'
