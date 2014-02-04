@@ -1,0 +1,83 @@
+AndOr:
+  Enabled: false
+
+AssignmentInCondition:
+  Enabled: false
+
+CaseIndentation:
+  # IndentWhenRelativeTo: case
+  # SupportedStyles:
+  #   - case
+  #   - end
+  IndentOneStep: true
+
+ClassLength:
+  Max: 1000
+
+CollectionMethods:
+  PreferredMethods:
+    collect: 'map'
+    collect!: 'map!'
+    # inject: 'reduce'
+    detect: 'find'
+    find_all: 'select'
+
+Documentation:
+  Enabled: false
+
+EmptyLinesAroundBody:
+  Enabled: false
+
+EndAlignment:
+  AlignWith: variable
+
+FavorSprintf:
+  Enabled: false
+
+IfUnlessModifier:
+  Enabled: false
+
+LeadingCommentSpace:
+  Enabled: false
+
+LineLength:
+  Max: 120
+
+MethodLength:
+  Max: 120
+
+PerlBackrefs:
+  Enabled: false
+
+PredicateName:
+  NamePrefixBlacklist:
+    # - is_
+    # - has_
+    - have_
+
+SignalException:
+  EnforcedStyle: only_raise
+  # SupportedStyles:
+  #   - only_raise
+  #   - only_fail
+  #   - semantic
+
+SpaceInsideBrackets:
+  Enabled: false
+
+StringLiterals:
+  Enabled: false
+
+TrailingComma:
+  EnforcedStyleForMultiline: comma
+  # SupportedStyles:
+  #   - comma
+  #   - no_comma
+
+# Ruby 2.0
+
+HashSyntax:
+  Enabled: false
+
+Lambda:
+  Enabled: false

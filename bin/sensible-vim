@@ -12,10 +12,11 @@ fi
 
 # Strip line numbers from filenames
 args=( "$@" )
+unset line
 for (( i = 0; i < ${#args[@]}; i++ )); do
-  if [ "${i:0:1}" != "-" ] && [[ "${args[i]}" =~ :[0-9]+$ ]]; then
-    line="+${args[i]##*:}"
-    args[i]="${args[i]%:*}"
+  if [ "${i:0:1}" != "-" ] && [[ "${args[i]}" =~ :[0-9]+.*$ ]]; then
+    line="+`echo "${args[i]}" | cut -d: -f2`"
+    args[i]="${args[i]%%:*}"
   fi
 done
 
