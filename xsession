@@ -5,6 +5,9 @@ x-session-manager
 
 # clean up
 rm -rf ~/.local/share/Trash &
+if [ -f ~/.xsession-errors ]; then
+  mv ~/.xsession-errors ~/.xsession-errors.old
+fi
 
 ql quit &>/dev/null &
 
