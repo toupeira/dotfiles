@@ -694,6 +694,19 @@ endfunction " }}}
   " }}}
 
   " syntastic {{{
+  nnoremap <silent>,l :call <SID>ToggleLinter()<CR>
+  function! s:ToggleLinter() " {{{
+    if &ft == 'ruby'
+      if g:syntastic_ruby_checkers == [ 'ruby' ]
+        let g:syntastic_ruby_checkers = [ 'ruby', 'rubocop' ]
+      else
+        let g:syntastic_ruby_checkers = [ 'ruby' ]
+      endif
+    endif
+
+    SyntasticCheck
+  endfunction " }}}
+
   let g:syntastic_check_on_open = 0
   let g:syntastic_enable_signs = 1
 

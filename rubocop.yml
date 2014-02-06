@@ -4,6 +4,15 @@ AndOr:
 AssignmentInCondition:
   Enabled: false
 
+BlockComments:
+  Enabled: false
+
+Blocks:
+  Enabled: false
+
+BracesAroundHashParameters:
+  Enabled: false
+
 CaseIndentation:
   # IndentWhenRelativeTo: case
   # SupportedStyles:
@@ -73,6 +82,9 @@ TrailingComma:
   # SupportedStyles:
   #   - comma
   #   - no_comma
+
+WordArray:
+  Enabled: false
 
 # Ruby 2.0
 
