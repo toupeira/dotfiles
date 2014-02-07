@@ -655,10 +655,10 @@ endfunction " }}}
   let g:sneak#use_ic_scs = 1
   let g:sneak#map_netrw = 0
 
-  nmap ,j <Plug>SneakForward
-  nmap ,k <Plug>SneakBackward
-  xmap ,j <Plug>VSneakForward
-  xmap ,k <Plug>VSneakBackward
+  nmap ,j <Plug>Sneak_s
+  nmap ,k <Plug>Sneak_S
+  xmap ,j <Plug>Sneak_s
+  xmap ,k <Plug>Sneak_S
   " }}}
 
   " conque {{{
