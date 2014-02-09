@@ -4,9 +4,9 @@
   set nocompatible
 
   " force old regex engine
-  if exists('+re')
-    set re=1
-  endif
+  " if exists('+re')
+  "   set re=1
+  " endif
 
   let s:has_ag  = executable('ag')
   let s:has_ack = executable('ack')
