@@ -123,12 +123,6 @@
   " automatically open quickfix window after commands that modify the quickfix list
   autocmd QuickFixCmdPost *grep* if len(getqflist()) | copen | endif
 
-  " cursor line
-  " autocmd CursorHold *
-  "   \ if &buftype != 'quickfix' | setlocal cursorline | endif
-  " autocmd CursorMoved,InsertEnter,BufLeave *
-  "   \ if &l:cursorline | setlocal nocursorline | endif
-
   " highlight trailing whitespace
   autocmd VimEnter,Colorscheme * highlight Whitespace ctermbg=235 guibg=#333333
   autocmd VimEnter,Colorscheme * match Whitespace /[^ \t]\s\+$/
