@@ -33,5 +33,5 @@ else
 
   [ "$1" = "clean" ] && exit
 
-  exec darktable "$@"
+  exec nice ionice -c3 darktable "$@"
 fi
