@@ -235,7 +235,7 @@ def show b, all_branches
     puts "\nWARNING: local and remote branches have diverged. A merge will occur unless you rebase." if both
 end
 
-branches = `git show-ref`.inject({}) do |hash, l|
+branches = `git show-ref`.lines.inject({}) do |hash, l|
     sha1, ref = l.chomp.split " refs/"
     next hash if !$config["ignore"].empty? and ref =~ Regexp.new($config["ignore"])
     name = if $all
@@ -249,13 +249,13 @@ branches = `git show-ref`.inject({}) do |hash, l|
     hash
 end
 
-remotes = `git config --get-regexp ^remote\.\*\.url`.inject({}) do |hash, l|
+remotes = `git config --get-regexp ^remote\.\*\.url`.lines.inject({}) do |hash, l|
     l =~ /^remote\.(.+?)\.url (.+)$/ or next hash
     hash[$1] ||= $2
     hash
 end
 
-`git config --get-regexp ^branch\.`.each do |l|
+`git config --get-regexp ^branch\.`.lines.each do |l|
     case l
     when /branch\.(.*?)\.remote (.+)/
         next if $2 == '.'
