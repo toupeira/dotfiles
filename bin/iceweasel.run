@@ -6,6 +6,5 @@ if pgrep -x iceweasel >/dev/null; then
     iceweasel "$@" &>/dev/null &
   fi
 else
-  sqlite3 ~/.mozilla/firefox/default/content-prefs.sqlite 'DELETE FROM prefs WHERE settingID = 1'
   iceweasel "$@" &>/dev/null &
 fi
