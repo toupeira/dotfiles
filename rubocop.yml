@@ -31,6 +31,9 @@ CollectionMethods:
     detect: 'find'
     find_all: 'select'
 
+CyclomaticComplexity:
+  Max: 12
+
 Documentation:
   Enabled: false
 
@@ -50,7 +53,7 @@ LeadingCommentSpace:
   Enabled: false
 
 LineLength:
-  Max: 120
+  Max: 180
 
 MethodLength:
   Max: 120
@@ -71,6 +74,9 @@ SignalException:
   #   - only_fail
   #   - semantic
 
+Semicolon:
+  AllowAsExpressionSeparator: true
+    
 SpaceInsideBrackets:
   Enabled: false
 
