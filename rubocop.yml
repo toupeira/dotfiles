@@ -80,6 +80,9 @@ Semicolon:
 SpaceInsideBrackets:
   Enabled: false
 
+SpecialGlobalVars:
+  Enabled: false
+
 StringLiterals:
   Enabled: false
 

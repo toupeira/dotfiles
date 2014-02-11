@@ -1,4 +1,4 @@
-#!/usr/bin/env ruby1.8
+#!/usr/bin/env ruby
 
 require 'fileutils'
 require 'optparse'
@@ -37,88 +37,112 @@ class Lazytile
 
     # Fill the left half of the screen
     :left => lambda { |s, w|
-      return :width => s[:width] / 2
+      {
+        :width => s[:width] / 2,
+      }
     },
 
     # Fill the right half of the screen
     :right => lambda { |s, w|
       width = s[:width] / 2
 
-      return :width  => width,
-             :x      => s[:x] + width
+      {
+        :width  => width,
+        :x      => s[:x] + width,
+      }
     },
 
     # Fill the top half of the screen
     :top => lambda { |s, w|
-      return :height => s[:height] / 2
+      {
+        :height => s[:height] / 2,
+      }
     },
 
     # Fill the bottom half of the screen
     :bottom => lambda { |s, w|
       height = s[:height] / 2
 
-      return :height => height,
-        :y      => s[:y] + height
+      {
+        :height => height,
+        :y      => s[:y] + height,
+      }
     },
 
     # Fill the left two thirds of the screen
     :wideleft => lambda { |s, w|
-      return :width => s[:width] * 0.7
+      {
+        :width => s[:width] * 0.7,
+      }
     },
 
     # Fill the right two thirds of the screen
     :wideright => lambda { |s, w|
       width = s[:width] * 0.7
 
-      return :width => width,
-        :x     => s[:x] + s[:width] - width
+      {
+        :width => width,
+        :x     => s[:x] + s[:width] - width,
+      }
     },
 
     # Fill the top two thirds of the screen
     :widetop => lambda { |s, w|
-      return :height => s[:height] * 0.7
+      {
+        :height => s[:height] * 0.7,
+      }
     },
 
     # Fill the bottom two thirds of the screen
     :widebottom => lambda { |s, w|
       height = s[:height] * 0.7
 
-      return :height => height,
-        :y     => s[:y] + s[:height] - height
+      return  {
+        :height => height,
+        :y      => s[:y] + s[:height] - height,
+      }
     },
 
     # Fill the center of the screen, with margin on all sides
     :center => lambda { |s, w|
       width = (s[:width] * 0.8).round
 
-      return :width  => width,
+      {
+        :width  => width,
         :height => s[:height] - 0.5 * s[:y],
         :x      => s[:width] / 2 - width / 2,
-        :y      => s[:y] * 1.25
+        :y      => s[:y] * 1.25,
+      }
     },
 
     # Fill the top left corner of the screen
     :topleft => lambda { |s, w|
-      return :width  => s[:width] / 2,
-        :height => s[:height] / 2
+      {
+        :width  => s[:width] / 2,
+        :height => s[:height] / 2,
+      }
     },
 
     # Fill the top right corner of the screen
     :topright => lambda { |s, w|
       width = s[:width] / 2
 
-      return :width  => width,
+      {
+        :width  => width,
         :height => s[:height] / 2,
-        :x      => s[:x] + width
+        :x      => s[:x] + width,
+      }
     },
 
     # Fill the bottom left corner of the screen
     :bottomleft => lambda { |s, w|
       height = s[:height] / 2
 
-      return :width  => s[:width] / 2,
+      {
+        :width  => s[:width] / 2,
         :height => height,
-        :y      => s[:y] + height
+        :y      => s[:y] + height,
+      }
     },
 
     # Fill the bottom right corner of the screen
@@ -126,10 +150,12 @@ class Lazytile
       width = s[:width] / 2
       height = s[:height] / 2
 
-      return :width  => width,
+      {
+        :width  => width,
         :height => height,
         :x      => s[:x] + width,
-        :y      => s[:y] + height
+        :y      => s[:y] + height,
+      }
     },
 
   }
@@ -138,7 +164,7 @@ class Lazytile
   SOCKET = "#{ENV['HOME']}/.lazytile.sock"
 
   # Perform a tile command by sending it to the client socket
-  def self.tile(mode, id=nil)
+  def self.tile(mode, id = nil)
     if client.send [ mode, id ].join("\t"), 0
       true
     else
@@ -208,10 +234,10 @@ class Lazytile
     if pid = daemon_pid
       debug "killing daemon..."
       Process.kill 'TERM', pid
-      return wait_for { not running? }
+      return wait_for { !running? }
     end
 
-    not running?
+    !running?
   end
 
   private
@@ -231,14 +257,14 @@ class Lazytile
       break if value
     end
 
-    return value
+    value
   end
 
   # Detect if any of the values in the two hashes differ
-  def self.changed(first, second, error_margin=2)
+  def self.changed(first, second, error_margin = 2)
     return true unless first and second
 
-    first.detect do |key, value|
+    first.find do |key, value|
       diff = (value - second[key].to_i).abs
       diff > error_margin
     end
@@ -250,7 +276,7 @@ class Lazytile
       pid = output "lsof -F p '#{SOCKET}'"
       if $?.exitstatus == 0
         pid.sub!(/\Ap(\d+).*/m, '\1')
-        pid = pid.to_i
+        pid.to_i
       else
         nil
       end
@@ -346,11 +372,11 @@ class Lazytile
   end
 
   # Perform the given tiling mode
-  def self.perform_tile(mode, id=nil)
+  def self.perform_tile(mode, id = nil)
     mode = mode.to_sym
     id ||= active_window
 
-    if !tiling_function = TILING_MODES[mode]
+    unless tiling_function = TILING_MODES[mode]
       debug "invalid tiling mode #{mode.inspect}", "window #{id}"
       return false
     end
@@ -412,7 +438,7 @@ class Lazytile
   end
 
   # Cleanup method that gets called after every tiling action
-  def self.cleanup(force=false, cycles=1000)
+  def self.cleanup(force = false, cycles = 1000)
     # Only run after the given number of cycles
     if force or !@counter or (@counter -= 1).zero?
       @counter = cycles
@@ -476,53 +502,53 @@ def run
   opts.parse!
 
   case arg = ARGV[0]
-  # Show the daemon status
-  when 's', 'status':
-    puts "Lazytile daemon is#{Lazytile.running? ? '' : ' not'} running."
-    exit
+    # Show the daemon status
+    when 's', 'status'
+      puts "Lazytile daemon is#{Lazytile.running? ? '' : ' not'} running."
+      exit
 
-  # Kill the daemon
-  when 'stop':
-    unless Lazytile.running?
-      puts "Lazytile daemon is not running."
-      exit false
-    end
+    # Kill the daemon
+    when 'stop'
+      unless Lazytile.running?
+        puts "Lazytile daemon is not running."
+        exit false
+      end
 
-    Lazytile.kill_daemon
+      Lazytile.kill_daemon
 
-    if Lazytile.running?
-      puts "Couldn't stop Lazytile daemon."
-      exit true
-    else
-      puts "Successfully stopped Lazytile daemon."
-      exit false
-    end
+      if Lazytile.running?
+        puts "Couldn't stop Lazytile daemon."
+        exit true
+      else
+        puts "Successfully stopped Lazytile daemon."
+        exit false
+      end
 
-  # Restart the daemon
-  when 'r', 'start', 'restart':
-    running = Lazytile.running?
-    Lazytile.kill_daemon
-    Lazytile.start_daemon
-    if Lazytile.running?
-      puts "Successfully #{running ? 'restarted' : 'started'} Lazytile daemon."
-      exit true
-    else
-      puts "Couldn't restart Lazytile daemon."
-      exit false
-    end
+    # Restart the daemon
+    when 'r', 'start', 'restart'
+      running = Lazytile.running?
+      Lazytile.kill_daemon
+      Lazytile.start_daemon
+      if Lazytile.running?
+        puts "Successfully #{running ? 'restarted' : 'started'} Lazytile daemon."
+        exit true
+      else
+        puts "Couldn't restart Lazytile daemon."
+        exit false
+      end
 
-  # Show the usage help
-  when nil:
-    usage.call
-
-  # Use the argument as tiling mode command
-  else
-    if Lazytile::TILING_MODES[arg.to_sym]
-      Lazytile.tile arg, @id
-    else
-      puts "Error: Invalid tiling mode '#{arg}'\n\n"
+    # Show the usage help
+    when nil
       usage.call
-    end
+
+    # Use the argument as tiling mode command
+    else
+      if Lazytile::TILING_MODES[arg.to_sym]
+        Lazytile.tile arg, @id
+      else
+        puts "Error: Invalid tiling mode '#{arg}'\n\n"
+        usage.call
+      end
   end
 
 rescue OptionParser::ParseError => exception
