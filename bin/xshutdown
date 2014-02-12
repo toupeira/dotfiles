@@ -6,14 +6,20 @@ class XShutdown < Gtk::Window
   ICONS = "/usr/share/icons/gnome/32x32/actions"
 
   ACTIONS = [
-    [ "_Shutdown", "gnome-shutdown",
-      "xfce4-session-logout --fast --halt" ],
+    [
+      "_Shutdown", "gnome-shutdown",
+      "xfce4-session-logout --fast --halt",
+    ],
 
-    [ "_Reboot", "gtk-refresh",
-      "xfce4-session-logout --fast --reboot" ],
+    [
+      "_Reboot", "gtk-refresh",
+      "xfce4-session-logout --fast --reboot",
+    ],
 
-    [ "_Logout", "gnome-logout",
-      "xfce4-session-logout --fast --logout" ],
+    [
+      "_Logout", "gnome-logout",
+      "xfce4-session-logout --fast --logout",
+    ],
   ]
 
   def initialize

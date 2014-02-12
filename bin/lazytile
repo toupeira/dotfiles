@@ -33,128 +33,128 @@ class Lazytile
     #
 
     # Fill the whole screen
-    :maximize => lambda {},
+    maximize: -> {},
 
     # Fill the left half of the screen
-    :left => lambda { |s, w|
+    left: lambda { |s, w|
       {
-        :width => s[:width] / 2,
+        width: s[:width] / 2,
       }
     },
 
     # Fill the right half of the screen
-    :right => lambda { |s, w|
+    right: lambda { |s, w|
       width = s[:width] / 2
 
       {
-        :width  => width,
-        :x      => s[:x] + width,
+        width: width,
+        x:     s[:x] + width,
       }
     },
 
     # Fill the top half of the screen
-    :top => lambda { |s, w|
+    top: lambda { |s, w|
       {
-        :height => s[:height] / 2,
+        height: s[:height] / 2,
       }
     },
 
     # Fill the bottom half of the screen
-    :bottom => lambda { |s, w|
+    bottom: lambda { |s, w|
       height = s[:height] / 2
 
       {
-        :height => height,
-        :y      => s[:y] + height,
+        height: height,
+        y:      s[:y] + height,
       }
     },
 
     # Fill the left two thirds of the screen
-    :wideleft => lambda { |s, w|
+    wideleft: lambda { |s, w|
       {
-        :width => s[:width] * 0.7,
+        width: s[:width] * 0.7,
       }
     },
 
     # Fill the right two thirds of the screen
-    :wideright => lambda { |s, w|
+    wideright: lambda { |s, w|
       width = s[:width] * 0.7
 
       {
-        :width => width,
-        :x     => s[:x] + s[:width] - width,
+        width: width,
+        x:     s[:x] + s[:width] - width,
       }
     },
 
     # Fill the top two thirds of the screen
-    :widetop => lambda { |s, w|
+    widetop: lambda { |s, w|
       {
-        :height => s[:height] * 0.7,
+        height: s[:height] * 0.7,
       }
     },
 
     # Fill the bottom two thirds of the screen
-    :widebottom => lambda { |s, w|
+    widebottom: lambda { |s, w|
       height = s[:height] * 0.7
 
       return  {
-        :height => height,
-        :y      => s[:y] + s[:height] - height,
+        height: height,
+        y:      s[:y] + s[:height] - height,
       }
     },
 
     # Fill the center of the screen, with margin on all sides
-    :center => lambda { |s, w|
+    center: lambda { |s, w|
       width = (s[:width] * 0.8).round
 
       {
-        :width  => width,
-        :height => s[:height] - 0.5 * s[:y],
-        :x      => s[:width] / 2 - width / 2,
-        :y      => s[:y] * 1.25,
+        width:  width,
+        height: s[:height] - 0.5 * s[:y],
+        x:      s[:width] / 2 - width / 2,
+        y:      s[:y] * 1.25,
       }
     },
 
     # Fill the top left corner of the screen
-    :topleft => lambda { |s, w|
+    topleft: lambda { |s, w|
       {
-        :width  => s[:width] / 2,
-        :height => s[:height] / 2,
+        width:  s[:width] / 2,
+        height: s[:height] / 2,
       }
     },
 
     # Fill the top right corner of the screen
-    :topright => lambda { |s, w|
+    topright: lambda { |s, w|
       width = s[:width] / 2
 
       {
-        :width  => width,
-        :height => s[:height] / 2,
-        :x      => s[:x] + width,
+        width:  width,
+        height: s[:height] / 2,
+        x:      s[:x] + width,
       }
     },
 
     # Fill the bottom left corner of the screen
-    :bottomleft => lambda { |s, w|
+    bottomleft: lambda { |s, w|
       height = s[:height] / 2
 
       {
-        :width  => s[:width] / 2,
-        :height => height,
-        :y      => s[:y] + height,
+        width:  s[:width] / 2,
+        height: height,
+        y:      s[:y] + height,
       }
     },
 
     # Fill the bottom right corner of the screen
-    :bottomright => lambda { |s, w|
+    bottomright: lambda { |s, w|
       width = s[:width] / 2
       height = s[:height] / 2
 
       {
-        :width  => width,
-        :height => height,
-        :x      => s[:x] + width,
-        :y      => s[:y] + height,
+        width:  width,
+        height: height,
+        x:      s[:x] + width,
+        y:      s[:y] + height,
       }
     },
 
@@ -310,10 +310,10 @@ class Lazytile
 
     # Collect the window properties
     props = {
-      :width  => width,
-      :height => height,
-      :x      => x,
-      :y      => y,
+      width:  width,
+      height: height,
+      x:      x,
+      y:      y,
     }
 
     # Collect the window border properties
@@ -322,10 +322,10 @@ class Lazytile
       props[:y] -= btop
 
       props[:border] = {
-        :left   => bleft,
-        :right  => bright,
-        :top    => btop,
-        :bottom => bbottom,
+        left:   bleft,
+        right:  bright,
+        top:    btop,
+        bottom: bbottom,
       }
     end
 

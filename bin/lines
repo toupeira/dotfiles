@@ -65,7 +65,7 @@ module Lines
     end
   end
 
-  def self.usage!(options=nil, exception=nil)
+  def self.usage!(options = nil, exception = nil)
     if exception
       puts "-#{$command}: #{exception.class}: #{exception.message}"
     elsif options
@@ -84,7 +84,7 @@ module Lines
         @@descriptions.each do |method, description, arguments|
           if method.to_s == command.to_s
             return "  %-10s %-23s %s" % [ method, arguments, description ]
-         end
+          end
         end
       end
 
@@ -129,7 +129,7 @@ module Lines
       end
 
       @@descriptions << [:truncate, "Cut off long lines and add ellipsis", "[WIDTH] [MODE]" ]
-      def truncate(lines, width=72, mode='head')
+      def truncate(lines, width = 72, mode = 'head')
         lines.each_with_index do |line, i|
           size = line.size
           if size > width
