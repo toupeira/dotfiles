@@ -15,7 +15,6 @@ function _gem_exec {
 
 # Aliases for different Ruby versions
 alias gem="_gem_exec /usr/bin/gem"
-alias gem1.8="_gem_exec /usr/bin/gem1.8"
 alias gem1.9.1="_gem_exec /usr/bin/gem1.9.1"
 alias gem2.0="_gem_exec /usr/bin/gem2.0"
 
