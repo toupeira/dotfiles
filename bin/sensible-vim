@@ -26,6 +26,7 @@ if [ ${#args[@]} -gt 0 ]; then
     if [ -f "$file" ]; then
       mimetype=$(
         file -L --brief --mime-type -- "$file" \
+          | fgrep -vx 'application/javascript' \
           | fgrep -vx 'application/octet-stream' \
           | fgrep -vx 'application/xml' \
           | fgrep -vx 'image/svg+xml' \
