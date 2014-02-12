@@ -20,8 +20,8 @@ class Lazytile
     # These are the definitions of all available tiling modes.
     # Each mode is a Proc that gets passed a hash for the (s)creen and (w)indow:
     #
-    # - screen => { :width => %d, :height => %d, :x => %d, :y => %d }
-    # - window => { :width => %d, :height => %d, :x => %d, :y => %d, :border => {} }
+    # - screen = { width: %d, height: %d, x: %d, y: %d }
+    # - window = { width: %d, height: %d, x: %d, y: %d, border: {} }
     #
     # :x and :y are the margin for the screen (set in .lazytile.conf, 0 by default) and the position for the window, respectively.
     # :border is a hash of window border sizes for :left, :right, :top and :bottom.
