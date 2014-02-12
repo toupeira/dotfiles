@@ -158,9 +158,9 @@ function system {
   else
     for arg in "$@"; do
       local dir=`dirname -- "$arg"`
-      if [ -d "$dir" -a ! -w "$dir" ]; then
+      if [ "$dir" != "." -a -d "$dir" -a ! -w "$dir" ]; then
         if [ -z "${sudo_history["$dir"]}" ]; then
-          warning "Using [1;33msudo[0m for directory [1m$dir[0m"
+          warning "Using [1;33msudo[0m for directory [1m$dir[0m arg $arg"
         fi
 
         sudo_history["$dir"]=1
@@ -469,7 +469,7 @@ function run {
       shift
 
       status "Compiling {{$dir}}"
-      if ! system make -BC "$dir" "$@" &>/dev/null; then
+      if ! system make -sBC "$dir" "$@"; then
         error "Error while compiling {{$dir}}"
         ask_abort
       fi
