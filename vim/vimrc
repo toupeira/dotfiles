@@ -13,7 +13,7 @@
 
   " set up pathogen
   runtime bundle/pathogen/autoload/pathogen.vim
-  let g:pathogen_disabled = []
+  let g:pathogen_disabled = ['cursorcross']
 
   " neocomplete requires Vim 7.3 and Lua
   if v:version < 703 || !has('lua') || (v:version == 703 && !has('patch885'))
@@ -762,7 +762,7 @@ endfunction " }}}
     inoremap <expr> <C-l> neocomplete#complete_common_string()
 
     " Recommended key-mappings.
-    " <CR>: close popup and save indent.
+    " <CR>: cancel popup and insert newline.
     inoremap <silent> <CR> <C-r>=neocomplete#smart_close_popup()<CR><CR>
     " <TAB>: completion.
     inoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<Tab>"

@@ -94,11 +94,3 @@ TrailingComma:
 
 WordArray:
   Enabled: false
-
-# Ruby 2.0
-
-HashSyntax:
-  Enabled: false
-
-Lambda:
-  Enabled: false
