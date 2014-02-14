@@ -696,10 +696,10 @@ endfunction " }}}
   nnoremap <silent>,l :call <SID>ToggleLinter()<CR>
   function! s:ToggleLinter() " {{{
     if &ft == 'ruby'
-      if g:syntastic_ruby_checkers == [ 'ruby' ]
-        let g:syntastic_ruby_checkers = [ 'ruby', 'rubocop' ]
+      if g:syntastic_ruby_checkers == [ 'mri' ]
+        let g:syntastic_ruby_checkers = [ 'mri', 'rubocop' ]
       else
-        let g:syntastic_ruby_checkers = [ 'ruby' ]
+        let g:syntastic_ruby_checkers = [ 'mri' ]
       endif
     endif
 
@@ -712,7 +712,7 @@ endfunction " }}}
   let g:syntastic_javascript_checkers = [ 'jshint' ]
   let g:syntastic_php_checkers = [ 'php', 'phpmd' ]
   let g:syntastic_python_checkers = [ 'python' ]
-  let g:syntastic_ruby_checkers = [ 'ruby', 'rubocop' ]
+  let g:syntastic_ruby_checkers = [ 'mri', 'rubocop' ]
   let g:syntastic_sh_checkers = [ 'sh' ]
 
   let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'

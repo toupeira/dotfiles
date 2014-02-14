@@ -1,6 +1,9 @@
 AndOr:
   Enabled: false
 
+AlignParameters:
+  Enabled: false
+
 AssignmentInCondition:
   Enabled: false
 
@@ -14,10 +17,7 @@ BracesAroundHashParameters:
   Enabled: false
 
 CaseIndentation:
-  # IndentWhenRelativeTo: case
-  # SupportedStyles:
-  #   - case
-  #   - end
+  IndentWhenRelativeTo: end
   IndentOneStep: true
 
 ClassLength:
