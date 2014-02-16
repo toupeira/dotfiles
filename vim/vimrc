@@ -326,6 +326,9 @@ endfunction " }}}
   xnoremap <silent> > >gv
   xnoremap <silent> < <gv
 
+  " select pasted text
+  nmap vp `[v`]
+
   " toggle paste mode with F12
   set pastetoggle=<f12>
 
