@@ -1,9 +1,7 @@
 # vim: ft=ruby
 
 %w[
-  rubygems
   yaml
-  ostruct
   open-uri
   wirble
   awesome_print
