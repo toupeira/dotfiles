@@ -4,6 +4,9 @@ AndOr:
 AlignParameters:
   Enabled: false
 
+AsciiComments:
+  Enabled: false
+
 AssignmentInCondition:
   Enabled: false
 
@@ -87,7 +90,8 @@ StringLiterals:
   Enabled: false
 
 TrailingComma:
-  EnforcedStyleForMultiline: comma
+  Enabled: false
+  # EnforcedStyleForMultiline: comma
   # SupportedStyles:
   #   - comma
   #   - no_comma

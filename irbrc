@@ -3,7 +3,6 @@
 %w[
   yaml
   open-uri
-  wirble
   awesome_print
   active_support/all
 ].each do |lib|
@@ -17,11 +16,7 @@ end
 puts
 puts "ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE} patchlevel #{RUBY_PATCHLEVEL}} [#{RUBY_PLATFORM}]"
 puts
-Kernel::at_exit { puts }
-
-if defined? Wirble
-  Wirble.init :init_colors => true
-end
+Kernel.at_exit { puts }
 
 if defined? AwesomePrint
   AwesomePrint.irb!
@@ -45,12 +40,12 @@ def ls(*args)
   system("#{ls} --color #{args.join ' '}")
 end
 
-def cd(dir=ENV['HOME'])
+def cd(dir = ENV['HOME'])
   Dir.chdir(dir.to_s) and ls
 end
 
 class Object
   def methods?
-    self.methods.sort - Object.methods
+    methods.sort - Object.methods
   end
 end
