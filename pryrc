@@ -1,3 +1,4 @@
+### default gems {{{
 %w[
   yaml
   open-uri
@@ -10,12 +11,20 @@
     puts e.message
   end
 end
+### }}}
 
+if respond_to? :ai
+  Pry.print = ->(output, value) { Pry::Helpers::BaseHelpers.stagger_output("=> #{value.ai}", output) }
+end
+
+### startup message {{{
 puts
 puts "ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE} patchlevel #{RUBY_PATCHLEVEL}} [#{RUBY_PLATFORM}]"
 puts
 Kernel.at_exit { puts }
+### }}}
 
+### prompt configuration {{{
 cyan     = ->(text) { "\001\e[1;36m\002#{text}\001\e[0m\002" }
 darkcyan = ->(text) { "\001\e[0;36m\002#{text}\001\e[0m\002" }
 red      = ->(text) { "\001\e[1;31m\002#{text}\001\e[0m\002" }
@@ -46,3 +55,4 @@ Pry.config.prompt = [
     "#{' ' * spaces}  #{separator} "
   }
 ]
+### }}}
