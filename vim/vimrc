@@ -866,14 +866,12 @@ endfunction " }}}
     call unite#custom#source('file', 'sorters', 'sorter_length')
     call unite#custom#source('file_rec/async', 'sorters', 'sorter_length')
 
-    " limit results for recently edited files
-    call unite#custom#source('file_mru', 'max_candidates', 10)
-
-    " ignored files for file_mru
-    call unite#custom#source('file_mru', 'ignore_pattern', 'COMMIT_EDITMSG')
-
     " sort buffers by number
     call unite#custom#source('buffer', 'sorters', 'sorter_reverse')
+
+    " settings for neomru
+    let g:neomru#file_mru_limit = 10
+    let g:neomru#file_mru_ignore_pattern = 'COMMIT_EDITMSG'
 
     " map our keys in all Unite buffers
     autocmd FileType unite call <SID>unite_buffer_mappings()
@@ -912,7 +910,7 @@ endfunction " }}}
     nnoremap <silent><expr> ,f UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-buffer-name=unite-files -start-insert')
 
     " ,<Space> - show Git changes and recently edited files
-    nnoremap <silent><expr> ,<Space> UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'file_mru:all', '-buffer-name=unite-changes -start-insert')
+    nnoremap <expr> ,<Space> UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'file_mru:all', '-buffer-name=unite-changes -start-insert')
 
     " ,b - show open buffers
     nnoremap <silent><expr> ,b UniteWrapper('buffer', '-buffer-name=unite-buffers -start-insert')

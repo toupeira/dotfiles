@@ -234,3 +234,7 @@
 	path = vim/bundle/cursorcross
 	url = https://github.com/mtth/cursorcross.vim.git
 	ignore = dirty
+[submodule "vim/bundle/neomru"]
+	path = vim/bundle/neomru
+	url = https://github.com/Shougo/neomru.vim.git
+	ignore = dirty
