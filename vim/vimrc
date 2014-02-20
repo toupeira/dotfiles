@@ -304,6 +304,9 @@ endfunction " }}}
   " shortcut for desktop clipboard
   noremap + "+
 
+  " jump to lines with <count><Tab>
+  nmap <expr> <Tab> v:count ? "gg" : "<Tab>"
+
   " don't use exact searches for */#
   noremap * g*
   noremap # g#
@@ -461,7 +464,7 @@ endfunction " }}}
   nnoremap <silent> ,r :edit<CR>
 
   " ,R - reload vimrc
-  nnoremap <silent> ,R :runtime! vimrc gvimrc<CR>:let &ft=&ft<CR>:nohlsearch<CR>
+  nnoremap <silent> ,R :runtime! vimrc gvimrc<CR>:let &ft=&ft<CR>:syn on<CR>:nohlsearch<CR>
 
   " ,s - split horizontally
   nnoremap <silent> ,s :split<CR>
@@ -584,10 +587,6 @@ endfunction " }}}
 
   " project {{{
   let g:project_enable_welcome = 0
-  " }}}
-
-  " movealong {{{
-  let g:movealong_default_keys = 1
   " }}}
 
   " gitv {{{
