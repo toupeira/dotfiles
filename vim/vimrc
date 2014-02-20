@@ -13,7 +13,7 @@
 
   " set up pathogen
   runtime bundle/pathogen/autoload/pathogen.vim
-  let g:pathogen_disabled = ['cursorcross']
+  let g:pathogen_disabled = [ 'cursorcross' ]
 
   " neocomplete requires Vim 7.3 and Lua
   if v:version < 703 || !has('lua') || (v:version == 703 && !has('patch885'))
@@ -83,7 +83,6 @@
 
   " interface
   syntax on
-  autocmd Syntax * syntax on
 
   colorscheme desertink
   set errorbells
@@ -161,8 +160,8 @@
 
   " indents
   set autoindent
-  set smartindent
-  set nocindent
+  "set smartindent
+  "set nocindent
 
   " avoid auto-indenting hash signs
   "inoremap # x<C-H>#
