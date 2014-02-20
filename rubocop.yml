@@ -70,6 +70,9 @@ PredicateName:
     # - has_
     - have_
 
+RegexpLiteral:
+  MaxSlashes: 0
+
 SignalException:
   EnforcedStyle: only_raise
   # SupportedStyles:

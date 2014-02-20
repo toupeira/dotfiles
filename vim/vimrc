@@ -98,9 +98,11 @@
   " disable preview window for completion
   "set completeopt-=preview
 
-  " buffers
+  " line numbers
   set number
   set numberwidth=6
+
+  " scrolling
   set scrolloff=5
   set sidescrolloff=8
   set sidescroll=1
