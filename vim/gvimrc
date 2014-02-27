@@ -130,7 +130,7 @@ endif
     " CTRL-x is Cut
     vnoremap <C-x> "+x
     " CTRL-c is Copy
-    vnoremap <C-c> "+y
+    vnoremap <C-c> "+ygv<Esc>
     " CTRL-v is Paste
     noremap <C-v>               "+gP
     cnoremap <C-v>              <C-r>+
@@ -149,9 +149,5 @@ endif
   if !has('unix')
     set guioptions-=a
   endif
-
-  " CTRL-a is Visual-select all
-  "noremap <C-a> ggVG
-  "vnoremap <C-a> <C-C>ggVG
 
 " }}}
