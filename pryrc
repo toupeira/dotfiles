@@ -13,16 +13,25 @@
 end
 ### }}}
 
-if respond_to? :ai
-  Pry.print = ->(output, value) { Pry::Helpers::BaseHelpers.stagger_output("=> #{value.ai}", output) }
-end
-
-### startup message {{{
+# startup message
 puts
 puts "ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE} patchlevel #{RUBY_PATCHLEVEL}} [#{RUBY_PLATFORM}]"
 puts
 Kernel.at_exit { puts }
-### }}}
+
+# use awesome_print for output
+if respond_to? :ai
+  Pry.print = ->(output, value) { Pry::Helpers::BaseHelpers.stagger_output("=> #{value.ai}", output) }
+end
+
+# delete single-letter command aliases
+('a'..'z').each do |letter|
+  begin
+    Pry.commands.delete letter
+  rescue ArgumentError
+    next
+  end
+end
 
 ### prompt configuration {{{
 cyan     = ->(text) { "\001\e[1;36m\002#{text}\001\e[0m\002" }
