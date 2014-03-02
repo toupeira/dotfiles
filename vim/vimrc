@@ -451,10 +451,10 @@ endfunction " }}}
   endfunction " }}}
 
   " ,x - close the current buffer
-  nnoremap <silent> ,x :lclose<CR>:BD<CR>
+  nnoremap <silent> ,x :lclose<CR>:Bdelete<CR>
 
   " ,X - write and close the current buffer
-  nnoremap <silent> ,X :lclose<CR>:w<CR>:BD<CR>
+  nnoremap <silent> ,X :lclose<CR>:w<CR>:Bdelete<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
@@ -632,7 +632,9 @@ endfunction " }}}
   " rooter {{{
   let g:rooter_manual_only = 1
   let g:rooter_change_directory_for_non_project_files = 1
-  autocmd BufEnter * :Rooter
+  if index(g:pathogen_disabled, 'rooter') == -1
+    autocmd BufEnter * if !isdirectory(expand('%')) | Rooter
+  endif
   " }}}
 
   " matchparen {{{
@@ -688,6 +690,7 @@ endfunction " }}}
   " netrw {{{
   let g:netrw_silent = 1
   let g:netrw_ftpmode = 'ascii'
+  let g:netrw_ftp_cmd = 'ftp -p'
   let g:netrw_longlist = 1
   let g:netrw_winsize = 40
   let g:netrw_altv = 1

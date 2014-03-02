@@ -234,3 +234,7 @@
 	path = vim/bundle/neomru
 	url = https://github.com/Shougo/neomru.vim.git
 	ignore = dirty
+[submodule "vim/bundle/bbye"]
+	path = vim/bundle/bbye
+	url = https://github.com/moll/vim-bbye.git
+	ignore = dirty
