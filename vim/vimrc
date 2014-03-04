@@ -399,12 +399,16 @@ endfunction " }}}
   nnoremap <silent> ,n :call SwitchBuffer(1)<CR>
   nnoremap <silent> ,p :call SwitchBuffer(-1)<CR>
   function! SwitchBuffer(delta)
-    let buffers  = []
+    let buffers = []
     for nr in range(1, bufnr('$'))
       if buflisted(nr) && getbufvar(nr, 'current_syntax') != 'qf'
         call add(buffers, nr)
       end
     endfor
+
+    if len(buffers) == 0
+      return
+    endif
 
     let position = index(buffers, bufnr('%')) + a:delta
 
