@@ -64,49 +64,6 @@ endif
 " Keybindings
 " {{{
 
-  " Ctrl+PageUp/PageDown - toggle font size
-  function! ToggleFontSize()
-    if exists('s:toggle_font_size')
-      let s:toggle_font_size_big = [ &guifont, &columns, &lines ]
-
-      execute 'set guifont=' . escape(s:toggle_font_size[0], ' ')
-      execute 'set columns=' . escape(s:toggle_font_size[1], ' ')
-      execute 'set lines='   . escape(s:toggle_font_size[2], ' ')
-
-      unlet s:toggle_font_size
-    else
-      let s:toggle_font_size = [ &guifont, &columns, &lines ]
-
-      if exists('s:toggle_font_size_big')
-        execute 'set guifont=' . escape(s:toggle_font_size_big[0], ' ')
-        execute 'set columns=' . escape(s:toggle_font_size_big[1], ' ')
-        execute 'set lines='   . escape(s:toggle_font_size_big[2], ' ')
-
-        unlet s:toggle_font_size_big
-      else
-        let font = substitute(&guifont, '[ :]h*\d.*', '', '')
-
-        if has('mac')
-          let &guifont = font.':h18'
-        elseif has('unix')
-          let &guifont = font.' 18'
-        else
-          let &guifont = font.'h16:cANSI'
-        endif
-
-        set columns=110 lines=40
-      endif
-
-      winpos 290 100
-    endif
-    wincmd =
-  endfunction
-
-  noremap <silent> <C-PageUp> :call ToggleFontSize()<CR>
-  noremap <silent> <C-PageDown> :call ToggleFontSize()<CR>
-  inoremap <silent> <C-PageUp> <C-O>:call ToggleFontSize()<CR>
-  inoremap <silent> <C-PageDown> <C-O>:call ToggleFontSize()<CR>
-
   " don't use Alt for menus
   set winaltkeys=no
 

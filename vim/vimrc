@@ -160,11 +160,6 @@
 
   " indents
   set autoindent
-  "set smartindent
-  "set nocindent
-
-  " avoid auto-indenting hash signs
-  "inoremap # x<C-H>#
 
   " tabs
   set noexpandtab
