@@ -13,7 +13,7 @@
 
   " set up pathogen
   runtime bundle/pathogen/autoload/pathogen.vim
-  let g:pathogen_disabled = [ 'cursorcross' ]
+  let g:pathogen_disabled = []
 
   " neocomplete requires Vim 7.3 and Lua
   if v:version < 703 || !has('lua') || (v:version == 703 && !has('patch885'))
@@ -573,10 +573,6 @@ endfunction " }}}
   " jedi {{{
   let g:jedi#auto_vim_configuration = 0
   let g:jedi#completions_enabled = 0
-  " }}}
-
-  " cursorcross {{{
-  let g:cursorcross_dynamic = 'clw'
   " }}}
 
   " javascript-libraries-syntax {{{
