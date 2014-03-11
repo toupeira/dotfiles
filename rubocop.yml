@@ -21,7 +21,7 @@ BracesAroundHashParameters:
 
 CaseIndentation:
   IndentWhenRelativeTo: end
-  IndentOneStep: true
+  IndentOneStep: false
 
 ClassLength:
   Max: 1000
