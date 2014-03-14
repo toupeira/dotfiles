@@ -5,6 +5,7 @@ PIPE=~/.quodlibet/control
 CURRENT=~/.quodlibet/current
 
 function _ql {
+  echo "Sending: $1"
   echo "$1" > $PIPE
 }
 
@@ -25,6 +26,16 @@ case "$command" in
   rate) command="set-rating";;
   playlist) command="dump-playlist";;
   shuffle) command="order";;
+  query-saved)
+    position=${argument:-1}
+    argument=`head -$((position * 2 - 1)) ~/.quodlibet/lists/queries.saved 2>/dev/null | tail -1`
+    if [ -n "$argument" ]; then
+      command="query"
+    else
+      echo "E: Can't find saved query at position $position"
+      exit 1
+    fi
+    ;;
   fastforward)
     command="seek"
     argument="+0:5"
@@ -46,11 +57,7 @@ case "$command" in
 
         if is_running; then
           sleep 0.5
-          query=`head -1 ~/.quodlibet/lists/queries.saved 2>/dev/null`
-          if [ -n "$query" ]; then
-            _ql "query $query"
-          fi
-
+          exec $0 query-saved
           exit 0
         fi
       done
@@ -79,17 +86,6 @@ case "$command" in
   current)
     cat $CURRENT
     ;;
-  query|search)
-    if [ -n "$argument" ]; then
-      _ql "set-browser SearchBar"
-      _ql "query $argument"
-      _ql "set-browser PanedBrowser"
-      exit
-    else
-      echo "E: '$command' needs an argument."
-      exit 1
-    fi
-    ;;
   status|dump-playlist|dump-queue)
     tmp=`mktemp`
     _ql "$command $tmp"
@@ -100,7 +96,7 @@ case "$command" in
   next|previous|play|pause|play-pause|hide-window|show-window|toggle-window|focus)
     _ql "$command"
     ;;
-  seek|order|repeat|volume|query|add-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue)
+  seek|order|repeat|volume|query|add-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue|query|search)
     case "$command" in
       shuffle|order|repeat) argument=${argument:-toggle};;
     esac
