@@ -298,8 +298,8 @@ endfunction " }}}
   " shortcut for desktop clipboard
   noremap + "+
 
-  " jump to lines with <count><Tab>
-  nmap <expr> <Tab> v:count ? "gg" : "<Tab>"
+  " jump to lines with <count><Space>
+  nmap <expr> <Space> v:count ? "gg" : "<Space>"
 
   " don't use exact searches for */#
   noremap * g*
