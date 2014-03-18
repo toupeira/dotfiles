@@ -316,8 +316,8 @@ endfunction " }}}
   autocmd CmdWinEnter * nnoremap <buffer> <C-c> :
 
   " indent with Tab/Shift+Tab in visual mode
-  vmap <Tab> >
-  vmap <S-Tab> <
+  xmap <Tab> >
+  xmap <S-Tab> <
 
   " keep cursor position when yanking in visual mode
   xnoremap <silent><expr> y "ygv" . mode()
