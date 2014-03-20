@@ -33,7 +33,9 @@ class Lazytile
     #
 
     # Fill the whole screen
-    maximize: -> {},
+    maximize: lambda { |s, w|
+      {}
+    },
 
     # Fill the left half of the screen
     left: lambda { |s, w|

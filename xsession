@@ -1,5 +1,11 @@
 #!/bin/bash
 
+# make Dropbox behave
+dropbox=~/.config/autostart/dropbox.desktop
+if [ -f "$dropbox" ]; then
+  sed -ri 's/(dropbox start) -i/\1/' "$dropbox"
+fi
+
 # run the session
 x-session-manager
 
