@@ -1,5 +1,32 @@
+### LIMITS
+
+ClassLength:
+  Max: 1000
+
+CyclomaticComplexity:
+  Max: 6
+
+LineLength:
+  Max: 180
+
+MethodLength:
+  Max: 120
+
+### BAD HABITS
+
 AndOr:
   Enabled: false
+
+# AssignmentInCondition:
+#   Enabled: false
+
+# BlockComments:
+#   Enabled: false
+
+Documentation:
+  Enabled: false
+
+### STYLE
 
 AlignHash:
   EnforcedHashRocketStyle: table
@@ -7,15 +34,9 @@ AlignHash:
   EnforcedLastArgumentHashStyle: always_ignore
 
 AlignParameters:
-  Enabled: false
+  EnforcedStyle: with_fixed_indentation
 
 AsciiComments:
-  Enabled: false
-
-AssignmentInCondition:
-  Enabled: false
-
-BlockComments:
   Enabled: false
 
 Blocks:
@@ -26,10 +47,6 @@ BracesAroundHashParameters:
 
 CaseIndentation:
   IndentWhenRelativeTo: end
-  IndentOneStep: false
-
-ClassLength:
-  Max: 1000
 
 CollectionMethods:
   PreferredMethods:
@@ -39,20 +56,11 @@ CollectionMethods:
     detect: 'find'
     find_all: 'select'
 
-CyclomaticComplexity:
-  Max: 12
-
-Documentation:
-  Enabled: false
-
 EmptyLinesAroundBody:
   Enabled: false
 
 EndAlignment:
   AlignWith: variable
-
-FavorSprintf:
-  Enabled: false
 
 IfUnlessModifier:
   Enabled: false
@@ -63,11 +71,8 @@ IndentHash:
 LeadingCommentSpace:
   Enabled: false
 
-LineLength:
-  Max: 180
-
-MethodLength:
-  Max: 120
+NumericLiterals:
+  MinDigits: 7
 
 PercentLiteralDelimiters:
   PreferredDelimiters:
@@ -85,14 +90,14 @@ PercentLiteralDelimiters:
 PerlBackrefs:
   Enabled: false
 
-PredicateName:
-  NamePrefixBlacklist:
-    # - is_
-    # - has_
-    - have_
+# PredicateName:
+#   NamePrefixBlacklist:
+#     # - is_
+#     # - has_
+#     - have_
 
 RegexpLiteral:
-  MaxSlashes: 0
+  Enabled: false
 
 SignalException:
   EnforcedStyle: only_raise
@@ -101,8 +106,8 @@ SignalException:
   #   - only_fail
   #   - semantic
 
-Semicolon:
-  AllowAsExpressionSeparator: true
+# Semicolon:
+#   AllowAsExpressionSeparator: true
     
 SpaceInsideBrackets:
   Enabled: false
