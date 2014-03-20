@@ -1,6 +1,11 @@
 AndOr:
   Enabled: false
 
+AlignHash:
+  EnforcedHashRocketStyle: table
+  EnforcedColonStyle: table
+  EnforcedLastArgumentHashStyle: always_ignore
+
 AlignParameters:
   Enabled: false
 
@@ -52,6 +57,9 @@ FavorSprintf:
 IfUnlessModifier:
   Enabled: false
 
+IndentHash:
+  EnforcedStyle: consistent
+
 LeadingCommentSpace:
   Enabled: false
 
@@ -60,6 +68,19 @@ LineLength:
 
 MethodLength:
   Max: 120
+
+PercentLiteralDelimiters:
+  PreferredDelimiters:
+    '%':  '{}'
+    '%q': '{}'
+    '%Q': '{}'
+    '%r': '{}'
+    '%s': '{}'
+    '%x': '{}'
+
+    '%i': '[]'
+    '%w': '[]'
+    '%W': '[]'
 
 PerlBackrefs:
   Enabled: false
