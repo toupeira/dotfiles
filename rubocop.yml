@@ -99,6 +99,9 @@ PerlBackrefs:
 RegexpLiteral:
   Enabled: false
 
+Semicolon:
+  AllowAsExpressionSeparator: true
+    
 SignalException:
   EnforcedStyle: only_raise
   # SupportedStyles:
@@ -106,9 +109,9 @@ SignalException:
   #   - only_fail
   #   - semantic
 
-# Semicolon:
-#   AllowAsExpressionSeparator: true
-    
+SingleLineBlockParams:
+  Enabled: false
+
 SpaceInsideBrackets:
   Enabled: false
 
