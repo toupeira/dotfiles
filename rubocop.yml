@@ -17,8 +17,8 @@ MethodLength:
 AndOr:
   Enabled: false
 
-# AssignmentInCondition:
-#   Enabled: false
+AssignmentInCondition:
+  Enabled: false
 
 # BlockComments:
 #   Enabled: false
