@@ -1,7 +1,14 @@
 # binaries
+*.pdf
+*.ps
+*.rtf
+*.doc
+*.docx
+*.xls
+*.xlsx
+
 *.gif
 *.jpg
-*.pdf
 *.png
 *.tiff
 
@@ -15,10 +22,22 @@
 *.mp4
 *.wmv
 
+*.ttf
+*.eot
+*.woff
+
+*.zip
+*.rar
+*.deb
+*.gem
+*.exe
+*.msi
+
 # home
 src/*-clone
 src/**/public/system
 src/**/tmp
+src/*/concrete
 src/archive
 src/puppet/modules/base/files/vim
 src/upstream
@@ -26,3 +45,4 @@ src/upstream
 # Rails
 db/archive
 app/assets/javascripts/ace
+app/assets/data

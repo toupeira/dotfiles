@@ -128,5 +128,8 @@ TrailingComma:
   #   - comma
   #   - no_comma
 
+WhileUntilModifier:
+  Enabled: false
+
 WordArray:
   Enabled: false
