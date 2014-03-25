@@ -234,3 +234,9 @@
 	path = vim/bundle/bbye
 	url = https://github.com/moll/vim-bbye.git
 	ignore = dirty
+[submodule "vim/bundle/neosnippet"]
+	path = vim/bundle/neosnippet
+	url = https://github.com/Shougo/neosnippet.vim.git
+[submodule "vim/bundle/snippets"]
+	path = vim/bundle/snippets
+	url = https://github.com/honza/vim-snippets
