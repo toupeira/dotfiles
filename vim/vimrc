@@ -111,6 +111,7 @@
 
   if has('conceal')
     set conceallevel=2
+    set concealcursor=n
   endif
 
   " command prompt and status line
@@ -617,6 +618,9 @@ endfunction " }}}
   let g:indentLine_char = '│'
   let g:indentLine_color_term = 235
   let g:indentLine_color_gui = '#333333'
+  let g:indentLine_noConcealCursor = 1
+
+  let g:indentLine_fileTypeExclude = [ 'help' ]
   " }}}
 
   " rooter {{{
