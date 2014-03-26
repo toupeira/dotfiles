@@ -55,8 +55,11 @@ if type __git_ps1 &>/dev/null; then
   export GIT_PS1_SHOWDIRTYSTATE=1
   export GIT_PS1_SHOWSTASHSTATE=1
   export GIT_PS1_SHOWUNTRACKEDFILES=1
+  export GIT_PS1_SHOWCOLORHINTS=1
 
-  export GIT_PS1='$(__git_ps1 "\[\033[0;32m\][\[\033[1;32m\]%s\[\033[0;32m\]]\[\033[0m\] ")'
+  export GIT_PS1_SHOWUPSTREAM='auto git'
+
+  export GIT_PS1='$(__git_ps1 "\[\033[0;32m\][\[\033[1;32m\]%s\[\033[0;32m\]]\[\033[0m\] " | sed "s/=//")'
   export SUDO_PS1=$PS1
   export PS1=$PS1$GIT_PS1
 fi
