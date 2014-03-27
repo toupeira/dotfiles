@@ -700,8 +700,14 @@ endfunction " }}}
     if &ft == 'ruby'
       if g:syntastic_ruby_checkers == [ 'mri' ]
         let g:syntastic_ruby_checkers = [ 'mri', 'rubocop' ]
+        echohl Question
+        echo "Linter enabled"
+        echohl none
       else
         let g:syntastic_ruby_checkers = [ 'mri' ]
+        echohl Question
+        echo "Linter disabled"
+        echohl none
       endif
     endif
 
