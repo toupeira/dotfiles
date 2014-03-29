@@ -102,7 +102,7 @@
 	rcon  = "!bundle exec rails console"
 	rgen  = "!bundle exec rails generate"
 	rlog  = "!f() { local logfile=${1:-$RAILS_ENV.log}; tail -f $(git rev-parse --show-toplevel 2>/dev/null)/log/$logfile*; }; f"
-	alog  = "!f() { local logfile=${1:-error.log}; tail -f /var/log/apache2/$logfile*; }; f"
+	wlog  = "!f() { local logfile=${1:-error.log}; tail -f /var/log/nginx/$logfile; }; f"
 
 	guard = "!bundle exec guard"
 
