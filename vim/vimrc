@@ -940,10 +940,10 @@ endfunction " }}}
     nnoremap <silent><expr> ,T empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? ":echoerr 'Not a git repository: ' . getcwd()\<CR>" : UniteWrapper('grep:.:-p\ .todoignore:(TODO\|FIXME)', '')
 
     " run ,<Space> on startup if no arguments were given
-    au VimEnter *
-      \ if !argc() && (line2byte('$') == -1) && (v:progname =~? '^[gm]\=vim\%[\.exe]$') |
-      \   execute "normal , " |
-      \ endif
+    " au VimEnter *
+    "   \ if !argc() && (line2byte('$') == -1) && (v:progname =~? '^[gm]\=vim\%[\.exe]$') |
+    "   \   execute "normal , " |
+    "   \ endif
   endif
   " }}}
 
