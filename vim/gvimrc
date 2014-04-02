@@ -67,44 +67,44 @@ endif
   " don't use Alt for menus
   set winaltkeys=no
 
-  " Copy & Paste shortcuts
-  if has('mac')
-    vnoremap <D-x> "+x
-    " Command-c is Copy
-    vnoremap <D-c> "+y
-    " Command-v is Paste
-    map <D-v>               "+gP
-    cmap <D-v>              <C-R>+
+  " " Copy & Paste shortcuts
+  " if has('mac')
+  "   vnoremap <D-x> "+x
+  "   " Command-c is Copy
+  "   vnoremap <D-c> "+y
+  "   " Command-v is Paste
+  "   map <D-v>               "+gP
+  "   cmap <D-v>              <C-R>+
 
-    " Pasting blockwise and linewise selections is not possible in Insert and
-    " Visual mode without the +virtualedit feature.  They are pasted as if they
-    " were characterwise instead.
-    " Uses the paste.vim autoload script.
+  "   " Pasting blockwise and linewise selections is not possible in Insert and
+  "   " Visual mode without the +virtualedit feature.  They are pasted as if they
+  "   " were characterwise instead.
+  "   " Uses the paste.vim autoload script.
 
-    exe 'inoremap <script> <D-v>' paste#paste_cmd['i']
-    exe 'vnoremap <script> <D-v>' paste#paste_cmd['v']
-  else
-    " CTRL-x is Cut
-    vnoremap <C-x> "+x
-    " CTRL-c is Copy
-    vnoremap <C-c> "+ygv<Esc>
-    " CTRL-v is Paste
-    noremap <C-v>               "+gP
-    cnoremap <C-v>              <C-r>+
+  "   exe 'inoremap <script> <D-v>' paste#paste_cmd['i']
+  "   exe 'vnoremap <script> <D-v>' paste#paste_cmd['v']
+  " else
+  "   " CTRL-x is Cut
+  "   vnoremap <C-x> "+x
+  "   " CTRL-c is Copy
+  "   vnoremap <C-c> "+ygv<Esc>
+  "   " CTRL-v is Paste
+  "   noremap <C-v>               "+gP
+  "   cnoremap <C-v>              <C-r>+
 
-    " Pasting blockwise and linewise selections is not possible in Insert and
-    " Visual mode without the +virtualedit feature.  They are pasted as if they
-    " were characterwise instead.
-    " Uses the paste.vim autoload script.
+  "   " Pasting blockwise and linewise selections is not possible in Insert and
+  "   " Visual mode without the +virtualedit feature.  They are pasted as if they
+  "   " were characterwise instead.
+  "   " Uses the paste.vim autoload script.
 
-    exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
-    exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
-  endif
+  "   exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
+  "   exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
+  " endif
 
-  " For CTRL-v to work autoselect must be off.
-  " On Unix we have two selections, autoselect can be used.
-  if !has('unix')
-    set guioptions-=a
-  endif
+  " " For CTRL-v to work autoselect must be off.
+  " " On Unix we have two selections, autoselect can be used.
+  " if !has('unix')
+  "   set guioptions-=a
+  " endif
 
 " }}}
