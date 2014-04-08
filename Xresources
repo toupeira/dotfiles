@@ -7,7 +7,7 @@ URxvt*font:			-misc-fixed-medium-*-*-*-13-100-*-*-*-60-*-*
 !URxvt*font:			xft:DejaVu Sans Mono for Powerline:size=9
 !URxvt*boldFont:		xft:DejaVu Sans Mono for Powerline:size=9:style=bold
 !URxvt*letterSpace:		-1
-URxvt*geometry:			120x48
+URxvt*geometry:			100x40
 URxvt*utmpInhibit:		true
 URxvt*loginShell:		true
 URxvt*depth:			32
