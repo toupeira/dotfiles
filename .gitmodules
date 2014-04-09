@@ -126,10 +126,6 @@
 	path = vim/bundle/indentline
 	url = https://github.com/Yggdroot/indentLine.git
 	ignore = dirty
-[submodule "vim/bundle/gitshade"]
-	path = vim/bundle/gitshade
-	url = https://github.com/joeytwiddle/git_shade.vim.git
-	ignore = dirty
 [submodule "vim/bundle/javascript-libraries-syntax"]
 	path = vim/bundle/javascript-libraries-syntax
 	url = https://github.com/othree/javascript-libraries-syntax.vim.git
@@ -218,10 +214,6 @@
 	path = vim/bundle/bufkill
 	url = https://github.com/mattdbridges/bufkill.vim.git
 	ignore = dirty
-[submodule "vim/bundle/sneak"]
-	path = vim/bundle/sneak
-	url = https://github.com/justinmk/vim-sneak.git
-	ignore = dirty
 [submodule "vim/bundle/targets"]
 	path = vim/bundle/targets
 	url = https://github.com/wellle/targets.vim.git
@@ -237,6 +229,8 @@
 [submodule "vim/bundle/neosnippet"]
 	path = vim/bundle/neosnippet
 	url = https://github.com/Shougo/neosnippet.vim.git
+	ignore = dirty
 [submodule "vim/bundle/snippets"]
 	path = vim/bundle/snippets
 	url = https://github.com/honza/vim-snippets
+	ignore = dirty
