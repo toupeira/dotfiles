@@ -618,10 +618,8 @@ endfunction " }}}
   " }}}
 
   " unimpaired {{{
-  nmap <C-n> ]eV=gv
-  nmap <C-p> [eV=gv
-  xmap <C-n> ]egv=gv
-  xmap <C-p> [egv=gv
+  xmap <C-j> ]ezogv=gv
+  xmap <C-k> [ezogv=gv
   " }}}
 
   " ragtag {{{
