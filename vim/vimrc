@@ -476,11 +476,11 @@ endfunction " }}}
     endif
   endfunction " }}}
 
-  " ,x - close the current buffer
+  " ,x - close the current buffer, keeping windows
   nnoremap <silent> ,x :lclose<CR>:Bdelete<CR>
 
-  " ,X - write and close the current buffer
-  nnoremap <silent> ,X :lclose<CR>:w<CR>:Bdelete<CR>
+  " ,X - close the current buffer, not keeping windows
+  nnoremap <silent> ,X :lclose<CR>:bd<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
