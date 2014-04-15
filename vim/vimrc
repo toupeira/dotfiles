@@ -32,7 +32,7 @@
   filetype plugin indent on
   set hidden
   set nobackup
-  set autowrite
+  " set autowrite
   set encoding=utf-8
   set modeline
   set modelines=2
