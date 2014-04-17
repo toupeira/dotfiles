@@ -622,6 +622,16 @@ endfunction " }}}
   xmap <C-k> [ezogv=gv
   " }}}
 
+  " ctrlsf {{{
+  let g:ctrlsf_ackprg = 'ag'
+  let g:ctrlsf_context = '-C 3 --smart-case'
+  let g:ctrlsf_leading_space = 6
+  let g:ctrlsf_width = '40%'
+
+  nmap <silent> ,/ :CtrlSF<Space><C-L>
+  nmap <silent> ,? :CtrlSFOpen<CR>
+  " }}}
+
   " ragtag {{{
   imap <C-]> <C-x>/
   autocmd User Ragtag silent! iunmap <buffer> <C-v>%

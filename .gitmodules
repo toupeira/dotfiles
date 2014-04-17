@@ -234,3 +234,6 @@
 	path = vim/bundle/snippets
 	url = https://github.com/honza/vim-snippets
 	ignore = dirty
+[submodule "vim/bundle/ctrlsf"]
+	path = vim/bundle/ctrlsf
+	url = https://github.com/dyng/ctrlsf.vim.git
