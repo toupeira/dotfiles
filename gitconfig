@@ -38,6 +38,9 @@
 	cmd = git-vimdiff sensible-vim $BASE $LOCAL $REMOTE $MERGED
 	trustExitCode = true
 
+[fetch]
+	prune = true
+
 [push]
 	default = simple
 
