@@ -849,6 +849,10 @@ endfunction " }}}
       let g:airline#extensions#tabline#left_alt_sep = ' '
     endif
 
+    if &t_Co <= 8
+      autocmd VimEnter * AirlineTheme monochrome
+    endif
+
     let g:airline_mode_map = {
       \ '__' : '#',
       \ 'n'  : 'n',
