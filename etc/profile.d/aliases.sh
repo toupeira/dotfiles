@@ -81,7 +81,7 @@ if has sudo; then
   fi
 
   # system tools
-  alias init='sudo init'
+  alias systemctl='sudo systemctl'
   alias modprobe='sudo modprobe'
   alias rmmod='sudo rmmod'
   alias iptables='sudo iptables'
