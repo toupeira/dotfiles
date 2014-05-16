@@ -17,6 +17,7 @@ function _gem_exec {
 alias gem="_gem_exec /usr/bin/gem"
 alias gem1.9.1="_gem_exec /usr/bin/gem1.9.1"
 alias gem2.0="_gem_exec /usr/bin/gem2.0"
+alias gem2.1="_gem_exec /usr/bin/gem2.1"
 
 # Add wrappers for all bundler executables
 for command in `find ~/{src,www}/*/.bundle/ruby/*/bin -maxdepth 1 -type f -executable -printf "%f\n" 2>/dev/null | sort | uniq`; do

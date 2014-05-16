@@ -9,7 +9,7 @@
   "browser"       : true,   // Standard browser globals e.g. `window`, `document`.
 
   "node"          : true,
-  "couch"         : true,
+  "couch"         : false,
   "rhino"         : false,
   "wsh"           : false,  // Windows Scripting Host.
 
@@ -19,16 +19,16 @@
   "dojo"          : false,
 
   "predef"        : [  // Custom globals.
-    "Window",
-    "HTMLDocument",
+    // "HTMLDocument",
+    // "Raphael",
+    // "pm",
+    // "phantom",
+    // "History",
+    // "alert",
+    // "_",
+    "angular",
     "FB",
-    "Raphael",
-    "pm",
-    "I18n",
-    "phantom",
-    "History",
-    "alert",
-    "_"
+    "I18n"
   ],
 
   // Development.
@@ -45,7 +45,7 @@
   "bitwise"       : true,   // Prohibit bitwise operators (&, |, ^, etc.).
   "boss"          : true,   // Tolerate assignments inside if, for & while. Usually conditions & loops are for comparison, not assignments.
   "curly"         : true,   // Require {} for every new block or scope.
-  "eqeqeq"        : false,  // Require triple equals i.e. `===`.
+  "eqeqeq"        : true,   // Require triple equals i.e. `===`.
   "unused"        : true,   // Check for unused variables.
   "eqnull"        : false,  // Tolerate use of `== null`.
   "evil"          : false,  // Tolerate use of `eval`.
