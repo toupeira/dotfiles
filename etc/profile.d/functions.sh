@@ -25,6 +25,7 @@ function login_message {
     echo
     date "+%A, %e. %B %Y  %k:%M"
     echo; eval ls; echo
+    from -c | grep -v "There are 0 messages" && echo
   else
     down
   fi
