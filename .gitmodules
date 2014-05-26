@@ -237,3 +237,6 @@
 [submodule "vim/bundle/ctrlsf"]
 	path = vim/bundle/ctrlsf
 	url = https://github.com/dyng/ctrlsf.vim.git
+[submodule "vim/bundle/tmux-navigator"]
+	path = vim/bundle/tmux-navigator
+	url = https://github.com/christoomey/vim-tmux-navigator.git

@@ -138,9 +138,9 @@
     let &t_fs = "\033\\"
   endif
 
-  if $STY
-    " show filename in screen title
-    set titlestring=%t\ %m
+  if exists('$STY') || exists('$TMUX')
+    " only show filename in screen/tmux title
+    set titlestring=%t%m
   else
     "set titlestring=%r%m\ %t\ \[%{substitute(expand('%:p:h'),\ $HOME,\ '~',\ 'g')}\]\ -\ %{v:servername}
   endif
