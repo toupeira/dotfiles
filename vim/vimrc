@@ -131,18 +131,33 @@
   autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") && &ft != 'gitcommit'
                           \| exe "normal g'\"" | endif
 
-  " window titles
+  " window/icon titles
   set title
+  set icon
+
   if match($TERM, '^screen-') == 0
     let &t_ts = "\033k"
     let &t_fs = "\033\\"
+
+    let &t_IS = "\033]0"
+    let &t_IE = "\007"
+  endif
+
+  let s:titlestring_default = "%t%m%r\ \[%{substitute(expand('%:p:h'),\ $HOME,\ '~',\ 'g')}\]"
+
+  " show user and host in SSH sessions
+  if exists('$SSH_CONNECTION')
+    let s:titlestring_default = expand('$USER') . '@' . hostname() . ':' . s:titlestring_default
   endif
 
   if exists('$STY') || exists('$TMUX')
     " only show filename in screen/tmux title
-    set titlestring=%t%m
+    set titlestring=%t%m%r
+
+    " but show the full title in the terminal
+    let &iconstring = s:titlestring_default
   else
-    "set titlestring=%r%m\ %t\ \[%{substitute(expand('%:p:h'),\ $HOME,\ '~',\ 'g')}\]\ -\ %{v:servername}
+    let &titlestring = s:titlestring_default
   endif
 
 " }}}

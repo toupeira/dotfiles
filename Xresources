@@ -2,6 +2,8 @@
 
 ! Terminal settings
 *VT100.utf8:			1
+XTerm*allowSendEvents:		true
+
 URxvt*termName:			rxvt-256color
 URxvt*font:			-misc-fixed-medium-*-*-*-13-100-*-*-*-60-*-*
 !URxvt*font:			xft:DejaVu Sans Mono for Powerline:size=9

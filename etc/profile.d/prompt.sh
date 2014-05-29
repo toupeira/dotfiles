@@ -71,11 +71,19 @@ fi
 
 # Set window titles when displaying prompt
 if [[ "$TERM" =~ ^(rxvt|xterm-256color|screen-) ]]; then
-  if [ -n "$STY" ]; then
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]0;$HOSTNAME:$_pwd\007\033k$_pwd\033\\"'
-  elif [ -n "$SSH_CONNECTION" ]; then
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;$HOSTNAME:$_pwd\007\033]2;$USER@$HOSTNAME:$_pwd\007"'
+  if [ -n "$SSH_CONNECTION" ]; then
+    _hostname="$USER@$HOSTNAME:"
   else
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;$_pwd\007\033]2;$_pwd\007"'
+    unset _hostname
   fi
+
+  if [ -n "$STY" -o -n "$TMUX" ]; then
+    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]0;'$_hostname'$_pwd\007\033k$_pwd\033\\"'
+  else
+    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;'$_hostname'$_pwd\007\033]2;'$_hostname'$_pwd\007"'
+  # else
+  #   export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;$_pwd\007\033]2;$_pwd\007"'
+  fi
+
+  unset _hostname
 fi
