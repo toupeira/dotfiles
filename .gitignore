@@ -1,4 +1,4 @@
 .*.swp
-byobu/.ssh-agent
+tmux/.ssh-agent
 urxvt/urxvtd-*
 vim/tmp
