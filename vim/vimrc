@@ -139,7 +139,7 @@
     let &t_ts = "\033k"
     let &t_fs = "\033\\"
 
-    let &t_IS = "\033]0"
+    let &t_IS = "\033]0;"
     let &t_IE = "\007"
   endif
 
