@@ -182,7 +182,7 @@ function src {
   local src_dir=~/src
 
   if [ -z "$1" ]; then
-    find "$src_dir" -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|"
+    find "$src_dir" -mindepth 2 -maxdepth 3 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|"
     return
   elif [ "$1" = "each" ]; then
     shift
