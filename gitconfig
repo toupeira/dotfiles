@@ -1,9 +1,7 @@
 [user]
 	name = Markus Koller
 	email = markus-koller@gmx.ch
-
-[url "git://github.com/"]
-	insteadOf = gh:
+	signingkey = A7A2B7B7 
 
 [color]
 	ui = auto

@@ -72,14 +72,6 @@ if has sudo; then
   alias update-rc.d='sudo update-rc.d'
   alias invoke-rc.d='sudo invoke-rc.d'
 
-  # ubuntu tools
-  if has initctl; then
-    alias start='sudo start'
-    alias stop='sudo stop'
-    alias reload='sudo reload'
-    alias restart='sudo restart'
-  fi
-
   # system tools
   alias systemctl='sudo systemctl'
   alias modprobe='sudo modprobe'
@@ -119,4 +111,9 @@ has git-edit && alias ed='git-edit'
 if has rlwrap; then
   has sbcl && alias sbcl='rlwrap sbcl'
   has ocaml && alias ocaml='rlwrap ocaml'
+fi
+
+if has selecta; then
+  has cinv && alias sssh='cinv host list | selecta | xargs ssh'
+  alias ssrc='src `src | selecta`'
 fi

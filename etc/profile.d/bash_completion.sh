@@ -42,6 +42,7 @@ function _packages_installed {
 complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
 
 function _src_projects {
-  COMPREPLY=( $(compgen -W "`find ~/src -mindepth 1 -maxdepth 1 -name "${COMP_WORDS[COMP_CWORD]}*" -printf '%f '`") )
+  local src_dir=~/src
+  COMPREPLY=( $(compgen -W "`src | grep "${COMP_WORDS[COMP_CWORD]}"`") )
 }
 complete -F _src_projects src

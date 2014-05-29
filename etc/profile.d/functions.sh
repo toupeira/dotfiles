@@ -179,11 +179,16 @@ function dotfiles {
 
 # Switch project directories and run Git commands in them
 function src {
-  if [ "$1" = "each" ]; then
+  local src_dir=~/src
+
+  if [ -z "$1" ]; then
+    find "$src_dir" -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|"
+    return
+  elif [ "$1" = "each" ]; then
     shift
-    for dir in ~/src/*; do
-      echo -e "# \e[0;36m$dir\e[0m" | sed -r "s|$HOME|~|"
-      (cd "$dir" || exit 1; $@)
+    for project in `src`; do
+      echo -e "# \e[0;36m$project\e[0m" | sed -r "s|$HOME|~|"
+      (cd "$src_dir/$project" || exit 1; $@)
 
       local status=$?
       if [ $status -ne 0 ]; then
@@ -193,12 +198,13 @@ function src {
     done
 
     return
-  elif [[ "$1" =~ ^(|st|status)$ ]]; then
+  elif [[ "$1" =~ ^(st|status)$ ]]; then
     echo
     local first=1
     local last=0
 
-    for dir in ~/src/*; do
+    for project in `src`; do
+      dir="$src_dir/$dir"
       [ -d "$dir/.git" ] || continue
 
       local changes=`cd "$dir"; git status -s | grep -c .`
@@ -233,7 +239,7 @@ function src {
   fi
 
   local project="$1"
-  local path=~/src/"$project"
+  local path="$src_dir/$project"
   shift
 
   if [ -z "$project" ]; then
@@ -243,8 +249,13 @@ function src {
   fi
 
   if [ ! -e "$path" ]; then
-    echo "$path does not exist"
-    return 1
+    local first_match=`src | fgrep -m1 "$project"`
+    if [ -n "$first_match" ]; then
+      src "$first_match" "$@"
+    else
+      echo "$path does not exist"
+      return 1
+    fi
   elif [ "$1" = "--path" ]; then
     echo "$path"
   elif [ -f "$path" ]; then
@@ -267,3 +278,16 @@ function src_alias {
   alias $alias="src $project"
   __git_edit_complete $alias _git `src "$project" --path`
 }
+
+# Selecta wrappers
+if has selecta; then
+  function selecta_wrapper {
+    local command="$1"
+    shift
+
+    local selection=`"$@" | selecta`
+    [ -n "$selection" ] && "$command" "$selection"
+  }
+
+  alias ssrc='selecta_wrapper src src'
+fi
