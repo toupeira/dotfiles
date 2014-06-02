@@ -3,21 +3,21 @@
 
 alias sunpm='sudo npm -g'
 
-# Add wrappers for all npm executables
-for command in `find ~/{src,www}/*/node_modules/*/bin -maxdepth 1 -type f -executable -printf "%f\n" 2>/dev/null | sort | uniq`; do
-  eval "function $command { npm_exec \"$command\" \"\$@\"; }"
-done
-unset command
+# # Add wrappers for all npm executables
+# for command in `find ~/{src,www}/*/node_modules/*/bin -maxdepth 1 -type f -executable -printf "%f\n" 2>/dev/null | sort | uniq`; do
+#   eval "function $command { npm_exec \"$command\" \"\$@\"; }"
+# done
+# unset command
 
-function npm_exec {
-  local pwd="$PWD"
-  local command="$1"
-  local bin=`command npm bin`/"$command"
-  shift
+# function npm_exec {
+#   local pwd="$PWD"
+#   local command="$1"
+#   local bin=`command npm bin`/"$command"
+#   shift
 
-  if [ -x "$bin" ]; then
-    command "$bin" "$@"
-  else
-    command "$command" "$@"
-  fi
-}
+#   if [ -x "$bin" ]; then
+#     command "$bin" "$@"
+#   else
+#     command "$command" "$@"
+#   fi
+# }

@@ -22,8 +22,6 @@ fi
 # Custom completions
 complete -o bashdefault -o default -F _root_command sudo watch
 complete -o bashdefault -o default -F _command start
-complete -F _pgrep psgrep
-complete -F _gem191 gem
 
 if has dotfiles; then
   __git_edit_complete dotfiles _git `dotfiles --path`
