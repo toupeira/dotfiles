@@ -15,7 +15,7 @@ function _gem_exec {
   $command "$@"
 }
 
-alias gem="_gem_exec /usr/bin/gem"
+alias sugem="_gem_exec gem"
 
 # # Aliases for different Ruby versions
 # alias gem1.9.1="_gem_exec /usr/bin/gem1.9.1"
