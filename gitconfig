@@ -66,11 +66,12 @@
 	ours = "!f() { git checkout --ours $@ && git add $@; }; f"
 	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 
-	unstage = reset HEAD
+	ap = add -p
 	all = add -A
 	ci = commit -v
 	ca = commit -va
 	amend = commit -v --amend
+	unstage = reset HEAD
 
 	l = log --all --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
 	lstat = "!f() { git l --stat $@; }; f"

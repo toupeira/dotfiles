@@ -207,14 +207,6 @@
   autocmd FileType crontab setlocal nobackup nowritebackup
   autocmd FileType puppet setlocal commentstring=#%s
 
-  autocmd BufNewFile,BufRead *.md setf markdown
-  autocmd BufEnter *.run setf sh
-  autocmd BufNewFile,BufRead *.inc,*.thtml setf php
-  autocmd BufNewFile,BufRead *.boo setf python
-  autocmd BufNewFile,BufRead Gemfile setf ruby
-  autocmd BufNewFile,BufRead ~/.devilspie/* setf lisp
-  autocmd BufNewFile,BufRead *.pac setf javascript
-
   " Ruby syntax highlighting
   let g:ruby_operators = 1
   let g:ruby_no_expensive = 1
