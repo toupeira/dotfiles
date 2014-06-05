@@ -45,7 +45,7 @@ elif [ -z "$TMUX" -a -n "$SSH_CONNECTION" -a -f ~/.tmux.conf ] && has tmux; then
   export SSH_AUTH_SOCK="$SSH_AGENT_TMUX"
 
   # Try to attach to a detached session, start a new one otherwise
-  session=`tmux list-sessions | fgrep -vm1 attached | cut -d: -f1`
+  session=`tmux list-sessions 2>/dev/null | fgrep -vm1 attached | cut -d: -f1`
   if [ -n "$session" ]; then
     exec tmux attach-session -t "$session"
   else
