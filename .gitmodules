@@ -62,10 +62,6 @@
 	path = vim/bundle/vimproc
 	url = https://github.com/Shougo/vimproc.vim.git
 	ignore = dirty
-[submodule "vim/bundle/undotree"]
-	path = vim/bundle/undotree
-	url = https://github.com/mbbill/undotree.git
-	ignore = dirty
 [submodule "vim/bundle/unite-outline"]
 	path = vim/bundle/unite-outline
 	url = https://github.com/Shougo/unite-outline.git
@@ -157,10 +153,6 @@
 [submodule "vim/bundle/conque"]
 	path = vim/bundle/conque
 	url = https://github.com/basepi/vim-conque.git
-	ignore = dirty
-[submodule "vim/bundle/pairs"]
-	path = vim/bundle/pairs
-	url = https://github.com/kurkale6ka/vim-pairs.git
 	ignore = dirty
 [submodule "vim/bundle/obsession"]
 	path = vim/bundle/obsession
