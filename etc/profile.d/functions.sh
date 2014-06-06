@@ -39,6 +39,11 @@ function down {
   done
 }
 
+# Open a file with xdg-open
+function open {
+  xdg-open "$@" &>/dev/null
+}
+
 # Move a file or directory and replace it by a symlink to the new location
 function mvln {
   if [ "$1" = "-n" ]; then

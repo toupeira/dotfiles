@@ -174,7 +174,8 @@
   set autoindent
 
   " tabs
-  set noexpandtab
+  set ts=2 sts=2 sw=2
+  set expandtab
   set smarttab
   set shiftround
 
@@ -196,7 +197,7 @@
 " Filetype Settings
 " {{{
 
-  autocmd FileType alsaconf,applescript,asm,autoit,coffee,conf,context,css,dot,eruby,html,io,javascript,lisp,markdown,ocaml,perl,php,puppet,smarty,sql,plaintex,ruby,scss,sh,svn,tex,text,textile,vb,vim,vimwiki,xhtml,xml,xslt,yaml setlocal ts=2 sts=2 sw=2 expandtab nocindent
+  autocmd FileType make setlocal noexpandtab
   autocmd FileType css,scss setlocal iskeyword+=%
   autocmd FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3 expandtab
   autocmd FileType python,lua,sshconfig setlocal ts=4 sts=4 sw=4 expandtab
