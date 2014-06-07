@@ -12,7 +12,7 @@ if has rbenv; then
 
     if [ "$version" != "system" ]; then
       version="${version/%-*/}"
-      version="${version/%\.0/}"
+      version="${version/%\.[0-9]/}"
       printf -- "[$version]"
     fi
   }
