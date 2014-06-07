@@ -7,8 +7,7 @@ alias ls='ls --color'
 alias ll='ls -lh'
 alias l='ls -A'
 
-# basic aliases
-alias @='start'
+# general aliases
 alias ..='cd ..'
 alias ...='cd ../..'
 alias cd_='cd "$_"'
@@ -20,12 +19,22 @@ alias du='du -ch'
 alias df='df -h'
 alias ln='ln -svfi'
 alias rgrep='grep -r --exclude=.svn --exclude=.git --exclude=.*.swp'
-alias cgrep='GREP_OPTIONS= grep'
 alias mime='file -i'
 alias killbg='kill -9 %1'
 alias ag='ag --smart-case'
+alias pstree='pstree -GUh'
+alias ftrace='strace -fe trace=file'
+alias ptrace='strace -fe trace=process'
+alias psgrep='pgrep -fla'
+alias smem='smem -kt'
+alias watch='watch -cd -n 1'
+has 7z && ! has rar && alias rar='7z'
 
-# debian aliases
+alias @='start'
+alias dt='dotfiles'
+has git-edit && alias ed='git-edit'
+
+# package aliases
 alias pkget='aptitude -Z install'
 alias pkgpurge='aptitude -Z purge'
 alias pkgremove='aptitude -Z remove'
@@ -65,6 +74,7 @@ if has sudo; then
   # debian tools
   alias apt-get='sudo apt-get'
   alias aptitude='sudo aptitude'
+  has eatmydata && alias aptitude='eatmydata sudo aptitude'
   alias pkginstall='sudo dpkg -i'
   alias dpkg-reconfigure='sudo dpkg-reconfigure'
   alias update-alternatives='sudo update-alternatives'
@@ -89,30 +99,4 @@ if has sudo; then
   alias fdisk='sudo fdisk'
   alias parted='sudo parted'
   alias lvm='sudo lvm'
-
-  # rails
-  alias passenger-status='sudo passenger-status'
-  alias passenger-memory-stats='sudo passenger-memory-stats'
-fi
-
-# program aliases
-alias s='git status'
-alias pstree='pstree -GUh'
-alias ftrace='strace -fe trace=file'
-alias ptrace='strace -fe trace=process'
-alias psgrep='pgrep -fla'
-alias dt='dotfiles'
-alias smem='smem -kt'
-alias watch='watch -cd -n 1'
-has 7z && ! has rar && alias rar='7z'
-has git-edit && alias ed='git-edit'
-
-if has rlwrap; then
-  has sbcl && alias sbcl='rlwrap sbcl'
-  has ocaml && alias ocaml='rlwrap ocaml'
-fi
-
-if has selecta; then
-  has cinv && alias sssh='cinv host list | selecta | xargs ssh'
-  alias ssrc='src `src | selecta`'
 fi
