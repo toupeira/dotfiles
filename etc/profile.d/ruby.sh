@@ -30,7 +30,7 @@ function _gem_exec {
     command="sudo $command"
   fi
 
-  echo $command "$@"
+  $command "$@"
 }
 
 alias gem="_gem_exec gem"
