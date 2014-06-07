@@ -1,21 +1,38 @@
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
-has rbenv && eval "$(rbenv init -)"
+# load rbenv
+if has rbenv; then
+  eval "$(rbenv init -)"
+
+  # show ruby version in prompt
+  function __rbenv_ps1 {
+    local version=`rbenv version`
+    version="${version/ */}"
+    version="${version/.0-p*/}"
+    if [ "$version" != "system" ]; then
+      printf "[$version] "
+    fi
+  }
+
+  export RBENV_PS1='\[\e[1;31m\]$(__rbenv_ps1)\[\e[0m\]'
+  export PS1=$PS1$RBENV_PS1
+fi
 
 # sudo wrapper for RubyGems
 function _gem_exec {
   local command="$1"
   shift
 
-  if [[ "$1" =~ (install|uninstall|update|clean|pristine) ]]; then
+  if rbenv version | grep -q ^system && [[ "$1" =~ (install|uninstall|update|clean|pristine) ]]; then
     command="sudo $command"
   fi
 
-  $command "$@"
+  echo $command "$@"
 }
 
-alias sugem="_gem_exec gem"
+alias gem="_gem_exec gem"
+alias sugem="sudo gem"
 
 # # Aliases for different Ruby versions
 # alias gem1.9.1="_gem_exec /usr/bin/gem1.9.1"
