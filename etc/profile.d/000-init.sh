@@ -35,7 +35,9 @@ if [ -z "$SSH_AUTH_SOCK" -a "$UID" != "0" ]; then
     echo "Couldn't find SSH agent"
     read -t 0.4
   fi
-elif [ -z "$TMUX" -a -n "$SSH_CONNECTION" -a -f ~/.tmux.conf ] && has tmux; then
+fi
+
+if [ -z "$TMUX" -a -n "$SSH_CONNECTION" -a -f ~/.tmux.conf ] && has tmux; then
   # Load screen for SSH sessions if tmux is set up
 
   # Maintain link to SSH agent for tmux

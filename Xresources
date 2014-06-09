@@ -1,112 +1,112 @@
-!Xft.dpi:			96
+!Xft.dpi: 96
 
 ! Terminal settings
-*VT100.utf8:			1
-XTerm*allowSendEvents:		true
+*VT100.utf8: 1
+XTerm*allowSendEvents: true
 
-URxvt*termName:			rxvt-256color
-URxvt*font:			-misc-fixed-medium-*-*-*-13-100-*-*-*-60-*-*
-!URxvt*font:			xft:DejaVu Sans Mono for Powerline:size=9
-!URxvt*boldFont:		xft:DejaVu Sans Mono for Powerline:size=9:style=bold
-!URxvt*letterSpace:		-1
-URxvt*geometry:			100x40
-URxvt*utmpInhibit:		true
-URxvt*loginShell:		true
-URxvt*depth:			32
-URxvt*fading:			25
-URxvt*title:			shell
-URxvt*iconName:			shell
-URxvt*iso14755:			false
-URxvt*iso14755_52:		false
-URxvt*visualBell:		true
-URxvt*urgentOnBell:		true
+URxvt*termName:           rxvt-256color
+URxvt*font:               -misc-fixed-medium-*-*-*-13-100-*-*-*-60-*-*
+!URxvt*font:               xft:DejaVu Sans Mono for Powerline:size=9
+!URxvt*boldFont:           xft:DejaVu Sans Mono for Powerline:size=9:style=bold
+!URxvt*letterSpace:        -1
+URxvt*geometry:           100x40
+URxvt*utmpInhibit:        true
+URxvt*loginShell:         true
+URxvt*depth:              32
+URxvt*fading:             25
+URxvt*title:              shell
+URxvt*iconName:           shell
+URxvt*iso14755:           false
+URxvt*iso14755_52:        false
+URxvt*visualBell:         true
+URxvt*urgentOnBell:       true
 
-URxvt*saveLines:		10000
-URxvt*scrollTtyOutput:		false
-URxvt*scrollTtyKeypress:	true
-URxvt*scrollBar_right:		true
+URxvt*saveLines:          10000
+URxvt*scrollTtyOutput:    false
+URxvt*scrollTtyKeypress:  true
+URxvt*scrollBar_right:    true
 
-URxvt*perl-ext-common:		selection,matcher,searchable-scrollback,confirm-paste,clipboard
+URxvt*perl-ext-common:    selection,matcher,searchable-scrollback,confirm-paste,clipboard
 
-URxvt.keysym.M-s:		perl:searchable-scrollback:start
+URxvt.keysym.M-s:         perl:searchable-scrollback:start
 
-URxvt.keysym.C-Insert:		perl:matcher:last
-URxvt.keysym.M-Insert:		perl:matcher:list
+URxvt.keysym.C-Insert:    perl:matcher:last
+URxvt.keysym.M-Insert:    perl:matcher:list
 
-URxvt.urlLauncher:		xdg-open
-URxvt*matcher.button:		1
-URxvt.matcher.pattern.1:	\\bwww\\.[\\w-]+\\.[\\w/?&@#-%=]*[\\w/-]
-URxvt.matcher.pattern.2:	\\B(/\\S+?[^\\\\]):(\\d+)
-URxvt.matcher.launcher.2:	gvim +$2 $1
+URxvt.urlLauncher:        xdg-open
+URxvt*matcher.button:     1
+URxvt.matcher.pattern.1:  \\bwww\\.[\\w-]+\\.[\\w/?&@#-%=]*[\\w/-]
+URxvt.matcher.pattern.2:  \\B(/\\S+?[^\\\\]):(\\d+)
+URxvt.matcher.launcher.2: gvim +$2 $1
 
-URxvt.keysym.M-c:		perl:clipboard:copy
-URxvt.keysym.M-v:		perl:clipboard:paste
-URxvt.keysym.M-C-v:		perl:clipboard:paste_escaped
-URxvt.clipboard.copycmd:	xclip -i -selection clipboard
-URxvt.clipboard.pastecmd:	xclip -o -selection clipboard
+URxvt.keysym.M-c:         perl:clipboard:copy
+URxvt.keysym.M-v:         perl:clipboard:paste
+URxvt.keysym.M-C-v:       perl:clipboard:paste_escaped
+URxvt.clipboard.copycmd:  xclip -i -selection clipboard
+URxvt.clipboard.pastecmd: xclip -o -selection clipboard
 
 ! Colors
-URxvt*background:	rgba:0000/0000/0000/f3f3
-URxvt*foreground:	#fff
+URxvt*background: rgba:0000/0000/0000/f3f3
+URxvt*foreground: #fff
 
 ! Black
-URxvt*color0:		#000000
-URxvt*color8:		#666666
+URxvt*color0: #000000
+URxvt*color8: #666666
 
 ! Red
-URxvt*color1:		#ee2233
-URxvt*color9:		#ee3333
+URxvt*color1: #ee2233
+URxvt*color9: #ee3333
 
 ! Green
-URxvt*color2:		#7da900
-URxvt*color10:		#c4f036
+URxvt*color2: #7da900
+URxvt*color10: #c4f036
 
 ! Yellow
-URxvt*color3:		#c4a400
-URxvt*color11:		#fee14d
+URxvt*color3: #c4a400
+URxvt*color11: #fee14d
 
 ! Blue
-URxvt*color4:		#6578ff
-URxvt*color12:		#6876d9
+URxvt*color4: #6578ff
+URxvt*color12: #6876d9
 
 ! Purple
-URxvt*color5:		#fc54ff
-URxvt*color13:		#fc54ff
+URxvt*color5: #fc54ff
+URxvt*color13: #fc54ff
 
 ! Cyan
-!URxvt*color6:		#207383
-URxvt*color14:		#69d9cf
+!URxvt*color6: #207383
+URxvt*color14: #69d9cf
 
 ! SSH AskPass
-SshAskpass*grabKeyboard:		true
-SshAskpass*grabPointer:			true
-SshAskpass*font:			-*-lucida-medium-r-*-*-10-*-*-*-*-*-*-*
-SshAskpass*foreground:			rgb:d0/d0/d0
-SshAskpass*background:			rgb:50/50/50
-SshAskpass*topShadowColor:		rgb:90/90/90
-SshAskpass*bottomShadowColor:		rgb:00/00/00
-SshAskpass*borderColor:			rgb:a0/a0/a0
-SshAskpass*shadowThickness:		2
-SshAskpass*borderWidth:			1
-SshAskpass*horizontalSpacing:		5
-SshAskpass*verticalSpacing:		5
-SshAskpass*Button.shadowThickness:	1
-SshAskpass*Button.borderWidth:		0
-SshAskpass*Button.horizontalSpacing:	4
-SshAskpass*Button.verticalSpacing:	2
-SshAskpass*Indicator.foreground:	rgb:70/80/90
-SshAskpass*Indicator.background:	rgb:50/50/50
-SshAskpass*Indicator.shadowThickness:	1
-SshAskpass*Indicator.borderWidth:	1
-SshAskpass*Indicator.height:		4
-SshAskpass*Indicator.width:		13
-SshAskpass*Indicator.horizontalSpacing:	4
-SshAskpass*Indicator.verticalSpacing:	5
-SshAskpass*Indicator.minimumCount:	11
-SshAskpass*Indicator.maximumCount:	11
-SshAskpass*Dialog.title:		OpenSSH
-SshAskpass*Dialog.label:		Please enter your authentication passphrase:
-SshAskpass*okButton.label:		OK
-SshAskpass*cancelButton.label:		Cancel
+SshAskpass*grabKeyboard: true
+SshAskpass*grabPointer: true
+SshAskpass*font: -*-lucida-medium-r-*-*-10-*-*-*-*-*-*-*
+SshAskpass*foreground: rgb:d0/d0/d0
+SshAskpass*background: rgb:50/50/50
+SshAskpass*topShadowColor: rgb:90/90/90
+SshAskpass*bottomShadowColor: rgb:00/00/00
+SshAskpass*borderColor: rgb:a0/a0/a0
+SshAskpass*shadowThickness: 2
+SshAskpass*borderWidth: 1
+SshAskpass*horizontalSpacing: 5
+SshAskpass*verticalSpacing: 5
+SshAskpass*Button.shadowThickness: 1
+SshAskpass*Button.borderWidth: 0
+SshAskpass*Button.horizontalSpacing: 4
+SshAskpass*Button.verticalSpacing: 2
+SshAskpass*Indicator.foreground: rgb:70/80/90
+SshAskpass*Indicator.background: rgb:50/50/50
+SshAskpass*Indicator.shadowThickness: 1
+SshAskpass*Indicator.borderWidth: 1
+SshAskpass*Indicator.height: 4
+SshAskpass*Indicator.width: 13
+SshAskpass*Indicator.horizontalSpacing: 4
+SshAskpass*Indicator.verticalSpacing: 5
+SshAskpass*Indicator.minimumCount: 11
+SshAskpass*Indicator.maximumCount: 11
+SshAskpass*Dialog.title: OpenSSH
+SshAskpass*Dialog.label: Please enter your authentication passphrase:
+SshAskpass*okButton.label: OK
+SshAskpass*cancelButton.label: Cancel
 
 #include ".Xresources.local"
