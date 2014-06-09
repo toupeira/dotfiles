@@ -7,10 +7,10 @@ if has rbenv; then
 
   # show ruby version in prompt
   function __rbenv_ps1 {
-    local version=`rbenv version`
+    local version=`rbenv version 2>/dev/null`
     version="${version/ */}"
 
-    if [ "$version" != "system" ]; then
+    if [ -n "$version" -a "$version" != "system" ]; then
       version="${version/%-*/}"
       version="${version/%\.[0-9]/}"
       printf -- "[$version]"
