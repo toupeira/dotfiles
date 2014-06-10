@@ -244,8 +244,13 @@ function src {
   fi
 
   local project="$1"
-  local path="$src_dir/$project"
   shift
+
+  if [ -d "$project" ]; then
+    local path="$project"
+  else
+    local path="$src_dir/$project"
+  fi
 
   if [ -z "$project" ]; then
     echo "Usage: src PROJECT [GIT-COMMAND] [GIT-ARGS]"
