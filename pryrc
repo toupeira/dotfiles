@@ -7,8 +7,7 @@
 ].each do |lib|
   begin
     require lib
-  rescue LoadError => e
-    puts e.message
+  rescue LoadError
   end
 end
 ### }}}
