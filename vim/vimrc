@@ -825,8 +825,30 @@ endfunction " }}}
     " show file directory separately from file name
     hi airline_filepath term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
     hi airline_filepath_inactive term=bold cterm=bold ctermfg=238 ctermbg=235 gui=bold guifg=#555555 guibg=#303030
+    hi airline_filepath_insert term=bold cterm=bold ctermfg=238 ctermbg=135 gui=bold guifg=#555555 guibg=#303030
+    function! AirlineFilepath() " {{{
+      let l:status = ""
+
+      if &readonly
+        let l:status .= g:airline_symbols.space
+        let l:status .= g:airline_symbols.space
+      endif
+
+      let l:file = expand('%')
+      let l:dir = fnamemodify(getcwd(), ':t')
+      let l:path = fnamemodify(l:file, ':p:.:h')
+
+      if l:path[0] != '/' && l:path[0:len(l:dir)] != l:dir
+        let l:path = l:dir . '/' . l:path
+      endif
+
+      let l:status .= "[" . l:path . "]"
+
+      return l:status
+    endfunction " }}}
+
     call airline#parts#define_raw('file', '%t%m')
-    call airline#parts#define_raw('filepath', '%{&ro?get(g:airline_symbols, "space"):""}%#airline_filepath#[%<%{fnamemodify(expand("%"), ":p:.:h:s?:f??")}]')
+    call airline#parts#define_raw('filepath', '%#airline_filepath#%{AirlineFilepath()}')
     autocmd VimEnter *
       \ let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
 
