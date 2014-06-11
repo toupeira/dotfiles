@@ -838,7 +838,7 @@ endfunction " }}}
       let l:dir = fnamemodify(getcwd(), ':t')
       let l:path = fnamemodify(l:file, ':p:.:h')
 
-      if l:path[0] != '/' && l:path[0:len(l:dir)] != l:dir
+      if l:path[0] != '/'
         let l:path = l:dir . '/' . l:path
       endif
 
