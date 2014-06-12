@@ -826,6 +826,12 @@ endfunction " }}}
     hi airline_filepath term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
     hi airline_filepath_inactive term=bold cterm=bold ctermfg=238 ctermbg=235 gui=bold guifg=#555555 guibg=#303030
     hi airline_filepath_insert term=bold cterm=bold ctermfg=238 ctermbg=135 gui=bold guifg=#555555 guibg=#303030
+
+    call airline#parts#define_raw('file', '%t%m')
+    call airline#parts#define_raw('filepath', '%#airline_filepath#%{AirlineFilepath()}')
+    autocmd VimEnter *
+      \ let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
+
     function! AirlineFilepath() " {{{
       let l:status = ""
 
@@ -856,11 +862,6 @@ endfunction " }}}
 
       return l:status
     endfunction " }}}
-
-    call airline#parts#define_raw('file', '%t%m')
-    call airline#parts#define_raw('filepath', '%#airline_filepath#%{AirlineFilepath()}')
-    autocmd VimEnter *
-      \ let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
 
     " show file format and encoding separated by a colon
     let g:airline_section_y = "%{strlen(&fenc)>0?&fenc.':':''}%{strlen(&ff)>0?&ff:''}"
