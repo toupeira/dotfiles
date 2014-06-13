@@ -830,15 +830,11 @@ endfunction " }}}
     call airline#parts#define_raw('file', '%t%m')
     call airline#parts#define_raw('filepath', '%#airline_filepath#[%<%{AirlineFilepath()}]')
     autocmd VimEnter *
-      \ let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
+      \ let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath']) |
+      \ let g:airline_symbols.readonly .= ' '
 
     function! AirlineFilepath() " {{{
       let l:status = ""
-
-      " if &readonly
-      "   let l:status .= g:airline_symbols.space
-      "   let l:status .= g:airline_symbols.space
-      " endif
 
       let l:file = expand('%')
       let l:dir = fnamemodify(getcwd(), ':t')
@@ -846,10 +842,14 @@ endfunction " }}}
 
       if l:path != '.'
         let l:status .= l:path
+
+        if l:path[0] != '/'
+          let l:status .= " @ "
+        endif
       endif
 
       if l:path[0] != '/'
-        let l:status .= " @ " . l:dir
+        let l:status .= l:dir
       endif
 
       return l:status
