@@ -187,7 +187,7 @@ function src {
   local src_dir=~/src
 
   if [ "$1" = "list" ]; then
-    find "$src_dir" -mindepth 1 -maxdepth 3 -type d -name archive -prune -o -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | sort
+    find "$src_dir" -mindepth 1 -maxdepth 3 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep -v "^(archive|upstream)/" | sort
     return
   elif [ "$1" = "each" ]; then
     shift
