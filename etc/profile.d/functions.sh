@@ -186,12 +186,12 @@ function dotfiles {
 function src {
   local src_dir=~/src
 
-  if [ -z "$1" ]; then
+  if [ "$1" = "list" ]; then
     find "$src_dir" -mindepth 2 -maxdepth 3 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|"
     return
   elif [ "$1" = "each" ]; then
     shift
-    for project in `src`; do
+    for project in `src list`; do
       echo -e "# \e[0;36m$project\e[0m" | sed -r "s|$HOME|~|"
       (cd "$src_dir/$project" || exit 1; $@)
 
@@ -203,17 +203,17 @@ function src {
     done
 
     return
-  elif [[ "$1" =~ ^(st|status)$ ]]; then
+  elif [[ "$1" =~ ^(|st|status)$ ]]; then
     echo
     local first=1
     local last=0
 
-    for project in `src`; do
-      dir="$src_dir/$dir"
+    for project in `src list`; do
+      dir="$src_dir/$project"
       [ -d "$dir/.git" ] || continue
 
       local changes=`cd "$dir"; git status -s | grep -c .`
-      local unmerged=`cd "$dir"; git status | grep -v "^# On branch .*" | fgrep -vx "nothing to commit, working directory clean"`
+      local unmerged=`cd "$dir"; git status | egrep "Your branch is (behind|ahead)"`
 
       if [ $changes -gt 0 -o -n "$unmerged" ]; then
         local label="changes"
@@ -259,7 +259,7 @@ function src {
   fi
 
   if [ ! -e "$path" ]; then
-    local first_match=`src | fgrep -m1 "$project"`
+    local first_match=`src list | fgrep -m1 "$project"`
     if [ -n "$first_match" ]; then
       src "$first_match" "$@"
     else
@@ -299,5 +299,5 @@ if has selecta; then
     [ -n "$selection" ] && "$command" "$selection"
   }
 
-  alias ssrc='selecta_wrapper src src'
+  alias ssrc='selecta_wrapper src src list'
 fi

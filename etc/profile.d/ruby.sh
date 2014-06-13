@@ -17,7 +17,7 @@ if has rbenv; then
     fi
   }
 
-  export RBENV_PS1='\[\e[1;35m\]$(__rbenv_ps1)\[\e[0m\]'
+  export RBENV_PS1='\[\e[1;33m\]$(__rbenv_ps1)\[\e[0m\]'
   export PS1=$SUDO_PS1$RBENV_PS1$GIT_PS1
 fi
 
