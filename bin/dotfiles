@@ -323,11 +323,11 @@ function run {
 
           if [ -e "$path/.skip" ]; then
             continue
-          elif [ ! -d "$path" -o -L "$path" -o -e "$path/.install" -o -e "$path/.git" ]; then
+          elif [ ! -d "$path" -o -L "$path" -o -e "$path/.install" ]; then
             run install "$path"
           fi
 
-          if [ -d "$path" -a ! -L "$path" -a ! -L "`origin "$path"`" ]; then
+          if [ -d "$path" -a ! -e "$path/.git" -a ! -L "$path" -a ! -L "`origin "$path"`" ]; then
             install_paths "$path"/*
           fi
         done
