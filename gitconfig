@@ -59,7 +59,7 @@
 
 	st = status
 	stat = status
-	ls = branch -av
+	ls = branch -avv
 
 	co = checkout
 	sw = checkout
