@@ -241,3 +241,6 @@
 [submodule "rbenv/rbenv"]
 	path = rbenv/rbenv
 	url = https://github.com/sstephenson/rbenv.git
+[submodule "selecta"]
+	path = selecta
+	url = https://github.com/garybernhardt/selecta.git
