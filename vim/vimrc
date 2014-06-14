@@ -836,26 +836,30 @@ endfunction " }}}
     function! AirlineFilepath() " {{{
       let l:status = ""
 
-      let l:file = expand('%')
-      let l:path = fnamemodify(l:file, ':p:.:h')
-      let l:dir = getcwd()
+      let l:file = fnamemodify(expand('%'), ':p')
+      let l:path = fnamemodify(l:file, ':.:h')
+      let l:cwd = getcwd()
 
-      if l:dir == $HOME
-        let l:dir = ''
-      else
-        let l:dir = fnamemodify(l:dir, ':t')
+      if l:cwd == $HOME && l:file[0:len($HOME) - 1] == $HOME
+        if l:path == '.'
+          return "~"
+        else
+          return "~/" . l:path
+        endif
       endif
+
+      let l:cwd = fnamemodify(l:cwd, ':t')
 
       if l:path != '.'
         let l:status .= l:path
 
-        if l:path[0] != '/' && !empty(l:dir)
+        if l:path[0] != '/' && !empty(l:cwd)
           let l:status .= " @ "
         endif
       endif
 
       if l:path[0] != '/'
-        let l:status .= l:dir
+        let l:status .= l:cwd
       endif
 
       return l:status

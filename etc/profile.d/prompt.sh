@@ -78,7 +78,7 @@ if [[ "$TERM" =~ ^(rxvt|xterm-256color|screen-) ]]; then
   fi
 
   if [ -n "$STY" -o -n "$TMUX" ]; then
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]0;'$_hostname'$_pwd\007\033k$_pwd\033\\"'
+    export PROMPT_COMMAND='[ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD";_pwd=${PWD/$HOME/\~}; echo -ne "\033]0;'$_hostname'$_pwd\007\033k$_pwd\033\\"'
   else
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;'$_hostname'$_pwd\007\033]2;'$_hostname'$_pwd\007"'
   # else
