@@ -244,3 +244,6 @@
 [submodule "selecta"]
 	path = selecta
 	url = https://github.com/garybernhardt/selecta.git
+[submodule "rbenv/plugins/rbenv-default-gems"]
+	path = rbenv/plugins/rbenv-default-gems
+	url = https://github.com/sstephenson/rbenv-default-gems.git
