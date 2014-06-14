@@ -188,12 +188,14 @@ function src {
 
   if [ "$1" = "list" ]; then
     if [ "$2" = "-a" ]; then
-      filter="egrep -v '^(archive|upstream)/'"
+      local filter="."
+      local options=
     else
-      filter="cat"
+      local filter="^(archive|upstream)/"
+      local options="-v"
     fi
 
-    find "$src_dir" -mindepth 1 -maxdepth 3 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | $filter | sort
+    find "$src_dir" -mindepth 1 -maxdepth 3 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep $options "$filter" | sort
     return
   elif [ "$1" = "each" ]; then
     shift
