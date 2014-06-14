@@ -232,3 +232,12 @@
 [submodule "vim/bundle/tmux-navigator"]
 	path = vim/bundle/tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator.git
+[submodule "rbenv/plugins/rbenv-bundler"]
+	path = rbenv/plugins/rbenv-bundler
+	url = https://github.com/carsomyr/rbenv-bundler.git
+[submodule "rbenv/plugins/ruby-build"]
+	path = rbenv/plugins/ruby-build
+	url = https://github.com/sstephenson/ruby-build.git
+[submodule "rbenv/rbenv"]
+	path = rbenv/rbenv
+	url = https://github.com/sstephenson/rbenv.git

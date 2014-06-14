@@ -187,7 +187,13 @@ function src {
   local src_dir=~/src
 
   if [ "$1" = "list" ]; then
-    find "$src_dir" -mindepth 1 -maxdepth 3 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep -v "^(archive|upstream)/" | sort
+    if [ "$2" = "-a" ]; then
+      filter="egrep -v '^(archive|upstream)/'"
+    else
+      filter="cat"
+    fi
+
+    find "$src_dir" -mindepth 1 -maxdepth 3 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | $filter | sort
     return
   elif [ "$1" = "each" ]; then
     shift
@@ -259,7 +265,7 @@ function src {
   fi
 
   if [ ! -e "$path" ]; then
-    local first_match=`src list | fgrep -m1 "$project"`
+    local first_match=`src list -a | fgrep -m1 "$project"`
     if [ -n "$first_match" ]; then
       src "$first_match" "$@"
     else
