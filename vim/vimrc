@@ -837,13 +837,19 @@ endfunction " }}}
       let l:status = ""
 
       let l:file = expand('%')
-      let l:dir = fnamemodify(getcwd(), ':t')
       let l:path = fnamemodify(l:file, ':p:.:h')
+      let l:dir = getcwd()
+
+      if l:dir == $HOME
+        let l:dir = ''
+      else
+        let l:dir = fnamemodify(l:dir, ':t')
+      endif
 
       if l:path != '.'
         let l:status .= l:path
 
-        if l:path[0] != '/'
+        if l:path[0] != '/' && !empty(l:dir)
           let l:status .= " @ "
         endif
       endif
