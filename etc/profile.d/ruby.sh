@@ -2,7 +2,8 @@
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # load rbenv
-if has rbenv; then
+if [ -d ~/.rbenv ]; then
+  export PATH="~/.rbenv/bin:$PATH"
   eval "$(rbenv init - --no-rehash)"
 
   # show ruby version in prompt
