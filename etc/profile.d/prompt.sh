@@ -30,7 +30,7 @@ _bwhite='\[\e[1;37m\]'       # White
 
 PS1_USER="\u"
 PS1_HOST=""
-[ -n "$SSH_CONNECTION" ] && PS1_HOST="@\h"
+[ -n "$SSH_CONNECTION" -o "$TERM" = "linux" ] && PS1_HOST="@\h"
 [ "$UID" = "0" ] && PS1_USER="$_bred$PS1_USER"
 
 export PS1="$_reset$_bblack$PS1_USER$_byellow$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_reset \[\$(_ps1_exit_code)\]"

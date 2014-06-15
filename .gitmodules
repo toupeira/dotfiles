@@ -247,3 +247,6 @@
 [submodule "rbenv/plugins/rbenv-default-gems"]
 	path = rbenv/plugins/rbenv-default-gems
 	url = https://github.com/sstephenson/rbenv-default-gems.git
+[submodule "vim/bundle/slim"]
+	path = vim/bundle/slim
+	url = https://github.com/slim-template/vim-slim.git
