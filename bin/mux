@@ -1,0 +1,3 @@
+#!/bin/sh
+export TMUX=
+exec roxterm --maximize -e ~/.tmuxifier/bin/tmuxifier s "$@" &>/dev/null &
