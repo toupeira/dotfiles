@@ -250,3 +250,6 @@
 [submodule "vim/bundle/slim"]
 	path = vim/bundle/slim
 	url = https://github.com/slim-template/vim-slim.git
+[submodule "tmuxifier/tmuxifier"]
+	path = tmuxifier/tmuxifier
+	url = https://github.com/jimeh/tmuxifier.git
