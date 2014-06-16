@@ -229,27 +229,36 @@
 [submodule "vim/bundle/ctrlsf"]
 	path = vim/bundle/ctrlsf
 	url = https://github.com/dyng/ctrlsf.vim.git
+  ignore = dirty
 [submodule "vim/bundle/tmux-navigator"]
 	path = vim/bundle/tmux-navigator
 	url = https://github.com/christoomey/vim-tmux-navigator.git
+  ignore = dirty
 [submodule "rbenv/plugins/rbenv-bundler"]
 	path = rbenv/plugins/rbenv-bundler
 	url = https://github.com/carsomyr/rbenv-bundler.git
+  ignore = dirty
 [submodule "rbenv/plugins/ruby-build"]
 	path = rbenv/plugins/ruby-build
 	url = https://github.com/sstephenson/ruby-build.git
+  ignore = dirty
 [submodule "rbenv/rbenv"]
 	path = rbenv/rbenv
 	url = https://github.com/sstephenson/rbenv.git
+  ignore = dirty
 [submodule "selecta"]
 	path = selecta
 	url = https://github.com/garybernhardt/selecta.git
+  ignore = dirty
 [submodule "rbenv/plugins/rbenv-default-gems"]
 	path = rbenv/plugins/rbenv-default-gems
 	url = https://github.com/sstephenson/rbenv-default-gems.git
+  ignore = dirty
 [submodule "vim/bundle/slim"]
 	path = vim/bundle/slim
 	url = https://github.com/slim-template/vim-slim.git
+  ignore = dirty
 [submodule "tmuxifier/tmuxifier"]
 	path = tmuxifier/tmuxifier
 	url = https://github.com/jimeh/tmuxifier.git
+  ignore = dirty
