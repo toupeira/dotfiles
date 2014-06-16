@@ -4,3 +4,4 @@ urxvt/urxvtd-*
 vim/tmp
 rbenv/shims
 rbenv/versions
+tmuxifier/layouts
