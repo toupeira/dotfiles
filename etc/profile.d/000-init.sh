@@ -40,7 +40,7 @@ if [ -z "$SSH_AUTH_SOCK" -a "$UID" != "0" ]; then
   fi
 fi
 
-if [ -z "$TMUX" -a -n "$SSH_CONNECTION" -a -f ~/.tmux.conf ] && has tmux; then
+if [ -z "$TMUX" -a -n "$SSH_CONNECTION" -a -x ~/bin/tmux-reattach ]; then
   # Load tmux for SSH sessions if it's set up
 
   # Maintain link to SSH agent for tmux
@@ -50,15 +50,15 @@ if [ -z "$TMUX" -a -n "$SSH_CONNECTION" -a -f ~/.tmux.conf ] && has tmux; then
   export SSH_AUTH_SOCK="$SSH_AGENT_TMUX"
 
   # Try to attach to a detached session, start a new one otherwise
-  exec tmux-reattach
+  exec ~/bin/tmux-reattach
 elif ! readlink -f "$SSH_AGENT_TMUX" &>/dev/null; then
   rm -f "$SSH_AGENT_TMUX"
 fi
 
 if [ -n "$TMUX" -a -n "$SSH_CONNECTION" ]; then
   # Show hostname in statusline
-  tmux set-option status-left "#[fg=colour231,bg=colour240,bold] #H "
-  tmux set-option status-right ""
+  tmux set-option status-left "#[fg=colour231,bg=colour240,bold] #H " >/dev/null
+  tmux set-option status-right "" >/dev/null
 fi
 
 unset SSH_AGENT_TMUX
