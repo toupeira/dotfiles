@@ -14,6 +14,9 @@ function has {
 shopt -s extglob
 shopt -s globstar
 
+# Disable flow control (Ctrl-S/Q)
+stty -ixon
+
 # Only continue on Linux
 [ "`uname -s`" = "Linux" ] || return
 
@@ -38,7 +41,7 @@ if [ -z "$SSH_AUTH_SOCK" -a "$UID" != "0" ]; then
 fi
 
 if [ -z "$TMUX" -a -n "$SSH_CONNECTION" -a -f ~/.tmux.conf ] && has tmux; then
-  # Load screen for SSH sessions if tmux is set up
+  # Load tmux for SSH sessions if it's set up
 
   # Maintain link to SSH agent for tmux
   if [ -S "$SSH_AUTH_SOCK" ] && [ ! -h "$SSH_AUTH_SOCK" ]; then

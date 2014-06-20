@@ -10,6 +10,11 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
+  " only enable tmux-navigator in tmux sessions
+  if empty($TMUX)
+    call add(g:pathogen_disabled, 'tmux-navigator')
+  endif
+
   " neocomplete requires Vim 7.3 and Lua
   if v:version < 703 || !has('lua') || (v:version == 703 && !has('patch885'))
     call add(g:pathogen_disabled, 'neocomplete')
@@ -197,12 +202,11 @@
 " Filetype Settings
 " {{{
 
-  autocmd FileType make setlocal noexpandtab
+  autocmd FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3
+  autocmd FileType python,apache,sshconfig setlocal ts=4 sts=4 sw=4
   autocmd FileType css,scss setlocal iskeyword+=%
-  autocmd FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3 expandtab
-  autocmd FileType python,lua,sshconfig setlocal ts=4 sts=4 sw=4 expandtab
-  autocmd FileType apache setlocal ts=4 sts=4 sw=4
-  autocmd FileType mail setlocal ts=2 sts=2 sw=2 expandtab tw=80 lbr
+  autocmd FileType make setlocal noexpandtab
+  autocmd FileType mail setlocal tw=80 lbr
   autocmd FileType tex,plaintex,context setlocal lbr
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd FileType crontab setlocal nobackup nowritebackup

@@ -2,10 +2,12 @@
 
 if [ -n "$CMD" ]; then
   vim="$CMD"
-elif [ -n "$DISPLAY" -a -z "$SSH_CONNECTION" ] && which gvim &>/dev/null; then
-  vim="gvim"
-elif [ "`uname -s`" = "Darwin" ] && which mvim &>/dev/null; then
+elif [ -n "$TERM" -a "$TERM" != 'dumb' ] || [ -n "$SSH_CONNECTION" ]; then
+  vim="vim"
+elif which mvim &>/dev/null; then
   vim="mvim"
+elif which gvim &>/dev/null; then
+  vim="gvim"
 else
   vim="vim"
 fi
