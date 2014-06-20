@@ -60,4 +60,9 @@ elif ! readlink -f "$SSH_AGENT_TMUX" &>/dev/null; then
   rm -f "$SSH_AGENT_TMUX"
 fi
 
+if [ -n "$TMUX" -a -n "$SSH_CONNECTION" ]; then
+  # Show hostname in statusline
+  tmux set-option status-left "#[fg=colour240]${TMUX_POWERLINE_SYMBOL_LEFT_FULL}#[fg=colour231,bg=colour240,bold] #H "
+fi
+
 unset SSH_AGENT_TMUX
