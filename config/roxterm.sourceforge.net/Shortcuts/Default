@@ -1,6 +1,6 @@
 
 [roxterm shortcuts scheme]
-File/New Window=
+File/New Window=<Shift><Control>n
 File/New Tab=<Shift><Control>t
 File/Close Window=<Shift><Control>q
 File/Close Tab=<Shift><Control>w
@@ -17,7 +17,7 @@ View/Scroll Down One Line=<Shift><Control>Down
 Help/Help=
 Edit/Copy & Paste=<Shift><Control>y
 Search/Find...=<Shift><Control>f
-Search/Find Next=<Shift><Control>n
-Search/Find Previous=<Shift><Control>p
+Search/Find Next=<Shift><Control>j
+Search/Find Previous=<Shift><Control>k
 File/New Window With Profile/Default=
 File/New Tab With Profile/Default=
