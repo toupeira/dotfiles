@@ -100,4 +100,5 @@ if has sudo; then
   alias fdisk='sudo fdisk'
   alias parted='sudo parted'
   alias lvm='sudo lvm'
+  alias docker='sudo docker'
 fi

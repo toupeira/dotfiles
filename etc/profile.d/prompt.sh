@@ -74,7 +74,7 @@ if [[ "$TERM" =~ ^(rxvt|xterm|screen) ]]; then
   if [ -n "$SSH_CONNECTION" ]; then
     _hostname="$USER@$HOSTNAME: "
   else
-    _hostname="$HOSTNAME: "
+    unset _hostname
   fi
 
   if [[ "$TERM" =~ ^screen ]]; then
