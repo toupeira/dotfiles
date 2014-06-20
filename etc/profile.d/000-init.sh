@@ -62,7 +62,8 @@ fi
 
 if [ -n "$TMUX" -a -n "$SSH_CONNECTION" ]; then
   # Show hostname in statusline
-  tmux set-option status-left "#[fg=colour240]${TMUX_POWERLINE_SYMBOL_LEFT_FULL}#[fg=colour231,bg=colour240,bold] #H "
+  tmux set-option status-left "#[fg=colour231,bg=colour240,bold] #H "
+  tmux set-option status-right ""
 fi
 
 unset SSH_AGENT_TMUX
