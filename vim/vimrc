@@ -143,11 +143,11 @@
     let &t_IE = "\007"
   endif
 
-  let s:titlestring_default = "%t%m%r\ \[%{substitute(expand('%:p:h'),\ $HOME,\ '~',\ 'g')}\]"
+  let s:titlestring_default = hostname() . ": %t%m%r\ \[%{AirlineFilepath()}\]"
 
   " show user and host in SSH sessions
   if exists('$SSH_CONNECTION')
-    let s:titlestring_default = expand('$USER') . '@' . hostname() . ':' . s:titlestring_default
+    let s:titlestring_default = expand('$USER') . '@' . s:titlestring_default
   endif
 
   if exists('$STY') || exists('$TMUX')

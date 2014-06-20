@@ -29,6 +29,7 @@ alias psgrep='pgrep -fla'
 alias smem='smem -kt'
 alias watch='watch -cd -n 1'
 has 7z && ! has rar && alias rar='7z'
+has rubocop && alias rubocop='rubocop -D'
 
 alias @='start'
 alias dt='dotfiles'

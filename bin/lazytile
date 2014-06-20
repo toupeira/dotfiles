@@ -292,7 +292,7 @@ class Lazytile
 
   # Return the ID of the active window
   def self.active_window
-    output("xprop -root _NET_ACTIVE_WINDOW").sub(/.*(0x\w+),.*/, '\1')
+    output("xprop -root _NET_ACTIVE_WINDOW")[/\b(0x\w+)/, 1]
   end
 
   # Return the window properties for the given ID

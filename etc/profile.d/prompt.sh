@@ -69,20 +69,18 @@ if type __git_ps1 &>/dev/null; then
   export PS1=$PS1$GIT_PS1
 fi
 
-# Set window titles when displaying prompt
-if [[ "$TERM" =~ ^(rxvt|xterm-256color|screen-) ]]; then
+# Show user, hostname and pwd in window title
+if [[ "$TERM" =~ ^(rxvt|xterm|screen) ]]; then
   if [ -n "$SSH_CONNECTION" ]; then
-    _hostname="$USER@$HOSTNAME:"
+    _hostname="$USER@$HOSTNAME: "
   else
-    unset _hostname
+    _hostname="$HOSTNAME: "
   fi
 
-  if [ -n "$STY" -o -n "$TMUX" ]; then
+  if [[ "$TERM" =~ ^screen ]]; then
     export PROMPT_COMMAND='[ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD";_pwd=${PWD/$HOME/\~}; echo -ne "\033]0;'$_hostname'$_pwd\007\033k$_pwd\033\\"'
   else
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;'$_hostname'$_pwd\007\033]2;'$_hostname'$_pwd\007"'
-  # else
-  #   export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;$_pwd\007\033]2;$_pwd\007"'
   fi
 
   unset _hostname
