@@ -92,6 +92,7 @@ function usage {
   echo
   echo "Other arguments:"
   echo "  COMMAND [ARGS]...     Excecute a Git command inside the dotfiles repository"
+  echo "  git COMMAND [ARGS]..."
   echo
   exit 255
 }
@@ -449,16 +450,20 @@ function run {
       local changes=`git status -s --ignore-submodules`
       [ -n "$changes" ] && git stash save | fgrep -q "No local changes to save" && unset changes
 
+      local current=`git rev-parse HEAD`
+
       status "{{Merging remote changes...}}"
       load_key
       git pull -v --progress --rebase "$@"
 
       [ -n "$changes" ] && git stash pop -q
 
-      status "{{Checking out submodules...}}"
-      run submodule sync -q
-      run submodule update --init -q
-      run build_all
+      if [ "`git rev-parse HEAD`" != "$current" ]; then
+        status "{{Checking out submodules...}}"
+        run submodule sync -q
+        run submodule update --init -q
+        run build_all
+      fi
       ;;
     push)
       load_key
@@ -476,6 +481,11 @@ function run {
       ;;
     build_all)
       run build "$DOTFILES/vim/bundle/vimproc"
+      ;;
+    git)
+      command="$1"
+      shift
+      git ignore-errors $command "$@"
       ;;
     *)
       git ignore-errors $command "$@"
