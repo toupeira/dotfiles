@@ -9,8 +9,6 @@ export LC_MESSAGES="en_GB.UTF-8"
 export LC_NUMERIC="en_GB.UTF-8"
 export LC_CTYPE="en_GB.UTF-8"
 
-export RAILS_ENV=development
-
 if [ -d ~/.profile.d ]; then
   for i in ~/.profile.d/*.sh; do
     if [ -r $i ]; then
