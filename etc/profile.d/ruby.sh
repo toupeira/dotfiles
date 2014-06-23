@@ -35,4 +35,3 @@ function _gem_exec {
 }
 
 alias gem="_gem_exec gem"
-alias sugem="sudo gem"
