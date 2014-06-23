@@ -230,8 +230,10 @@ function src {
           local label="changes"
           [ $changes -eq 1 ] && label="change"
           label="$changes\e[1;37m $label"
+        elif echo "$unmerged" | grep -q ahead; then
+          label="Unpublished commits"
         else
-          label="Unmerged changes"
+          label="Unmerged commits"
         fi
 
         [ -z "$first" ] && echo
