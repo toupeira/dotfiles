@@ -48,7 +48,7 @@ alias vi='vim'
 alias gvi='gvim'
 if has sensible-vim; then
   alias vim='CMD=vim sensible-vim'
-  alias gvim='sensible-vim'
+  alias gvim='CMD=gvim sensible-vim'
 fi
 
 # sudo aliases
