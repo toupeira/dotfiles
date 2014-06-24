@@ -195,7 +195,7 @@ function src {
       local options="-v"
     fi
 
-    find -L "$src_dir" -mindepth 1 -maxdepth 3 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep $options "$filter" | sort
+    find -L "$src_dir" -mindepth 1 -maxdepth 4 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep $options "$filter" | sort
     return
   elif [ "$1" = "each" ]; then
     shift
@@ -211,12 +211,14 @@ function src {
     done
 
     return
-  elif [[ "$1" =~ ^(|st|status)$ ]]; then
-    echo
+  elif [[ "$1" =~ ^(|-a|st|status)$ ]]; then
+    [ "$1" != "-a" ] && shift
+
     local first=1
     local last=0
 
-    for project in `src list`; do
+    echo
+    for project in `src list "$@"`; do
       dir="$src_dir/$project"
       [ -d "$dir/.git" ] || continue
 
