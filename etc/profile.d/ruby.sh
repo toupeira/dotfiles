@@ -36,3 +36,7 @@ function _gem_exec {
 
 alias gem="_gem_exec gem"
 alias sugem="command sudo gem"
+
+# gem aliases
+has rubocop && alias rubocop='rubocop -D'
+has foreman && alias fore='foreman start'

@@ -651,15 +651,6 @@ endfunction " }}}
   autocmd User Ragtag silent! iunmap <buffer> <C-v>&
   " }}}
 
-  " indentline {{{
-  let g:indentLine_char = '│'
-  let g:indentLine_color_term = 235
-  let g:indentLine_color_gui = '#333333'
-  let g:indentLine_noConcealCursor = 1
-
-  let g:indentLine_fileTypeExclude = [ 'help' ]
-  " }}}
-
   " rooter {{{
   let g:rooter_manual_only = 1
   let g:rooter_change_directory_for_non_project_files = 0
@@ -754,6 +745,8 @@ endfunction " }}}
   let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
   let g:syntastic_ruby_rubocop_exec = '/usr/local/bin/rubocop'
   let g:syntastic_ruby_rubocop_args = '-D'
+  let g:syntastic_sass_sass_exec = '/usr/local/bin/sass'
+  let g:syntastic_scss_sass_exec = '/usr/local/bin/sass'
   let g:syntastic_ruby_slimrb_exec = '/usr/local/bin/slimrb'
 
   if !&diff

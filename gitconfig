@@ -84,6 +84,8 @@
 	ff = merge --ff-only HEAD@{u}
 	solve = mergetool
 	rup = remote update
+  continue = rebase --continue
+  skip = rebase --skip
 
 	pu   = -c push.default=simple   push -v --progress
 	pua  = -c push.default=matching push -v --progress
