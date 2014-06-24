@@ -48,6 +48,8 @@ function _spring_exec {
 
   if [ -x bin/spring -a -x bin/"$command" ]; then
     bin/"$command" "$@"
+  elif [ -x script/"$command" ]; then
+    script/"$command" "$@"
   else
     command "$command" "$@"
   fi
