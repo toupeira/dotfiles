@@ -262,3 +262,6 @@
 	path = vim/bundle/ruby-refactoring
 	url = https://github.com/ecomba/vim-ruby-refactoring.git
   ignore = dirty
+[submodule "rbenv/plugins/rbenv-binstubs"]
+	path = rbenv/plugins/rbenv-binstubs
+	url = https://github.com/ianheggie/rbenv-binstubs.git

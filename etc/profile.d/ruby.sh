@@ -34,9 +34,26 @@ function _gem_exec {
   $command "$@"
 }
 
-alias gem="_gem_exec gem"
-alias sugem="command sudo gem"
+alias gem='_gem_exec gem'
+alias sugem='command sudo gem'
 
 # gem aliases
 has rubocop && alias rubocop='rubocop -D'
 has foreman && alias fore='foreman start'
+
+# make sure rails commands are run with spring
+function _spring_exec {
+  local command="$1"
+  shift
+
+  if [ -x bin/spring -a -x bin/"$command" ]; then
+    bin/"$command" "$@"
+  else
+    command "$command" "$@"
+  fi
+}
+
+alias  rails='_spring_exec rails'
+alias   rake='_spring_exec rake'
+alias bundle='_spring_exec bundle'
+alias spring='_spring_exec spring'

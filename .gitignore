@@ -2,6 +2,7 @@
 tmux/.ssh-agent
 urxvt/urxvtd-*
 vim/tmp
+rbenv/bundles
 rbenv/shims
 rbenv/versions
 tmuxifier/layouts
