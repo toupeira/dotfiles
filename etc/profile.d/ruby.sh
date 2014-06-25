@@ -39,7 +39,6 @@ alias sugem='command sudo gem'
 
 # gem aliases
 has rubocop && alias rubocop='rubocop -D'
-has foreman && alias fore='foreman start'
 
 # make sure rails commands are run with spring
 function _spring_exec {
