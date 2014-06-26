@@ -28,6 +28,11 @@ if has dotfiles; then
   __git_edit_complete dt _git       `dotfiles --path`
 fi
 
+if [ -r /usr/share/bash-completion/completions/ssh ]; then
+  . /usr/share/bash-completion/completions/ssh
+  complete -F _ssh ping host telnet nc
+fi
+
 # Debian completions
 function _packages_available {
   COMPREPLY=( $(compgen -W "`apt-cache pkgnames ${COMP_WORDS[COMP_CWORD]} 2>/dev/null`") )

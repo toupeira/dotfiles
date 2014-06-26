@@ -86,7 +86,7 @@
 	rup = remote update
   continue = rebase --continue
   skip = rebase --skip
-  delbranch = "!f() { git branch -d $1 && git pu github :$1 }; f"
+  delbranch = "!f() { git branch -d $1 && git pu github :$1; }; f"
 
 	pu   = -c push.default=simple   push -v --progress
 	pua  = -c push.default=matching push -v --progress
