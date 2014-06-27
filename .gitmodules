@@ -265,3 +265,4 @@
 [submodule "rbenv/plugins/rbenv-binstubs"]
 	path = rbenv/plugins/rbenv-binstubs
 	url = https://github.com/ianheggie/rbenv-binstubs.git
+  ignore = dirty
