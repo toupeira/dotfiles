@@ -60,10 +60,14 @@
   set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
   set dictionary=/usr/share/dict/words
 
-  " create temporary directory in ~/.vim/tmp
+  " create temporary directories in ~/.vim/tmp
   let s:tmpdir = expand("~") . "/.vim/tmp"
   if !isdirectory(s:tmpdir)
     call mkdir(s:tmpdir, 'p')
+  endif
+
+  if !isdirectory(s:tmpdir . '/swap')
+    call mkdir(s:tmpdir . '/swap', 'p')
   endif
 
   " enable persistent undo
