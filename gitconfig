@@ -96,7 +96,8 @@
 	sts = stash save
 	stp = stash pop
 	std = stash drop
-	stl = stash list
+  stw = "!git -c color.ui=always stash show | cat"
+  stl = "!git -c color.ui=always stash list | cat"
 
 	# shell wrappers
 	sh = "!f() { \"$@\"; }; f"
