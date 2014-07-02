@@ -95,7 +95,7 @@
 
 	sts = stash save
 	stp = stash pop
-	std = stash drop
+	std = "!git stash drop && git stl"
   stw = "!git -c color.ui=always stash show | cat"
   stl = "!git -c color.ui=always stash list | cat"
 
