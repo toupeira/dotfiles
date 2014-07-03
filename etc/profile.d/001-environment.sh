@@ -26,3 +26,4 @@ export LESS="-iRM"
 export GREP_OPTIONS="-i --color=auto --exclude=.svn --exclude=.git --exclude=.*.swp"
 export IRB_HISTORY_SIZE=3000
 export RI="--format ansi --no-pager"
+export PGDATABASE="postgres"
