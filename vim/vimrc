@@ -615,7 +615,7 @@ endfunction " }}}
   " }}}
 
   " search-pulse {{{
-  let g:vim_search_pulse_duration = 100
+  let g:vim_search_pulse_duration = 150
   " }}}
 
   " jedi {{{
