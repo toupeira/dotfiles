@@ -33,6 +33,16 @@ if [ -r /usr/share/bash-completion/completions/ssh ]; then
   complete -F _ssh ping host telnet nc
 fi
 
+if [ -r /usr/share/bash-completion/completions/systemctl ]; then
+  . /usr/share/bash-completion/completions/systemctl
+  complete -F _systemctl sctl
+fi
+
+if [ -r /usr/share/bash-completion/completions/journalctl ]; then
+  . /usr/share/bash-completion/completions/journalctl
+  complete -F _journalctl jctl
+fi
+
 # Debian completions
 function _packages_available {
   COMPREPLY=( $(compgen -W "`apt-cache pkgnames ${COMP_WORDS[COMP_CWORD]} 2>/dev/null`") )

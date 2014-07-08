@@ -313,3 +313,14 @@ if has selecta; then
 
   alias ssrc='selecta_wrapper src src list'
 fi
+
+# Sudo wrapper for systemctl
+function systemctl {
+  local command="systemctl"
+
+  if [[ "$1" =~ (start|stop|reload|enable|disable) ]]; then
+    command="sudo systemctl"
+  fi
+
+  command $command "$@"
+}

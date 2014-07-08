@@ -262,3 +262,9 @@
 	path = rbenv/plugins/rbenv-binstubs
 	url = https://github.com/ianheggie/rbenv-binstubs.git
   ignore = dirty
+[submodule "vim/bundle/cursorline-current-window"]
+	path = vim/bundle/cursorline-current-window
+	url = https://github.com/vim-scripts/CursorLineCurrentWindow.git
+[submodule "vim/bundle/search-pulse"]
+	path = vim/bundle/search-pulse
+	url = https://github.com/inside/vim-search-pulse.git

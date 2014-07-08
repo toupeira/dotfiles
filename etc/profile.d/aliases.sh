@@ -83,7 +83,8 @@ if has sudo; then
   alias invoke-rc.d='sudo invoke-rc.d'
 
   # system tools
-  alias systemctl='sudo systemctl'
+  alias sctl='systemctl'
+  alias jctl='journalctl'
   alias modprobe='sudo modprobe'
   alias rmmod='sudo rmmod'
   alias iptables='sudo iptables'
@@ -92,7 +93,6 @@ if has sudo; then
   alias ethtool='sudo ethtool'
   alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+|:\w+"'
   alias jnettop='sudo jnettop'
-  alias ifconfig='sudo ifconfig'
   alias ifup='sudo ifup'
   alias ifdown='sudo ifdown'
   alias tcpkill='sudo tcpkill'

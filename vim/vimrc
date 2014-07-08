@@ -94,6 +94,7 @@
   set synmaxcol=1000 " disable syntax highlighting on long lines
   set lazyredraw
   set mouse=a
+  set cursorline
 
   " windows
   set splitbelow
@@ -611,6 +612,10 @@ endfunction " }}}
 
   " rails {{{
   hi! link rubyRailsARMethod Statement
+  " }}}
+
+  " search-pulse {{{
+  let g:vim_search_pulse_duration = 100
   " }}}
 
   " jedi {{{
