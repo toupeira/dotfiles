@@ -676,19 +676,16 @@ endfunction " }}}
   " }}}
 
   " cycle {{{
-  autocmd FileType *    call AddCycleGroup('global', [ 'return', 'break', 'continue' ])
-  autocmd FileType ruby call AddCycleGroup('global', [ 'return', 'break', 'continue', 'next', 'retry' ])
-  autocmd FileType sh   call AddCycleGroup('sh', [ 'if', 'elif', 'else', 'fi' ])
-  autocmd FileType sh   call AddCycleGroup('sh', [ 'do', 'then' ])
-  " }}}
-
-  " conque {{{
-  let g:ConqueTerm_ReadUnfocused = 1
-
-  command! Shell silent ConqueTermSplit bash --login
-  command! Rlog silent! ConqueTermSplit tail -f log/development.log
-  command! Irb silent ConqueTermSplit irb
-  command! Ipython silent ConqueTermSplit ipython
+  autocmd FileType *
+    \ call AddCycleGroup('global', [ 'return', 'break', 'continue' ])
+  autocmd FileType ruby
+    \ call AddCycleGroup('global', [ 'return', 'break', 'continue', 'next', 'retry' ])
+  autocmd FileType sh
+    \ call AddCycleGroup('sh', [ 'if', 'elif', 'else', 'fi' ])
+  autocmd FileType sh
+    \ call AddCycleGroup('sh', [ 'do', 'then' ])
+  autocmd FileType javascript,coffee 
+    \ call AddCycleGroup([ 'javascript', 'coffee' ], [ 'addClass', 'removeClass' ])
   " }}}
 
   " tabular {{{
