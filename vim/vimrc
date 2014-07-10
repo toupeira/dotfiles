@@ -318,7 +318,7 @@ endfunction " }}}
   noremap g# #
 
   " clone a paragraph
-  noremap cp yap}p
+  noremap yp yap}p
 
   " repeat command for each line in selection
   xnoremap . :normal .<CR>
