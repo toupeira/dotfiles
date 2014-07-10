@@ -301,8 +301,9 @@ endfunction " }}}
 " Keybindings
 " {{{
 
-  " disable Ex mode
-  noremap Q <nop>
+  " apply macros with Q (disables the default Ex mode shortcut)
+  nnoremap Q @q
+  vnoremap Q :norm @q<CR>
 
   " shortcut for desktop clipboard
   noremap + "+
@@ -315,6 +316,9 @@ endfunction " }}}
   noremap # g#
   noremap g* *
   noremap g# #
+
+  " clone a paragraph
+  noremap cp yap}p
 
   " repeat command for each line in selection
   xnoremap . :normal .<CR>
