@@ -317,8 +317,8 @@ endfunction " }}}
   noremap g* *
   noremap g# #
 
-  " clone a paragraph
-  noremap yp yap}p
+  " clone the selection
+  vnoremap Y y`]o<Esc>p
 
   " repeat command for each line in selection
   xnoremap . :normal .<CR>
@@ -340,7 +340,6 @@ endfunction " }}}
 
   " keep cursor position when yanking in visual mode
   xnoremap <silent><expr> y "ygv" . mode()
-  xnoremap <silent><expr> Y "Ygv" . mode()
 
   " reselect visual block after indent
   xnoremap <silent> > >gv
