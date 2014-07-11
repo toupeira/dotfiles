@@ -250,10 +250,6 @@
 	path = vim/bundle/slim
 	url = https://github.com/slim-template/vim-slim.git
   ignore = dirty
-[submodule "tmuxifier/tmuxifier"]
-	path = tmuxifier/tmuxifier
-	url = https://github.com/jimeh/tmuxifier.git
-  ignore = dirty
 [submodule "rbenv/plugins/rbenv-binstubs"]
 	path = rbenv/plugins/rbenv-binstubs
 	url = https://github.com/ianheggie/rbenv-binstubs.git

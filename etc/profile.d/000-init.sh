@@ -20,9 +20,6 @@ stty -ixon
 # Only continue on Linux
 [ "`uname -s`" = "Linux" ] || return
 
-# Set up tmux
-SSH_AGENT_TMUX=~/.tmux/.ssh-agent
-
 if [ -z "$SSH_AUTH_SOCK" -a "$UID" != "0" ]; then
   # Try to connect to a running SSH agent
   socket=`command ls -t /tmp/ssh-*/agent.[0-9]* 2>/dev/null | head -1`
@@ -39,6 +36,9 @@ if [ -z "$SSH_AUTH_SOCK" -a "$UID" != "0" ]; then
     read -t 0.4
   fi
 fi
+
+# Set up tmux
+SSH_AGENT_TMUX=~/.tmux/.ssh-agent
 
 if [ -z "$TMUX" -a -n "$SSH_CONNECTION" -a -x ~/bin/tmux-reattach ]; then
   # Load tmux for SSH sessions if it's set up

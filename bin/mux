@@ -1,3 +1,0 @@
-#!/bin/sh
-export TMUX=
-exec roxterm --geometry 113x58+1600+0 -e ~/.tmuxifier/bin/tmuxifier s "$@" &>/dev/null &
