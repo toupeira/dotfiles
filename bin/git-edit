@@ -188,7 +188,7 @@ function main {
       echo -e " $GREEN>$WHITE Running $CYAN'${command[@]}'$WHITE with $GREEN$matches$WHITE"
     fi
 
-    "${command[@]}" "$matches"
+    exec "${command[@]}" "$matches"
   else
     if [ -z "$force" -a "${command[0]}" != "sensible-editor" ]; then
       echo -n " $CYAN>>>$WHITE Run $CYAN'${command[@]}'$WHITE on $YELLOW$count$WHITE files?$RESET [Y/n] "
@@ -202,7 +202,7 @@ function main {
         "${command[@]}" "$match"
       done
     else
-      "${command[@]}" "${matches[@]}"
+      exec "${command[@]}" "${matches[@]}"
     fi
   fi
 }
