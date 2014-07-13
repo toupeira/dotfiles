@@ -153,22 +153,14 @@
     let &t_IE = "\007"
   endif
 
-  let s:titlestring_default = "%t%m%r\ \[%{AirlineFilepath()}\]"
+  let &titlestring = "%t%m%r\ \[%{AirlineFilepath()}\]"
 
   " show user and host in SSH sessions
   if exists('$SSH_CONNECTION')
-    let s:titlestring_default = expand('$USER') . '@' . hostname() . ': ' . s:titlestring_default
+    let &titlestring = expand('$USER') . '@' . hostname() . ': ' . &titlestring
   endif
 
-  if exists('$STY') || exists('$TMUX')
-    " only show filename in screen/tmux title
-    set titlestring=%t%m%r
-
-    " but show the full title in the terminal
-    let &iconstring = s:titlestring_default
-  else
-    let &titlestring = s:titlestring_default
-  endif
+  let &iconstring = &titlestring
 
 " }}}
 
