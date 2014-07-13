@@ -1,0 +1,33 @@
+#!/bin/bash
+
+if [ -z "$1" ] && grep -q ^guard: Procfile &>/dev/null; then
+  tmux split-window -v -p 40 'shore -v guard'
+  tmux last-pane
+  exec shore guard
+fi
+
+unset title options
+
+if [ "$1" = "-v" ]; then
+  options="-v"
+  shift
+fi
+
+if [ -n "$1" ]; then
+  title="$1"
+else
+  title=$(basename "$PWD")
+fi
+
+title="shore[${title:-$1}]"
+if [[ "$TERM" =~ ^screen ]]; then
+  echo -ne "\033]0;$title\007\033k$title\033\\"
+else
+  echo -ne "\033]1;$title\007\033]2;$title\007"
+fi
+
+if [ -n "$1" ]; then
+  exec shoreman <(grep $options "^$1\w*:" Procfile)
+else
+  exec shoreman
+fi

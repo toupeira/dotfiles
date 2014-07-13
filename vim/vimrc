@@ -331,8 +331,8 @@ endfunction " }}}
   autocmd CmdWinEnter * nnoremap <buffer> <C-c> :
 
   " indent with Tab/Shift+Tab in visual mode
-  xmap <Tab> >
-  xmap <S-Tab> <
+  xnoremap <Tab> >
+  xnoremap <S-Tab> <
 
   " delete to black hole register with X
   noremap X "_d
@@ -615,10 +615,6 @@ endfunction " }}}
 
   " rails {{{
   hi! link rubyRailsARMethod Statement
-  " }}}
-
-  " search-pulse {{{
-  let g:vim_search_pulse_duration = 150
   " }}}
 
   " jedi {{{
@@ -998,7 +994,7 @@ endfunction " }}}
     endfunction
 
     " ,f - show files in the current working directory and project tree
-    nnoremap <silent><expr> ,f UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':%:.:h'), '-buffer-name=unite-files -start-insert')
+    nnoremap <silent><expr> ,f UniteWrapper('file' . (empty(expand('%')) ? '' : ':%:.:h') . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':%:.:h') . ' file/new' . (empty(expand('%')) ? '' : ':'.expand('%:.:h')), '-buffer-name=unite-files -start-insert')
 
     " ,<Space> - show Git changes and recently edited files
     nnoremap <expr> ,<Space> UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'file_mru:all', '-buffer-name=unite-changes -start-insert')
