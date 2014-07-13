@@ -262,3 +262,7 @@
 	path = vim/bundle/bracketed-paste
 	url = https://github.com/ConradIrwin/vim-bracketed-paste.git
   ignore = dirty
+[submodule "shoreman"]
+	path = shoreman
+	url = https://github.com/hecticjeff/shoreman.git
+  ignore = dirty

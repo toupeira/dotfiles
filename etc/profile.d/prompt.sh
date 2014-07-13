@@ -33,22 +33,7 @@ PS1_HOST=""
 [ -n "$SSH_CONNECTION" -o "$TERM" = "linux" ] && PS1_HOST="@\h"
 [ "$UID" = "0" ] && PS1_USER="$_bred$PS1_USER"
 
-export PS1="$_reset$_bblack$PS1_USER$_byellow$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_reset \[\$(_ps1_exit_code)\]"
-
-function _ps1_exit_code {
-  local status=$?
-  [ -n "$CYGWIN" -o "$CONQUE" ] && return
-
-  tput sc
-  if [ $status -gt 0 ]; then
-    tput cup $LINES $((COLUMNS-5-${#status}))
-    printf '  \033[1;30m[\033[1;31m%s\033[1;30m]\033[0m ' "$status"
-  else
-    tput cup $LINES $((COLUMNS-9))
-    printf '        '
-  fi
-  tput rc
-}
+export PS1="$_reset\[\$(_ps1_job_count)\]$_bblack$PS1_USER$_byellow$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_reset \[\$(_ps1_exit_status)\]"
 
 # Use Git prompt if available
 if type __git_ps1 &>/dev/null; then
@@ -69,6 +54,29 @@ if type __git_ps1 &>/dev/null; then
   export PS1=$PS1$GIT_PS1
 fi
 
+function _ps1_job_count {
+  local jobs=`jobs -p | wc -l`
+  let jobs-=1
+
+  if [ $jobs -gt 0 ]; then
+    printf '\e[1;35m[%d job%s]\e[0m ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
+  fi
+}
+
+function _ps1_exit_status {
+  local status=$?
+  [ -n "$CYGWIN" -o "$CONQUE" ] && return
+
+  if [ $status -gt 0 ]; then
+    tput sc
+    local column=$((COLUMNS-${#status}-3))
+
+    tput cup $LINES $column
+    printf '\e[1;30m[\e[1;31m%s\e[1;30m]\e[0m '  $status
+    tput rc
+  fi
+}
+
 # Show user, hostname and pwd in window title
 if [[ "$TERM" =~ ^(rxvt|xterm|screen) ]]; then
   if [ -n "$SSH_CONNECTION" ]; then
@@ -78,9 +86,9 @@ if [[ "$TERM" =~ ^(rxvt|xterm|screen) ]]; then
   fi
 
   if [[ "$TERM" =~ ^screen ]]; then
-    export PROMPT_COMMAND='[ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD";_pwd=${PWD/$HOME/\~}; echo -ne "\033]0;'$_hostname'$_pwd\007\033k$_pwd\033\\"'
+    export PROMPT_COMMAND='[ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD"; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
   else
-    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\033]1;'$_hostname'$_pwd\007\033]2;'$_hostname'$_pwd\007"'
+    export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
   fi
 
   unset _hostname
