@@ -461,24 +461,12 @@ endfunction " }}}
   endfunction
 
   " ,c - close current window, unless it's the only one
-  nnoremap <silent> ,c :call <SID>CloseWindow(0)<CR>
-  nnoremap <silent> ,C :call <SID>CloseWindow(1)<CR>
-  function! s:CloseWindow(resize) " {{{
+  nnoremap <silent> ,c :call <SID>CloseWindow()<CR>
+  function! s:CloseWindow() " {{{
     " get number of visible buffers
     let buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
 
     if winnr('$') > 1
-      if a:resize
-        let height = winheight(0) + 2 + (&showtabline ? 1 : 0) " add statusline and tabline height
-        let width = winwidth(0)
-
-        if height < &lines
-          let &lines = &lines / 6 * 5
-        elseif width < &columns
-          let &columns = &columns / 3 * 2
-        endif
-      endif
-
       if bufname('%') == '[Command Line]'
         close
       else
@@ -506,14 +494,8 @@ endfunction " }}}
   " ,s - split horizontally
   nnoremap <silent> ,s :split<CR>
 
-  " ,S - split horizontally, increase window height
-  nnoremap <silent> ,S :let &lines = &lines * 6 / 5<CR>:split<CR>
-
   " ,v - split vertically
   nnoremap <silent> ,v :vsplit<CR>
-
-  " ,V - split vertically, increase window width
-  nnoremap <silent> ,V :let &columns = &columns * 3 / 2<CR>:echomsg &columns<CR>:vsplit<CR>
 
   " ,w - write all files
   nnoremap <silent> ,w :write<CR>
@@ -619,6 +601,14 @@ endfunction " }}}
   let g:used_javascript_libs = 'jquery,requirejs'
   " }}}
 
+  " rspec-runner {{{
+  let g:rspec_command = 'Dispatch rspec {spec}'
+  nnoremap !F :call RunCurrentSpecFile()<CR>
+  nnoremap !N :call RunNearestSpec()<CR>
+  nnoremap !L :call RunLastSpec()<CR>
+  nnoremap !A :call RunAllSpecs()<CR>
+  " }}}
+
   " gitv {{{
   let g:Gitv_OpenHorizontal = 1
   let g:Gitv_WipeAllOnClose = 1
@@ -631,8 +621,8 @@ endfunction " }}}
   " }}}
 
   " unimpaired {{{
-  xmap <C-j> ]ezogv=gv
-  xmap <C-k> [ezogv=gv
+  xmap <silent> <C-j> ]egv=gv
+  xmap <silent> <C-k> [egv=gv
   " }}}
 
   " ctrlsf {{{

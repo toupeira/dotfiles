@@ -270,3 +270,7 @@
 	path = vim/bundle/dispatch
 	url = https://github.com/tpope/vim-dispatch.git
   ignore = dirty
+[submodule "vim/bundle/rspec-runner"]
+	path = vim/bundle/rspec-runner
+	url = https://github.com/thoughtbot/vim-rspec.git
+  ignore = dirty
