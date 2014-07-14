@@ -262,10 +262,6 @@
 	path = vim/bundle/bracketed-paste
 	url = https://github.com/ConradIrwin/vim-bracketed-paste.git
   ignore = dirty
-[submodule "shoreman"]
-	path = shoreman
-	url = https://github.com/hecticjeff/shoreman.git
-  ignore = dirty
 [submodule "vim/bundle/dispatch"]
 	path = vim/bundle/dispatch
 	url = https://github.com/tpope/vim-dispatch.git
@@ -274,3 +270,6 @@
 	path = vim/bundle/rspec-runner
 	url = https://github.com/thoughtbot/vim-rspec.git
   ignore = dirty
+[submodule "shoreman"]
+	path = shoreman
+	url = https://github.com/hecticjeff/shoreman.git
