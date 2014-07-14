@@ -20,7 +20,7 @@ Kernel.at_exit { puts }
 
 # use awesome_print for output
 if respond_to? :ai
-  Pry.print = ->(output, value) { Pry::Helpers::BaseHelpers.stagger_output("=> #{value.ai}", output) }
+  Pry.print = ->(output, value, _) { Pry::Helpers::BaseHelpers.stagger_output("=> #{value.ai}", output) }
 end
 
 # delete single-letter command aliases
