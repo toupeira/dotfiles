@@ -190,8 +190,8 @@
 	path = vim/bundle/ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
 	ignore = dirty
-[submodule "vim/bundle/rspec"]
-	path = vim/bundle/rspec
+[submodule "vim/bundle/rspec-syntax"]
+	path = vim/bundle/rspec-syntax
 	url = https://github.com/sheerun/rspec.vim.git
 	ignore = dirty
 [submodule "vim/bundle/bufkill"]
@@ -265,4 +265,8 @@
 [submodule "shoreman"]
 	path = shoreman
 	url = https://github.com/hecticjeff/shoreman.git
+  ignore = dirty
+[submodule "vim/bundle/dispatch"]
+	path = vim/bundle/dispatch
+	url = https://github.com/tpope/vim-dispatch.git
   ignore = dirty
