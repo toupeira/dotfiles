@@ -288,6 +288,14 @@ endfunction " }}}
   command! -nargs=+ Dict call system(g:open_command.' "http://dict.leo.org/?lp=ende&search=<args>"')
   command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=<args>"')
 
+  " shortcuts for shell commands in tmux panes
+  function! s:run_tmux(command)
+    call system('tmux split-window -v -p 30 "' . a:command . '"')
+  endfunction
+  command! -nargs=0 Pry call s:run_tmux('pry')
+  command! -nargs=0 Shell call s:run_tmux('bash --login')
+  command! -nargs=0 RConsole call s:run_tmux('rbenv exec rails console')
+
 " }}}
 
 " Keybindings
