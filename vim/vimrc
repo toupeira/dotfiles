@@ -610,11 +610,11 @@ endfunction " }}}
   " }}}
 
   " rspec-runner {{{
-  let g:rspec_command = 'Dispatch rspec {spec}'
-  nnoremap !F :call RunCurrentSpecFile()<CR>
-  nnoremap !N :call RunNearestSpec()<CR>
-  nnoremap !L :call RunLastSpec()<CR>
-  nnoremap !A :call RunAllSpecs()<CR>
+  let g:rspec_command = 'Dispatch rspec --backtrace {spec}'
+  nnoremap <silent> !F :call RunCurrentSpecFile()<CR>
+  nnoremap <silent> !N :call RunNearestSpec()<CR>
+  nnoremap <silent> !L :call RunLastSpec()<CR>
+  nnoremap <silent> !A :call RunAllSpecs()<CR>
   " }}}
 
   " gitv {{{

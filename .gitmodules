@@ -273,3 +273,4 @@
 [submodule "shoreman"]
 	path = shoreman
 	url = https://github.com/hecticjeff/shoreman.git
+  ignore = dirty
