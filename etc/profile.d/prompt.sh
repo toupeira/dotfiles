@@ -33,7 +33,7 @@ PS1_HOST=""
 [ -n "$SSH_CONNECTION" -o "$TERM" = "linux" ] && PS1_HOST="@\h"
 [ "$UID" = "0" ] && PS1_USER="$_bred$PS1_USER"
 
-export PS1="$_reset\[\$(_ps1_job_count)\]$_bblack$PS1_USER$_byellow$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_reset \[\$(_ps1_exit_status)\]"
+export PS1="$_reset\[\e[1;35m\]\$(_ps1_job_count)\[\e[0m\]$_bblack$PS1_USER$_byellow$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_reset \[\$(_ps1_exit_status)\]"
 
 # Use Git prompt if available
 if type __git_ps1 &>/dev/null; then
@@ -59,7 +59,7 @@ function _ps1_job_count {
   let jobs-=1
 
   if [ $jobs -gt 0 ]; then
-    printf '\e[1;35m[%d job%s]\e[0m ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
+    printf '[%d job%s] ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
   fi
 }
 
