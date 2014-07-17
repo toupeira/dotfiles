@@ -56,7 +56,7 @@ if has sudo; then
   alias sudo='sudo '
 
   # vim
-  alias suvi='sudo vim'
+  alias suvi='sudo TMUX=$TMUX vim'
   alias sugvi='sudo gvim'
   alias sudiff='sudo vimdiff'
   alias sugdiff='sudo gvimdiff'
