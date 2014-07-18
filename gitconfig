@@ -1,122 +1,123 @@
 [user]
-	name = Markus Koller
-	email = markus-koller@gmx.ch
-	signingkey = A7A2B7B7 
+  name = Markus Koller
+  email = markus-koller@gmx.ch
+  signingkey = A7A2B7B7 
 
 [color]
-	ui = auto
+  ui = auto
 
 [advice]
-	statusHints = false
+  statusHints = false
 
 [branch]
-	autosetuprebase = remote
+  autosetuprebase = remote
 
 [diff]
-	renames = copies
-	mnemonicprefix = true
+  renames = copies
+  mnemonicprefix = true
 
 [difftool]
-	prompt = false
+  prompt = false
 
 [log]
-	abbrevCommit = true
-	decorate = true
+  abbrevCommit = true
+  decorate = true
 
 [merge]
-	stat = true
-	tool = gvimdiff
-	#tool = git-vimdiff
+  stat = true
+  tool = gvimdiff
+  #tool = git-vimdiff
 
 [mergetool]
-	prompt = false
-	keepBackup = false
+  prompt = false
+  keepBackup = false
 
 [mergetool.git-vimdiff]
-	cmd = git-vimdiff sensible-vim $BASE $LOCAL $REMOTE $MERGED
-	trustExitCode = true
+  cmd = git-vimdiff sensible-vim $BASE $LOCAL $REMOTE $MERGED
+  trustExitCode = true
 
 [fetch]
-	prune = true
+  prune = true
 
 [push]
-	default = simple
+  default = simple
 
 [rebase]
-	stat = true
+  stat = true
 
 [alias]
-	h = help
-	r = remote
-	br = branch
-	sub = submodule
+  h = help
+  r = remote
+  br = branch
+  sub = submodule
 
-	shallow = clone --depth 1
+  shallow = clone --depth 1
 
-	di = diff --word-diff
-	dc = diff --word-diff --cached
-	ds = diff --stat
+  di = diff --word-diff
+  dc = diff --word-diff --cached
+  ds = diff --stat
 
-	st = status
-	stat = status
-	ls = branch -avv
+  st = status
+  stat = status
+  ls = branch -avv
 
-	co = checkout
-	sw = checkout
-	ours = "!f() { git checkout --ours $@ && git add $@; }; f"
-	theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+  co = checkout
+  sw = checkout
+  ours = "!f() { git checkout --ours $@ && git add $@; }; f"
+  theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 
-	ap = add -p
-	all = add -A
-	ci = commit -v
-	ca = commit -va
-	amend = commit -v --amend
-	unstage = reset HEAD
+  ap = add -p
+  all = add -A
+  ci = commit -v
+  ca = commit -va
+  amend = commit -v --amend
+  unstage = reset HEAD
 
-	l = log --all --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
-	lstat = "!f() { git l --stat $@; }; f"
-	ldiff = log -p --word-diff
-	blame = blame -w
+  l = log --all --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
+  lstat = "!f() { git l --stat $@; }; f"
+  ldiff = log -p --word-diff
+  blame = blame -w
 
-	up = pull -v --progress
-	upbase = pull -v --progress --rebase
-	upall = pull-all
-	ff = merge --ff-only HEAD@{u}
-	solve = mergetool
-	rup = remote update
+  up = pull -v --progress
+  upbase = pull -v --progress --rebase
+  upall = pull-all
+  ff = merge --ff-only HEAD@{u}
+  solve = mergetool
+  rup = remote update
   continue = rebase --continue
   skip = rebase --skip
   delbranch = "!f() { git branch -d $1 && git pu github :$1; }; f"
 
-	pu   = -c push.default=simple   push -v --progress
-	pua  = -c push.default=matching push -v --progress
-	poof = -c push.default=simple   push -v --progress --force
-	pub  = "!f() { local target=$1; shift; git push . HEAD:$target $@; }; f"
+  pu   = -c push.default=simple   push -v --progress
+  pua  = -c push.default=matching push -v --progress
+  poof = -c push.default=simple   push -v --progress --force
+  pub  = "!f() { local target=$1; shift; git push . HEAD:$target $@; }; f"
 
-	sts = stash save
-	stp = stash pop
-	std = "!git stash drop && git stl"
+  sts = stash save
+  stp = stash pop
+  std = "!git stash drop && git stl"
   stw = "!git -c color.ui=always stash show | cat"
   stl = "!git -c color.ui=always stash list | cat"
 
-	# shell wrappers
-	sh = "!f() { \"$@\"; }; f"
-	ag = "!ag --smart-case"
+  # shell wrappers
+  sh = "!f() { \"$@\"; }; f"
+  bash = "!f() { bash -ic \"$@\"; }; f"
+  ag = "!ag --smart-case"
 
-	rake  = "!bundle exec rake"
-	rails = "!bundle exec rails"
-	rcon  = "!bundle exec rails console"
-	rgen  = "!bundle exec rails generate"
-	rlog  = "!f() { local logfile=${1:-$RAILS_ENV.log}; tail -f $(git rev-parse --show-toplevel 2>/dev/null)/log/$logfile*; }; f"
-	wlog  = "!f() { local logfile=${1:-error.log}; tail -f /var/log/nginx/$logfile; }; f"
+  rake  = "!bundle exec rake"
+  rails = "!bundle exec rails"
+  rcon  = "!bundle exec rails console"
+  rgen  = "!bundle exec rails generate"
+  rlog  = "!f() { local logfile=${1:-$RAILS_ENV.log}; tail -f $(git rev-parse --show-toplevel 2>/dev/null)/log/$logfile*; }; f"
+  wlog  = "!f() { local logfile=${1:-error.log}; tail -f /var/log/nginx/$logfile; }; f"
 
-	guard = "!bundle exec guard"
+  guard = "!bundle exec guard"
 
-	# try to run a GUI, or tig on terminals
-	g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"
+  # try to run a GUI, or tig on terminals
+  g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"
 
-	ed = edit
-	vi = edit --command vim
-	vim = edit --command vim
-	gvi = edit --command gvim
-	gvim = edit --command gvim
+  ed = edit
+  vi = edit --command vim
+  vim = edit --command vim
+  gvi = edit --command gvim
+  gvim = edit --command gvim

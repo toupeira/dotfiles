@@ -296,8 +296,9 @@ function src {
 function src_alias {
   local alias="$1"
   local project="$2"
+  shift 2
 
-  alias $alias="src $project"
+  alias $alias="src $project $@"
   __git_edit_complete $alias _git `src "$project" --path`
 }
 
