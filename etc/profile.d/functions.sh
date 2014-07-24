@@ -8,6 +8,7 @@ function login_message {
   elif [ "$PWD" = "$HOME" ]; then
     echo -e "\e[1;37m`uname -a`\e[0m"
     uptime
+    echo
 
     if [ -f /etc/motd ]; then
       cat /etc/motd
@@ -27,11 +28,11 @@ function login_message {
 
     if has fortune && [ -z "$SSH_CONNECTION" ]; then
       fortune -acs -n $((LINES*40)) | awk '
-        /^\(.+\)$/ { print "\033[0;33mfortune:" $0 "\033[0m"; next }
-        /^%$/ { print "\033[1;36m% \033[0;36m--------------------------------------------------------------------------------\x1b[0m"; next }
-        { print "   " $0 }
-        END { print "\033[1;36m% \033[0;36m--------------------------------------------------------------------------------\n" }
+        /^\(.+\)$/ { print "\033[1;32mfortune:" $0 "\033[0m"; next }
+        /^%$/ { next }
+        { print "  \033[0;32m" $0 "\033[0m" }
       '
+      echo
     fi
 
     ls
