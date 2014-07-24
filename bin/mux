@@ -19,7 +19,7 @@ if [ "${1:0:1}" = "@" ]; then
       mux @server -b
       mux @console -b
       mux @guard  -b
-      sensible-vim
+      exec sensible-vim
       ;;
     *)
       echo "Unknown profile $profile."
