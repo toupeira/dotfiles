@@ -111,7 +111,9 @@
   rlog  = "!f() { local logfile=${1:-$RAILS_ENV.log}; tail -f $(git rev-parse --show-toplevel 2>/dev/null)/log/$logfile*; }; f"
   wlog  = "!f() { local logfile=${1:-error.log}; tail -f /var/log/nginx/$logfile; }; f"
 
-  guard = "!bundle exec guard"
+  mux = "!f() { mux \"$@\"; }; f"
+  shore = "!f() { shore \"$@\"; }; f"
+  guard = "!f() { bundle exec guard \"$@\"; }; f"
 
   # try to run a GUI, or tig on terminals
   g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"
