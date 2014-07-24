@@ -6,28 +6,38 @@ function login_message {
   if [ -z "$BASH_LOGIN" ]; then
     return
   elif [ "$PWD" = "$HOME" ]; then
-    if [ "$SSH_CONNECTION" -o -z "$DISPLAY" ]; then
-      [ -f /etc/motd ] && cat /etc/motd
-      uptime
-      echo
+    echo -e "\e[1;37m`uname -a`\e[0m"
+    uptime
 
+    if [ -f /etc/motd ]; then
+      cat /etc/motd
+      echo
+    fi
+
+    if [ "$SSH_CONNECTION" -o -z "$DISPLAY" ]; then
       if [ -n "$CYGWIN" ]; then
         local hostname="$HOSTNAME"
       else
         local hostname=`hostname -f`
       fi
 
-      echo -e "\033[0;36mWelcome \033[1;36m${USERNAME:-$USER}\033[0;36m on \033[1;33m$hostname\033[0m"
-    else
-      down
-      has fortune && fortune && echo
+      echo -e "\e[0;36mWelcome \e[1;36m${USERNAME:-$USER}\e[0;36m on \e[1;33m$hostname\e[0m"
+      echo
     fi
+
+    if has fortune && [ -z "$SSH_CONNECTION" ]; then
+      fortune -acs -n $((LINES*40)) | awk '
+        /^\(.+\)$/ { print "\033[0;33mfortune:" $0 "\033[0m"; next }
+        /^%$/ { print "\033[1;36m% \033[0;36m--------------------------------------------------------------------------------\x1b[0m"; next }
+        { print "   " $0 }
+        END { print "\033[1;36m% \033[0;36m--------------------------------------------------------------------------------\n" }
+      '
+    fi
+
+    ls
     echo
-    date "+%A, %e. %B %Y  %k:%M"
-    echo; eval ls; echo
-    from -c 2>/dev/null | grep -v "There are 0 messages" && echo || true
-  else
-    down
+    from -c 2>/dev/null | grep -v "There are 0 messages" && echo
+    true # for _ps1_exit_status
   fi
 }
 

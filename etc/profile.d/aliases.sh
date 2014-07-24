@@ -46,7 +46,7 @@ alias pkgsearch='apt-cache search'
 alias vi='vim'
 alias gvi='gvim'
 if has sensible-vim; then
-  alias vim='CMD=vim sensible-vim'
+  alias vim='sensible-vim'
   alias gvim='CMD=gvim sensible-vim'
 fi
 

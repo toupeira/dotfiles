@@ -742,6 +742,11 @@ endfunction " }}}
   let g:syntastic_scss_sass_exec = '/usr/local/bin/sass'
   let g:syntastic_ruby_slimrb_exec = '/usr/local/bin/slimrb'
 
+  autocmd BufEnter *.coffee
+    \ let g:syntastic_coffee_checkers = [ 'coffee', 'coffeelint' ]
+  autocmd BufEnter */app/views/**/*.js.coffee
+    \ let g:syntastic_coffee_checkers = []
+
   if !&diff
     let g:syntastic_auto_loc_list = 1
     let g:syntastic_auto_jump = 0

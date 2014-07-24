@@ -2,38 +2,12 @@
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # Prompt configuration
-
-# colors
-_reset='\[\e[0m\]'           # Reset
-
-# regular
-_black='\[\e[0;30m\]'        # Black
-_red='\[\e[0;31m\]'          # Red
-_green='\[\e[0;32m\]'        # Green
-_yellow='\[\e[0;33m\]'       # Yellow
-_blue='\[\e[0;34m\]'         # Blue
-_purple='\[\e[0;35m\]'       # Purple
-_cyan='\[\e[0;36m\]'         # Cyan
-_white='\[\e[0;37m\]'        # White
-
-# bold
-_bblack='\[\e[1;30m\]'       # Black
-_bred='\[\e[1;31m\]'         # Red
-_bgreen='\[\e[1;32m\]'       # Green
-_byellow='\[\e[1;33m\]'      # Yellow
-_bblue='\[\e[1;34m\]'        # Blue
-_bpurple='\[\e[1;35m\]'      # Purple
-_bcyan='\[\e[1;36m\]'        # Cyan
-_bwhite='\[\e[1;37m\]'       # White
-
-[ -n "$CONQUE" ] && unset _bblack
-
 PS1_USER="\u"
 PS1_HOST=""
 [ -n "$SSH_CONNECTION" -o "$TERM" = "linux" ] && PS1_HOST="@\h"
-[ "$UID" = "0" ] && PS1_USER="$_bred$PS1_USER"
+[ "$UID" = "0" ] && PS1_USER="\[\e[1;31m\]$PS1_USER"
 
-export PS1="$_reset\[\e[1;35m\]\$(_ps1_job_count)\[\e[0m\]$_bblack$PS1_USER$_byellow$PS1_HOST $_cyan[$_bcyan\w$_cyan]$_reset \[\$(_ps1_exit_status)\]"
+export PS1="\[\e[1;35m\]\$(_ps1_job_count)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST \[\e[0;36m\][\[\e[1;36m\]\w\[\e[0;36m\]]\[\e[0m\] \[\$(_ps1_exit_status)\]"
 
 # Use Git prompt if available
 if type __git_ps1 &>/dev/null; then
