@@ -1,33 +1,54 @@
 #!/bin/bash
 
-if [ -z "$1" ] && grep -q ^guard: Procfile &>/dev/null; then
-  tmux split-window -v -p 40 'shore -v guard'
-  tmux last-pane
-  exec shore guard
-fi
+unset options command title
 
-unset title options
+while [ "${1:0:1}" = "-" ]; do
+  case "$1" in
+    -v)
+      options="-v"
+      ;;
+    -e)
+      shift
+      command=( "$@" )
+      break
+      ;;
+    -t)
+      title="$2"
+      shift
+      ;;
+  esac
 
-if [ "$1" = "-v" ]; then
-  options="-v"
   shift
+done
+
+if [ ${#command} -eq 0 -a ! -f Procfile ]; then
+  echo "Can't continue without a Procfile."
+  exit 1
 fi
 
-if [ -n "$1" ]; then
-  title="$1"
-else
-  title=$(basename "$PWD")
-fi
-
-title="shore[${title:-$1}]"
+title="${title:-$1}"
+title="${title:-`basename "$PWD"`}"
+title="shore[$title]"
 if [[ "$TERM" =~ ^screen ]]; then
   echo -ne "\033]0;$title\007\033k$title\033\\"
 else
   echo -ne "\033]1;$title\007\033]2;$title\007"
 fi
 
-if [ -n "$1" ]; then
-  exec shoreman <(grep $options "^$1\w*:" Procfile)
-else
-  exec shoreman
-fi
+while true; do
+  if [ ${#command} -gt 0 ]; then
+    "${command[@]}"
+  elif [ -n "$1" ]; then
+    shoreman <(grep $options "^$1\w*:" Procfile)
+  else
+    shoreman
+  fi
+
+  echo -ne "\e[0;36mRestart? \e[1;36m[Y/n]\e[0m "
+  read -n 1
+  echo
+  case "$REPLY" in
+    ''|[nn]) exit;;
+          *) continue;;
+  esac
+done

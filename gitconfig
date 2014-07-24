@@ -106,10 +106,6 @@
 
   rake  = "!bundle exec rake"
   rails = "!bundle exec rails"
-  rcon  = "!bundle exec rails console"
-  rgen  = "!bundle exec rails generate"
-  rlog  = "!f() { local logfile=${1:-$RAILS_ENV.log}; tail -f $(git rev-parse --show-toplevel 2>/dev/null)/log/$logfile*; }; f"
-  wlog  = "!f() { local logfile=${1:-error.log}; tail -f /var/log/nginx/$logfile; }; f"
 
   mux = "!f() { mux \"$@\"; }; f"
   shore = "!f() { shore \"$@\"; }; f"
@@ -119,7 +115,3 @@
   g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"
 
   ed = edit
-  vi = edit --command vim
-  vim = edit --command vim
-  gvi = edit --command gvim
-  gvim = edit --command gvim

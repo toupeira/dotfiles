@@ -197,74 +197,79 @@ function dotfiles {
 function src {
   local src_dir=~/src
 
-  if [ "$1" = "list" ]; then
-    if [ "$2" = "-a" ]; then
-      local filter="."
-      local options=
-    else
-      local filter="^(archive|upstream)/"
-      local options="-v"
-    fi
-
-    find -L "$src_dir" -mindepth 1 -maxdepth 4 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep $options "$filter" | sort
-    return
-  elif [ "$1" = "each" ]; then
-    shift
-    for project in `src list`; do
-      echo -e "# \e[0;36m$project\e[0m" | sed -r "s|$HOME|~|"
-      (cd "$src_dir/$project" || exit 1; $@)
-
-      local status=$?
-      if [ $status -ne 0 ]; then
-        echo -e "# \e[1;31mexit code $status\e[0m"
+  case "$1" in
+    list)
+      if [ "$2" = "-a" ]; then
+        local filter="."
+        local options=
+      else
+        local filter="^(archive|upstream)/"
+        local options="-v"
       fi
+
+      find -L "$src_dir" -mindepth 1 -maxdepth 4 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep $options "$filter" | sort
+
+      return
+      ;;
+    each)
+      shift
+      for project in `src list`; do
+        echo -e "# \e[0;36m$project\e[0m" | sed -r "s|$HOME|~|"
+        (cd "$src_dir/$project" || exit 1; $@)
+
+        local status=$?
+        if [ $status -ne 0 ]; then
+          echo -e "# \e[1;31mexit code $status\e[0m"
+        fi
+        echo
+      done
+
+      return
+      ;;
+    st|status|-a|'')
+      [ "$1" != "-a" ] && shift
+
+      local first=1
+      local last=0
+
       echo
-    done
+      for project in `src list "$@"`; do
+        dir="$src_dir/$project"
+        [ -d "$dir/.git" ] || continue
 
-    return
-  elif [[ "$1" =~ ^(|-a|st|status)$ ]]; then
-    [ "$1" != "-a" ] && shift
+        local changes=`cd "$dir"; git status -s | grep -c .`
+        local unmerged=`cd "$dir"; git status | egrep "Your branch is (behind|ahead)"`
 
-    local first=1
-    local last=0
-
-    echo
-    for project in `src list "$@"`; do
-      dir="$src_dir/$project"
-      [ -d "$dir/.git" ] || continue
-
-      local changes=`cd "$dir"; git status -s | grep -c .`
-      local unmerged=`cd "$dir"; git status | egrep "Your branch is (behind|ahead)"`
-
-      if [ $changes -gt 0 -o -n "$unmerged" ]; then
-        local label="changes"
-
-        if [ $changes -gt 0 ]; then
+        if [ $changes -gt 0 -o -n "$unmerged" ]; then
           local label="changes"
-          [ $changes -eq 1 ] && label="change"
-          label="$changes\e[1;37m $label"
-        elif echo "$unmerged" | grep -q ahead; then
-          label="Unpublished commits"
+
+          if [ $changes -gt 0 ]; then
+            local label="changes"
+            [ $changes -eq 1 ] && label="change"
+            label="$changes\e[1;37m $label"
+          elif echo "$unmerged" | grep -q ahead; then
+            label="Unpublished commits"
+          else
+            label="Unmerged commits"
+          fi
+
+          [ -z "$first" ] && echo
+          echo -e " \e[1;32m>\e[1;37m \e[1;33m$label in \e[1;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
+          (cd "$dir" || exit 1; git -c color.ui=always status | sed -r 's/^/    /')
         else
-          label="Unmerged commits"
+          [ $last -gt 0 ] && echo
+          echo -e " \e[0;32m>\e[0m No changes in \e[0;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
         fi
 
-        [ -z "$first" ] && echo
-        echo -e " \e[1;32m>\e[1;37m \e[1;33m$label in \e[1;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
-        (cd "$dir" || exit 1; git -c color.ui=always status | sed -r 's/^/    /')
-      else
-        [ $last -gt 0 ] && echo
-        echo -e " \e[0;32m>\e[0m No changes in \e[0;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
-      fi
+        unset first
+        last=$changes
+        [ -n "$unmerged" ] && let last++
+      done
+      echo
 
-      unset first
-      last=$changes
-      [ -n "$unmerged" ] && let last++
-    done
-    echo
-
-    return
-  fi
+      return
+      ;;
+  esac
 
   local project="$1"
   shift
@@ -276,31 +281,56 @@ function src {
   fi
 
   if [ -z "$project" ]; then
-    echo "Usage: src PROJECT [GIT-COMMAND] [GIT-ARGS]"
-    echo "       src status"
+    echo "Usage: src PROJECT [COMMAND] [ARGS]"
+    echo "       src list [-a]"
+    echo "       src status [-a]"
     return 255
   fi
 
   if [ ! -e "$path" ]; then
     local first_match=`src list -a | fgrep -m1 "$project"`
     if [ -n "$first_match" ]; then
-      src "$first_match" "$@"
+      path="$src_dir/$first_match"
     else
       echo "$path does not exist"
       return 1
     fi
-  elif [ "$1" = "--path" ]; then
+  fi
+
+  if [ "$1" = "--path" ]; then
     echo "$path"
+    return
   elif [ -f "$path" ]; then
     sensible-editor "$path"
+    return
   elif [ ! -d "$path" ]; then
     echo "Unsupported path $path"
-  elif [ -n "$1" ]; then
-    (cd "$path" || exit 1; git "$@")
-  else
-    # switch to the project directory if no arguments were passed
-    cd "$path" || return 1
+    return
   fi
+
+  case "$1" in
+    '')
+      cd "$path"
+      return
+      ;;
+    -e)
+      command="$2"
+      shift 2
+      ;;
+    @*)
+      command="mux $1"
+      shift
+      ;;
+    vi|vim|gvi|gvim|sensible-vim|rake|rails|cap|mux|shore)
+      command="$1"
+      shift
+      ;;
+    *)
+      command="git"
+      ;;
+  esac
+
+  (cd "$path" && $command "$@")
 }
 
 # Helper to create an alias for src with Git completion

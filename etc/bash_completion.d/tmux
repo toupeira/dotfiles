@@ -1,0 +1,1 @@
+/usr/share/doc/tmux/examples/bash_completion_tmux.sh

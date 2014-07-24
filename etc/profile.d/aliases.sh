@@ -30,7 +30,6 @@ alias smem='smem -kt'
 alias watch='watch -cd -n 1'
 has 7z && ! has rar && alias rar='7z'
 
-alias @='start'
 alias dt='dotfiles'
 has git-edit && alias ed='git-edit'
 

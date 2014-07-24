@@ -1,5 +1,35 @@
 #!/bin/bash
 
+if [ "${1:0:1}" = "@" ]; then
+  profile="$1"
+  shift
+
+  case "$profile" in
+    @log)
+      mux -s -l 20 "$@" shore log;;
+    @guard)
+      mux -s -l 15 "$@" shore -e bundle exec guard;;
+    @server)
+      mux "$@" shore -t server -v guard;;
+    @pry)
+      mux -v -l 80 "$@" shore -e pry;;
+    @console)
+      mux -v -l 80 "$@" shore -e bundle exec spring rails console;;
+    @dev)
+      mux @server -b
+      mux @console -b
+      mux @guard  -b
+      sensible-vim
+      ;;
+    *)
+      echo "Unknown profile $profile."
+      exit 1
+      ;;
+  esac
+
+  exit
+fi
+
 command='new-window'
 unset args background
 
@@ -30,7 +60,7 @@ done
 tmux $command $args -- "$*"
 
 if [ "$background" ]; then
-  if "$command" = "new-window" ]; then
+  if [ "$command" = "new-window" ]; then
     tmux last-window
   else
     tmux last-pane
