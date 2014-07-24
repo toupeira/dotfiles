@@ -96,6 +96,10 @@
   set mouse=a
   set cursorline
 
+  " increase command-line height during startup to avoid prompt on long filenames
+  set cmdheight=2
+  autocmd VimEnter * set cmdheight=1
+
   " windows
   set splitbelow
   set splitright

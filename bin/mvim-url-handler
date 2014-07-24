@@ -1,0 +1,18 @@
+#!/usr/bin/env ruby
+
+if ARGV[0] =~ /^mvim:/
+  require 'uri'
+  require 'cgi'
+
+  uri = URI::parse(ARGV[0])
+  params = CGI::parse(uri.query)
+  file = params['url'][0]
+  line = params['line'][0]
+
+  args = [ file ]
+  args << "+#{line}" if line
+else
+  args = ARGV
+end
+
+exec 'gvim', *args
