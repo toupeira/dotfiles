@@ -1,0 +1,38 @@
+#!/bin/bash
+
+command='new-window'
+unset args background
+
+while [ "${1:0:1}" = "-" ]; do
+  case "$1" in
+    -b)
+      background=1
+      ;;
+    -s)
+      command='split-window'
+      args="$args -v"
+      ;;
+    -v)
+      command='split-window'
+      args="$args -h"
+      ;;
+    -c|-l|-p)
+      args="$args $1 $2"
+      shift
+      ;;
+    *)
+      echo "Usage: $0 [-b] [-c|-s|-v] [-l size|-p percentage] [COMMAND..]"
+  esac
+
+  shift
+done
+
+tmux $command $args -- "$*"
+
+if [ "$background" ]; then
+  if "$command" = "new-window" ]; then
+    tmux last-window
+  else
+    tmux last-pane
+  fi
+fi
