@@ -48,7 +48,7 @@ while true; do
   read -n 1
   echo
   case "$REPLY" in
-    ''|[nn]) exit;;
-          *) continue;;
+    [nN]) exit;;
+       *) continue;;
   esac
 done
