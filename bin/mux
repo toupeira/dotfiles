@@ -8,7 +8,7 @@ if [ "${1:0:1}" = "@" ]; then
     @log)
       mux -s -l 20 "$@" shore log;;
     @guard)
-      mux -s -l 15 "$@" shore -e bundle exec guard;;
+      mux -v -l 80 "$@" shore -e bundle exec guard;;
     @server)
       mux "$@" shore -t server -v guard;;
     @pry)
@@ -17,7 +17,6 @@ if [ "${1:0:1}" = "@" ]; then
       mux -v -l 80 "$@" shore -e bundle exec spring rails console;;
     @dev)
       mux @server -b
-      mux @console -b
       mux @guard  -b
       exec sensible-vim
       ;;
@@ -57,7 +56,12 @@ while [ "${1:0:1}" = "-" ]; do
   shift
 done
 
-tmux $command $args -- "$*"
+if [ $# -eq 0 ]; then
+  set --
+  set -- bash --login
+fi
+
+tmux $command $args -- "tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; $*"
 
 if [ "$background" ]; then
   if [ "$command" = "new-window" ]; then

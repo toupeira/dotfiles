@@ -1,6 +1,16 @@
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
+# Repeat a string
+function _repeat {
+  local string="$1"
+  local count="$2"
+
+  for (( i = 0; i < count; i++)); do
+    echo -n "$string"
+  done
+}
+
 # Show the login message
 function login_message {
   if [ -z "$BASH_LOGIN" ]; then

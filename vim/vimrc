@@ -294,8 +294,8 @@ endfunction " }}}
 
   " shortcuts to open tmux splits and windows
   command! -nargs=* Mux call system('mux <args>')
-  command! -nargs=0 Pry Mux -s -p 30 pry
-  command! -nargs=0 Shell Mux -s -p 30
+  command! -nargs=0 Shell    Mux -s -p 30
+  command! -nargs=0 Pry      Mux -s -p 30 pry
   command! -nargs=0 RConsole Mux -s -p 30 rbenv exec rails console
 
 " }}}

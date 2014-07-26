@@ -7,7 +7,7 @@ PS1_HOST=""
 [ -n "$SSH_CONNECTION" -o "$TERM" = "linux" ] && PS1_HOST="@\h"
 [ "$UID" = "0" ] && PS1_USER="\[\e[1;31m\]$PS1_USER"
 
-export PS1="\[\e[1;35m\]\$(_ps1_job_count)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST \[\e[0;36m\][\[\e[1;36m\]\w\[\e[0;36m\]]\[\e[0m\] \[\$(_ps1_exit_status)\]"
+export PS1="\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST \[\e[0;36m\][\[\e[1;36m\]\w\[\e[0;36m\]]\[\e[0m\] \[\$(_prompt_exit_status)\]"
 
 # Use Git prompt if available
 if type __git_ps1 &>/dev/null; then
@@ -28,16 +28,22 @@ if type __git_ps1 &>/dev/null; then
   export PS1=$PS1$GIT_PS1
 fi
 
-function _ps1_job_count {
-  local jobs=`jobs -p | wc -l`
-  let jobs-=1
+function _prompt_jobs {
+  local jobs=`jobs | grep -v 'tmux setenv'`
 
-  if [ $jobs -gt 0 ]; then
-    printf '[%d job%s] ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
+  if [ -n "$jobs" ]; then
+    tput sc
+    tput cup 0 0
+    echo -e "\e[1;35m`_repeat '=' $COLUMNS`\e[0m"
+    echo "$jobs" | sed -r "s/.*/`_repeat ' ' $COLUMNS`/"
+    echo -e "\e[1;35m`_repeat '=' $COLUMNS`\e[0m"
+    tput cup 1 0
+    echo "$jobs" | sed -r 's/^(.+)  (Stopped|Running) *(.*)$/ \o33[1;35m\1 \o33[0;35m[\2] \o33[1;35m\3\o33[0m/'
+    tput rc
   fi
 }
 
-function _ps1_exit_status {
+function _prompt_exit_status {
   local status=$?
   [ -n "$CYGWIN" -o "$CONQUE" ] && return
 
@@ -60,7 +66,7 @@ if [[ "$TERM" =~ ^(rxvt|xterm|screen) ]]; then
   fi
 
   if [[ "$TERM" =~ ^screen ]]; then
-    export PROMPT_COMMAND='[ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD"; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
+    export PROMPT_COMMAND='_prompt_jobs; [ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD"; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
   else
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
   fi
