@@ -217,7 +217,7 @@ function src {
         local options="-v"
       fi
 
-      find -L "$src_dir" -mindepth 1 -maxdepth 4 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep $options "$filter" | sort
+      find -L "$src_dir" -mindepth 1 -maxdepth 4 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep $options "$filter" | egrep -v "^dotfiles/.+" | sort
 
       return
       ;;
