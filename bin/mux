@@ -8,16 +8,16 @@ if [ "${1:0:1}" = "@" ]; then
     @log)
       mux -s -l 20 "$@" shore log;;
     @guard)
-      mux -v -l 80 "$@" shore -e bundle exec guard;;
+      mux -b -v -l 80 "$@" shore -e bundle exec guard;;
     @server)
-      mux "$@" shore -t server -v guard;;
+      mux -b "$@" shore -t server -v guard;;
     @pry)
       mux -v -l 80 "$@" shore -e pry;;
     @console)
       mux -v -l 80 "$@" shore -e bundle exec spring rails console;;
     @dev)
-      mux @server -b
-      mux @guard  -b
+      mux @server
+      mux @guard
       exec sensible-vim
       ;;
     *)
