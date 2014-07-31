@@ -1,0 +1,22 @@
+#!/bin/bash
+
+for branch in `git branch --merged | tr -d '*' | fgrep /`; do
+  echo -ne "\e[0;36mRemove merged branch \e[1;36m$branch\e[0;36m? [Y/n]\e[0m "
+  read -n 1
+  echo
+  case "$REPLY" in
+    n|N) continue;;
+  esac
+
+  git branch -d "$branch" && continue
+
+  echo -ne "\e[1;31mForcibly remove branch \e[1;36m$branch\e[1;31m? [y/N]\e[0m "
+  read -n 1
+  echo
+  case "$REPLY" in
+    y|Y) ;;
+      *) continue;;
+  esac
+
+  git branch -D "$branch"
+done
