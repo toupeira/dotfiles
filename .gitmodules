@@ -42,10 +42,6 @@
 	path = vim/bundle/tabular
 	url = https://github.com/godlygeek/tabular.git
 	ignore = dirty
-[submodule "vim/bundle/colorizer"]
-	path = vim/bundle/colorizer
-	url = https://github.com/lilydjwg/colorizer.git
-	ignore = dirty
 [submodule "vim/bundle/endwise"]
 	path = vim/bundle/endwise
 	url = https://github.com/tpope/vim-endwise.git
@@ -169,10 +165,6 @@
 [submodule "vim/bundle/coffeescript"]
 	path = vim/bundle/coffeescript
 	url = https://github.com/kchmck/vim-coffee-script.git
-	ignore = dirty
-[submodule "vim/bundle/css-color"]
-	path = vim/bundle/css-color
-	url = https://github.com/ap/vim-css-color.git
 	ignore = dirty
 [submodule "vim/bundle/html5"]
 	path = vim/bundle/html5
