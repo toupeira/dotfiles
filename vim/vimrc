@@ -110,6 +110,7 @@
   " line numbers
   set number
   set numberwidth=6
+  set relativenumber
 
   " scrolling
   set scrolloff=5
