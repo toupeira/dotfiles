@@ -213,6 +213,7 @@
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd FileType crontab setlocal nobackup nowritebackup
   autocmd FileType puppet setlocal commentstring=#%s
+  autocmd FileType help setlocal nonumber norelativenumber
 
   " Ruby syntax highlighting
   let g:ruby_operators = 1
@@ -600,6 +601,10 @@ endfunction " }}}
 
   " rails {{{
   hi! link rubyRailsARMethod Statement
+  " }}}
+
+  " colorizer {{{
+  let g:colorizer_auto_filetype = 'css,scss,sass'
   " }}}
 
   " jedi {{{
