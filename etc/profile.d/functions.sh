@@ -350,7 +350,7 @@ function src_alias {
   shift 2
 
   alias $alias="src $project $@"
-  __git_edit_complete $alias _git `src "$project" --path`
+  __git_edit_complete $alias _src_alias `src "$project" --path`
 }
 
 # Selecta wrappers

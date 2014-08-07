@@ -59,3 +59,23 @@ function _src_projects {
   COMPREPLY=( $(compgen -W "`src list -a | grep "${COMP_WORDS[COMP_CWORD]}"`") )
 }
 complete -F _src_projects src
+
+function _src_alias {
+  local cword="${COMP_WORDS[COMP_CWORD]}"
+  if [ -n "$cword" -a "${cword:0:1}" = "@" ]; then
+    _mux
+  else
+    _git
+  fi
+}
+
+# mux completion
+function _mux {
+  local cword="${COMP_WORDS[COMP_CWORD]}"
+  if [ -n "$cword" -a "${cword:0:1}" = "@" ]; then
+    COMPREPLY=( $(compgen -W "`egrep -o '@\w+' ~/bin/mux`" | fgrep "$cword") )
+  else
+    _command
+  fi
+}
+complete -o bashdefault -o default -F _mux mux
