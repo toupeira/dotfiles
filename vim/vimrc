@@ -322,7 +322,7 @@ endfunction " }}}
   noremap g# #
 
   " duplicate the selection
-  vnoremap D y`]o<Esc>p
+  vnoremap D y`]pgv
 
   " repeat command for each line in selection
   xnoremap . :normal .<CR>
