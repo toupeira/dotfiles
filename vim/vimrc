@@ -321,8 +321,8 @@ endfunction " }}}
   noremap g* *
   noremap g# #
 
-  " clone the selection
-  vnoremap Y y`]o<Esc>p
+  " duplicate the selection
+  vnoremap D y`]o<Esc>p
 
   " repeat command for each line in selection
   xnoremap . :normal .<CR>
