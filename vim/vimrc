@@ -93,8 +93,11 @@
   set visualbell t_vb= " disable bells
   set synmaxcol=1000 " disable syntax highlighting on long lines
   set lazyredraw
-  set mouse=a
   set cursorline
+
+  " mouse support
+  set mouse=a
+  set ttymouse=xterm2
 
   " increase command-line height during startup to avoid prompt on long filenames
   set cmdheight=2
