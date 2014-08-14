@@ -328,6 +328,7 @@ function src {
       shift 2
       ;;
     @*)
+      src "$path"
       command="mux $1"
       shift
       ;;
