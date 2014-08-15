@@ -27,3 +27,11 @@ export GREP_OPTIONS="-i --color=auto --exclude=.svn --exclude=.git --exclude=.*.
 export IRB_HISTORY_SIZE=3000
 export RI="--format ansi --no-pager"
 export PGDATABASE="postgres"
+
+# Colorize manpages
+export LESS_TERMCAP_mb=$'\e[1;31m'
+export LESS_TERMCAP_md=$'\e[1;32m'
+export LESS_TERMCAP_us=$'\e[1;33m'
+export LESS_TERMCAP_me=$'\e[0m'
+export LESS_TERMCAP_se=$'\e[0m'
+export LESS_TERMCAP_ue=$'\e[0m'

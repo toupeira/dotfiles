@@ -147,7 +147,7 @@ function system {
 
   # create an associative array to hold all commands and paths used for sudo,
   # so we can avoid duplicate warnings for the same value
-  [ -v sudo_history ] || declare -gA sudo_history
+  [ -n "$sudo_history" ] || declare -gA sudo_history
 
   if [ "$command" = "chown" -o "$command" = "chgrp" ]; then
     if [ -z "${sudo_history["$command"]}" ]; then
