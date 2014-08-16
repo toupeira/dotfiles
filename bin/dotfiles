@@ -141,13 +141,13 @@ function ask_abort {
   fi
 }
 
+# create an associative array to hold all commands and paths used for sudo,
+# so we can avoid duplicate warnings for the same value
+declare -A sudo_history
+
 function system {
   local command="$1"
   shift
-
-  # create an associative array to hold all commands and paths used for sudo,
-  # so we can avoid duplicate warnings for the same value
-  [ -n "$sudo_history" ] || declare -gA sudo_history
 
   if [ "$command" = "chown" -o "$command" = "chgrp" ]; then
     if [ -z "${sudo_history["$command"]}" ]; then
