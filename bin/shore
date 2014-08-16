@@ -45,7 +45,7 @@ while true; do
   fi
 
   echo -ne "\e[0;36mRestart? \e[1;36m[Y/n]\e[0m "
-  read -n 1
+  read -n 1 2>/dev/null || exit
   echo
   case "$REPLY" in
     [nN]) exit;;

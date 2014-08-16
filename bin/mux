@@ -6,18 +6,27 @@ if [ "${1:0:1}" = "@" ]; then
 
   case "$profile" in
     @log)
-      mux -s -l 20 "$@" shore log;;
+      mux -S "$@" shore log;;
     @guard)
-      mux -b -v -l 80 "$@" shore -e bundle exec guard;;
+      mux -b -V "$@" shore -e bundle exec guard;;
     @server)
       mux -b "$@" shore -t server -v guard;;
     @pry)
-      mux -v -l 80 "$@" shore -e pry;;
+      mux -V "$@" shore -e pry;;
     @console)
-      mux -v -l 80 "$@" shore -e bundle exec spring rails console;;
+      if [ -f Gemfile ]; then
+        command="bundle exec spring rails console"
+      elif [ -f Gruntfile.js ]; then
+        command="node"
+      else
+        echo "Can't find console for project."
+        exit 1
+      fi
+
+      mux -V "$@" shore -e "$command";;
     @dev)
       mux @server
-      mux @guard
+      [ -f Guardfile ] && mux @guard
       ;;
     *)
       echo "Unknown profile $profile."
@@ -33,6 +42,18 @@ unset args background
 
 while [ "${1:0:1}" = "-" ]; do
   case "$1" in
+    -S)
+      command='split-window'
+      args="$args -v -l 20"
+      ;;
+    -V)
+      command='split-window'
+      if [ `tput cols` -ge 160 ]; then
+        args="$args -h -l 80"
+      else
+        args="$args -v -l 20"
+      fi
+      ;;
     -b)
       background=1
       ;;
@@ -50,6 +71,8 @@ while [ "${1:0:1}" = "-" ]; do
       ;;
     *)
       echo "Usage: $0 [-b] [-c|-s|-v] [-l size|-p percentage] [COMMAND..]"
+      exit 255
+      ;;
   esac
 
   shift
