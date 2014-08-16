@@ -16,6 +16,7 @@ function login_message {
   if [ -z "$BASH_LOGIN" ]; then
     return
   elif [ "$PWD" = "$HOME" ]; then
+    clear
     echo -e "\e[1;37m`uname -a`\e[0m"
     uptime
     echo
