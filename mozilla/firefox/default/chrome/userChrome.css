@@ -12,3 +12,8 @@
 .findbar-container > * {
   display: -moz-box !important;
 }
+
+/* Hide plugin activation notification */
+notification[value="plugin-hidden"] {
+  display: none !important;
+}

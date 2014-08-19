@@ -41,9 +41,7 @@ endif
     if has('mac')
       set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h13
     elseif has('unix')
-      if hostname() == 'fnord'
-        set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 10
-      elseif hostname() == 'schtube'
+      if hostname() == 'schtube'
         set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 18
         set lines=28
         set columns=80
