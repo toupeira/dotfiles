@@ -78,8 +78,8 @@
 
   l = log --all --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
   lstat = "!f() { git l --stat $@; }; f"
-  ldi = log -p
-  ldiff = log -p --word-diff
+  ldi = log -p --word-diff
+  ldiff = log -p
   blame = blame -w
 
   up = pull -v --progress
