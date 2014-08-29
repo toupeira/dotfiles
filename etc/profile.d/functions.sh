@@ -211,14 +211,13 @@ function src {
   case "$1" in
     list)
       if [ "$2" = "-a" ]; then
-        local filter="."
-        local options=
+        unset filter options
       else
-        local filter="^(archive|upstream)/"
+        local filter="-not \( -path $src_dir/archive -prune \) -not \( -path $src_dir/upstream -prune \)"
         local options="-v"
       fi
 
-      find -L "$src_dir" -mindepth 1 -maxdepth 4 -type d -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep $options "$filter" | egrep -v "^dotfiles/.+" | sort
+      eval find -L "$src_dir" -mindepth 1 -maxdepth 4 -type d $filter -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep -v "^dotfiles/.+" | sort
 
       return
       ;;
