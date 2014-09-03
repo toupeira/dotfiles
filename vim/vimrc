@@ -492,10 +492,10 @@ endfunction " }}}
   endfunction " }}}
 
   " ,x - close the current buffer, keeping windows
-  nnoremap <silent> ,x :lclose<CR>:Bdelete<CR>
+  nnoremap <silent> ,x :silent lclose<CR>:silent Bdelete<CR>
 
   " ,X - close the current buffer, not keeping windows
-  nnoremap <silent> ,X :lclose<CR>:bd<CR>
+  nnoremap <silent> ,X :silent lclose<CR>:silent bd<CR>
 
   " ,d - open definition in new window
   nmap <silent> ,d <C-w>f
@@ -513,10 +513,10 @@ endfunction " }}}
   nnoremap <silent> ,v :vsplit<CR>
 
   " ,w - write all files
-  nnoremap <silent> ,w :write<CR>
+  nnoremap <silent> ,w :write<CR>:redraw<CR>
 
   " ,W - force write current file
-  nnoremap <silent> ,W :write!<CR>
+  nnoremap <silent> ,W :write!<CR>:redraw<CR>
 
   " ,$ - clear trailing whitespace
   nnoremap <silent> ,$ :call <SID>ClearTrailingWhitespace()<CR>

@@ -6,24 +6,40 @@ if [ "${1:0:1}" = "@" ]; then
 
   case "$profile" in
     @log)
-      mux -S "$@" shore log;;
+      if [ -f "log/development.log" ]; then
+        log="log/development.log"
+      else
+        echo "Can't find log for project."
+        exit 1
+      fi
+
+      mux -S "$@" shore -e "tail -n 0 -f $log";;
     @guard)
       mux -b -V "$@" shore -e bundle exec guard;;
     @server)
-      mux -b "$@" shore -t server -v guard;;
+      if [ -f Gemfile ]; then
+        server="rails server"
+      elif [ -f Gruntfile.js ]; then
+        server="grunt serve"
+      else
+        echo "Can't find server for project."
+        exit 1
+      fi
+
+      mux -b "$@" shore -e "$server";;
     @pry)
       mux -V "$@" shore -e pry;;
     @console)
       if [ -f Gemfile ]; then
-        command="bundle exec spring rails console"
+        console="rails console"
       elif [ -f Gruntfile.js ]; then
-        command="node"
+        console="node"
       else
         echo "Can't find console for project."
         exit 1
       fi
 
-      mux -V "$@" shore -e "$command";;
+      mux -V "$@" shore -e "$console";;
     @dev)
       mux @server
       [ -f Guardfile ] && mux @guard
