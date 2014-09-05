@@ -19,28 +19,23 @@ else
   return
 fi
 
+function has_completion {
+  type -p "_$1" || (_completion_loader "$1" && type -p "_$1")
+}
+
 # Custom completions
 complete -o bashdefault -o default -F _root_command sudo watch
+complete -o bashdefault -o default -F _command psgrep pskill
 complete -o bashdefault -o default -F _command start @
+
+has_completion ssh && complete -F _ssh ping host telnet nc
+has_completion pgrep && complete -F _pgrep psgrep pskill
+has_completion systemctl && complete -F _systemctl sctl
+has_completion journalctl && complete -F _journalctl jctl
 
 if has dotfiles; then
   __git_edit_complete dotfiles _git `dotfiles --path`
   __git_edit_complete dt _git       `dotfiles --path`
-fi
-
-if [ -r /usr/share/bash-completion/completions/ssh ]; then
-  . /usr/share/bash-completion/completions/ssh
-  complete -F _ssh ping host telnet nc
-fi
-
-if [ -r /usr/share/bash-completion/completions/systemctl ]; then
-  . /usr/share/bash-completion/completions/systemctl
-  complete -F _systemctl sctl
-fi
-
-if [ -r /usr/share/bash-completion/completions/journalctl ]; then
-  . /usr/share/bash-completion/completions/journalctl
-  complete -F _journalctl jctl
 fi
 
 # Debian completions
