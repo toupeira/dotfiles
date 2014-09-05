@@ -104,8 +104,8 @@
   stl = "!git -c color.ui=always stash list | cat"
 
   # shell wrappers
-  sh = "!f() { \"$@\"; }; f"
-  bash = "!f() { bash -ic \"$@\"; }; f"
+  sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
+  bash = "!f() { [ $# -gt 0 ] && bash -ic \"$@\"; }; f"
   ag = "!ag --smart-case"
 
   rake  = "!bundle exec rake"
