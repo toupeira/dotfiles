@@ -6,5 +6,6 @@ if pgrep -x iceweasel >/dev/null; then
     iceweasel "$@" &>/dev/null &
   fi
 else
+  rm -f ~/.mozilla/firefox/default/{lock,.parentlock}
   iceweasel "$@" &>/dev/null &
 fi

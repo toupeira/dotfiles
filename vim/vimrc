@@ -1008,6 +1008,9 @@ endfunction " }}}
     " ,b - show open buffers
     nnoremap <silent><expr> ,b UniteWrapper('buffer', '-buffer-name=unite-buffers -start-insert')
 
+    " ,B - search bundle
+    nnoremap <silent><expr> ,B UniteWrapper(join(map(split(glob('.bundle/ruby/*/{gems,bundler}'), '\n'), '"file_rec/async:" . v:val'), ' '), '-buffer-name=unite-bundle -start-insert')
+
     " ,y - show yank history
     let g:unite_source_history_yank_enable = 1
     nnoremap <silent><expr> ,y UniteWrapper('history/yank', '-buffer-name=unite-yank-history')
