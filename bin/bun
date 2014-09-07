@@ -6,6 +6,10 @@ if [ -f Gemfile ]; then
   paths=`echo .bundle/ruby/*/{gems,bundler/gems}`
 elif [ -f package.json ]; then
   paths='node_modules --ignore node_modules'
+elif [ -d vim/bundle ]; then
+  paths='vim/bundle'
+elif [ -d .vim/bundle ]; then
+  paths='.vim/bundle'
 else
   paths='.'
 fi

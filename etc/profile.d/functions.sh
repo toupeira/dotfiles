@@ -189,7 +189,7 @@ function dotfiles {
 
   if [ $# -eq 0 ]; then
     cd "$path"
-  elif [[ "$1" =~ ^b(u(n(d(l(e)?)?)?)?)?$ ]]; then
+  elif [ "$1" = "b" ]; then
     if [ -z "$2" ]; then
       cd "$path/vim/bundle"
     elif [ -d "$path/$2" ]; then

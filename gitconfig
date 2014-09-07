@@ -112,6 +112,7 @@
   rails = "!bundle exec rails"
 
   mux = "!mux"
+  bun = "!bun"
   shore = "!shore"
   guard = "!guard"
 
