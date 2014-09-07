@@ -1,0 +1,23 @@
+#!/bin/bash
+
+pattern='.'
+
+if [ -f Gemfile ]; then
+  paths=`echo .bundle/ruby/*/{gems,bundler/gems}`
+elif [ -f package.json ]; then
+  paths='node_modules --ignore node_modules'
+else
+  paths='.'
+fi
+
+if [ $# -gt 0 ]; then
+  args=( "$@" )
+  pattern=''
+  for (( i = 0; i < $#; i++ )); do
+    pattern="$pattern|${args[i]}"
+  done
+  pattern="(${pattern:1})"
+fi
+
+files=`ag -l --ignore spec --ignore test "$pattern" $paths | sort | fzf`
+[ -n "$files" ] && exec sensible-vim $files
