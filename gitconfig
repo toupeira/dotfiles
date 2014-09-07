@@ -111,9 +111,9 @@
   rake  = "!bundle exec rake"
   rails = "!bundle exec rails"
 
-  mux = "!f() { mux \"$@\"; }; f"
-  shore = "!f() { shore \"$@\"; }; f"
-  guard = "!f() { bundle exec guard \"$@\"; }; f"
+  mux = "!mux"
+  shore = "!shore"
+  guard = "!guard"
 
   # try to run a GUI, or tig on terminals
   g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"

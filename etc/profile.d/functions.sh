@@ -354,19 +354,6 @@ function src_alias {
   __git_edit_complete $alias _src_alias `src "$project" --path`
 }
 
-# Selecta wrappers
-if has selecta; then
-  function selecta_wrapper {
-    local command="$1"
-    shift
-
-    local selection=`"$@" | selecta`
-    [ -n "$selection" ] && "$command" "$selection"
-  }
-
-  alias ssrc='selecta_wrapper src src list'
-fi
-
 # Sudo wrapper for systemctl
 function systemctl {
   local command="systemctl"

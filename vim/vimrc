@@ -663,6 +663,8 @@ endfunction " }}}
   " rooter {{{
   let g:rooter_manual_only = 1
   let g:rooter_change_directory_for_non_project_files = 0
+  let g:rooter_use_lcd = 1
+
   if index(g:pathogen_disabled, 'rooter') == -1
     autocmd BufEnter * if !isdirectory(expand('%')) | Rooter
   endif
@@ -941,7 +943,7 @@ endfunction " }}}
 
     " speed up recursive file searches
     if s:has_ag
-      let g:unite_source_rec_async_command = 'ag -l --nocolor .'
+      let g:unite_source_rec_async_command = 'ag -l -g "" --nocolor'
       let g:unite_source_grep_command = 'ag'
       let g:unite_source_grep_default_opts = '--smart-case --nogroup --nocolor --line-numbers'
       let g:unite_source_grep_recursive_opt = ''

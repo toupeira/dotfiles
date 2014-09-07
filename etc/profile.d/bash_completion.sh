@@ -20,18 +20,20 @@ else
 fi
 
 function has_completion {
-  type -p "_$1" || (_completion_loader "$1" && type -p "_$1")
+  type -p "_$1" && return
+  _completion_loader "$1"
+  type -p "_$1"
 }
 
 # Custom completions
-complete -o bashdefault -o default -F _root_command sudo watch
+# complete -o bashdefault -o default -F _root_command sudo watch
 complete -o bashdefault -o default -F _command psgrep pskill
 complete -o bashdefault -o default -F _command start @
 
-has_completion ssh && complete -F _ssh ping host telnet nc
-has_completion pgrep && complete -F _pgrep psgrep pskill
-has_completion systemctl && complete -F _systemctl sctl
-has_completion journalctl && complete -F _journalctl jctl
+has_completion ssh        && complete -F _ssh        -o default -o bashdefault ping telnet host nc
+has_completion pgrep      && complete -F _pgrep      -o default -o bashdefault psgrep pskill
+has_completion systemctl  && complete -F _systemctl  -o default -o bashdefault sctl
+has_completion journalctl && complete -F _journalctl -o default -o bashdefault jctl
 
 if has dotfiles; then
   __git_edit_complete dotfiles _git `dotfiles --path`
