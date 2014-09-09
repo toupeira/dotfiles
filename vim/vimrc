@@ -371,22 +371,20 @@ endfunction " }}}
 
   " Copy & Paste shortcuts
   if has('mac')
-    " Command-c is Copy
     vnoremap <D-c> "+y
+    vnoremap <D-x> "+d
 
-    " Command-v is Paste
-    map <D-v>               "+gP
-    cmap <D-v>              <C-R>+
+    map <D-v>  "+gP
+    cmap <D-v> <C-R>+
 
     exe 'inoremap <script> <D-v>' paste#paste_cmd['i']
     exe 'vnoremap <script> <D-v>' paste#paste_cmd['v']
   else
-    " CTRL-c is Copy
     vnoremap <C-c> "+ygv<Esc>
+    vnoremap <C-x> "+d<Esc>
 
-    " CTRL-v is Paste
-    noremap <C-v>               "+gP
-    cnoremap <C-v>              <C-r>+
+    noremap <C-v>  "+gP
+    cnoremap <C-v> <C-r>+
 
     exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
     exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']

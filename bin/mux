@@ -19,6 +19,8 @@ if [ "${1:0:1}" = "@" ]; then
     @server)
       if [ -f Gemfile ]; then
         server="rails server"
+      elif [ -x node_modules/.bin/sails ]; then
+        console="sails lift"
       elif [ -f Gruntfile.js ]; then
         server="grunt serve"
       else
@@ -32,6 +34,8 @@ if [ "${1:0:1}" = "@" ]; then
     @console)
       if [ -f Gemfile ]; then
         console="rails console"
+      elif [ -x node_modules/.bin/sails ]; then
+        console="sails console"
       elif [ -f Gruntfile.js ]; then
         console="node"
       else
