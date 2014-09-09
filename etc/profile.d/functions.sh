@@ -350,7 +350,9 @@ function src_alias {
   local project="$2"
   shift 2
 
-  alias $alias="src $project $@"
+  local space=''
+  [ $# -gt 0 ] && space=' '
+  alias $alias="src $project$space$@"
   __git_edit_complete $alias _src_alias `src "$project" --path`
 }
 
