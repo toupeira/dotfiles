@@ -282,3 +282,7 @@
 	path = vim/bundle/jade
 	url = https://github.com/digitaltoad/vim-jade.git
   ignore = dirty
+[submodule "vim/bundle/tmux-complete"]
+	path = vim/bundle/tmux-complete
+	url = https://github.com/junegunn/tmux-complete.vim.git
+  ignore = dirty
