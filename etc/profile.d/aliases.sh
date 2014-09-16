@@ -31,6 +31,9 @@ alias smem='smem -kt'
 alias watch='watch -cd -n 1'
 has 7z && ! has rar && alias rar='7z'
 
+alias sctl='systemctl'
+alias jctl='journalctl'
+
 alias @='start '
 alias dt='dotfiles'
 has git-edit && alias ed='git-edit'
@@ -84,8 +87,6 @@ if has sudo; then
   alias invoke-rc.d='sudo invoke-rc.d'
 
   # system tools
-  alias sctl='systemctl'
-  alias jctl='journalctl'
   alias modprobe='sudo modprobe'
   alias rmmod='sudo rmmod'
   alias iptables='sudo iptables'

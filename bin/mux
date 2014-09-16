@@ -5,22 +5,17 @@ if [ "${1:0:1}" = "@" ]; then
   shift
 
   case "$profile" in
-    @log)
-      if [ -f "log/development.log" ]; then
-        log="log/development.log"
-      else
-        echo "Can't find log for project."
-        exit 1
-      fi
-
-      mux -S "$@" shore -e "tail -n 0 -f $log";;
     @guard)
-      mux -b -V "$@" shore -e bundle exec guard;;
+      mux -b -V "$@" shore -e bundle exec guard
+      ;;
+    @pry)
+      mux -V "$@" shore -e pry
+      ;;
     @server)
       if [ -f Gemfile ]; then
         server="rails server"
       elif [ -x node_modules/.bin/sails ]; then
-        console="sails lift"
+        server="sails lift"
       elif [ -f Gruntfile.js ]; then
         server="grunt serve"
       else
@@ -28,9 +23,8 @@ if [ "${1:0:1}" = "@" ]; then
         exit 1
       fi
 
-      mux -b "$@" shore -e "$server";;
-    @pry)
-      mux -V "$@" shore -e pry;;
+      mux -b "$@" shore -e "$server"
+      ;;
     @console)
       if [ -f Gemfile ]; then
         console="rails console"
@@ -43,7 +37,18 @@ if [ "${1:0:1}" = "@" ]; then
         exit 1
       fi
 
-      mux -V "$@" shore -e "$console";;
+      mux -V "$@" shore -e "$console"
+      ;;
+    @log)
+      if [ -f "log/development.log" ]; then
+        log="log/development.log"
+      else
+        echo "Can't find log for project."
+        exit 1
+      fi
+
+      mux -S "$@" shore -e "tail -n 0 -f $log"
+      ;;
     @dev)
       mux @server
       [ -f Guardfile ] && mux @guard
@@ -57,17 +62,17 @@ if [ "${1:0:1}" = "@" ]; then
   exit
 fi
 
-command='new-window'
+action='new-window'
 unset args background
 
 while [ "${1:0:1}" = "-" ]; do
   case "$1" in
     -S)
-      command='split-window'
+      action='split-window'
       args="$args -v -l 20"
       ;;
     -V)
-      command='split-window'
+      action='split-window'
       if [ `tput cols` -ge 160 ]; then
         args="$args -h -l 80"
       else
@@ -78,11 +83,11 @@ while [ "${1:0:1}" = "-" ]; do
       background=1
       ;;
     -s)
-      command='split-window'
+      action='split-window'
       args="$args -v"
       ;;
     -v)
-      command='split-window'
+      action='split-window'
       args="$args -h"
       ;;
     -c|-l|-p)
@@ -103,10 +108,10 @@ if [ $# -eq 0 ]; then
   set -- bash --login
 fi
 
-tmux $command $args -- "tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; $*"
+tmux $action $args -- "tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; PATH=\"$PATH\" $*"
 
 if [ "$background" ]; then
-  if [ "$command" = "new-window" ]; then
+  if [ "$action" = "new-window" ]; then
     tmux last-window
   else
     tmux last-pane
