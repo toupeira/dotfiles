@@ -23,5 +23,10 @@ if [ $# -gt 0 ]; then
   pattern="(${pattern:1})"
 fi
 
-files=`ag -l --ignore spec --ignore test "$pattern" $paths | sort | fzf`
+files=( `ag -l --ignore spec --ignore test "$pattern" $paths` )
+
+if [ ${#files[@]} -gt 1 ]; then
+  files=( `echo "${files[@]}" | tr " " "\n" | sort | fzf` )
+fi
+
 [ -n "$files" ] && exec sensible-vim $files

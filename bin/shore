@@ -21,7 +21,7 @@ while [ "${1:0:1}" = "-" ]; do
   shift
 done
 
-if [ ${#command} -eq 0 -a ! -f Procfile ]; then
+if [ ${#command[@]} -eq 0 -a ! -f Procfile ]; then
   echo "Can't continue without a Procfile."
   exit 1
 fi
@@ -36,7 +36,7 @@ else
 fi
 
 while true; do
-  if [ ${#command} -gt 0 ]; then
+  if [ ${#command[@]} -gt 0 ]; then
     "${command[@]}"
   elif [ -n "$1" ]; then
     shoreman <(grep $options "^$1\w*:" Procfile)
