@@ -5,7 +5,7 @@ PIPE=~/.quodlibet/control
 CURRENT=~/.quodlibet/current
 
 function _ql {
-  echo "Sending: $1"
+  [ -t 0 ] && echo "Sending: $1"
   echo "$1" > $PIPE
 }
 
