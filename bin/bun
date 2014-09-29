@@ -29,4 +29,7 @@ if [ ${#files[@]} -gt 1 ]; then
   files=( `echo "${files[@]}" | tr " " "\n" | sort | fzf` )
 fi
 
-[ -n "$files" ] && exec sensible-vim $files
+if [ -n "$files" ]; then
+  echo -e "\e[0;36m${files[@]}\e[0m" | tr " " "\n"
+  exec sensible-vim "${files[@]}"
+fi

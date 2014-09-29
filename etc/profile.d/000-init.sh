@@ -1,5 +1,5 @@
 # Helper to check for commands
-function has {
+has() {
   which "$1" &>/dev/null
 }
 

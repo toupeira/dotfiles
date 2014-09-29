@@ -5,7 +5,7 @@ if [ -d /var/lib/gems/1.8/bin ]; then
 fi
 
 if [ -d ~/bin ]; then
-  export PATH="$PATH":~/bin
+  export PATH="$PATH:$HOME/bin"
 fi
 
 # Add OS X system paths
