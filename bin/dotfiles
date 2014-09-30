@@ -283,13 +283,7 @@ function run {
           cd "$DOTFILES/$submodule" || exit 1
           [ -e ".git" ] || exec echo "Not a git repository: .git"
 
-          if [[ "$submodule" =~ powerline$ ]]; then
-            local branch="develop"
-          else
-            local branch="master"
-          fi
-
-          system git pull -v --progress origin "$branch"
+          system git pull -v --progress origin master
 
           if [ "$submodule" = "vim/bundle/vimproc" ]; then
             build "$DOTFILES/$submodule"
@@ -299,7 +293,7 @@ function run {
         status "{{Updating all submodules...}}"
         message="Update submodules"
 
-        run submodule foreach 'if [[ "$path" =~ powerline$ ]]; then branch="develop"; else branch="master"; fi; git pull -v --progress origin "$branch"'
+        run submodule foreach 'git pull -v --progress origin master'
 
         run build_all
       fi
