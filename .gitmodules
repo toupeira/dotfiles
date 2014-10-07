@@ -286,7 +286,3 @@
 	path = vim/bundle/tmux-complete
 	url = https://github.com/junegunn/tmux-complete.vim.git
   ignore = dirty
-[submodule "vim/bundle/gitgutter"]
-	path = vim/bundle/gitgutter
-	url = https://github.com/airblade/vim-gitgutter.git
-  ignore = dirty
