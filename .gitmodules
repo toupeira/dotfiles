@@ -286,3 +286,15 @@
 	path = vim/bundle/tmux-complete
 	url = https://github.com/junegunn/tmux-complete.vim.git
   ignore = dirty
+[submodule "tmux/copycat"]
+	path = tmux/copycat
+	url = https://github.com/tmux-plugins/tmux-copycat.git
+  ignore = dirty
+[submodule "tmux/yank"]
+	path = tmux/yank
+	url = https://github.com/tmux-plugins/tmux-yank.git
+  ignore = dirty
+[submodule "tmux/open"]
+	path = tmux/open
+	url = https://github.com/tmux-plugins/tmux-open.git
+  ignore = dirty

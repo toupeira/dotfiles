@@ -13,7 +13,7 @@ if [ -x /usr/libexec/path_helper ]; then
   eval `/usr/libexec/path_helper -s`
 fi
 
-if [ -n "$BASH_INTERACTIVE" ] && has sensible-vim; then
+if has sensible-vim; then
   export EDITOR="sensible-vim"
 else
   export EDITOR="vim"
