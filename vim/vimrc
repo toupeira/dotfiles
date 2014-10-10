@@ -688,6 +688,9 @@ endfunction " }}}
     \ call AddCycleGroup('sh', [ 'do', 'then' ])
   autocmd FileType javascript,coffee 
     \ call AddCycleGroup([ 'javascript', 'coffee' ], [ 'addClass', 'removeClass' ])
+
+  autocmd FileType *
+    \ call AddCycleGroup('global', [ 'debit', 'credit' ])
   " }}}
 
   " tabular {{{
