@@ -70,6 +70,7 @@
   theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 
   ap = add -p
+  cp = checkout -p
   all = add -A
   ci = commit -v
   ca = commit -va

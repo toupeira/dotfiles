@@ -1,54 +1,65 @@
+AllCops:
+  Include:
+    - Rakefile
+    - config.ru
+
 ### LIMITS
 
-ClassLength:
-  Max: 1000
-
-CyclomaticComplexity:
+Metrics/CyclomaticComplexity:
   Max: 6
 
-LineLength:
-  Max: 180
+Metrics/PerceivedComplexity:
+  Max: 6
 
-MethodLength:
-  Max: 120
+Metrics/LineLength:
+  Max: 150
+
+Metrics/MethodLength:
+  Max: 50
+
+Metrics/ClassLength:
+  Max: 150
 
 ### BAD HABITS
 
-AndOr:
+Lint/AssignmentInCondition:
   Enabled: false
 
-AssignmentInCondition:
+Style/AndOr:
   Enabled: false
 
 # BlockComments:
 #   Enabled: false
 
-Documentation:
+Style/Documentation:
   Enabled: false
 
-### STYLE
+### STYLE RULES
 
-AlignHash:
+Style/AlignHash:
   EnforcedHashRocketStyle: table
   EnforcedColonStyle: table
   EnforcedLastArgumentHashStyle: always_ignore
 
-AlignParameters:
+Style/AlignParameters:
   EnforcedStyle: with_fixed_indentation
 
-AsciiComments:
+Style/AsciiComments:
   Enabled: false
 
-Blocks:
+Style/BarePercentLiterals:
+  EnforcedStyle: percent_q
+
+Style/Blocks:
   Enabled: false
 
-BracesAroundHashParameters:
+Style/BracesAroundHashParameters:
   Enabled: false
 
-CaseIndentation:
+Style/CaseIndentation:
   IndentWhenRelativeTo: end
 
-CollectionMethods:
+Style/CollectionMethods:
   PreferredMethods:
     collect: 'map'
     collect!: 'map!'
@@ -56,28 +67,35 @@ CollectionMethods:
     detect: 'find'
     find_all: 'select'
 
-EmptyLinesAroundBody:
+Style/EmptyLinesAroundBody:
   Enabled: false
 
-EndAlignment:
-  AlignWith: variable
+Style/FileName:
+  Exclude:
+    - '**/Capfile'
+    - '**/Gemfile'
+    - '**/Guardfile'
+    - '**/Rakefile'
 
-FormatString:
+Style/FormatString:
   EnforcedStyle: percent
 
-IfUnlessModifier:
+Style/GuardClause:
+  MinBodyLength: 3
+
+Style/IfUnlessModifier:
   Enabled: false
 
-IndentHash:
+Style/IndentHash:
   EnforcedStyle: consistent
 
-LeadingCommentSpace:
+Style/LeadingCommentSpace:
   Enabled: false
 
-NumericLiterals:
+Style/NumericLiterals:
   MinDigits: 7
 
-PercentLiteralDelimiters:
+Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     '%':  '{}'
     '%q': '{}'
@@ -90,7 +108,7 @@ PercentLiteralDelimiters:
     '%w': '[]'
     '%W': '[]'
 
-PerlBackrefs:
+Style/PerlBackrefs:
   Enabled: false
 
 # PredicateName:
@@ -99,40 +117,40 @@ PerlBackrefs:
 #     # - has_
 #     - have_
 
-RegexpLiteral:
+Style/RegexpLiteral:
   Enabled: false
 
-Semicolon:
+Style/Semicolon:
   AllowAsExpressionSeparator: true
     
-SignalException:
+Style/SignalException:
   EnforcedStyle: only_raise
   # SupportedStyles:
   #   - only_raise
   #   - only_fail
   #   - semantic
 
-SingleLineBlockParams:
+Style/SingleLineBlockParams:
   Enabled: false
 
-SpaceInsideBrackets:
+Style/SpaceInsideBrackets:
   Enabled: false
 
-SpecialGlobalVars:
+Style/SpecialGlobalVars:
   Enabled: false
 
-StringLiterals:
+Style/StringLiterals:
   Enabled: false
 
-TrailingComma:
+Style/TrailingComma:
   Enabled: false
   # EnforcedStyleForMultiline: comma
   # SupportedStyles:
   #   - comma
   #   - no_comma
 
-WhileUntilModifier:
+Style/WhileUntilModifier:
   Enabled: false
 
-WordArray:
+Style/WordArray:
   Enabled: false
