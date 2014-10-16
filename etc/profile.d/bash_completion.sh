@@ -25,6 +25,11 @@ function has_completion {
   type -p "_$1"
 }
 
+# tmux completions
+if [ -f /usr/share/doc/tmux/examples/bash_completion_tmux.sh ]; then
+  . /usr/share/doc/tmux/examples/bash_completion_tmux.sh
+fi
+
 # Custom completions
 # complete -o bashdefault -o default -F _root_command sudo watch
 complete -o bashdefault -o default -F _command psgrep pskill
