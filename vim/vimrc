@@ -90,7 +90,9 @@
   set visualbell t_vb= " disable bells
   set synmaxcol=1000 " disable syntax highlighting on long lines
   set lazyredraw
-  set cursorline
+  if !&diff
+    set cursorline
+  endif
 
   " mouse support
   set mouse=a
