@@ -70,12 +70,12 @@
   theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
 
   ap = add -p
-  cp = checkout -p
   all = add -A
   ci = commit -v
   ca = commit -va
   amend = commit -v --amend
   unstage = reset HEAD
+  discard = checkout -p
 
   l = log --all --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
   lstat = "!f() { git l --stat $@; }; f"
