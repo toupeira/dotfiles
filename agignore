@@ -46,3 +46,4 @@ src/upstream
 db/archive
 app/assets/javascripts/ace
 app/assets/data
+tmp/
