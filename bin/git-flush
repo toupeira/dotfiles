@@ -5,9 +5,8 @@ git ff
 for branch in `git branch --merged | grep -v '^\*' | fgrep /`; do
   echo -ne "\e[0;36mRemove merged branch \e[1;36m$branch\e[0;36m? [Y/n]\e[0m "
   read -n 1
-  echo
   case "$REPLY" in
-    n|N) continue;;
+    n|N) echo; continue;;
   esac
 
   git branch -d "$branch" && continue
@@ -17,7 +16,7 @@ for branch in `git branch --merged | grep -v '^\*' | fgrep /`; do
   echo
   case "$REPLY" in
     y|Y) ;;
-      *) continue;;
+      *) echo; continue;;
   esac
 
   git branch -D "$branch"
