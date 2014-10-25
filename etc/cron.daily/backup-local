@@ -17,6 +17,7 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/.[Tt]mp*
   --exclude **/.[Tt]emp*
   --exclude **/.[Tt]rash*
+  --exclude **/.**/*[Cc]ache*
 
   --exclude **/home/*/Dropbox
   --exclude **/home/*/src
