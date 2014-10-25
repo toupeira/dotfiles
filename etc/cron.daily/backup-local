@@ -7,41 +7,41 @@ BACKUP="/var/backups/$HOSTNAME"
 LOGFILE="/var/log/backup-$HOSTNAME.log"
 
 DEFAULT_EXCLUDE_PATHS="
-  --exclude '**/[Cc]ache'
-  --exclude '**/[Tt]mp'
-  --exclude '**/[Tt]emp'
-  --exclude '**/[Tt]rash'
-  --exclude '**/.[Cc]ache*'
-  --exclude '**/.[Tt]mp*'
-  --exclude '**/.[Tt]emp*'
-  --exclude '**/.[Tt]rash*'
-   
   --exclude /etc/dotfiles
 
-  --exclude '/home/*/Dropbox'
-  --exclude '/home/*/src'
-  --exclude '/home/*/tmp'
+  --exclude **/[Cc]ache
+  --exclude **/[Tt]mp
+  --exclude **/[Tt]emp
+  --exclude **/[Tt]rash
+  --exclude **/.[Cc]ache*
+  --exclude **/.[Tt]mp*
+  --exclude **/.[Tt]emp*
+  --exclude **/.[Tt]rash*
 
-  --exclude '/home/*/.android/avd'
-  --exclude '/home/*/.cdist'
-  --exclude '/home/*/.cinv'
-  --exclude '/home/*/.dropbox-dist'
-  --exclude '/home/*/.gvfs'
-  --exclude '/home/*/.local/share/akonadi'
-  --exclude '/home/*/.macromedia'
-  --exclude '/home/*/.meteor'
-  --exclude '/home/*/.mozilla/firefox/*/adblockplus'
-  --exclude '/home/*/.mozilla/firefox/*/cookies*'
-  --exclude '/home/*/.mozilla/firefox/*/lazarus*'
-  --exclude '/home/*/.mozilla/firefox/*/storage'
-  --exclude '/home/*/.nenv'
-  --exclude '/home/*/.npm'
-  --exclude '/home/*/.password-store'
-  --exclude '/home/*/.rbenv'
-  --exclude '/home/*/.secrets'
-  --exclude '/home/*/.thumbnails'
-  --exclude '/home/*/.vagrant.d'
-  --exclude '/home/*/.xbmc'
+  --exclude **/home/*/Dropbox
+  --exclude **/home/*/src
+  --exclude **/home/*/tmp
+
+  --exclude **/home/*/.android/avd
+  --exclude **/home/*/.cdist
+  --exclude **/home/*/.cinv
+  --exclude **/home/*/.dropbox-dist
+  --exclude **/home/*/.gvfs
+  --exclude **/home/*/.local/share/akonadi
+  --exclude **/home/*/.macromedia
+  --exclude **/home/*/.meteor
+  --exclude **/home/*/.mozilla/firefox/*/adblockplus
+  --exclude **/home/*/.mozilla/firefox/*/cookies*
+  --exclude **/home/*/.mozilla/firefox/*/lazarus*
+  --exclude **/home/*/.mozilla/firefox/*/storage
+  --exclude **/home/*/.nenv
+  --exclude **/home/*/.npm
+  --exclude **/home/*/.password-store
+  --exclude **/home/*/.rbenv
+  --exclude **/home/*/.secrets
+  --exclude **/home/*/.thumbnails
+  --exclude **/home/*/.vagrant.d
+  --exclude **/home/*/.xbmc
 "
 
 DEFAULT_INCLUDE_PATHS="
