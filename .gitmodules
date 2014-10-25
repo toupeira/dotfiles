@@ -202,14 +202,6 @@
   path = vim/bundle/bbye
   url = https://github.com/moll/vim-bbye.git
   ignore = dirty
-[submodule "vim/bundle/neosnippet"]
-  path = vim/bundle/neosnippet
-  url = https://github.com/Shougo/neosnippet.vim.git
-  ignore = dirty
-[submodule "vim/bundle/snippets"]
-  path = vim/bundle/snippets
-  url = https://github.com/honza/vim-snippets
-  ignore = dirty
 [submodule "vim/bundle/ctrlsf"]
   path = vim/bundle/ctrlsf
   url = https://github.com/dyng/ctrlsf.vim.git
@@ -297,4 +289,8 @@
 [submodule "tmux/open"]
 	path = tmux/open
 	url = https://github.com/tmux-plugins/tmux-open.git
+  ignore = dirty
+[submodule "vim/bundle/incsearch"]
+	path = vim/bundle/incsearch
+	url = https://github.com/haya14busa/incsearch.vim
   ignore = dirty

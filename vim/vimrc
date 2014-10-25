@@ -607,6 +607,15 @@ endfunction " }}}
   let g:colorizer_auto_filetype = 'css,scss,sass'
   " }}}
 
+  " incsearch {{{
+  let g:incsearch#consistent_n_direction = 1
+  let g:incsearch#emacs_like_keymap = 1
+
+  map /  <Plug>(incsearch-forward)
+  map ?  <Plug>(incsearch-backward)
+  map g/ <Plug>(incsearch-stay)
+  " }}}
+
   " jedi {{{
   let g:jedi#auto_vim_configuration = 0
   let g:jedi#completions_enabled = 0
@@ -816,14 +825,6 @@ endfunction " }}}
     inoremap <expr> <BS>  neocomplete#smart_close_popup()."\<C-h>"
     inoremap <expr> <C-y> neocomplete#close_popup()
     inoremap <expr> <C-e> neocomplete#cancel_popup()
-  endif
-  " }}}
-
-  " neosnippet {{{
-  if index(g:pathogen_disabled, 'neosnippet') == -1
-    let g:neosnippet#enable_snipmate_compatibility = 1
-
-    imap <C-k> <Plug>(neosnippet_expand_or_jump)
   endif
   " }}}
 
