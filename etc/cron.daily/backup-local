@@ -60,9 +60,6 @@ function log {
 rm -f "$LOGFILE"
 
 log "Starting backup"
-log "Excluding paths: $(echo; echo "$DEFAULT_EXCLUDE_PATHS $EXCLUDE_PATHS" | grep .; echo)"
-log "Including paths: $(echo; echo "$DEFAULT_INCLUDE_PATHS $INCLUDE_PATHS" | grep .; echo)"
-
 for file in /etc/backup.d/*; do
   if [ -x "$file" ]; then
     log "Running $file..."
@@ -70,6 +67,13 @@ for file in /etc/backup.d/*; do
   fi
 done
 
+echo >> "$LOGFILE"
+log "Excluding paths: $(echo; echo "$DEFAULT_EXCLUDE_PATHS" "$EXCLUDE_PATHS" | grep .)"
+
+echo >> "$LOGFILE"
+log "Including paths: $(echo; echo "$DEFAULT_INCLUDE_PATHS" "$INCLUDE_PATHS" | grep .)"
+
+echo >> "$LOGFILE"
 log "Backing up files..."
 rdiff-backup --print-statistics --exclude-fifos --exclude-sockets \
   --exclude "$BACKUP" \
@@ -77,12 +81,15 @@ rdiff-backup --print-statistics --exclude-fifos --exclude-sockets \
   $DEFAULT_INCLUDE_PATHS $INCLUDE_PATHS \
   --exclude / / "$BACKUP" >> "$LOGFILE"
 
+echo >> "$LOGFILE"
 log "Purging old backups..."
 rdiff-backup --remove-older-than 3M -v2 --force "$BACKUP" >> "$LOGFILE"
 
-log "Building package lists"
+echo >> "$LOGFILE"
+log "Backing up package lists"
 (date; echo; dpkg --get-selections) > "$BACKUP/packages.txt"
 which gem >/dev/null && (date; echo; gem list) > "$BACKUP/gems.txt"
 which npm >/dev/null && (date; echo; npm -g list) > "$BACKUP/npm.txt"
 
+echo >> "$LOGFILE"
 log "Backup finished."
