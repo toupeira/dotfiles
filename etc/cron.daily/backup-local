@@ -9,7 +9,8 @@ LOGFILE="/var/log/backup-$HOSTNAME.log"
 DEFAULT_EXCLUDE_PATHS="
   --exclude /etc/dotfiles
 
-  --exclude **/[Cc]ache
+  --exclude **/[Cc]ache*
+  --exclude **/*[Cc]ache
   --exclude **/[Tt]mp
   --exclude **/[Tt]emp
   --exclude **/[Tt]rash
@@ -17,7 +18,6 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/.[Tt]mp*
   --exclude **/.[Tt]emp*
   --exclude **/.[Tt]rash*
-  --exclude **/.**/*[Cc]ache*
 
   --exclude **/home/*/Dropbox
   --exclude **/home/*/src
