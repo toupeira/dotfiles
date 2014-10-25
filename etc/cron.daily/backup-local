@@ -59,7 +59,9 @@ function log {
 
 rm -f "$LOGFILE"
 
-log "Backup started"
+log "Starting backup"
+log "Excluding paths: $(echo; echo "$DEFAULT_EXCLUDE_PATHS $EXCLUDE_PATHS" | grep .; echo)"
+log "Including paths: $(echo; echo "$DEFAULT_INCLUDE_PATHS $INCLUDE_PATHS" | grep .; echo)"
 
 for file in /etc/backup.d/*; do
   if [ -x "$file" ]; then
