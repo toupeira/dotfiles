@@ -6,6 +6,9 @@ HOSTNAME=`hostname -s`
 BACKUP="/var/backups/$HOSTNAME"
 LOGFILE="/var/log/backup-$HOSTNAME.log"
 
+TMPDIR=$(mktemp -d /tmp/backup-$HOSTNAME.XXXXXX)
+cd "$TMPDIR" || exit 1
+
 DEFAULT_EXCLUDE_PATHS="
   --exclude /etc/dotfiles
 
@@ -93,3 +96,6 @@ which npm >/dev/null && (date; echo; npm -g list) > "$BACKUP/npm.txt"
 
 echo >> "$LOGFILE"
 log "Backup finished."
+
+cd /
+rmdir "$TMPDIR"
