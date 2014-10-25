@@ -1,0 +1,85 @@
+#!/bin/bash
+
+[ "$1" != "--really" ] || exec nice ionice -c3 "$0" --really
+
+HOSTNAME=`hostname -s`
+BACKUP="/var/backups/$HOSTNAME"
+LOGFILE="/var/log/backup-$HOSTNAME.log"
+
+DEFAULT_EXCLUDE_PATHS="
+  --exclude '**/[Cc]ache'
+  --exclude '**/[Tt]mp'
+  --exclude '**/[Tt]emp'
+  --exclude '**/[Tt]rash'
+  --exclude '**/.[Cc]ache*'
+  --exclude '**/.[Tt]mp*'
+  --exclude '**/.[Tt]emp*'
+  --exclude '**/.[Tt]rash*'
+   
+  --exclude /etc/dotfiles
+
+  --exclude '/home/*/Dropbox'
+  --exclude '/home/*/src'
+  --exclude '/home/*/tmp'
+
+  --exclude '/home/*/.android/avd'
+  --exclude '/home/*/.cdist'
+  --exclude '/home/*/.cinv'
+  --exclude '/home/*/.dropbox-dist'
+  --exclude '/home/*/.gvfs'
+  --exclude '/home/*/.local/share/akonadi'
+  --exclude '/home/*/.macromedia'
+  --exclude '/home/*/.meteor'
+  --exclude '/home/*/.mozilla/firefox/*/adblockplus'
+  --exclude '/home/*/.mozilla/firefox/*/cookies*'
+  --exclude '/home/*/.mozilla/firefox/*/lazarus*'
+  --exclude '/home/*/.mozilla/firefox/*/storage'
+  --exclude '/home/*/.nenv'
+  --exclude '/home/*/.npm'
+  --exclude '/home/*/.password-store'
+  --exclude '/home/*/.rbenv'
+  --exclude '/home/*/.secrets'
+  --exclude '/home/*/.thumbnails'
+  --exclude '/home/*/.vagrant.d'
+  --exclude '/home/*/.xbmc'
+"
+
+DEFAULT_INCLUDE_PATHS="
+  --include /etc
+  --include /home
+  --include /root
+  --include /var/backups
+  --include /var/mail
+"
+
+function log {
+  date "+`basename "$0"` [%Y-%m-%d %T] $1" >> "$LOGFILE"
+}
+
+rm -f "$LOGFILE"
+
+log "Backup started"
+
+for file in /etc/backup.d/*; do
+  if [ -x "$file" ]; then
+    log "Running $file..."
+    . "$file" >> "$LOGFILE"
+  fi
+done
+
+log "Backing up files..."
+rdiff-backup --print-statistics --exclude-fifos --exclude-sockets \
+  --exclude "$BACKUP" \
+  $DEFAULT_EXCLUDE_PATHS $EXCLUDE_PATHS \
+  $DEFAULT_INCLUDE_PATHS $INCLUDE_PATHS \
+  --exclude / / "$BACKUP" >> "$LOGFILE"
+
+log "Purging old backups..."
+rdiff-backup --remove-older-than 3M -v2 --force "$BACKUP" >> "$LOGFILE"
+
+log "Building package lists"
+(date; echo; dpkg --get-selections) > "$BACKUP/packages.txt"
+which gem >/dev/null && (date; echo; gem list) > "$BACKUP/gems.txt"
+which npm >/dev/null && (date; echo; npm -g list) > "$BACKUP/npm.txt"
+
+log "Backup finished."
