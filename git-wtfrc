@@ -1,4 +1,4 @@
 ---
-max_commits: 10
-versions: []
-ignore: '^remotes/politnetz(-beta)?\.ch'
+max_commits: 5
+versions: [ 'heads/master', 'heads/staging' ]
+ignore: []
