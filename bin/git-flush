@@ -1,23 +1,79 @@
 #!/bin/bash
 
-git ff
+echo
+echo -e '\e[0;33mUpdating remotes:\e[1;33m'
+git remote update | sed -r 's/^/  - /'
+echo -e '\e[0m'
+git merge --ff-only HEAD@{u} >/dev/null || exit 1
 
-for branch in `git branch --merged | grep -v '^\*' | fgrep /`; do
-  echo -ne "\e[0;36mRemove merged branch \e[1;36m$branch\e[0;36m? [Y/n]\e[0m "
-  read -n 1
-  case "$REPLY" in
-    n|N) echo; continue;;
-  esac
+LOCAL_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/heads)
+REMOTE_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/remotes)
 
-  git branch -d "$branch" && continue
+function ask_yes {
+  echo -ne "$1 [Y/n]\e[0m "
+  read
+  [ "$REPLY" != "N" -a "$REPLY" != "n" ]
+}
 
-  echo -ne "\e[1;31mForcibly remove branch \e[1;36m$branch\e[1;31m? [y/N]\e[0m "
-  read -n 1
+function ask_no {
+  echo -ne "$1 [y/N]\e[0m "
+  read
+  [ "$REPLY" = "Y" -o "$REPLY" = "y" ]
+}
+
+function flush_branch {
+  local branch="$1"
+
+  git wtf | grep --color=never "$branch"
+  ask_yes "\e[0;36m     > Remove branch?" || return
+
+  if ! git branch -d "$branch"; then
+    ask_no "\e[0;31m     > Forcibly remove branch?" || return
+    git branch -D "$branch" || return
+  fi
+
+  local remote_branches=$(echo "$REMOTE_BRANCHES" | grep "$branch")
+  for remote_branch in $remote_branches; do
+    local remote=$(echo $remote_branch | cut -d/ -f1)
+    local remote_branch=$(echo $remote_branch | cut -d/ -f2-)
+
+    ask_yes "\e[0;32m     > Delete on remote \e[1;32m$remote\e[0;32m?" || continue
+    git push $remote :$remote_branch
+  done
+}
+
+unset branches
+
+case "$1" in
+  -a)
+    title="Local branches"
+    branches=$(echo "$LOCAL_BRANCHES" | grep '/')
+    ;;
+  "")
+    title="Merged branches"
+    branches=`comm -23 \
+      <(echo "$LOCAL_BRANCHES") \
+      <(echo "$REMOTE_BRANCHES" | sed -r 's|^[^/]+/||')`
+    ;;
+  *)
+    flush_branch "$1"
+    exit
+    ;;
+esac
+
+echo -e "\e[0;36m$title:\e[0m"
+for branch in $branches; do
+  echo -e "\e[1;36m - $branch\e[0m"
+done
+echo
+
+echo -e "\e[1;32mRemote branches:\e[0m"
+for branch in $(echo "$REMOTE_BRANCHES" | grep '/.*/'); do
+  echo -e "\e[0;32m - $branch\e[0m"
+done
+echo
+
+for branch in $branches; do
+  flush_branch "$branch"
   echo
-  case "$REPLY" in
-    y|Y) ;;
-      *) echo; continue;;
-  esac
-
-  git branch -D "$branch"
 done

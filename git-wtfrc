@@ -1,4 +1,7 @@
 ---
 max_commits: 5
-versions: [ 'heads/master', 'heads/staging' ]
+versions:
+ - heads/master
+ - heads/staging
+ - heads/production
 ignore: []
