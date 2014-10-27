@@ -1,13 +1,12 @@
 #!/bin/bash
 
 echo
-echo -e '\e[0;33mUpdating remotes:\e[1;33m'
-git remote update | sed -r 's/^/  - /'
-echo -e '\e[0m'
+echo -e '\e[0;32mUpdating remotes...'
+git fetch --all --quiet --prune
 git merge --ff-only HEAD@{u} >/dev/null || exit 1
 
-LOCAL_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/heads)
-REMOTE_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/remotes)
+LOCAL_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/heads | sort)
+REMOTE_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/remotes | sort)
 
 function ask_yes {
   echo -ne "$1 [Y/n]\e[0m "
@@ -59,7 +58,7 @@ case "$1" in
     title="Merged branches"
     branches=`comm -23 \
       <(echo "$LOCAL_BRANCHES") \
-      <(echo "$REMOTE_BRANCHES" | sed -r 's|^[^/]+/||')`
+      <(echo "$REMOTE_BRANCHES" | sed -r 's|^[^/]+/||' | sort)`
 
     if [ -z "$branches" ]; then
       echo -e "\e[0;36mNo merged branches.\e[0m"
@@ -73,17 +72,15 @@ case "$1" in
     ;;
 esac
 
-echo -e "\e[0;36m$title:\e[0m"
-for branch in $branches; do
-  echo -e "\e[1;36m - $branch\e[0m"
-done
 echo
-
-echo -e "\e[1;32mRemote branches:\e[0m"
-for branch in $(echo "$REMOTE_BRANCHES" | grep '/.*/'); do
-  echo -e "\e[0;32m - $branch\e[0m"
-done
-echo
+remote_topic_branches=$(echo "$REMOTE_BRANCHES" | grep '/.*/')
+if [ -n "$remote_topic_branches" ]; then
+  echo -e "\e[1;32mRemote branches:\e[0m"
+  for branch in $remote_topic_branches; do
+    echo -e "\e[0;32m - $branch\e[0m"
+  done
+  echo
+fi
 
 for branch in $branches; do
   flush_branch "$branch"
