@@ -48,12 +48,24 @@ case "$1" in
   -a)
     title="Local branches"
     branches=$(echo "$LOCAL_BRANCHES" | grep '/')
+
+    if [ -z "$branches" ]; then
+      echo -e "\e[0;36mNo local branches.\e[0m"
+      echo
+      exit
+    fi
     ;;
   "")
     title="Merged branches"
     branches=`comm -23 \
       <(echo "$LOCAL_BRANCHES") \
       <(echo "$REMOTE_BRANCHES" | sed -r 's|^[^/]+/||')`
+
+    if [ -z "$branches" ]; then
+      echo -e "\e[0;36mNo merged branches.\e[0m"
+      echo
+      exit
+    fi
     ;;
   *)
     flush_branch "$1"
