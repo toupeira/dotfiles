@@ -50,6 +50,7 @@ if [ "${1:0:1}" = "@" ]; then
       mux -S "$@" shore -e "tail -n 0 -f $log"
       ;;
     @dev)
+      wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
       mux @server
       [ -f Guardfile ] && mux @guard
       ;;
