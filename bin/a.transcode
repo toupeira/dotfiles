@@ -27,7 +27,7 @@ for file in "$@"; do
   echo " [1;34m>>>[0m [1;37m$file[0m"
 
   if [ "$ext" != "wav" -a ! -f "$name.wav" ]; then
-    nice mplayer -ao pcm:file="$name.wav" -vc dummy -vo null "$file"
+    nice mpv -ao pcm:file="$name.wav" --no-video "$file"
     file="$name.wav"
   fi
 
