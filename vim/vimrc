@@ -123,7 +123,6 @@
   set display+=lastline
 
   if has('conceal')
-    set conceallevel=2
     set concealcursor=n
   endif
 

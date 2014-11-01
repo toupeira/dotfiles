@@ -77,7 +77,7 @@
   unstage = reset HEAD
   discard = checkout -p
 
-  l = log --all --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
+  l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
   lstat = "!f() { git l --stat $@; }; f"
   ldi = log -p --word-diff
   ldiff = log -p

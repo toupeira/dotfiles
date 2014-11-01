@@ -63,7 +63,9 @@ function down {
 
 # Open a file with xdg-open
 function open {
-  xdg-open "$@" &>/dev/null
+  for file in "$@"; do
+    xdg-open "$file"
+  done
 }
 
 # Move a file or directory and replace it by a symlink to the new location
