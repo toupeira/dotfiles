@@ -847,8 +847,6 @@ endfunction " }}}
       \ let g:airline_symbols.readonly .= ' '
 
     function! AirlineFilepath() " {{{
-      let l:status = ""
-
       let l:file = fnamemodify(expand('%'), ':p')
       let l:path = fnamemodify(l:file, ':.:h')
       let l:cwd = getcwd()
@@ -861,17 +859,16 @@ endfunction " }}}
         endif
       endif
 
+      let l:status = ""
       let l:cwd = fnamemodify(l:cwd, ':t')
 
       if l:path != '.'
-        let l:status .= l:path
-
         if l:path[0] != '/' && !empty(l:cwd)
-          let l:status .= " @ "
+          let l:status = l:cwd . '/' . l:path
+        else
+          let l:status = l:path
         endif
-      endif
-
-      if l:path[0] != '/'
+      elseif l:path[0] != '/'
         let l:status .= l:cwd
       endif
 
