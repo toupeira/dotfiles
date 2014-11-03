@@ -574,7 +574,11 @@ endfunction " }}}
   " ,N - toggle line numbers
   nnoremap <silent> ,N :call <SID>ToggleLineNumbers()<CR>
   function! s:ToggleLineNumbers() " {{{
-    let &number=!&number
+    if &number
+      set nonumber norelativenumber
+    else
+      set number relativenumber
+    endif
   endfunction " }}}
 
   " F4 / F5 - change window height
@@ -847,32 +851,14 @@ endfunction " }}}
       \ let g:airline_symbols.readonly .= ' '
 
     function! AirlineFilepath() " {{{
-      let l:file = fnamemodify(expand('%'), ':p')
-      let l:path = fnamemodify(l:file, ':.:h')
-      let l:cwd = getcwd()
+      let l:path = fnamemodify(expand('%'), ':p:h')
 
-      if l:cwd == $HOME && l:file[0:len($HOME) - 1] == $HOME
-        if l:path == '.'
-          return "~"
-        else
-          return "~/" . l:path
-        endif
+      if exists('b:git_dir')
+        let l:root = fnamemodify(b:git_dir, ':h')
+        return fnamemodify(l:root, ':t') . substitute(l:path, '^' . l:root, '', '')
+      else
+        return substitute(l:path, '^' . $HOME, '~', '')
       endif
-
-      let l:status = ""
-      let l:cwd = fnamemodify(l:cwd, ':t')
-
-      if l:path != '.'
-        if l:path[0] != '/' && !empty(l:cwd)
-          let l:status = l:cwd . '/' . l:path
-        else
-          let l:status = l:path
-        endif
-      elseif l:path[0] != '/'
-        let l:status .= l:cwd
-      endif
-
-      return l:status
     endfunction " }}}
 
     " show file format and encoding separated by a colon

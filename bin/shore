@@ -10,6 +10,7 @@ while [ "${1:0:1}" = "-" ]; do
     -e)
       shift
       command=( "$@" )
+      shift $#
       break
       ;;
     -t)
@@ -28,7 +29,7 @@ fi
 
 title="${title:-$1}"
 title="${title:-`basename "$PWD"`}"
-title="shore[$title]"
+title="@$title"
 if [[ "$TERM" =~ ^screen ]]; then
   echo -ne "\033]0;$title\007\033k$title\033\\"
 else
