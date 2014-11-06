@@ -855,7 +855,7 @@ endfunction " }}}
 
       if exists('b:git_dir')
         let l:root = fnamemodify(b:git_dir, ':h')
-        return fnamemodify(l:root, ':t') . substitute(l:path, '^' . l:root, '', '')
+        return substitute(l:path, '^' . l:root . '/', '', '') . ' @ '. fnamemodify(l:root, ':t')
       else
         return substitute(l:path, '^' . $HOME, '~', '')
       endif

@@ -294,3 +294,11 @@
 	path = vim/bundle/incsearch
 	url = https://github.com/haya14busa/incsearch.vim
   ignore = dirty
+[submodule "vim/bundle/mustache-handlebars"]
+	path = vim/bundle/mustache-handlebars
+	url = https://github.com/mustache/vim-mustache-handlebars.git
+  ignore = dirty
+[submodule "vim/bundle/emblem"]
+	path = vim/bundle/emblem
+	url = https://github.com/heartsentwined/vim-emblem.git
+  ignore = dirty
