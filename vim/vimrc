@@ -766,7 +766,9 @@ endfunction " }}}
   let g:syntastic_ruby_rubocop_exec = '/usr/local/bin/rubocop'
   let g:syntastic_ruby_rubocop_args = '-D'
   let g:syntastic_sass_sass_exec = '/usr/local/bin/sass'
+  let g:syntastic_sass_sass_args = '-I .'
   let g:syntastic_scss_sass_exec = '/usr/local/bin/sass'
+  let g:syntastic_sass_sass_args = '-I .'
   let g:syntastic_ruby_slimrb_exec = '/usr/local/bin/slimrb'
 
   autocmd BufEnter *.coffee

@@ -3,7 +3,7 @@
 
 # load rbenv
 if [ -d ~/.rbenv ]; then
-  export PATH="~/.rbenv/bin:$PATH"
+  export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init - --no-rehash)"
 
   # show ruby version in prompt

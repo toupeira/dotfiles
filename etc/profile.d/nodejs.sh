@@ -3,7 +3,7 @@
 
 # load nenv
 if [ -d ~/.nenv ]; then
-  export PATH="~/.nenv/bin:$PATH"
+  export PATH="$HOME/.nenv/bin:$PATH"
   eval "$(nenv init - --no-rehash)"
 fi
 
