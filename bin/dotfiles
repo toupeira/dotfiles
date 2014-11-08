@@ -17,11 +17,21 @@ if [ "`uname -s`" = "Darwin" ]; then
   done
 fi
 
-DRYRUN=0
+COMMAND=
+
+FORCE=0
 VERBOSE=0
 QUIET=0
-FORCE=0
-COMMAND=
+DRYRUN=0
+
+function force   { [ $FORCE   -eq 1 ]; }
+function verbose { [ $VERBOSE -eq 1 ]; }
+function quiet   { [ $QUIET   -eq 1 ]; }
+function dryrun  { [ $DRYRUN  -eq 1 ]; }
+
+function dryrun_message {
+  dryrun && output "[DRY RUN]"
+}
 
 function main {
   # find the dotfiles repository
@@ -31,8 +41,7 @@ function main {
     elif [ -d ~/.dotfiles ]; then
       DOTFILES=~/.dotfiles
     else
-      error "Can't find repository in /etc/dotfiles or $HOME/.dotfiles, please set \$DOTFILES"
-      exit 1
+      abort "Can't find repository in /etc/dotfiles or $HOME/.dotfiles, please set \$DOTFILES"
     fi
   fi
 
@@ -42,17 +51,16 @@ function main {
   done
 
   if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
-    error "Can't find dotfiles script in repository, please check your \$DOTFILES"
-    exit 1
+    abort "Can't find dotfiles script in repository, please check your \$DOTFILES"
   fi
 
   # Parse arguments
   while [ $# -gt 0 ]; do
     case "$1" in
-      -n|--dry-run) DRYRUN=1;;
+      -f|--force)   FORCE=1;;
       -v|--verbose) VERBOSE=1;;
       -q|--quiet)   QUIET=1;;
-      -f|--force)   FORCE=1;;
+      -n|--dry-run) DRYRUN=1;;
          --path)    echo "$DOTFILES"; exit;;
       -*)           usage;;
       *)
@@ -76,10 +84,10 @@ function usage {
   echo "Usage: `basename $0` [options] COMMAND [args]"
   echo
   echo "Options:"
-  echo "  -n, --dry-run   Only show changes, without performing them"
+  echo "  -f, --force     Assume yes for all questions"
   echo "  -v, --verbose   Increase verbosity"
   echo "  -q, --quiet     Suppress all normal output"
-  echo "  -f, --force     Assume yes for all questions"
+  echo "  -n, --dry-run   Only show changes, without performing them"
   echo "      --path      Show path to the dotfiles repository and exit"
   echo
   echo "Commands:"
@@ -87,6 +95,7 @@ function usage {
   echo "  install PATH...       Install symlink for PATH"
   echo "  add PATH...           Add file to repository and replace it with a symlink"
   echo "  ca, commitall         Commit all changes"
+  echo "  list                  List submodules"
   echo "  up, update [MODULE]   Update submodules (fetch new commits)"
   echo "  sync                  Update, commit and push"
   echo
@@ -94,28 +103,44 @@ function usage {
   echo "  COMMAND [ARGS]...     Excecute a Git command inside the dotfiles repository"
   echo "  git COMMAND [ARGS]..."
   echo
+
   exit 255
 }
 
 function msg {
-  if [ $QUIET -eq 0 -o $VERBOSE -eq 1 -o "$2" = 1 ]; then
-    local msg="${1/$HOME/~}"
-    local color=${2:-4}
+  local message="${1/$HOME/~}"
+  local color=${2:-4}
+  local echo_options="$3"
 
-    if [ -n "$msg" ]; then
-      echo $3 " [1;3${color}m>[0m $msg" | sed -r 's/\{\{/[1m/g' | sed -r 's/\}\}/[0m/g'
+  if verbose || ! quiet || [ "$color" = 1 ]; then
+    if [ -n "$message" ]; then
+      echo -e $echo_options " \e[1;3${color}m>\e[0m $message" | sed -r 's/\{\{/\o033[1m/g' | sed -r 's/\}\}/\o033[0m/g'
     else
-      echo
+      echo -e $echo_options
     fi
   fi
 }
 
-function status { msg "$1" 2; }
-function warning { msg "$1" 3; }
+function output {
+  local output="$1"
+  local echo_options="$2"
+
+  if verbose || ! quiet; then
+    echo -e $echo_options "$1"
+  fi
+}
+
+function status  { msg "$1" ${2:-2}; }
+function warning { msg "$1" ${2:-3}; }
 
 function error {
   STATUS=1
   msg "$1" 1
+}
+
+function abort {
+  [ -n "$1" ] && error "$@"
+  exit 1
 }
 
 function ask {
@@ -137,7 +162,7 @@ function ask_yes {
 function ask_abort {
   STATUS=1
   if ! ask "Do you want to continue?" 1; then
-    exit 1
+    abort
   fi
 }
 
@@ -171,9 +196,11 @@ function system {
     done
   fi
 
-  [ $FORCE   -eq 1 ] && command="$command -f"
-  [ $VERBOSE -eq 1 ] && command="$command -v" && echo "    executing: $command $@"
-  [ $DRYRUN  -eq 1 ]                          && echo "    executing: $command $@ [DRY RUN]" && return
+  force   && command="$command -f"
+  verbose && command="$command -v"
+
+  verbose && output "     executing: $command $(echo "$@") `dryrun_message`"
+  dryrun && return
 
   command $command "$@"
 }
@@ -186,10 +213,10 @@ function git {
     local onerror="ask_abort"
   fi
 
-  [ $VERBOSE -eq 1 ] && echo "    executing: git $@"
-  [ $DRYRUN  -eq 1 ] && echo "    executing: git $@ [DRY RUN]" && return
+  verbose && output "     executing: git $(echo "$@") `dryrun_message`"
+  dryrun && return
 
-  (cd "$DOTFILES" || exit 1; command git "$@")
+  (cd "$DOTFILES" || abort; command git "$@")
   local status=$?
   [ $status -eq 0 ] || $onerror
 
@@ -248,66 +275,107 @@ function run {
   case "$command" in
     sync)
       if git ignore-errors status -s | grep -q .; then
-        msg
+        output
         git status
-        echo
+        output
         ask_abort
 
         run commitall
       fi
 
-      msg
+      output
       run pull
 
       if git status | fgrep -q "Your branch is ahead"; then
-        msg
+        output
         status "{{Pushing local changes...}}"
         run push
       fi
 
-      msg
+      output
+      ;;
+    list)
+      cat "$DOTFILES/.gitmodules" | awk '/path = / { print $3 }' | sort
       ;;
     up|update)
-      msg
-      run pull -q
+      unset batch
+      [ "$1" = '--batch' ] && batch=1 && shift
+      commit_message="Update submodules"
 
       if [ -n "$1" ]; then
         local submodule="$1"
-        [[ "$submodule" =~ / ]] || submodule="vim/bundle/$submodule"
         shift
 
-        status "Updating submodule {{$submodule}}..."
-        message="Update submodule $submodule"
+        if [ ! -d "$DOTFILES/$submodule" ]; then
+          submodule=`run list | grep -m1 "$submodule"`
+          if [ -z "$submodule" ]; then
+            abort "Submodule not found: {{$submodule}}"
+          fi
+        fi
+
+        commit_message="Update submodule $submodule"
 
         (
-          cd "$DOTFILES/$submodule" || exit 1
-          [ -e ".git" ] || exec echo "Not a git repository: .git"
+          cd "$DOTFILES/$submodule" || abort
+          [ -e ".git" ] || abort "Not a git repository: .git"
 
-          system git pull -v --progress origin master
+          old_commit=`system git rev-parse HEAD`
+          system git pull -q origin master
+          new_commit=`system git rev-parse HEAD`
 
-          if [ "$submodule" = "vim/bundle/vimproc" ]; then
-            build "$DOTFILES/$submodule"
+          if [ "$new_commit" != "$old_commit" ]; then
+            local url=`system git remote -v | egrep -om1 'https?://[^ ]+'`
+            [ -n "$url" ] && url=" ({{$url}})"
+
+            [ ! $batch ] && output
+            status "Changes in {{$submodule}}$url:" 6
+            quiet || system git -c color.ui=always diff --stat @{1}.. | sed -r 's/^/    /'
+
+            if [ "$submodule" = "vim/bundle/vimproc" ]; then
+              run build "$DOTFILES/$submodule"
+            fi
+
+            output
+          elif [ ! $batch ]; then
+            status "No changes in {{$submodule}}" 2
           fi
-        )
+
+        ) # keep cd scope
       else
-        status "{{Updating all submodules...}}"
-        message="Update submodules"
+        run pull -q
+        output
+        status "{{Updating submodules:}}"
 
-        run submodule foreach 'git pull -v --progress origin master'
+        local output=`mktemp -d ${TMPDIR:-/tmp}/dotfiles.XXXXXX`
 
-        run build_all
+        output '     \e[1;36m[' -n
+
+        for submodule in `run list`; do
+          (
+            run update --batch "$submodule" > "$output/${submodule//\//-}"
+            output '\e[0;36m=' -n
+          ) &
+        done
+
+        wait
+        output '\e[1;36m]\e[0m'
+        output
+
+        cat "$output"/*
+        rm -rf "$output"
       fi
+
+      [ $batch ] && return
 
       local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $2 }'`
-      if [ -n "$changes" ]; then
-        run commit -m "$message" $changes
-      fi
+      [ -z "$changes" ] && return
+
+      run commit -m "$commit_message" $changes
 
       if git status | fgrep -q "Your branch is ahead"; then
         run push
       fi
 
-      msg
       ;;
     init)
       function install_paths {
@@ -328,9 +396,9 @@ function run {
         done
       }
 
-      msg
+      output
       install_paths "${1:-$DOTFILES}"/*
-      msg
+      output
       ;;
     install)
       [ $# -eq 0 ] && usage
@@ -467,7 +535,9 @@ function run {
       local dir="$1"
       shift
 
-      status "Compiling {{$dir}}"
+      status "Building {{${dir/$DOTFILES\//}}} `dryrun_message`" 3
+      dryrun && return
+
       if ! system make -sBC "$dir" "$@"; then
         error "Error while compiling {{$dir}}"
         ask_abort
