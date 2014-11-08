@@ -288,7 +288,6 @@ function run {
 
       if git status | fgrep -q "Your branch is ahead"; then
         output
-        status "{{Pushing local changes...}}"
         run push
       fi
 
@@ -342,8 +341,8 @@ function run {
 
         ) # keep cd scope
       else
-        run pull -q
         output
+        run pull -q
         status "{{Updating submodules:}}"
 
         local output=`mktemp -d ${TMPDIR:-/tmp}/dotfiles.XXXXXX`
@@ -375,6 +374,7 @@ function run {
       if git status | fgrep -q "Your branch is ahead"; then
         run push
       fi
+      output
 
       ;;
     init)
@@ -529,7 +529,8 @@ function run {
       ;;
     push)
       load_key
-      git push -v --progress "$@"
+      status "{{Pushing local changes...}}"
+      git push -q "$@"
       ;;
     build)
       local dir="$1"
