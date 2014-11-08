@@ -186,10 +186,6 @@
   path = vim/bundle/rspec-syntax
   url = https://github.com/sheerun/rspec.vim.git
   ignore = dirty
-[submodule "vim/bundle/bufkill"]
-  path = vim/bundle/bufkill
-  url = https://github.com/mattdbridges/bufkill.vim.git
-  ignore = dirty
 [submodule "vim/bundle/targets"]
   path = vim/bundle/targets
   url = https://github.com/wellle/targets.vim.git
@@ -209,10 +205,6 @@
 [submodule "vim/bundle/tmux-navigator"]
   path = vim/bundle/tmux-navigator
   url = https://github.com/christoomey/vim-tmux-navigator.git
-  ignore = dirty
-[submodule "rbenv/plugins/rbenv-bundler"]
-  path = rbenv/plugins/rbenv-bundler
-  url = https://github.com/carsomyr/rbenv-bundler.git
   ignore = dirty
 [submodule "rbenv/plugins/ruby-build"]
   path = rbenv/plugins/ruby-build
