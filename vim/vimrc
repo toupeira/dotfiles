@@ -666,7 +666,7 @@ endfunction " }}}
 
   " slimux {{{
   let g:slimux_select_from_current_window = 1
-  let g:slimux_pane_format = '[#{pane_current_command}: #{pane_title}] #{?pane_active,(active),}'
+  let g:slimux_pane_format = '[#{pane_current_command}] #{pane_title} #{?pane_active,(active),}'
 
   nnoremap <silent> ,## :SlimuxREPLSendLine<CR>
   xnoremap <silent> ,#  :SlimuxREPLSendSelection<CR>gv
