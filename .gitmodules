@@ -294,3 +294,7 @@
 	path = vim/bundle/emblem
 	url = https://github.com/heartsentwined/vim-emblem.git
   ignore = dirty
+[submodule "vim/bundle/slimux"]
+	path = vim/bundle/slimux
+	url = https://github.com/epeli/slimux.git
+  ignore = dirty
