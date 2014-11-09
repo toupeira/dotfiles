@@ -1,120 +1,196 @@
 #!/bin/bash
 
-if [ "${1:0:1}" = "@" ]; then
-  profile="$1"
-  shift
+case "$1" in
+  @*)
+    profile="${1:1}"
+    shift
 
-  case "$profile" in
-    @guard)
-      mux -b -V "$@" shore -e bundle exec guard
-      ;;
-    @pry)
-      mux -V "$@" shore -e pry
-      ;;
-    @server)
-      if [ -f Gemfile ]; then
-        server="rails server"
-      elif [ -x node_modules/.bin/sails ]; then
-        server="sails lift"
-      elif [ -f Gruntfile.js ]; then
-        server="grunt serve"
-      else
-        echo "Can't find server for project."
-        exit 1
+    if [ -f Procfile ]; then
+      commands=$( egrep -o "^$profile.*:.+" Procfile )
+      count=$( echo "$commands" | grep -c . )
+
+      if [ $count -gt 0 ]; then
+        echo "$commands" | while read command; do
+          name=$( echo "$command" | cut -d: -f1 )
+          command=$( echo "$command" | cut -d: -f2- )
+
+          $0 -b "$@" "$0 title '$name'; $0 loop $command"
+        done
+
+        exit
       fi
+    fi
 
-      mux -b "$@" shore -e "$server"
-      ;;
-    @console)
-      if [ -f Gemfile ]; then
-        console="rails console"
-      elif [ -x node_modules/.bin/sails ]; then
-        console="sails console"
-      elif [ -f Gruntfile.js ]; then
-        console="node"
-      else
-        echo "Can't find console for project."
-        exit 1
-      fi
+    command="$profile $@"
+    options="-V"
 
-      mux -V "$@" shore -e "$console"
-      ;;
-    @log)
-      if [ -f "log/development.log" ]; then
-        log="log/development.log"
-      else
-        echo "Can't find log for project."
-        exit 1
-      fi
+    case "$profile" in
+      dev)
+        wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+        $0 @server
+        [ -f Guardfile ] && $0 @guard
+        ;;
+      guard)
+        command="bundle exec guard"
+        options="-b -V"
+        ;;
+      log)
+        if [ -f "log/development.log" ]; then
+          command="tail -n 0 -f log/development.log"
+          options="-S"
+        else
+          echo "Can't find log for project."
+          exit 1
+        fi
+        ;;
+      server)
+        options="-b"
 
-      mux -S "$@" shore -e "tail -n 0 -f $log"
-      ;;
-    @dev)
-      wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
-      mux @server
-      [ -f Guardfile ] && mux @guard
-      ;;
-    *)
-      echo "Unknown profile $profile."
-      exit 1
-      ;;
-  esac
+        if [ -x bin/rails ]; then
+          command="rails server"
+        elif [ -f .ember-cli ]; then
+          command="ember serve"
+        elif [ -f Gruntfile.js ]; then
+          command="grunt serve"
+        elif [ -x bin/server ]; then
+          command="bin/server"
+        else
+          echo "Can't find server for project."
+          exit 1
+        fi
+        ;;
+      console)
+        if [ -x bin/rails ]; then
+          command="rails console"
+        elif [ -f Gruntfile.js ]; then
+          command="node"
+        elif [ -x bin/console ]; then
+          command="bin/console"
+        else
+          echo "Can't find console for project."
+          exit 1
+        fi
+        ;;
+    esac
 
-  exit
-fi
+    $0 $options "$@" "$0 title '$profile'; $0 loop $command"
+    ;;
+  loop)
+    shift
+    command=( "$@" )
 
-action='new-window'
-unset args background
+    while true; do
+      "${command[@]}"
 
-while [ "${1:0:1}" = "-" ]; do
-  case "$1" in
-    -S)
-      action='split-window'
-      args="$args -v -l 20"
-      ;;
-    -V)
-      action='split-window'
-      if [ `tput cols` -ge 160 ]; then
-        args="$args -h -l 80"
-      else
-        args="$args -v -l 20"
-      fi
-      ;;
-    -b)
-      background=1
-      ;;
-    -s)
-      action='split-window'
-      args="$args -v"
-      ;;
-    -v)
-      action='split-window'
-      args="$args -h"
-      ;;
-    -c|-l|-p)
-      args="$args $1 $2"
+      reply=$( mux choose "Restart command" "Execute another command" "Quit" )
+      case "$reply" in
+        Restart*)
+          continue
+          ;;
+        Execute*)
+          command=( $( $0 input ) )
+          ;;
+        *)
+          exit
+          ;;
+      esac
+    done
+    ;;
+  title)
+    shift
+    title="${1:-`basename "$PWD"`}"
+    title="@$title"
+    if [[ "$TERM" =~ ^screen ]]; then
+      echo -ne "\033]0;$title\007\033k$title\033\\"
+    else
+      echo -ne "\033]1;$title\007\033]2;$title\007"
+    fi
+    ;;
+  choose)
+    shift
+    items=""
+    for item in "$@"; do
+      [ -n "$items" ] && items="$items,"
+      items="$items${item//,/ }"
+    done
+
+    $0 capture choose-list -l "$items"
+    ;;
+  input)
+    shift
+    prompt="$1"
+
+    $0 capture command-prompt -p "$prompt"
+    ;;
+  capture)
+    shift
+
+    env="MUX_CAPTURE_${TMUX_PANE//%/}"
+    tmux setenv -u "$env"
+
+    tmux "$@" "setenv '$env' '%%'"
+    while ! tmux showenv "$env" &>/dev/null; do
+      sleep 0.1
+    done
+
+    tmux showenv "$env" | cut -d= -f2-
+    tmux setenv -u "$env"
+    ;;
+  *)
+    action='new-window'
+    unset args background
+
+    while [ "${1:0:1}" = "-" ]; do
+      case "$1" in
+        -S)
+          action='split-window'
+          args="$args -v -l 20"
+          ;;
+        -V)
+          action='split-window'
+          if [ `tput cols` -ge 160 ]; then
+            args="$args -h -l 80"
+          else
+            args="$args -v -l 20"
+          fi
+          ;;
+        -b)
+          background=1
+          ;;
+        -s)
+          action='split-window'
+          args="$args -v"
+          ;;
+        -v)
+          action='split-window'
+          args="$args -h"
+          ;;
+        -c|-l|-p)
+          args="$args $1 $2"
+          shift
+          ;;
+        *)
+          echo "Usage: $0 [-b] [-c|-s|-v] [-l size|-p percentage] [COMMAND..]"
+          exit 255
+          ;;
+      esac
+
       shift
-      ;;
-    *)
-      echo "Usage: $0 [-b] [-c|-s|-v] [-l size|-p percentage] [COMMAND..]"
-      exit 255
-      ;;
-  esac
+    done
 
-  shift
-done
+    if [ $# -eq 0 ]; then
+      set --
+      set -- bash --login
+    fi
 
-if [ $# -eq 0 ]; then
-  set --
-  set -- bash --login
-fi
+    tmux $action $args -- "tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; PATH=\"$PATH\" $*"
 
-tmux $action $args -- "tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; PATH=\"$PATH\" $*"
-
-if [ "$background" ]; then
-  if [ "$action" = "new-window" ]; then
-    tmux last-window
-  else
-    tmux last-pane
-  fi
-fi
+    if [ "$background" ]; then
+      if [ "$action" = "new-window" ]; then
+        tmux last-window
+      else
+        tmux last-pane
+      fi
+    fi
+    ;;
+esac

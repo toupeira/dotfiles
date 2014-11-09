@@ -40,7 +40,7 @@ while true; do
   if [ ${#command[@]} -gt 0 ]; then
     "${command[@]}"
   elif [ -n "$1" ]; then
-    shoreman <(grep $options "^$1\w*:" Procfile)
+    shoreman <(grep $options "^$1[^:]*" Procfile)
   else
     shoreman
   fi
