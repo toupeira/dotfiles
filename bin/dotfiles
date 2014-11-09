@@ -8,7 +8,7 @@ if [ "${BASH_VERSION:0:1}" -lt 4 ]; then
 fi
 
 # Use Homebrew GNU commands on OS X if available
-if [ "`uname -s`" = "Darwin" ]; then
+if [ "$( uname -s )" = "Darwin" ]; then
   shopt -s expand_aliases
   for command in readlink sed; do
     if which g$command &>/dev/null; then
@@ -47,7 +47,7 @@ function main {
 
   # resolve symlinks
   while [ -L "$DOTFILES" ]; do
-    DOTFILES=`readlink -f "$DOTFILES"`
+    DOTFILES=$( readlink -f "$DOTFILES" )
   done
 
   if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
@@ -81,7 +81,7 @@ function main {
 }
 
 function usage {
-  echo "Usage: `basename $0` [options] COMMAND [args]"
+  echo "Usage: $( basename $0 ) [options] COMMAND [args]"
   echo
   echo "Options:"
   echo "  -f, --force     Assume yes for all questions"
@@ -183,7 +183,7 @@ function system {
     command="sudo $command"
   else
     for arg in "$@"; do
-      local dir=`dirname -- "$arg"`
+      local dir=$( dirname -- "$arg" )
       if [ "$dir" != "." -a -d "$dir" -a ! -w "$dir" ]; then
         if [ -z "${sudo_history["$dir"]}" ]; then
           warning "Using [1;33msudo[0m for directory [1m$dir[0m arg $arg"
@@ -199,7 +199,7 @@ function system {
   force   && command="$command -f"
   verbose && command="$command -v"
 
-  verbose && output "     executing: $command $(echo "$@") `dryrun_message`"
+  verbose && output "     executing: $command $(echo "$@") $( dryrun_message )"
   dryrun && return
 
   command $command "$@"
@@ -213,7 +213,7 @@ function git {
     local onerror="ask_abort"
   fi
 
-  verbose && output "     executing: git $(echo "$@") `dryrun_message`"
+  verbose && output "     executing: git $(echo "$@") $( dryrun_message )"
   dryrun && return
 
   (cd "$DOTFILES" || abort; command git "$@")
@@ -234,7 +234,7 @@ function validate {
 
 function load_key {
   local key=~/.ssh/id_rsa
-  if [ -f "$key" -a "`uname -s`" != "Darwin" ]; then
+  if [ -f "$key" -a "$( uname -s )" != "Darwin" ]; then
     ssh-add -l | fgrep -q "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
   fi
 }
@@ -306,7 +306,7 @@ function run {
         shift
 
         if [ ! -d "$DOTFILES/$submodule" ]; then
-          submodule=`run list | grep -m1 "$submodule"`
+          submodule=$( run list | grep -m1 "$submodule" )
           if [ -z "$submodule" ]; then
             abort "Submodule not found: {{$submodule}}"
           fi
@@ -318,12 +318,12 @@ function run {
           cd "$DOTFILES/$submodule" || abort
           [ -e ".git" ] || abort "Not a git repository: .git"
 
-          old_commit=`system git rev-parse HEAD`
+          old_commit=$( system git rev-parse HEAD )
           system git pull -q origin master
-          new_commit=`system git rev-parse HEAD`
+          new_commit=$( system git rev-parse HEAD )
 
           if [ "$new_commit" != "$old_commit" ]; then
-            local url=`system git remote -v | egrep -om1 'https?://[^ ]+'`
+            local url=$( system git remote -v | egrep -om1 'https?://[^ ]+' )
             [ -n "$url" ] && url=" ({{$url}})"
 
             [ ! $batch ] && output
@@ -345,11 +345,11 @@ function run {
         run pull -q
         status "{{Updating submodules:}}"
 
-        local output=`mktemp -d ${TMPDIR:-/tmp}/dotfiles.XXXXXX`
+        local output=$( mktemp -d ${TMPDIR:-/tmp}/dotfiles.XXXXXX )
 
         output '     \e[1;36m[' -n
 
-        for submodule in `run list`; do
+        for submodule in $( run list ); do
           (
             run update --batch "$submodule" > "$output/${submodule//\//-}"
             output '\e[0;36m=' -n
@@ -366,7 +366,7 @@ function run {
 
       [ $batch ] && return
 
-      local changes=`git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $2 }'`
+      local changes=$( git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $2 }' )
       [ -z "$changes" ] && return
 
       run commit -m "$commit_message" $changes
@@ -380,7 +380,7 @@ function run {
     init)
       function install_paths {
         for path in "$@"; do
-          if [ ! -e "$path" -o "`basename "$path"`" = "README.md" ]; then
+          if [ ! -e "$path" -o "$( basename "$path" )" = "README.md" ]; then
             continue
           fi
 
@@ -390,7 +390,7 @@ function run {
             run install "$path"
           fi
 
-          if [ -d "$path" -a ! -e "$path/.git" -a ! -L "$path" -a ! -L "`origin "$path"`" ]; then
+          if [ -d "$path" -a ! -e "$path/.git" -a ! -L "$path" -a ! -L "$( origin "$path" )" ]; then
             install_paths "$path"/*
           fi
         done
@@ -404,13 +404,13 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        local origin=`readlink -f -- "$path"`
-        local target=`target "$origin"`
+        local origin=$( readlink -f -- "$path" )
+        local target=$( target "$origin" )
         local force=0
 
         if [[ "$origin" =~ ^$DOTFILES/ ]]; then
           target="$origin"
-          origin=`origin "$target"`
+          origin=$( origin "$target" )
         fi
 
         if [ ! -e "$target" ]; then
@@ -419,7 +419,7 @@ function run {
         elif ! validate "$origin"; then
           continue
         elif [ -L "$origin" ]; then
-          local link=`readlink "$origin" 2>/dev/null`
+          local link=$( readlink "$origin" 2>/dev/null )
           if [ ! -e "$link" ]; then
             error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
             force=1
@@ -450,7 +450,7 @@ function run {
             system rm "$origin"
           fi
 
-          local parent=`dirname "$origin"`
+          local parent=$( dirname "$origin" )
           if [ ! -d "$parent" ]; then
             system mkdir -p "$parent"
           fi
@@ -468,9 +468,9 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        local origin=`readlink -f "$path" 2>/dev/null`
-        local target=`target "$origin"`
-        local target_dir=`dirname "$target"`
+        local origin=$( readlink -f "$path" 2>/dev/null )
+        local target=$( target "$origin" )
+        local target_dir=$( dirname "$target" )
 
         if [ ! -e "$origin" ]; then
           error "Path not found: {{$origin}}"
@@ -509,10 +509,10 @@ function run {
       git ignore-errors commit -a -m "Sync dotfiles" "$@"
       ;;
     pull)
-      local changes=`git status -s --ignore-submodules`
+      local changes=$( git status -s --ignore-submodules )
       [ -n "$changes" ] && git stash save | fgrep -q "No local changes to save" && unset changes
 
-      local current=`git rev-parse HEAD`
+      local current=$( git rev-parse HEAD )
 
       status "{{Merging remote changes...}}"
       load_key
@@ -520,7 +520,7 @@ function run {
 
       [ -n "$changes" ] && git stash pop -q
 
-      if [ "`git rev-parse HEAD`" != "$current" ]; then
+      if [ "$( git rev-parse HEAD )" != "$current" ]; then
         status "{{Checking out submodules...}}"
         run submodule sync -q
         run submodule update --init -q
@@ -536,7 +536,7 @@ function run {
       local dir="$1"
       shift
 
-      status "Building {{${dir/$DOTFILES\//}}} `dryrun_message`" 3
+      status "Building {{${dir/$DOTFILES\//}}} $( dryrun_message )" 3
       dryrun && return
 
       if ! system make -sBC "$dir" "$@"; then

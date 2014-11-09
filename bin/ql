@@ -5,7 +5,7 @@ PIPE=~/.quodlibet/control
 CURRENT=~/.quodlibet/current
 
 function _ql {
-  [ -t 0 ] && echo "Sending: $1"
+  [ -t 0 ] && [ -t 1 ] && echo "Sending: $1"
   echo "$1" > $PIPE
 }
 
@@ -62,9 +62,14 @@ case "$command" in
         fi
       done
 
-      echo "E: Couldn't start Quod Libet, giving up."
+      echo "Couldn't start Quod Libet, giving up."
       exit 1
     fi
+    ;;
+  start-playing)
+    shift
+    $0 play || $0 start-hidden --start-playing
+    exit 1
     ;;
   start-hidden)
     shift
@@ -75,10 +80,13 @@ case "$command" in
       exit 1
     fi
     ;;
+  is-running)
+    is_running
+    exit
+    ;;
 esac
 
 if ! is_running; then
-  echo "E: Quod Libet is not running."
   exit 1
 fi
 
