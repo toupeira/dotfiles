@@ -2,33 +2,47 @@
 
 case "$1" in
   @*)
-    profile="${1:1}"
+    proc="${1:1}"
     shift
 
     if [ -f Procfile ]; then
-      commands=$( egrep -o "^$profile.*:.+" Procfile )
+      commands=$( egrep -o "^$proc.*:.+" Procfile )
       count=$( echo "$commands" | grep -c . )
 
       if [ $count -gt 0 ]; then
         echo "$commands" | while read command; do
-          name=$( echo "$command" | cut -d: -f1 )
+          proc=$( echo "$command" | cut -d: -f1 )
           command=$( echo "$command" | cut -d: -f2- )
 
-          $0 -b "$@" "$0 title '$name'; $0 loop $command"
+          case "$proc" in
+            guard)
+              options="-b -V"
+              ;;
+            *)
+              options="-b"
+              ;;
+          esac
+
+          $0 $options "$@" "$0 title '$proc'; $0 loop $command"
         done
 
         exit
       fi
     fi
 
-    command="$profile $@"
+    command="$proc $@"
     options="-V"
 
-    case "$profile" in
+    case "$proc" in
       dev)
-        wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
         $0 @server
-        [ -f Guardfile ] && $0 @guard
+
+        if [ -f Guardfile ]; then
+          wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+          $0 @guard
+        fi
+
+        exit
         ;;
       guard)
         command="bundle exec guard"
@@ -73,24 +87,37 @@ case "$1" in
         ;;
     esac
 
-    $0 $options "$@" "$0 title '$profile'; $0 loop $command"
+    $0 $options "$@" "$0 title '$proc'; $0 loop $command"
     ;;
   loop)
     shift
     command=( "$@" )
 
     while true; do
-      "${command[@]}"
+      clear
+      eval "${command[@]}"
 
-      reply=$( mux choose "Restart command" "Execute another command" "Quit" )
-      case "$reply" in
-        Restart*)
+      >&2 echo -ne "
+ \e[0;34m[\e[1;34m ${command[@]} \e[0;34m]•••\e[0m
+   \e[0;36m• \e[1;36mR\e[0;36mestart command\e[0m
+   \e[0;36m• \e[1;36mE\e[0;36mxecute another command\e[0m
+   \e[0;33m• \e[1;33mQ\e[0;33muit\e[0m
+ \e[0;32m•••\e[0m "
+
+      read -n 1 2>/dev/null || exit
+      echo
+
+      case "$REPLY" in
+        [rR]*|"")
           continue
           ;;
-        Execute*)
-          command=( $( $0 input ) )
+        [eE]*)
+          echo -ne "  \e[0;34m•• \e[1;34mcommand:\e[0m "
+          read
+          command=( $( echo "$REPLY" ) )
           ;;
         *)
+          echo
           exit
           ;;
       esac
@@ -183,7 +210,7 @@ case "$1" in
       set -- bash --login
     fi
 
-    tmux $action $args -- "tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; PATH=\"$PATH\" $*"
+    tmux $action $args -- "export PATH=\"$PATH\"; tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; $*"
 
     if [ "$background" ]; then
       if [ "$action" = "new-window" ]; then
