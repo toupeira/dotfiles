@@ -26,6 +26,11 @@
   abbrevCommit = true
   decorate = true
 
+[pager]
+  log = diff-highlight | less
+  show = diff-highlight | less
+  diff = diff-highlight | less
+
 [merge]
   stat = true
   tool = gvimdiff
