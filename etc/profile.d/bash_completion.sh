@@ -75,7 +75,12 @@ function _src_alias {
 function _mux {
   local cword="${COMP_WORDS[COMP_CWORD]}"
   if [ -n "$cword" -a "${cword:0:1}" = "@" ]; then
-    COMPREPLY=( $(compgen -W "`egrep -o '@\w+' ~/bin/mux`" | fgrep "$cword") )
+    [ "$cword" = "@" ] && cword="@\w"
+
+    COMPREPLY=(
+      $( compgen -W "$( egrep -o "$cword[-[:alnum:]]*"    ~/bin/mux  2>/dev/null )")
+      $( compgen -W "$( egrep -o "^${cword:1}[-[:alnum:]]*" Procfile 2>/dev/null | sed -r 's/^/@/' )")
+    )
   else
     _command
   fi

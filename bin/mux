@@ -39,6 +39,7 @@ case "$1" in
 
         if [ -f Guardfile ]; then
           wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
+          sleep 0.1
           $0 @guard
         fi
 
