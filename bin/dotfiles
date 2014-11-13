@@ -324,7 +324,7 @@ function run {
 
           if [ "$new_commit" != "$old_commit" ]; then
             local url=$( system git remote -v | egrep -om1 'https?://[^ ]+' )
-            [ -n "$url" ] && url=" ({{$url}})"
+            [ -n "$url" ] && url=" [ {{$url}} ]"
 
             [ ! $batch ] && output
             status "Changes in {{$submodule}}$url:" 6
