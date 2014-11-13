@@ -26,19 +26,20 @@ done
 if [ ${#args[@]} -gt 0 ]; then
   for file in "$@"; do
     if [ -f "$file" ]; then
-      mimetype=$(
+      binary_type=$(
         file -L --brief --mime-type -- "$file" \
           | fgrep -vx 'regular file, no read permission' \
           | fgrep -vx 'application/javascript' \
           | fgrep -vx 'application/octet-stream' \
+          | fgrep -vx 'application/pgp-keys' \
           | fgrep -vx 'application/xml' \
           | fgrep -vx 'image/svg+xml' \
           | egrep -vx 'inode/(directory|x-empty)' \
           | grep -P '^((?!text/).+|text/rtf)$'
       )
 
-      if [ -n "$mimetype" ]; then
-        echo -ne "Open \e[1;37m$file \e[1;30m[$mimetype]\e[0m as binary? [Y/n] "
+      if [ -n "$binary_type" ]; then
+        echo -ne "Open \e[1;37m$file \e[1;30m[$binary_type]\e[0m as binary? [Y/n] "
         read
         if [ "$REPLY" != "n" ]; then
           for (( i = 0; i < ${#args[@]}; i++ )); do
