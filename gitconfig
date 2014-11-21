@@ -46,6 +46,7 @@
 
 [rerere]
   enabled = true
+  autoupdate = true
 
 [fetch]
   prune = true
