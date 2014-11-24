@@ -3,7 +3,7 @@
 pattern='.'
 
 if [ -f Gemfile ]; then
-  paths=`echo .bundle/ruby/*/{gems,bundler/gems}`
+  paths=`find .bundle -type d -name gems`
 elif [ -f package.json ]; then
   paths='node_modules --ignore node_modules'
 elif [ -d vim/bundle ]; then
