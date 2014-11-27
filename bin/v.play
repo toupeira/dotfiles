@@ -22,6 +22,7 @@ function add_path {
       -or -iname "*.flv"    -or -iname "*.img" \
       -or -iname "*.divx"   -or -iname "*.flac" \
       -or -iname "*.ram"    -or -iname "*.mpeg" \
+      -or -iname "*.f4v" \
     \) | sort | egrep -i $exclusive_regex "($regex)" >> $playlist
   elif [ -f "$path" ]; then
     realpath -- "$path" >> $playlist
