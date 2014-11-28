@@ -67,9 +67,6 @@ Style/CollectionMethods:
     detect: 'find'
     find_all: 'select'
 
-Style/EmptyLinesAroundBody:
-  Enabled: false
-
 Style/FileName:
   Exclude:
     - '**/Capfile'
