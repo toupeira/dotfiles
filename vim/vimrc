@@ -409,6 +409,9 @@ endfunction " }}}
     for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
       if bufwinnr(bufnum) != -1
         exec(a:pfx.'close')
+        if a:pfx == 'l'
+          execute 'SyntasticReset'
+        endif
         return
       endif
     endfor
@@ -743,24 +746,8 @@ endfunction " }}}
   " }}}
 
   " syntastic {{{
-  nnoremap <silent>,l :call <SID>ToggleLinter()<CR>
-  function! s:ToggleLinter() " {{{
-    if &ft == 'ruby'
-      if g:syntastic_ruby_checkers == [ 'mri' ]
-        let g:syntastic_ruby_checkers = [ 'mri', 'rubocop' ]
-        echohl Question
-        echo "Linter enabled"
-        echohl none
-      else
-        let g:syntastic_ruby_checkers = [ 'mri' ]
-        echohl Question
-        echo "Linter disabled"
-        echohl none
-      endif
-    endif
-
-    SyntasticCheck
-  endfunction " }}}
+  nnoremap <silent>,l :SyntasticToggleMode<CR>
+  nnoremap <silent>,L :SyntasticCheck<CR>
 
   let g:syntastic_check_on_open = 0
   let g:syntastic_enable_signs = 1

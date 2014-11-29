@@ -2,7 +2,8 @@
 
 {
   "devel":    false, // Development/debugging (alert, confirm, etc)
-  "esnext":   true, // true: Allow ES.next (ES6) syntax (ex: `const`)
+  "esnext":   true,  // Allow ES.next (ES6) syntax (ex: `const`)
+  "multistr": true,  // Allow ES5 multiline strings
 
   "jquery":   true, // jQuery
   "node":     true, // Node.js
