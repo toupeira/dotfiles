@@ -29,6 +29,7 @@ alias psgrep='pgrep -fla'
 alias pskill='pkill -fe'
 alias smem='smem -kt'
 alias watch='watch -cd -n 1 '
+alias irb='pry'
 has 7z && ! has rar && alias rar='7z'
 
 alias sctl='systemctl'
