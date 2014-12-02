@@ -175,10 +175,10 @@
 " {{{
 
   set formatoptions+=j
-  set selection=inclusive
   set backspace=indent,eol,start
   set whichwrap+=<,>,[,],h,l
   set iskeyword+=$
+  set selection=inclusive
 
   " indents
   set autoindent
@@ -513,7 +513,7 @@ endfunction " }}}
   " ,v - split vertically
   nnoremap <silent> ,v :vsplit<CR>
 
-  " ,w - write all files
+  " ,w - write current file
   nnoremap <silent> ,w :write<CR>:redraw<CR>
 
   " ,W - force write current file
