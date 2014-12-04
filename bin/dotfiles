@@ -522,7 +522,6 @@ function run {
 
       if [ "$( git rev-parse HEAD )" != "$current" ]; then
         status "{{Checking out submodules...}}"
-        run submodule sync -q
         run submodule update --init -q
         run build_all
       fi
