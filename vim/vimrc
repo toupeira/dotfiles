@@ -9,8 +9,9 @@
   runtime bundle/pathogen/autoload/pathogen.vim
   let g:pathogen_disabled = []
 
-  " only enable tmux-navigator in tmux sessions
+  " only enable tmux plugins in tmux sessions
   if empty($TMUX)
+    call add(g:pathogen_disabled, 'tmux-complete')
     call add(g:pathogen_disabled, 'tmux-navigator')
   endif
 
