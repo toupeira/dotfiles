@@ -174,7 +174,7 @@ function system {
   local command="$1"
   shift
 
-  if [ "$command" = "chown" -o "$command" = "chgrp" ]; then
+  if [ "$command" = "chown" -o "$command" = "chgrp" -o "$command" = "apt-get" ]; then
     if [ -z "${sudo_history["$command"]}" ]; then
       warning "Using [1;33msudo[0m for command [1m$command[0m"
     fi
@@ -398,6 +398,7 @@ function run {
 
       output
       install_paths "${1:-$DOTFILES}"/*
+      run install-packages "$DOTFILES/.packages"
       output
       ;;
     install)
@@ -463,6 +464,32 @@ function run {
           fi
         fi
       done
+      ;;
+    install-packages)
+      [ $# -eq 0 ] && usage
+
+      local packages=$( cat "$1" )
+      if dpkg -s xorg &>/dev/null; then
+        [ -f "$1.x11" ] && packages=$( echo "$packages"; cat "$1.x11" )
+      else
+        [ -f "$1.nox" ] && packages=$( echo "$packages"; cat "$1.nox" )
+      fi
+
+      local missing=$( comm -23 <( echo "$packages" | sort ) <( dpkg --get-selections | cut -f1 | sort ) )
+      if [ -n "$missing" ]; then
+        output
+        status "{{Missing packages:}}"
+        for package in $missing; do
+          output "    \e[0;32m- \e[1;32m$package\e[0m"
+        done
+
+        if ask_yes "{{Install?}}"; then
+          output
+          system apt-get install $missing
+        fi
+
+        output
+      fi
       ;;
     add)
       [ $# -eq 0 ] && usage

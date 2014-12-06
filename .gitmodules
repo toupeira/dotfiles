@@ -94,10 +94,6 @@
   path = vim/bundle/rsi
   url = https://github.com/tpope/vim-rsi.git
   ignore = dirty
-[submodule "urxvt/urxvt-perls"]
-  path = urxvt/urxvt-perls
-  url = https://github.com/muennich/urxvt-perls.git
-  ignore = dirty
 [submodule "vim/bundle/vimlint"]
   path = vim/bundle/vimlint
   url = https://github.com/dbakker/vim-lint.git
