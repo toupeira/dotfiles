@@ -46,8 +46,9 @@ case "$command" in
     ;;
   start)
     if is_running; then
-      echo "Quod Libet is already running."
-      exit 1
+      quodlibet --show-window
+      xwit -raise -focus -property WM_CLASS -names quodlibet
+      exit 0
     else
       shift
       quodlibet "$@" &>/dev/null &
