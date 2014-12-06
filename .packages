@@ -8,9 +8,6 @@ debian-keyring
 dnsutils
 file
 git
-httpie
-iotop
-ipython3
 less
 lsof
 moreutils
@@ -22,7 +19,6 @@ pv
 rlwrap
 rsync
 ruby
-ruby-dev
 silversearcher-ag
 smem
 software-properties-common
