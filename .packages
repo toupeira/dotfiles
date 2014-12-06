@@ -1,5 +1,6 @@
 apt-listchanges
 bash-completion
+build-essential
 curl
 debconf-utils
 debian-archive-keyring

@@ -148,7 +148,7 @@ function ask {
 
   msg "$1 [y/N] " "${2:-6}" -n >&2
   read
-  [ "$REPLY" = "Y" -o "$REPLY" = "y" ]
+  [ "${REPLY:0:1}" = "Y" -o "${REPLY:0:1}" = "y" ]
 }
 
 function ask_yes {
@@ -156,7 +156,7 @@ function ask_yes {
 
   msg "$1 [Y/n] " "$2" -n >&2
   read
-  [ "$REPLY" != "N" -a "$REPLY" != "n" ]
+  [ "${REPLY:0:1}" != "N" -a "${REPLY:0:1}" != "n" ]
 }
 
 function ask_abort {
@@ -550,7 +550,7 @@ function run {
       if [ "$( git rev-parse HEAD )" != "$current" ]; then
         status "{{Checking out submodules...}}"
         run submodule update --init -q
-        run build_all
+        run build-all
       fi
       ;;
     push)
@@ -570,7 +570,7 @@ function run {
         ask_abort
       fi
       ;;
-    build_all)
+    build-all)
       run build "$DOTFILES/vim/bundle/vimproc"
       ;;
     git)
