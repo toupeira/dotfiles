@@ -10,6 +10,7 @@ file
 git
 less
 lsof
+make
 moreutils
 ncurses-term
 p7zip-full
