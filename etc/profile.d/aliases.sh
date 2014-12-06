@@ -79,7 +79,7 @@ if has sudo; then
   # debian tools
   alias apt-get='sudo apt-get'
   alias aptitude='sudo aptitude'
-  has eatmydata && alias aptitude='eatmydata sudo aptitude'
+  has eatmydata && alias aptitude='sudo eatmydata aptitude'
   alias pkginstall='sudo dpkg -i'
   alias dpkg-reconfigure='sudo dpkg-reconfigure'
   alias update-alternatives='sudo update-alternatives'
