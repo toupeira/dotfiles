@@ -1,2 +1,2 @@
-deb http://cdn.debian.net/debian/ sid main non-free contrib
-deb http://cdn.debian.net/debian/ experimental main non-free contrib
+deb http://http.debian.net/debian/ sid main non-free contrib
+deb http://http.debian.net/debian/ experimental main non-free contrib
