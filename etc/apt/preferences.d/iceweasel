@@ -1,0 +1,3 @@
+Package: iceweasel
+Pin: release c=iceweasel-beta
+Pin-Priority: 1000
