@@ -500,7 +500,7 @@ function run {
         local target_dir=$( dirname "$target" )
 
         if [ ! -e "$origin" ]; then
-          error "Path not found: {{$origin}}"
+          abort "Path not found: {{$origin}}"
         elif ! validate "$origin"; then
           continue
         elif [ -L "$path" ]; then

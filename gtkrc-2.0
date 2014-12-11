@@ -1,0 +1,2 @@
+include "/usr/share/themes/Numix/gtk-2.0/gtkrc"
+gtk-key-theme-name = "Emacs"
