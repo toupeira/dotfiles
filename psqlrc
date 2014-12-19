@@ -1,0 +1,4 @@
+\timing on
+\pset null '[NULL]'
+\set HISTSIZE 10000
+\set HISTCONTROL ignorespace
