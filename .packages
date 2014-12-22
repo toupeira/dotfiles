@@ -1,4 +1,5 @@
 apt-listchanges
+apt-transport-https
 bash-completion
 build-essential
 curl
