@@ -665,8 +665,8 @@ endfunction " }}}
   let g:ctrlsf_leading_space = 6
   let g:ctrlsf_width = '40%'
 
-  nmap ,/ :CtrlSF<Space>
-  nmap <silent> ,? :CtrlSFOpen<CR>
+  nmap ,/ <Plug>CtrlSFCwordPath
+  nnoremap <silent> ,? :CtrlSFOpen<CR>
   " }}}
 
   " slimux {{{
