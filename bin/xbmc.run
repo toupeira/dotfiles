@@ -14,6 +14,7 @@ else
   [ "$leanstick" ] && leanstick.run stop
 
   xbmc --nolirc "$@"
+  rm -f ~/xbmc_crashlog-*.log
 
   [ "$pulseaudio" ] && pulseaudio --daemonize
   [ "$leanstick" ] && leanstick.run
