@@ -1,0 +1,20 @@
+#!/bin/bash
+
+[ -d ~/.quodlibet ] && quodlibet=1
+[ -f ~/.leanstick ] && leanstick=1
+pgrep -x pulseaudio &>/dev/null && pulseaudio=1
+
+[ "$quodlibet" ] && ql quit
+
+if pgrep -x xbmc.bin >/dev/null; then
+  echo "XBMC is already running."
+  xwit -raise -focus -names "XBMC Media Center"
+else
+  [ "$pulseaudio" ] && pulseaudio --kill 2>/dev/null
+  [ "$leanstick" ] && leanstick.run stop
+
+  xbmc --nolirc "$@"
+
+  [ "$pulseaudio" ] && pulseaudio --daemonize
+  [ "$leanstick" ] && leanstick.run
+fi
