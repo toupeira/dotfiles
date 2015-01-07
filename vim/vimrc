@@ -100,9 +100,13 @@
   set mouse=a
   set ttymouse=xterm2
 
+  augroup vimrc
+    autocmd!
+  augroup END
+
   " increase command-line height during startup to avoid prompt on long filenames
   " set cmdheight=2
-  " autocmd VimEnter * set cmdheight=1
+  " autocmd vimrc VimEnter * set cmdheight=1
 
   " windows
   set splitbelow
@@ -139,15 +143,15 @@
   set wildignore=*.pyc,*.o,*.lo,*.la,*.exe,*.swp,*.db,*.bak,*.old,*.dat,*.,tmp,*.mdb,*~,~*
 
   " automatically open quickfix window after commands that modify the quickfix list
-  autocmd QuickFixCmdPost *grep* if len(getqflist()) | copen | endif
+  autocmd vimrc QuickFixCmdPost *grep* if len(getqflist()) | copen | endif
 
   " highlight trailing whitespace
-  autocmd VimEnter,Colorscheme * highlight Whitespace ctermbg=235 guibg=#333333
-  autocmd VimEnter,Colorscheme * match Whitespace /[^ \t]\s\+$/
+  autocmd vimrc VimEnter,Colorscheme * highlight Whitespace ctermbg=235 guibg=#333333
+  autocmd vimrc VimEnter,Colorscheme * match Whitespace /[^ \t]\s\+$/
 
   " go to last cursor position when opening files
-  autocmd BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") && &ft != 'gitcommit'
-                          \| exe "normal g'\"" | endif
+  autocmd vimrc BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") && &ft != 'gitcommit'
+                                \| exe "normal g'\"" | endif
 
   " window/icon titles
   set title
@@ -201,23 +205,23 @@
 
   " folding
   set foldenable foldmethod=marker
-  autocmd Syntax * set foldmethod=marker
+  autocmd vimrc Syntax * set foldmethod=marker
 
 " }}}
 
 " Filetype Settings
 " {{{
 
-  autocmd FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3
-  autocmd FileType python,apache,sshconfig setlocal ts=4 sts=4 sw=4
-  autocmd FileType css,scss setlocal iskeyword+=%
-  autocmd FileType make setlocal noexpandtab
-  autocmd FileType mail setlocal tw=80 lbr
-  autocmd FileType tex,plaintex,context setlocal lbr
-  autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
-  autocmd FileType crontab setlocal nobackup nowritebackup
-  autocmd FileType puppet setlocal commentstring=#%s
-  autocmd FileType help setlocal nonumber norelativenumber
+  autocmd vimrc FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3
+  autocmd vimrc FileType python,apache,sshconfig setlocal ts=4 sts=4 sw=4
+  autocmd vimrc FileType css,scss setlocal iskeyword+=%
+  autocmd vimrc FileType make setlocal noexpandtab
+  autocmd vimrc FileType mail setlocal tw=80 lbr
+  autocmd vimrc FileType tex,plaintex,context setlocal lbr
+  autocmd vimrc FileType gitcommit,gitrebase setlocal colorcolumn=50,72
+  autocmd vimrc FileType crontab setlocal nobackup nowritebackup
+  autocmd vimrc FileType puppet setlocal commentstring=#%s
+  autocmd vimrc FileType help setlocal nonumber norelativenumber
 
   " Ruby syntax highlighting
   let g:ruby_operators = 1
@@ -336,7 +340,7 @@ endfunction " }}}
 
   " map Ctrl+C to Escape
   inoremap <C-c> <Esc>
-  autocmd CmdWinEnter * nnoremap <buffer> <C-c> :
+  autocmd vimrc CmdWinEnter * nnoremap <buffer> <C-c> :
 
   " indent with Tab/Shift+Tab in visual mode
   xnoremap <Tab> >
@@ -436,7 +440,7 @@ endfunction " }}}
   endfunction " }}}
 
   " resize quickfix windows to their content, or 20 lines maximum
-  autocmd FileType qf call <SID>ResizeWindow(2, 20)
+  autocmd vimrc FileType qf call <SID>ResizeWindow(2, 20)
   function! s:ResizeWindow(min, max) " {{{
     let max = min([a:max, &lines / 3])
     execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
@@ -681,8 +685,8 @@ endfunction " }}}
 
   " ragtag {{{
   imap <C-]> <C-x>/
-  autocmd User Ragtag silent! iunmap <buffer> <C-v>%
-  autocmd User Ragtag silent! iunmap <buffer> <C-v>&
+  autocmd vimrc User Ragtag silent! iunmap <buffer> <C-v>%
+  autocmd vimrc User Ragtag silent! iunmap <buffer> <C-v>&
   " }}}
 
   " rooter {{{
@@ -691,7 +695,7 @@ endfunction " }}}
   let g:rooter_use_lcd = 1
 
   if index(g:pathogen_disabled, 'rooter') == -1
-    autocmd BufEnter * if !isdirectory(expand('%')) | Rooter
+    autocmd vimrc BufEnter * if !isdirectory(expand('%')) | Rooter
   endif
   " }}}
 
@@ -703,23 +707,23 @@ endfunction " }}}
   " colorizer {{{
   let g:colorizer_startup = 0
   if has('gui_running')
-    autocmd FileType css,scss silent ColorToggle
+    autocmd vimrc FileType css,scss silent ColorToggle
   endif
   " }}}
 
   " cycle {{{
-  autocmd FileType *
+  autocmd vimrc FileType *
     \ call AddCycleGroup('global', [ 'return', 'break', 'continue' ])
-  autocmd FileType ruby
+  autocmd vimrc FileType ruby
     \ call AddCycleGroup('global', [ 'return', 'break', 'continue', 'next', 'retry' ])
-  autocmd FileType sh
+  autocmd vimrc FileType sh
     \ call AddCycleGroup('sh', [ 'if', 'elif', 'else', 'fi' ])
-  autocmd FileType sh
+  autocmd vimrc FileType sh
     \ call AddCycleGroup('sh', [ 'do', 'then' ])
-  autocmd FileType javascript,coffee 
+  autocmd vimrc FileType javascript,coffee 
     \ call AddCycleGroup([ 'javascript', 'coffee' ], [ 'addClass', 'removeClass' ])
 
-  autocmd FileType *
+  autocmd vimrc FileType *
     \ call AddCycleGroup('global', [ 'debit', 'credit' ])
   " }}}
 
@@ -770,9 +774,9 @@ endfunction " }}}
   let g:syntastic_sass_sass_args = '-I .'
   let g:syntastic_ruby_slimrb_exec = '/usr/local/bin/slimrb'
 
-  " autocmd BufRead */app/views/**/*.js.coffee
+  " autocmd vimrc BufRead */app/views/**/*.js.coffee
   "   \ let b:syntastic_coffee_checkers = []
-  " autocmd BufEnter *.coffee
+  " autocmd vimrc BufEnter *.coffee
   "   \ let g:syntastic_coffee_checkers = [ 'coffee', 'coffeelint' ]
 
   if !&diff
@@ -847,7 +851,7 @@ endfunction " }}}
 
     call airline#parts#define_raw('file', '%t%m')
     call airline#parts#define_raw('filepath', '%#airline_filepath#[%<%{AirlineFilepath()}]')
-    autocmd VimEnter *
+    autocmd vimrc VimEnter *
       \ let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath']) |
       \ let g:airline_symbols.readonly .= ' '
 
@@ -900,7 +904,7 @@ endfunction " }}}
     endif
 
     if !has('gui') && &t_Co <= 8
-      autocmd VimEnter * AirlineTheme monochrome
+      autocmd vimrc VimEnter * AirlineTheme monochrome
     endif
 
     let g:airline_mode_map = {
@@ -952,7 +956,7 @@ endfunction " }}}
     let g:neomru#file_mru_ignore_pattern = 'COMMIT_EDITMSG'
 
     " map our keys in all Unite buffers
-    autocmd FileType unite call <SID>unite_buffer_mappings()
+    autocmd vimrc FileType unite call <SID>unite_buffer_mappings()
     function! s:unite_buffer_mappings() " {{{
       " use ; to toggle insert mode
       nmap <silent><buffer> ; i

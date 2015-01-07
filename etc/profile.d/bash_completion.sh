@@ -40,6 +40,8 @@ has_completion pgrep      && complete -F _pgrep      -o default -o bashdefault p
 has_completion systemctl  && complete -F _systemctl  -o default -o bashdefault sctl
 has_completion journalctl && complete -F _journalctl -o default -o bashdefault jctl
 
+has pgcli && has_completion psql && complete -F _psql pgcli
+
 if has dotfiles; then
   __git_edit_complete dotfiles _git `dotfiles --path`
   __git_edit_complete dt _git       `dotfiles --path`
