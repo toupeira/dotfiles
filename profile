@@ -4,11 +4,6 @@
 # see /usr/share/doc/bash/examples/startup-files for examples.
 # the files are located in the bash-doc package.
 
-export LANG="de_CH.UTF-8"
-export LC_MESSAGES="en_GB.UTF-8"
-export LC_NUMERIC="en_GB.UTF-8"
-export LC_CTYPE="en_GB.UTF-8"
-
 if [ -d ~/.profile.d ]; then
   for i in ~/.profile.d/*.sh; do
     if [ -r $i ]; then

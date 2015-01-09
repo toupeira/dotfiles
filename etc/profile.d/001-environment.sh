@@ -1,26 +1,16 @@
+export LANG="de_CH.UTF-8"
+export LC_MESSAGES="en_GB.UTF-8"
+export LC_NUMERIC="en_GB.UTF-8"
+export LC_CTYPE="en_GB.UTF-8"
+
 export PATH="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
+[ -d ~/bin ] && export PATH="$PATH:$HOME/bin"
+[ -x /usr/libexec/path_helper ] && eval `/usr/libexec/path_helper -s`
 
-if [ -d /var/lib/gems/1.8/bin ]; then
-  export PATH="$PATH:/var/lib/gems/1.8/bin"
-fi
-
-if [ -d ~/bin ]; then
-  export PATH="$PATH:$HOME/bin"
-fi
-
-# Add OS X system paths
-if [ -x /usr/libexec/path_helper ]; then
-  eval `/usr/libexec/path_helper -s`
-fi
-
-if has sensible-vim; then
-  export EDITOR="sensible-vim"
-else
-  export EDITOR="vim"
-fi
-
+export EDITOR="vim"
 export GIT_EDITOR="vim"
 export PAGER="less"
+has sensible-vim && export EDITOR="sensible-vim"
 
 export LESS="-iRM"
 export GREP_OPTIONS="-i --color=auto --exclude=.svn --exclude=.git --exclude=.*.swp"
