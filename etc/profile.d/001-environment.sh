@@ -1,7 +1,5 @@
-export LANG="de_CH.UTF-8"
-export LC_MESSAGES="en_GB.UTF-8"
-export LC_NUMERIC="en_GB.UTF-8"
-export LC_CTYPE="en_GB.UTF-8"
+. /etc/default/locale
+export LANG LC_MESSAGES LC_NUMERIC LC_CTYPE
 
 export PATH="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
 [ -d ~/bin ] && export PATH="$PATH:$HOME/bin"
@@ -10,7 +8,7 @@ export PATH="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/g
 export EDITOR="vim"
 export GIT_EDITOR="vim"
 export PAGER="less"
-has sensible-vim && export EDITOR="sensible-vim"
+which sensible-vim >/dev/null && export EDITOR="sensible-vim"
 
 export LESS="-iRM"
 export GREP_OPTIONS="-i --color=auto --exclude=.svn --exclude=.git --exclude=.*.swp"

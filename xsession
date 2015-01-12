@@ -1,7 +1,5 @@
 #!/bin/bash
 
-. /etc/profile.d/001-environment.sh
-
 # make Dropbox behave
 dropbox=~/.config/autostart/dropbox.desktop
 if [ -f "$dropbox" ]; then
