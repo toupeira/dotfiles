@@ -720,7 +720,7 @@ endfunction " }}}
     \ call AddCycleGroup('sh', [ 'if', 'elif', 'else', 'fi' ])
   autocmd vimrc FileType sh
     \ call AddCycleGroup('sh', [ 'do', 'then' ])
-  autocmd vimrc FileType javascript,coffee 
+  autocmd vimrc FileType javascript,coffee
     \ call AddCycleGroup([ 'javascript', 'coffee' ], [ 'addClass', 'removeClass' ])
 
   autocmd vimrc FileType *
