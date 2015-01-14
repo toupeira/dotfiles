@@ -294,3 +294,7 @@
 	path = vim/bundle/slimux
 	url = https://github.com/epeli/slimux.git
   ignore = dirty
+[submodule "vim/bundle/fetch"]
+	path = vim/bundle/fetch
+	url = https://github.com/kopischke/vim-fetch.git
+  ignore = dirty
