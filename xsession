@@ -1,5 +1,7 @@
 #!/bin/bash
 
+[ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
+
 # make Dropbox behave
 dropbox=~/.config/autostart/dropbox.desktop
 if [ -f "$dropbox" ]; then
@@ -11,9 +13,9 @@ x-session-manager
 
 # clean up
 rm -rf ~/.local/share/Trash &
-if [ -f ~/.xsession-errors ]; then
-  mv ~/.xsession-errors ~/.xsession-errors.old
-fi
+# if [ -f ~/.xsession-errors ]; then
+#   mv ~/.xsession-errors ~/.xsession-errors.old
+# fi
 
 ql quit &>/dev/null &
 
