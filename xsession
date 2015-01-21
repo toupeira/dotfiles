@@ -17,7 +17,9 @@ rm -rf ~/.local/share/Trash &
 #   mv ~/.xsession-errors ~/.xsession-errors.old
 # fi
 
-ql quit
+if pgrep -x quodlibet; then
+  ql quit
+fi
 
 if pgrep -x deluged; then
   timeout 5 deluge-console halt
