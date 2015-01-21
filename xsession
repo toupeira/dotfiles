@@ -17,17 +17,12 @@ rm -rf ~/.local/share/Trash &
 #   mv ~/.xsession-errors ~/.xsession-errors.old
 # fi
 
-ql quit &>/dev/null &
+ql quit
 
 if pgrep -x deluged; then
-  (
-    timeout 5 deluge-console halt
-    killall deluged
-    killall -9 deluged
-  ) &>/dev/null &
+  timeout 5 deluge-console halt
+  killall deluged
+  killall -9 deluged
 fi
-
-# wait for all processes to finish
-wait
 
 exit 0
