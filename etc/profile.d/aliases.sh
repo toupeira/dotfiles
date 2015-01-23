@@ -103,4 +103,5 @@ if has sudo; then
   alias parted='sudo parted'
   alias lvm='sudo lvm'
   alias docker='sudo docker'
+  alias fastboot='sudo fastboot'
 fi
