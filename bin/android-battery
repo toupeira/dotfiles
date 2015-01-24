@@ -1,12 +1,8 @@
 #!/bin/sh
 battery=$( adb shell dumpsys battery 2>/dev/null )
 if [ -n "$battery" ]; then
-  capacity=$( echo "$battery" | fgrep 'level:' | egrep -o '[0-9]+' )
-  if [ "$capacity" = "100" ]; then
-    echo "Charged $capacity%"
-  else
-    echo "Charging $capacity%"
-  fi
+  capacity=$( echo "$battery" | fgrep 'level:' | grep -Po '\d+' )
+  echo "Charging $capacity%"
 else
   echo
 fi
