@@ -1,5 +1,8 @@
-#!/bin/sh
-model=$( adb shell getprop ro.product.model 2>/dev/null | grep -Poi '[\w ]+' )
+#!/bin/bash
+
+adb start-server &>/dev/null
+
+model=$( adb shell getprop ro.product.model | grep -Poi '[\w ]+' )
 if [ -n "$model" ]; then
   version=$( adb shell getprop ro.build.version.release | grep -Poi '[\d\.]+' )
   echo "$model ($version)"
