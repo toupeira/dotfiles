@@ -1,0 +1,2 @@
+#!/bin/sh
+exec chromium --app="http://tunein.com/user/toupeira/" "@"
