@@ -1,3 +1,4 @@
+autocmd BufNewFile,BufRead *.axlsx setf ruby
 autocmd BufNewFile,BufRead *.pac setf javascript
 autocmd BufNewFile,BufRead *.run setf sh
 
