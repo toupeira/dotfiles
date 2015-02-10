@@ -795,10 +795,12 @@ endfunction " }}}
     let g:neocomplete#data_directory = '~/.vim/tmp/neocomplete'
     let g:neocomplete#enable_at_startup = 1
     let g:neocomplete#enable_auto_select = 1
-    "let g:neocomplete#enable_refresh_always = 1
     let g:neocomplete#enable_smart_case = 1
     let g:neocomplete#auto_completion_start_length = 2
-    let g:neocomplete#force_overwrite_completefunc = 1
+
+    " fuzzy completion breaks dot-repeat more noticeably
+    " https://github.com/Shougo/neocomplete.vim/issues/332
+    let g:neocomplete#enable_fuzzy_completion = 0
 
     " always use completions from all buffers
     if !exists('g:neocomplete#same_filetypes')
