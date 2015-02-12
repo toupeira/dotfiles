@@ -1,0 +1,2 @@
+#!/bin/sh
+exec vim --noplugin -u NONE -U NONE "$@"
