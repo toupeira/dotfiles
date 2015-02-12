@@ -24,62 +24,18 @@ VERBOSE=0
 QUIET=0
 DRYRUN=0
 
+# Helpers to check active toggles
 function force   { [ $FORCE   -eq 1 ]; }
 function verbose { [ $VERBOSE -eq 1 ]; }
 function quiet   { [ $QUIET   -eq 1 ]; }
 function dryrun  { [ $DRYRUN  -eq 1 ]; }
 
+# Helper to decorate dry-run output
 function dryrun_message {
   dryrun && output "[DRY RUN]"
 }
 
-function main {
-  # find the dotfiles repository
-  if [ -z "$DOTFILES" ]; then
-    if [ -d /etc/dotfiles ]; then
-      DOTFILES=/etc/dotfiles
-    elif [ -d ~/.dotfiles ]; then
-      DOTFILES=~/.dotfiles
-    else
-      abort "Can't find repository in /etc/dotfiles or $HOME/.dotfiles, please set \$DOTFILES"
-    fi
-  fi
-
-  # resolve symlinks
-  while [ -L "$DOTFILES" ]; do
-    DOTFILES=$( readlink -f "$DOTFILES" )
-  done
-
-  if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
-    abort "Can't find dotfiles script in repository, please check your \$DOTFILES"
-  fi
-
-  # Parse arguments
-  while [ $# -gt 0 ]; do
-    case "$1" in
-      -f|--force)   FORCE=1;;
-      -v|--verbose) VERBOSE=1;;
-      -q|--quiet)   QUIET=1;;
-      -n|--dry-run) DRYRUN=1;;
-         --path)    echo "$DOTFILES"; exit;;
-      -*)           usage;;
-      *)
-        COMMAND=( "$@" )
-        break
-        ;;
-    esac
-    shift
-  done
-
-  if [ -n "$COMMAND" ]; then
-    STATUS=0
-    run "${COMMAND[@]}"
-    exit $STATUS
-  else
-    usage
-  fi
-}
-
+# Show usage help and exit
 function usage {
   echo "Usage: $( basename $0 ) [options] COMMAND [args]"
   echo
@@ -107,6 +63,7 @@ function usage {
   exit 255
 }
 
+# Output a message with a colored arrow in front
 function msg {
   local message="${1/$HOME/~}"
   local color=${2:-4}
@@ -121,6 +78,11 @@ function msg {
   fi
 }
 
+# Helpers for colored messages
+function status  { msg "$1" ${2:-2}; }
+function warning { msg "$1" ${2:-3}; }
+
+# Output a raw string
 function output {
   local output="$1"
   local echo_options="$2"
@@ -130,19 +92,19 @@ function output {
   fi
 }
 
-function status  { msg "$1" ${2:-2}; }
-function warning { msg "$1" ${2:-3}; }
-
+# Output error message
 function error {
   STATUS=1
   msg "$1" 1
 }
 
+# Output error message and exit
 function abort {
   [ -n "$1" ] && error "$@"
   exit 1
 }
 
+# Ask a yes/no question, defaulting to no
 function ask {
   [ $FORCE -eq 1 ] && return
 
@@ -151,6 +113,7 @@ function ask {
   [ "${REPLY:0:1}" = "Y" -o "${REPLY:0:1}" = "y" ]
 }
 
+# Ask a yes/no question, defaulting to yes
 function ask_yes {
   [ $FORCE -eq 1 ] && return
 
@@ -159,6 +122,7 @@ function ask_yes {
   [ "${REPLY:0:1}" != "N" -a "${REPLY:0:1}" != "n" ]
 }
 
+# Ask to continue or abort
 function ask_abort {
   STATUS=1
   if ! ask "Do you want to continue?" 1; then
@@ -170,10 +134,12 @@ function ask_abort {
 # so we can avoid duplicate warnings for the same value
 declare -A sudo_history
 
+# Run a shell command
 function system {
   local command="$1"
   shift
 
+  # Check for commands that require sudo
   if [ "$command" = "chown" -o "$command" = "chgrp" -o "$command" = "apt-get" ]; then
     if [ -z "${sudo_history["$command"]}" ]; then
       warning "Using [1;33msudo[0m for command [1m$command[0m"
@@ -182,6 +148,7 @@ function system {
     sudo_history["$command"]=1
     command="sudo $command"
   else
+    # Check for paths that require sudo
     for arg in "$@"; do
       local dir=$( dirname -- "$arg" )
       if [ "$dir" != "." -a -d "$dir" -a ! -w "$dir" ]; then
@@ -205,6 +172,7 @@ function system {
   command $command "$@"
 }
 
+# Run a Git command
 function git {
   if [ "$1" = "ignore-errors" ]; then
     local onerror=":"
@@ -216,6 +184,8 @@ function git {
   verbose && output "     executing: git $(echo "$@") $( dryrun_message )"
   dryrun && return
 
+  # Spawn a subshell so we can run the command inside the repository
+  # without any nasty side-effects
   (cd "$DOTFILES" || abort; command git "$@")
   local status=$?
   [ $status -eq 0 ] || $onerror
@@ -223,6 +193,8 @@ function git {
   return $status
 }
 
+# Make sure the given path is either inside the home directory,
+# or a valid /etc path
 function validate {
   if ! [[ "$1" =~ ^($HOME|(/private|/usr/local)?/etc)($|/) ]]; then
     error "Path is not inside \$HOME or /etc: {{$1}}"
@@ -232,6 +204,7 @@ function validate {
   fi
 }
 
+# Load the users' SSH key if necessary
 function load_key {
   local key=~/.ssh/id_rsa
   if [ -f "$key" -a "$( uname -s )" != "Darwin" ]; then
@@ -239,6 +212,7 @@ function load_key {
   fi
 }
 
+# Transform a filesystem path into a repository path
 function target {
   local origin="$1"
 
@@ -255,6 +229,7 @@ function target {
   echo "$DOTFILES/${target#.}"
 }
 
+# Transform a repository path into a filesystem path
 function origin {
   local target="${1:${#DOTFILES}+1}"
   local topdir="${target%%/*}"
@@ -268,6 +243,7 @@ function origin {
   fi
 }
 
+# Run a dotfiles command
 function run {
   local command="$1"
   shift
@@ -582,6 +558,54 @@ function run {
       git ignore-errors $command "$@"
       ;;
   esac
+}
+
+# Parse arguments and run command
+function main {
+  # find the dotfiles repository
+  if [ -z "$DOTFILES" ]; then
+    if [ -d /etc/dotfiles ]; then
+      DOTFILES=/etc/dotfiles
+    elif [ -d ~/.dotfiles ]; then
+      DOTFILES=~/.dotfiles
+    else
+      abort "Can't find repository in /etc/dotfiles or $HOME/.dotfiles, please set \$DOTFILES"
+    fi
+  fi
+
+  # resolve symlinks
+  while [ -L "$DOTFILES" ]; do
+    DOTFILES=$( readlink -f "$DOTFILES" )
+  done
+
+  if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
+    abort "Can't find dotfiles script in repository, please check your \$DOTFILES"
+  fi
+
+  # Parse arguments
+  while [ $# -gt 0 ]; do
+    case "$1" in
+      -f|--force)   FORCE=1;;
+      -v|--verbose) VERBOSE=1;;
+      -q|--quiet)   QUIET=1;;
+      -n|--dry-run) DRYRUN=1;;
+         --path)    echo "$DOTFILES"; exit;;
+      -*)           usage;;
+      *)
+        COMMAND=( "$@" )
+        break
+        ;;
+    esac
+    shift
+  done
+
+  if [ -n "$COMMAND" ]; then
+    STATUS=0
+    run "${COMMAND[@]}"
+    exit $STATUS
+  else
+    usage
+  fi
 }
 
 main "$@"
