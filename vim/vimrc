@@ -917,6 +917,8 @@ endfunction " }}}
 
     if !has('gui') && &t_Co <= 8
       autocmd vimrc VimEnter * AirlineTheme monochrome
+    else
+      autocmd vimrc VimEnter * AirlineTheme desertink
     endif
 
     let g:airline_mode_map = {
