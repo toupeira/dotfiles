@@ -65,7 +65,7 @@ case "$1" in
           command="rails server"
         elif [ -f .ember-cli ]; then
           command="ember serve"
-        elif [ -f Gruntfile.js ]; then
+        elif [ -f Gruntfile.js -o -f Gruntfile.coffee ]; then
           command="grunt serve"
         elif [ -x bin/server ]; then
           command="bin/server"
