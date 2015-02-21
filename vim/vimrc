@@ -167,6 +167,11 @@
 
   let &titlestring = "%t%m%r\ \[%{AirlineFilepath()}\]"
 
+  " add Unicode marker for tmux-navigator
+  if !empty($TMUX)
+    let &titlestring .= " ◉"
+  endif
+
   " show user and host in SSH sessions
   if exists('$SSH_CONNECTION')
     let &titlestring = expand('$USER') . '@' . hostname() . ': ' . &titlestring
