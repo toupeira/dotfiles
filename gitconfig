@@ -118,15 +118,14 @@
   bash = "!f() { [ $# -gt 0 ] && bash -ic \"$@\"; }; f"
   ag = "!ag --smart-case"
 
-  rake  = "!bundle exec rake"
-  rails = "!bundle exec rails"
+  rake  = "!rake"
+  rails = "!rails"
+  guard = "!guard"
+  cap = "!cap"
 
   mux = "!mux"
   bun = "!bun"
-  shore = "!shore"
-  guard = "!guard"
+  ed = edit
 
   # try to run a GUI, or tig on terminals
   g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"
-
-  ed = edit

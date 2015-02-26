@@ -1,16 +1,6 @@
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
-# Repeat a string
-function _repeat {
-  local string="$1"
-  local count="$2"
-
-  for (( i = 0; i < count; i++)); do
-    echo -n "$string"
-  done
-}
-
 # Show the login message
 function login_message {
   if [ -z "$BASH_LOGIN" ]; then
@@ -55,13 +45,15 @@ function login_message {
 
 # Clear the screen and show the prompt at the bottom
 function down {
+  local lines=$( tput lines )
   local i
-  for i in `seq 1 $(tput lines)`; do
+
+  for (( i = 0; i < lines; i++ )); do
     echo
   done
 }
 
-# Open a file with xdg-open
+# Open files with xdg-open
 function open {
   for file in "$@"; do
     xdg-open "$file"
@@ -115,33 +107,18 @@ if [ -n "$SSH_AUTH_SOCK" ]; then
   }
 fi
 
-# GVim wrapper to pass a file to an existing session
-function gvi.add {
-  gvim --remote-silent "$@"
-  if has xwit; then
-    xwit -raise -focus -property WM_CLASS -names gvim
-  fi
-}
-
-# Ag wrapper to edit files matching a pattern (using Vim)
-function ag.edit {
-  [ "$1" = "-l" ] && shift
-  local files=`ag -l "$@"`
+# Ag wrapper to edit files matching a pattern
+function _edit {
+  local files=$( "$@" )
   if [ -n "$files" ]; then
-    sensible-vim $files
+    sensible-editor $files
   else
     echo "No files found."
   fi
 }
 
-# Ag wrapper to search through a Gem folder inside a Rails project
-function ag.rails {
-  local gem="$1"
-  local path=`bundle show "$gem"` || return $?
-  shift
-
-  ag "$@" "$path"
-}
+alias ag.edit='_edit ag -l'
+alias bun.edit='_edit bun -l'
 
 # GVim wrapper for SSH connections to pass a file to a local instance
 if [ -n "$SSH_CONNECTION" ]; then
@@ -206,144 +183,17 @@ function dotfiles {
   fi
 }
 
-# Switch project directories and run Git commands in them
+# Wrapper for ~/bin/src to switch project directories
 function src {
-  local src_dir=~/src
-
   case "$1" in
-    list)
-      if [ "$2" = "-a" ]; then
-        unset filter options
-      else
-        local filter="-not \( -path $src_dir/archive -prune \) -not \( -path $src_dir/upstream -prune \)"
-        local options="-v"
-      fi
-
-      eval find -L "$src_dir" -mindepth 1 -maxdepth 4 -type d $filter -name .git | sed -r "s|^$src_dir/(.+)/\.git$|\1|" | egrep -v "^dotfiles/.+" | sort
-
-      return
-      ;;
-    each)
-      shift
-      for project in `src list`; do
-        echo -e "# \e[0;36m$project\e[0m" | sed -r "s|$HOME|~|"
-        (cd "$src_dir/$project" || exit 1; $@)
-
-        local status=$?
-        if [ $status -ne 0 ]; then
-          echo -e "# \e[1;31mexit code $status\e[0m"
-        fi
-        echo
-      done
-
-      return
-      ;;
-    st|status|-a|'')
-      [ "$1" != "-a" ] && shift
-
-      local first=1
-      local last=0
-
-      echo
-      for project in `src list "$@"`; do
-        dir="$src_dir/$project"
-        [ -d "$dir/.git" ] || continue
-
-        local changes=`cd "$dir"; git status -s | grep -c .`
-        local unmerged=`cd "$dir"; git status | egrep "Your branch is (behind|ahead)"`
-
-        if [ $changes -gt 0 -o -n "$unmerged" ]; then
-          local label="changes"
-
-          if [ $changes -gt 0 ]; then
-            local label="changes"
-            [ $changes -eq 1 ] && label="change"
-            label="$changes\e[1;37m $label"
-          elif echo "$unmerged" | grep -q ahead; then
-            label="Unpublished commits"
-          else
-            label="Unmerged commits"
-          fi
-
-          [ -z "$first" ] && echo
-          echo -e " \e[1;32m>\e[1;37m \e[1;33m$label in \e[1;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
-          (cd "$dir" || exit 1; git -c color.ui=always status | sed -r 's/^/    /')
-        else
-          [ $last -gt 0 ] && echo
-          echo -e " \e[0;32m>\e[0m No changes in \e[0;36m[`realpath "$dir"`]\e[0m" | sed -r "s|$HOME|~|"
-        fi
-
-        unset first
-        last=$changes
-        [ -n "$unmerged" ] && let last++
-      done
-      echo
-
-      return
-      ;;
-  esac
-
-  local project="$1"
-  shift
-
-  if [ -d "$project" ]; then
-    local path="$project"
-  else
-    local path="$src_dir/$project"
-  fi
-
-  if [ -z "$project" ]; then
-    echo "Usage: src PROJECT [COMMAND] [ARGS]"
-    echo "       src list [-a]"
-    echo "       src status [-a]"
-    return 255
-  fi
-
-  if [ ! -e "$path" ]; then
-    local first_match=`src list -a | fgrep -m1 "$project"`
-    if [ -n "$first_match" ]; then
-      path="$src_dir/$first_match"
-    else
-      echo "$path does not exist"
-      return 1
-    fi
-  fi
-
-  if [ "$1" = "--path" ]; then
-    echo "$path"
-    return
-  elif [ -f "$path" ]; then
-    sensible-editor "$path"
-    return
-  elif [ ! -d "$path" ]; then
-    echo "Unsupported path $path"
-    return
-  fi
-
-  case "$1" in
-    '')
-      cd "$path"
-      return
-      ;;
-    -e)
-      command="$2"
-      shift 2
-      ;;
-    @*)
-      src "$path"
-      command="mux $1"
-      shift
-      ;;
-    vi|vim|gvi|gvim|sensible-vim|rake|rails|cap|mux|shore)
-      command="$1"
-      shift
+    ''|status|-a|list|each)
+      command src "$@"
       ;;
     *)
-      command="git"
+      local path=$( command src "$@" )
+      cd "$path"
       ;;
   esac
-
-  (cd "$path" && $command "$@")
 }
 
 # Helper to create an alias for src with Git completion

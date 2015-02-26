@@ -1,35 +1,18 @@
 #!/bin/bash
 
-pattern='.'
+paths=()
 
-if [ -f Gemfile ]; then
-  paths=`find .bundle -type d -name gems`
-elif [ -f package.json ]; then
-  paths='node_modules --ignore node_modules'
-elif [ -d vim/bundle ]; then
-  paths='vim/bundle'
-elif [ -d .vim/bundle ]; then
-  paths='.vim/bundle'
+[ -f Gemfile ]      && paths=( "${paths[@]}" $( find "$PWD/.bundle" -type d -name gems ) )
+[ -f package.json ] && paths=( "${paths[@]}" "$PWD/node_modules" --ignore node_modules )
+[ -d vim/bundle ]   && paths=( "${paths[@]}" "$PWD/vim/bundle"  )
+[ -d .vim/bundle ]  && paths=( "${paths[@]}" "$PWD/.vim/bundle" )
+
+[ ${#paths} -eq 0 ] && paths=( "$PWD" )
+
+if [ "$1" = "--path" ]; then
+  echo "${paths[0]}"
+elif [ "$1" = "--paths" ]; then
+  echo "${paths[@]}"
 else
-  paths='.'
-fi
-
-if [ $# -gt 0 ]; then
-  args=( "$@" )
-  pattern=''
-  for (( i = 0; i < $#; i++ )); do
-    pattern="$pattern|${args[i]}"
-  done
-  pattern="(${pattern:1})"
-fi
-
-files=( `ag -l --ignore spec --ignore test "$pattern" $paths` )
-
-if [ ${#files[@]} -gt 1 ]; then
-  files=( `echo "${files[@]}" | tr " " "\n" | sort | fzf` )
-fi
-
-if [ -n "$files" ]; then
-  echo -e "\e[0;36m${files[@]}\e[0m" | tr " " "\n"
-  exec sensible-vim "${files[@]}"
+  ag "$@" "${paths[@]}"
 fi

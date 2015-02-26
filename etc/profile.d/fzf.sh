@@ -13,3 +13,4 @@ _fzf_orig_completion_host='_ssh'
 _fzf_orig_completion_nc='_ssh'
 
 complete -F _fzf_ssh_completion ping telnet host nc
+complete -o bashdefault -o default -F _fzf_all_completion ag bun
