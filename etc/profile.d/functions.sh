@@ -190,8 +190,13 @@ function src {
       command src "$@"
       ;;
     *)
-      local path=$( command src "$@" )
-      cd "$path"
+      local project_path=$( command src "$1" )
+      if [ -n "$project_path" ]; then
+        cd "$project_path"
+        [ $# -gt 1 ] && command src "$@"
+      else
+        return 1
+      fi
       ;;
   esac
 }
@@ -202,10 +207,16 @@ function src_alias {
   local project="$2"
   shift 2
 
-  local space=''
-  [ $# -gt 0 ] && space=' '
-  alias $alias="src $project$space$@"
-  __git_edit_complete $alias _src_alias `src "$project" --path`
+  local project_path=$( command src "$project" --path 2>/dev/null )
+
+  if [ -n "$project_path" ]; then
+    local space=''
+    [ $# -gt 0 ] && space=' '
+    alias $alias="src $project$space$@"
+    __git_edit_complete $alias _src_alias "$project_path"
+  else
+    return 1
+  fi
 }
 
 # Sudo wrapper for systemctl

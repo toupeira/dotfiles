@@ -8,7 +8,7 @@ function usage {
   echo "  src list [-a]                      List all project paths"
   echo "  src each [COMMAND] [ARGS]          Run command in each project"
   echo
-  echo "  src PROJECT                        Output project path"
+  echo "  src PROJECT [--path]               Output project path"
   echo "  src PROJECT [GIT-COMMAND] [ARGS]   Run Git command"
   echo "  src PROJECT -e [COMMAND] [ARGS]    Run command"
   echo "  src PROJECT @MUX                   Run mux command"
@@ -98,35 +98,26 @@ shift
 if [ -z "$PROJECT" ]; then
   usage
 elif [ -d "$PROJECT" ]; then
-  path="$PROJECT"
+  PROJECT_PATH="$PROJECT"
 else
-  path="$SRC/$PROJECT"
+  PROJECT_PATH="$SRC/$PROJECT"
 fi
 
-if [ ! -e "$path" ]; then
+if [ ! -d "$PROJECT_PATH" ]; then
   first_match=`src list -a | fgrep -m1 "$PROJECT"`
   if [ -n "$first_match" ]; then
-    path="$SRC/$first_match"
-  else
-    echo "$path does not exist"
-    exit 1
+    PROJECT_PATH="$SRC/$first_match"
+
+    if [ ! -d "$PROJECT_PATH" ]; then
+      echo "Project not found: $PROJECT" >&2
+      exit 1
+    fi
   fi
 fi
 
-if [ "$1" = "--path" ]; then
-  echo "$path"
-  exit
-elif [ -f "$path" ]; then
-  sensible-editor "$path"
-  exit
-elif [ ! -d "$path" ]; then
-  echo "Unsupported path $path"
-  exit 1
-fi
-
 case "$1" in
-  '')
-    echo "$path"
+  --path|'')
+    echo "$PROJECT_PATH"
     exit
     ;;
   -e)
@@ -134,7 +125,6 @@ case "$1" in
     shift 2
     ;;
   @*)
-    src "$path"
     command="mux $1"
     shift
     ;;
@@ -143,5 +133,5 @@ case "$1" in
     ;;
 esac
 
-cd "$path"
+cd "$PROJECT_PATH"
 exec $command "$@"
