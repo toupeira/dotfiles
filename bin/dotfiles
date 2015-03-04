@@ -153,7 +153,7 @@ function system {
       local dir=$( dirname -- "$arg" )
       if [ "$dir" != "." -a -d "$dir" -a ! -w "$dir" ]; then
         if [ -z "${sudo_history["$dir"]}" ]; then
-          warning "Using [1;33msudo[0m for directory [1m$dir[0m arg $arg"
+          warning "Using [1;33msudo[0m for directory [1m$dir[0m"
         fi
 
         sudo_history["$dir"]=1
