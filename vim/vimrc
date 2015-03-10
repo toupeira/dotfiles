@@ -2,6 +2,8 @@
 " {{{
 
   set nocompatible
+  set encoding=utf-8
+  scriptencoding utf-8
 
   let s:has_ag  = executable('ag')
 
@@ -28,6 +30,10 @@
     set guioptions+=M
   endif
 
+  augroup vimrc
+    autocmd!
+  augroup END
+
 " }}}
 
 " General Settings
@@ -38,7 +44,6 @@
   set hidden
   set nobackup
   " set autowrite
-  set encoding=utf-8
   set modeline
   set modelines=2
   if v:version > 703
@@ -99,10 +104,6 @@
   " mouse support
   set mouse=a
   set ttymouse=xterm2
-
-  augroup vimrc
-    autocmd!
-  augroup END
 
   " increase command-line height during startup to avoid prompt on long filenames
   " set cmdheight=2
@@ -614,7 +615,7 @@ endfunction " }}}
 " {{{
 
   " diff-enhanced {{{
-  autocmd VimEnter * CustomDiff histogram
+  autocmd vimrc VimEnter * CustomDiff histogram
   " }}}
 
   " man {{{
