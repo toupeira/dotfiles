@@ -613,6 +613,10 @@ endfunction " }}}
 " Plugin Settings
 " {{{
 
+  " diff-enhanced {{{
+  autocmd VimEnter * CustomDiff histogram
+  " }}}
+
   " man {{{
   runtime ftplugin/man.vim
   " }}}

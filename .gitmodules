@@ -306,3 +306,6 @@
 	path = vim/bundle/expand-region
 	url = https://github.com/terryma/vim-expand-region.git
   ignore = dirty
+[submodule "vim/bundle/diff-enhanced"]
+	path = vim/bundle/diff-enhanced
+	url = https://github.com/chrisbra/vim-diff-enhanced.git
