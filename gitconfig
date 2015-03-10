@@ -100,6 +100,8 @@
   rup = remote update
   continue = rebase --continue
   skip = rebase --skip
+
+  pr = "!f() { git fetch github refs/pull/$1/head:pr/$1; } ; f"
   delbranch = "!f() { git branch -d $1 && git pu github :$1; }; f"
 
   pu   = -c push.default=simple   push -v --progress
