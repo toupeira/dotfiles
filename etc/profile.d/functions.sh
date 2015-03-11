@@ -191,11 +191,12 @@ function src {
       ;;
     *)
       local project_path=$( command src "$1" )
-      if [ -n "$project_path" ]; then
-        cd "$project_path"
-        [ $# -gt 1 ] && command src "$@"
-      else
+      if [ -z "$project_path" ]; then
         return 1
+      elif [ $# -gt 1 ]; then
+        (cd "$project_path" && command src "$@")
+      else
+        cd "$project_path"
       fi
       ;;
   esac
