@@ -103,17 +103,22 @@ else
   PROJECT_PATH="$SRC/$PROJECT"
 fi
 
-if [ ! -d "$PROJECT_PATH" ]; then
-  first_match=`src list -a | fgrep -m1 "$PROJECT"`
+while [ ! -d "$PROJECT_PATH" ]; do
+  first_match=$( src list | fgrep -m1 "$PROJECT" )
   if [ -n "$first_match" ]; then
     PROJECT_PATH="$SRC/$first_match"
-
-    if [ ! -d "$PROJECT_PATH" ]; then
-      echo "Project not found: $PROJECT" >&2
-      exit 1
-    fi
+    continue
   fi
-fi
+
+  first_match=$( src list -a | fgrep -m1 "$PROJECT" )
+  if [ -n "$first_match" ]; then
+    PROJECT_PATH="$SRC/$first_match"
+    continue
+  fi
+
+  echo "Project not found: $PROJECT" >&2
+  exit 1
+done
 
 case "$1" in
   --path|'')
