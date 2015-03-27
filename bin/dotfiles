@@ -507,9 +507,17 @@ function run {
       done
       ;;
     ca|commitall)
+      if [ "$1" = "-m" ]; then
+        shift
+        local message="$1"
+        shift
+      else
+        local message="Sync dotfiles"
+      fi
+
       status "{{Committing local changes...}}"
       git ignore-errors add -A .
-      git ignore-errors commit -a -m "Sync dotfiles" "$@"
+      git ignore-errors commit -a -m "$message" "$@"
       ;;
     pull)
       local changes=$( git status -s --ignore-submodules )
