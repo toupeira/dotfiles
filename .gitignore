@@ -3,6 +3,7 @@ tmux/.ssh-agent
 urxvt/urxvtd-*
 vim/tmp
 rbenv/bundles
+rbenv/gems
 rbenv/shims
 rbenv/versions
 nenv/bundles

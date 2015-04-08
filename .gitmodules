@@ -309,3 +309,12 @@
 [submodule "vim/bundle/diff-enhanced"]
 	path = vim/bundle/diff-enhanced
 	url = https://github.com/chrisbra/vim-diff-enhanced.git
+[submodule "rbenv/plugins/rbenv-communal-gems"]
+	path = rbenv/plugins/rbenv-communal-gems
+	url = https://github.com/tpope/rbenv-communal-gems.git
+[submodule "rbenv/plugins/rbenv-ctags"]
+	path = rbenv/plugins/rbenv-ctags
+	url = https://github.com/tpope/rbenv-ctags.git
+[submodule "rbenv/plugins/rbenv-gem-rehash"]
+	path = rbenv/plugins/rbenv-gem-rehash
+	url = https://github.com/sstephenson/rbenv-gem-rehash.git

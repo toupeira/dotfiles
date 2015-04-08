@@ -810,6 +810,9 @@ endfunction " }}}
     let g:neocomplete#enable_smart_case = 1
     let g:neocomplete#auto_completion_start_length = 2
 
+    " increase limit for tag cache files
+    let g:neocomplete#sources#tags#cache_limit_size = 16777216 " 16MB
+
     " fuzzy completion breaks dot-repeat more noticeably
     " https://github.com/Shougo/neocomplete.vim/issues/332
     let g:neocomplete#enable_fuzzy_completion = 0

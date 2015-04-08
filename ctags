@@ -1,1 +1,8 @@
+--recurse
+--exclude=.git
+--exclude=tmp
+--exclude=cache
+--exclude=.bundle
+--exclude=node_modules
+--exclude='*\.min\.*'
 --regex-html=/(id=|:id => )["':]?([-A-Za-z0-9_]*)["']?/\1/d,named element,named elements/

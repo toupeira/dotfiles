@@ -124,6 +124,7 @@
   rails = "!rails"
   guard = "!guard"
   cap = "!cap"
+  ctags = "!f() { local dir=$( git rev-parse --git-dir); [ -d \"$dir\" ] && git ls-files | ctags -RL - --tag-relative -f \"$dir/tags\"; }; f"
 
   mux = "!mux"
   bun = "!bun"
