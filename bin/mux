@@ -61,7 +61,7 @@ case "$1" in
       server)
         options="-b"
 
-        if [ -x bin/rails ]; then
+        if [ -x bin/rails -o -x script/rails ]; then
           command="rails server"
         elif [ -f .ember-cli ]; then
           command="ember serve"
