@@ -318,3 +318,9 @@
 [submodule "rbenv/plugins/rbenv-gem-rehash"]
 	path = rbenv/plugins/rbenv-gem-rehash
 	url = https://github.com/sstephenson/rbenv-gem-rehash.git
+[submodule "vim/bundle/unite-tag"]
+	path = vim/bundle/unite-tag
+	url = https://github.com/tsukkee/unite-tag.git
+[submodule "vim/bundle/bundler"]
+	path = vim/bundle/bundler
+	url = https://github.com/tpope/vim-bundler.git

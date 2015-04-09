@@ -1032,8 +1032,11 @@ endfunction " }}}
     let g:unite_source_history_yank_enable = 1
     nnoremap <silent><expr> ,y UniteWrapper('history/yank', '-buffer-name=unite-yank-history')
 
-    " ,t - show file outline
-    nnoremap <silent><expr> ,t UniteWrapper('outline', '-start-insert')
+    " ,o - show file outline
+    nnoremap <silent><expr> ,o UniteWrapper('outline', '-start-insert')
+
+    " ,t - show tags
+    nnoremap <silent><expr> ,t UniteWrapper('tag', '-start-insert')
 
     " ,T - show TODO and FIXME notes
     nnoremap <silent><expr> ,T empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? ":echoerr 'Not a git repository: ' . getcwd()\<CR>" : UniteWrapper('grep:.:-p\ .todoignore:(TODO\|FIXME)', '')
