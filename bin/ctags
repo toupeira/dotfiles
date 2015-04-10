@@ -1,0 +1,17 @@
+#!/bin/bash
+
+ctags='ctags-exuberant'
+args=()
+
+while [ $# -gt 0 ]; do
+  if [ "$1" = "--languages=ruby" ]; then
+    ctags='ripper-tags'
+    unset GEM_HOME GEM_PATH RUBYOPT # break out of Bundler
+  else
+    args=( "${args[@]}" "$1" )
+  fi
+
+  shift
+done
+
+exec $ctags "${args[@]}"
