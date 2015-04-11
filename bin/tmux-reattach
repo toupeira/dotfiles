@@ -1,5 +1,10 @@
 #!/bin/sh
 
+# ignore stale tmux sockets
+if [ -n "$TMUX" -a ! -S "$TMUX" ]; then
+  unset TMUX
+fi
+
 session=`tmux list-sessions 2>/dev/null | fgrep -vm1 attached | cut -d: -f1`
 if [ -n "$session" ]; then
   exec tmux attach-session -t "$session"
