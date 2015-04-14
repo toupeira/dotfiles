@@ -1,5 +1,8 @@
 #!/bin/sh
 
+# try to work around random hang on startup
+export EVENT_NOEPOLL=1
+
 # ignore stale tmux sockets
 if [ -n "$TMUX" -a ! -S "$TMUX" ]; then
   unset TMUX
