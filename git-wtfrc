@@ -2,6 +2,7 @@
 max_commits: 5
 versions:
  - heads/master
+ - heads/develop
  - heads/staging
  - heads/production
 ignore: []
