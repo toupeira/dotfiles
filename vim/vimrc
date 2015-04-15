@@ -713,7 +713,7 @@ endfunction " }}}
   let g:rooter_silent_chdir = 1
 
   if index(g:pathogen_disabled, 'rooter') == -1
-    autocmd vimrc BufEnter * if !isdirectory(expand('%')) | Rooter
+    autocmd vimrc BufEnter * if !isdirectory(expand('%')) && !exists('b:skip_rooter') | Rooter
   endif
   " }}}
 
@@ -776,7 +776,7 @@ endfunction " }}}
   let g:syntastic_check_on_open = 0
   let g:syntastic_enable_signs = 1
 
-  let g:syntastic_javascript_checkers = [ 'jshint' ]
+  let g:syntastic_javascript_checkers = [ 'jshint', 'jscs' ]
   let g:syntastic_php_checkers = [ 'php', 'phpmd' ]
   let g:syntastic_python_checkers = [ 'python' ]
   let g:syntastic_ruby_checkers = [ 'mri' ]
