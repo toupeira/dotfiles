@@ -47,3 +47,6 @@ db/archive
 app/assets/javascripts/ace
 app/assets/data
 tmp/
+
+# NodeJS
+node_modules
