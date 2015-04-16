@@ -10,6 +10,7 @@ alias l='ls -A'
 # general aliases
 alias ..='cd ..'
 alias ...='cd ../..'
+alias ....='cd ../../..'
 alias cd_='cd "$_"'
 alias back='cd "$OLDPWD"'
 alias cp='cp -v'
