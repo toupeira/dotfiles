@@ -615,7 +615,7 @@ endfunction " }}}
 " {{{
 
   " diff-enhanced {{{
-  autocmd vimrc VimEnter * CustomDiff histogram
+  autocmd vimrc VimEnter * EnhancedDiff histogram
   " }}}
 
   " man {{{
