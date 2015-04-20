@@ -1,6 +1,7 @@
 # Check for interactive bash and fzf
 [ -n "$BASH_INTERACTIVE" ] && has fzf || return
 
+export FZF_TMUX=0
 export FZF_DEFAULT_COMMAND='ag -l -g ""'
 export FZF_DEFAULT_OPTS='-x -m'
 export FZF_COMPLETION_TRIGGER='//'
