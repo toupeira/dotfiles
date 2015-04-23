@@ -1014,7 +1014,7 @@ endfunction " }}}
 
     " wrapper for default Unite arguments
     function! UniteWrapper(action, arguments)
-      return ":\<C-u>silent! Unite -no-split -toggle " . a:action . " " . a:arguments . "\<CR>"
+      return ":\<C-u>silent! Unite -no-split -no-resize -toggle " . a:action . " " . a:arguments . "\<CR>"
     endfunction
 
     " ,f - show files in the current working directory and project tree
