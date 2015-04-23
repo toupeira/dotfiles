@@ -644,48 +644,13 @@ endfunction " }}}
   map <Backspace> <Plug>(expand_region_shrink)
   " }}}
 
-  " jedi {{{
-  let g:jedi#auto_vim_configuration = 0
-  let g:jedi#completions_enabled = 0
-  let g:jedi#show_call_signatures = 0
-  " }}}
-
   " javascript-libraries-syntax {{{
   let g:used_javascript_libs = 'jquery,requirejs'
-  " }}}
-
-  " rspec-runner {{{
-  let g:rspec_command = 'Dispatch rspec --backtrace {spec}'
-  nnoremap <silent> !F :call RunCurrentSpecFile()<CR>
-  nnoremap <silent> !N :call RunNearestSpec()<CR>
-  nnoremap <silent> !L :call RunLastSpec()<CR>
-  nnoremap <silent> !A :call RunAllSpecs()<CR>
-  " }}}
-
-  " gitv {{{
-  let g:Gitv_OpenHorizontal = 1
-  let g:Gitv_WipeAllOnClose = 1
-  let g:Gitv_DoNotMapCtrlKey = 1
-  " }}}
-
-  " undotree {{{
-  let g:undotree_SetFocusWhenToggle = 1
-  nnoremap <silent> ,u :UndotreeToggle<CR>
   " }}}
 
   " unimpaired {{{
   xmap <silent> <C-j> ]egv=gv
   xmap <silent> <C-k> [egv=gv
-  " }}}
-
-  " ctrlsf {{{
-  let g:ctrlsf_ackprg = 'ag'
-  let g:ctrlsf_context = '-C 3 --smart-case'
-  let g:ctrlsf_leading_space = 6
-  let g:ctrlsf_width = '40%'
-
-  nmap ,/ <Plug>CtrlSFCwordPath
-  nnoremap <silent> ,? :CtrlSFOpen<CR>
   " }}}
 
   " slimux {{{
@@ -720,13 +685,6 @@ endfunction " }}}
   " matchparen {{{
   let g:matchparen_timeout = 50
   let g:matchparen_insert_timeout = 50
-  " }}}
-
-  " colorizer {{{
-  let g:colorizer_startup = 0
-  if has('gui_running')
-    autocmd vimrc FileType css,scss silent ColorToggle
-  endif
   " }}}
 
   " cycle {{{
