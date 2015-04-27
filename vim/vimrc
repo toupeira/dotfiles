@@ -852,7 +852,7 @@ endfunction " }}}
     endfunction " }}}
 
     " show file format and encoding separated by a colon
-    let g:airline_section_y = "%{strlen(&fenc)>0?&fenc.':':''}%{strlen(&ff)>0?&ff:''}"
+    let g:airline_section_y = "%{strlen(&fenc)>0?&fenc:''}%{strlen(&ff)>0&&(&ff!='unix')?':'.&ff:''}"
     "let g:airline_section_z = "%3p%% %{g:airline_symbols.linenr} %3l "
 
     let g:airline#extensions#hunks#enabled = 0
