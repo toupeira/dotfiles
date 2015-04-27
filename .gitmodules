@@ -46,10 +46,6 @@
   path = vim/bundle/endwise
   url = https://github.com/tpope/vim-endwise.git
   ignore = dirty
-[submodule "vim/bundle/javascript-syntax"]
-  path = vim/bundle/javascript-syntax
-  url = https://github.com/jelera/vim-javascript-syntax.git
-  ignore = dirty
 [submodule "vim/bundle/unite"]
   path = vim/bundle/unite
   url = https://github.com/Shougo/unite.vim.git
@@ -317,4 +313,8 @@
 [submodule "vim/bundle/bundler"]
 	path = vim/bundle/bundler
 	url = https://github.com/tpope/vim-bundler.git
+  ignore = dirty
+[submodule "vim/bundle/yajs"]
+	path = vim/bundle/yajs
+	url = https://github.com/othree/yajs.vim.git
   ignore = dirty
