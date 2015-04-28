@@ -1,0 +1,14 @@
+#!/bin/bash
+
+function clear {
+  local age="$1"
+  shift
+
+  for dir in "$@"; do
+    if [ -d "$dir" ]; then
+      find "$dir" -type f -mtime "$age" -exec rm "{}" \;
+    fi
+  done
+}
+
+clear +180 /home/*/.vim/tmp
