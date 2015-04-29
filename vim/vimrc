@@ -178,6 +178,11 @@
   " add Unicode marker for tmux-navigator
   if !empty($TMUX)
     let &iconstring .= " ◉"
+
+    " mintty from Cygwin/Babun doesn't seem to use the iconstring
+    if !empty($CYGWIN)
+      let &titlestring = &iconstring
+    endif
   endif
 
 " }}}
