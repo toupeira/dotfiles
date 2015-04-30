@@ -301,7 +301,7 @@ endfunction " }}}
   command! Dg diffget
   command! Dp diffput
 
-  " shortcuts for online searches
+  " shortcuts to open files externally and perform online searches
   if has('mac')
     let g:open_command = 'open'
   elseif has('unix')
@@ -309,6 +309,7 @@ endfunction " }}}
   else
     let g:open_command = 'start'
   endif
+  command! -nargs=+ -complete=file_in_path Open call system(g:open_command.' <args>')
   command! -nargs=+ Google call system(g:open_command.' "https://www.google.com/search?q=<args>"')
   command! -nargs=+ Dict call system(g:open_command.' "http://dict.leo.org/?lp=ende&search=<args>"')
   command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=<args>"')
