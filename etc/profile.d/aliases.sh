@@ -32,6 +32,7 @@ alias pskill='pkill -fe'
 alias smem='smem -kt'
 alias watch='watch -cd -n 1 '
 alias irb='pry'
+alias pyserve='python -m SimpleHTTPServer 8080'
 has 7z && ! has rar && alias rar='7z'
 
 alias sctl='systemctl'
