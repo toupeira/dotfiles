@@ -17,9 +17,6 @@ shopt -s globstar
 # Disable flow control (Ctrl-S/Q)
 stty -ixon
 
-# Only continue on Linux
-[ "`uname -s`" = "Linux" ] || return
-
 if [ -z "$SSH_AUTH_SOCK" -a "$UID" != "0" ]; then
   # Try to connect to a running SSH agent
   socket=`command ls -t /tmp/ssh-*/agent.[0-9]* 2>/dev/null | head -1`
