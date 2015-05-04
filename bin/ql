@@ -58,7 +58,7 @@ case "$command" in
 
         if is_running; then
           sleep 0.5
-          exec $0 query-saved 1
+          exec $0 query-saved 11
           exit 0
         fi
       done
