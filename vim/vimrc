@@ -458,8 +458,8 @@ endfunction " }}}
     execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
   endfunction " }}}
 
-  " Ctrl-c - remove highlighted search
-  nnoremap <silent> <C-c> :nohlsearch<CR>
+  " Ctrl-c - remove highlighted search and redraw
+  nnoremap <silent> <C-c> :nohlsearch<CR>:redraw!<CR>
 
   " <count>` - switch buffers
   nnoremap <silent><expr> ` v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "`"
