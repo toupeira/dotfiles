@@ -1,7 +1,5 @@
 #!/bin/bash
 
-[ -f ~/.Xmodmap ] && xmodmap ~/.Xmodmap
-
 # make Dropbox behave
 dropbox=~/.config/autostart/dropbox.desktop
 if [ -f "$dropbox" ]; then
