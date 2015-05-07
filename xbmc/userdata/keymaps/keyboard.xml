@@ -41,8 +41,7 @@
       <q>Queue</q>
       <closesquarebracket>FastForward</closesquarebracket>
       <opensquarebracket>Rewind</opensquarebracket>
-      <f>FastForward</f>
-      <r>Rewind</r>
+      <f>ActivateWindow(Favourites)</f>
       <left>Left</left>
       <right>Right</right>
       <up>Up</up>

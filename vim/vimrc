@@ -176,7 +176,7 @@
   let &iconstring = &titlestring
 
   " add Unicode marker for tmux-navigator
-  if !empty($TMUX)
+  if !empty($TMUX) || !empty($SUDO_COMMAND)
     let &iconstring .= " ◉"
 
     " mintty from Cygwin/Babun doesn't seem to use the iconstring
