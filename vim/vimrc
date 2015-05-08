@@ -46,7 +46,8 @@
   " set autowrite
   set modeline
   set modelines=2
-  if v:version > 703
+
+  if v:version > 703 && !has('nvim')
     set cryptmethod=blowfish
   endif
 
