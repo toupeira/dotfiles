@@ -138,13 +138,9 @@
   path = vim/bundle/scriptease
   url = https://github.com/tpope/vim-scriptease.git
   ignore = dirty
-[submodule "tmux/powerline-theme"]
-  path = tmux/powerline-theme
-  url = https://github.com/jooize/tmux-powerline-theme.git
-  ignore = dirty
 [submodule "tmux/powerline"]
   path = tmux/powerline
-  url = https://github.com/Lokaltog/powerline.git
+  url = https://github.com/powerline/powerline.git
   ignore = dirty
 [submodule "vim/bundle/coffeescript"]
   path = vim/bundle/coffeescript
