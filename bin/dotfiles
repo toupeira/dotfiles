@@ -37,7 +37,7 @@ function dryrun_message {
 
 # Show usage help and exit
 function usage {
-  echo "Usage: $( basename $0 ) [options] COMMAND [args]"
+  echo "Usage: $( basename "$0" ) [options] COMMAND [args]"
   echo
   echo "Options:"
   echo "  -f, --force     Assume yes for all questions"
@@ -166,7 +166,7 @@ function system {
   force   && command="$command -f"
   verbose && command="$command -v"
 
-  verbose && output "     executing: $command $(echo "$@") $( dryrun_message )"
+  verbose && output "     executing: $command $* $( dryrun_message )"
   dryrun && return
 
   command $command "$@"
@@ -181,7 +181,7 @@ function git {
     local onerror="ask_abort"
   fi
 
-  verbose && output "     executing: git $(echo "$@") $( dryrun_message )"
+  verbose && output "     executing: git $* $( dryrun_message )"
   dryrun && return
 
   # Spawn a subshell so we can run the command inside the repository
@@ -270,7 +270,7 @@ function run {
       output
       ;;
     list)
-      cat "$DOTFILES/.gitmodules" | awk '/path = / { print $3 }' | sort
+      awk '/path = / { print $3 }' "$DOTFILES/.gitmodules" | sort
       ;;
     up|update)
       unset batch
@@ -304,7 +304,7 @@ function run {
 
             [ ! $batch ] && output
             status "Changes in {{$submodule}}$url:" 6
-            quiet || system git -c color.ui=always diff --stat @{1}.. | sed -r 's/^/    /'
+            quiet || system git -c color.ui=always diff --stat '@{1}..' | sed -r 's/^/    /'
 
             if [ "$submodule" = "vim/bundle/vimproc" ]; then
               run build "$DOTFILES/$submodule"
@@ -607,7 +607,7 @@ function main {
     shift
   done
 
-  if [ -n "$COMMAND" ]; then
+  if [ ${#COMMAND[@]} -gt 0 ]; then
     STATUS=0
     run "${COMMAND[@]}"
     exit $STATUS
