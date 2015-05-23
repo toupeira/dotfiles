@@ -338,3 +338,7 @@
 	path = vim/bundle/tagbar
 	url = https://github.com/majutsushi/tagbar.git
   ignore = dirty
+[submodule "vim/bundle/papercolor"]
+	path = vim/bundle/papercolor
+	url = https://github.com/NLKNguyen/papercolor-theme.git
+  ignore = dirty
