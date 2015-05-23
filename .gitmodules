@@ -334,3 +334,7 @@
 	path = vim/bundle/textobj-ruby
 	url = https://github.com/tek/vim-textobj-ruby.git
   ignore = dirty
+[submodule "vim/bundle/tagbar"]
+	path = vim/bundle/tagbar
+	url = https://github.com/majutsushi/tagbar.git
+  ignore = dirty

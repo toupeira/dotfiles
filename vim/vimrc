@@ -621,6 +621,18 @@ endfunction " }}}
 " Plugin Settings
 " {{{
 
+  " tagbar {{{
+  let g:tagbar_autoclose = 1
+  let g:tagbar_compact = 1
+  let g:tagbar_previewwin_pos = 'rightbelow'
+
+  nnoremap <silent> ,t :TagbarToggle<CR>
+  " }}}
+
+  " pasta {{{
+  let g:pasta_disabled_filetypes = [ 'python', 'coffee', 'markdown', 'yaml', 'slim', 'tagbar' ]
+  " }}}
+
   " diff-enhanced {{{
   autocmd vimrc VimEnter * EnhancedDiff histogram
   " }}}
@@ -635,6 +647,7 @@ endfunction " }}}
 
   " colorizer {{{
   let g:colorizer_auto_filetype = 'css,scss,sass'
+  let g:colorizer_syntax = 1
   " }}}
 
   " incsearch {{{
@@ -868,10 +881,12 @@ endfunction " }}}
 
     let g:airline#extensions#hunks#enabled = 0
     let g:airline#extensions#syntastic#enabled = 0
-    let g:airline#extensions#tagbar#enabled = 0
     let g:airline#extensions#whitespace#enabled = 0
 
+    let g:airline#extensions#tagbar#enabled = 1
+
     let g:airline#extensions#tabline#enabled = 1
+    let g:airline#extensions#tabline#excludes = [ 'tagbar' ]
     let g:airline#extensions#tabline#formatter = 'unique_tail'
     let g:airline#extensions#tabline#buffer_nr_show = 1
     let g:airline#extensions#tabline#buffer_min_count = 2
@@ -1005,11 +1020,8 @@ endfunction " }}}
     " ,o - show file outline
     nnoremap <silent><expr> ,o UniteWrapper('outline', '-start-insert')
 
-    " ,t - show tags
-    nnoremap <silent><expr> ,t UniteWrapper('tag', '-start-insert')
-
-    " ,T - show TODO and FIXME notes
-    nnoremap <silent><expr> ,T empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? ":echoerr 'Not a git repository: ' . getcwd()\<CR>" : UniteWrapper('grep:.:-p\ .todoignore:(TODO\|FIXME)', '')
+    " ,T - show tags
+    nnoremap <silent><expr> ,T UniteWrapper('tag', '-start-insert')
 
     " run ,<Space> on startup if no arguments were given
     " au VimEnter *
