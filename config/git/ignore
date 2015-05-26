@@ -1,4 +1,5 @@
 # temporary files
+.~*
 .DS_Store
 
 # binary files
