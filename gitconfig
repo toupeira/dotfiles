@@ -13,7 +13,7 @@
   resolveConflict = false
 
 [branch]
-  autosetuprebase = remote
+	autosetuprebase = always
 
 [diff]
   renames = copies
