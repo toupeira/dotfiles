@@ -699,7 +699,7 @@ endfunction " }}}
   let g:rooter_patterns = ['Gemfile', 'package.json', 'bower.json', '.git', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/']
 
   if index(g:pathogen_disabled, 'rooter') == -1
-    autocmd vimrc BufEnter * if !isdirectory(expand('%')) && !exists('b:skip_rooter') | Rooter
+    autocmd vimrc BufEnter * if !isdirectory(expand('%')) | Rooter
   endif
   " }}}
 
@@ -866,13 +866,21 @@ endfunction " }}}
 
     function! AirlineFilepath() " {{{
       let l:path = fnamemodify(expand('%'), ':p:h')
+      let l:root = getcwd()
+
+      let l:root = substitute(l:path, '^' . l:root . '/', '', '')
+      let l:root = substitute(l:root, '^' . $HOME, '~', '')
 
       if exists('b:git_dir')
-        let l:root = fnamemodify(b:git_dir, ':h')
-        return substitute(l:path, '^' . l:root . '/', '', '') . ' @ '. fnamemodify(l:root, ':t')
-      else
-        return substitute(l:path, '^' . $HOME, '~', '')
+        let l:project = fnamemodify(b:git_dir, ':h:t')
+        if fnamemodify(b:git_dir, ':h') == l:root
+          let l:root = l:project
+        else
+          let l:root .= ' @ ' . l:project
+        endif
       endif
+
+      return l:root
     endfunction " }}}
 
     " show file format and encoding separated by a colon
