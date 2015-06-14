@@ -167,13 +167,7 @@
     let &t_IE = "\007"
   endif
 
-  let &titlestring = "%t%m%r\ \[%{AirlineFilepath()}\]"
-
-  " " show user and host in SSH sessions
-  " if exists('$SSH_CONNECTION')
-  "   let &titlestring = expand('$USER') . '@' . hostname() . ': ' . &titlestring
-  " endif
-
+  let &titlestring = "%t%m%r\ \[%{AirlineFilepath(1)}\]"
   let &iconstring = &titlestring
 
   " add Unicode marker for tmux-navigator
@@ -859,12 +853,12 @@ endfunction " }}}
     hi airline_filepath_insert term=bold cterm=bold ctermfg=238 ctermbg=135 gui=bold guifg=#555555 guibg=#303030
 
     call airline#parts#define_raw('file', '%t%m')
-    call airline#parts#define_raw('filepath', '%#airline_filepath#[%<%{AirlineFilepath()}]')
+    call airline#parts#define_raw('filepath', '%#airline_filepath#[%<%{AirlineFilepath(0)}]')
     autocmd vimrc VimEnter *
       \ let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath']) |
       \ let g:airline_symbols.readonly .= ' '
 
-    function! AirlineFilepath() " {{{
+    function! AirlineFilepath(short) " {{{
       let l:path = fnamemodify(expand('%'), ':p:h')
       let l:root = getcwd()
 
@@ -873,6 +867,10 @@ endfunction " }}}
 
       if exists('b:git_dir')
         let l:project = fnamemodify(b:git_dir, ':h:t')
+        if a:short
+          return l:project
+        endif
+
         if fnamemodify(b:git_dir, ':h') == l:root
           let l:root = l:project
         else
