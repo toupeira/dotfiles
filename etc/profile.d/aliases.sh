@@ -1,13 +1,16 @@
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
-# ls
+# dotfiles aliases
+alias @='start '
+alias dt='dotfiles'
+has git-edit && alias ed='git-edit'
+
+# general shell aliases
 has dircolors && eval `dircolors -b`
 alias ls='ls --color'
 alias ll='ls -lh'
 alias l='ls -A'
-
-# general aliases
 alias ..='cd ..'
 alias ...='cd ../..'
 alias ....='cd ../../..'
@@ -21,7 +24,13 @@ alias df='df -h'
 alias ln='ln -svfi'
 alias mime='file -i'
 alias killbg='kill -9 %1'
-alias ag='ag --smart-case'
+alias xcopy='xclip -selection clipboard -i'
+alias xpaste='xclip -selection clipboard -o'
+has 7z && ! has rar && alias rar='7z'
+
+# system administration
+alias sctl='systemctl'
+alias jctl='journalctl'
 alias pstree='pstree -GUh'
 alias ftrace='strace -fe trace=file'
 alias ptrace='strace -fe trace=process'
@@ -29,18 +38,8 @@ alias psgrep='pgrep -fla'
 alias pskill='pkill -fe'
 alias smem='smem -kt'
 alias watch='watch -cd -n 1 '
-alias irb='pry'
-alias pyserve='python -m SimpleHTTPServer 8080'
-has 7z && ! has rar && alias rar='7z'
 
-alias sctl='systemctl'
-alias jctl='journalctl'
-
-alias @='start '
-alias dt='dotfiles'
-has git-edit && alias ed='git-edit'
-
-# package aliases
+# package managment
 alias pkget='aptitude -Z install'
 alias pkgpurge='aptitude -Z purge'
 alias pkgremove='aptitude -Z remove'
@@ -48,13 +47,17 @@ alias pkglist='dpkg -L'
 alias pkgname='apt-cache pkgnames'
 alias pkgsearch='apt-cache search'
 
-# vim aliases
+# development
 alias vi='vim'
 alias gvi='gvim'
 if has sensible-vim; then
   alias vim='sensible-vim'
   alias gvim='CMD=gvim sensible-vim'
 fi
+
+alias ag='ag --smart-case'
+alias irb='pry'
+alias pyserve='python -m SimpleHTTPServer 8080'
 
 # sudo aliases
 if has sudo; then
