@@ -1,27 +1,31 @@
 // vim: ft=javascript
 
 {
-  "devel":    false, // Development/debugging (alert, confirm, etc)
-  "esnext":   true,  // Allow ES.next (ES6) syntax (ex: `const`)
-  "multistr": true,  // Allow ES5 multiline strings
+  "jquery":   true,
+  "node":     true,
 
-  "jquery":   true, // jQuery
-  "node":     true, // Node.js
+  "devel":    false, // forbid development/debugging code
+  "eqeqeq":   true,  // forbid == and !=
+  "esnext":   true,  // allow ES6 syntax
+  "freeze":   true,  // forbid overwriting prototypes of native objects
+  "latedef":  true,  // require definition before use
+  "undef":    true,  // require variable definitions
+  "unused":   true,  // check for unused variables
 
-  "globals": {
-    "require": false,
-    "angular": false,
-
-    "after": false,
-    "afterEach": false,
-    "before": false,
+  "globals":   {
+    "afterEach":  false,
+    "after":      false,
+    "angular":    false,
     "beforeEach": false,
-    "browser": false,
-    "describe": false,
-    "expect": false,
-    "inject": false,
-    "it": false,
-    "jasmine": false,
-    "spyOn": false
+    "before":     false,
+    "browser":    false,
+    "describe":   false,
+    "expect":     false,
+    "inject":     false,
+    "it":         false,
+    "jasmine":    false,
+    "require":    false,
+    "spyOn":      false,
+    "window":     false
   }
 }
