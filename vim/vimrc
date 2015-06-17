@@ -978,29 +978,33 @@ endfunction " }}}
     " map our keys in all Unite buffers
     autocmd vimrc FileType unite call <SID>unite_buffer_mappings()
     function! s:unite_buffer_mappings() " {{{
+      " use Tab to run the default action
+      nmap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
+      imap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
+
+      " use ,a to show all actions
+      nmap <silent><buffer> ,a <Plug>(unite_choose_action)
+      imap <silent><buffer> ,a <Plug>(unite_choose_action)
+
       " use ; to toggle insert mode
       nmap <silent><buffer> ; i
       inoremap <silent><buffer> ; <Esc>
 
-      " use <C-c> to close Unite
-      nmap <silent><buffer> <C-c> <Plug>(unite_exit)
-      imap <silent><buffer> <C-c> <Plug>(unite_exit)
-
-      " use <Tab> to run the default action
-      nmap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
-      imap <silent><buffer> <Tab> <Plug>(unite_do_default_action)
-
-      " use <C-a> to show all actions
-      nmap <silent><buffer> <C-a> <Plug>(unite_choose_action)
-      imap <silent><buffer> <C-a> <Plug>(unite_choose_action)
-
-      " use <C-n> and <C-p> to move between lines in normal mode too
-      noremap <silent><buffer> <C-n> j
-      noremap <silent><buffer> <C-p> k
+      " use ,s and ,v to open the selection in horizontal/vertical splits
+      imap <silent><buffer><expr> ,s unite#do_action('split')
+      imap <silent><buffer><expr> ,v unite#do_action('vsplit')
 
       " use ' to start quick-match mode
       nmap <silent><buffer> ' <Plug>(unite_quick_match_default_action)
       imap <silent><buffer> ' <Plug>(unite_quick_match_default_action)
+
+      " use C-c to close Unite
+      nmap <silent><buffer> <C-c> <Plug>(unite_exit)
+      imap <silent><buffer> <C-c> <Plug>(unite_exit)
+
+      " use C-n and C-p to move between lines in normal mode too
+      noremap <silent><buffer> <C-n> j
+      noremap <silent><buffer> <C-p> k
     endfunction " }}}
 
     " wrapper for default Unite arguments
