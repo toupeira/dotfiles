@@ -342,3 +342,7 @@
 	path = vim/bundle/papercolor
 	url = https://github.com/NLKNguyen/papercolor-theme.git
   ignore = dirty
+[submodule "vim/bundle/css3-syntax"]
+	path = vim/bundle/css3-syntax
+	url = https://github.com/hail2u/vim-css3-syntax.git
+  ignore = dirty
