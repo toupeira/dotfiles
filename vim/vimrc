@@ -304,10 +304,10 @@ endfunction " }}}
   else
     let g:open_command = 'start'
   endif
-  command! -nargs=+ -complete=file_in_path Open call system(g:open_command.' <args>')
-  command! -nargs=+ Google call system(g:open_command.' "https://www.google.com/search?q=<args>"')
-  command! -nargs=+ Dict call system(g:open_command.' "http://dict.leo.org/?lp=ende&search=<args>"')
-  command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=<args>"')
+  command! -nargs=+ -complete=file_in_path Open call system(g:open_command.' ' . expand("<args>"))
+  command! -nargs=+ Google call system(g:open_command.' "https://www.google.com/search?q=' . expand("<args>") . '"')
+  command! -nargs=+ Dict call system(g:open_command.' "http://dict.leo.org/?lp=ende&search=' . expand("<args>") . '"')
+  command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=' . expand("<args>") . '"')
 
   " shortcuts to open tmux splits and windows
   command! -nargs=* Mux call system('mux <args>')
