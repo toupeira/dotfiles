@@ -170,8 +170,36 @@
     let &t_IE = "\007"
   endif
 
-  let &titlestring = "%t%m%r\ \[%{AirlineFilepath(1)}\]"
+  let &titlestring = "%t%m%r\ \[%{ProjectFilepath(1)}\]"
   let &iconstring = &titlestring
+
+  " show the project name and relative path to the current file
+  function! ProjectFilepath(short) " {{{
+    let l:path = fnamemodify(expand('%'), ':p:h')
+    let l:root = getcwd()
+
+    let l:root = substitute(l:path, '^' . l:root . '/', '', '')
+    let l:root = substitute(l:root, '^' . $HOME, '~', '')
+
+    if exists('b:git_dir')
+      let l:root = substitute(l:root, '^' . b:git_dir, '', '')
+      let l:project = fnamemodify(b:git_dir, ':h:t')
+
+      " only return project name
+      if a:short || winwidth(0) < 60
+        return l:project
+      endif
+
+      " otherwise also add the path
+      if fnamemodify(b:git_dir, ':h') == l:root
+        let l:root = l:project
+      else
+        let l:root .= ' @ ' . l:project
+      endif
+    endif
+
+    return l:root
+  endfunction " }}}
 
   " add Unicode marker for tmux-navigator
   if !empty($TMUX) || !empty($SUDO_COMMAND)
@@ -850,44 +878,6 @@ endfunction " }}}
     let g:airline_detect_paste = 0
     let g:airline_detect_iminsert = 0
 
-    " show file directory separately from file name
-    hi airline_filepath term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
-    hi airline_filepath_inactive term=bold cterm=bold ctermfg=238 ctermbg=235 gui=bold guifg=#555555 guibg=#303030
-    hi airline_filepath_insert term=bold cterm=bold ctermfg=238 ctermbg=135 gui=bold guifg=#555555 guibg=#303030
-
-    call airline#parts#define_raw('file', '%t%m')
-    call airline#parts#define_raw('filepath', '%#airline_filepath#[%<%{AirlineFilepath(0)}]')
-    autocmd vimrc VimEnter *
-      \ let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath']) |
-      \ let g:airline_symbols.readonly .= ' '
-
-    function! AirlineFilepath(short) " {{{
-      let l:path = fnamemodify(expand('%'), ':p:h')
-      let l:root = getcwd()
-
-      let l:root = substitute(l:path, '^' . l:root . '/', '', '')
-      let l:root = substitute(l:root, '^' . $HOME, '~', '')
-
-      if exists('b:git_dir')
-        let l:project = fnamemodify(b:git_dir, ':h:t')
-        if a:short
-          return l:project
-        endif
-
-        if fnamemodify(b:git_dir, ':h') == l:root
-          let l:root = l:project
-        else
-          let l:root .= ' @ ' . l:project
-        endif
-      endif
-
-      return l:root
-    endfunction " }}}
-
-    " show file format and encoding separated by a colon
-    let g:airline_section_y = "%{strlen(&fenc)>0?&fenc:''}%{strlen(&ff)>0&&(&ff!='unix')?':'.&ff:''}"
-    "let g:airline_section_z = "%3p%% %{g:airline_symbols.linenr} %3l "
-
     let g:airline#extensions#hunks#enabled = 0
     let g:airline#extensions#quickfix#enabled = 0
     let g:airline#extensions#syntastic#enabled = 0
@@ -924,12 +914,6 @@ endfunction " }}}
       let g:airline#extensions#tabline#left_alt_sep = ' '
     endif
 
-    " if !has('gui') && &t_Co <= 8
-    "   autocmd vimrc VimEnter * AirlineTheme monochrome
-    " else
-    "   autocmd vimrc VimEnter * AirlineTheme desertink
-    " endif
-
     let g:airline_mode_map = {
       \ '__' : '#',
       \ 'n'  : 'n',
@@ -943,6 +927,40 @@ endfunction " }}}
       \ 'S'  : 'S',
       \ "\023" : 's•b',
       \ }
+
+    let g:airline#extensions#default#section_truncate_width = {
+      \ 'b': 80
+    \ }
+
+    " overwrite sections after airline has loaded
+    autocmd vimrc VimEnter * call s:AirlineOverrides()
+
+    function! s:AirlineOverrides()
+      " hide tag in small windows
+      call airline#parts#define_minwidth('tagbar', 100)
+
+      " add space after readonly symbol
+      let g:airline_symbols.readonly .= ' '
+
+      " show file directory separately from file name
+      call airline#parts#define_raw('file', '%t%m')
+      call airline#parts#define_raw('filepath', '%#airline_filepath#[%<%{ProjectFilepath(0)}]')
+      let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
+
+      hi airline_filepath term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
+      hi airline_filepath_inactive term=bold cterm=bold ctermfg=238 ctermbg=235 gui=bold guifg=#555555 guibg=#303030
+      hi airline_filepath_insert term=bold cterm=bold ctermfg=238 ctermbg=135 gui=bold guifg=#555555 guibg=#303030
+
+      " switch filetype and format/encoding, and only show
+      " file format and encoding if it's not the default
+      let g:airline_section_x = airline#section#create([
+        \ "%{substitute(airline#parts#ffenc(), '\\(^utf-8\\|\\[unix\\]$\\)', '', 'g')}"
+      \ ])
+      let g:airline_section_y = airline#section#create_right(['tagbar', 'filetype'])
+
+      " don't show position percentage
+      let g:airline_section_z = airline#section#create(['windowswap', 'linenr', ':%v'])
+    endfunction
   endif
   " }}}
 
