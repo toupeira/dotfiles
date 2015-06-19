@@ -93,6 +93,9 @@
   syntax on
 
   colorscheme desertink
+  command! Dark colorscheme desertink | AirlineTheme desertink
+  command! Light colorscheme PaperColor | AirlineTheme papercolor
+
   set errorbells
   set visualbell t_vb= " disable bells
   set cmdheight=1
