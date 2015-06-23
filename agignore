@@ -33,6 +33,10 @@
 *.exe
 *.msi
 
+# minified files
+**.min.js
+**.min.css
+
 # home
 src/*-clone
 src/**/public/system
