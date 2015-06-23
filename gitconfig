@@ -33,9 +33,8 @@
 
 [merge]
   stat = true
-  tool = vimdiff
-  #tool = splice
-  #tool = git-vimdiff
+  tool = splice
+  #tool = vimdiff
 
 [mergetool]
   prompt = false
@@ -43,10 +42,6 @@
 
 [mergetool.splice]
   cmd = sensible-vim $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'
-  trustExitCode = true
-
-[mergetool.git-vimdiff]
-  cmd = git-vimdiff sensible-vim $BASE $LOCAL $REMOTE $MERGED
   trustExitCode = true
 
 [rerere]
