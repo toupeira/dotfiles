@@ -66,9 +66,9 @@
       <comma>SkipPrevious</comma>
       <tab>FullScreen</tab>
       <printscreen>Screenshot</printscreen>
-      <minus>VolumeDown</minus>
-      <plus>VolumeUp</plus>
-      <equals>VolumeUp</equals>
+      <minus>noop</minus>
+      <plus>noop</plus>
+      <equals>noop</equals>
       <zero>Number0</zero>
       <one>Number1</one>
       <two>Number2</two>
@@ -79,8 +79,8 @@
       <seven>Number7</seven>
       <eight>Number8</eight>
       <nine>Number9</nine>
-      <numpadminus>VolumeDown</numpadminus>
-      <numpadplus>VolumeUp</numpadplus>
+      <numpadminus>noop</numpadminus>
+      <numpadplus>noop</numpadplus>
       <numpadzero>Number0</numpadzero>
       <numpadone>Number1</numpadone>
       <numpadtwo>Number2</numpadtwo>
@@ -102,9 +102,9 @@
       <browser_search/>
       <browser_favorites>ActivateWindow(Favourites)</browser_favorites>
       <browser_home>XBMC.ActivateWindow(Home)</browser_home>
-      <volume_mute>Mute</volume_mute>
-      <volume_down>XBMC.RunScript("/home/toupeira/.xbmc/runner.py", "amixer.sync 'DAC 1%-' 'DAC,1 1%-'")</volume_down>
-      <volume_up>XBMC.RunScript("/home/toupeira/.xbmc/runner.py", "amixer.sync 'DAC 1%+' 'DAC,1 1%+'")</volume_up>
+      <volume_mute>noop</volume_mute>
+      <volume_down>noop</volume_down>
+      <volume_up>noop</volume_up>
       <next_track>SkipNext</next_track>
       <prev_track>SkipPrevious</prev_track>
       <stop>Stop</stop>
@@ -126,9 +126,9 @@
       <f mod="ctrl">SkipNext</f>          <!-- Skip -->
       <b mod="ctrl">SkipPrevious</b>      <!-- Replay -->
       <d mod="ctrl">Info</d>              <!-- MCE Details -->
-      <f10>VolumeUp</f10>                 <!-- MCE Vol up -->
-      <f9>VolumeDown</f9>                 <!-- MCE Vol down -->
-      <f8>Mute</f8>                       <!-- MCE mute -->
+      <f10>noop</f10>                     <!-- MCE Vol up -->
+      <f9>noop</f9>                       <!-- MCE Vol down -->
+      <f8>noop</f8>                       <!-- MCE mute -->
       <g mod="ctrl">OSD</g>               <!-- MCE Guide -->
       <m mod="ctrl">ActivateWindow(music)</m>    <!-- MCE My music -->
       <i mod="ctrl">ActivateWindow(pictures)</i> <!-- MCE My pictures -->
