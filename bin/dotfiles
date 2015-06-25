@@ -373,7 +373,7 @@ function run {
       }
 
       output
-      install_paths "${1:-$DOTFILES}"/*
+      install_paths "$DOTFILES"/*
       run install-packages "$DOTFILES/.packages"
       output
       ;;
