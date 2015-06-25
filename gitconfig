@@ -33,8 +33,7 @@
 
 [merge]
   stat = true
-  tool = splice
-  #tool = vimdiff
+  tool = vimdiff
 
 [mergetool]
   prompt = false
