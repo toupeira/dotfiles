@@ -64,8 +64,8 @@
 
   shallow = clone --depth 1
 
-  di = diff --word-diff
-  dc = diff --word-diff --cached
+  di = diff
+  dc = diff --cached
   ds = diff --stat
 
   st = status
@@ -87,8 +87,7 @@
 
   l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
   lstat = "!f() { git l --stat $@; }; f"
-  ldi = log -p --word-diff
-  ldiff = log -p
+  ldi = log -p
   blame = blame -w
 
   up = pull -v --progress
