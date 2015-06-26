@@ -9,7 +9,9 @@
 
   " set up pathogen
   runtime bundle/pathogen/autoload/pathogen.vim
-  let g:pathogen_disabled = []
+  if !exists('g:pathogen_disabled')
+    let g:pathogen_disabled = []
+  endif
 
   " only enable tmux plugins in tmux sessions
   if empty($TMUX)

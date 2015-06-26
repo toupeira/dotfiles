@@ -54,6 +54,7 @@ if has sensible-vim; then
   alias vim='sensible-vim'
   alias gvim='CMD=gvim sensible-vim'
 fi
+alias vip='vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" --cmd "let g:pathogen_disabled = [ \"neocomplete\", \"unite\" ]"'
 
 alias ag='ag --smart-case'
 alias irb='pry'
