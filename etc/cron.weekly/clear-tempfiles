@@ -6,7 +6,7 @@ function clear {
 
   for dir in "$@"; do
     if [ -d "$dir" ]; then
-      find "$dir" -type f -mtime "$age" -exec rm "{}" \;
+      find "$dir" -type f -mtime "$age" -delete
     fi
   done
 }
