@@ -1,14 +1,11 @@
 #!/bin/sh
 
-# try to work around random hang on startup
-export EVENT_NOEPOLL=1
-
 # ignore stale tmux sockets
 if [ -n "$TMUX" -a ! -S "$TMUX" ]; then
   unset TMUX
 fi
 
-session=`tmux list-sessions 2>/dev/null | fgrep -vm1 attached | cut -d: -f1`
+session=$( tmux list-sessions 2>/dev/null | fgrep -vm1 attached | cut -d: -f1 )
 if [ -n "$session" ]; then
   exec tmux attach-session -t "$session"
 else
