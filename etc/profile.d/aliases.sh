@@ -26,6 +26,8 @@ alias mime='file -i'
 alias killbg='kill -9 %1'
 alias xcopy='xclip -selection clipboard -i'
 alias xpaste='xclip -selection clipboard -o'
+alias grep='grep -i --color=auto --exclude=.svn --exclude=.git --exclude=.*.swp'
+alias rgrep='grep -r'
 has 7z && ! has rar && alias rar='7z'
 
 # system administration
