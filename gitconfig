@@ -74,8 +74,8 @@
 
   co = checkout
   sw = checkout
-  ours = "!f() { git checkout --ours $@ && git add $@; }; f"
-  theirs = "!f() { git checkout --theirs $@ && git add $@; }; f"
+  ours = checkout --ours
+  theirs = checkout --theirs
 
   ap = add -p
   all = add -A
@@ -94,10 +94,11 @@
   upbase = pull -v --progress --rebase
   upall = pull-all
   ff = merge --ff-only HEAD@{u}
-  solve = mergetool
   rup = remote update
   continue = rebase --continue
   skip = rebase --skip
+  solve = mergetool
+  splice = mergetool --tool=splice
 
   pr = "!f() { git fetch github refs/pull/$1/head:pr/$1; } ; f"
   delbranch = "!f() { git branch -d $1 && git pu github :$1; }; f"
