@@ -120,6 +120,11 @@ function _edit {
 alias ag.edit='_edit ag -l'
 alias bun.edit='_edit bun -l'
 
+# Ag wraper to view colored and grouped results in less
+function ag.less {
+  ag --group --color "$@" | less
+}
+
 # GVim wrapper for SSH connections to pass a file to a local instance
 if [ -n "$SSH_CONNECTION" ]; then
   [ "`type -t gvi`" = "alias" ] && unalias gvi
