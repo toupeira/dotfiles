@@ -104,7 +104,7 @@
   set synmaxcol=1000 " disable syntax highlighting on long lines
   set lazyredraw
   if !&diff
-    set cursorline
+    set nocursorline
   endif
 
   " mouse support
@@ -125,7 +125,7 @@
   " line numbers
   set number
   set numberwidth=6
-  set relativenumber
+  set norelativenumber
 
   " scrolling
   set scrolloff=5
@@ -627,7 +627,7 @@ endfunction " }}}
     if &number
       set nonumber norelativenumber
     else
-      set number relativenumber
+      set number norelativenumber
     endif
   endfunction " }}}
 
