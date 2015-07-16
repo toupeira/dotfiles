@@ -1,11 +1,11 @@
 @-moz-document domain(trello.com) {
-  .list-title .num-cards {
+  .list-header-num-cards {
     display: inline !important;
     font-weight: bold !important;
     float: right !important;
   }
 
-  .list-title.editing .num-cards {
-    display:none !important;
+  .list-header.editing .list-header-num-cards {
+    display: none !important;
   }
 }
