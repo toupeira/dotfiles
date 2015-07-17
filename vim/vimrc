@@ -672,11 +672,6 @@ endfunction " }}}
   hi! link rubyRailsARMethod Statement
   " }}}
 
-  " colorizer {{{
-  let g:colorizer_auto_filetype = 'css,scss,sass'
-  let g:colorizer_syntax = 1
-  " }}}
-
   " incsearch {{{
   let g:incsearch#consistent_n_direction = 1
   let g:incsearch#emacs_like_keymap = 1

@@ -350,3 +350,7 @@
 	path = vim/bundle/splice
 	url = https://github.com/sjl/splice.vim.git
   ignore = dirty
+[submodule "vim/bundle/css-color"]
+	path = vim/bundle/css-color
+	url = https://github.com/ap/vim-css-color.git
+  ignore = dirty
