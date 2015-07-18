@@ -22,7 +22,7 @@ endif
 " {{{
 
   " interface
-  set guioptions=aigM " disable toolbars, menus, scrollbars
+  set guioptions=acigM " disable toolbars, menus, scrollbars
   set guicursor+=a:blinkon0 " disable cursor blinking
   set visualbell t_vb= " disable bells, reset when starting GUI
 
