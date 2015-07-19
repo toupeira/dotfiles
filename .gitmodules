@@ -350,3 +350,7 @@
 	path = vim/bundle/css-color
 	url = https://github.com/ap/vim-css-color.git
   ignore = dirty
+[submodule "vim/bundle/interesting-words"]
+	path = vim/bundle/interesting-words
+	url = https://github.com/vasconcelloslf/vim-interestingwords.git
+  ignore = dirty
