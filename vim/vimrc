@@ -681,11 +681,6 @@ endfunction " }}}
   map g/ <Plug>(incsearch-stay)
   " }}}
 
-  " expand-region {{{
-  map <Space> <Plug>(expand_region_expand)
-  map <Backspace> <Plug>(expand_region_shrink)
-  " }}}
-
   " javascript-libraries-syntax {{{
   let g:used_javascript_libs = 'jquery,requirejs'
   " }}}
