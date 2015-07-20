@@ -191,7 +191,7 @@ function dotfiles {
 # Wrapper for ~/bin/src to switch project directories
 function src {
   case "$1" in
-    ''|status|-a|list|each)
+    ''|-a|--path|status|list|each)
       command src "$@"
       ;;
     *)
@@ -213,9 +213,9 @@ function src_alias {
   local project="$2"
   shift 2
 
-  local project_path=$( command src "$project" --path 2>/dev/null )
+  local project_path="$( command src --path )/$project"
 
-  if [ -n "$project_path" ]; then
+  if [ -d "$project_path" ]; then
     local space=''
     [ $# -gt 0 ] && space=' '
     alias $alias="src $project$space$@"

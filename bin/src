@@ -4,6 +4,7 @@ SRC=${SRC:-~/src}
 
 function usage {
   echo "Usage:"
+  echo "  src --path                         Show source path"
   echo "  src [status] [-a]                  Show status for all projects"
   echo "  src list [-a]                      List all project paths"
   echo "  src each [COMMAND] [ARGS]          Run command in each project"
@@ -17,6 +18,9 @@ function usage {
 }
 
 case "$1" in
+  --path)
+    exec echo "$SRC"
+    ;;
   ''|status|-a)
     [ "$1" != "-a" ] && shift
 
