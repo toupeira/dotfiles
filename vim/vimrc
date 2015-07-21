@@ -694,6 +694,13 @@ endfunction " }}}
   xmap <silent> <C-k> [egv=gv
   " }}}
 
+  " test {{{
+  let g:test#strategy = 'dispatch'
+
+  nnoremap <silent> ,!  :TestFile<CR>
+  nnoremap <silent> ,!! :TestNearest<CR>
+  " }}}
+
   " ragtag {{{
   let g:ragtag_global_maps = 1
 
