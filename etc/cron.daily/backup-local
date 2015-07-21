@@ -60,9 +60,9 @@ function log {
   date "+`basename "$0"` [%Y-%m-%d %T] $1" >> "$LOGFILE"
 }
 
+log "Starting backup"
 rm -f "$LOGFILE"
 
-log "Starting backup"
 for file in /etc/backup.d/*; do
   if [ -x "$file" ]; then
     log "Running $file..."
