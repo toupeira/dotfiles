@@ -694,16 +694,6 @@ endfunction " }}}
   xmap <silent> <C-k> [egv=gv
   " }}}
 
-  " slimux {{{
-  let g:slimux_select_from_current_window = 1
-  let g:slimux_pane_format = '[#{pane_current_command}] #{pane_title} #{?pane_active,(active),}'
-
-  nnoremap <silent> ,## :SlimuxREPLSendLine<CR>
-  xnoremap <silent> ,#  :SlimuxREPLSendSelection<CR>gv
-  nnoremap <silent> ,!  :SlimuxShellPrompt<CR>
-  nnoremap <silent> ,!! :SlimuxShellLast<CR>
-  " }}}
-
   " ragtag {{{
   let g:ragtag_global_maps = 1
 
@@ -1044,9 +1034,6 @@ endfunction " }}}
     " ,y - show yank history
     let g:unite_source_history_yank_enable = 1
     nnoremap <silent><expr> ,y UniteWrapper('history/yank', '-buffer-name=unite-yank-history')
-
-    " ,o - show file outline
-    nnoremap <silent><expr> ,o UniteWrapper('outline', '-start-insert')
 
     " ,T - show tags
     nnoremap <silent><expr> ,T UniteWrapper('tag', '-start-insert')

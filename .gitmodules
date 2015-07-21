@@ -54,10 +54,6 @@
   path = vim/bundle/vimproc
   url = https://github.com/Shougo/vimproc.vim.git
   ignore = dirty
-[submodule "vim/bundle/unite-outline"]
-  path = vim/bundle/unite-outline
-  url = https://github.com/Shougo/unite-outline.git
-  ignore = dirty
 [submodule "vim/bundle/ansiesc"]
   path = vim/bundle/ansiesc
   url = https://github.com/vim-scripts/AnsiEsc.vim.git
@@ -261,10 +257,6 @@
 [submodule "vim/bundle/emblem"]
 	path = vim/bundle/emblem
 	url = https://github.com/heartsentwined/vim-emblem.git
-  ignore = dirty
-[submodule "vim/bundle/slimux"]
-	path = vim/bundle/slimux
-	url = https://github.com/epeli/slimux.git
   ignore = dirty
 [submodule "vim/bundle/fetch"]
 	path = vim/bundle/fetch
