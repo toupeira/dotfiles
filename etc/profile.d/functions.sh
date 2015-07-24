@@ -213,7 +213,11 @@ function src_alias {
   local project="$2"
   shift 2
 
-  local project_path="$( command src --path )/$project"
+  if [ -d "$project" ]; then
+    local project_path="$project"
+  else
+    local project_path="$( command src --path )/$project"
+  fi
 
   if [ -d "$project_path" ]; then
     local space=''
