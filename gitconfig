@@ -82,7 +82,7 @@
   ci = commit -v
   ca = commit -va
   amend = commit -v --amend
-  unstage = reset HEAD
+  unstage = reset HEAD -p
   discard = checkout -p
 
   l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
