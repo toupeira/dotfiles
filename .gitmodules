@@ -346,3 +346,7 @@
   path = vim/bundle/test
   url = https://github.com/janko-m/vim-test.git
   ignore = dirty
+[submodule "vim/bundle/devicons"]
+  path = vim/bundle/devicons
+  url = https://github.com/ryanoasis/vim-devicons.git
+  ignore = dirty
