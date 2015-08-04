@@ -648,6 +648,10 @@ endfunction " }}}
 " Plugin Settings
 " {{{
 
+  " devicons {{{
+  let g:webdevicons_enable_airline_tabline = 0
+  " }}}
+
   " tagbar {{{
   let g:tagbar_autoclose = 1
   let g:tagbar_compact = 1
