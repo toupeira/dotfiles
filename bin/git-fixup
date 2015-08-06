@@ -1,0 +1,23 @@
+#!/bin/zsh
+# Copied from https://github.com/tombruijn/dotfiles/blob/master/bin/git-fixup
+
+amount=${1:-10}
+array=(${(@f)"$(git --no-pager log -n $amount --oneline --color)"})
+echo
+for (( i = 1; i <= $#array; i++ )) do
+  key="$i"
+  if [[ $#i == 1 ]]; then
+    key=" $key"
+  fi
+  echo " $key. $array[i]"
+done
+
+local choice
+echo ""
+read "choice?Commit to fixup: "
+if [[ "$choice" -le "0" ]]; then
+  echo "No commit given.. Exiting."
+else
+  local commits_back=$(($choice - 1))
+  git commit --fixup HEAD~$commits_back
+fi

@@ -54,6 +54,7 @@
   default = simple
 
 [rebase]
+  autosquash = true
   stat = true
 
 [alias]
