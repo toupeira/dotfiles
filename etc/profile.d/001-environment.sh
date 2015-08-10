@@ -14,7 +14,8 @@ export LESS="-iRM"
 export IRB_HISTORY_SIZE=3000
 export RI="--format ansi --no-pager"
 export PGDATABASE="postgres"
-export ANDROID_HOME=~/src/upstream/android-sdk-linux
+export ANDROID_HOME="$HOME/src/upstream/android-sdk-linux"
+export QT_STYLE_OVERRIDE="gtk"
 
 # Colorize manpages
 export LESS_TERMCAP_mb=$'\e[1;31m'
