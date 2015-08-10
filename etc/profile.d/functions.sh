@@ -198,6 +198,8 @@ function src {
       local project_path=$( command src "$1" )
       if [ -z "$project_path" ]; then
         return 1
+      elif [ $# -eq 2 -a "$2" = '@dev' ]; then
+        cd "$project_path" && command src "$@"
       elif [ $# -gt 1 ]; then
         (cd "$project_path" && command src "$@")
       else

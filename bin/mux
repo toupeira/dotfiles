@@ -1,12 +1,14 @@
 #!/bin/bash
 
+PROCFILE=$( ls ~/.procfile.d/"$( basename "$PWD" )" Procfile 2>/dev/null | head -1 )
+
 case "$1" in
   @*)
     proc="${1:1}"
     shift
 
-    if [ -f Procfile ]; then
-      commands=$( egrep -o "^$proc.*:.+" Procfile )
+    if [ -f "$PROCFILE" ]; then
+      commands=$( egrep -o "^$proc.*:.+" "$PROCFILE" )
       count=$( echo "$commands" | grep -c . )
 
       if [ $count -gt 0 ]; then
@@ -37,7 +39,7 @@ case "$1" in
       dev)
         $0 @server
 
-        if [ -f Guardfile ]; then
+        if [ -f Guardfile ] || grep -q ^guard: "$PROCFILE"; then
           wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
           sleep 0.1
           $0 @guard

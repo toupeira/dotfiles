@@ -80,8 +80,12 @@ function _mux {
     [ "$cword" = "@" ] && cword="@\w"
 
     COMPREPLY=(
-      $( compgen -W "$( egrep -o "$cword[-[:alnum:]]*"    ~/bin/mux  2>/dev/null )")
-      $( compgen -W "$( egrep -o "^${cword:1}[-[:alnum:]]*" Procfile 2>/dev/null | sed -r 's/^/@/' )")
+      $( compgen -W "$(
+          (cat Procfile 2>/dev/null; echo dev: guard: log: server: console: | tr ' ' '\n') \
+            | egrep -o "^${cword:1}[-[:alnum:]]*" \
+            | sed -r 's/^/@/'
+         )"
+      )
     )
   else
     _command
