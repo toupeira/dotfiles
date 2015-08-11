@@ -5,7 +5,8 @@
   set encoding=utf-8
   scriptencoding utf-8
 
-  let s:has_ag  = executable('ag')
+  let s:vimdir = expand("~") . "/.vim"
+  let s:has_ag = executable('ag')
 
   " set up pathogen
   runtime bundle/pathogen/autoload/pathogen.vim
@@ -62,18 +63,12 @@
   if s:has_ag
     let &grepprg = "ag --smart-case --nogroup"
   endif
-
-  set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
   set dictionary=/usr/share/dict/words
 
-  " create temporary directories in ~/.vim/tmp
-  let s:tmpdir = expand("~") . "/.vim/tmp"
-  if !isdirectory(s:tmpdir)
-    call mkdir(s:tmpdir, 'p')
-  endif
-
-  if !isdirectory(s:tmpdir . '/swap')
-    call mkdir(s:tmpdir . '/swap', 'p')
+  " store swapfiles in a central location
+  set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
+  if !isdirectory(s:vimdir . '/tmp/swap')
+    call mkdir(s:vimdir . '/tmp/swap', 'p')
   endif
 
   " enable persistent undo
@@ -83,6 +78,16 @@
 
     if !isdirectory(&undodir)
       call mkdir(&undodir, 'p')
+    endif
+  endif
+
+  " spell checking
+  if has('spell')
+    set nospell
+    set spellfile=~/.vim/spells/en.add
+
+    if !isdirectory(s:vimdir . '/spells')
+      call mkdir(s:vimdir . '/spells', 'p')
     endif
   endif
 
@@ -258,7 +263,7 @@
   autocmd vimrc FileType make setlocal noexpandtab
   autocmd vimrc FileType mail setlocal tw=80 lbr
   autocmd vimrc FileType tex,plaintex,context setlocal lbr
-  autocmd vimrc FileType gitcommit,gitrebase setlocal colorcolumn=50,72
+  autocmd vimrc FileType gitcommit,gitrebase setlocal spell colorcolumn=50,72
   autocmd vimrc FileType crontab setlocal nobackup nowritebackup
   autocmd vimrc FileType puppet setlocal commentstring=#%s
   autocmd vimrc FileType help setlocal nonumber norelativenumber
