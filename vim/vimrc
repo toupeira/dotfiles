@@ -136,7 +136,8 @@
   set display+=lastline
 
   if has('conceal')
-    set concealcursor=n
+    set concealcursor=nvc
+    set conceallevel=2
   endif
 
   " command prompt and status line
@@ -277,6 +278,10 @@
   let php_alt_comparisons = 1
   let php_alt_AssignByReference = 1
   let php_folding = 1
+
+  " JSON shortcuts
+  nnoremap ck ^ci"
+  nnoremap cv $F"ci"
 
 " }}}
 
@@ -558,11 +563,11 @@ endfunction " }}}
   " ,v - split vertically
   nnoremap <silent> ,v :vsplit<CR>
 
-  " ,w - write current file
+  " ,w - write current buffer
   nnoremap <silent> ,w :write<CR>:redraw<CR>
 
-  " ,W - force write current file
-  nnoremap <silent> ,W :write!<CR>:redraw<CR>
+  " ,W - write all open buffers
+  nnoremap <silent> ,W :wall<CR>:redraw<CR>
 
   " ,$ - clear trailing whitespace
   nnoremap <silent> ,$ :call <SID>ClearTrailingWhitespace()<CR>
@@ -647,6 +652,10 @@ endfunction " }}}
 
 " Plugin Settings
 " {{{
+
+  " json {{{
+  let g:vim_json_syntax_concealcursor = &concealcursor
+  " }}}
 
   " devicons {{{
   let g:webdevicons_enable_airline_tabline = 0
