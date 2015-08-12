@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$VIM" = 'vip' ] || ([ $# -eq 0 ] && df -P .; [ $# -gt 0 ] && df -P "$@" 2>/dev/null) | grep -q ^encfs; then
+if [ "$VIM" = 'vip' ] || ([ $# -eq 0 ] && df -P .; [ $# -gt 0 ] && df -P -- "$@" 2>/dev/null) | grep -q ^encfs; then
   # run vim in "private" mode on encfs filesystems
   exec vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" \
     --cmd "let g:pathogen_disabled = [ \"neocomplete\", \"unite\" ]" "$@"
