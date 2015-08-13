@@ -288,6 +288,46 @@
   nnoremap ck ^ci"
   nnoremap cv $F"ci"
 
+  " show recent log entries in commit messages
+  function! s:EnhanceCommitMessage()
+    " avoid line wrapping
+    let textwidth = &textwidth
+    let &textwidth = 0
+
+    " return if log entries were already added
+    normal gg0
+    if search('^# Latest commits:$')
+      return
+    endif
+
+    if !search('^# Please enter the commit message')
+      return
+    endif
+
+    normal V
+    call search('^# Changes to be committed:$')
+    normal kkd
+
+    normal O# Latest commits:
+    normal o#
+
+    let command = 'git log -n 5 --no-color --no-decorate --pretty=%s'
+    for line in split(system(command), '\n')
+      execute 'normal o#  - ' . line
+    endfor
+
+    normal gg0
+
+    " insert new line for empty commit messages
+    if search('^# Latest commits:$', 'n') == 2
+      normal O
+      startinsert
+    endif
+
+    let &textwidth = textwidth
+  endfunction
+  autocmd vimrc FileType gitcommit call <SID>EnhanceCommitMessage()
+
 " }}}
 
 " Commands
