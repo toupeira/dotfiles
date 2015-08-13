@@ -1,0 +1,11 @@
+#!/bin/sh
+
+if ! pgrep -x teamviewerd >/dev/null; then
+  gksudo systemctl start teamviewerd
+fi
+
+teamviewer "$@"
+
+if ! pgrep -x teamviewer; then
+  gksudo systemctl stop teamviewerd
+fi
