@@ -142,7 +142,7 @@
 
   if has('conceal')
     set concealcursor=nvc
-    set conceallevel=2
+    set conceallevel=0
   endif
 
   " command prompt and status line
@@ -699,6 +699,7 @@ endfunction " }}}
 " {{{
 
   " json {{{
+  let g:vim_json_syntax_conceal = (&conceallevel > 0)
   let g:vim_json_syntax_concealcursor = &concealcursor
   " }}}
 
