@@ -92,9 +92,9 @@
   blame = blame -w
 
   up = pull -v --progress
-  upbase = pull -v --progress --rebase
   upall = pull-all
   ff = merge --ff-only HEAD@{u}
+  rem = rebase-maybe
   rup = remote update
   continue = rebase --continue
   skip = rebase --skip

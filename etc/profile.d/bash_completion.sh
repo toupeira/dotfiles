@@ -9,6 +9,8 @@ shopt -q progcomp || return
 
 if [ "`type -t _git`" != "function" -a -r /usr/share/bash-completion/completions/git ]; then
   . /usr/share/bash-completion/completions/git
+
+  _git_rebase_maybe () { _git_rebase; }
 fi
 
 if [ -r /usr/share/bash-completion/bash_completion ]; then
