@@ -309,13 +309,13 @@
     normal kkd
 
     normal O# Latest commits:
-    normal o#
 
     let command = 'git log -n 5 --no-color --no-decorate --pretty=%s'
     for line in split(system(command), '\n')
       execute 'normal o#  - ' . line
     endfor
 
+    normal o#
     normal gg0
 
     " insert new line for empty commit messages
