@@ -1035,7 +1035,8 @@ endfunction " }}}
 
     " sort file results by length
     call unite#custom#source('file', 'sorters', 'sorter_length')
-    call unite#custom#source('file_rec/async', 'sorters', 'sorter_length')
+    " call unite#custom#source('file_rec/async', 'sorters', 'sorter_length')
+    call unite#custom#source('file_rec/async', 'sorters', [])
 
     " sort buffers by number
     call unite#custom#source('buffer', 'sorters', 'sorter_reverse')
