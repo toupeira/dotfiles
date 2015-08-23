@@ -1024,7 +1024,7 @@ endfunction " }}}
 
     " speed up recursive file searches
     if s:has_ag
-      let g:unite_source_rec_async_command = 'ag -l -g "" --nocolor'
+      let g:unite_source_rec_async_command = [ 'ag', '-l', '-g', '""', '--nocolor' ]
       let g:unite_source_grep_command = 'ag'
       let g:unite_source_grep_default_opts = '--smart-case --nogroup --nocolor --line-numbers'
       let g:unite_source_grep_recursive_opt = ''
@@ -1034,12 +1034,11 @@ endfunction " }}}
     command! -nargs=? -complete=file Bookmark UniteBookmarkAdd <args>
 
     " sort file results by length
-    call unite#custom#source('file', 'sorters', 'sorter_length')
-    " call unite#custom#source('file_rec/async', 'sorters', 'sorter_length')
-    call unite#custom#source('file_rec/async', 'sorters', [])
+    call unite#custom#source('file', 'sorters', [ 'sorter_length' ])
+    call unite#custom#source('file_rec/async', 'sorters', [ 'sorter_length' ])
 
     " sort buffers by number
-    call unite#custom#source('buffer', 'sorters', 'sorter_reverse')
+    call unite#custom#source('buffer', 'sorters', [ 'sorter_reverse' ])
 
     " settings for buffers
     let g:unite_source_buffer_time_format = '(%Y-%m-%d %H:%M:%S) '
