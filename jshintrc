@@ -14,9 +14,11 @@
 
   "globals":   {
     "afterEach":  false,
+    "afterAll":   false,
     "after":      false,
     "angular":    false,
     "beforeEach": false,
+    "beforeAll":  false,
     "before":     false,
     "browser":    false,
     "describe":   false,
