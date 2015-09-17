@@ -785,22 +785,6 @@ endfunction " }}}
   let g:matchparen_insert_timeout = 50
   " }}}
 
-  " cycle {{{
-  autocmd vimrc FileType *
-    \ call AddCycleGroup('global', [ 'return', 'break', 'continue' ])
-  autocmd vimrc FileType ruby
-    \ call AddCycleGroup('global', [ 'return', 'break', 'continue', 'next', 'retry' ])
-  autocmd vimrc FileType sh
-    \ call AddCycleGroup('sh', [ 'if', 'elif', 'else', 'fi' ])
-  autocmd vimrc FileType sh
-    \ call AddCycleGroup('sh', [ 'do', 'then' ])
-  autocmd vimrc FileType javascript,coffee
-    \ call AddCycleGroup([ 'javascript', 'coffee' ], [ 'addClass', 'removeClass' ])
-
-  autocmd vimrc FileType *
-    \ call AddCycleGroup('global', [ 'debit', 'credit' ])
-  " }}}
-
   " tabular {{{
   noremap ,a :Tabular /
   noremap ,a{ :Tabular /{<CR>
