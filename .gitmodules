@@ -174,10 +174,6 @@
   path = vim/bundle/bbye
   url = https://github.com/moll/vim-bbye.git
   ignore = dirty
-[submodule "vim/bundle/tmux-navigator"]
-  path = vim/bundle/tmux-navigator
-  url = https://github.com/christoomey/vim-tmux-navigator.git
-  ignore = dirty
 [submodule "rbenv/plugins/ruby-build"]
   path = rbenv/plugins/ruby-build
   url = https://github.com/sstephenson/ruby-build.git

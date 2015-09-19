@@ -17,7 +17,6 @@
   " only enable tmux plugins in tmux sessions
   if empty($TMUX)
     call add(g:pathogen_disabled, 'tmux-complete')
-    call add(g:pathogen_disabled, 'tmux-navigator')
   endif
 
   " neocomplete requires Vim 7.3 and Lua
@@ -209,7 +208,7 @@
   let &titlestring = "%t%m%r\ \[%{ProjectFilepath(1)}\]"
   let &iconstring = &titlestring
 
-  " add Unicode marker for tmux-navigator
+  " add Unicode marker for tmux navigation
   let g:iconstringOriginal = &iconstring
   function! s:ToggleTmuxMarker(enable) " {{{
     if a:enable == 0
@@ -405,12 +404,6 @@ endfunction " }}}
   command! -nargs=+ Dict call system(g:open_command.' "http://dict.leo.org/?lp=ende&search=' . expand("<args>") . '"')
   command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=' . expand("<args>") . '"')
 
-  " shortcuts to open tmux splits and windows
-  command! -nargs=* Mux call system('mux <args>')
-  command! -nargs=0 Shell    Mux -s -p 30
-  command! -nargs=0 Pry      Mux -s -p 30 pry
-  command! -nargs=0 RConsole Mux -s -p 30 rbenv exec rails console
-
 " }}}
 
 " Keybindings
@@ -466,11 +459,34 @@ endfunction " }}}
   " toggle paste mode with F12
   set pastetoggle=<f12>
 
-  " navigate windows with Ctrl+jkhl
-  nnoremap <silent> <C-j> <C-w>j
-  nnoremap <silent> <C-k> <C-w>k
-  nnoremap <silent> <C-h> <C-w>h
-  nnoremap <silent> <C-l> <C-w>l
+  " navigate windows/tmux panes with Ctrl+jkhl
+  function! TmuxNavigate(cmd) " {{{
+    let nr = winnr()
+
+    execute('wincmd ' . a:cmd)
+
+    if (empty($TMUX))
+      return
+    else
+      let pane = str2nr(system('tmux display -p "#{pane_index}"'))
+      let panes = str2nr(system('tmux display -p "#{window_panes}"'))
+    endif
+
+    if (nr != winnr())
+      return
+    elseif (((a:cmd == 'k' || a:cmd == 'h') && nr == 1 && pane == 1) ||
+          \ ((a:cmd == 'j' || a:cmd == 'l') && nr == winnr('$') && pane == panes))
+      silent call system('tmux resize-pane -Z')
+    else
+      let arg = tr(a:cmd, 'hjkl', 'LDUR')
+      silent call system('tmux select-pane -' . arg)
+    endif
+  endfunction " }}}
+
+  nnoremap <silent> <c-h> :call TmuxNavigate('h')<CR>
+  nnoremap <silent> <c-j> :call TmuxNavigate('j')<CR>
+  nnoremap <silent> <c-k> :call TmuxNavigate('k')<CR>
+  nnoremap <silent> <c-l> :call TmuxNavigate('l')<CR>
 
   " alias Ctrl-v as Ctrl-q
   noremap <C-q> <C-v>
@@ -858,16 +874,6 @@ endfunction " }}}
     let g:syntastic_auto_jump = 0
   endif
   " }}}
-
-  " tmux-navigator
-  if index(g:pathogen_disabled, 'tmux-navigator') == -1
-    let g:tmux_navigator_no_mappings = 1
-
-    nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
-    nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
-    nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
-    nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
-  endif
 
   " neocomplete {{{
   if index(g:pathogen_disabled, 'neocomplete') == -1
