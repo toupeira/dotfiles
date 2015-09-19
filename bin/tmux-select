@@ -1,0 +1,34 @@
+#!/bin/bash
+
+if [ "$1" = "-l" ]; then
+  (tmux last-window || tmux last-pane) &>/dev/null
+  exit 0
+fi
+
+title=$( tmux display-message -p '#{pane_title}' )
+if [[ "$title" =~ \ 😑$ ]]; then
+  vim=true
+else
+  vim=false
+fi
+
+pane=$( tmux display-message -p '#{pane_index}' )
+panes=$( tmux display-message -p '#{window_panes}' )
+
+if [[ $pane -eq 1 && "$1" =~ ^-[LU]$ ]] ||
+   [[ $pane -eq $panes && "$1" =~ ^-[DR]$ ]]; then
+  cmd="tmux resize-pane -Z"
+else
+  cmd="tmux select-pane $@"
+fi
+
+if $vim; then
+  wincmd=$( echo "${1#-}" | tr 'lLDUR' 'phjkl' )
+  tmux send-keys ":let nr = winnr() | wincmd $wincmd" C-m
+  tmux send-keys ":if nr == winnr() | silent call system(\"$cmd\") | end"
+  tmux send-keys 'C-m' ':echo "\r"' 'C-m'
+else
+  $cmd
+fi
+
+exit 0

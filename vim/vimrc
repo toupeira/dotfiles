@@ -178,9 +178,6 @@
     let &t_IE = "\007"
   endif
 
-  let &titlestring = "%t%m%r\ \[%{ProjectFilepath(1)}\]"
-  let &iconstring = &titlestring
-
   " show the project name and relative path to the current file
   function! ProjectFilepath(short) " {{{
     let l:path = fnamemodify(expand('%'), ':p:h')
@@ -209,14 +206,30 @@
     return l:root
   endfunction " }}}
 
+  let &titlestring = "%t%m%r\ \[%{ProjectFilepath(1)}\]"
+  let &iconstring = &titlestring
+
   " add Unicode marker for tmux-navigator
-  if !empty($TMUX) || !empty($SUDO_COMMAND)
-    let &iconstring .= " ◉"
+  let g:iconstringOriginal = &iconstring
+  function! s:ToggleTmuxMarker(enable) " {{{
+    if a:enable == 0
+      let &iconstring = g:iconstringOriginal
+    elseif a:enable == 1
+      let &iconstring = g:iconstringOriginal . " 😑"
+    else
+      let &iconstring = g:iconstringOriginal . " 😮"
+    endif
 
     " mintty from Cygwin/Babun doesn't seem to use the iconstring
     if !empty($CYGWIN)
       let &titlestring = &iconstring
     endif
+  endfunction " }}}
+
+  if !empty($TMUX) || !empty($SUDO_COMMAND)
+    call <SID>ToggleTmuxMarker(1)
+    autocmd vimrc InsertLeave * call <SID>ToggleTmuxMarker(1)
+    autocmd vimrc InsertEnter * call <SID>ToggleTmuxMarker(2)
   endif
 
 " }}}
@@ -845,6 +858,16 @@ endfunction " }}}
     let g:syntastic_auto_jump = 0
   endif
   " }}}
+
+  " tmux-navigator
+  if index(g:pathogen_disabled, 'tmux-navigator') == -1
+    let g:tmux_navigator_no_mappings = 1
+
+    nnoremap <silent> <c-h> :TmuxNavigateLeft<cr>
+    nnoremap <silent> <c-j> :TmuxNavigateDown<cr>
+    nnoremap <silent> <c-k> :TmuxNavigateUp<cr>
+    nnoremap <silent> <c-l> :TmuxNavigateRight<cr>
+  endif
 
   " neocomplete {{{
   if index(g:pathogen_disabled, 'neocomplete') == -1
