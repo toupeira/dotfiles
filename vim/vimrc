@@ -218,6 +218,7 @@
     else
       let &iconstring = g:iconstringOriginal . " 😮"
     endif
+    redraw!
 
     " mintty from Cygwin/Babun doesn't seem to use the iconstring
     if !empty($CYGWIN)
