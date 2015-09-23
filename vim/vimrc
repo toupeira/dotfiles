@@ -209,27 +209,12 @@
   let &iconstring = &titlestring
 
   " add Unicode marker for tmux navigation
-  let g:iconstringOriginal = &iconstring
-  function! s:ToggleTmuxMarker(enable) " {{{
-    if a:enable == 0
-      let &iconstring = g:iconstringOriginal
-    elseif a:enable == 1
-      let &iconstring = g:iconstringOriginal . " 😑"
-    else
-      let &iconstring = g:iconstringOriginal . " 😮"
-    endif
-    redraw!
+  if !empty($TMUX) || !empty($SUDO_COMMAND)
+    let &iconstring .= " %{mode() == 'n' ? '😑' : '😮'}"
 
-    " mintty from Cygwin/Babun doesn't seem to use the iconstring
     if !empty($CYGWIN)
       let &titlestring = &iconstring
     endif
-  endfunction " }}}
-
-  if !empty($TMUX) || !empty($SUDO_COMMAND)
-    call <SID>ToggleTmuxMarker(1)
-    autocmd vimrc InsertLeave * call <SID>ToggleTmuxMarker(1)
-    autocmd vimrc InsertEnter * call <SID>ToggleTmuxMarker(2)
   endif
 
 " }}}
