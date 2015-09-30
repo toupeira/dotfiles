@@ -29,6 +29,7 @@ rsync
 ruby
 silversearcher-ag
 smem
+socat
 software-properties-common
 sqlite3
 strace
