@@ -381,9 +381,13 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        local origin=$( readlink -f -- "$path" )
+        local origin="$path"
         local target=$( target "$origin" )
         local force=0
+
+        if [ "${origin:0:1}" != "/" ]; then
+          origin="$PWD/$path"
+        fi
 
         if [[ "$origin" =~ ^$DOTFILES/ ]]; then
           target="$origin"

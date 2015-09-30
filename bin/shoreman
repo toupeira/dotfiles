@@ -1,2 +1,1 @@
-#!/bin/sh
-exec `dotfiles --path`/shoreman/shoreman.sh "$@"
+../shoreman/shoreman.sh
