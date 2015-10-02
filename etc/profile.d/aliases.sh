@@ -56,8 +56,8 @@ alias :e='vim'
 alias :E='vim'
 if has sensible-vim; then
   alias vim='sensible-vim'
-  alias gvim='VIM=gvim sensible-vim'
-  alias vip='VIM=vip sensible-vim'
+  alias gvim='VIMCMD=gvim sensible-vim'
+  alias vip='VIMCMD=vip sensible-vim'
 fi
 
 alias ag='ag --smart-case'
