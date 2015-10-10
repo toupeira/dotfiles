@@ -720,6 +720,7 @@ endfunction " }}}
 
   " devicons {{{
   let g:webdevicons_enable_airline_tabline = 0
+  let g:webdevicons_enable_airline_statusline = 0
   " }}}
 
   " tagbar {{{
@@ -1005,9 +1006,10 @@ endfunction " }}}
       " switch filetype and format/encoding, and only show
       " file format and encoding if it's not the default
       let g:airline_section_x = airline#section#create([
-        \ "%{substitute(airline#parts#ffenc(), '\\(^utf-8\\|\\[unix\\]$\\)', '', 'g')}"
+        \ 'tagbar',
+        \ "%{&ff == 'unix' ? '' : WebDevIconsGetFileFormatSymbol()}%{&fenc == 'utf-8' ? '' : ' ' . &fenc}"
       \ ])
-      let g:airline_section_y = airline#section#create_right(['tagbar', 'filetype'])
+      let g:airline_section_y = airline#section#create(['%{WebDevIconsGetFileTypeSymbol()} %{&ft}'])
 
       " don't show position percentage
       let g:airline_section_z = airline#section#create(['windowswap', 'linenr', ':%v'])
