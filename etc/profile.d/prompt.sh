@@ -4,6 +4,7 @@
 # Prompt configuration
 PS1_USER="\u"
 PS1_HOST=""
+[ -z "$SSH_CONNECTION" ] && [ "$USER" = "toupeira" -o "$USER" = "mak" ] && PS1_USER="λ"
 [ -n "$SSH_CONNECTION" -o "$TERM" = "linux" ] && PS1_HOST="@\h"
 [ "$UID" = "0" ] && PS1_USER="\[\e[1;31m\]$PS1_USER"
 
@@ -17,13 +18,15 @@ if type __git_ps1 &>/dev/null; then
   export GIT_PS1_SHOWUPSTREAM='auto git'
 
   GIT_PS1_SUBSTITUTES="
+    s/\\*/☼/;
+    s/\\+/⚙/;
     s/=//;
     s/<>/ ⇵/;
     s/>/ ↑/;
     s/</ ↓/;
   "
 
-  export GIT_PS1='$(__git_ps1 "\[\e[0;32m\][\[\e[1;32m\]%s\[\e[0;32m\]]\[\e[0m\] " | sed "$GIT_PS1_SUBSTITUTES")'
+  export GIT_PS1='$(__git_ps1 "\[\e[0;32m\](\[\e[1;32m\]%s\[\e[0;32m\])\[\e[0m\] " | sed -r "$GIT_PS1_SUBSTITUTES")'
   export SUDO_PS1=$PS1
   export PS1=$PS1$GIT_PS1
 fi
