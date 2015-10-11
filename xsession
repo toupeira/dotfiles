@@ -11,9 +11,8 @@ x-session-manager
 
 # clean up
 rm -rf ~/.local/share/Trash &
-# if [ -f ~/.xsession-errors ]; then
-#   mv ~/.xsession-errors ~/.xsession-errors.old
-# fi
+
+killall -9 kodi.bin 2>/dev/null
 
 if pgrep -x quodlibet; then
   ql quit
