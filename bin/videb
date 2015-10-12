@@ -9,7 +9,7 @@ fi
 
 DEBFILE="$1"
 TMPDIR=`mktemp -d /tmp/deb.XXXXXXXXXX` || exit 1
-OUTPUT=`basename "$DEBFILE" .deb`.modfied.deb
+OUTPUT=`basename "$DEBFILE" .deb`.modified.deb
 
 if [[ -e "$OUTPUT" ]]; then
   echo "$OUTPUT exists."
@@ -33,7 +33,7 @@ MOD=`stat -c "%y" "$CONTROL"`
 $EDITOR "$CONTROL"
 
 if [[ "$MOD" == `stat -c "%y" "$CONTROL"` ]]; then
-  echo Not modfied.
+  echo Not modified.
 else
   echo Building new deb...
   dpkg -b "$TMPDIR" "$OUTPUT"
