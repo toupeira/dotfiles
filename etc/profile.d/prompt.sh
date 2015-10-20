@@ -26,7 +26,7 @@ if type __git_ps1 &>/dev/null; then
     s/</ ↓/;
   "
 
-  export GIT_PS1='$(__git_ps1 "\[\e[0;32m\](\[\e[1;32m\]%s\[\e[0;32m\])\[\e[0m\] " | sed -r "$GIT_PS1_SUBSTITUTES")'
+  export GIT_PS1='$(__git_ps1 "\[\e[0;32m\]❰\[\e[1;32m\]%s\[\e[0;32m\]❱\[\e[0m\] " | sed -r "$GIT_PS1_SUBSTITUTES")'
   export SUDO_PS1=$PS1
   export PS1=$PS1$GIT_PS1
 fi
