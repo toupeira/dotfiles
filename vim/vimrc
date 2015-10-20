@@ -205,7 +205,7 @@
     return l:root
   endfunction " }}}
 
-  let &titlestring = "%t%m%r\ \[%{ProjectFilepath(1)}\]"
+  let &titlestring = "%t%m%r\ ❰%{ProjectFilepath(1)}❱"
   let &iconstring = &titlestring
 
   " add Unicode marker for tmux navigation
@@ -996,7 +996,7 @@ endfunction " }}}
 
       " show file directory separately from file name
       call airline#parts#define_raw('file', '%t%m')
-      call airline#parts#define_raw('filepath', '%#airline_filepath#[%<%{ProjectFilepath(0)}]')
+      call airline#parts#define_raw('filepath', '%#airline_filepath#❰%<%{ProjectFilepath(0)}❱')
       let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
 
       hi airline_filepath term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
