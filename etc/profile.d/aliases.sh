@@ -63,6 +63,7 @@ fi
 alias ag='ag --smart-case'
 alias irb='pry'
 alias pyserve='python -m SimpleHTTPServer 8080'
+alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'
 
 # sudo aliases
 if has sudo; then
