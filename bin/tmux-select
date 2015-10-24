@@ -19,14 +19,14 @@ if [[ $pane -eq 1 && "$1" =~ ^-[LU]$ ]] ||
    [[ $pane -eq $panes && "$1" =~ ^-[DR]$ ]]; then
   cmd="tmux resize-pane -Z"
 else
-  cmd="tmux select-pane $@"
+  cmd="tmux select-pane $@; tmux select-pane -P 'bg=#111111'; sleep 0.1; tmux select-pane -P bg=default"
 fi
 
 if $vim; then
   key=$( echo "${1#-}" | tr 'LDUR' 'hjkl' )
   tmux send-keys "C-$key"
 else
-  $cmd
+  eval $cmd
 fi
 
 exit 0
