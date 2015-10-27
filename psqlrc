@@ -1,4 +1,6 @@
 \timing on
+\x auto
 \pset null '[NULL]'
 \set HISTSIZE 10000
 \set HISTCONTROL ignorespace
+\set COMP_KEYWORD_CASE upper
