@@ -52,5 +52,6 @@ app/assets/javascripts/ace
 app/assets/data
 tmp/
 
-# NodeJS
+# JavaScript
 node_modules
+bower_components
