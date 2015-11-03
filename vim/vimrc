@@ -261,7 +261,7 @@
   autocmd vimrc FileType make setlocal noexpandtab
   autocmd vimrc FileType mail setlocal tw=80 lbr
   autocmd vimrc FileType tex,plaintex,context setlocal lbr
-  autocmd vimrc FileType gitcommit,gitrebase setlocal spell colorcolumn=50,72
+  autocmd vimrc FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd vimrc FileType crontab setlocal nobackup nowritebackup
   autocmd vimrc FileType puppet setlocal commentstring=#%s
   autocmd vimrc FileType help setlocal nonumber norelativenumber
