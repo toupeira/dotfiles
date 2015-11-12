@@ -14,7 +14,7 @@ fi
 args=( "$@" )
 upstream="${args[${#args[@]} - 1]}"
 
-authors=$( git log --format='%aE %aN' "HEAD..$upstream" )
+authors=$( git log --format='%aE %aN' "$upstream..HEAD" )
 [ $? -eq 0 ] || exit 1
 
 other_authors=$(
