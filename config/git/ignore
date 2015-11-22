@@ -9,4 +9,4 @@
 .*.sw?
 doc/tags
 doc/tags-*
-/Session.vim
+Session.vim

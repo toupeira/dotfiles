@@ -354,3 +354,7 @@
   path = git-imerge
   url = https://github.com/mhagger/git-imerge.git
   ignore = dirty
+[submodule "vim/bundle/projectionist"]
+  path = vim/bundle/projectionist
+  url = https://github.com/tpope/vim-projectionist.git
+  ignore = dirty
