@@ -6,5 +6,6 @@ roxterm
 vim-gtk
 wmctrl
 xautomation
+xdotool
 xclip
 xwit
