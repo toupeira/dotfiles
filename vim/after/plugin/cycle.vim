@@ -1,4 +1,5 @@
 call AddCycleGroup('global', [ 'return', 'break', 'continue' ])
+call AddCycleGroup('global', [ 'next', 'previous' ])
 call AddCycleGroup('global', [ 'staging', 'production' ])
 call AddCycleGroup('global', [ 'debit', 'credit' ])
 
