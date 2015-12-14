@@ -87,7 +87,7 @@
   discard = checkout -p
 
   l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
-  lstat = "!f() { git l --stat $@; }; f"
+  lstat = "!cd ${GIT_PREFIX:-.} && git l --stat"
   ldiff = log -p
   blame = blame -w
 
