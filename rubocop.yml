@@ -50,9 +50,6 @@ Style/AsciiComments:
 Style/BarePercentLiterals:
   EnforcedStyle: percent_q
 
-Style/Blocks:
-  Enabled: false
-
 Style/BracesAroundHashParameters:
   Enabled: false
 
