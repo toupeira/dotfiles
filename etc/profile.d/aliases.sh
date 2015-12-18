@@ -28,7 +28,6 @@ alias xcopy='xclip -selection clipboard -i'
 alias xpaste='xclip -selection clipboard -o'
 alias grep='grep -i --color=auto --exclude=.svn --exclude=.git --exclude=.*.swp'
 alias rgrep='grep -r'
-has 7z && ! has rar && alias rar='7z'
 
 # system administration
 alias sctl='systemctl'
@@ -67,14 +66,19 @@ alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'
 
 # sudo aliases
 if has sudo; then
+  function _sudo_aliases {
+    while [ $# -gt 0 ]; do
+      eval "alias $1='sudo $1'"
+      shift
+    done
+  }
+
   # expand aliases in arguments
   alias sudo='sudo '
 
   # vim
   alias suvi='sudo TMUX=$TMUX vim'
-  alias sugvi='sudo gvim'
   alias sudiff='sudo vimdiff'
-  alias sugdiff='sudo gvimdiff'
   alias visudo='sudo visudo'
 
   # file management
@@ -87,31 +91,17 @@ if has sudo; then
   alias sumod='sudo chmod -vR 644'
 
   # debian tools
-  alias apt-get='sudo apt-get'
-  alias aptitude='sudo aptitude'
-  has eatmydata && alias aptitude='sudo eatmydata aptitude'
+  _sudo_aliases \
+    apt-get aptitude dpkg-reconfigure \
+    update-alternatives update-rc.d invoke-rc.d
+
   alias pkginstall='sudo dpkg -i'
-  alias dpkg-reconfigure='sudo dpkg-reconfigure'
-  alias update-alternatives='sudo update-alternatives'
-  alias make-kpkg='sudo make-kpkg'
-  alias update-rc.d='sudo update-rc.d'
-  alias invoke-rc.d='sudo invoke-rc.d'
+  has eatmydata && alias aptitude='sudo eatmydata aptitude'
 
   # system tools
-  alias modprobe='sudo modprobe'
-  alias rmmod='sudo rmmod'
-  alias iptables='sudo iptables'
-  alias ip6tables='sudo ip6tables'
-  alias tcpdump='sudo tcpdump'
-  alias ethtool='sudo ethtool'
+  _sudo_aliases \
+    modprobe rmmod ifup ifdown ethtool iptables ip6tables \
+    tcpdump jnettop fdisk parted lvm docker fastboot
+
   alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+|:\w+"'
-  alias jnettop='sudo jnettop'
-  alias ifup='sudo ifup'
-  alias ifdown='sudo ifdown'
-  alias tcpkill='sudo tcpkill'
-  alias fdisk='sudo fdisk'
-  alias parted='sudo parted'
-  alias lvm='sudo lvm'
-  alias docker='sudo docker'
-  alias fastboot='sudo fastboot'
 fi
