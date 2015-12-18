@@ -453,14 +453,14 @@ endfunction " }}}
 
     if (empty($TMUX))
       return
-    else
-      let pane = str2nr(system('tmux display -p "#{pane_index}"'))
-      let panes = str2nr(system('tmux display -p "#{window_panes}"'))
+    elseif (nr != winnr())
+      return
     endif
 
-    if (nr != winnr())
-      return
-    elseif (((a:cmd == 'k' || a:cmd == 'h') && nr == 1 && pane == 1) ||
+    let pane = str2nr(system('tmux display -p "#{pane_index}"'))
+    let panes = str2nr(system('tmux display -p "#{window_panes}"'))
+
+    if (((a:cmd == 'k' || a:cmd == 'h') && nr == 1 && pane == 1) ||
           \ ((a:cmd == 'j' || a:cmd == 'l') && nr == winnr('$') && pane == panes))
       silent call system('tmux resize-pane -Z')
     else
