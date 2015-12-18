@@ -274,10 +274,6 @@
   path = rbenv/plugins/rbenv-communal-gems
   url = https://github.com/tpope/rbenv-communal-gems.git
   ignore = dirty
-[submodule "rbenv/plugins/rbenv-ctags"]
-  path = rbenv/plugins/rbenv-ctags
-  url = https://github.com/tpope/rbenv-ctags.git
-  ignore = dirty
 [submodule "rbenv/plugins/rbenv-gem-rehash"]
   path = rbenv/plugins/rbenv-gem-rehash
   url = https://github.com/sstephenson/rbenv-gem-rehash.git
