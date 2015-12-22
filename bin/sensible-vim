@@ -29,6 +29,7 @@ if [ ${#args[@]} -gt 0 ]; then
           | fgrep -vx 'application/octet-stream' \
           | fgrep -vx 'application/pgp-keys' \
           | fgrep -vx 'application/xml' \
+          | fgrep -vx 'application/zip' \
           | fgrep -vx 'application/zlib' \
           | fgrep -vx 'image/svg+xml' \
           | egrep -vx 'inode/(directory|x-empty)' \
