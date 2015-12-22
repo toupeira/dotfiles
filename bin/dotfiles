@@ -555,13 +555,14 @@ function run {
       status "Building {{${dir/$DOTFILES\//}}} $( dryrun_message )" 3
       dryrun && return
 
-      if ! system make -sBC "$dir" "$@"; then
-        error "Error while compiling {{$dir}}"
+      if ! (cd "$dir" && system "$@"); then
+        error "Error while building {{$dir}}"
         ask_abort
       fi
       ;;
     build-all)
-      run build "$DOTFILES/vim/bundle/vimproc"
+      run build "$DOTFILES/vim/bundle/ternjs"  npm install
+      run build "$DOTFILES/vim/bundle/vimproc" make -s
       ;;
     git)
       command="$1"

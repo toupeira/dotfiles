@@ -354,3 +354,7 @@
   path = vim/bundle/projectionist
   url = https://github.com/tpope/vim-projectionist.git
   ignore = dirty
+[submodule "vim/bundle/ternjs"]
+  path = vim/bundle/ternjs
+  url = https://github.com/ternjs/tern_for_vim.git
+  ignore = dirty
