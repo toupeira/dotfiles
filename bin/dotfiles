@@ -328,10 +328,16 @@ function run {
         output '     \e[1;36m[' -n
 
         for submodule in $( run list ); do
+          while [ "$( jobs -r | wc -l )" -gt 10 ]; do
+            sleep 0.1
+          done
+
           (
             run update --batch "$submodule" > "$output/${submodule//\//-}"
             output '\e[0;36m=' -n
           ) &
+
+          sleep 0.1
         done
 
         wait
