@@ -25,6 +25,7 @@ if [ ${#args[@]} -gt 0 ]; then
       binary_type=$(
         file -L --brief --mime-type -- "$file" \
           | fgrep -vx 'regular file, no read permission' \
+          | fgrep -vx 'application/gzip' \
           | fgrep -vx 'application/javascript' \
           | fgrep -vx 'application/octet-stream' \
           | fgrep -vx 'application/pgp-keys' \
