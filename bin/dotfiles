@@ -563,6 +563,7 @@ function run {
     build-all)
       run build "$DOTFILES/vim/bundle/ternjs"  npm install
       run build "$DOTFILES/vim/bundle/vimproc" make -s
+      run build "$DOTFILES/rbenv/rbenv/src"    make -s
       ;;
     git)
       command="$1"
