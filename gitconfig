@@ -57,6 +57,10 @@
   autosquash = true
   stat = true
 
+[stash]
+  showPatch = true
+  showStat = true
+
 [alias]
   h = help
   r = remote
@@ -112,8 +116,8 @@
   sts = stash save
   stp = stash pop
   std = "!git stash drop && git stl"
-  stw = --no-pager -c color.ui=always stash show
-  stl = --no-pager -c color.ui=always stash list
+  stw = "!cd ${GIT_PREFIX:-.} && git --no-pager -c color.ui=always stash show"
+  stl = "!cd ${GIT_PREFIX:-.} && git --no-pager -c color.ui=always stash list"
 
   # shell wrappers
   sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
