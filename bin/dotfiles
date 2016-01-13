@@ -558,6 +558,11 @@ function run {
       local dir="$1"
       shift
 
+      if ! which "$1" >/dev/null; then
+        warning "Not building {{${dir/$DOTFILES\//}}} (missing {{$1}}) $( dryrun_message )" 5
+        return
+      fi
+
       status "Building {{${dir/$DOTFILES\//}}} $( dryrun_message )" 3
       dryrun && return
 
