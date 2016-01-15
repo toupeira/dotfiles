@@ -1,7 +1,8 @@
 #!/bin/bash
 
-PIPE=~/.quodlibet/control
+export DISPLAY=${DISPLAY:-:0}
 
+PIPE=~/.quodlibet/control
 CURRENT=~/.quodlibet/current
 
 function _ql {
