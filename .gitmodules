@@ -358,3 +358,7 @@
   path = vim/bundle/ternjs
   url = https://github.com/ternjs/tern_for_vim.git
   ignore = dirty
+[submodule "vim/bundle/elixir"]
+  path = vim/bundle/elixir
+  url = https://github.com/elixir-lang/vim-elixir.git
+  ignore = dirty
