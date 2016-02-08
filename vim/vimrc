@@ -1099,6 +1099,10 @@ endfunction " }}}
       " use C-n and C-p to move between lines in normal mode too
       noremap <silent><buffer> <C-n> j
       noremap <silent><buffer> <C-p> k
+
+      " use C-r to refresh Unite
+      nmap <silent><buffer> <C-r> <Plug>(unite_redraw)
+      imap <silent><buffer> <C-r> <Plug>(unite_redraw)
     endfunction " }}}
 
     " wrapper for default Unite arguments
