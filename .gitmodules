@@ -108,7 +108,7 @@
   ignore = dirty
 [submodule "vim/bundle/airline"]
   path = vim/bundle/airline
-  url = https://github.com/bling/vim-airline.git
+  url = https://github.com/vim-airline/vim-airline.git
   ignore = dirty
 [submodule "vim/bundle/cycle"]
   path = vim/bundle/cycle
