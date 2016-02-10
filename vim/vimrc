@@ -399,6 +399,14 @@ endfunction " }}}
   nnoremap Q @q
   vnoremap Q :norm @q<CR>
 
+  " run a macro over a visual selection without stopping at errors
+  " https://github.com/stoeffel/.dotfiles/blob/master/vim/visual-at.vim
+  xnoremap @ :<C-u>call <SID>ExecuteMacroOverVisualRange()<CR>
+  function! s:ExecuteMacroOverVisualRange()
+    echo "@".getcmdline()
+    execute ":'<,'>normal @".nr2char(getchar())
+  endfunction
+
   " shortcut for desktop clipboard
   noremap + "+
 
