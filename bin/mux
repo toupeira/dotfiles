@@ -88,6 +88,10 @@ case "$1" in
           exit 1
         fi
         ;;
+      *)
+        echo "Unknown process '$proc'"
+        exit 1
+        ;;
     esac
 
     $0 $options "$@" "$0 title '$proc'; $0 loop $command"
