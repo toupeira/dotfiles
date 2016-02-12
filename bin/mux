@@ -25,7 +25,7 @@ case "$1" in
               ;;
           esac
 
-          $0 $options "$@" "$0 title '$localproc'; $0 loop '$command'"
+          $0 $options "$@" "$0 title '${localproc:${#proc}+1}'; $0 loop '$command'"
         done
 
         exit
