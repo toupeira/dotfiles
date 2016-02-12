@@ -1,6 +1,6 @@
 #!/bin/bash
 
-PROCFILE=$( ls ~/.procfile.d/"$( basename "$PWD" )" Procfile 2>/dev/null | head -1 )
+PROCFILE=$( find ~/.procfile.d/"$( basename "$PWD" )" Procfile 2>/dev/null | head -1 )
 
 case "$1" in
   @*)
@@ -13,10 +13,10 @@ case "$1" in
 
       if [ $count -gt 0 ]; then
         echo "$commands" | while read command; do
-          proc=$( echo "$command" | cut -d: -f1 )
+          localproc=$( echo "$command" | cut -d: -f1 )
           command=$( echo "$command" | cut -d: -f2- )
 
-          case "$proc" in
+          case "$localproc" in
             guard)
               options="-b -V"
               ;;
@@ -25,14 +25,14 @@ case "$1" in
               ;;
           esac
 
-          $0 $options "$@" "$0 title '$proc'; $0 loop $command"
+          $0 $options "$@" "$0 title '$localproc'; $0 loop '$command'"
         done
 
         exit
       fi
     fi
 
-    command="$proc $@"
+    command="$proc $*"
     options="-V"
 
     case "$proc" in
@@ -105,7 +105,7 @@ case "$1" in
       eval "${command[@]}"
 
       >&2 echo -ne "
- \e[0;34m[\e[1;34m ${command[@]} \e[0;34m]•••\e[0m
+ \e[0;34m[\e[1;34m ${command[*]} \e[0;34m]•••\e[0m
    \e[0;36m• \e[1;36mR\e[0;36mestart command\e[0m
    \e[0;36m• \e[1;36mE\e[0;36mxecute another command\e[0m
    \e[0;33m• \e[1;33mQ\e[0;33muit\e[0m
@@ -121,7 +121,7 @@ case "$1" in
         [eE]*)
           echo -ne "  \e[0;34m•• \e[1;34mcommand:\e[0m "
           read
-          command=( $( echo "$REPLY" ) )
+          command=( "$REPLY" )
           ;;
         *)
           echo
@@ -132,7 +132,7 @@ case "$1" in
     ;;
   title)
     shift
-    title="${1:-`basename "$PWD"`}"
+    title="${1:-$( basename "$PWD" )}"
     title="@$title"
     if [[ "$TERM" =~ ^(tmux|screen) ]]; then
       echo -ne "\033]0;$title\007\033k$title\033\\"
@@ -182,7 +182,7 @@ case "$1" in
           ;;
         -V)
           action='split-window'
-          if [ `tput cols` -ge 160 ]; then
+          if [ "$( tput cols )" -ge 160 ]; then
             args="$args -h -l 80"
           else
             args="$args -v -l 20"
