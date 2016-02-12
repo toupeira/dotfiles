@@ -169,7 +169,7 @@
   set title
   set icon
 
-  if match($TERM, '^screen-') == 0
+  if match($TERM, '^\(tmux\|screen\)-') == 0
     let &t_ts = "\033k"
     let &t_fs = "\033\\"
 

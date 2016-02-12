@@ -54,14 +54,14 @@ function _prompt_exit_status {
 }
 
 # Show user, hostname and pwd in window title
-if [[ "$TERM" =~ ^(rxvt|xterm|screen) ]]; then
+if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
   if [ -n "$SSH_CONNECTION" ]; then
     _hostname="$USER@$HOSTNAME: "
   else
     unset _hostname
   fi
 
-  if [[ "$TERM" =~ ^screen ]]; then
+  if [[ "$TERM" =~ ^(tmux|screen) ]]; then
     export PROMPT_COMMAND='[ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD"; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
   else
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'

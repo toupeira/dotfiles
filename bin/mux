@@ -134,7 +134,7 @@ case "$1" in
     shift
     title="${1:-`basename "$PWD"`}"
     title="@$title"
-    if [[ "$TERM" =~ ^screen ]]; then
+    if [[ "$TERM" =~ ^(tmux|screen) ]]; then
       echo -ne "\033]0;$title\007\033k$title\033\\"
     else
       echo -ne "\033]1;$title\007\033]2;$title\007"
