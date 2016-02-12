@@ -948,10 +948,10 @@ endfunction " }}}
 
   " airline {{{
   if index(g:pathogen_disabled, 'airline') == -1
-    if &t_Co > 8
+    if has('gui_running') || &t_Co > 8
       let g:airline_theme = 'desertink'
     else
-      let g:airline_theme = 'kalisi'
+      let g:airline_theme = 'dark'
     endif
 
     let g:airline_inactive_collapse = 0
