@@ -8,7 +8,7 @@ has git-edit && alias ed='git-edit'
 
 # general shell aliases
 has dircolors && eval `dircolors -b`
-alias ls='ls --color'
+alias ls='ls --color --quoting-style=literal'
 alias ll='ls -lh'
 alias l='ls -A'
 alias ..='cd ..'
