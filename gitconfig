@@ -43,10 +43,6 @@
   cmd = sensible-vim $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'
   trustExitCode = true
 
-[rerere]
-  enabled = true
-  autoupdate = true
-
 [fetch]
   prune = true
 
