@@ -23,7 +23,7 @@ function ask_no {
 function flush_branch {
   local branch="$1"
 
-  git wtf | grep --color=never "$branch"
+  git wtf | grep --color=never "$branch"
   ask_yes "\e[0;36m     > Remove branch?" || return
 
   if ! git branch -d "$branch"; then
