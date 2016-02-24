@@ -25,4 +25,4 @@ export LESS_TERMCAP_me=$'\e[0m'
 export LESS_TERMCAP_se=$'\e[0m'
 export LESS_TERMCAP_ue=$'\e[0m'
 
-[ -x ~/bin/phantomjs ] && export PHANTOMJS_BIN="$HOME/bin/phantomjs"
+[ -x /usr/bin/phantomjs ] && export PHANTOMJS_BIN="/usr/bin/phantomjs"
