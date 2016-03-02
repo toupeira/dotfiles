@@ -29,6 +29,13 @@ alias xpaste='xclip -selection clipboard -o'
 alias grep='grep -i --color=auto --exclude=.svn --exclude=.git --exclude=.*.swp'
 alias rgrep='grep -r'
 
+if has http; then
+  alias GET='http get'
+  alias HEAD='http -h get'
+  alias POST='http post'
+  alias PUT='http put'
+fi
+
 # system administration
 alias sctl='systemctl'
 alias jctl='journalctl'
