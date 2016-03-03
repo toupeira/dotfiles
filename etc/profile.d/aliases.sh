@@ -54,6 +54,7 @@ alias pkgremove='aptitude -Z remove'
 alias pkglist='dpkg -L'
 alias pkgname='apt-cache pkgnames'
 alias pkgsearch='apt-cache search'
+alias pkgshow='aptitude show'
 
 # development
 alias vi='vim'
