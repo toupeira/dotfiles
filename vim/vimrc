@@ -873,7 +873,7 @@ endfunction " }}}
   let g:syntastic_scss_sass_exec = expand('~/.rbenv/shims/sass')
   let g:syntastic_scss_sass_args = '-I .'
   let g:syntastic_sh_shellcheck_exec = 'shellcheck'
-  let g:syntastic_sh_shellcheck_args = '-e 2064,2086,2139,2155'
+  let g:syntastic_sh_shellcheck_args = '-e 2032,2033,2064,2086,2139,2155'
 
   " autocmd vimrc BufRead */app/views/**/*.js.coffee
   "   \ let b:syntastic_coffee_checkers = []
