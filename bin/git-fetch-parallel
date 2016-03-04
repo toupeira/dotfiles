@@ -1,0 +1,27 @@
+#!/bin/bash
+
+if [ $# -eq 0 ]; then
+  git submodule init
+
+  (
+    git remote | xargs -n 1 echo remote
+    git submodule -q foreach "echo \$path" | xargs -n 1 echo submodule
+  ) | xargs -n 2 -P 10 "$0"
+  echo
+  exit
+fi
+
+case "$1" in
+  remote)
+    git fetch -q "$2" >/dev/null
+    ;;
+  submodule)
+    (cd "$2" && git fetch -q >/dev/null)
+    ;;
+  *)
+    echo "Usage: $0 [remote|submodule] NAME"
+    exit 255
+    ;;
+esac
+
+echo -n .
