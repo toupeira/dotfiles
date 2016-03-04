@@ -297,7 +297,10 @@ function run {
           [ -e ".git" ] || abort "Not a git repository: .git"
 
           old_commit=$( system git rev-parse HEAD )
-          system git pull -q origin master
+          if ! dryrun; then
+            system git fetch -q origin
+            system git reset -q --hard origin/master
+          fi
           new_commit=$( system git rev-parse HEAD )
 
           if [ "$new_commit" != "$old_commit" ]; then
