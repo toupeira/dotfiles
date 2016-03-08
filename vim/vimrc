@@ -120,6 +120,8 @@
   " autocmd vimrc VimEnter * set cmdheight=1
 
   " windows
+  set winheight=3
+  set winminheight=3
   set splitbelow
   set splitright
 
