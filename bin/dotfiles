@@ -549,7 +549,8 @@ function run {
       if [ "$( git rev-parse HEAD )" != "$current" ]; then
         status "{{Checking out submodules...}}"
         git submodule init -q
-        git submodule foreach -q --recursive "echo '\$name'" | xargs -n 1 git submodule update -q
+        git submodule foreach -q --recursive "echo '\$name'" \
+          | xargs -n 1 -P 5 git submodule update -q
         run build-all
       fi
       ;;
