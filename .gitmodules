@@ -362,7 +362,3 @@
   path = vim/bundle/elixir
   url = https://github.com/elixir-lang/vim-elixir.git
   ignore = dirty
-[submodule "vim/bundle/tmux-focus-events"]
-  path = vim/bundle/tmux-focus-events
-  url = https://github.com/tmux-plugins/vim-tmux-focus-events.git
-  ignore = dirty
