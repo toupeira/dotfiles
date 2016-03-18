@@ -198,10 +198,6 @@
   path = vim/bundle/cursorline-current-window
   url = https://github.com/vim-scripts/CursorLineCurrentWindow.git
   ignore = dirty
-[submodule "vim/bundle/bracketed-paste"]
-  path = vim/bundle/bracketed-paste
-  url = https://github.com/ConradIrwin/vim-bracketed-paste.git
-  ignore = dirty
 [submodule "vim/bundle/dispatch"]
   path = vim/bundle/dispatch
   url = https://github.com/tpope/vim-dispatch.git
