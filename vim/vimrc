@@ -786,11 +786,6 @@ endfunction " }}}
   let g:used_javascript_libs = 'jquery,requirejs'
   " }}}
 
-  " unimpaired {{{
-  xmap <silent> <C-j> ]egv=gv
-  xmap <silent> <C-k> [egv=gv
-  " }}}
-
   " test {{{
   let g:test#strategy = 'dispatch'
 
