@@ -1,11 +1,11 @@
 #!/bin/sh
-if pgrep -x iceweasel >/dev/null; then
+if pgrep -x firefox >/dev/null; then
   if [ $# -eq 0 ]; then
     xwit -raise -focus -property WM_CLASS -names Navigator
   else
-    iceweasel "$@" &>/dev/null &
+    firefox "$@" &>/dev/null &
   fi
 else
   rm -f ~/.mozilla/firefox/default/{lock,.parentlock}
-  iceweasel "$@" &>/dev/null &
+  firefox "$@" &>/dev/null &
 fi
