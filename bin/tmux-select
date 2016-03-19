@@ -1,9 +1,17 @@
 #!/bin/bash
 
-if [ "$1" = "-l" ]; then
-  (tmux last-window || tmux last-pane) &>/dev/null
-  exit 0
-fi
+case "$1" in
+  -l|--last)
+    (tmux last-window || tmux last-pane) &>/dev/null
+    exit 0
+    ;;
+  -f|--flash)
+    tmux select-pane -P 'bg=#111111'
+    sleep 0.1
+    tmux select-pane -P bg=default
+    exit 0
+    ;;
+esac
 
 title=$( tmux display -p '#{pane_title}' )
 if [[ "$title" =~ \ 😑$ ]]; then
@@ -17,9 +25,10 @@ panes=$( tmux display -p '#{window_panes}' )
 
 if [[ $pane -eq 1 && "$1" =~ ^-[LU]$ ]] ||
    [[ $pane -eq $panes && "$1" =~ ^-[DR]$ ]]; then
-  cmd="tmux resize-pane -Z"
+  # cmd="tmux resize-pane -Z"
+  cmd="$0 --flash"
 else
-  cmd="tmux select-pane $*; tmux select-pane -P 'bg=#111111'; sleep 0.1; tmux select-pane -P bg=default"
+  cmd="tmux select-pane $*; $0 --flash"
 fi
 
 if $vim; then

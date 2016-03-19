@@ -472,7 +472,7 @@ endfunction " }}}
 
     if (((a:cmd == 'k' || a:cmd == 'h') && nr == 1 && pane == 1) ||
           \ ((a:cmd == 'j' || a:cmd == 'l') && nr == winnr('$') && pane == panes))
-      silent call system('tmux resize-pane -Z')
+      " silent call system('tmux resize-pane -Z')
     else
       let arg = tr(a:cmd, 'hjkl', 'LDUR')
       silent call system('tmux select-pane -' . arg)
