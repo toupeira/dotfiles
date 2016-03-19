@@ -59,20 +59,18 @@
 
 [alias]
   h = help
-  r = remote
-  br = branch
-  sub = submodule
+  st = status
 
-  shallow = clone --depth 1
+  l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
+  lstat = "!cd ${GIT_PREFIX:-.} && git l --stat"
+  ldiff = log -p
 
   di = diff
   dc = diff --cached
   ds = diff --stat
 
-  st = status
-  stat = status
+  br = branch
   ls = branch -avv
-
   co = checkout
   sw = checkout
   ours = checkout --ours
@@ -80,34 +78,34 @@
 
   ap = add -p
   all = add -A
+  unstage = reset HEAD -p
+  discard = checkout -p
   ci = commit -v
   ca = commit -va
   amend = commit -v --amend
-  unstage = reset HEAD -p
-  discard = checkout -p
 
-  l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
-  lstat = "!cd ${GIT_PREFIX:-.} && git l --stat"
-  ldiff = log -p
-  blame = blame -w
+  r = remote
+  rup = remote update
+  shallow = clone --depth 1
 
   up = pull -v --progress
   upall = pull-all
   ff = merge --ff-only HEAD@{u}
   rem = rebase-maybe
-  rup = remote update
   continue = rebase --continue
   skip = rebase --skip
   solve = mergetool
   splice = mergetool --tool=splice
 
-  pr = "!f() { git fetch github refs/pull/$1/head:pr/$1; } ; f"
-  delbranch = "!f() { git branch -d $1 && git pu github :$1; }; f"
-
   pu   = -c push.default=simple   push -v --progress
   pua  = -c push.default=matching push -v --progress
   poof = -c push.default=simple   push -v --progress --force-with-lease
   pub  = "!f() { local target=$1; shift; git push . HEAD:$target $@; }; f"
+  delbranch = "!f() { git branch -d $1 && git pu github :$1; }; f"
+
+  sub = submodule
+  checkout-submodules = "!git sub init -q && git sub foreach -q --recursive 'echo $name' | xargs -n 1 -P 5 git sub update -q"
+  subco = "!git checkout-submodules"
 
   sts = stash save
   stp = stash pop
