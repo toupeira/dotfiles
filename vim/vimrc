@@ -562,7 +562,7 @@ endfunction " }}}
   endfunction " }}}
 
   " Ctrl-c - remove highlighted search and redraw
-  nnoremap <silent> <C-c> :nohlsearch<CR>:call UncolorAllWords()<CR>:redraw!<CR>
+  nnoremap <silent> <C-c> :nohlsearch<CR>:redraw!<CR>
 
   " <count>` - switch buffers
   nnoremap <silent><expr> ` v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "`"
@@ -780,10 +780,6 @@ endfunction " }}}
   map /  <Plug>(incsearch-forward)
   map ?  <Plug>(incsearch-backward)
   map g/ <Plug>(incsearch-stay)
-  " }}}
-
-  " interesting-words {{{
-  nnoremap <silent> <Space> :call InterestingWords('n')<CR>
   " }}}
 
   " javascript-libraries-syntax {{{
