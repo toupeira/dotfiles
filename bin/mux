@@ -65,6 +65,8 @@ case "$1" in
 
         if [ -x bin/rails -o -x script/rails ]; then
           command="rails server"
+        elif [ -f elm-package.json ]; then
+          command="elm-live Main.elm"
         elif [ -f .ember-cli ]; then
           command="ember serve"
         elif [ -f Gruntfile.js -o -f Gruntfile.coffee ]; then
@@ -79,6 +81,8 @@ case "$1" in
       console)
         if [ -x bin/rails ]; then
           command="rails console"
+        elif [ -f elm-package.json ]; then
+          command="elm-repl"
         elif [ -f Gruntfile.js ]; then
           command="node"
         elif [ -x bin/console ]; then
