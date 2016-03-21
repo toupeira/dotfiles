@@ -342,3 +342,7 @@
   path = vim/bundle/elixir
   url = https://github.com/elixir-lang/vim-elixir.git
   ignore = dirty
+[submodule "vim/bundle/elm"]
+  path = vim/bundle/elm
+  url = https://github.com/lambdatoast/elm.vim.git
+  ignore = dirty
