@@ -28,6 +28,7 @@ alias xcopy='xclip -selection clipboard -i'
 alias xpaste='xclip -selection clipboard -o'
 alias grep='grep -i --color=auto --exclude=.svn --exclude=.git --exclude=.*.swp'
 alias rgrep='grep -r'
+alias ssh.direct='ssh -o ControlPath=none'
 
 if has http; then
   alias GET='http get'
