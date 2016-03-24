@@ -235,7 +235,7 @@ function src_alias {
 function systemctl {
   local command="systemctl"
 
-  if [[ "$1" =~ (start|stop|reload|enable|disable) ]]; then
+  if ! [[ "$1" =~ ^(|status|(get|is|list|show).*)$ ]]; then
     command="sudo systemctl"
   fi
 
