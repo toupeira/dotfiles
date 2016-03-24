@@ -2,7 +2,32 @@
 
 PROCFILE=$( find ~/.procfile.d/"$( basename "$PWD" )" Procfile 2>/dev/null | head -1 )
 
+function usage {
+  echo "Usage: mux [OPTIONS] [COMMAND..]"
+  echo
+  echo "Commands:"
+  echo "  mux                   Create a new window"
+  echo "  mux COMMAND..         Run a command in a new window"
+  echo "  mux @PROCESS          Run a process from a Procfile in a new window"
+  echo
+  echo "  mux loop COMMAND..    Run a command repeatedly"
+  echo "  mux title TITLE       Set the current tmux window title"
+  echo
+  echo "Options:"
+  echo "  -t TITLE      Specify title for new window"
+  echo "  -s            Split window horizontally"
+  echo "  -v            Split window vertically"
+  echo "  -S            Small pane on the bottom"
+  echo "  -V            Small pane on the right"
+  echo
+  echo "Pass options to tmux:"
+  echo "  -d, -c PATH, -l SIZE, -p PERCENTAGE"
+  echo
+  exit 255
+}
+
 case "$1" in
+  # Run a process from a Procfile
   @*)
     proc="${1:1}"
     shift
@@ -15,17 +40,19 @@ case "$1" in
         echo "$commands" | while read command; do
           localproc=$( echo "$command" | cut -d: -f1 )
           command=$( echo "$command" | cut -d: -f2- )
+          title=${localproc:${#proc}+1}
+          title=${title:-$localproc}
 
           case "$localproc" in
-            guard)
-              options="-b -V"
+            watcher)
+              options="-d -V"
               ;;
             *)
-              options="-b"
+              options="-d"
               ;;
           esac
 
-          $0 $options "$@" "$0 title '${localproc:${#proc}+1}'; $0 loop '$command'"
+          $0 -t "@$title" $options "$@" "$0 loop '$command'"
         done
 
         exit
@@ -39,17 +66,26 @@ case "$1" in
       dev)
         $0 @server
 
-        if [ -f Guardfile ] || grep -q ^guard: "$PROCFILE"; then
+        if [ -f Guardfile ] || grep -q ^watcher "$PROCFILE"; then
           wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
           sleep 0.1
-          $0 @guard
+          $0 @watcher
         fi
 
         exit
         ;;
-      guard)
-        command="bundle exec guard"
-        options="-b -V"
+      watcher)
+        options="-d -V"
+
+        if [ -f Guardfile ]; then
+          command="bundle exec guard"
+        elif [ -f elm-package.json ]; then
+          command="elm live Main.elm"
+        elif [ -f Gruntfile.js -o -f Gruntfile.coffee ]; then
+          command="grunt watch"
+        else
+          echo "Can't find watcher for project."
+        fi
         ;;
       log)
         if [ -f "log/development.log" ]; then
@@ -61,12 +97,12 @@ case "$1" in
         fi
         ;;
       server)
-        options="-b"
+        options="-d"
 
         if [ -x bin/rails -o -x script/rails ]; then
           command="rails server"
         elif [ -f elm-package.json ]; then
-          command="elm-live Main.elm"
+          command="elm live Main.elm"
         elif [ -f .ember-cli ]; then
           command="ember serve"
         elif [ -f Gruntfile.js -o -f Gruntfile.coffee ]; then
@@ -98,8 +134,10 @@ case "$1" in
         ;;
     esac
 
-    $0 $options "$@" "$0 title '$proc'; $0 loop $command"
+    $0 -t "@$proc" $options "$@" "$0 loop $command"
     ;;
+
+  # Run a process repeatedly
   loop)
     shift
     command=( "$@" )
@@ -134,82 +172,60 @@ case "$1" in
       esac
     done
     ;;
+
+  # Set the current tmux window title
   title)
-    shift
-    title="${1:-$( basename "$PWD" )}"
-    title="@$title"
+    title="$2"
+    [ -n "$title" ] || usage
+
     if [[ "$TERM" =~ ^(tmux|screen) ]]; then
       echo -ne "\033]0;$title\007\033k$title\033\\"
     else
       echo -ne "\033]1;$title\007\033]2;$title\007"
     fi
     ;;
-  choose)
-    shift
-    items=""
-    for item in "$@"; do
-      [ -n "$items" ] && items="$items,"
-      items="$items${item//,/ }"
-    done
 
-    $0 capture choose-list -l "$items"
-    ;;
-  input)
-    shift
-    prompt="$1"
-
-    $0 capture command-prompt -p "$prompt"
-    ;;
-  capture)
-    shift
-
-    env="MUX_CAPTURE_${TMUX_PANE//%/}"
-    tmux setenv -u "$env"
-
-    tmux "$@" "setenv '$env' '%%'"
-    while ! tmux showenv "$env" &>/dev/null; do
-      sleep 0.1
-    done
-
-    tmux showenv "$env" | cut -d= -f2-
-    tmux setenv -u "$env"
-    ;;
+  # Create a new window
   *)
-    action='new-window'
-    unset args background
+    action="new-window"
+    title=$( basename "$PWD" )
+    unset args
 
     while [ "${1:0:1}" = "-" ]; do
       case "$1" in
+        -t)
+          title="$2"
+          shift
+          ;;
         -S)
-          action='split-window'
+          action="split-window"
           args="$args -v -l 20"
           ;;
         -V)
-          action='split-window'
+          action="split-window"
           if [ "$( tput cols )" -ge 160 ]; then
             args="$args -h -l 80"
           else
             args="$args -v -l 20"
           fi
           ;;
-        -b)
-          background=1
-          ;;
         -s)
-          action='split-window'
+          action="split-window"
           args="$args -v"
           ;;
         -v)
-          action='split-window'
+          action="split-window"
           args="$args -h"
+          ;;
+        -d)
+          args="$args $1"
           ;;
         -c|-l|-p)
           args="$args $1 $2"
           shift
           ;;
         *)
-          echo "Usage: $0 [-b] [-c|-s|-v] [-l size|-p percentage] [COMMAND..]"
-          exit 255
+          usage
           ;;
       esac
 
@@ -221,14 +237,6 @@ case "$1" in
       set -- bash --login
     fi
 
-    tmux $action $args -- "export PATH=\"$PATH\"; tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; $*"
-
-    if [ "$background" ]; then
-      if [ "$action" = "new-window" ]; then
-        tmux last-window
-      else
-        tmux last-pane
-      fi
-    fi
+    tmux $action $args -- "$0 title '$title'; export PATH=\"$PATH\"; tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; $*"
     ;;
 esac
