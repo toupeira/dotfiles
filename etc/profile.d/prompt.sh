@@ -32,7 +32,7 @@ if type __git_ps1 &>/dev/null; then
 fi
 
 function _prompt_jobs {
-  local jobs=`jobs | grep -vc 'tmux setenv'`
+  local jobs=`jobs | grep -vc 'mux store'`
 
   if [ $jobs -gt 0 ]; then
     printf '[%d job%s] ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
@@ -62,7 +62,7 @@ if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
   fi
 
   if [[ "$TERM" =~ ^(tmux|screen) ]]; then
-    export PROMPT_COMMAND='[ -n "$TMUX" ] && tmux setenv TMUXPWD_$(tmux display -p "#D" | tr -d %) "$PWD"; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
+    export PROMPT_COMMAND='mux store; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
   else
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
   fi

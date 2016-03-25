@@ -1,5 +1,10 @@
 #!/bin/bash
 
+if [ -z "$TMUX" ]; then
+  echo "Not running in tmux."
+  exit 1
+fi
+
 PROCFILE=$( find ~/.procfile.d/"$( basename "$PWD" )" Procfile 2>/dev/null | head -1 )
 
 function usage {
@@ -10,6 +15,8 @@ function usage {
   echo "  mux COMMAND..         Run a command in a new window"
   echo "  mux @PROCESS          Run a process from a Procfile in a new window"
   echo
+  echo "  mux store [PATH]      Store the current directory for the pane"
+  echo "  mux restore           Restore the current directory for the pane"
   echo "  mux loop COMMAND..    Run a command repeatedly"
   echo "  mux title TITLE       Set the current tmux window title"
   echo
@@ -17,8 +24,8 @@ function usage {
   echo "  -t TITLE      Specify title for new window"
   echo "  -s            Split window horizontally"
   echo "  -v            Split window vertically"
-  echo "  -S            Small pane on the bottom"
-  echo "  -V            Small pane on the right"
+  echo "  -b            Small pane on the bottom"
+  echo "  -r            Small pane on the right"
   echo
   echo "Pass options to tmux:"
   echo "  -d, -c PATH, -l SIZE, -p PERCENTAGE"
@@ -45,7 +52,7 @@ case "$1" in
 
           case "$localproc" in
             watcher)
-              options="-d -V"
+              options="-d -r"
               ;;
             *)
               options="-d"
@@ -60,7 +67,7 @@ case "$1" in
     fi
 
     command="$proc $*"
-    options="-V"
+    options="-r"
 
     case "$proc" in
       dev)
@@ -75,7 +82,7 @@ case "$1" in
         exit
         ;;
       watcher)
-        options="-d -V"
+        options="-d -r"
 
         if [ -f Guardfile ]; then
           command="bundle exec guard"
@@ -85,12 +92,13 @@ case "$1" in
           command="grunt watch"
         else
           echo "Can't find watcher for project."
+          exit 1
         fi
         ;;
       log)
         if [ -f "log/development.log" ]; then
           command="tail -n 0 -f log/development.log"
-          options="-S"
+          options="-b"
         else
           echo "Can't find log for project."
           exit 1
@@ -135,6 +143,17 @@ case "$1" in
     esac
 
     $0 -t "@$proc" $options "$@" "$0 loop $command"
+    ;;
+
+  # Store/restore the current directory for the pane
+  store|restore)
+    pane=$( tmux display -p '#D' | tr -d % )
+    if [ "$1" = "store" ]; then
+      tmux setenv "TMUXPWD_$pane" "${2:-$PWD}"
+    else
+      path=$( tmux showenv "TMUXPWD_$pane" | cut -d= -f2- )
+      [ -n "$path" ] && cd "$path" && echo "$path"
+    fi
     ;;
 
   # Run a process repeatedly
@@ -197,16 +216,17 @@ case "$1" in
           title="$2"
           shift
           ;;
-        -S)
+        -b)
           action="split-window"
-          args="$args -v -l 20"
+          args="$args -v -l 15"
           ;;
-        -V)
+        -r)
           action="split-window"
-          if [ "$( tput cols )" -ge 160 ]; then
+          width=$( tmux list-windows -F '#{window_active} #{window_width}' | awk '/^1/ { print $2 }' )
+          if [ "$width" -ge 160 ]; then
             args="$args -h -l 80"
           else
-            args="$args -v -l 20"
+            args="$args -h -l 55"
           fi
           ;;
         -s)
@@ -237,6 +257,12 @@ case "$1" in
       set -- bash --login
     fi
 
-    tmux $action $args -- "$0 title '$title'; export PATH=\"$PATH\"; tmux setenv TMUXPWD_\$(tmux display -p '#D' | tr -d %) \"$PWD\"; $*"
+    tmux $action $args -- "
+      $0 title '$title';
+      export PATH=\"$PATH\";
+      cd $( $0 restore );
+      mux store;
+      $*
+    " || tmux display "Pane too small"
     ;;
 esac
