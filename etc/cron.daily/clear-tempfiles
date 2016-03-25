@@ -1,0 +1,10 @@
+#!/bin/bash
+
+find /tmp \
+  -maxdepth 1 \
+  \( -name 'karma-*' -o -name 'xvfb-run.*' -o \
+     -name '.com.google.*' -o -name '.org.chromium.*' \) \
+  -type d -mtime +1 -exec rm -rf "{}" \;
+
+find /home/*/.vim/tmp \
+  -type f -mtime +180 -delete
