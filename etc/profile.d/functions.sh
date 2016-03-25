@@ -234,10 +234,16 @@ function src_alias {
 # Sudo wrapper for systemctl
 function systemctl {
   local command="systemctl"
+  local args=( "$@" )
+
+  while [ "${1:0:1}" = "-" ]; do
+    [[ "$1" =~ ^(-h|--help|--version)$ ]] && shift $#
+    shift
+  done
 
   if ! [[ "$1" =~ ^(|status|(get|is|list|show).*)$ ]]; then
     command="sudo systemctl"
   fi
 
-  command $command "$@"
+  command $command "${args[@]}"
 }
