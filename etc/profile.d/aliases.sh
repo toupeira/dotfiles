@@ -27,6 +27,8 @@ alias killbg='kill -9 %1'
 alias xcopy='xclip -selection clipboard -i'
 alias xpaste='xclip -selection clipboard -o'
 alias grep='grep -i --color=auto --exclude=.svn --exclude=.git --exclude=.*.swp'
+alias egrep='grep -E'
+alias fgrep='grep -F'
 alias rgrep='grep -r'
 alias ssh.direct='ssh -o ControlPath=none'
 
