@@ -193,6 +193,15 @@ function git {
   return $status
 }
 
+# Run a command in a tmux pane if possible
+function mux-wrap {
+  if [ -n "$TMUX" ]; then
+    mux -b "$@"
+  else
+    system "$@"
+  fi
+}
+
 # Make sure the given path is either inside the home directory,
 # or a valid /etc path
 function validate {
@@ -385,7 +394,7 @@ function run {
 
       output
       install_paths "$DOTFILES"/*
-      run install-packages system
+      run package system
       output
       ;;
     install)
@@ -456,7 +465,7 @@ function run {
         fi
       done
       ;;
-    install-packages)
+    package)
       [ $# -eq 0 ] && usage
 
       local list="$DOTFILES/packages/$1"
@@ -476,6 +485,7 @@ function run {
       local packages_apt=$( echo "$packages" | fgrep -v : | sort )
       local packages_gem=$( echo "$packages" | grep ^gem: | cut -d: -f2 | sort )
       local packages_npm=$( echo "$packages" | grep ^npm: | cut -d: -f2 | sort )
+      local packages_pip=$( echo "$packages" | grep ^pip: | cut -d: -f2 | sort )
 
       local missing_apt=$(
         comm -23 \
@@ -499,24 +509,43 @@ function run {
         )
       fi
 
-      if [ -n "$missing_apt" -o -n "$missing_gem" -o -n "$missing_npm" ]; then
+      if [ -n "$packages_pip" ]; then
+        missing_pip=$(
+          comm -23 \
+            <( echo "$packages_pip" | cut -d: -f2 | sort ) \
+            <( sudo pip list | awk '/\(/ { print $1 }' | sort )
+        )
+      fi
+
+      if [ -n "$missing_apt" -o \
+           -n "$missing_gem" -o \
+           -n "$missing_npm" -o \
+           -n "$missing_pip" ]; then
         output
         status "{{Missing packages:}}"
         for package in $missing_apt; do
-          output "    \e[0;32m- \e[1;32m$package\e[0m"
+          output "    \e[0;32m[apt] \e[1;32m$package\e[0m"
         done
         for package in $missing_gem; do
-          output "    \e[0;32m- \e[0;32mgem: \e[1;32m$package\e[0m"
+          output "    \e[0;32m[gem] \e[1;32m$package\e[0m"
         done
         for package in $missing_npm; do
-          output "    \e[0;32m- \e[0;32mnpm: \e[1;32m$package\e[0m"
+          output "    \e[0;32m[npm] \e[1;32m$package\e[0m"
+        done
+        for package in $missing_pip; do
+          output "    \e[0;32m[pip] \e[1;32m$package\e[0m"
         done
 
         output
         if ask_yes "{{Install?}}"; then
-          [ -n "$missing_apt" ] && output && system sudo apt-get install $missing_apt
-          [ -n "$missing_gem" ] && output && system sudo gem install $missing_gem
-          [ -n "$missing_npm" ] && output && system sudo npm -g install $missing_npm
+          [ -n "$missing_apt" ] && output \
+            && mux-wrap sudo aptitude install $missing_apt
+          [ -n "$missing_gem" ] && output \
+            && mux-wrap sudo gem install $missing_gem
+          [ -n "$missing_npm" ] && output \
+            && mux-wrap sudo npm -g install $missing_npm
+          [ -n "$missing_pip" ] && output \
+            && mux-wrap sudo pip install $missing_pip
         fi
 
         output

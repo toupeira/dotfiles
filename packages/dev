@@ -1,19 +1,26 @@
-docker.io
+build-essential
 elixir
 erlang-base
 erlang-dev
 erlang-parsetools
+exuberant-ctags
 g++
 jq
 nodejs
+patch
 postgresql
+python-pip
 redis-server
 ruby-dev
+shellcheck
+sqlite3
+tig
 
 gem:activesupport
 gem:awesome_print
 gem:bundler
 gem:pry
+gem:ripper-tags
 gem:rubocop
 
 npm:bower
@@ -28,3 +35,7 @@ npm:jshint
 npm:jsonlint
 npm:npm-check-updates
 npm:tern
+
+pip:grip
+pip:pgcli
+pip:wheel
