@@ -13,6 +13,7 @@ debtags
 dnsutils
 file
 git
+httpie
 less
 locales-all
 lsof

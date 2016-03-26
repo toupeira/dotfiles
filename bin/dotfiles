@@ -140,7 +140,7 @@ function system {
   shift
 
   # Check for commands that require sudo
-  if [ "$command" = "chown" -o "$command" = "chgrp" -o "$command" = "apt-get" ]; then
+  if [ "$command" = "chown" -o "$command" = "chgrp" ]; then
     if [ -z "${sudo_history["$command"]}" ]; then
       warning "Using [1;33msudo[0m for command [1m$command[0m"
     fi
@@ -385,7 +385,7 @@ function run {
 
       output
       install_paths "$DOTFILES"/*
-      run install-packages "$DOTFILES/.packages"
+      run install-packages system
       output
       ;;
     install)
@@ -459,24 +459,64 @@ function run {
     install-packages)
       [ $# -eq 0 ] && usage
 
-      local packages=$( cat "$1" )
-      if dpkg -s xorg &>/dev/null; then
-        [ -f "$1.x11" ] && packages=$( echo "$packages"; cat "$1.x11" )
-      else
-        [ -f "$1.nox" ] && packages=$( echo "$packages"; cat "$1.nox" )
+      local list="$DOTFILES/packages/$1"
+
+      if [ ! -f "$list" ]; then
+        abort "Can't find list '$list'"
       fi
 
-      local missing=$( comm -23 <( echo "$packages" | sort ) <( dpkg --get-selections | cut -f1 | sort ) )
-      if [ -n "$missing" ]; then
+      local packages=$( cat "$list" )
+
+      if dpkg -s xorg &>/dev/null; then
+        [ -f "$list.x11" ] && packages=$( echo "$packages"; cat "$list.x11" )
+      else
+        [ -f "$list.nox" ] && packages=$( echo "$packages"; cat "$list.nox" )
+      fi
+
+      local packages_apt=$( echo "$packages" | fgrep -v : | sort )
+      local packages_gem=$( echo "$packages" | grep ^gem: | cut -d: -f2 | sort )
+      local packages_npm=$( echo "$packages" | grep ^npm: | cut -d: -f2 | sort )
+
+      local missing_apt=$(
+        comm -23 \
+          <( echo "$packages_apt" | sort ) \
+          <( dpkg --get-selections | cut -f1 | cut -d: -f1 | sort )
+      )
+
+      if [ -n "$packages_gem" ]; then
+        missing_gem=$(
+          comm -23 \
+            <( echo "$packages_gem" | cut -d: -f2 | sort ) \
+            <( sudo gem list | awk '/\(/ { print $1 }' | sort )
+        )
+      fi
+
+      if [ -n "$packages_npm" ]; then
+        missing_npm=$(
+          comm -23 \
+            <( echo "$packages_npm" | cut -d: -f2 | sort ) \
+            <( npm -g list --depth=0 | grep @ | cut -d\  -f2 | cut -d@ -f1 | sort )
+        )
+      fi
+
+      if [ -n "$missing_apt" -o -n "$missing_gem" -o -n "$missing_npm" ]; then
         output
         status "{{Missing packages:}}"
-        for package in $missing; do
+        for package in $missing_apt; do
           output "    \e[0;32m- \e[1;32m$package\e[0m"
         done
+        for package in $missing_gem; do
+          output "    \e[0;32m- \e[0;32mgem: \e[1;32m$package\e[0m"
+        done
+        for package in $missing_npm; do
+          output "    \e[0;32m- \e[0;32mnpm: \e[1;32m$package\e[0m"
+        done
 
+        output
         if ask_yes "{{Install?}}"; then
-          output
-          system apt-get install $missing
+          [ -n "$missing_apt" ] && output && system sudo apt-get install $missing_apt
+          [ -n "$missing_gem" ] && output && system sudo gem install $missing_gem
+          [ -n "$missing_npm" ] && output && system sudo npm -g install $missing_npm
         fi
 
         output
