@@ -218,16 +218,17 @@ case "$1" in
           ;;
         -b)
           action="split-window"
-          args="$args -v -l 15"
+          height=$( tmux list-panes -F '#{pane_active} #{pane_height}' | awk '/^1/ { print $2 }' )
+          height=$(( height / 4 ))
+          height=$(( height < 5 ? 5 : height ))
+          args="$args -v -l $height"
           ;;
         -r)
           action="split-window"
-          width=$( tmux list-windows -F '#{window_active} #{window_width}' | awk '/^1/ { print $2 }' )
-          if [ "$width" -ge 160 ]; then
-            args="$args -h -l 80"
-          else
-            args="$args -h -l 55"
-          fi
+          width=$( tmux list-panes -F '#{pane_active} #{pane_width}' | awk '/^1/ { print $2 }' )
+          width=$(( width * 5 / 14 ))
+          width=$(( width < 30 ? 30 : width ))
+          args="$args -h -l $width"
           ;;
         -s)
           action="split-window"
