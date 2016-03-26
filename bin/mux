@@ -221,7 +221,7 @@ case "$1" in
         -b)
           action="split-window"
           height=$( tmux list-panes -F '#{pane_active} #{pane_height}' | awk '/^1/ { print $2 }' )
-          height=$(( height / 4 ))
+          height=$(( height / 3 ))
           height=$(( height < 5 ? 5 : height ))
           args="$args -v -l $height"
           ;;
