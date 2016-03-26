@@ -1,2 +1,0 @@
-#!/bin/sh
-exec vim --noplugin -u NONE -U NONE --cmd 'set nocompatible' "$@"
