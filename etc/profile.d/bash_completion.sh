@@ -58,7 +58,7 @@ complete -F _packages_available pkget
 function _packages_installed {
   COMPREPLY=( $(compgen -W "`dglob ${COMP_WORDS[COMP_CWORD]}`") )
 }
-complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
+complete -F _packages_installed pkglist pkgpurge pkgremove pkgshow debbugs debpackages
 
 function _src_projects {
   local src_dir=~/src
