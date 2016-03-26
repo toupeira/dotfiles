@@ -392,6 +392,13 @@ endfunction " }}}
   command! -nargs=+ Dict call system(g:open_command.' "http://dict.leo.org/?lp=ende&search=' . expand("<args>") . '"')
   command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=' . expand("<args>") . '"')
 
+  " shortcuts to open tmux splits and windows
+  command! -nargs=* Mux call system('mux <args>')
+  command! -nargs=0 Shell    Mux -b
+  command! -nargs=0 Pry      Mux -b pry
+  command! -nargs=0 Server   Mux @server
+  command! -nargs=0 Watcher  Mux @watcher
+
 " }}}
 
 " Keybindings
