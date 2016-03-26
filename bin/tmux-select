@@ -2,7 +2,7 @@
 
 case "$1" in
   -l|--last)
-    (tmux last-window || tmux last-pane || tmux next-window) &>/dev/null
+    (tmux last-window || tmux next-window || tmux last-pane) &>/dev/null
     exit 0
     ;;
   -f|--flash)
