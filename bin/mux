@@ -109,6 +109,8 @@ case "$1" in
 
         if [ -x bin/rails -o -x script/rails ]; then
           command="rails server"
+        elif [ -f mix.exs ] && grep -q :phoenix mix.exs; then
+          command="mix phoenix.server"
         elif [ -f elm-package.json ]; then
           command="elm live Main.elm"
         elif [ -f .ember-cli ]; then
