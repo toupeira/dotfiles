@@ -261,10 +261,10 @@ case "$1" in
     fi
 
     tmux $action $args -- "
-      $0 title '$title';
       export PATH=\"$PATH\";
+      $0 title '$title';
       cd $( $0 restore );
-      mux store;
+      $0 store;
       $*
     " || tmux display "Pane too small"
     ;;
