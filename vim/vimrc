@@ -45,7 +45,8 @@
   filetype plugin indent on
   set hidden
   set nobackup
-  set backupcopy=yes
+  set writebackup
+  set backupcopy=auto
   set modeline
   set modelines=2
 
