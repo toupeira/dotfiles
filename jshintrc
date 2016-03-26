@@ -29,6 +29,7 @@
     "jasmine":    false,
     "require":    false,
     "spyOn":      false,
-    "window":     false
+    "window":     false,
+    "Elm":        false
   }
 }
