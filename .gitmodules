@@ -340,5 +340,5 @@
   ignore = dirty
 [submodule "vim/bundle/elm"]
   path = vim/bundle/elm
-  url = https://github.com/lambdatoast/elm.vim.git
+  url = https://github.com/ElmCast/elm-vim.git
   ignore = dirty

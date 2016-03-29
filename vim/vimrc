@@ -747,6 +747,13 @@ endfunction " }}}
 " Plugin Settings
 " {{{
 
+  " elm {{{
+  let g:elm_detailed_complete = 1
+  let g:elm_jump_to_error = 0
+  let g:elm_make_show_warnings = 1
+  let g:elm_make_output_file = '/dev/null'
+  " }}}
+
   " json {{{
   let g:vim_json_syntax_conceal = (&conceallevel > 0)
   let g:vim_json_syntax_concealcursor = &concealcursor
@@ -814,7 +821,15 @@ endfunction " }}}
   let g:rooter_change_directory_for_non_project_files = 0
   let g:rooter_use_lcd = 1
   let g:rooter_silent_chdir = 1
-  let g:rooter_patterns = ['Gemfile', 'package.json', 'bower.json', '.git', '.git/', '_darcs/', '.hg/', '.bzr/', '.svn/']
+  let g:rooter_patterns = [
+    \ 'elm-package.json',
+    \ 'package.json',
+    \ 'Gemfile',
+    \ 'mix.exs',
+    \ '.git',
+    \ '.git/',
+    \ '.svn/'
+  \ ]
 
   if index(g:pathogen_disabled, 'rooter') == -1
     autocmd vimrc BufEnter * if !isdirectory(expand('%')) | Rooter
@@ -858,10 +873,15 @@ endfunction " }}}
   let g:syntastic_check_on_open = 0
   let g:syntastic_enable_highlighting = 0
   let g:syntastic_echo_current_error = 0
+  let g:syntastic_auto_loc_list = 1
+  if !&diff
+    let g:syntastic_auto_jump = 0
+  endif
 
   let g:syntastic_javascript_checkers = [ 'jshint', 'jscs' ]
   let g:syntastic_html_checkers = [ 'htmlhint' ]
   let g:syntastic_python_checkers = [ 'python' ]
+  let g:syntastic_elm_checkers = [ 'elm_make' ]
 
   " let g:syntastic_ruby_checkers = [ 'mri' ]
   " let g:syntastic_sh_checkers = [ 'sh' ]
@@ -882,11 +902,6 @@ endfunction " }}}
   "   \ let b:syntastic_coffee_checkers = []
   " autocmd vimrc BufEnter *.coffee
   "   \ let g:syntastic_coffee_checkers = [ 'coffee', 'coffeelint' ]
-
-  if !&diff
-    let g:syntastic_auto_loc_list = 1
-    let g:syntastic_auto_jump = 0
-  endif
   " }}}
 
   " neocomplete {{{
@@ -911,23 +926,17 @@ endfunction " }}}
     let g:neocomplete#same_filetypes._ = '_'
 
     " enable omni-completion for more languages
-     call neocomplete#util#set_default_dictionary(
-          \'g:neocomplete#sources#omni#input_patterns', 'ruby',
-          \'[^. *\t]\.\h\w*\|\h\w*::\w*')
     call neocomplete#util#set_default_dictionary(
-          \'g:neocomplete#sources#omni#input_patterns',
-          \'php',
-          \'[^. \t]->\h\w*\|\h\w*::\w*')
-    " call neocomplete#util#set_default_dictionary(
-    "       \'g:neocomplete#sources#omni#input_patterns',
-    "       \'javascript',
-    "       \'[^. \t]\.\w*')
-
-    " disable for Python
-    " call neocomplete#util#set_default_dictionary(
-    "       \'g:neocomplete#sources#omni#input_patterns',
-    "       \'python',
-    "       \'')
+      \ 'g:neocomplete#sources#omni#input_patterns', 'ruby',
+      \ '[^. *\t]\.\h\w*\|\h\w*::\w*')
+    call neocomplete#util#set_default_dictionary(
+      \ 'g:neocomplete#sources#omni#input_patterns',
+      \ 'php',
+      \ '[^. \t]->\h\w*\|\h\w*::\w*')
+    call neocomplete#util#set_default_dictionary(
+      \ 'g:neocomplete#sources#omni#input_patterns',
+      \ 'elm',
+      \ '\.')
 
     " from neocomplete.txt:
     " ---------------------
