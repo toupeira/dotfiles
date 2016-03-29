@@ -16,6 +16,7 @@
     "afterEach":  false,
     "afterAll":   false,
     "after":      false,
+    "alert":      false,
     "angular":    false,
     "beforeEach": false,
     "beforeAll":  false,
