@@ -263,9 +263,8 @@ case "$1" in
     tmux $action $args -- "
       export PATH=\"$PATH\";
       $0 title '$title';
-      cd $( $0 restore );
       $0 store;
-      $*
+      exec $*
     " || tmux display "Pane too small"
     ;;
 esac
