@@ -153,7 +153,7 @@ case "$1" in
     if [ "$1" = "store" ]; then
       tmux setenv "TMUXPWD_$pane" "${2:-$PWD}"
     else
-      path=$( tmux showenv "TMUXPWD_$pane" | cut -d= -f2- )
+      path=$( tmux showenv "TMUXPWD_$pane" 2>/dev/null | cut -d= -f2- )
       [ -n "$path" ] && cd "$path" && echo "$path"
     fi
     ;;
@@ -260,9 +260,12 @@ case "$1" in
       set -- bash --login
     fi
 
+    cd "$( $0 restore )"
+
     tmux $action $args -- "
       export PATH=\"$PATH\";
       $0 title '$title';
+      cd '$PWD';
       $0 store;
       exec $*
     " || tmux display "Pane too small"

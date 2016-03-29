@@ -123,6 +123,8 @@ while [ ! -d "$PROJECT_PATH" ]; do
   exit 1
 done
 
+cd "$PROJECT_PATH"
+
 case "$1" in
   --path|'')
     echo "$PROJECT_PATH"
@@ -133,6 +135,7 @@ case "$1" in
     shift 2
     ;;
   @*)
+    mux store
     command="mux $1"
     shift
     ;;
@@ -141,5 +144,4 @@ case "$1" in
     ;;
 esac
 
-cd "$PROJECT_PATH"
 exec $command "$@"
