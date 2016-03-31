@@ -61,7 +61,7 @@ if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
     unset _hostname
   fi
 
-  if [[ "$TERM" =~ ^(tmux|screen) ]]; then
+  if [ -n "$TMUX" ]; then
     export PROMPT_COMMAND='mux store; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
   else
     export PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
