@@ -644,8 +644,12 @@ endfunction " }}}
   " ,w - write current buffer
   nnoremap <silent> ,w :write<CR>:redraw<CR>
 
-  " ,W - write all open buffers
-  nnoremap <silent> ,W :wall<CR>:redraw<CR>
+  " ,W - write current buffer and force syntax check
+  nnoremap <silent> ,W :write<CR>:redraw<CR>:if <SID>SyntasticIsPassive() \| SyntasticCheck \| endif<CR>
+  function! s:SyntasticIsPassive() " {{{
+    call g:SyntasticModeMap.synch()
+    return !g:SyntasticModeMap.doAutoChecking()
+  endfunction " }}}
 
   " ,$ - clear trailing whitespace
   nnoremap <silent> ,$ :call <SID>ClearTrailingWhitespace()<CR>
@@ -877,6 +881,10 @@ endfunction " }}}
   if !&diff
     let g:syntastic_auto_jump = 0
   endif
+
+  let g:syntastic_mode_map = {
+    \ "mode": "active",
+    \ "passive_filetypes": [ "javascript" ] }
 
   let g:syntastic_javascript_checkers = [ 'jshint', 'jscs' ]
   let g:syntastic_html_checkers = [ 'htmlhint' ]
