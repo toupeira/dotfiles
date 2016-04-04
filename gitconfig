@@ -104,8 +104,7 @@
   delbranch = "!f() { git branch -d $1 && git pu github :$1; }; f"
 
   sub = submodule
-  checkout-submodules = "!git sub init -q && git sub foreach -q --recursive 'echo $name' | xargs -n 1 -P 5 git sub update -q"
-  subco = "!git checkout-submodules"
+  checkout-submodules = submodule update -q --init
 
   sts = stash save
   stp = stash pop
