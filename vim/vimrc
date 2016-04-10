@@ -990,7 +990,7 @@ endfunction " }}}
     let g:airline#extensions#tabline#buffer_nr_show = 1
     let g:airline#extensions#tabline#buffer_min_count = 2
 
-    if has('gui_running') || exists('$POWERLINE_FONT')
+    if has('gui_running') || exists('$ROXTERM_ID')
       let g:airline_powerline_fonts = 1
 
       let g:airline#extensions#tabline#left_sep = ''
