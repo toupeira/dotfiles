@@ -905,6 +905,9 @@ endfunction " }}}
   let g:syntastic_sh_shellcheck_exec = 'shellcheck'
   let g:syntastic_sh_shellcheck_args = '-e 2032,2033,2064,2086,2139,2155'
 
+  autocmd vimrc BufRead,BufNewFile ~/.cdist/manifest/*,~/.cdist/type/*/*
+      \ let b:syntastic_checkers = [ 'sh' ]
+
   " autocmd vimrc BufRead */app/views/**/*.js.coffee
   "   \ let b:syntastic_coffee_checkers = []
   " autocmd vimrc BufEnter *.coffee
