@@ -3,11 +3,6 @@
   font-size: 100% !important;
 }
 
-/* Don't use small fonts in Awesomebar */
-#PopupAutoCompleteRichResult[type="autocomplete-richlistbox"] * {
-  font-size: 1em !important;
-}
-
 /* Always show full findbar */
 .findbar-container > * {
   display: -moz-box !important;
@@ -16,4 +11,35 @@
 /* Hide plugin activation notification */
 notification[value="plugin-hidden"] {
   display: none !important;
+}
+
+
+/* Tweak Awesomebar for Numix theme */
+/* http://superuser.com/a/1066621 */
+
+#PopupAutoCompleteRichResult .autocomplete-richlistitem[selected="true"],
+#PopupAutoCompleteRichResult .autocomplete-richlistitem[selected="true"] * {
+  color: #FFFFFF !important;
+}
+
+#PopupAutoCompleteRichResult .autocomplete-richlistitem description {
+  color: #F16962 !important;
+  font-weight: bold;
+  text-decoration: none;
+  font-size: 11px;
+}
+
+#PopupAutoCompleteRichResult .autocomplete-richlistitem description:last-child {
+  color: #FFFFFF !important;
+  font-weight: normal;
+  text-decoration: none;
+  font-size: 12px;
+}
+
+.ac-title {
+  color: #FFFFFF !important;
+}
+
+#PopupAutoComplete .autocomplete-treebody {
+  color: #FFFFFF !important;
 }
