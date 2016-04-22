@@ -611,7 +611,7 @@ function run {
 
       status "{{Merging remote changes...}}"
       load_key
-      git pull -v --progress --rebase "$@"
+      git pull -v --progress --rebase --jobs=8 "$@"
 
       [ -n "$changes" ] && git stash pop -q
 
