@@ -24,7 +24,7 @@ notification[value="plugin-hidden"] {
 
 #PopupAutoCompleteRichResult .autocomplete-richlistitem description {
   color: #F16962 !important;
-  font-weight: bold;
+  font-weight: normal;
   text-decoration: none;
   font-size: 11px;
 }
