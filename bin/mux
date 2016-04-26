@@ -149,7 +149,12 @@ case "$1" in
 
   # Store/restore the current directory for the pane
   store|restore)
-    pane=$( tmux display -p '#D' | tr -d % )
+    if [ -n "$TMUX_PANE" ]; then
+      pane=$( echo "$TMUX_PANE" | tr -d % )
+    else
+      pane=$( tmux display -p '#D' | tr -d % )
+    fi
+
     if [ "$1" = "store" ]; then
       tmux setenv "TMUXPWD_$pane" "${2:-$PWD}"
     else
