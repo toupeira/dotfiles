@@ -320,10 +320,6 @@ function run {
             status "Changes in {{$submodule}}$url:" 6
             quiet || system git -c color.ui=always log --oneline '@{1}..' | sed -r 's/^/    /'
 
-            if [ "$submodule" = "vim/bundle/vimproc" ]; then
-              run build "$DOTFILES/$submodule"
-            fi
-
             output
           elif [ ! $batch ]; then
             status "No changes in {{$submodule}}" 2
@@ -358,6 +354,8 @@ function run {
 
         cat "$output"/*
         rm -rf "$output"
+
+        run build-all
       fi
 
       [ $batch ] && return
