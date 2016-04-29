@@ -26,14 +26,14 @@ notification[value="plugin-hidden"] {
   color: #F16962 !important;
   font-weight: normal;
   text-decoration: none;
-  font-size: 12px !important;
+  font-size: 8pt !important;
 }
 
 #PopupAutoCompleteRichResult .autocomplete-richlistitem description:last-child {
   color: #FFFFFF !important;
   font-weight: normal;
   text-decoration: none;
-  font-size: 12px !important;
+  font-size: 8pt !important;
 }
 
 .ac-title {
