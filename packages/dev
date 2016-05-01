@@ -10,6 +10,7 @@ nodejs
 patch
 postgresql
 python-pip
+rebar
 redis-server
 ruby-dev
 shellcheck
