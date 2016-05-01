@@ -342,3 +342,7 @@
   path = vim/bundle/elm
   url = https://github.com/ElmCast/elm-vim.git
   ignore = dirty
+[submodule "emacs.d"]
+  path = emacs.d
+  url = https://github.com/syl20bnr/spacemacs
+  ignore = dirty
