@@ -28,7 +28,7 @@ function login_message {
     fi
 
     if has fortune && [ -z "$SSH_CONNECTION" ]; then
-      fortune -acs -n $((LINES*40)) | awk '
+      fortune -acs -n $((${LINES:-10}*40)) | awk '
         /^\(.+\)$/ { print "\033[1;32mfortune:" $0 "\033[0m"; next }
         /^%$/ { next }
         { print "  \033[0;32m" $0 "\033[0m" }
