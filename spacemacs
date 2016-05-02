@@ -24,17 +24,38 @@ values."
      ;; <M-m f e R> (Emacs style) to install them.
      ;; ----------------------------------------------------------------
      auto-completion
-     ;; better-defaults
-     emacs-lisp
-     git
-     markdown
+     syntax-checking
+     better-defaults
+     themes-megapack
      org
+     dash
+
      (shell :variables
             shell-default-height 30
             shell-default-position 'bottom)
-     ;; spell-checking
-     syntax-checking
+
+     git
+     github
      version-control
+
+     unimpaired
+     vim-empty-lines
+     vinegar
+
+     elixir
+     elm
+     emacs-lisp
+     erlang
+     html
+     javascript
+     markdown
+     php
+     python
+     ruby
+     (shell-scripts :variables
+                    sh-indentation 2
+                    sh-basic-offset 2)
+     yaml
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
@@ -89,19 +110,13 @@ values."
    dotspacemacs-startup-lists '(recents projects)
    ;; Number of recent files to show in the startup buffer. Ignored if
    ;; `dotspacemacs-startup-lists' doesn't include `recents'. (default 5)
-   dotspacemacs-startup-recent-list-size 5
+   dotspacemacs-startup-recent-list-size 10
    ;; Default major mode of the scratch buffer (default `text-mode')
    dotspacemacs-scratch-mode 'text-mode
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(spacemacs-dark
-                         spacemacs-light
-                         solarized-light
-                         solarized-dark
-                         leuven
-                         monokai
-                         zenburn)
+   dotspacemacs-themes '(monokai)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
@@ -144,7 +159,7 @@ values."
    dotspacemacs-display-default-layout nil
    ;; If non nil then the last auto saved layouts are resume automatically upon
    ;; start. (default nil)
-   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-auto-resume-layouts t
    ;; Location where to auto-save files. Possible values are `original' to
    ;; auto-save the file in-place, `cache' to auto-save the file to another
    ;; file stored in the cache directory and `nil' to disable auto-saving.
@@ -157,7 +172,7 @@ values."
    ;; `find-contrib-file' (SPC f e c) are replaced. (default nil)
    dotspacemacs-use-ido nil
    ;; If non nil, `helm' will try to minimize the space it uses. (default nil)
-   dotspacemacs-helm-resize nil
+   dotspacemacs-helm-resize t
    ;; if non nil, the helm header is hidden when there is only one source.
    ;; (default nil)
    dotspacemacs-helm-no-header nil
@@ -166,7 +181,7 @@ values."
    dotspacemacs-helm-position 'bottom
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
-   dotspacemacs-enable-paste-micro-state nil
+   dotspacemacs-enable-paste-micro-state t
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
    dotspacemacs-which-key-delay 0.4
@@ -206,7 +221,7 @@ values."
    ;; If non nil line numbers are turned on in all `prog-mode' and `text-mode'
    ;; derivatives. If set to `relative', also turns on relative line numbers.
    ;; (default nil)
-   dotspacemacs-line-numbers nil
+   dotspacemacs-line-numbers 1
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
@@ -240,6 +255,27 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+  (setq-default
+   tab-width 2
+   evil-shift-width 2
+   c-basic-offset 2
+   css-indent-offset 2
+   erlang-indent-level 2
+   js-indent-level 2
+   js2-basic-offset 2
+   jsx-indent-level 2
+   web-mode-markup-indent-offset 2
+   web-mode-code-indent-offset 2
+   web-mode-css-indent-offset 2
+   web-mode-attr-indent-offset 2
+
+   evil-escape-delay 0
+   exec-path-from-shell-check-startup-files nil
+   flycheck-check-syntax-automatically '(mode-enabled save)
+   magit-repository-directories '("~/src")
+   ruby-version-manager 'rbenv
+   vc-follow-symlinks t
+  )
   )
 
 (defun dotspacemacs/user-config ()
@@ -249,6 +285,38 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  (define-key evil-normal-state-map "Y" "yy")
+  ;; (define-key evil-visual-state-map "D" "y`]pgv")
+
+  (define-key evil-insert-state-map "\C-a" 'beginning-of-line)
+  (define-key evil-visual-state-map "\C-a" 'beginning-of-line)
+
+  (define-key evil-insert-state-map "\C-e" 'end-of-line)
+  (define-key evil-visual-state-map "\C-e" 'end-of-line)
+
+  (define-key evil-insert-state-map "\C-q" 'quoted-insert)
+  (define-key evil-normal-state-map "\C-v" 'yank)
+  (define-key evil-insert-state-map "\C-v" 'yank)
+  (define-key evil-visual-state-map "\C-v" 'yank)
+
+  ;; C-c as general purpose escape key sequence.
+  ;; https://www.emacswiki.org/emacs/Evil#toc16
+  ;;
+  (defun escape-anywhere (prompt)
+    "Functionality for escaping generally.  Includes exiting Evil insert state and C-g binding. "
+    (cond
+    ;; If we're in one of the Evil states that defines [escape] key, return [escape] so as
+    ;; Key Lookup will use it.
+    ((or (evil-insert-state-p) (evil-normal-state-p) (evil-replace-state-p) (evil-visual-state-p)) [escape])
+    ;; This is the best way I could infer for now to have C-c work during evil-read-key.
+    ;; Note: As long as I return [escape] in normal-state, I don't need this.
+    ;;((eq overriding-terminal-local-map evil-read-key-map) (keyboard-quit) (kbd ""))
+    (t (kbd "C-g"))))
+  (define-key key-translation-map (kbd "C-c") 'escape-anywhere)
+  ;; Works around the fact that Evil uses read-event directly when in operator state, which
+  ;; doesn't use the key-translation-map.
+  (define-key evil-operator-state-map (kbd "C-c") 'keyboard-quit)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
