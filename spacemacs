@@ -255,6 +255,7 @@ executes.
  This function is mostly useful for variables that need to be set
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
+
   (setq-default
    tab-width 2
    evil-shift-width 2
@@ -317,6 +318,11 @@ you should place your code here."
   ;; Works around the fact that Evil uses read-event directly when in operator state, which
   ;; doesn't use the key-translation-map.
   (define-key evil-operator-state-map (kbd "C-c") 'keyboard-quit)
+
+  (add-hook 'before-make-frame-hook
+            #'(lambda ()
+                (add-to-list 'default-frame-alist '(width  . 120))
+                (add-to-list 'default-frame-alist '(height . 60))))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

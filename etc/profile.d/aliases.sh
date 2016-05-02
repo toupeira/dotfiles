@@ -69,6 +69,9 @@ if has sensible-vim; then
   alias gvim='VIMCMD=gvim sensible-vim'
   alias vip='VIMCMD=vip sensible-vim'
 fi
+if has sensible-emacs; then
+  alias emacs='sensible-emacs'
+fi
 
 alias ag='ag --smart-case'
 alias irb='pry'
