@@ -63,7 +63,10 @@ values."
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages '()
    ;; A list of packages and/or extensions that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages
+   '(
+     smooth-scrolling
+    )
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
    ;; are declared in a layer which is not a member of
    ;; the list `dotspacemacs-configuration-layers'. (default t)
@@ -269,6 +272,15 @@ before packages are loaded. If you are unsure, you should try in setting them in
    web-mode-code-indent-offset 2
    web-mode-css-indent-offset 2
    web-mode-attr-indent-offset 2
+
+   scroll-step 1
+   scroll-margin 5
+   scroll-conservatively 0
+   scroll-up-aggressively 0.01
+   scroll-down-aggressively 0.01
+   mouse-wheel-scroll-amount '(1 ((shift) . 1))
+   mouse-wheel-progressive-speed t
+   mouse-wheel-follow-mouse t
 
    evil-cross-lines t
    evil-escape-delay 0
