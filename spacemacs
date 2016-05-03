@@ -336,6 +336,10 @@ you should place your code here."
   (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
   (define-key evil-normal-state-map (kbd "C-z") 'evil-numbers/dec-at-pt)
 
+  ;; Helm bindings
+  (require 'helm)
+  (define-key helm-map (kbd "C-w") 'backward-kill-word)
+
   ;; emulate Ctrl-u behaviour from Vim
   (define-key evil-insert-state-map (kbd "C-u") 'backward-kill-line)
   (defun backward-kill-line ()
