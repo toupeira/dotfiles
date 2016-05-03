@@ -270,7 +270,12 @@ before packages are loaded. If you are unsure, you should try in setting them in
    web-mode-css-indent-offset 2
    web-mode-attr-indent-offset 2
 
+   evil-cross-lines t
    evil-escape-delay 0
+   evil-ex-interactive-search-highlight 'selected-window
+   evil-split-window-below t
+   evil-vsplit-window-right t
+
    exec-path-from-shell-check-startup-files nil
    flycheck-check-syntax-automatically '(mode-enabled save)
    magit-repository-directories '("~/src")
@@ -295,6 +300,10 @@ you should place your code here."
 
   (define-key evil-insert-state-map "\C-e" 'end-of-line)
   (define-key evil-visual-state-map "\C-e" 'end-of-line)
+
+  (define-key evil-visual-state-map "\C-u" 'backward-kill-sentence)
+  (define-key evil-normal-state-map "\C-a" 'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map "\C-z" 'evil-numbers/dec-at-pt)
 
   (define-key evil-insert-state-map "\C-q" 'quoted-insert)
   (define-key evil-normal-state-map "\C-v" 'yank)
