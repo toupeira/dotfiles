@@ -61,7 +61,10 @@ values."
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
-   dotspacemacs-additional-packages '()
+   dotspacemacs-additional-packages
+   '(
+     simpleclip
+    )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages
    '(
@@ -272,7 +275,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
    web-mode-code-indent-offset 2
    web-mode-css-indent-offset 2
    web-mode-attr-indent-offset 2
-
    scroll-step 1
    scroll-margin 5
    scroll-conservatively 0
@@ -294,6 +296,12 @@ before packages are loaded. If you are unsure, you should try in setting them in
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
   )
+
+  ;; Set default size of new windows
+  (add-hook 'before-make-frame-hook
+            #'(lambda ()
+                (add-to-list 'default-frame-alist '(width  . 120))
+                (add-to-list 'default-frame-alist '(height . 60))))
   )
 
 (defun dotspacemacs/user-config ()
@@ -304,28 +312,63 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  (define-key evil-normal-state-map "Y" "yy")
-  ;; (define-key evil-visual-state-map "D" "y`]pgv")
+  ;; yank linewise with Y
+  (define-key evil-normal-state-map (kbd "Y") (kbd "yy"))
 
-  (define-key evil-insert-state-map "\C-a" 'beginning-of-line)
-  (define-key evil-visual-state-map "\C-a" 'beginning-of-line)
+  ;; paste with Ctrl-v, quoted insert with Ctrl-q
+  (define-key evil-normal-state-map (kbd "C-v") 'simpleclip-paste)
+  (define-key evil-insert-state-map (kbd "C-v") 'simpleclip-paste)
+  (define-key evil-visual-state-map (kbd "C-v") 'simpleclip-paste)
+  (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
 
-  (define-key evil-insert-state-map "\C-e" 'end-of-line)
-  (define-key evil-visual-state-map "\C-e" 'end-of-line)
+  ;; navigate windows with Ctrl-h/j/k/l
+  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
+  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
+  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
+  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 
-  (define-key evil-visual-state-map "\C-u" 'backward-kill-sentence)
-  (define-key evil-normal-state-map "\C-a" 'evil-numbers/inc-at-pt)
-  (define-key evil-normal-state-map "\C-z" 'evil-numbers/dec-at-pt)
+  ;; readline keys in insert mode
+  (define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
+  (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
+  (define-key evil-visual-state-map (kbd "C-u") 'backward-kill-sentence)
 
-  (define-key evil-insert-state-map "\C-q" 'quoted-insert)
-  (define-key evil-normal-state-map "\C-v" 'yank)
-  (define-key evil-insert-state-map "\C-v" 'yank)
-  (define-key evil-visual-state-map "\C-v" 'yank)
+  ;; cycle numbers with Ctrl-a/z
+  (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
+  (define-key evil-normal-state-map (kbd "C-z") 'evil-numbers/dec-at-pt)
+
+  ;; emulate Ctrl-u behaviour from Vim
+  (define-key evil-insert-state-map (kbd "C-u") 'backward-kill-line)
+  (defun backward-kill-line ()
+    (interactive)
+    (let ((end (point)))
+      (evil-beginning-of-line)
+      (unless (looking-at "[[:space:]]*$")
+        (evil-first-non-blank))
+      (delete-region (point) end)))
+
+  ;; duplicate selected region
+  (define-key evil-visual-state-map (kbd "D") 'duplicate-region)
+  (defun duplicate-region ()
+    (interactive)
+    (let* ((end (region-end))
+           (text (buffer-substring (region-beginning)
+                                   end)))
+      (goto-char end)
+      (insert text)
+      (push-mark end)
+      (setq deactivate-mark nil)
+      (exchange-point-and-mark)))
 
   ;; C-c as general purpose escape key sequence.
   ;; https://www.emacswiki.org/emacs/Evil#toc16
-  ;;
   (defun escape-anywhere (prompt)
+    ;; Clear search highlight
+    (evil-search-highlight-persist-remove-all)
+
+    ;; Copy region to clipboard
+    (if (evil-visual-state-p)
+      (simpleclip-copy evil-visual-beginning evil-visual-end))
+
     "Functionality for escaping generally.  Includes exiting Evil insert state and C-g binding. "
     (cond
     ;; If we're in one of the Evil states that defines [escape] key, return [escape] so as
@@ -339,11 +382,6 @@ you should place your code here."
   ;; Works around the fact that Evil uses read-event directly when in operator state, which
   ;; doesn't use the key-translation-map.
   (define-key evil-operator-state-map (kbd "C-c") 'keyboard-quit)
-
-  (add-hook 'before-make-frame-hook
-            #'(lambda ()
-                (add-to-list 'default-frame-alist '(width  . 120))
-                (add-to-list 'default-frame-alist '(height . 60))))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

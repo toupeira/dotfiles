@@ -3,11 +3,10 @@
 if [ "$1" = '--kill' ]; then
   exec emacsclient -e '(kill-emacs)'
 elif ! pgrep -fx 'emacs --daemon' >/dev/null; then
-  echo "Starting Emacs daemon..."
   emacs --daemon &>/dev/null
 fi
 
-if [ -n "$DISPLAY" ]; then
+if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|--no-window-system ]]; then
   emacsclient -c "$@" &>/dev/null &
 else
   exec emacsclient -c "$@"
