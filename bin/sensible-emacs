@@ -1,13 +1,18 @@
 #!/bin/bash
 
-if [ "$1" = '--kill' ]; then
+emacs='emacsclient -c'
+
+if [ "$1" = '-kill' ]; then
   exec emacsclient -e '(kill-emacs)'
+elif [ "$1" = '-ns' ]; then
+  shift
+  emacs='emacs --geometry 120x60'
 elif ! pgrep -fx 'emacs --daemon' >/dev/null; then
   emacs --daemon &>/dev/null
 fi
 
 if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|--no-window-system ]]; then
-  emacsclient -c "$@" &>/dev/null &
+  $emacs "$@" &>/dev/null &
 else
-  exec emacsclient -c "$@"
+  exec $emacs "$@"
 fi

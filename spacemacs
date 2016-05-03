@@ -64,6 +64,7 @@ values."
    dotspacemacs-additional-packages
    '(
      simpleclip
+     tabbar-ruler
     )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages
@@ -165,7 +166,7 @@ values."
    dotspacemacs-display-default-layout nil
    ;; If non nil then the last auto saved layouts are resume automatically upon
    ;; start. (default nil)
-   dotspacemacs-auto-resume-layouts t
+   dotspacemacs-auto-resume-layouts nil
    ;; Location where to auto-save files. Possible values are `original' to
    ;; auto-save the file in-place, `cache' to auto-save the file to another
    ;; file stored in the cache directory and `nil' to disable auto-saving.
@@ -187,7 +188,7 @@ values."
    dotspacemacs-helm-position 'bottom
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
-   dotspacemacs-enable-paste-micro-state t
+   dotspacemacs-enable-paste-micro-state nil
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
    dotspacemacs-which-key-delay 0.4
@@ -337,8 +338,8 @@ you should place your code here."
   (define-key evil-normal-state-map (kbd "C-z") 'evil-numbers/dec-at-pt)
 
   ;; Helm bindings
-  (require 'helm)
-  (define-key helm-map (kbd "C-w") 'backward-kill-word)
+  (with-eval-after-load 'helm
+    (define-key helm-map (kbd "C-w") 'backward-kill-word))
 
   ;; emulate Ctrl-u behaviour from Vim
   (define-key evil-insert-state-map (kbd "C-u") 'backward-kill-line)
@@ -386,6 +387,36 @@ you should place your code here."
   ;; Works around the fact that Evil uses read-event directly when in operator state, which
   ;; doesn't use the key-translation-map.
   (define-key evil-operator-state-map (kbd "C-c") 'keyboard-quit)
+
+  ;; (require 'tabbar-ruler)
+  ;; (tabbar-ruler-style-firefox)
+  ;; (tabbar-ruler-group-by-projectile-project)
+  ;; (setq
+  ;;  tabbar-ruler-global-tabbar t
+  ;;  tabbar-ruler-fancy-current-tab-separator 'wave
+  ;;  tabbar-ruler-fancy-tab-separator 'wave
+  ;;  tabbar-ruler-tab-height 20
+  ;;  tabbar-ruler-tab-padding nil
+  ;;  tabbar-ruler-pad-selected nil
+  ;;  tabbar-ruler-padding-face nil
+  ;;  )
+
+  ;; (dolist (face '(tabbar-button
+  ;;                 tabbar-separator
+  ;;                 tabbar-selected
+  ;;                 tabbar-selected-highlight
+  ;;                 tabbar-selected-modified
+  ;;                 tabbar-unselected
+  ;;                 tabbar-unselected-highlight
+  ;;                 tabbar-unselected-modified))
+  ;;   (set-face-attribute face nil :height 80)
+  ;;   (set-face-bold face nil))
+  ;; (dolist (face '(tabbar-selected
+  ;;                 tabbar-selected-highlight))
+  ;;   (set-face-foreground face "#fff"))
+  ;; (dolist (face '(tabbar-unselected
+  ;;                 tabbar-unselected-highlight))
+  ;;   (set-face-foreground face "#aaa"))
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
