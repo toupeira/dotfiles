@@ -313,6 +313,12 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  (spacemacs/set-leader-keys
+    "ws" 'split-window-below-and-focus
+    "wS" 'split-window-below
+    "wv" 'split-window-right-and-focus
+    "wV" 'split-window-right)
+
   ;; yank linewise with Y
   (define-key evil-normal-state-map (kbd "Y") (kbd "yy"))
 
