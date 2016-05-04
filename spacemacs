@@ -27,6 +27,7 @@ values."
      syntax-checking
      better-defaults
      themes-megapack
+     theming
      org
      dash
 
@@ -114,7 +115,7 @@ values."
    ;; List of items to show in the startup buffer. If nil it is disabled.
    ;; Possible values are: `recents' `bookmarks' `projects'.
    ;; (default '(recents projects))
-   dotspacemacs-startup-lists '(recents projects)
+   dotspacemacs-startup-lists '(recents projects bookmarks)
    ;; Number of recent files to show in the startup buffer. Ignored if
    ;; `dotspacemacs-startup-lists' doesn't include `recents'. (default 5)
    dotspacemacs-startup-recent-list-size 10
@@ -220,7 +221,7 @@ values."
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
    dotspacemacs-inactive-transparency 90
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
-   dotspacemacs-mode-line-unicode-symbols t
+   dotspacemacs-mode-line-unicode-symbols nil
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
@@ -285,6 +286,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
    mouse-wheel-progressive-speed t
    mouse-wheel-follow-mouse t
 
+   require-final-newline t
+
    evil-cross-lines t
    evil-escape-delay 0
    evil-ex-interactive-search-highlight 'selected-window
@@ -296,6 +299,14 @@ before packages are loaded. If you are unsure, you should try in setting them in
    magit-repository-directories '("~/src")
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
+
+   theming-modifications
+   '((monokai
+      (fringe              :background "#1a1a16" :foreground "#404036")
+      (hl-line             :background "#2e2e27")
+      (linum               :background "#1a1a16" :foreground "#404036")
+      (trailing-whitespace :background "#33332b")
+    ))
   )
 
   ;; Set default size of new windows
@@ -377,7 +388,8 @@ you should place your code here."
     (evil-search-highlight-persist-remove-all)
 
     ;; Copy region to clipboard
-    (if (evil-visual-state-p)
+    (when (and evil-mode (eq evil-state 'visual))
+      (evil-visual-expand-region)
       (simpleclip-copy evil-visual-beginning evil-visual-end))
 
     "Functionality for escaping generally.  Includes exiting Evil insert state and C-g binding. "
