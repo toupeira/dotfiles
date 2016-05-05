@@ -1,18 +1,19 @@
 #!/bin/bash
 
-emacs='emacsclient -c'
+emacs='emacsclient -c -a ""'
 
 if [ "$1" = '-kill' ]; then
   exec emacsclient -e '(kill-emacs)'
 elif [ "$1" = '-ns' ]; then
   shift
   emacs='emacs --geometry 120x60'
-elif ! pgrep -fx 'emacs --daemon' >/dev/null; then
-  emacs --daemon &>/dev/null
+elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
+  unset DISPLAY
+  emacs='emacs'
 fi
 
 if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|--no-window-system ]]; then
-  $emacs "$@" &>/dev/null &
+  eval $emacs "$@" &>/dev/null &
 else
-  exec $emacs "$@"
+  eval exec $emacs "$@"
 fi
