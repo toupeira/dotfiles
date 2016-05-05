@@ -297,6 +297,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
    exec-path-from-shell-check-startup-files nil
    flycheck-check-syntax-automatically '(mode-enabled save)
    magit-repository-directories '("~/src")
+   powerline-height 16
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
 
@@ -413,7 +414,7 @@ you should place your code here."
   ;;  tabbar-ruler-global-tabbar t
   ;;  tabbar-ruler-fancy-current-tab-separator 'wave
   ;;  tabbar-ruler-fancy-tab-separator 'wave
-  ;;  tabbar-ruler-tab-height 20
+  ;;  tabbar-ruler-tab-height 16
   ;;  tabbar-ruler-tab-padding nil
   ;;  tabbar-ruler-pad-selected nil
   ;;  tabbar-ruler-padding-face nil
