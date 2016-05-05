@@ -1,6 +1,19 @@
 ;; -*- mode: emacs-lisp -*-
-;; This file is loaded by Spacemacs at startup.
-;; It must be stored in your home directory.
+;;
+;; FIXME:
+;; - continue comment on newline
+;; - complete with TAB instead of RET?
+;; - colors in terminal mode
+;; - detection of sh/bash files
+;;
+;; TODO:
+;; - setup tabbar
+;; - setup shells
+;; - grunt integration
+;;
+
+(setq is-gui    (display-graphic-p))
+(setq is-ocelot (string= system-name "ocelot"))
 
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
@@ -16,46 +29,52 @@ values."
    dotspacemacs-configuration-layer-path '()
    ;; List of configuration layers to load. If it is the symbol `all' instead
    ;; of a list then all discovered layers will be installed.
+   dotspacemacs-configuration-layer-path '("~/.spacemacs.d")
    dotspacemacs-configuration-layers
    '(
-     ;; ----------------------------------------------------------------
-     ;; Example of useful layers you may want to use right away.
-     ;; Uncomment some layer names and press <SPC f e R> (Vim style) or
-     ;; <M-m f e R> (Emacs style) to install them.
-     ;; ----------------------------------------------------------------
-     auto-completion
-     syntax-checking
+     ;; configuration
      better-defaults
-     themes-megapack
-     theming
-     org
-     dash
+     (theming
+      :variables
+      theming-headings-inherit-from-default 'all
+      theming-headings-same-size 'all
+      theming-headings-bold 'all)
 
-     (shell :variables
-            shell-default-height 30
-            shell-default-position 'bottom)
-
-     git
-     github
-     version-control
-
+     ;; vim
      unimpaired
      vim-empty-lines
-     vinegar
 
+     ;; development
+     auto-completion
+     syntax-checking
+     version-control
+     github
+     git
+
+     ;; apps
+     org
+     dash
+     (ranger
+      :variables
+      ranger-show-dotfiles nil)
+     (shell
+      :variables
+      shell-default-height 30
+      shell-default-position 'bottom)
+
+     ;; languages
      elixir
      elm
      emacs-lisp
      erlang
      html
      javascript
+     lua
      markdown
      php
      python
      ruby
-     (shell-scripts :variables
-                    sh-indentation 2
-                    sh-basic-offset 2)
+     shell-scripts
      yaml
      )
    ;; List of additional packages that will be installed without being
@@ -66,6 +85,14 @@ values."
    '(
      simpleclip
      tabbar-ruler
+
+     dracula-theme
+     gotham-theme
+     leuven-theme
+     moe-theme
+     molokai-theme
+     monokai-theme
+     subatomic-theme
     )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages
@@ -133,7 +160,7 @@ values."
                                :size 13
                                :weight normal
                                :width normal
-                               :powerline-scale 1.1)
+                               :powerline-scale 1.0)
    ;; The leader key
    dotspacemacs-leader-key "SPC"
    ;; The leader key accessible in `emacs state' and `insert state'
@@ -189,7 +216,7 @@ values."
    dotspacemacs-helm-position 'bottom
    ;; If non nil the paste micro-state is enabled. When enabled pressing `p`
    ;; several times cycle between the kill ring content. (default nil)
-   dotspacemacs-enable-paste-micro-state nil
+   dotspacemacs-enable-paste-micro-state t
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
    dotspacemacs-which-key-delay 0.4
@@ -211,7 +238,7 @@ values."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup nil
+   dotspacemacs-maximized-at-startup is-ocelot
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -225,11 +252,11 @@ values."
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters the
    ;; point when it reaches the top or bottom of the screen. (default t)
-   dotspacemacs-smooth-scrolling t
+   dotspacemacs-smooth-scrolling nil
    ;; If non nil line numbers are turned on in all `prog-mode' and `text-mode'
    ;; derivatives. If set to `relative', also turns on relative line numbers.
    ;; (default nil)
-   dotspacemacs-line-numbers 1
+   dotspacemacs-line-numbers t
    ;; If non-nil smartparens-strict-mode will be enabled in programming modes.
    ;; (default nil)
    dotspacemacs-smartparens-strict-mode nil
@@ -265,6 +292,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
   (setq-default
+
+   ;; indentation
    tab-width 2
    evil-shift-width 2
    c-basic-offset 2
@@ -273,10 +302,19 @@ before packages are loaded. If you are unsure, you should try in setting them in
    js-indent-level 2
    js2-basic-offset 2
    jsx-indent-level 2
+   sh-indentation 2
+   sh-basic-offset 2
    web-mode-markup-indent-offset 2
    web-mode-code-indent-offset 2
    web-mode-css-indent-offset 2
    web-mode-attr-indent-offset 2
+
+   ;; emacs settings
+   require-final-newline t
+   resize-mini-windows t
+
+   ;; work around laggy smooth-scrolling layer
+   ;; https://github.com/syl20bnr/spacemacs/issues/1781
    scroll-step 1
    scroll-margin 5
    scroll-conservatively 0
@@ -286,27 +324,55 @@ before packages are loaded. If you are unsure, you should try in setting them in
    mouse-wheel-progressive-speed t
    mouse-wheel-follow-mouse t
 
-   require-final-newline t
-
+   ;; evil settings
    evil-cross-lines t
    evil-escape-delay 0
    evil-ex-interactive-search-highlight 'selected-window
    evil-split-window-below t
    evil-vsplit-window-right t
 
+   ;; package settings
    exec-path-from-shell-check-startup-files nil
    flycheck-check-syntax-automatically '(mode-enabled save)
    magit-repository-directories '("~/src")
-   powerline-height 16
+   powerline-height (if is-ocelot 28 16)
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
 
+   ;; theme settings
    theming-modifications
    '((monokai
-      (fringe              :background "#1a1a16" :foreground "#404036")
-      (hl-line             :background "#2e2e27")
-      (linum               :background "#1a1a16" :foreground "#404036")
-      (trailing-whitespace :background "#33332b")
+      ;; modeline
+      (spacemacs-normal-face :background "#A6E22E" :foreground "#344D05")
+      (spacemacs-visual-face :background "#FD971F" :foreground "#663801")
+      (spacemacs-insert-face :background "#66D9EF" :foreground "#1D5A66")
+
+      ;; line numbers
+      (linum :background "#12120F" :foreground "#45453A")
+
+      ;; visual selection
+      ;; (region :inherit nil :background "#0E3436")
+      (region :inherit nil :background "#000" :bold t)
+
+      ;; cursorline
+      (hl-line :background "#33332B")
+      (trailing-whitespace :background "#404035")
+
+      ;; search highlighting
+      (isearch :background "#D3FBF6" :foreground "black" :bold t)
+      (lazy-highlight :background "#74DBCD" :foreground "black")
+      (evil-search-highlight-persist-highlight-face
+       :background "#74DBCD" :foreground "black")
+
+      ;; comments
+      (font-lock-comment-face :foreground "#99937A")
+      (font-lock-comment-delimiter-face :foreground "#99937A")
+      (font-lock-doc-face :foreground "#40CAE4")
+
+      ;; error symbols
+      (flycheck-fringe-error :background nil)
+      (flycheck-fringe-warning :background nil)
+      (flycheck-fringe-info :background nil)
     ))
   )
 
@@ -325,6 +391,50 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
+  ;; Override Spacemacs settings
+  (setq-default
+   linum-format "%5d "
+  )
+
+  ;; Enable flycheck for additional filetypes
+  (spacemacs/add-flycheck-hook 'shell-mode-hook)
+
+  ;; show file and project in title
+  ;; https://github.com/syl20bnr/spacemacs/pull/5924
+  (defun spacemacs//frame-title-format ()
+    "Return frame title with current project name, where applicable."
+    (let ((file buffer-file-name))
+      (concat "emacs: "
+        (cond
+        ((eq nil file) "%b")
+        ((and (bound-and-true-p projectile-mode)
+              (projectile-project-p))
+          (concat (substring file (length (projectile-project-root)))
+                  (format " [%s]" (projectile-project-name))))
+        (t (abbreviate-file-name file))))))
+
+  ;; auto-open error list
+  (defun flycheck-auto-list-errors ()
+    (if flycheck-current-errors
+      (flycheck-list-errors)
+      (-if-let (window (flycheck-get-error-list-window))
+        (quit-window nil window))))
+  (add-hook 'flycheck-after-syntax-check-hook 'flycheck-auto-list-errors)
+
+  (when is-gui
+    (setq frame-title-format '((:eval (spacemacs//frame-title-format)))))
+
+  ;; paste with Ctrl-v, quoted insert with Ctrl-q
+  (simpleclip-mode t)
+  (global-set-key (kbd "C-v") 'simpleclip-paste)
+  (define-key evil-normal-state-map (kbd "C-v") 'simpleclip-paste)
+  (define-key evil-insert-state-map (kbd "C-v") 'simpleclip-paste)
+  (define-key evil-visual-state-map (kbd "C-v") 'simpleclip-paste)
+
+  (global-set-key (kbd "C-q") 'quoted-insert)
+  (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
+
+  ;; always focus new splits
   (spacemacs/set-leader-keys
     "ws" 'split-window-below-and-focus
     "wS" 'split-window-below
@@ -334,13 +444,11 @@ you should place your code here."
   ;; yank linewise with Y
   (define-key evil-normal-state-map (kbd "Y") (kbd "yy"))
 
-  ;; paste with Ctrl-v, quoted insert with Ctrl-q
-  (define-key evil-normal-state-map (kbd "C-v") 'simpleclip-paste)
-  (define-key evil-insert-state-map (kbd "C-v") 'simpleclip-paste)
-  (define-key evil-visual-state-map (kbd "C-v") 'simpleclip-paste)
-  (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
-
   ;; navigate windows with Ctrl-h/j/k/l
+  (global-set-key (kbd "C-h") 'evil-window-left)
+  (global-set-key (kbd "C-j") 'evil-window-down)
+  (global-set-key (kbd "C-k") 'evil-window-up)
+  (global-set-key (kbd "C-l") 'evil-window-right)
   (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
   (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
   (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
@@ -349,7 +457,6 @@ you should place your code here."
   ;; readline keys in insert mode
   (define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
   (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
-  (define-key evil-visual-state-map (kbd "C-u") 'backward-kill-sentence)
 
   ;; cycle numbers with Ctrl-a/z
   (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
@@ -359,7 +466,15 @@ you should place your code here."
   (with-eval-after-load 'helm
     (define-key helm-map (kbd "C-w") 'backward-kill-word))
 
+  ;; show file name with Ctrl-g
+  (global-set-key (kbd "C-g")
+                  (lambda ()
+                    (interactive)
+                    (message "%s" (or (buffer-file-name) (buffer-name)))))
+
   ;; emulate Ctrl-u behaviour from Vim
+  ;; TODO: try deleting only newly entered characters first
+  ;; TODO: submit upstream bug report
   (define-key evil-insert-state-map (kbd "C-u") 'backward-kill-line)
   (defun backward-kill-line ()
     (interactive)
@@ -414,7 +529,7 @@ you should place your code here."
   ;;  tabbar-ruler-global-tabbar t
   ;;  tabbar-ruler-fancy-current-tab-separator 'wave
   ;;  tabbar-ruler-fancy-tab-separator 'wave
-  ;;  tabbar-ruler-tab-height 16
+  ;;  tabbar-ruler-tab-height powerline-height
   ;;  tabbar-ruler-tab-padding nil
   ;;  tabbar-ruler-pad-selected nil
   ;;  tabbar-ruler-padding-face nil
