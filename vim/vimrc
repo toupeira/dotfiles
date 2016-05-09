@@ -213,7 +213,7 @@
 
   " add Unicode marker for tmux navigation
   if !empty($TMUX) || !empty($SUDO_COMMAND)
-    let &iconstring .= " %{mode() == 'n' ? '😑' : '😮'}"
+    let &iconstring .= " %{mode() == 'n' || &ft == 'unite' ? '😑' : '😮'}"
 
     if !empty($CYGWIN)
       let &titlestring = &iconstring
@@ -1134,6 +1134,10 @@ endfunction " }}}
       " use C-c to close Unite
       nmap <silent><buffer> <C-c> <Plug>(unite_exit)
       imap <silent><buffer> <C-c> <Plug>(unite_exit)
+
+      " also support C-j and C-k to move between lines
+      imap <silent><buffer> <C-j> <Plug>(unite_select_next_line)
+      imap <silent><buffer> <C-k> <Plug>(unite_select_previous_line)
 
       " use C-n and C-p to move between lines in normal mode too
       noremap <silent><buffer> <C-n> j
