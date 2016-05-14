@@ -346,3 +346,7 @@
   path = emacs.d
   url = https://github.com/syl20bnr/spacemacs
   ignore = dirty
+[submodule "vim/bundle/org-mode"]
+  path = vim/bundle/org-mode
+  url = https://github.com/jceb/vim-orgmode.git
+  ignore = dirty
