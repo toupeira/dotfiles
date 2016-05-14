@@ -1002,6 +1002,8 @@ endfunction " }}}
     let g:airline#extensions#tabline#buffer_nr_show = 1
     let g:airline#extensions#tabline#buffer_min_count = 2
 
+    call airline#init#bootstrap()
+
     if has('gui_running') || exists('$ROXTERM_ID')
       let g:airline_powerline_fonts = 1
 
@@ -1014,16 +1016,15 @@ endfunction " }}}
       let g:airline_right_sep = '«'
       let g:airline_right_sep = '◀'
 
-      if !exists('g:airline_symbols')
-        let g:airline_symbols = {}
-      endif
-
       let g:airline_symbols.branch = '@'
       let g:airline_symbols.linenr = ''
 
       let g:airline#extensions#tabline#left_sep = g:airline_left_sep
       let g:airline#extensions#tabline#left_alt_sep = ' '
     endif
+
+    " add space after readonly symbol
+    let g:airline_symbols.readonly .= ' '
 
     let g:airline_mode_map = {
       \ '__' : '#',
@@ -1043,36 +1044,28 @@ endfunction " }}}
       \ 'b': 80
     \ }
 
-    " overwrite sections after airline has loaded
-    autocmd vimrc VimEnter * call s:AirlineOverrides()
+    " hide tag in small windows
+    call airline#parts#define_minwidth('tagbar', 100)
 
-    function! s:AirlineOverrides()
-      " hide tag in small windows
-      call airline#parts#define_minwidth('tagbar', 100)
+    " show file directory separately from file name
+    call airline#parts#define_raw('file', '%t%m')
+    call airline#parts#define_raw('filepath', '%#airline_filepath#❰%<%{ProjectFilepath(0)}❱')
+    let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
 
-      " add space after readonly symbol
-      let g:airline_symbols.readonly .= ' '
+    hi airline_filepath term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
+    hi airline_filepath_inactive term=bold cterm=bold ctermfg=238 ctermbg=235 gui=bold guifg=#555555 guibg=#303030
+    hi airline_filepath_insert term=bold cterm=bold ctermfg=238 ctermbg=135 gui=bold guifg=#555555 guibg=#303030
 
-      " show file directory separately from file name
-      call airline#parts#define_raw('file', '%t%m')
-      call airline#parts#define_raw('filepath', '%#airline_filepath#❰%<%{ProjectFilepath(0)}❱')
-      let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
+    " switch filetype and format/encoding, and only show
+    " file format and encoding if it's not the default
+    let g:airline_section_x = airline#section#create([
+      \ 'tagbar',
+      \ "%{&ff == 'unix' ? '' : WebDevIconsGetFileFormatSymbol()}%{&fenc == 'utf-8' ? '' : ' ' . &fenc}"
+    \ ])
+    let g:airline_section_y = airline#section#create(['%{WebDevIconsGetFileTypeSymbol()} %{&ft}'])
 
-      hi airline_filepath term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
-      hi airline_filepath_inactive term=bold cterm=bold ctermfg=238 ctermbg=235 gui=bold guifg=#555555 guibg=#303030
-      hi airline_filepath_insert term=bold cterm=bold ctermfg=238 ctermbg=135 gui=bold guifg=#555555 guibg=#303030
-
-      " switch filetype and format/encoding, and only show
-      " file format and encoding if it's not the default
-      let g:airline_section_x = airline#section#create([
-        \ 'tagbar',
-        \ "%{&ff == 'unix' ? '' : WebDevIconsGetFileFormatSymbol()}%{&fenc == 'utf-8' ? '' : ' ' . &fenc}"
-      \ ])
-      let g:airline_section_y = airline#section#create(['%{WebDevIconsGetFileTypeSymbol()} %{&ft}'])
-
-      " don't show position percentage
-      let g:airline_section_z = airline#section#create(['windowswap', 'linenr', ':%v'])
-    endfunction
+    " don't show position percentage
+    let g:airline_section_z = airline#section#create(['windowswap', 'linenr', ':%v'])
   endif
   " }}}
 
