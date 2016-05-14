@@ -1,16 +1,4 @@
 ;; -*- mode: emacs-lisp -*-
-;;
-;; FIXME:
-;; - continue comment on newline
-;; - complete with TAB instead of RET?
-;; - colors in terminal mode
-;; - detection of sh/bash files
-;;
-;; TODO:
-;; - setup tabbar
-;; - setup shells
-;; - grunt integration
-;;
 
 (setq is-gui    (display-graphic-p))
 (setq is-ocelot (string= system-name "ocelot"))
@@ -34,11 +22,6 @@ values."
    '(
      ;; configuration
      better-defaults
-     (theming
-      :variables
-      theming-headings-inherit-from-default 'all
-      theming-headings-same-size 'all
-      theming-headings-bold 'all)
 
      ;; vim
      unimpaired
@@ -54,6 +37,7 @@ values."
      ;; apps
      org
      dash
+     mu4e
      (ranger
       :variables
       ranger-show-dotfiles nil)
@@ -66,6 +50,7 @@ values."
      elixir
      elm
      emacs-lisp
+     emoji
      erlang
      html
      javascript
@@ -76,24 +61,19 @@ values."
      ruby
      shell-scripts
      yaml
+
+     ;; custom layers
+     dotfiles-ui
+     dotfiles-evil
+     dotfiles-org
+     dotfiles-mu4e
      )
    ;; List of additional packages that will be installed without being
    ;; wrapped in a layer. If you need some configuration for these
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
-   '(
-     simpleclip
-     tabbar-ruler
-
-     dracula-theme
-     gotham-theme
-     leuven-theme
-     moe-theme
-     molokai-theme
-     monokai-theme
-     subatomic-theme
-    )
+   '()
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages
    '(
@@ -156,8 +136,8 @@ values."
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
-   dotspacemacs-default-font '("Source Code Pro"
-                               :size 13
+   dotspacemacs-default-font `("DejaVu Sans Mono"
+                               :size ,(if is-ocelot 22 12)
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -324,13 +304,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
    mouse-wheel-progressive-speed t
    mouse-wheel-follow-mouse t
 
-   ;; evil settings
-   evil-cross-lines t
-   evil-escape-delay 0
-   evil-ex-interactive-search-highlight 'selected-window
-   evil-split-window-below t
-   evil-vsplit-window-right t
-
    ;; package settings
    exec-path-from-shell-check-startup-files nil
    flycheck-check-syntax-automatically '(mode-enabled save)
@@ -338,49 +311,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
    powerline-height (if is-ocelot 28 16)
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
-
-   ;; theme settings
-   theming-modifications
-   '((monokai
-      ;; modeline
-      (spacemacs-normal-face :background "#A6E22E" :foreground "#344D05")
-      (spacemacs-visual-face :background "#FD971F" :foreground "#663801")
-      (spacemacs-insert-face :background "#66D9EF" :foreground "#1D5A66")
-
-      ;; line numbers
-      (linum :background "#12120F" :foreground "#45453A")
-
-      ;; visual selection
-      ;; (region :inherit nil :background "#0E3436")
-      (region :inherit nil :background "#000" :bold t)
-
-      ;; cursorline
-      (hl-line :background "#33332B")
-      (trailing-whitespace :background "#404035")
-
-      ;; search highlighting
-      (isearch :background "#D3FBF6" :foreground "black" :bold t)
-      (lazy-highlight :background "#74DBCD" :foreground "black")
-      (evil-search-highlight-persist-highlight-face
-       :background "#74DBCD" :foreground "black")
-
-      ;; comments
-      (font-lock-comment-face :foreground "#99937A")
-      (font-lock-comment-delimiter-face :foreground "#99937A")
-      (font-lock-doc-face :foreground "#40CAE4")
-
-      ;; error symbols
-      (flycheck-fringe-error :background nil)
-      (flycheck-fringe-warning :background nil)
-      (flycheck-fringe-info :background nil)
-    ))
   )
-
-  ;; Set default size of new windows
-  (add-hook 'before-make-frame-hook
-            #'(lambda ()
-                (add-to-list 'default-frame-alist '(width  . 120))
-                (add-to-list 'default-frame-alist '(height . 60))))
   )
 
 (defun dotspacemacs/user-config ()
@@ -391,166 +322,16 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  ;; Override Spacemacs settings
-  (setq-default
-   linum-format "%5d "
-  )
-
-  ;; Enable flycheck for additional filetypes
+  ;; enable flycheck for additional filetypes
   (spacemacs/add-flycheck-hook 'shell-mode-hook)
 
-  ;; show file and project in title
-  ;; https://github.com/syl20bnr/spacemacs/pull/5924
-  (defun spacemacs//frame-title-format ()
-    "Return frame title with current project name, where applicable."
-    (let ((file buffer-file-name))
-      (concat "emacs: "
-        (cond
-        ((eq nil file) "%b")
-        ((and (bound-and-true-p projectile-mode)
-              (projectile-project-p))
-          (concat (substring file (length (projectile-project-root)))
-                  (format " [%s]" (projectile-project-name))))
-        (t (abbreviate-file-name file))))))
-
   ;; auto-open error list
-  (defun flycheck-auto-list-errors ()
+  (defun dotfiles/auto-list-errors ()
     (if flycheck-current-errors
       (flycheck-list-errors)
       (-if-let (window (flycheck-get-error-list-window))
         (quit-window nil window))))
-  (add-hook 'flycheck-after-syntax-check-hook 'flycheck-auto-list-errors)
-
-  (when is-gui
-    (setq frame-title-format '((:eval (spacemacs//frame-title-format)))))
-
-  ;; paste with Ctrl-v, quoted insert with Ctrl-q
-  (simpleclip-mode t)
-  (global-set-key (kbd "C-v") 'simpleclip-paste)
-  (define-key evil-normal-state-map (kbd "C-v") 'simpleclip-paste)
-  (define-key evil-insert-state-map (kbd "C-v") 'simpleclip-paste)
-  (define-key evil-visual-state-map (kbd "C-v") 'simpleclip-paste)
-
-  (global-set-key (kbd "C-q") 'quoted-insert)
-  (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
-
-  ;; always focus new splits
-  (spacemacs/set-leader-keys
-    "ws" 'split-window-below-and-focus
-    "wS" 'split-window-below
-    "wv" 'split-window-right-and-focus
-    "wV" 'split-window-right)
-
-  ;; yank linewise with Y
-  (define-key evil-normal-state-map (kbd "Y") (kbd "yy"))
-
-  ;; navigate windows with Ctrl-h/j/k/l
-  (global-set-key (kbd "C-h") 'evil-window-left)
-  (global-set-key (kbd "C-j") 'evil-window-down)
-  (global-set-key (kbd "C-k") 'evil-window-up)
-  (global-set-key (kbd "C-l") 'evil-window-right)
-  (define-key evil-normal-state-map (kbd "C-h") 'evil-window-left)
-  (define-key evil-normal-state-map (kbd "C-j") 'evil-window-down)
-  (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
-  (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
-
-  ;; readline keys in insert mode
-  (define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
-  (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
-
-  ;; cycle numbers with Ctrl-a/z
-  (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
-  (define-key evil-normal-state-map (kbd "C-z") 'evil-numbers/dec-at-pt)
-
-  ;; Helm bindings
-  (with-eval-after-load 'helm
-    (define-key helm-map (kbd "C-w") 'backward-kill-word))
-
-  ;; show file name with Ctrl-g
-  (global-set-key (kbd "C-g")
-                  (lambda ()
-                    (interactive)
-                    (message "%s" (or (buffer-file-name) (buffer-name)))))
-
-  ;; emulate Ctrl-u behaviour from Vim
-  ;; TODO: try deleting only newly entered characters first
-  ;; TODO: submit upstream bug report
-  (define-key evil-insert-state-map (kbd "C-u") 'backward-kill-line)
-  (defun backward-kill-line ()
-    (interactive)
-    (let ((end (point)))
-      (evil-beginning-of-line)
-      (unless (looking-at "[[:space:]]*$")
-        (evil-first-non-blank))
-      (delete-region (point) end)))
-
-  ;; duplicate selected region
-  (define-key evil-visual-state-map (kbd "D") 'duplicate-region)
-  (defun duplicate-region ()
-    (interactive)
-    (let* ((end (region-end))
-           (text (buffer-substring (region-beginning)
-                                   end)))
-      (goto-char end)
-      (insert text)
-      (push-mark end)
-      (setq deactivate-mark nil)
-      (exchange-point-and-mark)))
-
-  ;; C-c as general purpose escape key sequence.
-  ;; https://www.emacswiki.org/emacs/Evil#toc16
-  (defun escape-anywhere (prompt)
-    ;; Clear search highlight
-    (evil-search-highlight-persist-remove-all)
-
-    ;; Copy region to clipboard
-    (when (and evil-mode (eq evil-state 'visual))
-      (evil-visual-expand-region)
-      (simpleclip-copy evil-visual-beginning evil-visual-end))
-
-    "Functionality for escaping generally.  Includes exiting Evil insert state and C-g binding. "
-    (cond
-    ;; If we're in one of the Evil states that defines [escape] key, return [escape] so as
-    ;; Key Lookup will use it.
-    ((or (evil-insert-state-p) (evil-normal-state-p) (evil-replace-state-p) (evil-visual-state-p)) [escape])
-    ;; This is the best way I could infer for now to have C-c work during evil-read-key.
-    ;; Note: As long as I return [escape] in normal-state, I don't need this.
-    ;;((eq overriding-terminal-local-map evil-read-key-map) (keyboard-quit) (kbd ""))
-    (t (kbd "C-g"))))
-  (define-key key-translation-map (kbd "C-c") 'escape-anywhere)
-  ;; Works around the fact that Evil uses read-event directly when in operator state, which
-  ;; doesn't use the key-translation-map.
-  (define-key evil-operator-state-map (kbd "C-c") 'keyboard-quit)
-
-  ;; (require 'tabbar-ruler)
-  ;; (tabbar-ruler-style-firefox)
-  ;; (tabbar-ruler-group-by-projectile-project)
-  ;; (setq
-  ;;  tabbar-ruler-global-tabbar t
-  ;;  tabbar-ruler-fancy-current-tab-separator 'wave
-  ;;  tabbar-ruler-fancy-tab-separator 'wave
-  ;;  tabbar-ruler-tab-height powerline-height
-  ;;  tabbar-ruler-tab-padding nil
-  ;;  tabbar-ruler-pad-selected nil
-  ;;  tabbar-ruler-padding-face nil
-  ;;  )
-
-  ;; (dolist (face '(tabbar-button
-  ;;                 tabbar-separator
-  ;;                 tabbar-selected
-  ;;                 tabbar-selected-highlight
-  ;;                 tabbar-selected-modified
-  ;;                 tabbar-unselected
-  ;;                 tabbar-unselected-highlight
-  ;;                 tabbar-unselected-modified))
-  ;;   (set-face-attribute face nil :height 80)
-  ;;   (set-face-bold face nil))
-  ;; (dolist (face '(tabbar-selected
-  ;;                 tabbar-selected-highlight))
-  ;;   (set-face-foreground face "#fff"))
-  ;; (dolist (face '(tabbar-unselected
-  ;;                 tabbar-unselected-highlight))
-  ;;   (set-face-foreground face "#aaa"))
+  (add-hook 'flycheck-after-syntax-check-hook 'dotfiles/auto-list-errors)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
