@@ -10,3 +10,6 @@
 doc/tags
 doc/tags-*
 Session.vim
+
+# emacs
+.#*

@@ -1,6 +1,4 @@
-autocmd BufNewFile,BufRead *.axlsx setf ruby
-autocmd BufNewFile,BufRead *.pac setf javascript
-autocmd BufNewFile,BufRead *.run setf sh
-
-autocmd BufNewFile,BufRead */.cdist/manifest/*,*/type/*/manifest*,*/type/*/gencode* setf sh
-autocmd BufNewFile,BufRead ~/.devilspie/* setf lisp
+autocmd vimrc BufNewFile,BufRead *.org_archive setf org
+autocmd vimrc BufNewFile,BufRead *.pac setf javascript
+autocmd vimrc BufNewFile,BufRead *.run setf sh
+autocmd vimrc BufNewFile,BufRead ~/.cdist/manifest/*,~/.cdist/type/*/manifest*,~/.cdist/type/*/gencode* setf sh

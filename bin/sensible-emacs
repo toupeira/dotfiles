@@ -1,18 +1,20 @@
 #!/bin/bash
 
-emacs='emacsclient -c -a ""'
+emacs='emacs --geometry 120x60'
 
 if [ "$1" = '-kill' ]; then
-  exec emacsclient -e '(kill-emacs)'
+  exec emacsclient -e '(spacemacs/kill-emacs)'
 elif [ "$1" = '-ns' ]; then
   shift
-  emacs='emacs --geometry 120x60'
+  export EMACS_SERVER="disabled"
 elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
   unset DISPLAY
   emacs='emacs'
+elif [ -S "/tmp/emacs$UID/server" ]; then
+  emacs='emacsclient --create-frame'
 fi
 
-if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|--no-window-system ]]; then
+if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|-t|--tty ]]; then
   eval $emacs "$@" &>/dev/null &
 else
   eval exec $emacs "$@"

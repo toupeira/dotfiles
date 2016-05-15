@@ -2,10 +2,8 @@
 (setq linum-format "%5d ")
 
 ;; set default size of new windows
-(add-hook 'before-make-frame-hook
-          (lambda ()
-            (add-to-list 'default-frame-alist '(width  . 120))
-            (add-to-list 'default-frame-alist '(height . 60))))
+(add-to-list 'default-frame-alist '(width  . 120))
+(add-to-list 'default-frame-alist '(height . 60))
 
 ;; show file and project in title
 ;; https://github.com/syl20bnr/spacemacs/pull/5924
@@ -21,7 +19,7 @@
                 (format " [%s]" (projectile-project-name))))
       (t (abbreviate-file-name file))))))
 
-(when is-gui
+(when dotfiles/is-gui
   (setq frame-title-format '((:eval (spacemacs//frame-title-format)))))
 
 ;; customize theme
@@ -55,9 +53,12 @@
     (font-lock-doc-face :foreground "#40CAE4")
 
     ;; error symbols
-    (flycheck-fringe-error :background nil)
-    (flycheck-fringe-warning :background nil)
-    (flycheck-fringe-info :background nil)
+    (flycheck-fringe-error :background nil :foreground "#F92672")
+    (flycheck-fringe-warning :background nil :foreground "#E6DB74")
+    (flycheck-fringe-info :background nil :foreground "#66D9EF")
+
+    ;; org-mode
+    (org-agenda-clocking :background "#294C48")
   )))
 
 (configuration-layer/declare-layer

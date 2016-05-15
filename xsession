@@ -24,4 +24,8 @@ if pgrep -x deluged; then
   killall -9 deluged
 fi
 
+if pgrep -x emacs; then
+  emacsclient -e '(kill-emacs)'
+fi
+
 exit 0

@@ -16,9 +16,7 @@
   (define-key evil-operator-state-map (kbd "C-c") 'keyboard-quit)
 
   ;; also clear search highlight on C-c
-  (add-hook 'dotfiles/escape-anywhere-hook
-            (lambda ()
-              (evil-search-highlight-persist-remove-all)))
+  (add-hook 'dotfiles/escape-anywhere-hook 'evil-search-highlight-persist-remove-all)
 
   ;; show file name with C-g
   (global-set-key (kbd "C-g") 'dotfiles/identify-buffer)
@@ -33,12 +31,32 @@
   (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
   (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 
+  ;; add C-n/p in search prompt
+  (define-key isearch-mode-map (kbd "C-n") 'isearch-ring-advance)
+  (define-key isearch-mode-map (kbd "C-p") 'isearch-ring-retreat)
+
   ;; always focus new splits
   (spacemacs/set-leader-keys
     "ws" 'split-window-below-and-focus
     "wS" 'split-window-below
     "wv" 'split-window-right-and-focus
     "wV" 'split-window-right)
+
+  ;; fix bd behaviour
+  ;; https://github.com/syl20bnr/spacemacs/issues/5031
+  (spacemacs/set-leader-keys
+    "bd" 'evil-delete-buffer)
+
+  ;; use qq/qQ to keep server running
+  (when dotspacemacs-persistent-server
+    (spacemacs/set-leader-keys
+      "qq" 'dotfiles/prompt-frame-killer
+      "qQ" 'spacemacs/frame-killer))
+
+  ;; use qz/qZ to kill server
+  (spacemacs/set-leader-keys
+    "qz" 'spacemacs/prompt-kill-emacs
+    "qZ" 'spacemacs/kill-emacs)
 
   ;; yank linewise with Y
   (define-key evil-normal-state-map (kbd "Y") (kbd "yy"))
@@ -61,12 +79,15 @@
 (defun dotfiles-evil/post-init-helm ()
   ;; use C-w to delete words in Helm
   (with-eval-after-load 'helm
-    (define-key helm-map (kbd "C-w") 'backward-kill-word))
+    (define-key helm-map (kbd "C-w") 'backward-kill-word)
+    (define-key helm-map (kbd "M-d") 'helm-buffer-run-kill-buffers))
 )
 
 (defun dotfiles-evil/init-simpleclip ()
   ;; don't use desktop clipboard for kill ring
-  (simpleclip-mode t)
+  (use-package simpleclip
+    :config
+    (simpleclip-mode t))
 )
 
 (defun dotfiles-evil/post-init-simpleclip ()

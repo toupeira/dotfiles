@@ -1,7 +1,6 @@
-;; -*- mode: emacs-lisp -*-
-
-(setq is-gui    (display-graphic-p))
-(setq is-ocelot (string= system-name "ocelot"))
+(setq dotfiles/is-server (not (string= (getenv "EMACS_SERVER") "disabled")))
+(setq dotfiles/is-gui    (display-graphic-p))
+(setq dotfiles/is-ocelot (string= system-name "ocelot"))
 
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
@@ -22,10 +21,11 @@ values."
    '(
      ;; configuration
      better-defaults
+     eyebrowse
 
      ;; vim
      unimpaired
-     vim-empty-lines
+     ;; vim-empty-lines
 
      ;; development
      auto-completion
@@ -77,6 +77,7 @@ values."
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages
    '(
+     org-repo-todo
      smooth-scrolling
     )
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -137,7 +138,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font `("DejaVu Sans Mono"
-                               :size ,(if is-ocelot 22 12)
+                               :size ,(if dotfiles/is-ocelot 22 12)
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -218,7 +219,7 @@ values."
    ;; If non nil the frame is maximized when Emacs starts up.
    ;; Takes effect only if `dotspacemacs-fullscreen-at-startup' is nil.
    ;; (default nil) (Emacs 24.4+ only)
-   dotspacemacs-maximized-at-startup is-ocelot
+   dotspacemacs-maximized-at-startup dotfiles/is-ocelot
    ;; A value from the range (0..100), in increasing opacity, which describes
    ;; the transparency level of a frame when it's active or selected.
    ;; Transparency can be toggled through `toggle-transparency'. (default 90)
@@ -246,7 +247,7 @@ values."
    dotspacemacs-highlight-delimiters 'all
    ;; If non nil advises quit functions to keep server open when quitting.
    ;; (default nil)
-   dotspacemacs-persistent-server nil
+   dotspacemacs-persistent-server dotfiles/is-server
    ;; List of search tool executable names. Spacemacs uses the first installed
    ;; tool of the list. Supported tools are `ag', `pt', `ack' and `grep'.
    ;; (default '("ag" "pt" "ack" "grep"))
@@ -308,7 +309,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
    exec-path-from-shell-check-startup-files nil
    flycheck-check-syntax-automatically '(mode-enabled save)
    magit-repository-directories '("~/src")
-   powerline-height (if is-ocelot 28 16)
+   powerline-height (if dotfiles/is-ocelot 28 16)
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
   )
@@ -321,6 +322,19 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  ;; remove default layouts
+  (setq spacemacs--custom-layout-alist ())
+
+  (spacemacs|define-custom-layout "dotfiles"
+    :binding "d"
+    :body
+    (spacemacs/find-dotfile))
+
+  (spacemacs|define-custom-layout "org"
+    :binding "o"
+    :body
+    (find-file (concat org-directory "/todo.org")))
 
   ;; enable flycheck for additional filetypes
   (spacemacs/add-flycheck-hook 'shell-mode-hook)

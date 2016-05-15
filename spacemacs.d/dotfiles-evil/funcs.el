@@ -1,3 +1,9 @@
+;; save files and kill frame
+(defun dotfiles/prompt-frame-killer ()
+  (interactive)
+  (save-some-buffers)
+  (spacemacs/frame-killer))
+
 ;; copy to desktop clipboard
 (defun dotfiles/copy ()
   (interactive)
@@ -10,19 +16,18 @@
   (interactive)
   (simpleclip-paste))
 
-;; escape from anywhere
-;; https://www.emacswiki.org/emacs/Evil#toc16
+;; escape wrapper that should work anywhere
+;; https://www.emacswiki.org/emacs/evil#toc16
 (defvar dotfiles/escape-anywhere-hook nil)
 (defun dotfiles/escape-anywhere (prompt)
   (run-hooks 'dotfiles/escape-anywhere-hook)
 
   (cond
-  ;; If we're in one of the Evil states that defines [escape] key, return [escape] so as
-  ;; Key Lookup will use it.
+  ;; return Escape in Evil modes
   ((or (evil-insert-state-p) (evil-normal-state-p) (evil-replace-state-p) (evil-visual-state-p)) [escape])
-  ;; This is the best way I could infer for now to have C-c work during evil-read-key.
-  ;; Note: As long as I return [escape] in normal-state, I don't need this.
-  ;;((eq overriding-terminal-local-map evil-read-key-map) (keyboard-quit) (kbd ""))
+  ;; return C-c in Emacs mode
+  ((evil-emacs-state-p) (kbd "C-c"))
+  ;; return C-g in other modes
   (t (kbd "C-g"))))
 
 ;; show buffer name
