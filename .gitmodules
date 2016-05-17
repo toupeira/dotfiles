@@ -202,10 +202,6 @@
   path = vim/bundle/dispatch
   url = https://github.com/tpope/vim-dispatch.git
   ignore = dirty
-[submodule "shoreman"]
-  path = shoreman
-  url = https://github.com/hecticjeff/shoreman.git
-  ignore = dirty
 [submodule "fzf"]
   path = fzf
   url = https://github.com/junegunn/fzf.git
