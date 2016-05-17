@@ -136,7 +136,7 @@ Style/SpecialGlobalVars:
 Style/StringLiterals:
   Enabled: false
 
-Style/TrailingComma:
+Style/TrailingCommaInLiteral:
   Enabled: false
   # EnforcedStyleForMultiline: comma
   # SupportedStyles:
