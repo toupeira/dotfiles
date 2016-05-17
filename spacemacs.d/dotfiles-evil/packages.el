@@ -77,30 +77,34 @@
 )
 
 (defun dotfiles-evil/post-init-helm ()
-  ;; use C-w to delete words in Helm
   (with-eval-after-load 'helm
-    (define-key helm-map (kbd "C-w") 'backward-kill-word)
-    (define-key helm-map (kbd "M-d") 'helm-buffer-run-kill-buffers))
-)
+    ;; use C-w to delete words instead of yanking text at point
+    (define-key helm-map [remap 'helm-yank-text-at-point] 'backward-kill-word)
 
-(defun dotfiles-evil/init-simpleclip ()
-  ;; don't use desktop clipboard for kill ring
-  (use-package simpleclip
-    :config
-    (simpleclip-mode t))
-)
+    ;; use M-d to kill buffers
+    (define-key helm-buffer-map (kbd "M-d") 'helm-buffer-run-kill-buffers)
+  ))
 
-(defun dotfiles-evil/post-init-simpleclip ()
-  ;; paste with C-v
-  (global-set-key (kbd "C-v") 'dotfiles/paste)
-  (define-key evil-normal-state-map (kbd "C-v") 'dotfiles/paste)
-  (define-key evil-insert-state-map (kbd "C-v") 'dotfiles/paste)
-  (define-key evil-visual-state-map (kbd "C-v") 'dotfiles/paste)
+(when dotfiles/is-gui
+  (defun dotfiles-evil/init-simpleclip ()
+    ;; don't use desktop clipboard for kill ring
+    (use-package simpleclip
+      :config
+      (simpleclip-mode t))
+  )
 
-  ;; use C-q for quoted insert
-  (global-set-key (kbd "C-q") 'quoted-insert)
-  (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
+  (defun dotfiles-evil/post-init-simpleclip ()
+    ;; paste with C-v
+    (global-set-key (kbd "C-v") 'dotfiles/paste)
+    (define-key evil-normal-state-map (kbd "C-v") 'dotfiles/paste)
+    (define-key evil-insert-state-map (kbd "C-v") 'dotfiles/paste)
+    (define-key evil-visual-state-map (kbd "C-v") 'dotfiles/paste)
 
-  ;; copy with C-c
-  (add-hook 'dotfiles/escape-anywhere-hook 'dotfiles/copy)
+    ;; use C-q for quoted insert
+    (global-set-key (kbd "C-q") 'quoted-insert)
+    (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
+
+    ;; copy with C-c
+    (add-hook 'dotfiles/escape-anywhere-hook 'dotfiles/copy)
+  )
 )

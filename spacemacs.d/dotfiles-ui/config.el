@@ -59,6 +59,7 @@
 
     ;; org-mode
     (org-agenda-clocking :background "#294C48")
+    (org-agenda-calendar-event :inherit 'org-drawer :foreground nil)
   )))
 
 (configuration-layer/declare-layer
