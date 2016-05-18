@@ -2,16 +2,28 @@
 
 emacs='/usr/bin/emacs --geometry 120x60'
 
-if [ "$1" = '-kill' ]; then
-  exec emacsclient -e '(spacemacs/kill-emacs)'
-elif [ "$1" = '-ns' ]; then
-  shift
-  export EMACS_SERVER="disabled"
-elif [ -S "/tmp/emacs$UID/server" ]; then
-  emacs='emacsclient --create-frame'
-elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
-  unset DISPLAY
-fi
+case "$1" in
+  -h|--help)
+    exec /usr/bin/emacs --help
+    ;;
+  -v|--version)
+    exec /usr/bin/emacs --version
+    ;;
+  -k|--kill)
+    exec emacsclient -e '(spacemacs/kill-emacs)'
+    ;;
+  -ns|--no-server)
+    shift
+    export EMACS_SERVER="disabled"
+    ;;
+  *)
+    if [ -S "/tmp/emacs$UID/server" ]; then
+      emacs='emacsclient --create-frame'
+    elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
+      unset DISPLAY
+    fi
+    ;;
+esac
 
 if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|-t|--tty ]]; then
   eval $emacs "$@" &>/dev/null &

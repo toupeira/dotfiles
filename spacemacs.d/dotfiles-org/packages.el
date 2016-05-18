@@ -12,7 +12,7 @@
    org-cycle-separator-lines 1
    org-refile-targets '((org-agenda-files :maxlevel . 1))
    org-startup-align-all-tables t
-   org-startup-folded content
+   org-startup-folded 'content
    org-todo-keywords
    '((sequence "TODO" "STARTED" "|" "DONE"))
    org-todo-keyword-faces

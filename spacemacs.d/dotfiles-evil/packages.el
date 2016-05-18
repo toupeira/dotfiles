@@ -79,7 +79,7 @@
 (defun dotfiles-evil/post-init-helm ()
   (with-eval-after-load 'helm
     ;; use C-w to delete words instead of yanking text at point
-    (define-key helm-map [remap 'helm-yank-text-at-point] 'backward-kill-word)
+    (define-key helm-map [remap helm-yank-text-at-point] 'backward-kill-word)
 
     ;; use M-d to kill buffers
     (define-key helm-buffer-map (kbd "M-d") 'helm-buffer-run-kill-buffers)

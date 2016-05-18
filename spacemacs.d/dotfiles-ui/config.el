@@ -2,29 +2,35 @@
 (setq linum-format "%5d ")
 
 ;; set default size of new windows
-(add-to-list 'default-frame-alist '(width  . 120))
-(add-to-list 'default-frame-alist '(height . 60))
+(unless dotfiles/is-ocelot
+  (add-to-list 'default-frame-alist '(width  . 120))
+  (add-to-list 'default-frame-alist '(height . 60))
+)
 
 ;; show file and project in title
 ;; https://github.com/syl20bnr/spacemacs/pull/5924
-(defun spacemacs//frame-title-format ()
-  "Return frame title with current project name, where applicable."
-  (let ((file buffer-file-name))
-    (concat "emacs: "
-      (cond
-      ((eq nil file) "%b")
-      ((and (bound-and-true-p projectile-mode)
-            (projectile-project-p))
-        (concat (substring file (length (projectile-project-root)))
-                (format " [%s]" (projectile-project-name))))
-      (t (abbreviate-file-name file))))))
-
 (when dotfiles/is-gui
-  (setq frame-title-format '((:eval (spacemacs//frame-title-format)))))
+  (defun spacemacs//frame-title-format ()
+    "Return frame title with current project name, where applicable."
+    (let ((file buffer-file-name))
+      (concat "emacs: "
+        (cond
+        ((eq nil file) "%b")
+        ((and (bound-and-true-p projectile-mode)
+              (projectile-project-p))
+          (concat (substring file (length (projectile-project-root)))
+                  (format " [%s]" (projectile-project-name))))
+        (t (abbreviate-file-name file))))))
+
+  (setq frame-title-format '((:eval (spacemacs//frame-title-format))))
+)
 
 ;; customize theme
 (setq theming-modifications
  '((monokai
+    (default :background "#1C1C17")
+    (fringe :background "#1C1C17")
+
     ;; modeline
     (spacemacs-normal-face :background "#A6E22E" :foreground "#344D05")
     (spacemacs-visual-face :background "#FD971F" :foreground "#663801")
@@ -34,18 +40,20 @@
     (linum :background "#12120F" :foreground "#45453A")
 
     ;; visual selection
-    ;; (region :inherit nil :background "#0E3436")
-    (region :inherit nil :background "#000" :bold t)
+    (region :inherit nil :background "#005F87" :bold t)
 
     ;; cursorline
-    (hl-line :background "#33332B")
-    (trailing-whitespace :background "#404035")
+    (hl-line :background "#262620")
+    (trailing-whitespace :background "#33332B")
 
     ;; search highlighting
-    (isearch :background "#D3FBF6" :foreground "black" :bold t)
-    (lazy-highlight :background "#74DBCD" :foreground "black")
+    (isearch :background "#6B9C0A" :foreground "white" :bold t)
+    (lazy-highlight :background "#344D05" :foreground "white" :bold t)
     (evil-search-highlight-persist-highlight-face
-      :background "#74DBCD" :foreground "black")
+      :inherit nil :background "#344D05" :foreground nil)
+
+    ;; match highlighting
+    (sp-show-pair-match-face :background "#404036" :foreground nil :inverse-video nil :bold t)
 
     ;; comments
     (font-lock-comment-face :foreground "#99937A")

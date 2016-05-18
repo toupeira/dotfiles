@@ -138,7 +138,7 @@ values."
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
    ;; size to make separators look not too crappy.
    dotspacemacs-default-font `("DejaVu Sans Mono"
-                               :size ,(if dotfiles/is-ocelot 22 12)
+                               :size ,(if dotfiles/is-ocelot 23 12)
                                :weight normal
                                :width normal
                                :powerline-scale 1.0)
@@ -323,7 +323,7 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  ;; remove default layouts
+  ;; setup custom layouts
   (setq spacemacs--custom-layout-alist ())
 
   (spacemacs|define-custom-layout "dotfiles"
@@ -346,6 +346,11 @@ you should place your code here."
       (-if-let (window (flycheck-get-error-list-window))
         (quit-window nil window))))
   (add-hook 'flycheck-after-syntax-check-hook 'dotfiles/auto-list-errors)
+
+  ;; for some reason this doesn't get applied with theming-modifications
+  (set-face-attribute
+   'evil-search-highlight-persist-highlight-face
+   nil :inherit nil :background "#344D05" :foreground nil)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
