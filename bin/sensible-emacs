@@ -26,7 +26,7 @@ case "$1" in
 esac
 
 if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|-t|--tty ]]; then
-  eval $emacs "$@" &>/dev/null &
+  eval exec $emacs "$@" &>/dev/null &
 else
   eval exec $emacs "$@"
 fi

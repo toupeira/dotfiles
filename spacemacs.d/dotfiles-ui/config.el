@@ -47,10 +47,12 @@
     (trailing-whitespace :background "#33332B")
 
     ;; search highlighting
+    ; (isearch :background "#993991" :foreground "white" :bold t)
+    ; (lazy-highlight :inherit nil :background "#662661" :foreground nil)
+    ; (evil-search-highlight-persist-highlight-face :inherit 'lazy-highlight)
     (isearch :background "#6B9C0A" :foreground "white" :bold t)
-    (lazy-highlight :background "#344D05" :foreground "white" :bold t)
-    (evil-search-highlight-persist-highlight-face
-      :inherit nil :background "#344D05" :foreground nil)
+    (lazy-highlight :inherit nil :background "#3D5906" :foreground nil)
+    (evil-search-highlight-persist-highlight-face :inherit 'lazy-highlight)
 
     ;; match highlighting
     (sp-show-pair-match-face :background "#404036" :foreground nil :inverse-video nil :bold t)
@@ -66,7 +68,7 @@
     (flycheck-fringe-info :background nil :foreground "#66D9EF")
 
     ;; org-mode
-    (org-agenda-clocking :background "#294C48")
+    (org-agenda-clocking :background "#00364C")
     (org-agenda-calendar-event :inherit 'org-drawer :foreground nil)
   )))
 

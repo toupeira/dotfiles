@@ -16,13 +16,29 @@
    org-todo-keywords
    '((sequence "TODO" "STARTED" "|" "DONE"))
    org-todo-keyword-faces
-   '(("STARTED" . org-level-8)
+   '(("STARTED" . "#AE81FF")
      ("DONE" . org-special-keyword))
+   org-tag-persistent-alist
+   '(("home"   . ?h)
+     ("work"   . ?w)
+     ("events" . ?e))
 
    org-agenda-files '("~/org")
-   org-agenda-buffer-name "*Org Agenda*"
+   org-agenda-buffer-name "*agenda*"
    org-agenda-window-setup 'other-window
    org-agenda-include-diary nil
+
+   org-agenda-custom-commands
+   '(
+      ("h" "Home context" agenda ""
+       ((org-agenda-tag-filter-preset '("-work"))))
+      ("w" "Work context" agenda ""
+       ((org-agenda-tag-filter-preset '("-home"))
+        (org-agenda-start-with-clockreport-mode t)))
+      ("g" "GTD workflow"
+       ((todo "STARTED")
+        (todo "TODO")))
+    )
 
    org-capture-templates
    '(

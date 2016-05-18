@@ -73,7 +73,9 @@ values."
    ;; packages, then consider creating a layer. You can also put the
    ;; configuration in `dotspacemacs/user-config'.
    dotspacemacs-additional-packages
-   '()
+   '(
+     angular-mode
+   )
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages
    '(
@@ -309,6 +311,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
    exec-path-from-shell-check-startup-files nil
    flycheck-check-syntax-automatically '(mode-enabled save)
    magit-repository-directories '("~/src")
+   paradox-github-token t
    powerline-height (if dotfiles/is-ocelot 28 16)
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
@@ -347,10 +350,10 @@ you should place your code here."
         (quit-window nil window))))
   (add-hook 'flycheck-after-syntax-check-hook 'dotfiles/auto-list-errors)
 
-  ;; for some reason this doesn't get applied with theming-modifications
+  ;; for some reason this doesn't get applied with the theming-modifications layer
   (set-face-attribute
    'evil-search-highlight-persist-highlight-face
-   nil :inherit nil :background "#344D05" :foreground nil)
+   nil :inherit 'lazy-highlight :background nil :foreground nil)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will
