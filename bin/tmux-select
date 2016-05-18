@@ -28,7 +28,7 @@ if [[ $pane -eq 1 && "$1" =~ ^-[LU]$ ]] ||
   # cmd="tmux resize-pane -Z"
   cmd="$0 --flash"
 else
-  cmd="tmux select-pane $*; $0 --flash"
+  cmd="tmux select-pane $*"
 fi
 
 if $vim; then
