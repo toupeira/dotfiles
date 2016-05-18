@@ -1000,8 +1000,6 @@ endfunction " }}}
     let g:airline#extensions#tabline#buffer_nr_show = 1
     let g:airline#extensions#tabline#buffer_min_count = 2
 
-    call airline#init#bootstrap()
-
     if has('gui_running') || exists('$ROXTERM_ID')
       let g:airline_powerline_fonts = 1
 
@@ -1014,6 +1012,9 @@ endfunction " }}}
       let g:airline_right_sep = '«'
       let g:airline_right_sep = '◀'
 
+      if !exists('g:airline_symbols')
+        let g:airline_symbols = {}
+      endif
       let g:airline_symbols.branch = '@'
       let g:airline_symbols.linenr = ''
 
@@ -1022,6 +1023,7 @@ endfunction " }}}
     endif
 
     " add space after readonly symbol
+    call airline#init#bootstrap()
     let g:airline_symbols.readonly .= ' '
 
     let g:airline_mode_map = {
