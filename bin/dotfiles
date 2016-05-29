@@ -628,7 +628,7 @@ function run {
       local dir="$1"
       shift
 
-      if ! which "$1" >/dev/null; then
+      if ! which "$1" >/dev/null && ! [ -x "$dir/$1" ]; then
         warning "Not building {{${dir/$DOTFILES\//}}} (missing {{$1}}) $( dryrun_message )" 5
         return
       fi
@@ -642,6 +642,7 @@ function run {
       fi
       ;;
     build-all)
+      run build "$DOTFILES/fzf"                ./install --bin
       run build "$DOTFILES/vim/bundle/ternjs"  npm install
       run build "$DOTFILES/vim/bundle/vimproc" make -s
       run build "$DOTFILES/rbenv/rbenv/src"    make -s
