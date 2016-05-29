@@ -1,6 +1,3 @@
-;; interface settings
-(setq linum-format "%5d ")
-
 ;; set default size of new windows
 (unless dotfiles/is-ocelot
   (add-to-list 'default-frame-alist '(width  . 120))
@@ -29,7 +26,6 @@
 (setq theming-modifications
  '((monokai
     (default :background "#1C1C17")
-    (fringe :background "#1C1C17")
 
     ;; modeline
     (spacemacs-normal-face :background "#A6E22E" :foreground "#344D05")
@@ -38,6 +34,7 @@
 
     ;; line numbers
     (linum :background "#12120F" :foreground "#45453A")
+    (fringe :inherit 'linum :background nil)
 
     ;; visual selection
     (region :inherit nil :background "#005F87" :bold t)

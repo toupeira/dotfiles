@@ -8,12 +8,13 @@
 (defun dotfiles/copy ()
   (interactive)
   (when (and evil-mode (eq evil-state 'visual))
-    (evil-visual-expand-region)
-    (simpleclip-copy evil-visual-beginning evil-visual-end)))
+    (evil-yank evil-visual-beginning evil-visual-end (evil-visual-type) ?+)))
 
 ;; paste from desktop clipboard
 (defun dotfiles/paste ()
   (interactive)
+  (when (and evil-mode (eq (evil-visual-type) 'line))
+    (evil-digit-argument-or-evil-beginning-mof-line))
   (simpleclip-paste))
 
 ;; escape wrapper that should work anywhere

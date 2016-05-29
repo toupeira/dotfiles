@@ -1,5 +1,5 @@
 (setq dotfiles-org-packages
-      '(org org-alert))
+      '(org org-alert org-compat))
 
 (defun dotfiles-org/post-init-org ()
   (setq

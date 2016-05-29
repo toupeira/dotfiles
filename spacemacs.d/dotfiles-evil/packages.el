@@ -74,6 +74,13 @@
 
   ;; emulate C-u behaviour from Vim
   (define-key evil-insert-state-map (kbd "C-u") 'dotfiles/backward-kill-line)
+
+  ;; use C-\ for Emacs mode
+  (global-set-key (kbd "C-\\") 'evil-execute-in-emacs-state)
+
+  ;; use Emacs keys in ex mode
+  (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
+  (define-key evil-ex-completion-map (kbd "C-h") 'backward-delete-char)
 )
 
 (defun dotfiles-evil/post-init-helm ()
@@ -99,10 +106,12 @@
     (define-key evil-normal-state-map (kbd "C-v") 'dotfiles/paste)
     (define-key evil-insert-state-map (kbd "C-v") 'dotfiles/paste)
     (define-key evil-visual-state-map (kbd "C-v") 'dotfiles/paste)
+    (define-key evil-ex-completion-map (kbd "C-v") 'dotfiles/paste)
 
-    ;; use C-q for quoted insert
+    ;; use C-q for quoted insert / visual block mode
     (global-set-key (kbd "C-q") 'quoted-insert)
     (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
+    (define-key evil-normal-state-map (kbd "C-q") 'evil-visual-block)
 
     ;; copy with C-c
     (add-hook 'dotfiles/escape-anywhere-hook 'dotfiles/copy)

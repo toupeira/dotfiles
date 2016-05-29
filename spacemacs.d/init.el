@@ -79,6 +79,8 @@ values."
    ;; A list of packages and/or extensions that will not be install and loaded.
    dotspacemacs-excluded-packages
    '(
+     linum
+     linum-relative
      org-repo-todo
      smooth-scrolling
     )
@@ -337,7 +339,10 @@ you should place your code here."
   (spacemacs|define-custom-layout "org"
     :binding "o"
     :body
-    (find-file (concat org-directory "/todo.org")))
+    (find-file (concat org-directory "/todo.org"))
+    (split-window-below)
+    (find-file (concat org-directory "/work.org"))
+    )
 
   ;; enable flycheck for additional filetypes
   (spacemacs/add-flycheck-hook 'shell-mode-hook)
