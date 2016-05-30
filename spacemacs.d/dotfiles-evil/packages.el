@@ -2,7 +2,6 @@
       '(evil helm simpleclip))
 
 (defun dotfiles-evil/post-init-evil ()
-  ;; evil settings
   (setq
    evil-cross-lines t
    evil-escape-delay 0
@@ -35,29 +34,6 @@
   (define-key isearch-mode-map (kbd "C-n") 'isearch-ring-advance)
   (define-key isearch-mode-map (kbd "C-p") 'isearch-ring-retreat)
 
-  ;; always focus new splits
-  (spacemacs/set-leader-keys
-    "ws" 'split-window-below-and-focus
-    "wS" 'split-window-below
-    "wv" 'split-window-right-and-focus
-    "wV" 'split-window-right)
-
-  ;; fix bd behaviour
-  ;; https://github.com/syl20bnr/spacemacs/issues/5031
-  (spacemacs/set-leader-keys
-    "bd" 'evil-delete-buffer)
-
-  ;; use qq/qQ to keep server running
-  (when dotspacemacs-persistent-server
-    (spacemacs/set-leader-keys
-      "qq" 'dotfiles/prompt-frame-killer
-      "qQ" 'spacemacs/frame-killer))
-
-  ;; use qz/qZ to kill server
-  (spacemacs/set-leader-keys
-    "qz" 'spacemacs/prompt-kill-emacs
-    "qZ" 'spacemacs/kill-emacs)
-
   ;; yank linewise with Y
   (define-key evil-normal-state-map (kbd "Y") (kbd "yy"))
 
@@ -77,6 +53,7 @@
 
   ;; use C-\ for Emacs mode
   (global-set-key (kbd "C-\\") 'evil-execute-in-emacs-state)
+  (define-key evil-motion-state-map (read-kbd-macro evil-toggle-key) nil)
 
   ;; use Emacs keys in ex mode
   (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)

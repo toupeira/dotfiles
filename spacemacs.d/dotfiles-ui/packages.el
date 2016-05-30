@@ -1,6 +1,8 @@
 (setq dotfiles-ui-packages
  '(
    nlinum
+   (linum-relative :excluded t)
+   smooth-scrolling
 
    dracula-theme
    gotham-theme
@@ -29,3 +31,9 @@
       :documentation "Show the line numbers."
       :evil-leader "tn")
    )))
+
+(defun dotfiles-ui/post-init-smooth-scrolling ()
+  (setq
+   scroll-margin 5
+   mouse-wheel-scroll-amount '(1 ((shift) . 1))
+  ))

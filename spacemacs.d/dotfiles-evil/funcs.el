@@ -14,8 +14,10 @@
 (defun dotfiles/paste ()
   (interactive)
   (when (and evil-mode (eq (evil-visual-type) 'line))
-    (evil-digit-argument-or-evil-beginning-mof-line))
-  (simpleclip-paste))
+    (evil-digit-argument-or-evil-beginning-of-line))
+  (if evil-mode
+    (evil-paste-from-register ?+)
+    (simpleclip-paste)))
 
 ;; escape wrapper that should work anywhere
 ;; https://www.emacswiki.org/emacs/evil#toc16

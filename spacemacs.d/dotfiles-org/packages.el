@@ -1,5 +1,11 @@
 (setq dotfiles-org-packages
-      '(org org-alert org-compat))
+ '(
+   org
+   org-alert
+   org-indent
+   org-compat
+   (org-repo-todo :excluded t)
+  ))
 
 (defun dotfiles-org/post-init-org ()
   (setq
@@ -13,6 +19,7 @@
    org-refile-targets '((org-agenda-files :maxlevel . 1))
    org-startup-align-all-tables t
    org-startup-folded 'content
+   org-startup-indented t
    org-todo-keywords
    '((sequence "TODO" "STARTED" "|" "DONE"))
    org-todo-keyword-faces
@@ -48,13 +55,6 @@
       "* TODO %?\n%a")
     )
   )
-
-  (spacemacs/set-leader-keys
-    "Ct" (lambda () (interactive) (org-capture nil "t") (evil-append-line))
-    "Cw" (lambda () (interactive) (org-capture nil "w") (evil-append-line)))
-
-  (spacemacs/set-leader-keys-for-major-mode 'org-mode
-    "SPC" 'org-toggle-checkbox)
 
   (with-eval-after-load 'org
     (add-to-list 'org-modules 'org-habit))
