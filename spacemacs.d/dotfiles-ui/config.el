@@ -1,3 +1,6 @@
+;; interface settings
+(setq linum-format "%5d")
+
 ;; set default size of new windows
 (unless dotfiles/is-ocelot
   (add-to-list 'default-frame-alist '(width  . 120))
