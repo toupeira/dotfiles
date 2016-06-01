@@ -32,28 +32,22 @@ values."
    ;; of a list then all discovered layers will be installed.
    dotspacemacs-configuration-layers
    '(
-     ;; core
-     better-defaults
-     helm
-
-     ;; development
      auto-completion
+     better-defaults
+     colors
+     command-log
+     dash
+     games
+     git
+     github
+     helm
+     org
      syntax-checking
      version-control
-     github
-     git
 
-     ;; apps
-     org
-     dash
      mu4e
-     (ranger
-      :variables
-      ranger-show-dotfiles nil)
-     (shell
-      :variables
-      shell-default-height 30
-      shell-default-position 'bottom)
+     (ranger :variables ranger-show-dotfiles nil)
+     (shell :variables shell-default-height 30 shell-default-position 'bottom)
 
      ;; languages
      elixir
@@ -68,6 +62,7 @@ values."
      php
      python
      ruby
+     ruby-on-rails
      shell-scripts
      vimscript
      yaml
@@ -84,7 +79,7 @@ values."
    dotspacemacs-additional-packages
    '(
      angular-mode
-   )
+    )
    ;; A list of packages that will not be install and loaded.
    dotspacemacs-excluded-packages '()
    ;; If non-nil spacemacs will delete any orphan packages, i.e. packages that
@@ -328,8 +323,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
    powerline-height (if dotfiles/is-ocelot 28 16)
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
-  )
-  )
+  ))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -361,9 +355,9 @@ you should place your code here."
   ;; auto-open error list
   (defun dotfiles/auto-list-errors ()
     (if flycheck-current-errors
-      (flycheck-list-errors)
+        (flycheck-list-errors)
       (-if-let (window (flycheck-get-error-list-window))
-        (quit-window nil window))))
+          (quit-window nil window))))
   (add-hook 'flycheck-after-syntax-check-hook 'dotfiles/auto-list-errors)
 
   ;; for some reason this doesn't get applied with the theming-modifications layer
