@@ -79,6 +79,14 @@ values."
    dotspacemacs-additional-packages
    '(
      angular-mode
+
+     dracula-theme
+     gotham-theme
+     leuven-theme
+     moe-theme
+     molokai-theme
+     monokai-theme
+     subatomic-theme
     )
    ;; A list of packages that will not be install and loaded.
    dotspacemacs-excluded-packages '()
@@ -136,13 +144,7 @@ values."
    ;; List of themes, the first of the list is loaded when spacemacs starts.
    ;; Press <SPC> T n to cycle to the next theme in the list (works great
    ;; with 2 themes variants, one dark and one light)
-   dotspacemacs-themes '(monokai
-                         spacemacs-dark
-                         spacemacs-light
-                         solarized-light
-                         solarized-dark
-                         leuven
-                         zenburn)
+   dotspacemacs-themes '(monokai leuven)
    ;; If non nil the cursor color matches the state color in GUI Emacs.
    dotspacemacs-colorize-cursor-according-to-state t
    ;; Default font. `powerline-scale' allows to quickly tweak the mode-line
