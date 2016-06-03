@@ -2,7 +2,6 @@
  '(
    org
    org-indent
-   org-gnome
    (org-repo-todo :excluded t)
   ))
 
@@ -104,18 +103,5 @@
      (lambda ()
        (call-process "hamster" nil nil nil "stop")
        ))
-  )
-)
-
-(when dotfiles/is-ocelot
-  (defun dotfiles-org/init-org-gnome ()
-    (use-package org-gnome
-      :init
-      (setq org-gnome-notify-appointments t
-            org-gnome-integrate-with-calendar t
-            org-gnome-integrate-with-empathy nil
-            org-gnome-appointment-icon "/usr/share/icons/gnome/scalable/status/appointment-soon-symbolic.svg")
-      :config
-      (org-gnome-turn-on))
   )
 )
