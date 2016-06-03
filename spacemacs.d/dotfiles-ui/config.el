@@ -12,15 +12,21 @@
 (when dotfiles/is-gui
   (defun spacemacs//frame-title-format ()
     "Return frame title with current project name, where applicable."
-    (let ((file buffer-file-name))
-      (concat "emacs: "
-        (cond
-        ((eq nil file) "%b")
-        ((and (bound-and-true-p projectile-mode)
-              (projectile-project-p))
-          (concat (substring file (length (projectile-project-root)))
-                  (format " [%s]" (projectile-project-name))))
-        (t (abbreviate-file-name file))))))
+    (let ((file (buffer-file-name)))
+      (cond
+       ((eq nil file) "%b")
+       ((and (bound-and-true-p projectile-mode)
+             (projectile-project-p))
+        (format "%s [%s:%s]"
+                (file-name-nondirectory file)
+                (projectile-project-name)
+                (substring (file-name-directory file) (length (projectile-project-root)))
+                ))
+       (t (format "%s [%s]"
+                  (file-name-nondirectory file)
+                  (file-name-directory file)
+                  ))
+        )))
 
   (setq frame-title-format '((:eval (spacemacs//frame-title-format))))
 )
