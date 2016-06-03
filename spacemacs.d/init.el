@@ -190,7 +190,7 @@ values."
    dotspacemacs-display-default-layout nil
    ;; If non nil then the last auto saved layouts are resume automatically upon
    ;; start. (default nil)
-   dotspacemacs-auto-resume-layouts nil
+   dotspacemacs-auto-resume-layouts t
    ;; Size (in MB) above which spacemacs will prompt to open the large file
    ;; literally to avoid performance issues. Opening a file literally means that
    ;; no major mode or minor modes are active. (default is 1)
@@ -334,22 +334,6 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-
-  ;; setup custom layouts
-  (setq spacemacs--custom-layout-alist ())
-
-  (spacemacs|define-custom-layout "dotfiles"
-    :binding "d"
-    :body
-    (spacemacs/find-dotfile))
-
-  (spacemacs|define-custom-layout "org"
-    :binding "o"
-    :body
-    (find-file (concat org-directory "/todo.org"))
-    (split-window-below)
-    (find-file (concat org-directory "/work.org"))
-    )
 
   ;; enable flycheck for additional filetypes
   (spacemacs/add-flycheck-hook 'shell-mode-hook)

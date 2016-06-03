@@ -62,6 +62,10 @@
 
 (defun dotfiles-evil/post-init-helm ()
   (with-eval-after-load 'helm
+    ;; Use C-f/b to scroll
+    (define-key helm-map (kbd "C-f") 'helm-next-page)
+    (define-key helm-map (kbd "C-b") 'helm-previous-page)
+
     ;; use C-w to delete words instead of yanking text at point
     (define-key helm-map [remap helm-yank-text-at-point] 'backward-kill-word)
 
