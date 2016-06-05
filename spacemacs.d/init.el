@@ -184,7 +184,7 @@ values."
    ;; (default nil)
    dotspacemacs-ex-substitute-global nil
    ;; Name of the default layout (default "Default")
-   dotspacemacs-default-layout-name "Default"
+   dotspacemacs-default-layout-name "default"
    ;; If non nil the default layout name is displayed in the mode-line.
    ;; (default nil)
    dotspacemacs-display-default-layout nil
@@ -335,20 +335,36 @@ This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
 
-  ;; automatically use project layers
+  ;; remove default custom layouts
+  (setq spacemacs--custom-layout-alist ())
+
+  ;; automatically use project layouts
   (def-auto-persp "projectile"
-    :hooks (projectile-mode-hook)
+    :hooks (find-file-hook)
     :predicate (lambda (buffer)
                  (and (not (eq nil (buffer-file-name buffer)))
                       (bound-and-true-p projectile-mode)
                       (projectile-project-p)
                       (projectile-project-buffer-p buffer (projectile-project-root))))
     :on-match (lambda (perspective buffer after-match hook args)
-                  (persp-switch (projectile-project-root))))
+                (if (string-prefix-p "/etc/dotfiles/" (file-truename (buffer-file-name buffer)))
+                    (persp-switch "/etc/dotfiles/")
+                  (persp-switch (abbreviate-file-name (projectile-project-root))))))
 
   ;; always use dotfiles layer for init.el
   (advice-add 'spacemacs/find-dotfile :before
               (lambda () (persp-switch "/etc/dotfiles/")))
+
+  ;; create default layouts
+  (add-hook 'persp-mode-hook 'dotfiles/startup)
+  (defun dotfiles/startup ()
+    (remove-hook 'persp-mode-hook 'dotfiles/startup)
+    (spacemacs/find-dotfile)
+    (persp-switch (abbreviate-file-name (file-truename "~/org/")))
+    (find-file (concat org-directory "/work.org"))
+    (split-window-below)
+    (find-file (concat org-directory "/todo.org"))
+    (org-agenda-list))
 
   ;; enable flycheck for additional filetypes
   (spacemacs/add-flycheck-hook 'shell-mode-hook)

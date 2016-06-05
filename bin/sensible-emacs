@@ -19,6 +19,9 @@ case "$1" in
   *)
     if [ -S "/tmp/emacs$UID/server" ]; then
       emacs='emacsclient --create-frame'
+      if [ $# -eq 0 ]; then
+        emacs="$emacs --eval '(dotfiles/startup)'"
+      fi
     elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
       unset DISPLAY
     fi
