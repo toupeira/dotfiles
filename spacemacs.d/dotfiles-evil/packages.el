@@ -1,5 +1,8 @@
 (setq dotfiles-evil-packages
-      '(evil helm simpleclip))
+      '(evil
+        evil-lisp-state
+        helm
+        simpleclip))
 
 (defun dotfiles-evil/post-init-evil ()
   (setq
@@ -30,9 +33,11 @@
   (define-key evil-normal-state-map (kbd "C-k") 'evil-window-up)
   (define-key evil-normal-state-map (kbd "C-l") 'evil-window-right)
 
-  ;; add C-n/p in search prompt
+  ;; add C-n/p and Up/Down in search prompt
   (define-key isearch-mode-map (kbd "C-n") 'isearch-ring-advance)
   (define-key isearch-mode-map (kbd "C-p") 'isearch-ring-retreat)
+  (define-key isearch-mode-map (kbd "<down>") 'isearch-ring-advance)
+  (define-key isearch-mode-map (kbd "<up>") 'isearch-ring-retreat)
 
   ;; yank linewise with Y
   (define-key evil-normal-state-map (kbd "Y") (kbd "yy"))
@@ -60,6 +65,9 @@
   (define-key evil-ex-completion-map (kbd "C-h") 'backward-delete-char)
 )
 
+(defun dotfiles-evil/post-init-evil-lisp-state ()
+  (define-key evil-lisp-state-map (kbd "C-g") 'evil-lisp-state/quit))
+
 (defun dotfiles-evil/post-init-helm ()
   (with-eval-after-load 'helm
     ;; Use C-f/b to scroll
@@ -68,6 +76,7 @@
 
     ;; use C-w to delete words instead of yanking text at point
     (define-key helm-map [remap helm-yank-text-at-point] 'backward-kill-word)
+    (define-key company-active-map (kbd "C-w") 'backward-kill-word)
 
     ;; use M-d to kill buffers
     (define-key helm-buffer-map (kbd "M-d") 'helm-buffer-run-kill-buffers)

@@ -1,6 +1,7 @@
 #!/bin/bash
 
 emacs='/usr/bin/emacs --geometry 120x60'
+message="Starting new Emacs server..."
 
 case "$1" in
   -h|--help)
@@ -10,17 +11,22 @@ case "$1" in
     exec /usr/bin/emacs --version
     ;;
   -k|--kill)
+    message="Stopping Emacs server..."
     exec emacsclient -e '(spacemacs/kill-emacs)'
     ;;
   -ns|--no-server)
     shift
     export EMACS_SERVER="disabled"
+    message="Starting Emacs without server..."
     ;;
   *)
     if [ -S "/tmp/emacs$UID/server" ]; then
       emacs='emacsclient --create-frame'
       if [ $# -eq 0 ]; then
+        message="Opening new frame..."
         emacs="$emacs --eval '(dotfiles/startup)'"
+      else
+        message="Opening $*..."
       fi
     elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
       unset DISPLAY
@@ -29,6 +35,7 @@ case "$1" in
 esac
 
 if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|-t|--tty ]]; then
+  echo "$message"
   eval exec $emacs "$@" &>/dev/null &
 else
   eval exec $emacs "$@"

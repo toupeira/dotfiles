@@ -14,7 +14,7 @@
    org-log-reschedule nil
    org-log-redeadline nil
    org-cycle-separator-lines 1
-   org-refile-targets '((org-agenda-files :maxlevel . 1))
+   org-refile-targets '((dotfiles/org-refile-targets :maxlevel . 2))
    org-refile-use-outline-path 'file
    org-refile-allow-creating-parent-nodes t
    org-outline-path-complete-in-steps nil
@@ -34,6 +34,7 @@
    org-agenda-buffer-name "*agenda*"
    org-agenda-window-setup 'only-window
    org-agenda-include-diary nil
+   org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5)
 
    org-agenda-custom-commands
    '(
@@ -42,9 +43,7 @@
       ((org-agenda-tag-filter-preset '("-work"))))
      ("w" "Work context"
       ((agenda ""))
-      ((org-agenda-tag-filter-preset '("+work"))
-       (org-agenda-start-with-clockreport-mode t)
-       (org-agenda-clockreport-parameter-plist '(:link t :maxlevel 1))))
+      ((org-agenda-tag-filter-preset '("+work"))))
      ("g" "GTD workflow"
       ((todo "STARTED")
        (todo "TODO")))
@@ -75,15 +74,20 @@
     (define-key org-agenda-mode-map (kbd "C-k") 'evil-window-up)
     (define-key org-agenda-mode-map (kbd "C-l") 'evil-window-right)
 
-    (define-key org-agenda-mode-map (kbd "d") 'org-agenda-deadline)
-    (define-key org-agenda-mode-map (kbd "s") 'org-agenda-schedule)
-    (define-key org-agenda-mode-map (kbd "w") 'org-save-all-org-buffers)
-
     (define-key org-agenda-mode-map (kbd "D") 'org-agenda-day-view)
     (define-key org-agenda-mode-map (kbd "W") 'org-agenda-week-view)
     (define-key org-agenda-mode-map (kbd "M") 'org-agenda-month-view)
     (define-key org-agenda-mode-map (kbd "Y") 'org-agenda-year-view)
+
+    (define-key org-agenda-mode-map (kbd "w") 'org-save-all-org-buffers)
   )
+
+  (add-hook 'org-capture-mode-hook 'evil-insert-state)
+  (add-hook 'org-clock-in-hook 'dotfiles/org-start-task)
+
+  (when (executable-find "hamster")
+    (add-hook 'org-clock-in-hook 'dotfiles/org-start-hamster-task)
+    (add-hook 'org-clock-out-hook 'dotfiles/org-stop-hamster-task))
 
   ;; keep headlines when archiving tasks
   ;; http://orgmode.org/worg/org-hacks.html
@@ -97,36 +101,5 @@
                          (car (org-get-outline-path)))
                org-archive-location)))
         ad-do-it))
-  )
-
-  (with-eval-after-load 'org-capture
-    (add-hook 'org-capture-mode-hook 'evil-insert-state)
-    (define-key org-capture-mode-map [remap evil-save-and-close] 'org-capture-finalize)
-    (define-key org-capture-mode-map [remap evil-save-modified-and-close] 'org-capture-finalize)
-    (define-key org-capture-mode-map [remap evil-quit] 'org-capture-kill)
-  )
-
-  (add-hook
-   'org-clock-in-hook
-   (lambda ()
-     (org-todo "STARTED")
-     ))
-
-  (when (executable-find "hamster")
-    (add-hook
-     'org-clock-in-hook
-     (lambda ()
-       (let* ((file (file-name-base (buffer-file-name (marker-buffer org-clock-marker))))
-              (section (org-find-top-headline org-clock-marker))
-              (task org-clock-current-task)
-              (description (concat file ": " section " @" section ", " task)))
-         (call-process "hamster" nil nil nil "start" description)
-         )))
-
-    (add-hook
-     'org-clock-out-hook
-     (lambda ()
-       (call-process "hamster" nil nil nil "stop")
-       ))
   )
 )

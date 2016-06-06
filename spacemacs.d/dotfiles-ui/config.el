@@ -7,30 +7,6 @@
   (add-to-list 'default-frame-alist '(height . 60))
 )
 
-;; show file and project in title
-;; https://github.com/syl20bnr/spacemacs/pull/5924
-(when dotfiles/is-gui
-  (defun spacemacs//frame-title-format ()
-    "Return frame title with current project name, where applicable."
-    (let ((file (buffer-file-name)))
-      (cond
-       ((eq nil file) "%b")
-       ((and (bound-and-true-p projectile-mode)
-             (projectile-project-p))
-        (format "%s [%s:%s]"
-                (file-name-nondirectory file)
-                (projectile-project-name)
-                (substring (file-name-directory file) (length (projectile-project-root)))
-                ))
-       (t (format "%s [%s]"
-                  (file-name-nondirectory file)
-                  (file-name-directory file)
-                  ))
-        )))
-
-  (setq frame-title-format '((:eval (spacemacs//frame-title-format))))
-)
-
 ;; customize theme
 (setq theming-modifications
  '((monokai

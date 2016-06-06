@@ -216,7 +216,7 @@ values."
    dotspacemacs-enable-paste-transient-state t
    ;; Which-key delay in seconds. The which-key buffer is the popup listing
    ;; the commands bound to the current keystroke sequence. (default 0.4)
-   dotspacemacs-which-key-delay 0.4
+   dotspacemacs-which-key-delay 0.6
    ;; Which-key frame position. Possible values are `right', `bottom' and
    ;; `right-then-bottom'. right-then-bottom tries to display the frame to the
    ;; right; if there is insufficient space it displays it at the bottom.
@@ -340,32 +340,45 @@ you should place your code here."
   (setq spacemacs--custom-layout-alist ())
 
   ;; automatically use project layouts
-  (def-auto-persp "projectile"
-    :hooks (find-file-hook)
-    :predicate (lambda (buffer)
-                 (and (not (eq nil (buffer-file-name buffer)))
-                      (bound-and-true-p projectile-mode)
-                      (projectile-project-p)
-                      (projectile-project-buffer-p buffer (projectile-project-root))))
-    :on-match (lambda (perspective buffer after-match hook args)
-                (if (string-prefix-p "/etc/dotfiles/" (file-truename (buffer-file-name buffer)))
-                    (persp-switch "/etc/dotfiles/")
-                  (persp-switch (abbreviate-file-name (projectile-project-root))))))
+  (defun dotfiles/projectile-layout (&rest args)
+    (when (projectile-project-p)
+      (let* ((buffer (current-buffer))
+             (old-persp (get-current-persp))
+             (root (if (string-prefix-p "/etc/dotfiles/" (file-truename (buffer-file-name buffer)))
+                       "/etc/dotfiles/"
+                     (projectile-project-root)))
+             (new-persp (abbreviate-file-name root)))
+        (persp-switch new-persp)
+        (persp-add-buffer buffer (get-current-persp) nil)
+        (when (and old-persp (not (string= new-persp (persp-name old-persp))))
+          (persp-remove-buffer buffer old-persp)))))
 
-  ;; always use dotfiles layer for init.el
-  (advice-add 'spacemacs/find-dotfile :before
-              (lambda () (persp-switch "/etc/dotfiles/")))
+  (advice-add 'after-find-file :after 'dotfiles/projectile-layout)
+
+  ;; always use default layout for home screen
+  (advice-add
+   'spacemacs/home :before
+   (lambda () (persp-switch dotspacemacs-default-layout-name)))
+
+  ;; always use dotfiles layout for init.el
+  (advice-add
+   'spacemacs/find-dotfile :before
+   (lambda () (persp-switch "/etc/dotfiles/")))
 
   ;; create default layouts
   (add-hook 'persp-mode-hook 'dotfiles/startup)
   (defun dotfiles/startup ()
     (remove-hook 'persp-mode-hook 'dotfiles/startup)
     (spacemacs/find-dotfile)
-    (persp-switch (abbreviate-file-name (file-truename "~/org/")))
-    (find-file (concat org-directory "/work.org"))
-    (split-window-below)
-    (find-file (concat org-directory "/todo.org"))
-    (org-agenda-list))
+
+    (persp-switch "~/Dropbox/org/")
+    (if dotfiles/is-ocelot
+        (progn
+          (find-file (concat org-directory "/work.org"))
+          (org-agenda nil "w"))
+      (progn
+        (find-file (concat org-directory "/todo.org"))
+        (org-agenda-list))))
 
   ;; enable flycheck for additional filetypes
   (spacemacs/add-flycheck-hook 'shell-mode-hook)
@@ -382,6 +395,24 @@ you should place your code here."
   (set-face-attribute
    'evil-search-highlight-persist-highlight-face
    nil :inherit 'lazy-highlight :background nil :foreground nil)
+
+  ;; fix SPC TAB with perspectives
+  ;; https://github.com/syl20bnr/spacemacs/issues/5129
+  (defun dotfiles/alternate-buffer ()
+    (interactive)
+    (let* ((current (current-buffer))
+           (other (if (evil-alternate-buffer)
+                      (car (evil-alternate-buffer))
+                    (other-buffer (current-buffer) t)))
+           (other (if (persp-contain-buffer-p other)
+                      other
+                    (car (delq current (persp-buffer-list))))))
+      (if other
+          (switch-to-buffer other)
+        (spacemacs/switch-to-scratch-buffer))))
+
+  (spacemacs/set-leader-keys
+    "TAB"  'dotfiles/alternate-buffer)
   )
 
 ;; Do not write anything past this comment. This is where Emacs will

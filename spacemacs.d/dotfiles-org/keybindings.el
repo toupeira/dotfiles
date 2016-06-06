@@ -3,4 +3,4 @@
   "Cw" (lambda () (interactive) (org-capture nil "w") (evil-append-line)))
 
 (spacemacs/set-leader-keys-for-major-mode 'org-mode
-  "SPC" 'org-toggle-checkbox)
+  "u" 'org-update-all-dblocks)

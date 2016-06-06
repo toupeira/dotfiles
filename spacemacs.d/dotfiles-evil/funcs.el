@@ -36,7 +36,11 @@
 ;; show buffer name
 (defun dotfiles/identify-buffer ()
   (interactive)
-  (message "%s" (or (buffer-file-name) (buffer-name))))
+  (message
+   (concat
+    (or (buffer-file-name) (buffer-name))
+    (or (and (projectile-project-p) (format " [%s]" (projectile-project-name))) "")
+    )))
 
 ;; kill to beginning of line, as in Vim
 ;; TODO: try deleting only newly entered characters first
