@@ -1,8 +1,3 @@
-;; always delete buffers
-;; https://github.com/syl20bnr/spacemacs/issues/4929
-(spacemacs/set-leader-keys
-  "bd" (lambda () (interactive) (kill-buffer (current-buffer))))
-
 ;; always focus new splits
 (spacemacs/set-leader-keys
   "ws" 'split-window-below-and-focus
