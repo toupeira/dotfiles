@@ -22,9 +22,10 @@
    org-startup-folded 'content
    org-startup-indented t
    org-todo-keywords
-   '((sequence "TODO" "STARTED" "|" "DONE"))
+   '((sequence "TODO" "NEXT" "STARTED" "|" "DONE"))
    org-todo-keyword-faces
-   '(("STARTED" . "#AE81FF")
+   '(("NEXT" . "#FD971F")
+     ("STARTED" . "#AE81FF")
      ("DONE" . org-special-keyword))
    org-tag-persistent-alist
    '(("work"   . ?w)
@@ -44,9 +45,20 @@
      ("w" "Work context"
       ((agenda ""))
       ((org-agenda-tag-filter-preset '("+work"))))
-     ("g" "GTD workflow"
+     ("gg" "GTD over all contexts"
       ((todo "STARTED")
+       (todo "NEXT")
        (todo "TODO")))
+     ("gh" "GTD over home context"
+      ((todo "STARTED")
+       (todo "NEXT")
+       (todo "TODO"))
+      ((org-agenda-tag-filter-preset '("-work"))))
+     ("gw" "GTD over work context"
+      ((todo "STARTED")
+       (todo "NEXT")
+       (todo "TODO"))
+      ((org-agenda-tag-filter-preset '("+work"))))
     )
 
    org-clock-history-length 25
@@ -98,7 +110,7 @@
                                  (> (org-outline-level) 1))
                  (concat (car (split-string org-archive-location "::"))
                          "::* "
-                         (car (org-get-outline-path)))
+                         (s-join " - " (org-get-outline-path)))
                org-archive-location)))
         ad-do-it))
   )

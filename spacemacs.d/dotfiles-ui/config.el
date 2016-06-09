@@ -38,6 +38,10 @@
 
     ;; match highlighting
     (sp-show-pair-match-face :background "#404036" :foreground nil :inverse-video nil :bold t)
+    (sp-pair-overlay-face :background nil)
+
+    ;; eval highlighting
+    (eval-sexp-fu-flash :inherit 'highlight :background nil :foreground nil)
 
     ;; comments
     (font-lock-comment-face :foreground "#99937A")

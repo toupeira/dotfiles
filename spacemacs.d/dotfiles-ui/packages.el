@@ -1,36 +1,51 @@
 (setq dotfiles-ui-packages
  '(
+   flycheck
+   persp-mode
    projectile
    smooth-scrolling
   ))
 
+(defun dotfiles-ui/post-init-persp-mode ()
+  (advice-add 'find-file :after 'dotfiles/switch-to-project-layout)
+  ;; (def-auto-persp "projectile"
+  ;;   :parameters '((dont-save-to-file . t))
+  ;;   :get-name-expr
+  ;;   (lambda ()
+  ;;     (if (string-prefix-p "/etc/dotfiles/" (file-truename (buffer-file-name buffer)))
+  ;;         "/etc/dotfiles/"
+  ;;       (projectile-project-root)))
+  ;;   :predicate
+  ;;   (lambda (foo)
+  ;;     (message "%s" foo)
+  ;;     (projectile-project-p)))
+
+  ;; always use default layout for home screen
+  (advice-add
+   'spacemacs/home :before
+   (lambda () (persp-switch dotspacemacs-default-layout-name)))
+
+  ;; always use dotfiles layout for init.el
+  (advice-add
+   'spacemacs/find-dotfile :before
+   (lambda () (persp-switch "/etc/dotfiles/")))
+
+  ;; create default layouts
+  (add-hook 'persp-mode-hook 'dotfiles/startup))
+
+(defun dotfiles-ui/post-init-flycheck ()
+  (setq flycheck-check-syntax-automatically '(mode-enabled save))
+
+  (spacemacs/add-flycheck-hook 'lisp-mode-hook)
+  (spacemacs/add-flycheck-hook 'shell-mode-hook)
+
+  (add-hook 'flycheck-after-syntax-check-hook 'dotfiles/auto-list-errors)
+  (advice-add 'flycheck-error-list-refresh :after 'dotfiles/auto-resize-errors))
+
+(defun dotfiles-ui/post-init-projectile ()
+  (setq frame-title-format '((:eval (dotfiles/frame-title-format)))))
+
 (defun dotfiles-ui/post-init-smooth-scrolling ()
   (setq
    scroll-margin 5
-   mouse-wheel-scroll-amount '(1 ((shift) . 1))
-  ))
-
-;; show file and project in title
-;; https://github.com/syl20bnr/spacemacs/pull/5924
-(when dotfiles/is-gui
-  (defun spacemacs//frame-title-format ()
-    "Return frame title with current project name and path."
-    (let* ((file (buffer-file-name))
-           (path (if file (file-truename file) ""))
-           (name (if file (file-name-nondirectory path) (buffer-name)))
-           (directory (if file (s-chop-suffix "/" (file-name-directory path)) ""))
-
-           (project (projectile-project-p))
-           (directory (if (and project file)
-                          (file-relative-name directory (projectile-project-root))
-                        (abbreviate-file-name directory)))
-           (directory (if (string= "." directory) "" directory)))
-      (format "%s [%s%s%s]"
-              name
-              (if project (projectile-project-name) dotspacemacs-default-layout-name)
-              (if (not (string= "" directory)) ":" "")
-              directory)))
-
-  (defun dotfiles-ui/post-init-projectile ()
-    (setq frame-title-format '((:eval (spacemacs//frame-title-format)))))
-)
+   mouse-wheel-scroll-amount '(1 ((shift) . 1))))

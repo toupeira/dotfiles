@@ -320,7 +320,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
 
    ;; package settings
    exec-path-from-shell-check-startup-files nil
-   flycheck-check-syntax-automatically '(mode-enabled save)
    magit-repository-directories '("~/src")
    paradox-github-token t
    powerline-height (if dotfiles/is-ocelot 28 16)
@@ -335,61 +334,6 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
-
-  ;; remove default custom layouts
-  (setq spacemacs--custom-layout-alist ())
-
-  ;; automatically use project layouts
-  (defun dotfiles/projectile-layout (&rest args)
-    (when (projectile-project-p)
-      (let* ((buffer (current-buffer))
-             (old-persp (get-current-persp))
-             (root (if (string-prefix-p "/etc/dotfiles/" (file-truename (buffer-file-name buffer)))
-                       "/etc/dotfiles/"
-                     (projectile-project-root)))
-             (new-persp (abbreviate-file-name root)))
-        (persp-switch new-persp)
-        (persp-add-buffer buffer (get-current-persp) nil)
-        (when (and old-persp (not (string= new-persp (persp-name old-persp))))
-          (persp-remove-buffer buffer old-persp)))))
-
-  (advice-add 'after-find-file :after 'dotfiles/projectile-layout)
-
-  ;; always use default layout for home screen
-  (advice-add
-   'spacemacs/home :before
-   (lambda () (persp-switch dotspacemacs-default-layout-name)))
-
-  ;; always use dotfiles layout for init.el
-  (advice-add
-   'spacemacs/find-dotfile :before
-   (lambda () (persp-switch "/etc/dotfiles/")))
-
-  ;; create default layouts
-  (add-hook 'persp-mode-hook 'dotfiles/startup)
-  (defun dotfiles/startup ()
-    (remove-hook 'persp-mode-hook 'dotfiles/startup)
-    (spacemacs/find-dotfile)
-
-    (persp-switch "~/Dropbox/org/")
-    (if dotfiles/is-ocelot
-        (progn
-          (find-file (concat org-directory "/work.org"))
-          (org-agenda nil "w"))
-      (progn
-        (find-file (concat org-directory "/todo.org"))
-        (org-agenda-list))))
-
-  ;; enable flycheck for additional filetypes
-  (spacemacs/add-flycheck-hook 'shell-mode-hook)
-
-  ;; auto-open error list
-  (defun dotfiles/auto-list-errors ()
-    (if flycheck-current-errors
-        (flycheck-list-errors)
-      (-if-let (window (flycheck-get-error-list-window))
-          (quit-window nil window))))
-  (add-hook 'flycheck-after-syntax-check-hook 'dotfiles/auto-list-errors)
 
   ;; for some reason this doesn't get applied with the theming-modifications layer
   (set-face-attribute
