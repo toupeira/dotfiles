@@ -247,3 +247,21 @@ function systemctl {
 
   command $command "${args[@]}"
 }
+
+# Open multiple SSH sessions in tmux panes
+function ssh.mux {
+  if [ $# -eq 0 ]; then
+    echo "Usage: ssh.mux HOST.."
+    return 1
+  fi
+
+  local first_host="$1"
+  shift
+
+  for host in $( echo "$@" | tr " " "\n" | tac ); do
+    mux -b -d ssh "$host"
+  done
+
+  tmux select-layout even-vertical
+  ssh "$first_host"
+}
