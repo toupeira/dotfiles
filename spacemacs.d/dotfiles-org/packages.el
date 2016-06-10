@@ -9,6 +9,7 @@
   (setq
    org-directory "~/org"
    org-enforce-todo-dependencies t
+   org-fontify-done-headline t
    org-log-into-drawer t
    org-log-refile nil
    org-log-reschedule nil
@@ -26,7 +27,7 @@
    org-todo-keyword-faces
    '(("NEXT" . "#FD971F")
      ("STARTED" . "#AE81FF")
-     ("DONE" . org-special-keyword))
+     ("DONE" . org-done))
    org-tag-persistent-alist
    '(("work"   . ?w)
      ("events" . ?e))
@@ -44,7 +45,8 @@
       ((org-agenda-tag-filter-preset '("-work"))))
      ("w" "Work context"
       ((agenda ""))
-      ((org-agenda-tag-filter-preset '("+work"))))
+      ((org-agenda-tag-filter-preset '("+work"))
+       (org-agenda-hide-tags-regexp "^work$")))
      ("gg" "GTD over all contexts"
       ((todo "STARTED")
        (todo "NEXT")

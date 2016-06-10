@@ -48,4 +48,8 @@
 (defun dotfiles-ui/post-init-smooth-scrolling ()
   (setq
    scroll-margin 5
-   mouse-wheel-scroll-amount '(1 ((shift) . 1))))
+   mouse-wheel-scroll-amount '(1 ((shift) . 1)))
+
+  ;; disable scroll margin for shell buffers
+  (add-hook 'term-mode-hook (lambda () (setq-local scroll-margin 0)))
+  (add-hook 'eshell-mode-hook (lambda () (setq-local scroll-margin 0))))

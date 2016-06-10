@@ -54,4 +54,7 @@
     ;; org-mode
     (org-agenda-clocking :background "#00364C")
     (org-agenda-calendar-event :inherit 'org-drawer :foreground nil)
+    (org-done :inherit 'org-special-keyword :foreground nil)
+    (org-headline-done :inherit 'org-done :foreground nil :strike-through t :bold nil)
+    (org-agenda-done :inherit 'org-headline-done :foreground nil :strike-through nil)
   )))

@@ -41,13 +41,13 @@ values."
      git
      github
      helm
-     org
-     syntax-checking
-     version-control
-
      mu4e
+     org
+     pdf-tools
      (ranger :variables ranger-show-dotfiles nil)
      (shell :variables shell-default-height 30 shell-default-position 'bottom)
+     syntax-checking
+     version-control
 
      ;; languages
      elixir
