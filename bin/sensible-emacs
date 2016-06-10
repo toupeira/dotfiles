@@ -1,7 +1,10 @@
 #!/bin/bash
 
+# work around https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=790098
+export GDK_SCALE=
+
 emacs='/usr/bin/emacs --geometry 120x60'
-message="Starting new Emacs server..."
+message="Starting new server..."
 
 case "$1" in
   -h|--help)
@@ -11,22 +14,20 @@ case "$1" in
     exec /usr/bin/emacs --version
     ;;
   -k|--kill)
-    message="Stopping Emacs server..."
+    message="Stopping server..."
     exec emacsclient -e '(spacemacs/kill-emacs)'
     ;;
   -ns|--no-server)
     shift
     export EMACS_SERVER="disabled"
-    message="Starting Emacs without server..."
+    message="Starting standalone session..."
     ;;
   *)
     if [ -S "/tmp/emacs$UID/server" ]; then
+      message="Opening new frame..."
       emacs='emacsclient --create-frame'
       if [ $# -eq 0 ]; then
-        message="Opening new frame..."
         emacs="$emacs --eval '(dotfiles/startup)'"
-      else
-        message="Opening $*..."
       fi
     elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
       unset DISPLAY
@@ -34,8 +35,9 @@ case "$1" in
     ;;
 esac
 
+echo -e "\e[1;30m[$( basename ${emacs%% *} )]\e[0m $message"
+
 if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|-t|--tty ]]; then
-  echo "$message"
   eval exec $emacs "$@" &>/dev/null &
 else
   eval exec $emacs "$@"
