@@ -84,7 +84,7 @@
   ca = commit -va
   amend = commit -v --amend
 
-  r = remote
+  r = remote -v
   rup = remote update
   shallow = clone --depth 1
 
