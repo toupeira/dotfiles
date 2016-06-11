@@ -21,6 +21,7 @@
 
     ;; visual selection
     (region :inherit nil :background "#005F87" :bold t)
+    (secondary-selection :inherit 'region :background nil)
 
     ;; cursorline
     (hl-line :background "#262620")

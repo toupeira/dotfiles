@@ -3,6 +3,10 @@
 # work around https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=790098
 export GDK_SCALE=
 
+function log {
+  echo -e "\e[1;30m[$( basename ${emacs%% *} )]\e[0m $1"
+}
+
 emacs='/usr/bin/emacs --geometry 120x60'
 message="Starting new server..."
 
@@ -14,7 +18,7 @@ case "$1" in
     exec /usr/bin/emacs --version
     ;;
   -k|--kill)
-    message="Stopping server..."
+    log "Stopping server..."
     exec emacsclient -e '(spacemacs/kill-emacs)'
     ;;
   -ns|--no-server)
@@ -35,7 +39,7 @@ case "$1" in
     ;;
 esac
 
-echo -e "\e[1;30m[$( basename ${emacs%% *} )]\e[0m $message"
+log "$message"
 
 if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|-t|--tty ]]; then
   eval exec $emacs "$@" &>/dev/null &

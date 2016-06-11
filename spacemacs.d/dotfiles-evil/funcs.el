@@ -10,6 +10,12 @@
   (when (and evil-mode (eq evil-state 'visual))
     (evil-yank evil-visual-beginning evil-visual-end (evil-visual-type) ?+)))
 
+;; cut to desktop clipboard
+(defun dotfiles/cut ()
+  (interactive)
+  (when (and evil-mode (eq evil-state 'visual))
+    (evil-delete evil-visual-beginning evil-visual-end (evil-visual-type) ?+)))
+
 ;; paste from desktop clipboard
 (defun dotfiles/paste ()
   (interactive)
@@ -18,6 +24,12 @@
   (if evil-mode
     (evil-paste-from-register ?+)
     (simpleclip-paste)))
+
+;; kill current buffer and delete its window
+(defun dotfiles/kill-buffer-and-window ()
+  (interactive)
+  (spacemacs/kill-this-buffer)
+  (delete-window))
 
 ;; escape wrapper that should work anywhere
 ;; https://www.emacswiki.org/emacs/evil#toc16
@@ -48,9 +60,8 @@
 (defun dotfiles/backward-kill-line ()
   (interactive)
   (let ((end (point)))
-    (evil-beginning-of-line)
-    (unless (looking-at "[[:space:]]*$")
-      (evil-first-non-blank))
+    (if (= (point) (progn (back-to-indentation) (point)))
+        (beginning-of-line))
     (delete-region (point) end)))
 
 ;; duplicate selected region

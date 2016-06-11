@@ -42,6 +42,11 @@
   ;; yank linewise with Y
   (define-key evil-normal-state-map (kbd "Y") (kbd "yy"))
 
+  ;; paste shortcuts
+  (define-key evil-insert-state-map (kbd "C-\"") (kbd "C-r \""))
+  (define-key evil-insert-state-map (kbd "C-*") (kbd "C-r *"))
+  (define-key evil-normal-state-map (kbd "C-*") (kbd "\" * P"))
+
   ;; duplicate region with D
   (define-key evil-visual-state-map (kbd "D") 'dotfiles/duplicate-region)
 
@@ -105,5 +110,8 @@
 
     ;; copy with C-c
     (add-hook 'dotfiles/escape-anywhere-hook 'dotfiles/copy)
+
+    ;; cut with C-x
+    (define-key evil-visual-state-map (kbd "C-x") 'dotfiles/cut)
   )
 )

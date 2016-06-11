@@ -7,7 +7,8 @@
 
 (defun dotfiles-org/post-init-org ()
   (setq
-   org-directory "~/org"
+   org-blank-before-new-entry '((heading . auto) (plain-list-item . nil))
+   org-directory (abbreviate-file-name (file-truename "~/org/"))
    org-enforce-todo-dependencies t
    org-fontify-done-headline t
    org-log-into-drawer t
@@ -38,6 +39,13 @@
    org-agenda-include-diary nil
    org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5)
 
+   org-clock-history-length 25
+   org-clock-in-resume t
+   org-clock-out-remove-zero-time-clocks t
+   org-clock-persist t
+  )
+
+  (setq
    org-agenda-custom-commands
    '(
      ("h" "Home context"
@@ -61,19 +69,19 @@
        (todo "NEXT")
        (todo "TODO"))
       ((org-agenda-tag-filter-preset '("+work"))))
-    )
+     ))
 
-   org-clock-history-length 25
-   org-clock-in-resume t
-   org-clock-out-remove-zero-time-clocks t
-   org-clock-persist t
-
+  (setq
    org-capture-templates
    '(
-     ("t" "Todo" entry (file+headline "todo.org" "Inbox")
-      "* TODO %?")
-     ("w" "Work" entry (file+headline "work.org" "Inbox")
-      "* TODO %?")
+     ("t" "Todo" entry (file+olp (concat org-directory "todo.org") "Inbox")
+      "* TODO %?" :empty-lines-after 2)
+     ("w" "Work" entry (file+olp (concat org-directory "work.org") "Inbox")
+      "* TODO %?\nCaptured: %U" :empty-lines-after 2)
+     ("e" "Emacs" checkitem (file+olp (concat org-directory "todo.org") "Projects" "Emacs" "Inbox")
+      "- [ ] %?")
+     ("s" "Someday" entry (file+olp (concat org-directory "someday.org") "Inbox")
+      "* %?" :empty-lines-after 2)
     )
   )
 
@@ -94,8 +102,16 @@
     (define-key org-agenda-mode-map (kbd "Y") 'org-agenda-year-view)
 
     (define-key org-agenda-mode-map (kbd "w") 'org-save-all-org-buffers)
+
+    (define-key org-agenda-mode-map (kbd "$") 'evil-end-of-line)
   )
 
+  (advice-add 'org-agenda-quit :before 'org-save-all-org-buffers)
+  (advice-add 'org-agenda-redo :before 'org-save-all-org-buffers)
+
+  (add-hook 'org-capture-mode-hook (lambda ()
+                                     (fit-window-to-buffer (selected-window) 5)
+                                     (shrink-window-if-larger-than-buffer)))
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
   (add-hook 'org-clock-in-hook 'dotfiles/org-start-task)
 

@@ -83,6 +83,8 @@
   ci = commit -v
   ca = commit -va
   amend = commit -v --amend
+  reword = commit -v --amend --only
+  extend = commit -v --amend --no-edit
 
   r = remote -v
   rup = remote update

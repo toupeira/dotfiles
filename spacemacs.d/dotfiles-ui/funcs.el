@@ -2,7 +2,7 @@
   (remove-hook 'persp-mode-hook 'dotfiles/startup)
   (spacemacs/find-dotfile)
 
-  (persp-switch "~/Dropbox/org/")
+  (persp-switch org-directory)
   (if dotfiles/is-ocelot
       (progn
         (find-file (concat org-directory "/work.org"))
@@ -15,15 +15,14 @@
   (when (projectile-project-p)
     (let* ((buffer (current-buffer))
            (old-persp (get-current-persp))
-           (root (if (string-prefix-p "/etc/dotfiles/" (file-truename (buffer-file-name buffer)))
-                     "/etc/dotfiles/"
+           (root (if (string-prefix-p dotfiles/directory (file-truename (buffer-file-name buffer)))
+                     dotfiles/directory
                    (projectile-project-root)))
            (new-persp (abbreviate-file-name root)))
+      (switch-to-buffer (other-buffer))
       (persp-switch new-persp)
-      (persp-add-buffer buffer (get-current-persp) nil)
+      (persp-add-buffer buffer)
       (when (and old-persp (not (string= new-persp (persp-name old-persp))))
-        (message (format "Removing buffer '%s' from layout '%s'"
-                         (buffer-name buffer) (persp-name old-persp)))
         (persp-remove-buffer buffer old-persp)))))
 
 ;; show file name, path and project in title

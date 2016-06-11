@@ -1,3 +1,5 @@
+autoconf
+automake
 build-essential
 elixir
 erlang-base

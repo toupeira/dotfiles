@@ -14,7 +14,7 @@
         (cond
          ((not level) nil)
          ((> level 2) (outline-up-heading (- level 2)))
-         (t (outline-up-heading (- level 1)))))
+         ((> level 1) (outline-up-heading (- level 1)))))
 
       (nth 4 (org-heading-components)))))
 

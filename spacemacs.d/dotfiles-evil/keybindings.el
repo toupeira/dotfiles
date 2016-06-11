@@ -3,7 +3,8 @@
   "ws" 'split-window-below-and-focus
   "wS" 'split-window-below
   "wv" 'split-window-right-and-focus
-  "wV" 'split-window-right)
+  "wV" 'split-window-right
+  "wx" 'dotfiles/kill-buffer-and-window)
 
 ;; use qq/qQ to keep server running
 (when dotspacemacs-persistent-server
