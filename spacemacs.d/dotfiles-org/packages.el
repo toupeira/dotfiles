@@ -85,36 +85,49 @@
     )
   )
 
+  ;; enable org-mode for additional extensions
+  (add-to-list 'auto-mode-alist '("\\.org_archive$" . org-mode))
+
   (with-eval-after-load 'org
     (add-to-list 'org-modules 'org-habit)
     (org-clock-persistence-insinuate))
 
   (with-eval-after-load 'org-agenda
+    ;; remap window switching keys
     (define-key org-agenda-mode-map (kbd "C-w") 'evil-window-map)
     (define-key org-agenda-mode-map (kbd "C-h") 'evil-window-left)
     (define-key org-agenda-mode-map (kbd "C-j") 'evil-window-down)
     (define-key org-agenda-mode-map (kbd "C-k") 'evil-window-up)
     (define-key org-agenda-mode-map (kbd "C-l") 'evil-window-right)
 
+    ;; use uppercase letters to switch period
     (define-key org-agenda-mode-map (kbd "D") 'org-agenda-day-view)
     (define-key org-agenda-mode-map (kbd "W") 'org-agenda-week-view)
     (define-key org-agenda-mode-map (kbd "M") 'org-agenda-month-view)
     (define-key org-agenda-mode-map (kbd "Y") 'org-agenda-year-view)
 
+    (define-key org-agenda-mode-map (kbd "d") 'org-agenda-deadline)
+    (define-key org-agenda-mode-map (kbd "s") 'org-agenda-schedule)
     (define-key org-agenda-mode-map (kbd "w") 'org-save-all-org-buffers)
 
+    ;; don't use $ for archiving
     (define-key org-agenda-mode-map (kbd "$") 'evil-end-of-line)
   )
 
+  ;; auto-save buffers in agenda
   (advice-add 'org-agenda-quit :before 'org-save-all-org-buffers)
   (advice-add 'org-agenda-redo :before 'org-save-all-org-buffers)
 
+  ;; shrink capture window and start in insert mode
   (add-hook 'org-capture-mode-hook (lambda ()
                                      (fit-window-to-buffer (selected-window) 5)
                                      (shrink-window-if-larger-than-buffer)))
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
+
+  ;; start clocked tasks
   (add-hook 'org-clock-in-hook 'dotfiles/org-start-task)
 
+  ;; start/stop clocked tasks in hamster
   (when (executable-find "hamster")
     (add-hook 'org-clock-in-hook 'dotfiles/org-start-hamster-task)
     (add-hook 'org-clock-out-hook 'dotfiles/org-stop-hamster-task))
