@@ -87,31 +87,29 @@
     (define-key helm-buffer-map (kbd "M-d") 'helm-buffer-run-kill-buffers)
   ))
 
-(when dotfiles/is-gui
-  (defun dotfiles-evil/init-simpleclip ()
-    ;; don't use desktop clipboard for kill ring
-    (use-package simpleclip
-      :config
-      (simpleclip-mode t))
-  )
+(defun dotfiles-evil/init-simpleclip ()
+  ;; don't use desktop clipboard for kill ring
+  (use-package simpleclip
+    :config
+    (simpleclip-mode t))
+)
 
-  (defun dotfiles-evil/post-init-simpleclip ()
-    ;; paste with C-v
-    (global-set-key (kbd "C-v") 'dotfiles/paste)
-    (define-key evil-normal-state-map (kbd "C-v") 'dotfiles/paste)
-    (define-key evil-insert-state-map (kbd "C-v") 'dotfiles/paste)
-    (define-key evil-visual-state-map (kbd "C-v") 'dotfiles/paste)
-    (define-key evil-ex-completion-map (kbd "C-v") 'dotfiles/paste)
+(defun dotfiles-evil/post-init-simpleclip ()
+  ;; paste with C-v
+  (global-set-key (kbd "C-v") 'dotfiles/paste)
+  (define-key evil-normal-state-map (kbd "C-v") 'dotfiles/paste)
+  (define-key evil-insert-state-map (kbd "C-v") 'dotfiles/paste)
+  (define-key evil-visual-state-map (kbd "C-v") 'dotfiles/paste)
+  (define-key evil-ex-completion-map (kbd "C-v") 'dotfiles/paste)
 
-    ;; use C-q for quoted insert / visual block mode
-    (global-set-key (kbd "C-q") 'quoted-insert)
-    (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
-    (define-key evil-normal-state-map (kbd "C-q") 'evil-visual-block)
+  ;; use C-q for quoted insert / visual block mode
+  (global-set-key (kbd "C-q") 'quoted-insert)
+  (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
+  (define-key evil-normal-state-map (kbd "C-q") 'evil-visual-block)
 
-    ;; copy with C-c
-    (add-hook 'dotfiles/escape-anywhere-hook 'dotfiles/copy)
+  ;; copy with C-c
+  (add-hook 'dotfiles/escape-anywhere-hook 'dotfiles/copy)
 
-    ;; cut with C-x
-    (define-key evil-visual-state-map (kbd "C-x") 'dotfiles/cut)
-  )
+  ;; cut with C-x
+  (define-key evil-visual-state-map (kbd "C-x") 'dotfiles/cut)
 )
