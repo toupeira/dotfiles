@@ -43,6 +43,10 @@
    org-clock-in-resume t
    org-clock-out-remove-zero-time-clocks t
    org-clock-persist t
+
+   calendar-week-start-day 1
+   calendar-day-name-array (locale-info 'days)
+   calendar-month-name-array (locale-info 'months)
   )
 
   (setq
@@ -84,6 +88,8 @@
       "* %?" :empty-lines-after 2)
     )
   )
+
+  (add-hook 'calendar-load-hook (lambda () (calendar-set-date-style 'european)))
 
   ;; enable org-mode for additional extensions
   (add-to-list 'auto-mode-alist '("\\.org_archive$" . org-mode))
