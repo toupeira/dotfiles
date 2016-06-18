@@ -7,7 +7,7 @@ function log {
   echo -e "\e[1;30m[$( basename ${emacs%% *} )]\e[0m $1"
 }
 
-emacs='/usr/bin/emacs --geometry 120x60'
+emacs='/usr/bin/emacs'
 message="Starting new server..."
 
 case "$1" in

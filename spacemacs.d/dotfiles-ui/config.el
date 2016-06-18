@@ -1,10 +1,6 @@
 ;; interface settings
 (setq linum-format "%5d")
 
-;; set default size of new windows
-(add-to-list 'default-frame-alist '(width  . 120))
-(add-to-list 'default-frame-alist '(height . 60))
-
 ;; customize theme
 (setq theming-modifications
  '((monokai
