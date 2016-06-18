@@ -25,12 +25,6 @@
     (evil-paste-from-register ?+)
     (simpleclip-paste)))
 
-;; kill current buffer and delete its window
-(defun dotfiles/kill-buffer-and-window ()
-  (interactive)
-  (spacemacs/kill-this-buffer)
-  (delete-window))
-
 ;; escape wrapper that should work anywhere
 ;; https://www.emacswiki.org/emacs/evil#toc16
 (defvar dotfiles/escape-anywhere-hook nil)
