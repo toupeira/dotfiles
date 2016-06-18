@@ -99,13 +99,6 @@
     (org-clock-persistence-insinuate))
 
   (with-eval-after-load 'org-agenda
-    ;; remap window switching keys
-    (define-key org-agenda-mode-map (kbd "C-w") 'evil-window-map)
-    (define-key org-agenda-mode-map (kbd "C-h") 'evil-window-left)
-    (define-key org-agenda-mode-map (kbd "C-j") 'evil-window-down)
-    (define-key org-agenda-mode-map (kbd "C-k") 'evil-window-up)
-    (define-key org-agenda-mode-map (kbd "C-l") 'evil-window-right)
-
     ;; use uppercase letters to switch period
     (define-key org-agenda-mode-map (kbd "D") 'org-agenda-day-view)
     (define-key org-agenda-mode-map (kbd "W") 'org-agenda-week-view)

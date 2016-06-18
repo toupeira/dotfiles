@@ -1,5 +1,6 @@
 (setq dotfiles-evil-packages
       '(evil
+        evil-evilified-state
         evil-lisp-state
         helm
         simpleclip))
@@ -69,6 +70,13 @@
   (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
   (define-key evil-ex-completion-map (kbd "C-h") 'backward-delete-char)
 )
+
+(defun dotfiles-evil/post-init-evil-evilified-state ()
+  (define-key evil-evilified-state-map-original (kbd "C-w") 'evil-window-map)
+  (define-key evil-evilified-state-map-original (kbd "C-h") 'evil-window-left)
+  (define-key evil-evilified-state-map-original (kbd "C-j") 'evil-window-down)
+  (define-key evil-evilified-state-map-original (kbd "C-k") 'evil-window-up)
+  (define-key evil-evilified-state-map-original (kbd "C-l") 'evil-window-right))
 
 (defun dotfiles-evil/post-init-evil-lisp-state ()
   (define-key evil-lisp-state-map (kbd "C-g") 'evil-lisp-state/quit))
