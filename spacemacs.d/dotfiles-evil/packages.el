@@ -2,6 +2,7 @@
       '(evil
         evil-evilified-state
         evil-lisp-state
+        ediff
         helm
         simpleclip))
 
@@ -66,7 +67,7 @@
   (global-set-key (kbd "C-\\") 'evil-execute-in-emacs-state)
   (define-key evil-motion-state-map (read-kbd-macro evil-toggle-key) nil)
 
-  ;; use Emacs keys in ex mode
+  ;; add readline keys in ex mode
   (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
   (define-key evil-ex-completion-map (kbd "C-h") 'backward-delete-char)
 )
@@ -80,6 +81,13 @@
 
 (defun dotfiles-evil/post-init-evil-lisp-state ()
   (define-key evil-lisp-state-map (kbd "C-g") 'evil-lisp-state/quit))
+
+(defun dotfiles-evil/post-init-ediff ()
+  (add-hook 'ediff-keymap-setup-hook
+    (lambda ()
+      (evil-define-key 'normal ediff-mode-map (kbd "C-j") 'evil-window-down)
+      (evil-define-key 'normal ediff-mode-map (kbd "C-k") 'evil-window-up)
+    )))
 
 (defun dotfiles-evil/post-init-helm ()
   (with-eval-after-load 'helm
