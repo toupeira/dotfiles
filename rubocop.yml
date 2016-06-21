@@ -138,10 +138,6 @@ Style/StringLiterals:
 
 Style/TrailingCommaInLiteral:
   Enabled: false
-  # EnforcedStyleForMultiline: comma
-  # SupportedStyles:
-  #   - comma
-  #   - no_comma
 
 Style/WhileUntilModifier:
   Enabled: false
