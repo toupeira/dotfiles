@@ -268,6 +268,7 @@
   autocmd vimrc FileType crontab setlocal nobackup nowritebackup
   autocmd vimrc FileType puppet setlocal commentstring=#%s
   autocmd vimrc FileType help setlocal nonumber norelativenumber
+  autocmd vimrc FileType org setlocal foldmethod=expr
 
   " Ruby syntax highlighting
   let g:ruby_operators = 1
