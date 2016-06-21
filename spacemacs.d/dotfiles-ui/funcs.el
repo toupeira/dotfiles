@@ -20,7 +20,7 @@
                    (projectile-project-root)))
            (new-persp (abbreviate-file-name root)))
       (switch-to-buffer (other-buffer))
-      (persp-switch new-persp)
+      (persp-frame-switch new-persp)
       (persp-add-buffer buffer)
       (when (and old-persp (not (string= new-persp (persp-name old-persp))))
         (persp-remove-buffer buffer old-persp)))))

@@ -1,6 +1,7 @@
 (spacemacs/set-leader-keys
   "oa" 'org-agenda-list
   "oo" 'org-agenda
+  "oj" 'org-clock-goto
   "oO" 'org-clock-out
   "o/" (lambda () (interactive)
          (let ((projectile-project-root org-directory))
@@ -12,6 +13,7 @@
 
   "Ct" (lambda () (interactive) (org-capture nil "t"))
   "Cw" (lambda () (interactive) (org-capture nil "w"))
+  "Cp" (lambda () (interactive) (org-capture nil "p"))
   "Cs" (lambda () (interactive) (org-capture nil "s"))
   "Ce" (lambda () (interactive) (org-capture nil "e")))
 
@@ -23,6 +25,7 @@
 
   "SPC C t" "org-capture todo"
   "SPC C w" "org-capture work"
+  "SPC C p" "org-capture project"
   "SPC C s" "org-capture someday"
   "SPC C e" "org-capture emacs"
   )

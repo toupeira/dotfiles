@@ -79,13 +79,23 @@
    org-capture-templates
    '(
      ("t" "Todo" entry (file+olp (concat org-directory "todo.org") "Inbox")
-      "* TODO %?" :empty-lines-after 2)
+      "* TODO %?"
+      :empty-lines-after 2)
+
      ("w" "Work" entry (file+olp (concat org-directory "work.org") "Inbox")
-      "* TODO %?\nCaptured: %U" :empty-lines-after 2)
+      "* TODO %?\nCaptured: %U"
+      :empty-lines-after 2)
+
+     ("p" "Project" entry (file+olp (concat org-directory "work.org") "Projects")
+      "* %^{category} - %^{title}\n:PROPERTIES:\n:CATEGORY: %\\1\n:END:"
+      :immediate-finish t :jump-to-captured t)
+
      ("e" "Emacs" checkitem (file+olp (concat org-directory "todo.org") "Projects" "Emacs" "Inbox")
       "- [ ] %?")
+
      ("s" "Someday" entry (file+olp (concat org-directory "someday.org") "Inbox")
-      "* %?" :empty-lines-after 2)
+      "* %?"
+      :empty-lines-after 2)
     )
   )
 
@@ -119,7 +129,7 @@
 
   ;; shrink capture window and start in insert mode
   (add-hook 'org-capture-mode-hook (lambda ()
-                                     (fit-window-to-buffer (selected-window) 5)
+                                     (fit-window-to-buffer (selected-window) 10)
                                      (shrink-window-if-larger-than-buffer)))
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
 

@@ -34,12 +34,14 @@
   ;;   ;;       (persp-remove-buffer buffer old-persp)))
   ;;   ;;   (persp-frame-switch persp-name)))
 
-  ;; always use default layout for home screen
+  ;; automatically use default layout for home screen
   (advice-add 'spacemacs/home :before
               (lambda () (persp-switch dotspacemacs-default-layout-name)))
 
-  ;; always use org layout for agenda views
+  ;; automatically use org layout
   (advice-add 'org-agenda-prepare-window :before
+              (lambda (&rest args) (persp-switch org-directory)))
+  (advice-add 'org-clock-goto :before
               (lambda (&rest args) (persp-switch org-directory)))
 
   ;; create default layouts

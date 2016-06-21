@@ -22,6 +22,10 @@
   ;; also clear search highlight on C-c
   (add-hook 'dotfiles/escape-anywhere-hook 'evil-search-highlight-persist-remove-all)
 
+  ;; remove bindings for C-n/p since we have the paste transient state
+  (define-key evil-normal-state-map "\C-n" nil)
+  (define-key evil-normal-state-map "\C-p" nil)
+
   ;; show file name with C-g
   (global-set-key (kbd "C-g") 'dotfiles/identify-buffer)
 
@@ -52,7 +56,7 @@
   ;; duplicate region with D
   (define-key evil-visual-state-map (kbd "D") 'dotfiles/duplicate-region)
 
-  ;; readline keys in insert mode
+  ;; readline keys in insert state
   (define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
   (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
 
@@ -63,11 +67,12 @@
   ;; emulate C-u behaviour from Vim
   (define-key evil-insert-state-map (kbd "C-u") 'dotfiles/backward-kill-line)
 
-  ;; use C-\ for Emacs mode
-  (global-set-key (kbd "C-\\") 'evil-execute-in-emacs-state)
+  ;; use C-\ for Emacs state
+  (global-set-key (kbd "C-\\") 'evil-emacs-state)
+  (define-key evil-emacs-state-map (kbd "C-\\") 'evil-exit-emacs-state)
   (define-key evil-motion-state-map (read-kbd-macro evil-toggle-key) nil)
 
-  ;; add readline keys in ex mode
+  ;; add readline keys in ex state
   (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
   (define-key evil-ex-completion-map (kbd "C-h") 'backward-delete-char)
 )
@@ -118,7 +123,7 @@
   (define-key evil-visual-state-map (kbd "C-v") 'dotfiles/paste)
   (define-key evil-ex-completion-map (kbd "C-v") 'dotfiles/paste)
 
-  ;; use C-q for quoted insert / visual block mode
+  ;; use C-q for quoted insert / visual block state
   (global-set-key (kbd "C-q") 'quoted-insert)
   (define-key evil-insert-state-map (kbd "C-q") 'quoted-insert)
   (define-key evil-normal-state-map (kbd "C-q") 'evil-visual-block)

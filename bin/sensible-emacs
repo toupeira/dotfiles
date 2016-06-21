@@ -10,6 +10,13 @@ function log {
 emacs='/usr/bin/emacs'
 message="Starting new server..."
 
+file_args=false
+term_args=false
+for arg in "$@"; do
+  [ "${arg:0:1}" != "-" ] && file_args=true && break
+done
+[[ "$*" =~ -nw|-t|--tty ]] && term_args=true
+
 case "$1" in
   -h|--help)
     exec /usr/bin/emacs --help
@@ -27,11 +34,16 @@ case "$1" in
     message="Starting standalone session..."
     ;;
   *)
-    if [ -S "/tmp/emacs$UID/server" ]; then
+    if pgrep -x emacs >/dev/null && [ -S "/tmp/emacs$UID/server" ]; then
       message="Opening new frame..."
       emacs='emacsclient --create-frame'
-      if [ $# -eq 0 ]; then
-        emacs="$emacs --eval '(dotfiles/startup)'"
+
+      if ! $file_args; then
+        if $term_args; then
+          emacs="$emacs --eval '(spacemacs/home)'"
+        else
+          emacs="$emacs --eval '(dotfiles/startup)'"
+        fi
       fi
     elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
       unset DISPLAY
@@ -39,9 +51,8 @@ case "$1" in
     ;;
 esac
 
-log "$message"
-
-if [ -n "$DISPLAY" ] && ! [[ "$*" =~ -nw|-t|--tty ]]; then
+if [ -n "$DISPLAY" ] && ! $term_args; then
+  log "$message"
   eval exec $emacs "$@" &>/dev/null &
 else
   eval exec $emacs "$@"

@@ -71,6 +71,7 @@ if has sensible-vim; then
 fi
 if has sensible-emacs; then
   alias emacs='sensible-emacs'
+  alias e='sensible-emacs -nw'
 fi
 
 alias ag='ag --smart-case'
