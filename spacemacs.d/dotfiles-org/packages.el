@@ -3,20 +3,26 @@
    org
    org-indent
    (org-repo-todo :excluded t)
+
+   org-agenda-property
   ))
 
 (defun dotfiles-org/post-init-org ()
   (setq
+   org-attach-directory "attachments/"
    org-blank-before-new-entry '((heading . auto) (plain-list-item . nil))
+   org-columns-default-format "%TODO %40ITEM %SCHEDULED %DEADLINE %CLOCKSUM"
    org-directory (abbreviate-file-name (file-truename "~/org/"))
+   org-download-method 'attach
    org-enforce-todo-dependencies t
    org-fontify-done-headline t
+   org-habit-show-done-always-green t
    org-log-into-drawer t
    org-log-refile nil
    org-log-reschedule nil
    org-log-redeadline nil
    org-cycle-separator-lines 1
-   org-refile-targets '((dotfiles/org-refile-targets :maxlevel . 2))
+   org-refile-targets '((dotfiles/org-refile-targets :maxlevel . 3))
    org-refile-use-outline-path 'file
    org-refile-allow-creating-parent-nodes t
    org-outline-path-complete-in-steps nil
@@ -24,78 +30,96 @@
    org-startup-folded 'content
    org-startup-indented t
    org-todo-keywords
-   '((sequence "TODO" "NEXT" "STARTED" "|" "DONE"))
+   '((sequence "TODO" "NEXT" "STARTED(!)" "|" "DONE")
+     (sequence "PENDING" "|" "DONE")
+     (sequence "MAYBE" "GOAL" "FOCUS" "|" "DONE" "ABANDONED(!)"))
    org-todo-keyword-faces
    '(("NEXT" . "#FD971F")
+     ("GOAL" . "#FD971F")
      ("STARTED" . "#AE81FF")
+     ("FOCUS" . "#AE81FF")
      ("DONE" . org-done))
    org-tag-persistent-alist
-   '(("work"   . ?w)
-     ("events" . ?e))
+   '(("work"   . ?w))
 
    org-agenda-files '("~/org")
    org-agenda-buffer-name "*agenda*"
    org-agenda-window-setup 'only-window
    org-agenda-include-diary nil
    org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5)
+   org-agenda-show-inherited-tags nil
 
    org-clock-history-length 25
    org-clock-in-resume t
    org-clock-out-remove-zero-time-clocks t
    org-clock-persist t
+   org-clock-clocktable-default-properties
+   '(:block today)
+   org-clocktable-defaults
+   '(:maxlevel 3 :scope file-with-archives :properties ("CATEGORY")
+     :indent t :link t :narrow 40!)
 
    calendar-week-start-day 1
    calendar-day-name-array (locale-info 'days)
    calendar-month-name-array (locale-info 'months)
   )
 
-  (setq
-   org-agenda-custom-commands
-   '(
-     ("h" "Home context"
-      ((agenda ""))
-      ((org-agenda-tag-filter-preset '("-work"))))
-     ("w" "Work context"
-      ((agenda ""))
-      ((org-agenda-tag-filter-preset '("+work"))
-       (org-agenda-hide-tags-regexp "^work$")))
-     ("gg" "GTD over all contexts"
-      ((todo "STARTED")
-       (todo "NEXT")
-       (todo "TODO")))
-     ("gh" "GTD over home context"
-      ((todo "STARTED")
-       (todo "NEXT")
-       (todo "TODO"))
-      ((org-agenda-tag-filter-preset '("-work"))))
-     ("gw" "GTD over work context"
-      ((todo "STARTED")
-       (todo "NEXT")
-       (todo "TODO"))
-      ((org-agenda-tag-filter-preset '("+work"))))
-     ))
+  (let* ((task-list-options
+          '((org-agenda-sorting-strategy '((todo timestamp-up category-keep)))
+            (org-agenda-property-list '("SCHEDULED" "DEADLINE" "CLOCKSUM"))
+            (org-agenda-tags-column -70)
+            (org-agenda-property-column 70)))
+         (task-list
+          `((todo "STARTED" ,(cons '(org-agenda-overriding-header "Started tasks:") task-list-options))
+            (todo "NEXT" ,(cons '(org-agenda-overriding-header "Next tasks:") task-list-options))
+            (tags-todo "+SCHEDULED={.+}|+DEADLINE={.+}/TODO"
+                       ,(cons '(org-agenda-overriding-header "Scheduled tasks:") task-list-options))
+            (tags-todo "-SCHEDULED={.+}-DEADLINE={.+}/TODO"
+                       ,(cons '(org-agenda-overriding-header "Unscheduled tasks:") task-list-options))))
+         (goal-list
+          `((todo "FOCUS" ,(cons '(org-agenda-overriding-header "Goals to focus on:") task-list-options))
+            (todo "GOAL"  ,(cons '(org-agenda-overriding-header "Other goals:") task-list-options))
+            (todo "MAYBE" ,(cons '(org-agenda-overriding-header "Other ideas:") task-list-options)))))
+    (setq
+     org-agenda-custom-commands
+     `(
+       ("h" "Agenda for home context"
+        ,(cons '(agenda "") (subseq task-list 0 2))
+        ((org-agenda-tag-filter-preset '("-work"))))
+       ("w" "Agenda for work context"
+        ,(cons '(agenda "") (subseq task-list 0 2))
+        ((org-agenda-tag-filter-preset '("+work"))))
+
+       ("H" "Review home tasks" ,task-list
+        ,(cons '(org-agenda-tag-filter-preset '("-work")) task-list-options))
+       ("W" "Review work tasks" ,task-list
+        ,(cons '(org-agenda-tag-filter-preset '("+work")) task-list-options))
+       ("G" "Review goals" ,goal-list)
+      )))
 
   (setq
    org-capture-templates
    '(
-     ("t" "Todo" entry (file+olp (concat org-directory "todo.org") "Inbox")
+     ("t" "Add todo entry" entry (file+olp (concat org-directory "todo.org") "Inbox")
       "* TODO %?"
       :empty-lines-after 2)
 
-     ("w" "Work" entry (file+olp (concat org-directory "work.org") "Inbox")
-      "* TODO %?\nCaptured: %U"
-      :empty-lines-after 2)
-
-     ("p" "Project" entry (file+olp (concat org-directory "work.org") "Projects")
-      "* %^{category} - %^{title}\n:PROPERTIES:\n:CATEGORY: %\\1\n:END:"
-      :immediate-finish t :jump-to-captured t)
-
-     ("e" "Emacs" checkitem (file+olp (concat org-directory "todo.org") "Projects" "Emacs" "Inbox")
+     ("e" "Add Emacs issue" checkitem (file+olp (concat org-directory "todo.org") "Projects" "Emacs" "Inbox")
       "- [ ] %?")
 
-     ("s" "Someday" entry (file+olp (concat org-directory "someday.org") "Inbox")
-      "* %?"
+     ("w" "Work")
+
+     ("wi" "Add todo item" entry (file+olp (concat org-directory "work.org") "Inbox")
+      "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:"
       :empty-lines-after 2)
+
+     ("wt" "Add task with project" entry (file+olp (concat org-directory "work.org") "Inbox")
+      "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:%^{CATEGORY}p\n\n"
+      :empty-lines-after 2)
+
+     ("wp" "Add project" entry (file+olp (concat org-directory "work.org") "Projects")
+      "* %^{category} - %^{title}\n:PROPERTIES:\n:CATEGORY: %\\1\n:END:"
+      :immediate-finish t :jump-to-captured t)
     )
   )
 
@@ -106,9 +130,15 @@
 
   (with-eval-after-load 'org
     (add-to-list 'org-modules 'org-habit)
-    (org-clock-persistence-insinuate))
+    (org-clock-persistence-insinuate)
+    ;; use T to cycle backwords through todo states
+    (evil-define-key 'normal evil-org-mode-map (kbd "T") 'org-shiftleft))
 
   (with-eval-after-load 'org-agenda
+    ;; use T to cycle backwords through todo states
+    (define-key org-agenda-mode-map (kbd "T")
+      (lambda () (interactive) (org-agenda-todo 'left)))
+
     ;; use uppercase letters to switch period
     (define-key org-agenda-mode-map (kbd "D") 'org-agenda-day-view)
     (define-key org-agenda-mode-map (kbd "W") 'org-agenda-week-view)
@@ -128,13 +158,19 @@
   (advice-add 'org-agenda-redo :before 'org-save-all-org-buffers)
 
   ;; shrink capture window and start in insert mode
-  (add-hook 'org-capture-mode-hook (lambda ()
-                                     (fit-window-to-buffer (selected-window) 10)
-                                     (shrink-window-if-larger-than-buffer)))
+  (add-hook
+   'org-capture-mode-hook
+   (lambda ()
+     (fit-window-to-buffer (selected-window) 10)
+     (shrink-window-if-larger-than-buffer)))
   (add-hook 'org-capture-mode-hook 'evil-insert-state)
 
-  ;; start clocked tasks
+  ;; set clocked tasks to STARTED state
   (add-hook 'org-clock-in-hook 'dotfiles/org-start-task)
+
+  ;; save files when clocking tasks
+  (add-hook 'org-clock-in-hook (lambda () (dotfiles/silence (save-buffer))) t)
+  (add-hook 'org-clock-out-hook (lambda () (dotfiles/silence (save-buffer))) t)
 
   ;; start/stop clocked tasks in hamster
   (when (executable-find "hamster")
@@ -155,3 +191,9 @@
         ad-do-it))
   )
 )
+
+(defun dotfiles-org/init-org-agenda-property ()
+  (use-package org-agenda-property
+    :defer t
+    :config
+    (setq org-agenda-property-list '("LOCATION"))))

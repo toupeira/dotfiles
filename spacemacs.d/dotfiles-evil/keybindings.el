@@ -1,5 +1,4 @@
 (spacemacs/set-leader-keys
-  "bD" 'kill-buffer-and-window ;; https://github.com/syl20bnr/spacemacs/issues/6334
   "ws" 'split-window-below-and-focus
   "wS" 'split-window-below
   "wv" 'split-window-right-and-focus

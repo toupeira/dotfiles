@@ -16,7 +16,7 @@
     (fringe :inherit 'linum :background nil)
 
     ;; visual selection
-    (region :inherit nil :background "#005F87" :bold t)
+    (region :inherit nil :background "#005F87")
     (secondary-selection :inherit 'region :background nil)
 
     ;; cursorline
@@ -54,4 +54,6 @@
     (org-done :inherit 'org-special-keyword :foreground nil)
     (org-headline-done :inherit 'org-done :foreground nil :strike-through t :bold nil)
     (org-agenda-done :inherit 'org-headline-done :foreground nil :strike-through nil)
+    (org-agenda-dimmed-todo-face :foreground nil :bold t)
+    (org-verbatim :inherit 'font-lock-comment-face)
   )))

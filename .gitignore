@@ -7,6 +7,7 @@ rbenv/bundles
 rbenv/gems
 rbenv/shims
 rbenv/versions
+spacemacs.d/private
 tmux/.ssh-agent
 urxvt/urxvtd-*
 vim/tmp

@@ -46,14 +46,12 @@
            (or (buffer-file-name) (buffer-name))
            major-mode))
 
-;; kill to beginning of line, as in Vim
+;; kill to beginning of code or line, as in Vim
 ;; TODO: try deleting only newly entered characters first
-;; TODO: submit upstream bug report
 (defun dotfiles/backward-kill-line ()
   (interactive)
   (let ((end (point)))
-    (if (= (point) (progn (back-to-indentation) (point)))
-        (beginning-of-line))
+    (mwim-beginning-of-code-or-line)
     (delete-region (point) end)))
 
 ;; duplicate selected region

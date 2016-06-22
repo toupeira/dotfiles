@@ -1,9 +1,5 @@
 (setq dotfiles-evil-packages
       '(evil
-        evil-evilified-state
-        evil-lisp-state
-        ediff
-        helm
         simpleclip))
 
 (defun dotfiles-evil/post-init-evil ()
@@ -13,6 +9,7 @@
    evil-ex-interactive-search-highlight 'selected-window
    evil-split-window-below t
    evil-vsplit-window-right t
+   evil-want-fine-undo t
   )
 
   ;; use C-c to escape
@@ -56,15 +53,20 @@
   ;; duplicate region with D
   (define-key evil-visual-state-map (kbd "D") 'dotfiles/duplicate-region)
 
-  ;; readline keys in insert state
-  (define-key evil-insert-state-map (kbd "C-a") 'beginning-of-line)
-  (define-key evil-insert-state-map (kbd "C-e") 'end-of-line)
-
   ;; cycle numbers with C-a/x
   (define-key evil-normal-state-map (kbd "C-a") 'evil-numbers/inc-at-pt)
   (define-key evil-normal-state-map (kbd "C-x") 'evil-numbers/dec-at-pt)
 
-  ;; emulate C-u behaviour from Vim
+  ;; add readline keys in insert state
+  (define-key evil-insert-state-map (kbd "C-a") 'mwim-beginning-of-code-or-line)
+  (define-key evil-insert-state-map (kbd "C-e") 'mwim-end-of-code-or-line)
+
+  ;; add readline keys in ex state
+  (define-key evil-ex-completion-map (kbd "C-a") 'mwim-beginning-of-code-or-line)
+  (define-key evil-ex-completion-map (kbd "C-e") 'mwim-end-of-code-or-line)
+  (define-key evil-ex-completion-map (kbd "C-h") 'backward-delete-char)
+
+  ;; add C-u behaviour from Vim
   (define-key evil-insert-state-map (kbd "C-u") 'dotfiles/backward-kill-line)
 
   ;; use C-\ for Emacs state
@@ -72,41 +74,50 @@
   (define-key evil-emacs-state-map (kbd "C-\\") 'evil-exit-emacs-state)
   (define-key evil-motion-state-map (read-kbd-macro evil-toggle-key) nil)
 
-  ;; add readline keys in ex state
-  (define-key evil-ex-completion-map (kbd "C-a") 'move-beginning-of-line)
-  (define-key evil-ex-completion-map (kbd "C-h") 'backward-delete-char)
-)
+  ;; add window keys in evilified buffers
+  (with-eval-after-load 'evil-evilified-state
+    (define-key evil-evilified-state-map-original (kbd "C-w") 'evil-window-map)
+    (define-key evil-evilified-state-map-original (kbd "C-h") 'evil-window-left)
+    (define-key evil-evilified-state-map-original (kbd "C-j") 'evil-window-down)
+    (define-key evil-evilified-state-map-original (kbd "C-k") 'evil-window-up)
+    (define-key evil-evilified-state-map-original (kbd "C-l") 'evil-window-right))
 
-(defun dotfiles-evil/post-init-evil-evilified-state ()
-  (define-key evil-evilified-state-map-original (kbd "C-w") 'evil-window-map)
-  (define-key evil-evilified-state-map-original (kbd "C-h") 'evil-window-left)
-  (define-key evil-evilified-state-map-original (kbd "C-j") 'evil-window-down)
-  (define-key evil-evilified-state-map-original (kbd "C-k") 'evil-window-up)
-  (define-key evil-evilified-state-map-original (kbd "C-l") 'evil-window-right))
+  ;; add window keys in ediff
+  (with-eval-after-load 'ediff
+    (add-hook 'ediff-keymap-setup-hook
+              (lambda ()
+                (evil-define-key 'normal ediff-mode-map (kbd "C-j") 'evil-window-down)
+                (evil-define-key 'normal ediff-mode-map (kbd "C-k") 'evil-window-up))))
 
-(defun dotfiles-evil/post-init-evil-lisp-state ()
-  (define-key evil-lisp-state-map (kbd "C-g") 'evil-lisp-state/quit))
-
-(defun dotfiles-evil/post-init-ediff ()
-  (add-hook 'ediff-keymap-setup-hook
-    (lambda ()
-      (evil-define-key 'normal ediff-mode-map (kbd "C-j") 'evil-window-down)
-      (evil-define-key 'normal ediff-mode-map (kbd "C-k") 'evil-window-up)
-    )))
-
-(defun dotfiles-evil/post-init-helm ()
   (with-eval-after-load 'helm
-    ;; Use C-f/b to scroll
+    ;; use C-f/b to scroll
     (define-key helm-map (kbd "C-f") 'helm-next-page)
     (define-key helm-map (kbd "C-b") 'helm-previous-page)
+    (define-key helm-map (kbd "C-u") 'dotfiles/backward-kill-line)
 
     ;; use C-w to delete words instead of yanking text at point
     (define-key helm-map [remap helm-yank-text-at-point] 'backward-kill-word)
-    (define-key company-active-map (kbd "C-w") 'backward-kill-word)
+    (define-key helm-map [remap helm-swoop-yank-thing-at-point] 'backward-kill-word)
 
+    ;; only run in emacs state once on C-\ in helm
+    (define-key helm-map (kbd "C-\\") 'evil-execute-in-emacs-state))
+
+  (with-eval-after-load 'helm-buffers
     ;; use M-d to kill buffers
-    (define-key helm-buffer-map (kbd "M-d") 'helm-buffer-run-kill-buffers)
-  ))
+    (define-key helm-buffer-map (kbd "M-d")
+      (lambda () (interactive) (helm-kill-marked-buffers nil) (helm-refresh))))
+
+  (with-eval-after-load 'company
+    (define-key company-active-map (kbd "C-w") 'backward-kill-word))
+
+  (with-eval-after-load 'evil-lisp-state
+    ;; use C-c/C-g to exit lisp state
+    (define-key evil-lisp-state-map (kbd "C-g") 'evil-lisp-state/quit))
+
+  (with-eval-after-load 'git-commit
+    ;; start commit buffers in insert state
+    (add-hook 'git-commit-mode-hook 'evil-insert-state))
+)
 
 (defun dotfiles-evil/init-simpleclip ()
   ;; don't use desktop clipboard for kill ring
@@ -122,6 +133,8 @@
   (define-key evil-insert-state-map (kbd "C-v") 'dotfiles/paste)
   (define-key evil-visual-state-map (kbd "C-v") 'dotfiles/paste)
   (define-key evil-ex-completion-map (kbd "C-v") 'dotfiles/paste)
+  (with-eval-after-load 'helm
+    (define-key helm-map (kbd "C-v") 'dotfiles/paste))
 
   ;; use C-q for quoted insert / visual block state
   (global-set-key (kbd "C-q") 'quoted-insert)
@@ -131,6 +144,6 @@
   ;; copy with C-c
   (add-hook 'dotfiles/escape-anywhere-hook 'dotfiles/copy)
 
-  ;; cut with C-x
+  ;; cut with C-x in visual state
   (define-key evil-visual-state-map (kbd "C-x") 'dotfiles/cut)
 )

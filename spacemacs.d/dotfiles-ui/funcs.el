@@ -1,15 +1,17 @@
+(defmacro dotfiles/silence (&rest body)
+  `(let ((previous-message (current-message)))
+     ,@body
+     (when previous-message
+       (message previous-message))))
+
 (defun dotfiles/startup ()
   (remove-hook 'persp-mode-hook 'dotfiles/startup)
   (spacemacs/find-dotfile)
 
   (persp-switch org-directory)
   (if dotfiles/is-ocelot
-      (progn
-        (find-file (concat org-directory "/work.org"))
-        (org-agenda nil "w"))
-    (progn
-      (find-file (concat org-directory "/todo.org"))
-      (org-agenda-list))))
+      (dotfiles/org-goto "work" "w")
+    (dotfiles/org-goto "todo" t)))
 
 (defun dotfiles/switch-to-project-layout (&rest args)
   (when (projectile-project-p)
@@ -20,7 +22,7 @@
                    (projectile-project-root)))
            (new-persp (abbreviate-file-name root)))
       (switch-to-buffer (other-buffer))
-      (persp-frame-switch new-persp)
+      (persp-switch new-persp)
       (persp-add-buffer buffer)
       (when (and old-persp (not (string= new-persp (persp-name old-persp))))
         (persp-remove-buffer buffer old-persp)))))

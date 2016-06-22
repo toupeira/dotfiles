@@ -256,7 +256,7 @@ values."
    ;; If non nil show the color guide hint for transient state keys. (default t)
    dotspacemacs-show-transient-state-color-guide t
    ;; If non nil unicode symbols are displayed in the mode line. (default t)
-   dotspacemacs-mode-line-unicode-symbols nil
+   dotspacemacs-mode-line-unicode-symbols t
    ;; If non nil smooth scrolling (native-scrolling) is enabled. Smooth
    ;; scrolling overrides the default behavior of Emacs which recenters point
    ;; when it reaches the top or bottom of the screen. (default t)
@@ -325,6 +325,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
    web-mode-attr-indent-offset 2
 
    ;; emacs settings
+   delete-by-moving-to-trash nil
    require-final-newline t
    resize-mini-windows t
    use-dialog-box nil
@@ -333,9 +334,11 @@ before packages are loaded. If you are unsure, you should try in setting them in
    exec-path-from-shell-check-startup-files nil
    helm-autoresize-min-height 1
    helm-autoresize-max-height 30
+   magit-log-arguments '("-n256" "--decorate" "--patch")
    magit-repository-directories '("~/src")
    paradox-github-token t
    powerline-height (if dotfiles/is-ocelot 28 16)
+   ruby-insert-encoding-magic-comment nil
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
   ))
@@ -347,6 +350,9 @@ layers configuration.
 This is the place where most of your configurations should be done. Unless it is
 explicitly specified that a variable should be set before a package is loaded,
 you should place your code here."
+
+  ;; always show current function in modeline
+  (which-function-mode t)
 
   ;; for some reason this doesn't get applied with the theming-modifications layer
   (set-face-attribute
@@ -370,7 +376,11 @@ you should place your code here."
 
   (spacemacs/set-leader-keys
     "TAB"  'dotfiles/alternate-buffer)
-  )
+
+  (-when-let* ((private "~/.spacemacs.d/private")
+               (exists (file-directory-p private)))
+    (dolist (file (directory-files private t ".\\.el$"))
+      (load file nil nil))))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.

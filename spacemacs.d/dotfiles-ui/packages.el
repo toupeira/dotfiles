@@ -5,6 +5,7 @@
    projectile
    smooth-scrolling
    which-key
+
    zone-nyan
   ))
 
@@ -32,7 +33,7 @@
   ;;   ;;       (message (format "Removing buffer '%s' from layout '%s'"
   ;;   ;;                        (buffer-name buffer) (persp-name old-persp)))
   ;;   ;;       (persp-remove-buffer buffer old-persp)))
-  ;;   ;;   (persp-frame-switch persp-name)))
+  ;;   ;;   (persp-switch persp-name)))
 
   ;; automatically use default layout for home screen
   (advice-add 'spacemacs/home :before
