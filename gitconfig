@@ -15,6 +15,9 @@
 [branch]
 	autosetuprebase = always
 
+[commit]
+  gpgSign = true
+
 [diff]
   renames = copies
   mnemonicprefix = true
