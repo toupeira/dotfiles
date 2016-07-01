@@ -1,4 +1,7 @@
 (spacemacs/set-leader-keys
+  "S"  'split-window-below-and-focus
+  "V"  'split-window-right-and-focus
+  "W"  'save-buffer
   "ws" 'split-window-below-and-focus
   "wS" 'split-window-below
   "wv" 'split-window-right-and-focus

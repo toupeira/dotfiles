@@ -406,6 +406,27 @@ endfunction " }}}
 " Keybindings
 " {{{
 
+  " Spacemacs escape hatch
+  nmap <Space>S ,s
+  nmap <Space>V ,v
+  nmap <Space>W ,w
+  nmap <Space>bb ,b
+  nmap <Space>ff ,f
+  nmap <Space>pf ,f
+  nmap <Space>ph ,f
+  nmap <Space>fr ,r
+  nnoremap <Space>bn :bnext<CR>
+  nnoremap <Space>bp :bprevious<CR>
+  nnoremap <Space>bd :bd<CR>
+  nnoremap <Space>bR :e<CR>
+  nnoremap <Space>fs :write<CR>
+  nnoremap <Space>qq :q<CR>
+  nnoremap <Space>qz :q<CR>
+  nnoremap <Space>qa :quitall<CR>
+  nnoremap <Space>wd <C-w>c
+  nnoremap <Space>ws <C-w>s
+  nnoremap <Space>wv <C-w>v
+
   " apply macros with Q (disables the default Ex mode shortcut)
   nnoremap Q @q
   vnoremap Q :norm @q<CR>
@@ -1150,8 +1171,8 @@ endfunction " }}}
     " ,f - show files in the current working directory and project tree
     nnoremap <silent><expr> ,f UniteWrapper('file' . (empty(expand('%')) ? '' : ':'.expand('%:.:h')) . ' file_rec/async:!' . (empty(expand('%')) ? '' : ':'.expand('%:.:h')) . ' file/new' . (empty(expand('%')) ? '' : ':'.expand('%:.:h')), '-buffer-name=unite-files -start-insert')
 
-    " ,<Space> - show Git changes and recently edited files
-    nnoremap <silent><expr> ,<Space> UniteWrapper((empty(system('git rev-parse --is-inside-work-tree 2>/dev/null')) ? '' : 'giti/status ') . 'file_mru:all', '-buffer-name=unite-changes -start-insert')
+    " ,r - show recently edited files
+    nnoremap <silent><expr> ,r UniteWrapper('file_mru:all', '-buffer-name=unite-changes -start-insert')
 
     " ,b - show open buffers
     nnoremap <silent><expr> ,b UniteWrapper('buffer', '-buffer-name=unite-buffers -start-insert')
