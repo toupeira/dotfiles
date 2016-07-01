@@ -1,18 +1,17 @@
 (spacemacs/set-leader-keys
   "o/" 'helm-multi-swoop-org
   "oj" 'org-clock-goto
-  "oO" 'org-clock-out
 
   "oa" 'org-agenda-list
   "ow" (lambda () (interactive) (dotfiles/org-goto "work" "w"))
-  "oh" (lambda () (interactive) (dotfiles/org-goto "todo" "h"))
+  "oo" (lambda () (interactive) (dotfiles/org-goto "organizer" "o"))
 
-  "oH" (lambda () (interactive) (dotfiles/org-goto "todo" "H"))
+  "oO" (lambda () (interactive) (dotfiles/org-goto "organizer" "O"))
   "oW" (lambda () (interactive) (dotfiles/org-goto "work" "W"))
-  "oG" (lambda () (interactive) (dotfiles/org-goto "todo" "G" '("Goals")))
+  "oG" (lambda () (interactive) (dotfiles/org-goto "organizer" "G" '("Goals")))
   "oE" (lambda ()
          (interactive)
-         (dotfiles/org-goto "todo" nil '("Projects" "Emacs" "Inbox"))
+         (dotfiles/org-goto "organizer" nil '("Projects" "Emacs" "Inbox"))
          (org-show-subtree))
 
   "Ct" (lambda () (interactive) (org-capture nil "t"))
@@ -27,9 +26,9 @@
   "SPC o /" "smart search org files"
 
   "SPC o w" "agenda for work"
-  "SPC o h" "agenda for home"
+  "SPC o o" "agenda for home"
 
-  "SPC o H" "review home tasks"
+  "SPC o O" "review home tasks"
   "SPC o W" "review work tasks"
   "SPC o G" "review goals"
   "SPC o E" "goto emacs inbox"

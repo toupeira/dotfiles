@@ -11,7 +11,7 @@
   (persp-switch org-directory)
   (if dotfiles/is-ocelot
       (dotfiles/org-goto "work" "w")
-    (dotfiles/org-goto "todo" t)))
+    (dotfiles/org-goto "organizer" t)))
 
 (defun dotfiles/switch-to-project-layout (&rest args)
   (when (projectile-project-p)

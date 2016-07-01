@@ -82,14 +82,14 @@
     (setq
      org-agenda-custom-commands
      `(
-       ("h" "Agenda for home context"
+       ("o" "Agenda for home context"
         ,(cons '(agenda "") (subseq task-list 0 2))
         ((org-agenda-tag-filter-preset '("-work"))))
        ("w" "Agenda for work context"
         ,(cons '(agenda "") (subseq task-list 0 2))
         ((org-agenda-tag-filter-preset '("+work"))))
 
-       ("H" "Review home tasks" ,task-list
+       ("O" "Review home tasks" ,task-list
         ,(cons '(org-agenda-tag-filter-preset '("-work")) task-list-options))
        ("W" "Review work tasks" ,task-list
         ,(cons '(org-agenda-tag-filter-preset '("+work")) task-list-options))
@@ -99,11 +99,11 @@
   (setq
    org-capture-templates
    '(
-     ("t" "Add todo entry" entry (file+olp (concat org-directory "todo.org") "Inbox")
+     ("t" "Add todo entry" entry (file+olp (concat org-directory "organizer.org") "Inbox")
       "* TODO %?"
       :empty-lines-after 2)
 
-     ("e" "Add Emacs issue" checkitem (file+olp (concat org-directory "todo.org") "Projects" "Emacs" "Inbox")
+     ("e" "Add Emacs issue" checkitem (file+olp (concat org-directory "organizer.org") "Projects" "Emacs" "Inbox")
       "- [ ] %?")
 
      ("w" "Work")
@@ -122,6 +122,7 @@
     )
   )
 
+  (add-hook 'org-mode-hook 'visual-line-mode)
   (add-hook 'calendar-load-hook (lambda () (calendar-set-date-style 'european)))
 
   ;; enable org-mode for additional extensions
