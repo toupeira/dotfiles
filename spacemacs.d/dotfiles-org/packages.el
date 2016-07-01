@@ -9,26 +9,48 @@
 
 (defun dotfiles-org/post-init-org ()
   (setq
+   calendar-week-start-day 1
+   calendar-day-name-array (locale-info 'days)
+   calendar-month-name-array (locale-info 'months)
+
+   org-agenda-files '("~/org")
+   org-agenda-buffer-name "*agenda*"
+   org-agenda-window-setup 'only-window
+   org-agenda-include-diary nil
+   org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5)
+   org-agenda-show-inherited-tags nil
    org-attach-directory "attachments/"
    org-blank-before-new-entry '((heading . auto) (plain-list-item . nil))
+   org-clock-history-length 25
+   org-clock-idle-time 5
+   org-clock-in-resume t
+   org-clock-out-remove-zero-time-clocks t
+   org-clock-persist t
+   org-clock-clocktable-default-properties
+   '(:block today)
+   org-clocktable-defaults
+   '(:maxlevel 3 :scope file-with-archives :properties ("CATEGORY")
+               :indent t :link t :narrow 40!)
    org-columns-default-format "%TODO %40ITEM %SCHEDULED %DEADLINE %CLOCKSUM"
+   org-cycle-separator-lines 1
    org-directory (abbreviate-file-name (file-truename "~/org/"))
    org-download-method 'attach
    org-enforce-todo-dependencies t
    org-fontify-done-headline t
    org-habit-show-done-always-green t
    org-log-into-drawer t
+   org-log-redeadline nil
    org-log-refile nil
    org-log-reschedule nil
-   org-log-redeadline nil
-   org-cycle-separator-lines 1
+   org-outline-path-complete-in-steps nil
+   org-refile-allow-creating-parent-nodes t
    org-refile-targets '((dotfiles/org-refile-targets :maxlevel . 3))
    org-refile-use-outline-path 'file
-   org-refile-allow-creating-parent-nodes t
-   org-outline-path-complete-in-steps nil
    org-startup-align-all-tables t
    org-startup-folded 'content
    org-startup-indented t
+   org-tag-persistent-alist
+   '(("work"   . ?w))
    org-todo-keywords
    '((sequence "TODO" "NEXT" "STARTED(!)" "|" "DONE")
      (sequence "PENDING" "|" "DONE")
@@ -39,29 +61,6 @@
      ("STARTED" . "#AE81FF")
      ("FOCUS" . "#AE81FF")
      ("DONE" . org-done))
-   org-tag-persistent-alist
-   '(("work"   . ?w))
-
-   org-agenda-files '("~/org")
-   org-agenda-buffer-name "*agenda*"
-   org-agenda-window-setup 'only-window
-   org-agenda-include-diary nil
-   org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5)
-   org-agenda-show-inherited-tags nil
-
-   org-clock-history-length 25
-   org-clock-in-resume t
-   org-clock-out-remove-zero-time-clocks t
-   org-clock-persist t
-   org-clock-clocktable-default-properties
-   '(:block today)
-   org-clocktable-defaults
-   '(:maxlevel 3 :scope file-with-archives :properties ("CATEGORY")
-     :indent t :link t :narrow 40!)
-
-   calendar-week-start-day 1
-   calendar-day-name-array (locale-info 'days)
-   calendar-month-name-array (locale-info 'months)
   )
 
   (let* ((task-list-options

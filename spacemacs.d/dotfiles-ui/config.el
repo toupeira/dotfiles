@@ -43,6 +43,9 @@
     (font-lock-comment-delimiter-face :foreground "#99937A")
     (font-lock-doc-face :foreground "#40CAE4")
 
+    ;; helm
+    (helm-source-header :background "#33332B" :foreground "#E6E1CF")
+
     ;; error symbols
     (flycheck-fringe-error :background nil :foreground "#F92672")
     (flycheck-fringe-warning :background nil :foreground "#E6DB74")
