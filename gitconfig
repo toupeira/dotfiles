@@ -1,7 +1,7 @@
 [user]
   name = Markus Koller
   email = markus-koller@gmx.ch
-  signingkey = A7A2B7B7 
+  signingKey = A7A2B7B7
 
 [color]
   ui = auto
@@ -25,14 +25,15 @@
 [difftool]
   prompt = false
 
+[fetch]
+  prune = true
+
 [log]
   abbrevCommit = true
   decorate = true
 
-[pager]
-  log = diff-highlight | less
-  show = diff-highlight | less
-  diff = diff-highlight | less
+[gpg]
+  program = gpg2
 
 [merge]
   stat = true
@@ -46,8 +47,10 @@
   cmd = sensible-vim $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'
   trustExitCode = true
 
-[fetch]
-  prune = true
+[pager]
+  log = diff-highlight | less
+  show = diff-highlight | less
+  diff = diff-highlight | less
 
 [push]
   default = simple

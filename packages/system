@@ -9,9 +9,12 @@ debian-archive-keyring
 debian-goodies
 debian-keyring
 debtags
+dirmngr
 dnsutils
 file
 git
+gnupg
+gnupg2
 httpie
 iotop
 iproute2
