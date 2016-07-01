@@ -342,3 +342,7 @@
   path = vim/bundle/org-mode
   url = https://github.com/jceb/vim-orgmode.git
   ignore = dirty
+[submodule "tmux/asos"]
+  path = tmux/asos
+  url = https://github.com/fcpg/tmux-asos.git
+  ignore = dirty
