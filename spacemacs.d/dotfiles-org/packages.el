@@ -138,6 +138,8 @@
     (define-key org-agenda-mode-map (kbd "T")
       (lambda () (interactive) (org-agenda-todo 'left)))
 
+    (define-key org-agenda-mode-map (kbd "o") 'org-agenda-open-link)
+
     ;; use uppercase letters to switch period
     (define-key org-agenda-mode-map (kbd "D") 'org-agenda-day-view)
     (define-key org-agenda-mode-map (kbd "W") 'org-agenda-week-view)

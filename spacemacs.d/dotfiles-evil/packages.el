@@ -74,6 +74,18 @@
   (define-key evil-emacs-state-map (kbd "C-\\") 'evil-exit-emacs-state)
   (define-key evil-motion-state-map (read-kbd-macro evil-toggle-key) nil)
 
+  ;; use M-j/k to swap lines in insert state
+  (define-key evil-normal-state-map (kbd "M-j") (concat ":m +1"))
+  (define-key evil-normal-state-map (kbd "M-k") (concat ":m -2"))
+  (define-key evil-visual-state-map (kbd "M-j") (concat ":m '>+1" (kbd "RET") "gv=gv"))
+  (define-key evil-visual-state-map (kbd "M-k") (concat ":m '<-2" (kbd "RET") "gv=gv"))
+
+  ;; use M-h/j/k/l to move around in insert state
+  (define-key evil-insert-state-map (kbd "M-h") 'evil-backward-char)
+  (define-key evil-insert-state-map (kbd "M-j") 'evil-next-line)
+  (define-key evil-insert-state-map (kbd "M-k") 'evil-previous-line)
+  (define-key evil-insert-state-map (kbd "M-l") 'evil-forward-char)
+
   ;; add window keys in evilified buffers
   (with-eval-after-load 'evil-evilified-state
     (define-key evil-evilified-state-map-original (kbd "C-w") 'evil-window-map)
