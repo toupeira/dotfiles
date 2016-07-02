@@ -101,7 +101,7 @@
    '(
      ("t" "Add todo entry" entry (file+olp (concat org-directory "organizer.org") "Inbox")
       "* TODO %?"
-      :empty-lines-after 2)
+      :empty-lines-after 1)
 
      ("e" "Add Emacs issue" checkitem (file+olp (concat org-directory "organizer.org") "Projects" "Emacs" "Inbox")
       "- [ ] %?")
@@ -110,11 +110,11 @@
 
      ("wi" "Add todo item" entry (file+olp (concat org-directory "work.org") "Inbox")
       "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:"
-      :empty-lines-after 2)
+      :empty-lines-after 1)
 
      ("wt" "Add task with project" entry (file+olp (concat org-directory "work.org") "Inbox")
       "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:%^{CATEGORY}p\n\n"
-      :empty-lines-after 2)
+      :empty-lines-after 1)
 
      ("wp" "Add project" entry (file+olp (concat org-directory "work.org") "Projects")
       "* %^{category} - %^{title}\n:PROPERTIES:\n:CATEGORY: %\\1\n:END:"

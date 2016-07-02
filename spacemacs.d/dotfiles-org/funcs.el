@@ -24,10 +24,12 @@
     (remove-if-not 'file-writable-p files)))
 
 (defun dotfiles/org-start-task ()
-  (-when-let* ((state (org-get-todo-state))
-               (task (or (string= state "TODO") (string= state "NEXT"))))
-    (dotfiles/silence
-     (org-todo "STARTED"))))
+  (let ((state (org-get-todo-state))
+        (heading (org-get-heading)))
+    (when (and (not (string= "NEXT Basteln" heading))
+               (or (string= state "TODO") (string= state "NEXT")))
+      (dotfiles/silence
+       (org-todo "STARTED")))))
 
 (defun dotfiles/org-start-hamster-task ()
   (let* ((file (file-name-base (buffer-file-name (marker-buffer org-clock-marker))))
