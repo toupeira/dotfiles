@@ -2,7 +2,7 @@
 
 [ "$1" != "--really" ] || exec nice ionice -c3 "$0" --really
 
-HOSTNAME=`hostname -s`
+HOSTNAME=$( hostname -s )
 BACKUP="/var/backups/$HOSTNAME"
 LOGFILE="/var/log/backup-$HOSTNAME.log"
 
@@ -22,40 +22,31 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/.[Tt]emp*
   --exclude **/.[Tt]rash*
 
-  --exclude **/home/*/Dropbox
-  --exclude **/home/*/download
-  --exclude **/home/*/src
-  --exclude **/home/*/tmp
+  --include /home/*/Dropbox/org
+  --exclude /home/*/Dropbox
+  --exclude /home/*/src
+  --exclude /home/*/tmp
 
-  --exclude **/home/*/.android/avd
-  --exclude **/home/*/.cdist
-  --exclude **/home/*/.cinv
-  --exclude **/home/*/.config/google-chrome*
-  --exclude **/home/*/.config/teamviewer*
-  --exclude **/home/*/.cordova
-  --exclude **/home/*/.dropbox*
-  --exclude **/home/*/.gem
-  --exclude **/home/*/.gvfs
-  --exclude **/home/*/.hex
-  --exclude **/home/*/.kodi
-  --exclude **/home/*/.local/share
-  --exclude **/home/*/.macromedia
-  --exclude **/home/*/.meteor
-  --exclude **/home/*/.mozilla/firefox/*/adblockplus
-  --exclude **/home/*/.mozilla/firefox/*/cookies*
-  --exclude **/home/*/.mozilla/firefox/*/lazarus*
-  --exclude **/home/*/.mozilla/firefox/*/storage
-  --exclude **/home/*/.mu
-  --exclude **/home/*/.nenv
-  --exclude **/home/*/.node-gyp
-  --exclude **/home/*/.npm
-  --exclude **/home/*/.password-store
-  --exclude **/home/*/.rbenv
-  --exclude **/home/*/.secrets
-  --exclude **/home/*/.Skype
-  --exclude **/home/*/.thumbnails
-  --exclude **/home/*/.vagrant.d
-  --exclude **/home/*/.vscode
+  --exclude /home/*/.android/avd
+  --exclude /home/*/.cdist
+  --exclude /home/*/.cinv
+  --exclude /home/*/.dropbox-dist
+  --exclude /home/*/.gvfs
+  --exclude /home/*/.kodi
+  --exclude /home/*/.local/share/akonadi
+  --exclude /home/*/.macromedia
+  --exclude /home/*/.meteor
+  --exclude /home/*/.mozilla/firefox/*/adblockplus
+  --exclude /home/*/.mozilla/firefox/*/cookies*
+  --exclude /home/*/.mozilla/firefox/*/lazarus*
+  --exclude /home/*/.mozilla/firefox/*/storage
+  --exclude /home/*/.nenv
+  --exclude /home/*/.npm
+  --exclude /home/*/.password-store
+  --exclude /home/*/.rbenv
+  --exclude /home/*/.secrets
+  --exclude /home/*/.thumbnails
+  --exclude /home/*/.vagrant.d
 "
 
 DEFAULT_INCLUDE_PATHS="
@@ -67,7 +58,7 @@ DEFAULT_INCLUDE_PATHS="
 "
 
 function log {
-  date "+`basename "$0"` [%Y-%m-%d %T] $1" >> "$LOGFILE"
+  date "+$( basename "$0" ) [%Y-%m-%d %T] $1" >> "$LOGFILE"
 }
 
 log "Starting backup"
