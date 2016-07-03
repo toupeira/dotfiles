@@ -10,30 +10,29 @@
   ))
 
 (defun dotfiles-ui/post-init-persp-mode ()
-  (advice-add 'find-file :after 'dotfiles/switch-to-project-layout)
-  ;; (def-auto-persp "projectile"
-  ;;   :parameters '((dont-save-to-file . t))
-  ;;   ;; :hooks '(after-change-major-mode-hook)
-  ;;   :switch 'frame
-  ;;   :predicate
-  ;;   (lambda (buffer)
-  ;;     (with-current-buffer buffer
-  ;;       (and
-  ;;        (buffer-file-name)
-  ;;        (projectile-project-p))))
-  ;;   :get-name-expr
-  ;;   (lambda ()
-  ;;     (if (string-prefix-p dotfiles/directory (file-truename (buffer-file-name (current-buffer))))
-  ;;         dotfiles/directory
-  ;;       (abbreviate-file-name (projectile-project-root)))))
-  ;;   ;; :after-match
-  ;;   ;; (lambda (persp-name persp buffer &rest args)
-  ;;   ;;   (let ((old-persp (get-current-persp)))
-  ;;   ;;     (when (and old-persp (not (string= persp-name (persp-name old-persp))))
-  ;;   ;;       (message (format "Removing buffer '%s' from layout '%s'"
-  ;;   ;;                        (buffer-name buffer) (persp-name old-persp)))
-  ;;   ;;       (persp-remove-buffer buffer old-persp)))
-  ;;   ;;   (persp-switch persp-name)))
+  ;; (advice-add 'find-file :after 'dotfiles/switch-to-project-layout)
+
+  ;; find-file-hook also triggers on find-file-noselect,
+  ;; after-find-file fits better but doesn't provide its own hook
+  (defvar after-find-file-hook nil)
+  (advice-add 'find-file :after (lambda (&rest args) (run-hooks 'after-find-file-hook)))
+
+  ;; https://github.com/Bad-ptr/persp-mode.el/issues/40 
+  (def-auto-persp "projectile"
+    :parameters '((dont-save-to-file . t))
+    :hooks '(after-find-file-hook)
+    :switch 'frame
+    :predicate
+    (lambda (buffer)
+      (when (and (buffer-file-name)
+                 (projectile-project-p))
+        (switch-to-buffer (other-buffer))
+        t))
+    :get-name-expr
+    (lambda ()
+      (if (string-prefix-p dotfiles/directory (file-truename (buffer-file-name (current-buffer))))
+          dotfiles/directory
+        (abbreviate-file-name (projectile-project-root)))))
 
   ;; automatically use default layout for home screen
   (advice-add 'spacemacs/home :before
