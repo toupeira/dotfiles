@@ -22,31 +22,46 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/.[Tt]emp*
   --exclude **/.[Tt]rash*
 
-  --include /home/*/Dropbox/org
-  --exclude /home/*/Dropbox
-  --exclude /home/*/src
-  --exclude /home/*/tmp
+  --include **/home/*/Dropbox/org
+  --exclude **/home/*/Dropbox
+  --exclude **/home/*/src
+  --exclude **/home/*/tmp
 
-  --exclude /home/*/.android/avd
-  --exclude /home/*/.cdist
-  --exclude /home/*/.cinv
-  --exclude /home/*/.dropbox-dist
-  --exclude /home/*/.gvfs
-  --exclude /home/*/.kodi
-  --exclude /home/*/.local/share/akonadi
-  --exclude /home/*/.macromedia
-  --exclude /home/*/.meteor
-  --exclude /home/*/.mozilla/firefox/*/adblockplus
-  --exclude /home/*/.mozilla/firefox/*/cookies*
-  --exclude /home/*/.mozilla/firefox/*/lazarus*
-  --exclude /home/*/.mozilla/firefox/*/storage
-  --exclude /home/*/.nenv
-  --exclude /home/*/.npm
-  --exclude /home/*/.password-store
-  --exclude /home/*/.rbenv
-  --exclude /home/*/.secrets
-  --exclude /home/*/.thumbnails
-  --exclude /home/*/.vagrant.d
+  --exclude **/home/*/.android/avd
+  --exclude **/home/*/.cdist
+  --exclude **/home/*/.cinv
+  --exclude **/home/*/.config/chromium
+  --exclude **/home/*/.config/Franz
+  --exclude **/home/*/.config/google-chrome
+  --exclude **/home/*/.config/google-chrome-unstable
+  --exclude **/home/*/.config/opera
+  --exclude **/home/*/.config/teamviewer10
+  --exclude **/home/*/.cordova
+  --exclude **/home/*/.dropbox
+  --exclude **/home/*/.dropbox-dist
+  --exclude **/home/*/.gem
+  --exclude **/home/*/.gvfs
+  --exclude **/home/*/.hex
+  --exclude **/home/*/.kodi
+  --exclude **/home/*/.local/share/akonadi
+  --exclude **/home/*/.local/share/gnome-shell
+  --exclude **/home/*/.local/share/gvfs-metadata
+  --exclude **/home/*/.local/share/teamviewer11
+  --exclude **/home/*/.local/share/Zeal
+  --exclude **/home/*/.macromedia
+  --exclude **/home/*/.meteor
+  --exclude **/home/*/.mozilla/firefox/*/adblockplus
+  --exclude **/home/*/.mozilla/firefox/*/cookies*
+  --exclude **/home/*/.mozilla/firefox/*/lazarus*
+  --exclude **/home/*/.mozilla/firefox/*/storage
+  --exclude **/home/*/.nenv
+  --exclude **/home/*/.npm
+  --exclude **/home/*/.password-store
+  --exclude **/home/*/.rbenv
+  --exclude **/home/*/.secrets
+  --exclude **/home/*/.Skype
+  --exclude **/home/*/.thumbnails
+  --exclude **/home/*/.vagrant.d
 "
 
 DEFAULT_INCLUDE_PATHS="
