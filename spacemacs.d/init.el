@@ -58,7 +58,7 @@ values."
      html
      javascript
      lua
-     markdown
+     (markdown :variables markdown-live-preview-engine 'vmd)
      php
      python
      ruby
