@@ -22,7 +22,7 @@
    org-attach-directory "attachments/"
    org-blank-before-new-entry '((heading . auto) (plain-list-item . nil))
    org-clock-history-length 25
-   org-clock-idle-time 5
+   org-clock-idle-time 15
    org-clock-in-resume t
    org-clock-out-remove-zero-time-clocks t
    org-clock-persist t
