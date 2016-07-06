@@ -2,7 +2,6 @@
  '(
    org
    org-indent
-   (org-repo-todo :excluded t)
 
    org-agenda-property
   ))
