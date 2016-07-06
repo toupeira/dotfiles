@@ -1,0 +1,6 @@
+#!/bin/sh
+if ! pgrep -x emacs >/dev/null || emacsclient --eval '(visible-frame-list)' | fgrep -qx nil; then
+  exec sensible-emacs "$@"
+else
+  xwit -raise -focus -property WM_CLASS -names emacs
+fi
