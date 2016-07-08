@@ -20,7 +20,7 @@
   ;; https://github.com/Bad-ptr/persp-mode.el/issues/40 
   (def-auto-persp "projectile"
     :parameters '((dont-save-to-file . t))
-    :hooks '(after-find-file-hook)
+    :hooks '(after-find-file-hook server-visit-hook)
     :switch 'frame
     :predicate
     (lambda (buffer)
