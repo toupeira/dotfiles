@@ -14,12 +14,17 @@
          (dotfiles/org-goto "organizer" nil '("Projects" "Emacs" "Inbox"))
          (org-show-subtree))
 
-  "Ct" (lambda () (interactive) (org-capture nil "t"))
+  "Cc" (lambda () (interactive) (org-capture nil "o"))
+  "Cb" (lambda () (interactive) (org-capture nil "b"))
   "Ce" (lambda () (interactive) (org-capture nil "e"))
 
-  "Cwi" (lambda () (interactive) (org-capture nil "wi"))
-  "Cwt" (lambda () (interactive) (org-capture nil "wt"))
+  "Cww" (lambda () (interactive) (org-capture nil "ww"))
+  "Cwb" (lambda () (interactive) (org-capture nil "wb"))
   "Cwp" (lambda () (interactive) (org-capture nil "wp"))
+
+  ;; remove Spacemacs bindings
+  "Ci" nil
+  "Cl" nil
   )
 
 (which-key-add-key-based-replacements
@@ -33,14 +38,19 @@
   "SPC o G" "review goals"
   "SPC o E" "goto emacs inbox"
 
-  "SPC C t" "capture todo entry"
-  "SPC C e" "capture emacs issue"
+  "SPC C c" "inbox"
+  "SPC C b" "basteln"
+  "SPC C e" "emacs"
 
-  "SPC C w i" "capture todo item"
-  "SPC C w t" "capture task with project"
-  "SPC C w p" "capture project"
+  "SPC C w"   "work"
+  "SPC C w w" "inbox"
+  "SPC C w b" "basteln"
+  "SPC C w p" "add project"
   )
 
 (spacemacs/set-leader-keys-for-major-mode 'org-mode
   "u" 'dotfiles/org-update-buffer
   "C" 'org-copy)
+
+(spacemacs/set-leader-keys-for-major-mode 'org-agenda-mode
+  "R" 'org-agenda-refile)
