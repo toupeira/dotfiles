@@ -51,13 +51,14 @@
    org-tag-persistent-alist
    '(("work"   . ?w))
    org-todo-keywords
-   '((sequence "TODO" "NEXT" "STARTED(!)" "|" "DONE")
+   '((sequence "TODO" "NEXT" "STARTED(!)" "WAITING(!)" "|" "DONE")
      (sequence "PENDING" "|" "DONE")
      (sequence "MAYBE" "GOAL" "FOCUS" "|" "DONE" "ABANDONED(!)"))
    org-todo-keyword-faces
    '(("NEXT" . "#FD971F")
      ("GOAL" . "#FD971F")
      ("STARTED" . "#AE81FF")
+     ("WAITING" . "#E6DB74")
      ("FOCUS" . "#AE81FF")
      ("DONE" . org-done))
   )
@@ -70,6 +71,7 @@
          (task-list
           `((todo "STARTED" ,(cons '(org-agenda-overriding-header "Started tasks:") task-list-options))
             (todo "NEXT" ,(cons '(org-agenda-overriding-header "Next tasks:") task-list-options))
+            (todo "WAITING" ,(cons '(org-agenda-overriding-header "Waiting tasks:") task-list-options))
             (tags-todo "+SCHEDULED={.+}|+DEADLINE={.+}/TODO"
                        ,(cons '(org-agenda-overriding-header "Scheduled tasks:") task-list-options))
             (tags-todo "-SCHEDULED={.+}-DEADLINE={.+}/TODO"
@@ -82,10 +84,10 @@
      org-agenda-custom-commands
      `(
        ("o" "Agenda for home context"
-        ,(cons '(agenda "") (subseq task-list 0 2))
+        ,(cons '(agenda "") (subseq task-list 0 3))
         ((org-agenda-tag-filter-preset '("-work"))))
        ("w" "Agenda for work context"
-        ,(cons '(agenda "") (subseq task-list 0 2))
+        ,(cons '(agenda "") (subseq task-list 0 3))
         ((org-agenda-tag-filter-preset '("+work"))))
 
        ("O" "Review home tasks" ,task-list
