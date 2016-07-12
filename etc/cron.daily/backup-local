@@ -11,6 +11,7 @@ cd "$TMPDIR" || exit 1
 
 DEFAULT_EXCLUDE_PATHS="
   --exclude /etc/dotfiles
+  --exclude /proc
 
   --exclude **/[Cc]ache*
   --exclude **/*[Cc]ache
