@@ -101,6 +101,18 @@
                 (evil-define-key 'normal ediff-mode-map (kbd "C-j") 'evil-window-down)
                 (evil-define-key 'normal ediff-mode-map (kbd "C-k") 'evil-window-up))))
 
+  (with-eval-after-load 'term
+    ;; use Emacs state for terminals
+    (delete 'term-mode evil-insert-state-modes)
+    (add-to-list 'evil-emacs-state-modes 'term-mode)
+    (evil-define-key 'normal term-raw-map (kbd "C-\\") 'evil-emacs-state)
+
+    ;; add window keys in terminals
+    (define-key term-raw-map (kbd "C-h") 'evil-window-left)
+    (define-key term-raw-map (kbd "C-j") 'evil-window-down)
+    (define-key term-raw-map (kbd "C-k") 'evil-window-up)
+    (define-key term-raw-map (kbd "C-l") 'evil-window-right))
+
   (with-eval-after-load 'helm
     ;; use C-f/b to scroll
     (define-key helm-map (kbd "C-f") 'helm-next-page)

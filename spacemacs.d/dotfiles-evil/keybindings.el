@@ -1,4 +1,5 @@
 (spacemacs/set-leader-keys
+  "`"  'spacemacs/default-pop-shell
   "S"  'split-window-below-and-focus
   "V"  'split-window-right-and-focus
   "W"  'save-buffer

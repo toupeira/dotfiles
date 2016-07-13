@@ -45,7 +45,12 @@ values."
      org
      pdf-tools
      (ranger :variables ranger-show-dotfiles nil)
-     (shell :variables shell-default-height 30 shell-default-position 'bottom)
+     (shell
+      :variables
+      shell-default-height 30
+      shell-default-position 'bottom
+      shell-default-term-shell "emacs-shell"
+      shell-enable-smart-eshell t)
      syntax-checking
      version-control
 
