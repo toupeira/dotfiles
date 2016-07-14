@@ -1,5 +1,6 @@
 [global_config]
   enabled_plugins = ,
+  geometry_hinting = False
   title_font = DejaVu Sans Mono for Powerline 9
   title_use_system_font = False
 [keybindings]
