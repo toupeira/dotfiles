@@ -1,0 +1,79 @@
+[global_config]
+  enabled_plugins = ,
+  title_font = DejaVu Sans Mono for Powerline 9
+  title_use_system_font = False
+[keybindings]
+  broadcast_all = None
+  broadcast_group = None
+  broadcast_off = None
+  close_term = None
+  close_window = None
+  copy = <Primary><Shift>c
+  cycle_next = None
+  cycle_prev = None
+  edit_window_title = None
+  go_down = None
+  go_left = None
+  go_next = None
+  go_prev = None
+  go_right = None
+  go_up = None
+  group_all = None
+  group_tab = None
+  help = None
+  hide_window = None
+  insert_number = None
+  insert_padded = None
+  layout_launcher = None
+  move_tab_left = None
+  move_tab_right = None
+  new_tab = None
+  new_terminator = None
+  new_window = <Primary><Shift>n
+  next_tab = None
+  prev_tab = None
+  reset = <Primary><Shift>r
+  resize_down = None
+  resize_left = None
+  resize_right = None
+  resize_up = None
+  rotate_ccw = None
+  rotate_cw = None
+  scaled_zoom = None
+  search = None
+  split_horiz = None
+  split_vert = None
+  toggle_scrollbar = None
+  toggle_zoom = None
+  ungroup_all = None
+  ungroup_tab = None
+[layouts]
+  [[default]]
+    [[[child1]]]
+      parent = window0
+      profile = default
+      type = Terminal
+    [[[window0]]]
+      parent = ""
+      type = Window
+[plugins]
+[profiles]
+  [[default]]
+    background_darkness = 0.9
+    background_image = None
+    background_type = transparent
+    cursor_blink = False
+    cursor_color = "#ebebe9"
+    custom_command = TERM=xterm-256color tmux-reattach
+    font = DejaVu Sans Mono for Powerline 9
+    foreground_color = "#ffffff"
+    login_shell = True
+    scroll_on_output = False
+    scrollback_lines = 10000
+    scrollbar_position = hidden
+    show_titlebar = False
+    update_records = False
+    urgent_bell = True
+    use_custom_command = True
+    use_system_font = False
+    visible_bell = True

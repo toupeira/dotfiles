@@ -5,9 +5,14 @@ if [ -n "$TMUX" -a ! -S "$TMUX" ]; then
   unset TMUX
 fi
 
+# fix $TERM
+if [ "$COLORTERM" = "gnome-terminal" ]; then
+  export TERM="xterm-256color"
+fi
+
 session=$( tmux list-sessions 2>/dev/null | fgrep -vm1 attached | cut -d: -f1 )
-if [ -n "$session" ]; then
+if [ -n "$session" -a $# -eq 0 ]; then
   exec tmux attach-session -t "$session"
 else
-  exec tmux new-session
+  exec tmux new-session "$@"
 fi
