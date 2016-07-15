@@ -106,6 +106,8 @@
       "* TODO %?")
      ("e" "emacs" checkitem (file+olp (concat org-directory "organizer.org") "Projects" "Emacs" "Inbox")
       "- [ ] %?")
+     ("n" "clock note" item (clock)
+      "- %U %?")
 
      ("w" "work")
 

@@ -17,6 +17,7 @@
   "Cc" (lambda () (interactive) (org-capture nil "o"))
   "Cb" (lambda () (interactive) (org-capture nil "b"))
   "Ce" (lambda () (interactive) (org-capture nil "e"))
+  "Cn" (lambda () (interactive) (org-capture nil "n"))
 
   "Cww" (lambda () (interactive) (org-capture nil "ww"))
   "Cwb" (lambda () (interactive) (org-capture nil "wb"))
@@ -41,6 +42,7 @@
   "SPC C c" "inbox"
   "SPC C b" "basteln"
   "SPC C e" "emacs"
+  "SPC C n" "clock note"
 
   "SPC C w"   "work"
   "SPC C w w" "inbox"
