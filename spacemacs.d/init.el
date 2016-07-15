@@ -38,7 +38,9 @@ values."
      command-log
      dash
      games
-     git
+     (git
+      :variables
+      git-magit-status-fullscreen t)
      github
      helm
      mu4e
