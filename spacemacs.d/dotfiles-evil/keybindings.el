@@ -2,7 +2,7 @@
   "`"  'spacemacs/default-pop-shell
   "S"  'split-window-below-and-focus
   "V"  'split-window-right-and-focus
-  "W"  'save-buffer
+  "W"  'dotfiles/save-buffer
   "ws" 'split-window-below-and-focus
   "wS" 'split-window-below
   "wv" 'split-window-right-and-focus

@@ -65,3 +65,8 @@
     (push-mark end)
     (setq deactivate-mark nil)
     (exchange-point-and-mark)))
+
+;; force-write a buffer
+(defun dotfiles/save-buffer ()
+  (interactive)
+  (evil-save nil t))
