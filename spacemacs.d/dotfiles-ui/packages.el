@@ -4,6 +4,7 @@
    persp-mode
    projectile
    smooth-scrolling
+   spaceline
    which-key
 
    zone-nyan
@@ -71,6 +72,13 @@
 ;; hide dotfiles/ prefix in which-key
 (defun dotfiles-ui/post-init-which-key ()
   (push '("^dotfiles/\\(.+\\\)" . "\\1") which-key-description-replacement-alist))
+
+;; trim down modeline
+(defun dotfiles-ui/post-init-spaceline ()
+  (spaceline-toggle-major-mode-off)
+  (spaceline-toggle-minor-modes-off)
+  (spaceline-toggle-buffer-position-off)
+  (spaceline-toggle-buffer-size-off))
 
 (defun dotfiles-ui/init-zone-nyan ()
   (use-package zone-nyan :defer t))
