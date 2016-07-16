@@ -340,7 +340,7 @@ before packages are loaded. If you are unsure, you should try in setting them in
    ;; package settings
    exec-path-from-shell-check-startup-files nil
    helm-autoresize-min-height 1
-   helm-autoresize-max-height 30
+   helm-autoresize-max-height 40
    helm-buffer-max-length nil
    magit-log-arguments '("-n100" "--decorate" "--patch")
    magit-repository-directories '("~/src")
