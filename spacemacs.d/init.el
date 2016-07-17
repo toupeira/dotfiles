@@ -3,6 +3,11 @@
 (setq dotfiles/is-gui    (display-graphic-p))
 (setq dotfiles/is-ocelot (string= system-name "ocelot"))
 
+(let ((private "~/.spacemacs.d/private"))
+  (when (file-directory-p private)
+    (dolist (file (directory-files private t ".\\.el$"))
+      (load file nil nil))))
+
 (defun dotspacemacs/layers ()
   "Configuration Layers declaration.
 You should not put any user code in this function besides modifying the variable
@@ -349,7 +354,9 @@ before packages are loaded. If you are unsure, you should try in setting them in
    ruby-insert-encoding-magic-comment nil
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
-  ))
+  )
+
+  (run-hooks 'dotfiles/init-hook))
 
 (defun dotspacemacs/user-config ()
   "Configuration function for user code.
@@ -385,10 +392,7 @@ you should place your code here."
   (spacemacs/set-leader-keys
     "TAB"  'dotfiles/alternate-buffer)
 
-  (-when-let* ((private "~/.spacemacs.d/private")
-               (exists (file-directory-p private)))
-    (dolist (file (directory-files private t ".\\.el$"))
-      (load file nil nil))))
+  (run-hooks dotfiles/config-hook))
 
 ;; Do not write anything past this comment. This is where Emacs will
 ;; auto-generate custom variable definitions.
