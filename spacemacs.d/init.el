@@ -1,7 +1,9 @@
 (setq dotfiles/directory "/etc/dotfiles/")
 (setq dotfiles/is-server (not (string= (getenv "EMACS_SERVER") "disabled")))
-(setq dotfiles/is-gui    (display-graphic-p))
 (setq dotfiles/is-ocelot (string= system-name "ocelot"))
+
+(defvar dotfiles/init-hook nil)
+(defvar dotfiles/config-hook nil)
 
 (let ((private "~/.spacemacs.d/private"))
   (when (file-directory-p private)
