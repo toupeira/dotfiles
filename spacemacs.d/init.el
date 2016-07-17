@@ -371,10 +371,11 @@ you should place your code here."
   ;; always show current function in modeline
   (which-function-mode t)
 
-  ;; for some reason this doesn't get applied with the theming-modifications layer
-  (set-face-attribute
-   'evil-search-highlight-persist-highlight-face
-   nil :inherit 'lazy-highlight :background nil :foreground nil)
+  ;; override custom Spacemacs faces
+  (defun spacemacs//adaptive-evil-highlight-persist-face ())
+  (defun spacemacs//adaptive-smartparent-pair-overlay-face ())
+  (defun spacemacs//show-trailing-whitespace ()
+    (setq show-trailing-whitespace 1))
 
   ;; fix SPC TAB with perspectives
   ;; https://github.com/syl20bnr/spacemacs/issues/5129
