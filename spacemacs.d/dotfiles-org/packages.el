@@ -54,11 +54,12 @@
      (sequence "PENDING" "|" "DONE")
      (sequence "MAYBE" "GOAL" "FOCUS" "|" "DONE" "ABANDONED(!)"))
    org-todo-keyword-faces
-   '(("NEXT" . "#FD971F")
-     ("GOAL" . "#FD971F")
+   '(("NEXT"    . "#FD971F")
+     ("GOAL"    . "#FD971F")
      ("STARTED" . "#AE81FF")
+     ("FOCUS"   . "#AE81FF")
      ("WAITING" . "#E6DB74")
-     ("FOCUS" . "#AE81FF")
+     ("PENDING" . "#A6E22E")
      ("DONE" . org-done))
   )
 

@@ -51,6 +51,7 @@
   )
 
 (spacemacs/set-leader-keys-for-major-mode 'org-mode
+  "TAB" 'spacemacs/delete-window
   "u" 'dotfiles/org-update-buffer
   "C" 'org-copy)
 
