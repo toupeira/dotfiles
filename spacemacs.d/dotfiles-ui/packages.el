@@ -1,6 +1,7 @@
 (setq dotfiles-ui-packages
  '(
    flycheck
+   magit
    persp-mode
    projectile
    smooth-scrolling
@@ -56,6 +57,10 @@
 
   (add-hook 'flycheck-after-syntax-check-hook 'dotfiles/auto-list-errors)
   (advice-add 'flycheck-error-list-refresh :after 'dotfiles/auto-resize-errors))
+
+(defun dotfiles-ui/post-init-magit ()
+  (add-hook 'magit-pre-call-git-hook 'dotfiles/ssh-key-load)
+  (add-hook 'magit-pre-start-git-hook 'dotfiles/ssh-key-load))
 
 (defun dotfiles-ui/post-init-projectile ()
   (setq frame-title-format '((:eval (dotfiles/frame-title-format)))))

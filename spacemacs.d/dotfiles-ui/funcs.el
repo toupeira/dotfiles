@@ -56,3 +56,14 @@
     (with-selected-window window
       (fit-window-to-buffer window 10)
       (shrink-window-if-larger-than-buffer))))
+
+(defun dotfiles/ssh-key-loaded ()
+  (eq 0 (call-process-shell-command "ssh-add -l | fgrep -q '/.ssh/id_rsa '")))
+
+(defun dotfiles/ssh-key-load ()
+  (when (not (dotfiles/ssh-key-loaded))
+    (call-process "ssh-add"))
+
+  (when (dotfiles/ssh-key-loaded)
+    (remove-hook 'magit-pre-call-git-hook 'dotfiles/ssh-key-load)
+    (remove-hook 'magit-pre-start-git-hook 'dotfiles/ssh-key-load)))
