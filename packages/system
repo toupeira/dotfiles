@@ -28,6 +28,7 @@ moreutils
 ncurses-term
 p7zip-full
 parted
+pinentry-curses
 psmisc
 pv
 rlwrap

@@ -1,6 +1,7 @@
 gparted
 libglib2.0-bin
 numix-icon-theme-circle
+pinentry-gtk2
 pkg-mozilla-archive-keyring
 terminator
 vim-gtk
