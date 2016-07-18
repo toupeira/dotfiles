@@ -59,7 +59,6 @@
      ("STARTED" . "#AE81FF")
      ("FOCUS"   . "#AE81FF")
      ("WAITING" . "#E6DB74")
-     ("PENDING" . "#A6E22E")
      ("DONE" . org-done))
   )
 

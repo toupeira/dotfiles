@@ -358,6 +358,12 @@ before packages are loaded. If you are unsure, you should try in setting them in
    vc-follow-symlinks t
   )
 
+  ;; override custom Spacemacs faces
+  (advice-add 'spacemacs//adaptive-evil-highlight-persist-face :around nil)
+  (advice-add 'spacemacs//adaptive-smartparent-pair-overlay-face :around nil)
+  (advice-add 'spacemacs//show-trailing-whitespace :around
+              (lambda (&rest args) (setq show-trailing-whitespace 1)))
+
   (run-hooks 'dotfiles/init-hook))
 
 (defun dotspacemacs/user-config ()
@@ -370,12 +376,6 @@ you should place your code here."
 
   ;; always show current function in modeline
   (which-function-mode t)
-
-  ;; override custom Spacemacs faces
-  (defun spacemacs//adaptive-evil-highlight-persist-face ())
-  (defun spacemacs//adaptive-smartparent-pair-overlay-face ())
-  (defun spacemacs//show-trailing-whitespace ()
-    (setq show-trailing-whitespace 1))
 
   ;; fix SPC TAB with perspectives
   ;; https://github.com/syl20bnr/spacemacs/issues/5129
