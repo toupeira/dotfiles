@@ -48,6 +48,9 @@
   toggle_zoom = None
   ungroup_all = None
   ungroup_tab = None
+  zoom_in = <Primary>plus
+  zoom_normal = <Primary>parenright
+  zoom_out = <Primary>underscore
 [layouts]
   [[default]]
     [[[child1]]]
@@ -78,3 +81,4 @@
     use_custom_command = True
     use_system_font = False
     visible_bell = True
+    word_chars = "-+A-Za-z0-9,./?%&#:_"
