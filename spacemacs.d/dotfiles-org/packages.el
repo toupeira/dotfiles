@@ -23,6 +23,7 @@
    org-clock-history-length 25
    org-clock-in-resume t
    org-clock-out-remove-zero-time-clocks t
+   org-clock-out-when-done nil
    org-clock-persist t
    org-clock-clocktable-default-properties
    '(:block today)
