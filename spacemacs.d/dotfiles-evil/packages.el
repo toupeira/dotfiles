@@ -107,6 +107,9 @@
     (add-to-list 'evil-emacs-state-modes 'term-mode)
     (evil-define-key 'normal term-raw-map (kbd "C-\\") 'evil-emacs-state)
 
+    ;; add pasting in terminals
+    (define-key term-raw-map (kbd "C-v") 'dotfiles/paste)
+
     ;; add window keys in terminals
     (define-key term-raw-map (kbd "C-h") 'evil-window-left)
     (define-key term-raw-map (kbd "C-j") 'evil-window-down)
