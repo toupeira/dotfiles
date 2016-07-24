@@ -14,14 +14,13 @@
          (dotfiles/org-goto "organizer" nil '("Projects" "Emacs" "Inbox"))
          (org-show-subtree))
 
-  "Cc" (lambda () (interactive) (org-capture nil "o"))
+  "Cc" (lambda () (interactive) (org-capture nil "c"))
   "Cb" (lambda () (interactive) (org-capture nil "b"))
   "Ce" (lambda () (interactive) (org-capture nil "e"))
   "Cn" (lambda () (interactive) (org-capture nil "n"))
 
-  "Cww" (lambda () (interactive) (org-capture nil "ww"))
-  "Cwb" (lambda () (interactive) (org-capture nil "wb"))
-  "Cwp" (lambda () (interactive) (org-capture nil "wp"))
+  "Cw" (lambda () (interactive) (org-capture nil "w"))
+  "CW" (lambda () (interactive) (org-capture nil "W"))
 
   ;; remove Spacemacs bindings
   "Ci" nil
@@ -44,10 +43,8 @@
   "SPC C e" "emacs"
   "SPC C n" "clock note"
 
-  "SPC C w"   "work"
-  "SPC C w w" "inbox"
-  "SPC C w b" "basteln"
-  "SPC C w p" "add project"
+  "SPC C w" "work task"
+  "SPC C W" "work inbox"
   )
 
 (spacemacs/set-leader-keys-for-major-mode 'org-mode

@@ -36,6 +36,8 @@
    org-download-method 'attach
    org-enforce-todo-dependencies t
    org-fontify-done-headline t
+   org-habit-following-days 5
+   org-habit-preceding-days 35
    org-habit-show-done-always-green t
    org-log-into-drawer t
    org-log-redeadline nil
@@ -100,7 +102,7 @@
   (setq
    org-capture-templates
    '(
-     ("o" "inbox" entry (file+olp (concat org-directory "organizer.org") "Inbox")
+     ("c" "inbox" entry (file+olp (concat org-directory "organizer.org") "Inbox")
       "* TODO %?"
       :empty-lines-after 1)
      ("b" "basteln" entry (file+olp (concat org-directory "organizer.org") "Projects" "Basteln")
@@ -110,18 +112,12 @@
      ("n" "clock note" item (clock)
       "- %U %?")
 
-     ("w" "work")
-
-     ("ww" "inbox" entry (file+olp (concat org-directory "work.org") "Inbox")
+     ("w" "work inbox" entry (file+olp (concat org-directory "work.org") "Inbox")
       "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:%^{CATEGORY}p\n\n"
       :empty-lines-after 1)
 
-     ("wb" "basteln" entry (file+olp (concat org-directory "work.org") "Panter" "Basteln")
+     ("W" "work todo" entry (file+olp (concat org-directory "work.org") "Inbox")
       "* TODO %?")
-
-     ("wp" "add project" entry (file+olp (concat org-directory "work.org") "Projects")
-      "* %^{category} - %^{title}\n:PROPERTIES:\n:CATEGORY: %\\1\n:END:"
-      :immediate-finish t :jump-to-captured t)
     )
   )
 
