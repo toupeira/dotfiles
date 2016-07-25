@@ -103,7 +103,7 @@
    org-capture-templates
    '(
      ("c" "inbox" entry (file+olp (concat org-directory "organizer.org") "Inbox")
-      "* TODO %?"
+      "* NEXT %?"
       :empty-lines-after 1)
      ("b" "basteln" entry (file+olp (concat org-directory "organizer.org") "Projects" "Basteln")
       "* TODO %?")
@@ -113,7 +113,7 @@
       "- %U %?")
 
      ("w" "work inbox" entry (file+olp (concat org-directory "work.org") "Inbox")
-      "* TODO %?\n:PROPERTIES:\n:CREATED: %U\n:END:%^{CATEGORY}p\n\n"
+      "* NEXT %?\n:PROPERTIES:\n:CREATED: %U\n:END:%^{CATEGORY}p\n\n"
       :empty-lines-after 1)
 
      ("W" "work todo" entry (file+olp (concat org-directory "work.org") "Inbox")
