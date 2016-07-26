@@ -3,12 +3,13 @@
 
 # Prompt configuration
 PS1_USER="\u"
-PS1_HOST=""
+PS1_HOST=" "
 [ -z "$SSH_CONNECTION" ] && [ "$USER" = "toupeira" -o "$USER" = "mak" ] && PS1_USER="λ"
-[ -n "$SSH_CONNECTION" -o "$TERM" = "linux" ] && PS1_HOST="@\h"
+[ -n "$SSH_CONNECTION" -o "$TERM" = "linux" ] && PS1_HOST="@\h "
+[ -n "$EMACS" ] && PS1_USER="" && PS1_HOST=""
 [ "$UID" = "0" ] && PS1_USER="\[\e[1;31m\]$PS1_USER"
 
-PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST \[\e[0;36m\][\[\e[1;36m\]\w\[\e[0;36m\]]\[\e[0m\] \[\$(_prompt_exit_status)\]"
+PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\w\[\e[0;36m\]]\[\e[0m\] \[\$(_prompt_exit_status)\]"
 
 # Use Git prompt if available
 if type __git_ps1 &>/dev/null; then
