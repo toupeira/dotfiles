@@ -407,9 +407,11 @@ endfunction " }}}
 " {{{
 
   " Spacemacs escape hatch
-  nmap <Space>S ,s
-  nmap <Space>V ,v
-  nmap <Space>W ,w
+  nmap <Space>- ,s
+  nmap <Space>\| ,v
+  nmap <Space><Backspace> ,c
+  nmap <Space><CR> ,w
+
   nmap <Space>bb ,b
   nmap <Space>ff ,f
   nmap <Space>pf ,f

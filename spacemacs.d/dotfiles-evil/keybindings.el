@@ -1,9 +1,10 @@
 (spacemacs/set-leader-keys
-  "`"  'spacemacs/default-pop-shell
-  "D"  'spacemacs/delete-window
-  "S"  'split-window-below-and-focus
-  "V"  'split-window-right-and-focus
-  "W"  'dotfiles/save-buffer
+  "-"   'split-window-below-and-focus
+  "|"   'split-window-right-and-focus
+  "DEL" 'spacemacs/delete-window
+  "RET" 'dotfiles/save-buffer
+  "`"   'spacemacs/default-pop-shell
+
   "ws" 'split-window-below-and-focus
   "wS" 'split-window-below
   "wv" 'split-window-right-and-focus
