@@ -19,10 +19,10 @@
 ;; paste from desktop clipboard
 (defun dotfiles/paste ()
   (interactive)
-  (when (and evil-mode (eq (evil-visual-type) 'line))
+  (when (and evil-mode (not (evil-insert-state-p)) (eq (evil-visual-type) 'line))
     (evil-digit-argument-or-evil-beginning-of-line))
   (if evil-mode
-    (evil-paste-from-register ?+)
+      (evil-paste-from-register ?+)
     (simpleclip-paste)))
 
 ;; escape wrapper that should work anywhere
