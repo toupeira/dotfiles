@@ -127,6 +127,10 @@
   ;; enable org-mode for additional extensions
   (add-to-list 'auto-mode-alist '("\\.org_archive$" . org-mode))
 
+  ;; save org buffers when idle or the window loses focus
+  (add-hook 'auto-save-hook (lambda () (dotfiles/silence (org-save-all-org-buffers))))
+  (add-hook 'focus-out-hook (lambda () (dotfiles/silence (org-save-all-org-buffers))))
+
   (with-eval-after-load 'org
     (add-to-list 'org-modules 'org-habit)
     (org-clock-persistence-insinuate)
