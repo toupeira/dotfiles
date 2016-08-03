@@ -1,8 +1,6 @@
 (setq dotfiles-org-packages
  '(
    org
-   org-indent
-
    org-agenda-property
   ))
 
