@@ -106,7 +106,10 @@ values."
      subatomic-theme
     )
    ;; A list of packages that will not be install and loaded.
-   dotspacemacs-excluded-packages '()
+   dotspacemacs-excluded-packages
+   '(
+     volatile-highlights
+    )
    ;; Defines the behaviour of Spacemacs when downloading packages.
    ;; Possible values are `used', `used-but-keep-unused' and `all'. `used' will
    ;; download only explicitly used packages and remove any unused packages as
@@ -361,8 +364,8 @@ before packages are loaded. If you are unsure, you should try in setting them in
   )
 
   ;; override custom Spacemacs faces
-  (advice-add 'spacemacs//adaptive-evil-highlight-persist-face :around nil)
-  (advice-add 'spacemacs//adaptive-smartparent-pair-overlay-face :around nil)
+  (advice-add 'spacemacs//adaptive-evil-highlight-persist-face :around (lambda (&rest args)))
+  (advice-add 'spacemacs//adaptive-smartparent-pair-overlay-face :around (lambda (&rest args)))
   (advice-add 'spacemacs//show-trailing-whitespace :around
               (lambda (&rest args) (setq show-trailing-whitespace 1)))
 
