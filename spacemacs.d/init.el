@@ -66,6 +66,7 @@ values."
      version-control
 
      ;; languages
+     graphviz
      elixir
      elm
      emacs-lisp
