@@ -20,6 +20,7 @@
    org-blank-before-new-entry '((heading . auto) (plain-list-item . nil))
    org-clock-history-length 25
    org-clock-in-resume t
+   org-clock-mode-line-total 'current
    org-clock-out-remove-zero-time-clocks t
    org-clock-out-when-done nil
    org-clock-persist t

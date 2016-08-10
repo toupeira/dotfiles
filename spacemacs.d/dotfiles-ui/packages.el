@@ -78,8 +78,10 @@
 (defun dotfiles-ui/post-init-which-key ()
   (push '("^dotfiles/\\(.+\\\)" . "\\1") which-key-description-replacement-alist))
 
-;; trim down modeline
+;; tweak modeline
 (defun dotfiles-ui/post-init-spaceline ()
+  (spaceline-toggle-org-clock-on)
+
   (spaceline-toggle-major-mode-off)
   (spaceline-toggle-minor-modes-off)
   (spaceline-toggle-buffer-position-off)
