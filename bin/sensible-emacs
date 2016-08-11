@@ -44,6 +44,8 @@ case "$1" in
         else
           emacs="$emacs --eval '(dotfiles/startup)'"
         fi
+      elif [ -v EMACS ]; then
+        emacs='emacsclient'
       fi
     elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
       unset DISPLAY
