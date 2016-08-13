@@ -14,7 +14,6 @@
          (dotfiles/org-goto "organizer" nil '("Projects" "Emacs" "Inbox"))
          (org-show-subtree))
 
-  "Cc" (lambda () (interactive) (org-capture nil "c"))
   "Cb" (lambda () (interactive) (org-capture nil "b"))
   "Ce" (lambda () (interactive) (org-capture nil "e"))
   "Cn" (lambda () (interactive) (org-capture nil "n"))

@@ -181,6 +181,10 @@
     (add-hook 'org-clock-in-hook 'dotfiles/org-start-hamster-task)
     (add-hook 'org-clock-out-hook 'dotfiles/org-stop-hamster-task))
 
+  ;; override Spacemacs keybinding
+  (spacemacs/set-leader-keys
+    "Cc" (lambda () (interactive) (org-capture nil "c")))
+
   ;; keep headlines when archiving tasks
   ;; http://orgmode.org/worg/org-hacks.html
   (with-eval-after-load 'org-archive
