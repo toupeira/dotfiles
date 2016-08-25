@@ -53,7 +53,7 @@ values."
      github
      helm
      mu4e
-     org
+     (org :variables org-enable-reveal-js-support t)
      pdf-tools
      (ranger :variables ranger-show-dotfiles nil)
      (shell
