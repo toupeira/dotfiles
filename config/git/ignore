@@ -14,3 +14,6 @@ Session.vim
 # emacs
 .#*
 .projectile
+
+# ruby
+.rake_tasks~
