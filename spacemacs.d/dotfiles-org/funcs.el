@@ -24,10 +24,8 @@
     (remove-if-not 'file-writable-p files)))
 
 (defun dotfiles/org-start-task ()
-  (let ((state (org-get-todo-state))
-        (heading (org-get-heading)))
-    (when (and (not (string= "NEXT Basteln" heading))
-               (or (string= state "TODO") (string= state "NEXT")))
+  (let ((state (org-get-todo-state)))
+    (when (or (string= state "TODO") (string= state "NEXT") (string= state "WAITING"))
       (dotfiles/silence
        (org-todo "STARTED")))))
 
