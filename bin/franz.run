@@ -1,8 +1,0 @@
-#!/bin/bash
-if ! pgrep -x Franz >/dev/null; then
-  ~/src/upstream/franz/Franz "$@" &>/dev/null &
-elif wmctrl -d | fgrep '1  *'; then
-  wmctrl -s 0
-else
-  wmctrl -s 1
-fi

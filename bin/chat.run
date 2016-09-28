@@ -1,0 +1,8 @@
+#!/bin/bash
+if ! pgrep -f /usr/lib/chromium >/dev/null; then
+  chromium &>/dev/null &
+elif wmctrl -d | fgrep '1  *'; then
+  wmctrl -s 0
+else
+  wmctrl -s 1
+fi
