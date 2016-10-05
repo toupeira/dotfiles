@@ -32,6 +32,7 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/home/*/.cdist
   --exclude **/home/*/.cinv
   --exclude **/home/*/.config/chromium
+  --exclude **/home/*/.config/deluge/state
   --exclude **/home/*/.config/Franz
   --exclude **/home/*/.config/google-chrome
   --exclude **/home/*/.config/google-chrome-unstable
