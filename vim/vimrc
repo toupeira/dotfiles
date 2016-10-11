@@ -8,6 +8,9 @@
   let s:vimdir = expand("~") . "/.vim"
   let s:has_ag = executable('ag')
 
+  " disable defaults.vim
+  let g:skip_defaults_vim = 1
+
   " set up pathogen
   runtime bundle/pathogen/autoload/pathogen.vim
   if !exists('g:pathogen_disabled')
