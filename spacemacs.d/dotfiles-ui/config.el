@@ -22,6 +22,8 @@
     ;; cursorline
     (hl-line :background "#262620")
     (trailing-whitespace :background "#33332B")
+    (company-preview :inherit 'trailing-whitespace :background nil)
+    (company-tooltip :inherit 'trailing-whitespace :background nil)
 
     ;; search highlighting
     ; (isearch :background "#993991" :foreground "white" :bold t)
