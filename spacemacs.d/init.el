@@ -333,7 +333,26 @@ executes.
 before packages are loaded. If you are unsure, you should try in setting them in
 `dotspacemacs/user-config' first."
 
-  (setq-default
+  ;; get rid of startup warning
+  (setq exec-path-from-shell-check-startup-files nil)
+
+  ;; override custom Spacemacs faces
+  (advice-add 'spacemacs//adaptive-evil-highlight-persist-face :around (lambda (&rest args)))
+  (advice-add 'spacemacs//adaptive-smartparent-pair-overlay-face :around (lambda (&rest args)))
+  (advice-add 'spacemacs//show-trailing-whitespace :around
+              (lambda (&rest args) (setq show-trailing-whitespace 1)))
+
+  (run-hooks 'dotfiles/init-hook))
+
+(defun dotspacemacs/user-config ()
+  "Configuration function for user code.
+This function is called at the very end of Spacemacs initialization after
+layers configuration.
+This is the place where most of your configurations should be done. Unless it is
+explicitly specified that a variable should be set before a package is loaded,
+you should place your code here."
+
+  (setq
 
    ;; indentation
    tab-width 2
@@ -358,9 +377,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
    use-dialog-box nil
 
    ;; package settings
-   exec-path-from-shell-check-startup-files nil
-   helm-autoresize-min-height 1
-   helm-autoresize-max-height 40
    helm-buffer-max-length nil
    magit-log-arguments '("-n100" "--decorate" "--patch")
    magit-repository-directories '("~/src")
@@ -370,22 +386,6 @@ before packages are loaded. If you are unsure, you should try in setting them in
    ruby-version-manager 'rbenv
    vc-follow-symlinks t
   )
-
-  ;; override custom Spacemacs faces
-  (advice-add 'spacemacs//adaptive-evil-highlight-persist-face :around (lambda (&rest args)))
-  (advice-add 'spacemacs//adaptive-smartparent-pair-overlay-face :around (lambda (&rest args)))
-  (advice-add 'spacemacs//show-trailing-whitespace :around
-              (lambda (&rest args) (setq show-trailing-whitespace 1)))
-
-  (run-hooks 'dotfiles/init-hook))
-
-(defun dotspacemacs/user-config ()
-  "Configuration function for user code.
-This function is called at the very end of Spacemacs initialization after
-layers configuration.
-This is the place where most of your configurations should be done. Unless it is
-explicitly specified that a variable should be set before a package is loaded,
-you should place your code here."
 
   ;; always show current function in modeline
   (which-function-mode t)
