@@ -77,7 +77,6 @@
     scrollbar_position = hidden
     show_titlebar = False
     update_records = False
-    urgent_bell = True
     use_custom_command = True
     use_system_font = False
     visible_bell = True
