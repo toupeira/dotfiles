@@ -12,10 +12,12 @@ message="Starting new server..."
 
 file_args=false
 term_args=false
+eval_args=false
 for arg in "$@"; do
   [ "${arg:0:1}" != "-" ] && file_args=true && break
 done
 [[ "$*" =~ -nw|-t|--tty ]] && term_args=true
+[[ "$*" =~ --eval ]] && eval_args=true
 
 case "$1" in
   -h|--help)
@@ -34,7 +36,7 @@ case "$1" in
     message="Starting standalone session..."
     ;;
   *)
-    if pgrep -x emacs >/dev/null && [ -S "/tmp/emacs$UID/server" ]; then
+    if pgrep -x emacs >/dev/null && [ -S "/tmp/emacs$UID/server" ] && ! $eval_args; then
       message="Opening new frame..."
       emacs='emacsclient --create-frame'
 
@@ -44,18 +46,18 @@ case "$1" in
         else
           emacs="$emacs --eval '(dotfiles/startup)'"
         fi
-      elif [ -v EMACS ]; then
+      elif [ -v INSIDE_EMACS ]; then
         emacs='emacsclient'
       fi
-    elif [ -z "$DISPLAY" -o -n "$SSH_CONNECTION" ]; then
+    elif [ -z "$DISPLAY" ] || [ -n "$SSH_CONNECTION" ]; then
       unset DISPLAY
     fi
     ;;
 esac
 
-if [ -n "$DISPLAY" ] && ! $term_args; then
+if [ -n "$DISPLAY" ] && ! $term_args && ! $eval_args; then
   log "$message"
-  eval exec $emacs "$@" &>/dev/null &
+  exec $emacs "$@" &>/dev/null &
 else
-  eval exec $emacs "$@"
+  exec $emacs "$@"
 fi
