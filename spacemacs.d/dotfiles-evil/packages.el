@@ -123,8 +123,7 @@
     (define-key helm-map (kbd "C-u") 'dotfiles/backward-kill-line)
 
     ;; use C-w to delete words instead of yanking text at point
-    (define-key helm-map [remap helm-yank-text-at-point] 'backward-kill-word)
-    (define-key helm-map [remap helm-swoop-yank-thing-at-point] 'backward-kill-word)
+    (define-key helm-map (kbd "C-w") 'backward-kill-word)
 
     ;; only run in emacs state once on C-\ in helm
     (define-key helm-map (kbd "C-\\") 'evil-execute-in-emacs-state))
