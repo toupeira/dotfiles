@@ -2,14 +2,23 @@ AllCops:
   Include:
     - Rakefile
     - config.ru
+  Exclude:
+    - '**/db/schema.rb'
+    - '**/db/migrate/*.rb'
 
 ### LIMITS
+
+Metrics/AbcSize:
+  Max: 18
+
+Metrics/BlockLength:
+  Max: 100
 
 Metrics/CyclomaticComplexity:
   Max: 6
 
 Metrics/PerceivedComplexity:
-  Max: 6
+  Max: 8
 
 Metrics/LineLength:
   Max: 150
@@ -37,8 +46,8 @@ Style/Documentation:
 ### STYLE RULES
 
 Style/AlignHash:
-  EnforcedHashRocketStyle: table
-  EnforcedColonStyle: table
+  EnforcedHashRocketStyle: key
+  EnforcedColonStyle: key
   EnforcedLastArgumentHashStyle: always_ignore
 
 Style/AlignParameters:
@@ -74,8 +83,11 @@ Style/FileName:
 Style/FormatString:
   EnforcedStyle: percent
 
+Style/FrozenStringLiteralComment:
+  Enabled: false
+
 Style/GuardClause:
-  MinBodyLength: 3
+  MinBodyLength: 4
 
 Style/IfUnlessModifier:
   Enabled: false
@@ -118,7 +130,7 @@ Style/Semicolon:
   AllowAsExpressionSeparator: true
     
 Style/SignalException:
-  EnforcedStyle: only_raise
+  EnforcedStyle: semantic
   # SupportedStyles:
   #   - only_raise
   #   - only_fail
@@ -130,10 +142,16 @@ Style/SingleLineBlockParams:
 Style/SpaceInsideBrackets:
   Enabled: false
 
+Style/SpaceInsidePercentLiteralDelimiters:
+  Enabled: false
+
 Style/SpecialGlobalVars:
   Enabled: false
 
 Style/StringLiterals:
+  Enabled: false
+
+Style/SymbolProc:
   Enabled: false
 
 Style/TrailingCommaInLiteral:
