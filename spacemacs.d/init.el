@@ -78,7 +78,11 @@ values."
      (markdown :variables markdown-live-preview-engine 'vmd)
      php
      python
-     ruby
+     (ruby
+      :variables
+      ruby-enable-enh-ruby-mode t
+      ruby-version-manager 'rbenv
+      ruby-test-runner 'rspec)
      ruby-on-rails
      shell-scripts
      vimscript
@@ -383,7 +387,6 @@ you should place your code here."
    paradox-github-token t
    powerline-height (if dotfiles/is-ocelot 28 16)
    ruby-insert-encoding-magic-comment nil
-   ruby-version-manager 'rbenv
    vc-follow-symlinks t
   )
 
