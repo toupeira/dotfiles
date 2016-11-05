@@ -37,6 +37,7 @@ npm:elm-test
 npm:htmlhint
 npm:jshint
 npm:jsonlint
+npm:js-yaml
 npm:npm-check-updates
 npm:tern
 npm:vmd
