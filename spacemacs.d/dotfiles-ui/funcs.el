@@ -48,14 +48,15 @@
             directory)))
 
 (defun dotfiles/auto-list-errors ()
-  (when flycheck-current-errors
-    (flycheck-list-errors)))
+  (if flycheck-current-errors
+      (flycheck-list-errors)
+    (-if-let (window (flycheck-get-error-list-window))
+        (quit-window nil window))))
 
 (defun dotfiles/auto-resize-errors ()
   (-when-let (window (flycheck-get-error-list-window t))
     (with-selected-window window
-      (fit-window-to-buffer window 10)
-      (shrink-window-if-larger-than-buffer))))
+      (fit-window-to-buffer window 5))))
 
 (defun dotfiles/ssh-key-loaded ()
   (eq 0 (call-process-shell-command "ssh-add -l | fgrep -q '/.ssh/id_rsa '")))

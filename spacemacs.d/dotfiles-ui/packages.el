@@ -56,7 +56,7 @@
   (spacemacs/add-flycheck-hook 'shell-mode-hook)
 
   (add-hook 'flycheck-after-syntax-check-hook 'dotfiles/auto-list-errors)
-  (advice-add 'flycheck-error-list-refresh :after 'dotfiles/auto-resize-errors))
+  (add-hook 'flycheck-error-list-after-refresh-hook 'dotfiles/auto-resize-errors))
 
 (defun dotfiles-ui/post-init-magit ()
   (add-hook 'magit-pre-call-git-hook 'dotfiles/ssh-key-load)
