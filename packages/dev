@@ -39,7 +39,4 @@ npm:jshint
 npm:jsonlint
 npm:npm-check-updates
 npm:tern
-
-pip:grip
-pip:pgcli
-pip:wheel
+npm:vmd
