@@ -101,6 +101,10 @@ Style/LeadingCommentSpace:
 Style/NumericLiterals:
   MinDigits: 7
 
+# Ruby <2.3 doesn't have Numeric#positive? / #negative? yet
+Style/NumericPredicate:
+  Enabled: false
+
 Style/PercentLiteralDelimiters:
   PreferredDelimiters:
     '%':  '{}'
