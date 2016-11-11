@@ -385,6 +385,7 @@ you should place your code here."
    magit-log-arguments '("-n100" "--decorate" "--patch")
    magit-repository-directories '("~/src")
    paradox-github-token t
+   persp-kill-foreign-buffer-action 'kill
    powerline-height (if dotfiles/is-ocelot 28 16)
    ruby-insert-encoding-magic-comment nil
    vc-follow-symlinks t

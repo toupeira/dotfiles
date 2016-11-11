@@ -133,8 +133,14 @@
   (with-eval-after-load 'org
     (add-to-list 'org-modules 'org-habit)
     (org-clock-persistence-insinuate)
+
     ;; use T to cycle backwords through todo states
-    (evil-define-key 'normal evil-org-mode-map (kbd "T") 'org-shiftleft))
+    (evil-define-key 'normal evil-org-mode-map (kbd "T") 'org-shiftleft)
+
+    ;; override Spacemacs keybinding
+    (spacemacs/set-leader-keys
+      "Cc" (lambda () (interactive) (org-capture nil "c")))
+  )
 
   (with-eval-after-load 'org-agenda
     ;; use T to cycle backwords through todo states
@@ -180,10 +186,6 @@
   (when (executable-find "hamster")
     (add-hook 'org-clock-in-hook 'dotfiles/org-start-hamster-task)
     (add-hook 'org-clock-out-hook 'dotfiles/org-stop-hamster-task))
-
-  ;; override Spacemacs keybinding
-  (spacemacs/set-leader-keys
-    "Cc" (lambda () (interactive) (org-capture nil "c")))
 
   ;; keep headlines when archiving tasks
   ;; http://orgmode.org/worg/org-hacks.html

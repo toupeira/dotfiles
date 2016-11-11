@@ -36,6 +36,10 @@
 # minified files
 **.min.js
 **.min.css
+**-min.js
+
+# logs
+*.log
 
 # home
 src/*-clone
@@ -50,7 +54,7 @@ src/upstream
 db/archive
 app/assets/javascripts/ace
 app/assets/data
-log/*.log
+vendor/assets
 tmp/
 
 # JavaScript
