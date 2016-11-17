@@ -34,12 +34,6 @@ Metrics/ClassLength:
 Lint/AssignmentInCondition:
   Enabled: false
 
-Style/AndOr:
-  Enabled: false
-
-# BlockComments:
-#   Enabled: false
-
 Style/Documentation:
   Enabled: false
 
@@ -58,6 +52,9 @@ Style/AsciiComments:
 
 Style/BarePercentLiterals:
   EnforcedStyle: percent_q
+
+Style/BlockDelimiters:
+  EnforcedStyle: semantic
 
 Style/BracesAroundHashParameters:
   Enabled: false
