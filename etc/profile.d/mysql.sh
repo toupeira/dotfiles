@@ -1,9 +1,9 @@
 # Check for interactive bash and MySQL
 [ -n "$BASH_INTERACTIVE" ] && has mysql || return
 
-alias mysql='mysql -u root'
-alias mysqladmin='mysqladmin -u root'
-alias mysqldump='mysqldump -u root'
+alias mysql='sudo mysql -u root'
+alias mysqladmin='sudo mysqladmin -u root'
+alias mysqldump='sudo mysqldump -u root'
 
 function mysql-ps {
   uptime
