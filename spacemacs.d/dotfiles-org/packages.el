@@ -85,8 +85,9 @@
      org-agenda-custom-commands
      `(
        ("o" "Agenda for home context"
-        ,(cons '(agenda "") (subseq task-list 0 3))
-        ((org-agenda-tag-filter-preset '("-work"))))
+        ,(cons '(agenda "") (append (subseq task-list 0 3) (subseq goal-list 0 1)))
+        ((org-agenda-tag-filter-preset '("-work"))
+         (org-agenda-use-time-grid nil)))
        ("w" "Agenda for work context"
         ,(cons '(agenda "") (subseq task-list 0 3))
         ((org-agenda-tag-filter-preset '("+work"))))
