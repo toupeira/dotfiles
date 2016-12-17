@@ -63,6 +63,9 @@
   showPatch = true
   showStat = true
 
+[submodule]
+  fetchJobs = 0
+
 [alias]
   h = help
   st = status
