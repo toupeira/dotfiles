@@ -1,6 +1,6 @@
 [global_config]
+  dbus = False
   enabled_plugins = ,
-  geometry_hinting = False
   title_font = DejaVu Sans Mono for Powerline 9
   title_use_system_font = False
 [keybindings]
@@ -12,6 +12,8 @@
   copy = <Primary><Shift>c
   cycle_next = None
   cycle_prev = None
+  edit_tab_title = None
+  edit_terminal_title = None
   edit_window_title = None
   go_down = None
   go_left = None
@@ -30,7 +32,7 @@
   move_tab_right = None
   new_tab = None
   new_terminator = None
-  new_window = <Primary><Shift>n
+  new_window = None
   next_tab = None
   prev_tab = None
   reset = <Primary><Shift>r
@@ -64,7 +66,6 @@
 [profiles]
   [[default]]
     background_darkness = 0.9
-    background_image = None
     background_type = transparent
     cursor_blink = False
     cursor_color = "#ebebe9"
@@ -72,11 +73,9 @@
     font = DejaVu Sans Mono for Powerline 9
     foreground_color = "#ffffff"
     login_shell = True
-    scroll_on_output = False
     scrollback_lines = 10000
     scrollbar_position = hidden
     show_titlebar = False
-    update_records = False
     use_custom_command = True
     use_system_font = False
     visible_bell = True
