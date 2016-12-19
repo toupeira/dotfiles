@@ -37,6 +37,7 @@
 **.min.js
 **.min.css
 **-min.js
+**.js.map
 
 # logs
 *.log
