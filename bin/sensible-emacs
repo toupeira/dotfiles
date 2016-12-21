@@ -57,7 +57,7 @@ esac
 
 if [ -n "$DISPLAY" ] && ! $term_args && ! $eval_args; then
   log "$message"
-  exec $emacs "$@" &>/dev/null &
+  eval exec $emacs "$@" &>/dev/null &
 else
   exec $emacs "$@"
 fi
