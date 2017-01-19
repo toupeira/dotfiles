@@ -32,6 +32,7 @@ parted
 pinentry-curses
 psmisc
 pv
+rename
 rlwrap
 rsync
 ruby
