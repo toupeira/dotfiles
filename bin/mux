@@ -270,7 +270,7 @@ case "$1" in
     tmux $action $args -- "
       export PATH=\"$PATH\";
       $0 title '$title';
-      cd '$PWD';
+      cd \"$PWD\";
       $0 store;
       exec $*
     " || tmux display "Pane too small"
