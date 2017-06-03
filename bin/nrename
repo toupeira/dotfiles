@@ -17,7 +17,7 @@ while [ "${1:0:1}" = "-" ]; do
     --)
       break
       ;;
-    -)
+    -*)
       exec echo "Usage:  nrename [-f] [-n] [-k PATTERN] FILE [FILE..]"
       ;;
   esac

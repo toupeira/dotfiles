@@ -1,0 +1,131 @@
+<keymap>
+  <global>
+    <joystick>
+      <a>Select</a>
+      <b>Back</b>
+      <x>Info</x>
+      <y>XBMC.ActivateWindow(Favourites)</y>
+      <back>ActivateWindow(shutdownmenu)</back>
+      <start>ToggleFullScreen</start>
+      <leftbumper>PageUp</leftbumper>
+      <rightbumper>PageDown</rightbumper>
+      <lefttrigger>FullScreen</lefttrigger>
+      <righttrigger>ContextMenu</righttrigger>
+
+      <left>Left</left>
+      <right>Right</right>
+      <up>Up</up>
+      <down>Down</down>
+
+      <leftthumb>noop</leftthumb>
+      <rightthumb>noop</rightthumb>
+      <leftstickleft>noop</leftstickleft>
+      <leftstickright>noop</leftstickright>
+      <leftstickup>noop</leftstickup>
+      <leftstickdown>noop</leftstickdown>
+      <rightstickleft>noop</rightstickleft>
+      <rightstickright>noop</rightstickright>
+      <rightstickup>noop</rightstickup>
+      <rightstickdown>noop</rightstickdown>
+    </joystick>
+  </global>
+
+  <Home>
+    <joystick>
+      <b>ActivateWindow(shutdownmenu)</b>
+    </joystick>
+  </Home>
+
+  <FullscreenVideo>
+    <joystick>
+      <a>Pause</a>
+      <b>Stop</b>
+      <x>Info</x>
+      <y>OSD</y>
+      <back>ActivateWindow(shutdownmenu)</back>
+      <start>ToggleFullScreen</start>
+      <leftbumper>SkipPrevious</leftbumper>
+      <rightbumper>SkipNext</rightbumper>
+      <lefttrigger>FullScreen</lefttrigger>
+      <righttrigger>AspectRatio</righttrigger>
+
+      <left>SmallStepBack</left>
+      <right>StepForward</right>
+      <up>BigStepForward</up>
+      <down>BigStepBack</down>
+
+      <leftthumb>noop</leftthumb>
+      <rightthumb>noop</rightthumb>
+      <leftstickleft>noop</leftstickleft>
+      <leftstickright>noop</leftstickright>
+      <leftstickup>noop</leftstickup>
+      <leftstickdown>noop</leftstickdown>
+      <rightstickleft>noop</rightstickleft>
+      <rightstickright>noop</rightstickright>
+      <rightstickup>noop</rightstickup>
+      <rightstickdown>noop</rightstickdown>
+    </joystick>
+  </FullscreenVideo>
+
+  <FullscreenLiveTV>
+    <joystick>
+      <left>PreviousChannelGroup</left>
+      <right>NextChannelGroup</right>
+      <up>ChannelUp</up>
+      <down>ChannelDown</down>
+    </joystick>
+  </FullscreenLiveTV>
+
+  <Visualisation>
+    <joystick>
+      <a>Pause</a>
+      <b>Stop</b>
+      <y>OSD</y>
+      <start>ToggleFullScreen</start>
+      <leftbumper>SkipPrevious</leftbumper>
+      <rightbumper>SkipNext</rightbumper>
+      <righttrigger>XBMC.ActivateWindow(VisualisationPresetList)</righttrigger>
+
+      <left>SmallStepBack</left>
+      <right>StepForward</right>
+      <up>NextPreset</up>
+      <down>PreviousPreset</down>
+    </joystick>
+  </Visualisation>
+
+  <SlideShow>
+    <joystick>
+      <a>Pause</a>
+      <b>Stop</b>
+      <x>ZoomNormal</x>
+      <y>Rotate</y>
+
+      <left>PreviousPicture</left>
+      <right>NextPicture</right>
+      <up>ZoomIn</up>
+      <down>ZoomOut</down>
+    </joystick>
+  </SlideShow>
+
+  <ScreenCalibration>
+    <joystick>
+      <a>NextCalibration</a>
+    </joystick>
+  </ScreenCalibration>
+
+  <VirtualKeyboard>
+    <joystick>
+      <b>BackSpace</b>
+      <x>Symbols</x>
+      <y>Shift</y>
+      <start>ToggleFullScreen</start>
+      <leftbumper>CursorLeft</leftbumper>
+      <rightbumper>CursorRight</rightbumper>
+      <lefttrigger>Back</lefttrigger>
+      <righttrigger>Enter</righttrigger>
+
+      <leftthumb>noop</leftthumb>
+      <rightthumb>noop</rightthumb>
+    </joystick>
+  </VirtualKeyboard>
+</keymap>
