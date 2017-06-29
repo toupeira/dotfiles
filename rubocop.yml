@@ -60,7 +60,7 @@ Style/BracesAroundHashParameters:
   Enabled: false
 
 Style/CaseIndentation:
-  IndentWhenRelativeTo: end
+  EnforcedStyle: end
 
 Style/CollectionMethods:
   PreferredMethods:
