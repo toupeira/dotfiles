@@ -273,6 +273,8 @@
   autocmd vimrc FileType help setlocal nonumber norelativenumber
   autocmd vimrc FileType org setlocal foldmethod=expr
 
+  autocmd vimrc BufRead,BufNewFile *.es6 setlocal ft=javascript
+
   " Ruby syntax highlighting
   let g:ruby_operators = 1
   let g:ruby_no_expensive = 1
