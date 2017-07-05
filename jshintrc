@@ -1,8 +1,10 @@
 // vim: ft=javascript
 
 {
+  "browser":  true,
   "jquery":   true,
   "node":     true,
+  "jasmine":  true,
 
   "devel":    false, // forbid development/debugging code
   "eqeqeq":   true,  // forbid == and !=
@@ -13,24 +15,9 @@
   "unused":   true,  // check for unused variables
 
   "globals":   {
-    "afterEach":  false,
-    "afterAll":   false,
-    "after":      false,
     "alert":      false,
     "angular":    false,
-    "beforeEach": false,
-    "beforeAll":  false,
-    "before":     false,
-    "browser":    false,
-    "describe":   false,
-    "document":   false,
-    "expect":     false,
     "inject":     false,
-    "it":         false,
-    "jasmine":    false,
-    "require":    false,
-    "spyOn":      false,
-    "window":     false,
     "Elm":        false
   }
 }
