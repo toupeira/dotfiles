@@ -41,15 +41,14 @@ function _prompt_jobs {
 }
 
 function _prompt_exit_status {
-  local status=$?
   [ -n "$CYGWIN" -o "$CONQUE" ] && return
 
-  if [ $status -gt 0 ]; then
+  if [ -n "$_last_status" ] && [ $_last_status -gt 0 ]; then
     tput sc
-    local column=$((COLUMNS-${#status}-3))
+    local column=$((COLUMNS-${#_last_status}-3))
 
     tput cup $LINES $column
-    printf '\e[1;30m[\e[1;31m%s\e[1;30m]\e[0m '  $status
+    printf '\e[1;30m[\e[1;31m%s\e[1;30m]\e[0m '  $_last_status
     tput rc
   fi
 }
@@ -63,9 +62,9 @@ if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
   fi
 
   if [ -n "$TMUX" ]; then
-    PROMPT_COMMAND='mux store; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
+    PROMPT_COMMAND='_last_status=$?; mux store; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
   else
-    PROMPT_COMMAND='_pwd=${PWD/$HOME/\~}; echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
+    PROMPT_COMMAND='_last_status=$?; _pwd=${PWD/$HOME/\~}; echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
   fi
 
   unset _hostname
