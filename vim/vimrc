@@ -914,7 +914,7 @@ endfunction " }}}
   "   \ "mode": "active",
   "   \ "passive_filetypes": [ "javascript" ] }
 
-  let g:syntastic_javascript_checkers = [ 'jshint', 'jscs' ]
+  let g:syntastic_javascript_checkers = [ 'jshint' ]
   let g:syntastic_html_checkers = [ 'htmlhint' ]
   let g:syntastic_python_checkers = [ 'python' ]
   let g:syntastic_elixir_checkers = [ 'dogma' ]
