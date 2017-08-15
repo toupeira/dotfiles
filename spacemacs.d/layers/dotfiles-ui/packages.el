@@ -20,21 +20,24 @@
   (advice-add 'find-file :after (lambda (&rest args) (run-hooks 'after-find-file-hook)))
 
   ;; https://github.com/Bad-ptr/persp-mode.el/issues/40 
-  (def-auto-persp "projectile"
+  (persp-def-auto-persp "projectile"
     :parameters '((dont-save-to-file . t))
     :hooks '(after-find-file-hook server-visit-hook)
     :switch 'frame
     :predicate
-    (lambda (buffer)
+    (lambda (buffer state)
       (when (and (buffer-file-name)
                  (projectile-project-p))
         (switch-to-buffer (other-buffer))
-        t))
-    :get-name-expr
-    (lambda ()
-      (if (string-prefix-p dotfiles/directory (file-truename (buffer-file-name (current-buffer))))
-          dotfiles/directory
-        (abbreviate-file-name (projectile-project-root)))))
+        state))
+    :get-name
+    (lambda (state)
+      (let* ((name
+        (if (string-prefix-p dotfiles/directory (file-truename (buffer-file-name (current-buffer))))
+            dotfiles/directory
+          (abbreviate-file-name (projectile-project-root)))))
+        (push (cons 'persp-name name) state)
+        state)))
 
   ;; automatically use default layout for home screen
   (advice-add 'spacemacs/home :before
