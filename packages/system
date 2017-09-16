@@ -1,5 +1,4 @@
 apt-listchanges
-apt-transport-https
 apt-xapian-index
 bash-completion
 console-common
