@@ -41,3 +41,4 @@ npm:js-yaml
 npm:npm-check-updates
 npm:tern
 npm:vmd
+npm:yarn
