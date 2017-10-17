@@ -94,6 +94,7 @@
   amend = commit -v --amend
   reword = commit -v --amend --only
   extend = commit -v --amend --no-edit
+  initial = commit --allow-empty -m 'Initial commit'
 
   r = remote -v
   rup = remote update
