@@ -73,10 +73,7 @@
           `((todo "STARTED" ,(cons '(org-agenda-overriding-header "Started tasks:") task-list-options))
             (todo "NEXT" ,(cons '(org-agenda-overriding-header "Next tasks:") task-list-options))
             (todo "WAITING" ,(cons '(org-agenda-overriding-header "Waiting tasks:") task-list-options))
-            (tags-todo "+SCHEDULED={.+}|+DEADLINE={.+}/TODO"
-                       ,(cons '(org-agenda-overriding-header "Scheduled tasks:") task-list-options))
-            (tags-todo "-SCHEDULED={.+}-DEADLINE={.+}/TODO"
-                       ,(cons '(org-agenda-overriding-header "Unscheduled tasks:") task-list-options))))
+            (todo "TODO" ,(cons '(org-agenda-overriding-header "Other tasks:") task-list-options))))
          (goal-list
           `((todo "FOCUS" ,(cons '(org-agenda-overriding-header "Goals to focus on:") task-list-options))
             (todo "GOAL"  ,(cons '(org-agenda-overriding-header "Other goals:") task-list-options))
