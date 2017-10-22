@@ -1,7 +1,9 @@
 /* Fix monospace font sizes in devtools */
+/*
 .devtools-monospace {
   font-size: 100% !important;
 }
+*/
 
 /* Always show full findbar */
 .findbar-container > * {
@@ -9,13 +11,16 @@
 }
 
 /* Hide plugin activation notification */
+/*
 notification[value="plugin-hidden"] {
   display: none !important;
 }
-
+*/
 
 /* Tweak Awesomebar */
 
+/*
 #PopupAutoCompleteRichResult .autocomplete-richlistitem description {
   font-size: 8pt !important;
 }
+*/
