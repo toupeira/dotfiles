@@ -80,10 +80,12 @@
     <joystick>
       <a>Pause</a>
       <b>Stop</b>
+      <x>Info</x>
       <y>OSD</y>
       <start>ToggleFullScreen</start>
       <leftbumper>SkipPrevious</leftbumper>
       <rightbumper>SkipNext</rightbumper>
+      <lefttrigger>FullScreen</lefttrigger>
       <righttrigger>XBMC.ActivateWindow(VisualisationPresetList)</righttrigger>
 
       <left>SmallStepBack</left>
