@@ -22,14 +22,14 @@ command="$1"
 argument="$2"
 
 case "$command" in
-  play-file) command="add-file";;
+  play-file) command="play-file";;
   queue) command="enqueue";;
   rate) command="set-rating";;
   playlist) command="dump-playlist";;
   shuffle) command="order";;
   query-saved)
     position=${argument:-1}
-    argument=`head -$((position * 2 - 1)) ~/.quodlibet/lists/queries.saved 2>/dev/null | tail -1`
+    argument=$( head -$((position * 2 - 1)) ~/.quodlibet/lists/queries.saved 2>/dev/null | tail -1 )
     if [ -n "$argument" ]; then
       command="query"
     else
@@ -49,17 +49,17 @@ case "$command" in
     if is_running; then
       quodlibet --show-window
       xwit -raise -focus -property WM_CLASS -names quodlibet
-      exit 0
+      exit
     else
       shift
       quodlibet "$@" &>/dev/null &
 
-      for i in `seq 1 300`; do
+      for _ in $( seq 1 300 ); do
         sleep 0.2
 
         if is_running; then
           sleep 0.5
-          exit 0
+          exit
         fi
       done
 
@@ -69,17 +69,13 @@ case "$command" in
     ;;
   start-playing)
     shift
-    $0 play || $0 start-hidden --start-playing
-    exit 1
+    $0 play || $0 start-hidden --start-playing "$@"
+    exit
     ;;
   start-hidden)
     shift
-
-    if $0 start "$@"; then
-      command="hide-window"
-    else
-      exit 1
-    fi
+    $0 start --start-hidden "$@"
+    exit
     ;;
   is-running)
     is_running
@@ -96,7 +92,7 @@ case "$command" in
     cat $CURRENT
     ;;
   status|dump-playlist|dump-queue)
-    tmp=`mktemp`
+    tmp=$( mktemp )
     _ql "$command $tmp"
     sleep 0.05
     cat $tmp
@@ -105,7 +101,7 @@ case "$command" in
   next|previous|play|pause|play-pause|hide-window|show-window|toggle-window|focus)
     _ql "$command"
     ;;
-  seek|order|repeat|volume|query|add-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue|query|search)
+  seek|order|repeat|volume|query|play-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue|query|search)
     case "$command" in
       shuffle|order|repeat) argument=${argument:-toggle};;
     esac
