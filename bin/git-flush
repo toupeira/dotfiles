@@ -7,6 +7,7 @@ git merge --ff-only HEAD@{u} >/dev/null || exit 1
 
 LOCAL_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/heads | sort)
 REMOTE_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/remotes | sort)
+GIT_WTF_OUTPUT=$(git wtf)
 
 function ask_yes {
   echo -ne "$1 [Y/n]\e[0m "
@@ -23,7 +24,7 @@ function ask_no {
 function flush_branch {
   local branch="$1"
 
-  git wtf | grep --color=never "$branch"
+  echo "$GIT_WTF_OUTPUT" | grep --color=never "$branch"
   ask_yes "\e[0;36m     > Remove branch?" || return
 
   if ! git branch -d "$branch"; then
