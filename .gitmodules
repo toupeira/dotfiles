@@ -346,3 +346,6 @@
   path = tmux/asos
   url = https://github.com/fcpg/tmux-asos.git
   ignore = dirty
+[submodule "vim/bundle/vue"]
+	path = vim/bundle/vue
+	url = https://github.com/posva/vim-vue.git
