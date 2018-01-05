@@ -48,15 +48,18 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/home/*/.local/share/akonadi
   --exclude **/home/*/.local/share/gnome-shell
   --exclude **/home/*/.local/share/gvfs-metadata
+  --exclude **/home/*/.local/share/heroku
   --exclude **/home/*/.local/share/teamviewer11
   --exclude **/home/*/.local/share/Zeal
   --exclude **/home/*/.macromedia
   --exclude **/home/*/.meteor
+  --exclude **/home/*/.mozilla/firefox/Crash*
   --exclude **/home/*/.mozilla/firefox/*/adblockplus
   --exclude **/home/*/.mozilla/firefox/*/cookies*
   --exclude **/home/*/.mozilla/firefox/*/lazarus*
   --exclude **/home/*/.mozilla/firefox/*/storage
   --exclude **/home/*/.nenv
+  --exclude **/home/*/.node-gyp
   --exclude **/home/*/.npm
   --exclude **/home/*/.password-store
   --exclude **/home/*/.rbenv
@@ -64,6 +67,7 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/home/*/.Skype
   --exclude **/home/*/.thumbnails
   --exclude **/home/*/.vagrant.d
+  --exclude **/home/*/.vscode
 "
 
 DEFAULT_INCLUDE_PATHS="
