@@ -52,9 +52,6 @@
   show = diff-highlight | less
   diff = diff-highlight | less
 
-[push]
-  default = simple
-
 [rebase]
   autosquash = true
   stat = true
@@ -109,9 +106,9 @@
   solve = mergetool
   splice = mergetool --tool=splice
 
-  pu   = -c push.default=simple   push -v --progress
-  pua  = -c push.default=matching push -v --progress
-  poof = -c push.default=simple   push -v --progress --force-with-lease
+  pu   = push -v --progress
+  poof = push -v --progress --force-with-lease
+  pusu = -c push.default=current push -v --progress --set-upstream
   pub  = "!f() { local target=$1; shift; git push . HEAD:$target $@; }; f"
   delbranch = "!f() { git branch -d $1 && git pu github :$1; }; f"
 
