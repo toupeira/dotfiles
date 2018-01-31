@@ -117,7 +117,7 @@ if has sudo; then
   # system tools
   _sudo_aliases \
     modprobe rmmod ifup ifdown ethtool iptables ip6tables \
-    tcpdump jnettop fdisk parted lvm docker fastboot
+    tcpdump jnettop fdisk parted lvm docker
 
   alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+|:\w+"'
 fi
