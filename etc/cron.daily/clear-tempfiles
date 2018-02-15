@@ -1,10 +1,15 @@
 #!/bin/bash
 
 find /tmp \
-  -maxdepth 1 \
-  \( -name 'karma-*' -o -name 'xvfb-run.*' -o \
-     -name '.com.google.*' -o -name '.org.chromium.*' \) \
-  -type d -mtime +1 -exec rm -rf "{}" \;
+  -maxdepth 1 -mtime +1 \( \
+  -name 'dropbox-*' -o \
+  -name 'gitaly-*' -o \
+  -name 'karma-*' -o \
+  -name 'ruby-*' -o \
+  -name 'xvfb-run.*' -o \
+  -name '.com.google.*' -o \
+  -name '.org.chromium.*' \
+  \) -exec rm -rf "{}" \;
 
 find /home/*/.vim/tmp \
   -type f -mtime +180 -delete

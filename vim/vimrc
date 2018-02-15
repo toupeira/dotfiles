@@ -446,6 +446,9 @@ endfunction " }}}
     execute ":'<,'>normal @".nr2char(getchar())
   endfunction
 
+  " reindent whole file
+  nnoremap =+ mzgg=G`z
+
   " shortcut for desktop clipboard
   noremap + "+
 
@@ -1028,6 +1031,7 @@ endfunction " }}}
     let g:airline#extensions#tabline#formatter = 'unique_tail'
     let g:airline#extensions#tabline#buffer_nr_show = 1
     let g:airline#extensions#tabline#buffer_min_count = 2
+    let g:airline#extensions#tabline#fnamecollapse = 0
 
     if has('gui_running') || exists('$TERMINATOR_UUID')
       let g:airline_powerline_fonts = 1

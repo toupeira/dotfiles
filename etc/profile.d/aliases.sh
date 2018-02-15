@@ -79,6 +79,7 @@ alias irb='pry'
 alias pyserve='python -m SimpleHTTPServer 8080'
 alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'
 alias r='rails'
+alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # sudo aliases
 if has sudo; then
