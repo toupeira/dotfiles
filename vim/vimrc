@@ -274,6 +274,7 @@
   autocmd vimrc FileType org setlocal foldmethod=expr
 
   autocmd vimrc BufRead,BufNewFile *.es6 setlocal ft=javascript
+  autocmd vimrc BufRead,BufNewFile *.axlsx,*.prawn setlocal ft=ruby
 
   " Ruby syntax highlighting
   let g:ruby_operators = 1
