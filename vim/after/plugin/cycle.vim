@@ -1,7 +1,10 @@
 call AddCycleGroup('global', [ 'return', 'break', 'continue' ])
 call AddCycleGroup('global', [ 'next', 'previous' ])
-call AddCycleGroup('global', [ 'staging', 'production' ])
+call AddCycleGroup('global', [ 'assert', 'refute' ])
+call AddCycleGroup('global', [ 'active', 'inactive' ])
+call AddCycleGroup('global', [ 'internal', 'external' ])
 call AddCycleGroup('global', [ 'debit', 'credit' ])
+call AddCycleGroup('global', [ 'staging', 'production' ])
 
 call AddCycleGroup(
   \ [ 'ruby', 'eruby', 'haml', 'slim' ],
