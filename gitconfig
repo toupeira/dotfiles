@@ -13,7 +13,7 @@
   resolveConflict = false
 
 [branch]
-	autosetuprebase = always
+  autosetuprebase = always
 
 [commit]
   gpgSign = true
