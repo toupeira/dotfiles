@@ -349,3 +349,6 @@
 [submodule "vim/bundle/vue"]
 	path = vim/bundle/vue
 	url = https://github.com/posva/vim-vue.git
+[submodule "vim/bundle/typescript"]
+	path = vim/bundle/typescript
+	url = https://github.com/leafgarland/typescript-vim

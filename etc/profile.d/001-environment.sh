@@ -27,3 +27,4 @@ export LESS_TERMCAP_ue=$'\e[0m'
 
 [ -n "$SSH_TTY" ] && export GPG_TTY="$SSH_TTY"
 [ -x /usr/bin/phantomjs ] && export PHANTOMJS_BIN="/usr/bin/phantomjs"
+which chromium &>/dev/null && export CHROME_BIN="chromium"

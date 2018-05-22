@@ -113,6 +113,8 @@ case "$1" in
           command="mix phoenix.server"
         elif [ -f elm-package.json ]; then
           command="elm live Main.elm"
+        elif [ -f angular.json ]; then
+          command="ng serve --open"
         elif [ -f .ember-cli ]; then
           command="ember serve"
         elif [ -f Gruntfile.js -o -f Gruntfile.coffee ]; then
