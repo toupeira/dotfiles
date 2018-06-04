@@ -26,7 +26,6 @@ case "$command" in
   queue) command="enqueue";;
   rate) command="set-rating";;
   playlist) command="dump-playlist";;
-  shuffle) command="order";;
   query-saved)
     position=${argument:-1}
     argument=$( head -$((position * 2 - 1)) ~/.quodlibet/lists/queries.saved 2>/dev/null | tail -1 )
@@ -101,9 +100,9 @@ case "$command" in
   next|previous|play|pause|play-pause|hide-window|show-window|toggle-window|focus)
     _ql "$command"
     ;;
-  seek|order|repeat|volume|query|play-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue|query|search)
+  seek|shuffle|repeat|volume|query|play-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue|query|search)
     case "$command" in
-      shuffle|order|repeat) argument=${argument:-toggle};;
+      shuffle|repeat) argument=${argument:-toggle};;
     esac
 
     if [ -n "$argument" ]; then
