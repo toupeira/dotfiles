@@ -40,11 +40,11 @@ case "$1" in
     shift
 
     if [ -f "$PROCFILE" ]; then
-      commands=$( egrep -o "^$proc.*:.+" "$PROCFILE" )
+      commands=$( grep -Eo "^$proc.*:.+" "$PROCFILE" )
       count=$( echo "$commands" | grep -c . )
 
       if [ $count -gt 0 ]; then
-        echo "$commands" | while read command; do
+        echo "$commands" | while read -r command; do
           localproc=$( echo "$command" | cut -d: -f1 )
           command=$( echo "$command" | cut -d: -f2- )
           title=${localproc:${#proc}+1}
@@ -88,7 +88,7 @@ case "$1" in
           command="bundle exec guard"
         elif [ -f elm-package.json ]; then
           command="elm live Main.elm"
-        elif [ -f Gruntfile.js -o -f Gruntfile.coffee ]; then
+        elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
           command="grunt watch"
         else
           echo "Can't find watcher for project."
@@ -107,17 +107,17 @@ case "$1" in
       server)
         options="-d"
 
-        if [ -x bin/rails -o -x script/rails ]; then
+        if [ -x bin/rails ] || [ -x script/rails ]; then
           command="rails server"
         elif [ -f mix.exs ] && grep -q :phoenix mix.exs; then
           command="mix phoenix.server"
         elif [ -f elm-package.json ]; then
           command="elm live Main.elm"
-        elif [ -f angular.json ]; then
+        elif [ -f angular.json ] || [ -f .angular-cli.json ]; then
           command="ng serve --open"
         elif [ -f .ember-cli ]; then
           command="ember serve"
-        elif [ -f Gruntfile.js -o -f Gruntfile.coffee ]; then
+        elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
           command="grunt serve"
         elif [ -x bin/server ]; then
           command="bin/server"
@@ -175,13 +175,13 @@ case "$1" in
       (eval "${command[@]}")
 
       >&2 echo -ne "
- \e[0;34m[\e[1;34m ${command[*]} \e[0;34m]•••\e[0m
-   \e[0;36m• \e[1;36mR\e[0;36mestart command\e[0m
-   \e[0;36m• \e[1;36mE\e[0;36mxecute another command\e[0m
-   \e[0;33m• \e[1;33mQ\e[0;33muit\e[0m
- \e[0;32m•••\e[0m "
+ \\e[0;34m[\\e[1;34m ${command[*]} \\e[0;34m]•••\\e[0m
+   \\e[0;36m• \\e[1;36mR\\e[0;36mestart command\\e[0m
+   \\e[0;36m• \\e[1;36mE\\e[0;36mxecute another command\\e[0m
+   \\e[0;33m• \\e[1;33mQ\\e[0;33muit\\e[0m
+ \\e[0;32m•••\\e[0m "
 
-      read -n 1 2>/dev/null || exit
+      read -rn 1 2>/dev/null || exit
       echo
 
       case "$REPLY" in
@@ -189,8 +189,8 @@ case "$1" in
           continue
           ;;
         [eE]*)
-          echo -ne "  \e[0;34m•• \e[1;34mcommand:\e[0m "
-          read
+          echo -ne "  \\e[0;34m•• \\e[1;34mcommand:\\e[0m "
+          read -r
           command=( "$REPLY" )
           ;;
         *)
@@ -207,9 +207,9 @@ case "$1" in
     [ -n "$title" ] || usage
 
     if [[ "$TERM" =~ ^(tmux|screen) ]]; then
-      echo -ne "\033]0;$title\007\033k$title\033\\"
+      echo -ne "\\033]0;$title\\007\\033k$title\\033\\"
     else
-      echo -ne "\033]1;$title\007\033]2;$title\007"
+      echo -ne "\\033]1;$title\\007\\033]2;$title\\007"
     fi
     ;;
 
@@ -267,7 +267,7 @@ case "$1" in
       set -- bash --login
     fi
 
-    cd "$( $0 restore )"
+    cd "$( $0 restore )" || true
 
     tmux $action $args -- "
       export PATH=\"$PATH\";
