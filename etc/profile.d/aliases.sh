@@ -7,7 +7,7 @@ alias dt='dotfiles'
 has git-edit && alias ed='git-edit'
 
 # general shell aliases
-has dircolors && eval `dircolors -b`
+has dircolors && eval $( dircolors -b )
 alias ls='ls --color --quoting-style=literal'
 alias ll='ls -lh'
 alias l='ls -A'
@@ -74,7 +74,7 @@ if has sensible-emacs; then
   alias e='sensible-emacs'
 fi
 
-alias ag='ag --smart-case'
+alias ag='ag --smart-case --hidden'
 alias irb='pry'
 alias pyserve='python -m SimpleHTTPServer 8080'
 alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'

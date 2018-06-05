@@ -52,9 +52,9 @@
    org-tag-persistent-alist
    '(("work"   . ?w))
    org-todo-keywords
-   '((sequence "TODO" "NEXT" "STARTED(!)" "WAITING(!)" "|" "DONE")
+   '((sequence "TODO" "NEXT" "STARTED" "WAITING" "|" "DONE")
      (sequence "PENDING" "|" "DONE")
-     (sequence "MAYBE" "GOAL" "FOCUS" "|" "DONE" "ABANDONED(!)"))
+     (sequence "MAYBE" "GOAL" "FOCUS" "|" "DONE" "ABANDONED"))
    org-todo-keyword-faces
    '(("NEXT"    . "#FD971F")
      ("GOAL"    . "#FD971F")
