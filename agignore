@@ -1,3 +1,8 @@
+# VCS
+.git
+.svn
+.hg
+
 # binaries
 *.pdf
 *.ps
