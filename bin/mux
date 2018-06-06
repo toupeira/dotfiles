@@ -115,6 +115,7 @@ case "$1" in
           command="elm live Main.elm"
         elif [ -f angular.json ] || [ -f .angular-cli.json ]; then
           command="ng serve --open"
+          [ -f yarn.lock ] && command="yarn exec $command"
         elif [ -f .ember-cli ]; then
           command="ember serve"
         elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
