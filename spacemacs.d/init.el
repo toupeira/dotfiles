@@ -85,6 +85,7 @@ values."
       ruby-test-runner 'rspec)
      ruby-on-rails
      shell-scripts
+     typescript
      vimscript
      yaml
 
