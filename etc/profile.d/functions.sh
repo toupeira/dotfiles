@@ -265,3 +265,10 @@ function ssh.mux {
   tmux select-layout even-vertical
   ssh "$first_host"
 }
+
+# Go to project root
+function up {
+  while [ ! -d .git ] && [ "$PWD" != "/" ]; do
+    cd ..
+  done
+}

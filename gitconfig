@@ -63,6 +63,9 @@
 [submodule]
   fetchJobs = 0
 
+[url "ssh://git@code.siemens.com/"]
+  insteadOf = https://code.siemens.com/
+
 [alias]
   h = help
   st = status

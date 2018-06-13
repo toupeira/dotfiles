@@ -8,3 +8,9 @@ if [ -d ~/.nenv ]; then
 fi
 
 alias sunpm='sudo npm -g'
+
+function ng {
+  local command="ng"
+  [ -f yarn.lock ] && command="yarn exec -s -- $command"
+  $command "$@"
+}

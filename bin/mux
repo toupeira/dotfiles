@@ -82,12 +82,15 @@ case "$1" in
         exit
         ;;
       watcher)
-        options="-d -r"
+        options="-d"
 
         if [ -f Guardfile ]; then
           command="bundle exec guard"
         elif [ -f elm-package.json ]; then
           command="elm live Main.elm"
+        elif [ -f angular.json ] || [ -f .angular-cli.json ]; then
+          command="ng test"
+          [ -f yarn.lock ] && command="yarn exec -s -- $command"
         elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
           command="grunt watch"
         else
@@ -113,9 +116,8 @@ case "$1" in
           command="mix phoenix.server"
         elif [ -f elm-package.json ]; then
           command="elm live Main.elm"
-        elif [ -f angular.json ] || [ -f .angular-cli.json ]; then
-          command="ng serve --port $((4200+RANDOM%1000)) --open"
-          [ -f yarn.lock ] && command="yarn exec -- $command"
+        elif [ -f package.json ] && jq -e .scripts.start package.json >/dev/null; then
+          command="yarn start --port $((4200+RANDOM%1000)) --open"
         elif [ -f .ember-cli ]; then
           command="ember serve"
         elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
