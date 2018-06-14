@@ -2,10 +2,6 @@
   path = vim/bundle/desertink
   url = https://github.com/toupeira/vim-desertink.git
   ignore = dirty
-[submodule "vim/bundle/syntastic"]
-  path = vim/bundle/syntastic
-  url = https://github.com/scrooloose/syntastic.git
-  ignore = dirty
 [submodule "vim/bundle/fugitive"]
   path = vim/bundle/fugitive
   url = https://github.com/tpope/vim-fugitive.git
@@ -347,8 +343,14 @@
   url = https://github.com/fcpg/tmux-asos.git
   ignore = dirty
 [submodule "vim/bundle/vue"]
-	path = vim/bundle/vue
-	url = https://github.com/posva/vim-vue.git
+  path = vim/bundle/vue
+  url = https://github.com/posva/vim-vue.git
+  ignore = dirty
 [submodule "vim/bundle/typescript"]
-	path = vim/bundle/typescript
-	url = https://github.com/leafgarland/typescript-vim
+  path = vim/bundle/typescript
+  url = https://github.com/leafgarland/typescript-vim
+  ignore = dirty
+[submodule "vim/bundle/ale"]
+  path = vim/bundle/ale
+  url = https://github.com/w0rp/ale.git
+  ignore = dirty

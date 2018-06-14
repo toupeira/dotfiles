@@ -571,9 +571,6 @@ endfunction " }}}
     for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
       if bufwinnr(bufnum) != -1
         exec(a:pfx.'close')
-        if a:pfx == 'l'
-          execute 'SyntasticReset'
-        endif
         return
       endif
     endfor
@@ -676,13 +673,6 @@ endfunction " }}}
 
   " ,w - write current buffer
   nnoremap <silent> ,w :write<CR>:redraw<CR>
-
-  " ,W - write current buffer and force syntax check
-  nnoremap <silent> ,W :write<CR>:redraw<CR>:if <SID>SyntasticIsPassive() \| SyntasticCheck \| endif<CR>
-  function! s:SyntasticIsPassive() " {{{
-    call g:SyntasticModeMap.synch()
-    return !g:SyntasticModeMap.doAutoChecking()
-  endfunction " }}}
 
   " ,$ - clear trailing whitespace
   nnoremap <silent> ,$ :call <SID>ClearTrailingWhitespace()<CR>
@@ -787,7 +777,6 @@ endfunction " }}}
   " elm {{{
   let g:elm_detailed_complete = 1
   let g:elm_jump_to_error = 0
-  let g:elm_syntastic_show_warnings = 1
   " }}}
 
   " json {{{
@@ -902,45 +891,44 @@ endfunction " }}}
   endif
   " }}}
 
-  " syntastic {{{
-  nnoremap <silent>,l :SyntasticToggleMode<CR>
-  nnoremap <silent>,L :SyntasticCheck<CR>
+  " ale {{{
+  nnoremap <silent>,l :ALEToggleBuffer<CR>
+  nnoremap <silent>,L :ALELint<CR>
 
-  let g:syntastic_check_on_open = 0
-  let g:syntastic_enable_highlighting = 0
-  let g:syntastic_echo_current_error = 0
-  let g:syntastic_auto_loc_list = 1
-  if !&diff
-    let g:syntastic_auto_jump = 0
-  endif
+  let g:ale_lint_on_text_changed = 'normal'
+  let g:ale_lint_on_insert_leave = 1
 
-  " let g:syntastic_mode_map = {
-  "   \ "mode": "active",
-  "   \ "passive_filetypes": [ "javascript" ] }
+  let g:ale_linters = {
+    \ 'typescript': [ 'tslint', 'tsserver' ]
+  \ }
 
-  let g:syntastic_javascript_checkers = [ 'jshint' ]
-  let g:syntastic_html_checkers = [ 'htmlhint' ]
-  let g:syntastic_python_checkers = [ 'python' ]
-  let g:syntastic_elixir_checkers = [ 'dogma' ]
-  let g:syntastic_elm_checkers = [ 'elm_make' ]
+  let g:airline#extensions#ale#show_line_numbers = 0
+  let g:airline#extensions#ale#warning_symbol = ''
+  let g:airline#extensions#ale#error_symbol = ''
+
+  " let g:syntastic_javascript_checkers = [ 'jshint' ]
+  " let g:syntastic_html_checkers = [ 'htmlhint' ]
+  " let g:syntastic_python_checkers = [ 'python' ]
+  " let g:syntastic_elixir_checkers = [ 'dogma' ]
+  " let g:syntastic_elm_checkers = [ 'elm_make' ]
 
   " let g:syntastic_ruby_checkers = [ 'mri' ]
   " let g:syntastic_sh_checkers = [ 'sh' ]
   " let g:syntastic_slim_checkers = []
 
-  let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
-  let g:syntastic_ruby_rubocop_exec = expand('~/.rbenv/shims/rubocop')
-  let g:syntastic_ruby_rubocop_args = '-D'
-  let g:syntastic_ruby_slimrb_exec = expand('~/.rbenv/shims/slimrb')
-  let g:syntastic_sass_sass_exec = expand('~/.rbenv/shims/sass')
-  let g:syntastic_sass_sass_args = '-I .'
-  let g:syntastic_scss_sass_exec = expand('~/.rbenv/shims/sass')
-  let g:syntastic_scss_sass_args = '-I .'
-  let g:syntastic_sh_shellcheck_exec = 'shellcheck'
-  let g:syntastic_sh_shellcheck_args = '-e 2032,2033,2064,2086,2139,2155'
+  " let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
+  " let g:syntastic_ruby_rubocop_exec = expand('~/.rbenv/shims/rubocop')
+  " let g:syntastic_ruby_rubocop_args = '-D'
+  " let g:syntastic_ruby_slimrb_exec = expand('~/.rbenv/shims/slimrb')
+  " let g:syntastic_sass_sass_exec = expand('~/.rbenv/shims/sass')
+  " let g:syntastic_sass_sass_args = '-I .'
+  " let g:syntastic_scss_sass_exec = expand('~/.rbenv/shims/sass')
+  " let g:syntastic_scss_sass_args = '-I .'
+  " let g:syntastic_sh_shellcheck_exec = 'shellcheck'
+  " let g:syntastic_sh_shellcheck_args = '-e 2032,2033,2064,2086,2139,2155'
 
-  autocmd vimrc BufRead,BufNewFile ~/.cdist/manifest/*,~/.cdist/type/*/*
-      \ let b:syntastic_checkers = [ 'sh' ]
+  " autocmd vimrc BufRead,BufNewFile ~/.cdist/manifest/*,~/.cdist/type/*/*
+  "     \ let b:syntastic_checkers = [ 'sh' ]
 
   " autocmd vimrc BufRead */app/views/**/*.js.coffee
   "   \ let b:syntastic_coffee_checkers = []
@@ -1022,7 +1010,6 @@ endfunction " }}}
 
     let g:airline#extensions#hunks#enabled = 0
     let g:airline#extensions#quickfix#enabled = 0
-    let g:airline#extensions#syntastic#enabled = 0
     let g:airline#extensions#whitespace#enabled = 0
 
     let g:airline#extensions#tagbar#enabled = 1
