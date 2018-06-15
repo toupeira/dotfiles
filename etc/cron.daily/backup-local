@@ -38,6 +38,7 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/home/*/.config/google-chrome-unstable
   --exclude **/home/*/.config/opera
   --exclude **/home/*/.config/teamviewer10
+  --exclude **/home/*/.config/yarn/global
   --exclude **/home/*/.cordova
   --exclude **/home/*/.dropbox
   --exclude **/home/*/.dropbox-dist

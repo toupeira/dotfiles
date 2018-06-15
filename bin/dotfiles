@@ -483,6 +483,7 @@ function run {
       local packages_apt=$( echo "$packages" | fgrep -v : | sort )
       local packages_gem=$( echo "$packages" | grep ^gem: | cut -d: -f2 | sort )
       local packages_npm=$( echo "$packages" | grep ^npm: | cut -d: -f2 | sort )
+      local packages_yarn=$( echo "$packages" | grep ^yarn: | cut -d: -f2 | sort )
       local packages_pip=$( echo "$packages" | grep ^pip: | cut -d: -f2 | sort )
 
       local missing_apt=$(
@@ -507,6 +508,14 @@ function run {
         )
       fi
 
+      if [ -n "$packages_yarn" ]; then
+        missing_yarn=$(
+          comm -23 \
+            <( echo "$packages_yarn" | cut -d: -f2 | sort ) \
+            <( command ls ~/.config/yarn/global/node_modules 2>/dev/null | sort )
+        )
+      fi
+
       if [ -n "$packages_pip" ]; then
         missing_pip=$(
           comm -23 \
@@ -518,6 +527,7 @@ function run {
       if [ -n "$missing_apt" -o \
            -n "$missing_gem" -o \
            -n "$missing_npm" -o \
+           -n "$missing_yarn" -o \
            -n "$missing_pip" ]; then
         output
         status "{{Missing packages:}}"
@@ -529,6 +539,9 @@ function run {
         done
         for package in $missing_npm; do
           output "    \e[0;32m[npm] \e[1;32m$package\e[0m"
+        done
+        for package in $missing_yarn; do
+          output "    \e[0;32m[yarn] \e[1;32m$package\e[0m"
         done
         for package in $missing_pip; do
           output "    \e[0;32m[pip] \e[1;32m$package\e[0m"
@@ -542,6 +555,8 @@ function run {
             && mux-wrap sudo gem install $missing_gem
           [ -n "$missing_npm" ] && output \
             && mux-wrap sudo npm -g install $missing_npm
+          [ -n "$missing_yarn" ] && output \
+            && mux-wrap yarn global add $missing_yarn
           [ -n "$missing_pip" ] && output \
             && mux-wrap sudo pip install $missing_pip
         fi
