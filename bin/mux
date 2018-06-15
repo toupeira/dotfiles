@@ -70,17 +70,6 @@ case "$1" in
     options="-r"
 
     case "$proc" in
-      dev)
-        $0 @server
-
-        if [ -f Guardfile ] || grep -q ^watcher "$PROCFILE"; then
-          wmctrl -r :ACTIVE: -b add,maximized_vert,maximized_horz
-          sleep 0.1
-          $0 @watcher
-        fi
-
-        exit
-        ;;
       watcher)
         options="-d"
 

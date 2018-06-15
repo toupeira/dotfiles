@@ -83,7 +83,7 @@ function _mux {
 
     COMPREPLY=(
       $( compgen -W "$(
-          (cat Procfile 2>/dev/null; echo dev: server: watcher: console: log: | tr ' ' '\n') \
+          (cat Procfile 2>/dev/null; echo server: watcher: console: log: | tr ' ' '\n') \
             | egrep -o "^${cword:1}[-[:alnum:]]*" \
             | sed -r 's/^/@/'
          )"
