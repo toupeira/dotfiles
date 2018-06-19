@@ -79,4 +79,4 @@
     use_custom_command = True
     use_system_font = False
     visible_bell = True
-    word_chars = "-+A-Za-z0-9,./?%&#:_"
+    word_chars = "-+A-Za-z0-9,./?%&#:_@"

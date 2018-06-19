@@ -210,6 +210,7 @@ function src {
 }
 
 # Helper to create an alias for src with Git completion
+alias s='src'
 function src_alias {
   local alias="$1"
   local project="$2"

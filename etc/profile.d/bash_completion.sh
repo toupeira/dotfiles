@@ -64,7 +64,7 @@ function _src_projects {
   local src_dir=~/src
   COMPREPLY=( $(compgen -W "`src list -a | grep "${COMP_WORDS[COMP_CWORD]}"`") )
 }
-complete -F _src_projects src
+complete -F _src_projects src s
 
 function _src_alias {
   local cword="${COMP_WORDS[COMP_CWORD]}"
