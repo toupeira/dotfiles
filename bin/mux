@@ -106,7 +106,7 @@ case "$1" in
         elif [ -f elm-package.json ]; then
           command="elm live Main.elm"
         elif [ -f package.json ] && jq -e .scripts.start package.json >/dev/null; then
-          command="yarn start --port $((4200+RANDOM%1000)) --open"
+          command="yarn -s start --port $((4200+RANDOM%1000)) --open"
         elif [ -f .ember-cli ]; then
           command="ember serve"
         elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then

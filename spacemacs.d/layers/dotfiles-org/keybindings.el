@@ -8,7 +8,6 @@
 
   "oO" (lambda () (interactive) (dotfiles/org-goto "organizer" "O"))
   "oW" (lambda () (interactive) (dotfiles/org-goto "work" "W"))
-  "oG" (lambda () (interactive) (dotfiles/org-goto "organizer" "G" '("Goals")))
   "oE" (lambda ()
          (interactive)
          (dotfiles/org-goto "organizer" nil '("Projects" "Emacs" "Inbox"))
@@ -34,7 +33,6 @@
 
   "SPC o O" "review home tasks"
   "SPC o W" "review work tasks"
-  "SPC o G" "review goals"
   "SPC o E" "goto emacs inbox"
 
   "SPC C c" "inbox"

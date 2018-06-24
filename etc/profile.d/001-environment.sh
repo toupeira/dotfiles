@@ -16,6 +16,7 @@ export RI="--format ansi --no-pager"
 export PGDATABASE="postgres"
 export ANDROID_HOME="$HOME/src/upstream/android-sdk-linux"
 export QT_QPA_PLATFORMTHEME="gtk2"
+export PASSWORD_STORE_ENABLE_EXTENSIONS="true"
 
 # Colorize manpages
 export LESS_TERMCAP_mb=$'\e[1;31m'
