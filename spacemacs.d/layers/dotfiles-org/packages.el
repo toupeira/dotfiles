@@ -27,8 +27,8 @@
    org-clock-clocktable-default-properties
    '(:block today)
    org-clocktable-defaults
-   '(:maxlevel 3 :scope file-with-archives :properties ("CATEGORY")
-               :indent t :link t :narrow 40!)
+   '(:scope file-with-archives :properties ("CATEGORY")
+     :indent t :link t :narrow 40!)
    org-columns-default-format "%TODO %40ITEM %SCHEDULED %DEADLINE %CLOCKSUM"
    org-cycle-separator-lines 1
    org-directory (abbreviate-file-name (file-truename "~/org/"))
