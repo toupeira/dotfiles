@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# work around https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=790098
+export GDK_SCALE=
+
 function log {
   echo -e "\e[1;30m[$( basename ${emacs%% *} )]\e[0m $1"
 }

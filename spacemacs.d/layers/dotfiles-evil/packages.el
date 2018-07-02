@@ -1,5 +1,6 @@
 (setq dotfiles-evil-packages
       '(evil
+        evil-goggles
         simpleclip))
 
 (defun dotfiles-evil/post-init-evil ()
@@ -9,7 +10,7 @@
    evil-ex-interactive-search-highlight 'selected-window
    evil-split-window-below t
    evil-vsplit-window-right t
-   evil-want-fine-undo t
+   evil-want-fine-undo nil
   )
 
   ;; use C-c to escape
@@ -144,6 +145,14 @@
     ;; start commit buffers in insert state
     (add-hook 'git-commit-mode-hook 'evil-insert-state))
 )
+
+(defun dotfiles-evil/init-evil-goggles ()
+  (use-package evil-goggles
+    :ensure t
+    :config
+    (evil-goggles-mode)
+    (evil-goggles-use-diff-refine-faces)
+    (setq evil-goggles-duration 0.1)))
 
 (defun dotfiles-evil/init-simpleclip ()
   ;; don't use desktop clipboard for kill ring
