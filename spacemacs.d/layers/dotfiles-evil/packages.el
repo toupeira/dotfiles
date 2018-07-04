@@ -1,6 +1,7 @@
 (setq dotfiles-evil-packages
       '(evil
         evil-goggles
+        (rotate-text :location (recipe :fetcher github :repo "debug-ito/rotate-text.el"))
         simpleclip))
 
 (defun dotfiles-evil/post-init-evil ()
@@ -160,6 +161,32 @@
     :config
     (simpleclip-mode t))
 )
+
+(defun dotfiles-evil/init-rotate-text ()
+  (use-package rotate-text
+    :config
+    (push '("+" "-") rotate-text-symbols)
+    (push '("+=" "-=") rotate-text-symbols)
+    (push '("==" "!=") rotate-text-symbols)
+    (push '("===" "!==") rotate-text-symbols)
+    (push '("&&" "||") rotate-text-symbols)
+
+    (push '("and" "or") rotate-text-words)
+    (push '("true" "false") rotate-text-words)
+    (push '("yes" "no") rotate-text-words)
+    (push '("on" "off") rotate-text-words)
+    (push '("first" "last") rotate-text-words)
+    (push '("add" "remove") rotate-text-words)
+    (push '("next" "previous") rotate-text-words)
+    (push '("active" "inactive") rotate-text-words)
+    (push '("internal" "external") rotate-text-words)
+
+    (push '("assert" "refute") rotate-text-words)
+    (push '("staging" "production") rotate-text-words)
+    (push '("debit" "credit") rotate-text-words)
+
+    (define-key evil-normal-state-map (kbd "C-a") 'rotate-text)
+    (define-key evil-normal-state-map (kbd "C-x") 'rotate-text-backward)))
 
 (defun dotfiles-evil/post-init-simpleclip ()
   ;; paste with C-v

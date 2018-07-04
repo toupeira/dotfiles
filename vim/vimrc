@@ -101,10 +101,7 @@
 
   " interface
   syntax on
-
   colorscheme desertink
-  command! Dark colorscheme desertink | AirlineTheme desertink
-  command! Light colorscheme PaperColor | AirlineTheme papercolor
 
   set errorbells
   set visualbell t_vb= " disable bells
@@ -233,6 +230,7 @@
   set whichwrap+=<,>,[,],h,l
   set iskeyword+=$
   set selection=inclusive
+  set nrformats=hex
 
   " indents
   set autoindent
@@ -773,6 +771,11 @@ endfunction " }}}
 
 " Plugin Settings
 " {{{
+
+  " org-mode {{{
+  " silence warning about missing plugin
+  command! -nargs=* -range SpeedDatingFormat echo
+  " }}}
 
   " elm {{{
   let g:elm_detailed_complete = 1

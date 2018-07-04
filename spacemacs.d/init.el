@@ -396,7 +396,7 @@ you should place your code here."
    ;; package settings
    helm-buffer-max-length nil
    magit-log-arguments '("-n100" "--decorate" "--patch")
-   magit-repository-directories '("~/src")
+   magit-repository-directories '(("~/src" . 3))
    paradox-github-token t
    persp-kill-foreign-buffer-action 'kill
    powerline-height (if dotfiles/is-ocelot 28 16)
@@ -409,21 +409,25 @@ you should place your code here."
 
   ;; fix SPC TAB with perspectives
   ;; https://github.com/syl20bnr/spacemacs/issues/5129
-  (defun dotfiles/alternate-buffer ()
-    (interactive)
-    (let* ((current (current-buffer))
-           (other (if (evil-alternate-buffer)
-                      (car (evil-alternate-buffer))
-                    (other-buffer (current-buffer) t)))
-           (other (if (persp-contain-buffer-p other)
-                      other
-                    (car (delq current (persp-buffer-list))))))
-      (if other
-          (switch-to-buffer other)
-        (spacemacs/switch-to-scratch-buffer))))
+  ; (defun dotfiles/alternate-buffer ()
+  ;   (interactive)
+  ;   (let* ((current (current-buffer))
+  ;          (other (if (evil-alternate-buffer)
+  ;                     (car (evil-alternate-buffer))
+  ;                   (other-buffer (current-buffer) t)))
+  ;          (other (if (persp-contain-buffer-p other)
+  ;                     other
+  ;                   (car (delq current (persp-buffer-list))))))
+  ;     (if other
+  ;         (switch-to-buffer other)
+  ;       (spacemacs/switch-to-scratch-buffer))))
 
-  (spacemacs/set-leader-keys
-    "TAB"  'dotfiles/alternate-buffer)
+  ; (spacemacs/set-leader-keys
+  ;   "TAB"  'dotfiles/alternate-buffer)
+
+  ;; work around https://github.com/syl20bnr/spacemacs/issues/9603
+  (add-hook 'org-mode-hook (lambda ()
+    (org-defkey org-mode-map [(meta return)] 'org-meta-return)))
 
   (run-hooks dotfiles/config-hook))
 

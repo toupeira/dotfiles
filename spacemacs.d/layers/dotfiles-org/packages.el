@@ -191,6 +191,7 @@
   )
 )
 
+;; show calendar locations in agenda
 (defun dotfiles-org/init-org-agenda-property ()
   (use-package org-agenda-property
     :defer t
