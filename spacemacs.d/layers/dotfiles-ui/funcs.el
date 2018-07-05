@@ -8,7 +8,7 @@
   (remove-hook 'persp-mode-hook 'dotfiles/startup)
   (spacemacs/find-dotfile)
 
-  (persp-switch org-directory)
+  (persp-switch (dotfiles/org-directory))
   (if dotfiles/is-ocelot
       (dotfiles/org-goto "work" "w")
     (dotfiles/org-goto "organizer" "o")))

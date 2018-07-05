@@ -1,6 +1,9 @@
+(defun dotfiles/org-directory ()
+  (abbreviate-file-name (file-truename org-directory)))
+
 (defun dotfiles/org-goto (file &optional agenda path)
   (interactive)
-  (find-file (concat org-directory file ".org"))
+  (find-file (concat org-directory "/" file ".org"))
   (evil-goto-first-line)
   (org-set-startup-visibility)
   (outline-next-heading)

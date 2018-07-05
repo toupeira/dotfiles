@@ -40,8 +40,8 @@
   "SPC C e" "emacs"
   "SPC C n" "clock note"
 
-  "SPC C w" "work task"
-  "SPC C W" "work inbox"
+  "SPC C w" "work inbox"
+  "SPC C W" "work todo"
   )
 
 (spacemacs/set-leader-keys-for-major-mode 'org-mode

@@ -45,9 +45,9 @@
 
   ;; automatically use org layout
   (advice-add 'org-agenda-prepare-window :before
-              (lambda (&rest args) (persp-switch org-directory)))
+              (lambda (&rest args) (persp-switch (dotfiles/org-directory))))
   (advice-add 'org-clock-goto :before
-              (lambda (&rest args) (persp-switch org-directory)))
+              (lambda (&rest args) (persp-switch (dotfiles/org-directory))))
 
   ;; create default layouts
   (add-hook 'persp-mode-hook 'dotfiles/startup))

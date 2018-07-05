@@ -111,6 +111,7 @@ values."
    ;; A list of packages that will not be installed and loaded.
    dotspacemacs-excluded-packages
    '(
+     org-projectile
      volatile-highlights
     )
    ;; Defines the behaviour of Spacemacs when installing packages.

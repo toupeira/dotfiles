@@ -31,7 +31,7 @@
      :indent t :link t :narrow 40!)
    org-columns-default-format "%TODO %40ITEM %SCHEDULED %DEADLINE %CLOCKSUM"
    org-cycle-separator-lines 1
-   org-directory (abbreviate-file-name (file-truename "~/org/"))
+   org-directory "~/org"
    org-download-method 'attach
    org-enforce-todo-dependencies t
    org-fontify-done-headline t
@@ -90,21 +90,21 @@
   (setq
    org-capture-templates
    '(
-     ("c" "inbox" entry (file+olp (concat org-directory "organizer.org") "Inbox")
+     ("c" "inbox" entry (file+olp "organizer.org" "Inbox")
       "* NEXT %?"
       :empty-lines-after 1)
-     ("b" "basteln" entry (file+olp (concat org-directory "organizer.org") "Projects" "Basteln")
+     ("b" "basteln" entry (file+olp "organizer.org" "Projects" "Basteln")
       "* TODO %?")
-     ("e" "emacs" checkitem (file+olp (concat org-directory "organizer.org") "Projects" "Emacs" "Inbox")
+     ("e" "emacs" checkitem (file+olp "organizer.org" "Projects" "Emacs" "Inbox")
       "- [ ] %?")
      ("n" "clock note" item (clock)
       "- %U %?")
 
-     ("w" "work inbox" entry (file+olp (concat org-directory "work.org") "Inbox")
+     ("w" "work inbox" entry (file+olp "work.org" "Inbox")
       "* NEXT %?\n:PROPERTIES:\n:CREATED: %U\n:END:%^{CATEGORY}p\n\n"
       :empty-lines-after 1)
 
-     ("W" "work todo" entry (file+olp (concat org-directory "work.org") "Inbox")
+     ("W" "work todo" entry (file+olp "work.org" "Inbox")
       "* TODO %?")
     )
   )
