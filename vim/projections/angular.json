@@ -1,0 +1,34 @@
+{
+  "src/*.service.ts": { "type": "service" },
+  "src/*.model.ts": { "type": "model" },
+
+  "src/*.module.ts": {
+    "type": "module",
+    "alternate": "src/{}.routes.ts"
+  },
+
+  "src/*.routes.ts": {
+    "type": "routes",
+    "alternate": "src/{}.module.ts"
+  },
+
+  "src/*.component.ts": {
+    "type": "component",
+    "alternate": "src/{}.component.html"
+  },
+
+  "src/*.component.html": {
+    "type": "template",
+    "alternate": "src/{}.component.ts"
+  },
+
+  "src/*.scss": {
+    "type": "styles",
+    "alternate": "src/{}.ts"
+  },
+
+  "src/*.spec.ts": {
+    "type": "spec",
+    "alternate": "src/{}.ts"
+  }
+}
