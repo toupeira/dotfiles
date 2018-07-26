@@ -1,6 +1,5 @@
 {
   "src/*.service.ts": { "type": "service" },
-  "src/*.model.ts": { "type": "model" },
 
   "src/*.module.ts": {
     "type": "module",
