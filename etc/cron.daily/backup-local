@@ -46,6 +46,7 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/home/*/.gvfs
   --exclude **/home/*/.hex
   --exclude **/home/*/.kodi
+  --exclude **/home/*/.local/lib/python*
   --exclude **/home/*/.local/share/akonadi
   --exclude **/home/*/.local/share/gnome-shell
   --exclude **/home/*/.local/share/gvfs-metadata

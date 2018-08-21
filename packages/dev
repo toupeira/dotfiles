@@ -11,6 +11,7 @@ jq
 nodejs
 patch
 postgresql
+python3-pip
 python-pip
 rebar
 redis-server

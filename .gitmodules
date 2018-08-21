@@ -26,10 +26,6 @@
   path = vim/bundle/pathogen
   url = https://github.com/tpope/vim-pathogen.git
   ignore = dirty
-[submodule "vim/bundle/matchtag"]
-  path = vim/bundle/matchtag
-  url = https://github.com/gregsexton/MatchTag.git
-  ignore = dirty
 [submodule "vim/bundle/loremipsum"]
   path = vim/bundle/loremipsum
   url = https://github.com/vim-scripts/loremipsum
@@ -353,4 +349,8 @@
 [submodule "vim/bundle/ale"]
   path = vim/bundle/ale
   url = https://github.com/w0rp/ale.git
+  ignore = dirty
+[submodule "vim/bundle/matchtagalways"]
+  path = vim/bundle/matchtagalways
+  url = https://github.com/Valloric/MatchTagAlways.git
   ignore = dirty
