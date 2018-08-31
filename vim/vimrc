@@ -774,6 +774,10 @@ endfunction " }}}
 " Plugin Settings
 " {{{
 
+  " dispatch {{{
+  let g:dispatch_no_maps = 1
+  " }}}
+
   " org-mode {{{
   " silence warning about missing plugin
   command! -nargs=* -range SpeedDatingFormat echo
@@ -899,6 +903,8 @@ endfunction " }}}
   " ale {{{
   nnoremap <silent>,l :ALEToggleBuffer<CR>
   nnoremap <silent>,L :ALELint<CR>
+
+  hi ALEWarning ctermbg=238
 
   let g:ale_lint_on_text_changed = 'normal'
   let g:ale_lint_on_insert_leave = 1
