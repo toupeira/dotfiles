@@ -6,7 +6,7 @@ export FZF_DEFAULT_COMMAND='rg -l --hidden ""'
 export FZF_DEFAULT_OPTS='-x -m'
 export FZF_COMPLETION_TRIGGER='//'
 
-. "$( dotfiles --path )/fzf/shell/completion.bash"
+. /usr/share/bash-completion/completions/fzf
 
 _fzf_orig_completion_ping='_ssh'
 _fzf_orig_completion_telnet='_ssh'

@@ -12,6 +12,7 @@ dirmngr
 dnsutils
 eatmydata
 file
+fzf
 git
 gnupg
 gnupg2

@@ -194,10 +194,6 @@
   path = vim/bundle/dispatch
   url = https://github.com/tpope/vim-dispatch.git
   ignore = dirty
-[submodule "fzf"]
-  path = fzf
-  url = https://github.com/junegunn/fzf.git
-  ignore = dirty
 [submodule "nenv/plugins/nenv-binstubs"]
   path = nenv/plugins/nenv-binstubs
   url = https://github.com/madumlao/nenv-binstubs.git
