@@ -1,3 +1,6 @@
+[core]
+  pager = less -RFX
+
 [user]
   name = Markus Koller
   email = markus-koller@gmx.ch
@@ -6,6 +9,20 @@
 [color]
   ui = auto
 
+[color "diff"]
+  meta = yellow
+  frag = magenta bold
+  commit = yellow bold
+  old = red bold
+  new = green bold
+  whitespace = red reverse
+
+[color "diff-highlight"]
+  oldNormal = red bold
+  oldHighlight = red bold 52
+  newNormal = green bold
+  newHighlight = green bold 22
+
 [advice]
   pushUpdateRejected = false
   statusHints = false
@@ -13,7 +30,7 @@
   resolveConflict = false
 
 [branch]
-	autosetuprebase = always
+  autosetuprebase = always
 
 [commit]
   gpgSign = true
@@ -24,6 +41,9 @@
 
 [difftool]
   prompt = false
+
+[diff-so-fancy]
+  markEmptyLines = false
 
 [fetch]
   prune = true
@@ -48,9 +68,9 @@
   trustExitCode = true
 
 [pager]
-  log = diff-highlight | less
-  show = diff-highlight | less
-  diff = diff-highlight | less
+  log = diff-so-fancy | less -RFX
+  show = diff-so-fancy | less -RFX
+  diff = diff-so-fancy | less -RFX
 
 [rebase]
   autosquash = true
