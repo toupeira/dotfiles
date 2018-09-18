@@ -2,7 +2,7 @@
 [ -n "$BASH_INTERACTIVE" ] && has fzf || return
 
 export FZF_TMUX=0
-export FZF_DEFAULT_COMMAND='ag -l -g ""'
+export FZF_DEFAULT_COMMAND='rg -l --hidden ""'
 export FZF_DEFAULT_OPTS='-x -m'
 export FZF_COMPLETION_TRIGGER='//'
 
@@ -15,4 +15,4 @@ _fzf_orig_completion_nc='_ssh'
 _fzf_orig_completion_curl='_ssh'
 
 complete -F _fzf_complete_ssh ping telnet host nc curl
-complete -o bashdefault -o default -F _fzf_path_completion ag bun
+complete -o bashdefault -o default -F _fzf_path_completion ag rg bun

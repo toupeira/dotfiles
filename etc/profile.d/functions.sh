@@ -107,7 +107,7 @@ if [ -n "$SSH_AUTH_SOCK" ]; then
   }
 fi
 
-# Ag wrapper to edit files matching a pattern
+# Wrapper to edit files matching a pattern
 function _edit {
   local files=$( "$@" )
   if [ -n "$files" ]; then
@@ -118,6 +118,7 @@ function _edit {
 }
 
 alias ag.edit='_edit ag -l'
+alias rg.edit='_edit rg -l'
 alias bun.edit='_edit bun -l'
 
 # Ag wraper to view colored and grouped results in less

@@ -75,6 +75,7 @@ if has sensible-emacs; then
   alias e='sensible-emacs'
 fi
 
+alias rg='rg --smart-case --hidden'
 alias ag='ag --smart-case --hidden'
 alias irb='pry'
 alias pyserve='python -m SimpleHTTPServer 8080'
