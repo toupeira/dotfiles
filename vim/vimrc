@@ -407,6 +407,9 @@ endfunction " }}}
   command! -nargs=0 Server   Mux @server
   command! -nargs=0 Watcher  Mux @watcher
 
+  " open markdown preview
+  command! -nargs=0 VMD execute 'silent !vmd % &>/dev/null &' | redraw!
+
 " }}}
 
 " Keybindings
