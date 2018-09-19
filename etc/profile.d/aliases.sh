@@ -75,7 +75,15 @@ if has sensible-emacs; then
   alias e='sensible-emacs'
 fi
 
-alias rg='rg --smart-case --hidden'
+alias rg='rg --smart-case --hidden '\
+'  --colors "path:fg:green" '\
+'  --colors "path:style:bold" '\
+'  --colors "match:fg:yellow" '\
+'  --colors "match:bg:yellow" '\
+'  --colors "match:style:bold" '\
+'  --colors "line:fg:magenta" '\
+'  --colors "line:style:bold" '\
+'  --colors "column:fg:magenta"'
 alias ag='ag --smart-case --hidden'
 alias irb='pry'
 alias pyserve='python -m SimpleHTTPServer 8080'
