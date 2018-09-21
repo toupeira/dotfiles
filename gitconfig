@@ -120,7 +120,7 @@
   up = pull -v --progress
   upall = pull-all
   ff = merge --ff-only HEAD@{u}
-  rem = rebase-maybe
+  ri = rebase -i
   continue = rebase --continue
   skip = rebase --skip
   solve = mergetool
