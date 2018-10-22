@@ -1,0 +1,4 @@
+#!/bin/sh
+(emacsclient -e '(dotfiles/org-clock-string)' 2>/dev/null || echo 'No task') \
+  | tr -d '"' \
+  | sed -r 's/\\n/\n/g'

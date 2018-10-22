@@ -171,11 +171,6 @@
   (add-hook 'org-clock-in-hook (lambda () (dotfiles/silence (save-buffer))) t)
   (add-hook 'org-clock-out-hook (lambda () (dotfiles/silence (save-buffer))) t)
 
-  ;; start/stop clocked tasks in hamster
-  (when (executable-find "hamster")
-    (add-hook 'org-clock-in-hook 'dotfiles/org-start-hamster-task)
-    (add-hook 'org-clock-out-hook 'dotfiles/org-stop-hamster-task))
-
   ;; keep headlines when archiving tasks
   ;; http://orgmode.org/worg/org-hacks.html
   (with-eval-after-load 'org-archive

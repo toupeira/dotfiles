@@ -32,15 +32,9 @@
       (dotfiles/silence
        (org-todo "STARTED")))))
 
-(defun dotfiles/org-start-hamster-task ()
-  (let* ((file (file-name-base (buffer-file-name (marker-buffer org-clock-marker))))
-         (category (org-get-category))
-         (task org-clock-current-task)
-         (description (format "%s @%s, %s" category category task))
-         (description
-          (if (string= file category) description
-            (concat file ": " description))))
-    (call-process "hamster" nil nil nil "start" description)))
-
-(defun dotfiles/org-stop-hamster-task ()
-  (call-process "hamster" nil nil nil "stop"))
+(defun dotfiles/org-clock-string ()
+  (if (org-clocking-p)
+      (let* ((category (save-window-excursion (org-clock-goto) (org-get-category)))
+             (duration (org-duration-from-minutes (org-clock-get-clocked-time))))
+        (format "%s\n%s" category duration))
+    "No task"))
