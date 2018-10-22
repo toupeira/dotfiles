@@ -860,7 +860,7 @@ endfunction " }}}
   let g:rooter_silent_chdir = 1
   let g:rooter_patterns = [
     \ 'elm-package.json',
-    \ 'package.json',
+    \ 'ng-package.json',
     \ 'Gemfile',
     \ 'mix.exs',
     \ '.git',
@@ -914,6 +914,7 @@ endfunction " }}}
   let g:ale_set_balloons = 0
 
   let g:ale_linters = {
+    \ 'javascript': [ 'eslint' ],
     \ 'typescript': [ 'tslint', 'tsserver' ]
   \ }
 

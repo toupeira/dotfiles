@@ -52,9 +52,6 @@
   abbrevCommit = true
   decorate = true
 
-[gpg]
-  program = gpg2
-
 [merge]
   stat = true
   tool = vimdiff
@@ -68,9 +65,9 @@
   trustExitCode = true
 
 [pager]
-  log = diff-so-fancy | less -RFX
-  show = diff-so-fancy | less -RFX
-  diff = diff-so-fancy | less -RFX
+  log = diff-so-fancy | less -cRX
+  show = diff-so-fancy | less -cRX
+  diff = diff-so-fancy | less -cRX
 
 [rebase]
   autosquash = true
@@ -121,6 +118,7 @@
   upall = pull-all
   ff = merge --ff-only HEAD@{u}
   ri = rebase -i
+  rim = rebase -i master
   continue = rebase --continue
   skip = rebase --skip
   solve = mergetool

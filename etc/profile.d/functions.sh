@@ -117,13 +117,12 @@ function _edit {
   fi
 }
 
-alias ag.edit='_edit ag -l'
 alias rg.edit='_edit rg -l'
 alias bun.edit='_edit bun -l'
 
-# Ag wraper to view colored and grouped results in less
-function ag.less {
-  ag --group --color "$@" | less
+# rg wraper to view colored and grouped results in less
+function rg.less {
+  rg --pretty "$@" | less
 }
 
 # GVim wrapper for SSH connections to pass a file to a local instance
@@ -211,7 +210,6 @@ function src {
 }
 
 # Helper to create an alias for src with Git completion
-alias s='src'
 function src_alias {
   local alias="$1"
   local project="$2"
@@ -273,4 +271,9 @@ function up {
   while [ ! -d .git ] && [ "$PWD" != "/" ]; do
     cd ..
   done
+}
+
+# Browse a JSON file
+function jq.less {
+  jq -C . "$1" | less
 }
