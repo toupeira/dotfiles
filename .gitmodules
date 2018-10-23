@@ -140,7 +140,7 @@
   ignore = dirty
 [submodule "vim/bundle/markdown"]
   path = vim/bundle/markdown
-  url = https://github.com/tpope/vim-markdown.git
+  url = https://github.com/gabrielelana/vim-markdown.git
   ignore = dirty
 [submodule "vim/bundle/puppet"]
   path = vim/bundle/puppet

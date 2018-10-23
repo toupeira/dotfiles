@@ -744,22 +744,6 @@ endfunction " }}}
     endif
   endfunction " }}}
 
-  " ,M - preview Markdown
-  nnoremap <silent> ,M :call <SID>PreviewMarkdown()<CR>
-  function! s:PreviewMarkdown() " {{{
-    let tmpfile = '/tmp/vim-markdown-preview.html'
-    call system('grip ' . shellescape(expand('%:p')) . ' --export ' . tmpfile)
-
-    let window = system('xdotool search --name -- " - Grip - Iceweasel"')
-    if window
-      call system('xdotool windowmap ' . window)
-      call system('xdotool windowactivate ' . window)
-      call system('xdotool key ctrl+r')
-    else
-      call system('iceweasel.run ' . tmpfile)
-    endif
-  endfunction " }}}
-
   " F4 / F5 - change window height
   nnoremap <silent> <F4> <C-w>+
   imap <silent> <F4> <C-o><F4>
@@ -776,6 +760,10 @@ endfunction " }}}
 
 " Plugin Settings
 " {{{
+
+  " markdown {{{
+  let g:markdown_enable_spell_checking = 0
+  " }}}
 
   " dispatch {{{
   let g:dispatch_no_maps = 1
