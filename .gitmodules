@@ -118,10 +118,6 @@
   path = vim/bundle/unite-giti
   url = https://github.com/kmnk/vim-unite-giti.git
   ignore = dirty
-[submodule "vim/bundle/obsession"]
-  path = vim/bundle/obsession
-  url = https://github.com/tpope/vim-obsession.git
-  ignore = dirty
 [submodule "vim/bundle/scriptease"]
   path = vim/bundle/scriptease
   url = https://github.com/tpope/vim-scriptease.git
