@@ -10,13 +10,14 @@ export GIT_EDITOR="vim"
 export PAGER="less"
 which sensible-vim >/dev/null && export EDITOR="sensible-vim"
 
-export LESS="-iRM"
-export IRB_HISTORY_SIZE=3000
-export RI="--format ansi --no-pager"
-export PGDATABASE="postgres"
 export ANDROID_HOME="$HOME/src/upstream/android-sdk-linux"
-export QT_QPA_PLATFORMTHEME="gtk2"
+export IRB_HISTORY_SIZE=3000
+export LESS="-iRM"
 export PASSWORD_STORE_ENABLE_EXTENSIONS="true"
+export PGDATABASE="postgres"
+export QT_QPA_PLATFORMTHEME="gtk2"
+export RI="--format ansi --no-pager"
+export RIPGREP_CONFIG_PATH=~/.config/ripgrep.conf
 
 # Colorize manpages
 export LESS_TERMCAP_mb=$'\e[1;31m'

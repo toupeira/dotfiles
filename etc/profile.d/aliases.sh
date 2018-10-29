@@ -75,6 +75,7 @@ if has sensible-emacs; then
   alias e='sensible-emacs'
 fi
 
+alias ag='echo "Use rg! 🤯" #'
 alias rg='rg --smart-case --hidden '\
 '  --colors "path:fg:green" '\
 '  --colors "path:style:bold" '\
@@ -84,7 +85,6 @@ alias rg='rg --smart-case --hidden '\
 '  --colors "line:fg:magenta" '\
 '  --colors "line:style:bold" '\
 '  --colors "column:fg:magenta"'
-alias ag='ag --smart-case --hidden'
 alias irb='pry'
 alias pyserve='python -m SimpleHTTPServer 8080'
 alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'

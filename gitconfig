@@ -142,7 +142,7 @@
   # shell wrappers
   sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
   bash = "!f() { [ $# -gt 0 ] && bash -ic \"$@\"; }; f"
-  ag = "!ag --smart-case"
+  rg = "!rg --smart-case"
 
   rake  = "!rake"
   rails = "!rails"

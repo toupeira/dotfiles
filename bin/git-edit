@@ -13,7 +13,6 @@ fi
 workdir=`echo "$PWD" | sed -r "s|^$HOME|~|"`
 
 # default options
-AG="ag --nocolor --smart-case --follow"
 GIT="git -c color.ui=always"
 GIT_FORMAT="%C(yellow)[%h] %C(black bold)%ar:%Creset %s"
 GIT_LOG=10
