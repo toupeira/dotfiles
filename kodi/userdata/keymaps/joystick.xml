@@ -3,8 +3,8 @@
     <joystick>
       <a>Select</a>
       <b>Back</b>
-      <x>Info</x>
-      <y>XBMC.ActivateWindow(Favourites)</y>
+      <x>Playlist</x>
+      <y>ActivateWindow(Favourites)</y>
       <back>ActivateWindow(shutdownmenu)</back>
       <start>ToggleFullScreen</start>
       <leftbumper>PageUp</leftbumper>
@@ -32,6 +32,7 @@
 
   <Home>
     <joystick>
+      <y>ActivateWindow(Favourites)</y>
       <b>ActivateWindow(shutdownmenu)</b>
     </joystick>
   </Home>
@@ -40,8 +41,8 @@
     <joystick>
       <a>Pause</a>
       <b>Stop</b>
-      <x>Info</x>
-      <y>OSD</y>
+      <x>OSD</x>
+      <y>Info</y>
       <back>ActivateWindow(shutdownmenu)</back>
       <start>ToggleFullScreen</start>
       <leftbumper>SkipPrevious</leftbumper>
@@ -80,13 +81,13 @@
     <joystick>
       <a>Pause</a>
       <b>Stop</b>
-      <x>Info</x>
-      <y>OSD</y>
+      <x>OSD</x>
+      <y>Info</y>
       <start>ToggleFullScreen</start>
       <leftbumper>SkipPrevious</leftbumper>
       <rightbumper>SkipNext</rightbumper>
       <lefttrigger>FullScreen</lefttrigger>
-      <righttrigger>XBMC.ActivateWindow(VisualisationPresetList)</righttrigger>
+      <righttrigger>ActivateWindow(VisualisationPresetList)</righttrigger>
 
       <left>SmallStepBack</left>
       <right>StepForward</right>
@@ -114,7 +115,6 @@
       <a>NextCalibration</a>
     </joystick>
   </ScreenCalibration>
-
   <VirtualKeyboard>
     <joystick>
       <b>BackSpace</b>
@@ -130,4 +130,21 @@
       <rightthumb>noop</rightthumb>
     </joystick>
   </VirtualKeyboard>
+  <FullscreenInfo>
+    <joystick>
+      <y>Back</y>
+    </joystick>
+  </FullscreenInfo>
+  <VideoOSD>
+    <joystick>
+      <x>Back</x>
+      <y>noop</y>
+    </joystick>
+  </VideoOSD>
+  <MusicOSD>
+    <joystick>
+      <x>Back</x>
+      <y>noop</y>
+    </joystick>
+  </MusicOSD>
 </keymap>
