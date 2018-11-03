@@ -85,9 +85,6 @@
 [submodule "vim/bundle/pasta"]
   path = vim/bundle/pasta
   url = https://github.com/sickill/vim-pasta.git
-[submodule "vim/bundle/unite-giti"]
-  path = vim/bundle/unite-giti
-  url = https://github.com/kmnk/vim-unite-giti.git
 [submodule "vim/bundle/scriptease"]
   path = vim/bundle/scriptease
   url = https://github.com/tpope/vim-scriptease.git
@@ -136,9 +133,6 @@
 [submodule "rbenv/plugins/rbenv-binstubs"]
   path = rbenv/plugins/rbenv-binstubs
   url = https://github.com/ianheggie/rbenv-binstubs.git
-[submodule "vim/bundle/cursorline-current-window"]
-  path = vim/bundle/cursorline-current-window
-  url = https://github.com/vim-scripts/CursorLineCurrentWindow.git
 [submodule "vim/bundle/dispatch"]
   path = vim/bundle/dispatch
   url = https://github.com/tpope/vim-dispatch.git
@@ -148,9 +142,6 @@
 [submodule "nenv/nenv"]
   path = nenv/nenv
   url = https://github.com/ryuone/nenv.git
-[submodule "vim/bundle/jade"]
-  path = vim/bundle/jade
-  url = https://github.com/digitaltoad/vim-jade.git
 [submodule "vim/bundle/tmux-complete"]
   path = vim/bundle/tmux-complete
   url = https://github.com/junegunn/tmux-complete.vim.git
@@ -166,12 +157,6 @@
 [submodule "vim/bundle/incsearch"]
   path = vim/bundle/incsearch
   url = https://github.com/haya14busa/incsearch.vim
-[submodule "vim/bundle/mustache-handlebars"]
-  path = vim/bundle/mustache-handlebars
-  url = https://github.com/mustache/vim-mustache-handlebars.git
-[submodule "vim/bundle/emblem"]
-  path = vim/bundle/emblem
-  url = https://github.com/heartsentwined/vim-emblem.git
 [submodule "vim/bundle/fetch"]
   path = vim/bundle/fetch
   url = https://github.com/kopischke/vim-fetch.git
@@ -193,9 +178,6 @@
 [submodule "vim/bundle/yajs"]
   path = vim/bundle/yajs
   url = https://github.com/othree/yajs.vim.git
-[submodule "vim/bundle/textobj-comment"]
-  path = vim/bundle/textobj-comment
-  url = https://github.com/glts/vim-textobj-comment.git
 [submodule "vim/bundle/textobj-variable-segment"]
   path = vim/bundle/textobj-variable-segment
   url = https://github.com/Julian/vim-textobj-variable-segment.git
@@ -229,9 +211,6 @@
 [submodule "vim/bundle/projectionist"]
   path = vim/bundle/projectionist
   url = https://github.com/tpope/vim-projectionist.git
-[submodule "vim/bundle/ternjs"]
-  path = vim/bundle/ternjs
-  url = https://github.com/ternjs/tern_for_vim.git
 [submodule "vim/bundle/elixir"]
   path = vim/bundle/elixir
   url = https://github.com/elixir-lang/vim-elixir.git
