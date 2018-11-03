@@ -38,6 +38,7 @@
 [diff]
   renames = copies
   mnemonicprefix = true
+  ignoreSubmodules = dirty
 
 [difftool]
   prompt = false
