@@ -45,8 +45,8 @@
       <y>Info</y>
       <back>ActivateWindow(shutdownmenu)</back>
       <start>ToggleFullScreen</start>
-      <leftbumper>SkipPrevious</leftbumper>
-      <rightbumper>SkipNext</rightbumper>
+      <leftbumper>AudioNextLanguage</leftbumper>
+      <rightbumper>NextSubtitle</rightbumper>
       <lefttrigger>FullScreen</lefttrigger>
       <righttrigger>AspectRatio</righttrigger>
 
