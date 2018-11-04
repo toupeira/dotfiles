@@ -7,7 +7,7 @@ function login_message {
     return
   elif [ "$PWD" = "$HOME" ]; then
     clear
-    echo -e "\e[1;37m`uname -a`\e[0m"
+    echo -e "\\e[1;37m$( uname -a )\\e[0m"
     uptime
     echo
 
@@ -16,20 +16,20 @@ function login_message {
       echo
     fi
 
-    if [ "$SSH_CONNECTION" -o -z "$DISPLAY" ]; then
+    if [ "$SSH_CONNECTION" ] || [ -z "$DISPLAY" ]; then
       if [ -n "$CYGWIN" ]; then
         local hostname="$HOSTNAME"
       else
-        local hostname=`hostname -f`
+        local hostname=$( hostname -f )
       fi
 
-      echo -e "\e[0;36mWelcome \e[1;36m${USERNAME:-$USER}\e[0;36m on \e[1;33m$hostname\e[0m"
+      echo -e "\\e[0;36mWelcome \\e[1;36m${USERNAME:-$USER}\\e[0;36m on \\e[1;33m$hostname\\e[0m"
       echo
     fi
 
     if has fortune && [ -z "$SSH_CONNECTION" ]; then
       fortune -acs -n $((${LINES:-10}*40)) | awk '
-        /^\(.+\)$/ { print "\033[1;32mfortune:" $0 "\033[0m"; next }
+        /^\(.+\)$/ { print "\033[1;32mfortune" $0 "\033[0m"; next }
         /^%$/ { next }
         { print "  \033[0;32m" $0 "\033[0m" }
       '
@@ -38,7 +38,12 @@ function login_message {
 
     ls
     echo
-    from -c 2>/dev/null | grep -v "There are 0 messages" && echo
+    local mails=$( from -c 2>/dev/null | grep -v "There are 0 messages" )
+    if [ -n "$mails" ]; then
+      echo -e " 🎯 \\033[1;32m$mails\\033[0m"
+      echo
+    fi
+
     true # for _ps1_exit_status
   fi
 }
@@ -69,18 +74,18 @@ function mvln {
     local echo=""
   fi
 
-  local source=`readlink -f "$1" 2>/dev/null`
-  local target=`realpath "$2" 2>/dev/null`
+  local source=$( readlink -f "$1" 2>/dev/null )
+  local target=$( realpath "$2" 2>/dev/null )
   [ -z "$target" ] && target="$2"
 
-  [ -z "$source" -o -z "$target" ] && echo "Usage: mvln [-n] SOURCE TARGET" && return 1
+  [ -z "$source" ] || [ -z "$target" ] && echo "Usage: mvln [-n] SOURCE TARGET" && return 1
   [ ! -e "$source" ] && echo "$source: No such file or directory" && return 1
   [ "$source" = "$target" ] && echo "Source and target are the same." && return 1
 
   $echo mv -v "$source" "$target" || return 1
 
   if [ -d "$target" ]; then
-    local name=`basename "$source"`
+    local name=$( basename "$source" )
     $echo ln -sv "$target/$name" "$source"
   else
     $echo ln -sv "$target" "$source"
@@ -92,7 +97,7 @@ if [ -n "$SSH_AUTH_SOCK" ]; then
   function __load_key {
     local key=~/.ssh/id_rsa
     if [ -f "$key" ]; then
-      ssh-add -l | fgrep -q "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
+      ssh-add -l | grep -Fq "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
     fi
   }
 
@@ -111,7 +116,7 @@ fi
 function _edit {
   local files=$( "$@" )
   if [ -n "$files" ]; then
-    sensible-editor $files
+    sensible-editor "${files[@]}"
   else
     echo "No files found."
   fi
@@ -127,12 +132,12 @@ function rg.less {
 
 # GVim wrapper for SSH connections to pass a file to a local instance
 if [ -n "$SSH_CONNECTION" ]; then
-  [ "`type -t gvi`" = "alias" ] && unalias gvi
+  [ "$( type -t gvi )" = "alias" ] && unalias gvi
 
   function gvi {
     local wait=1
 
-    if [ -z "$DISPLAY" -o ! -x /usr/bin/gvim ]; then
+    if [ -z "$DISPLAY" ] || [ ! -x /usr/bin/gvim ]; then
       echo "Can't find GVim instance..."
       vim "$@"
       return
@@ -148,7 +153,7 @@ if [ -n "$SSH_CONNECTION" ]; then
             options="$options --servername ${arg:1}"
           else
             # Transform file paths into scp:// URIs
-            args=( "${args[@]}" "scp://$HOSTNAME/`readlink -f "$arg"`" )
+            args=( "${args[@]}" "scp://$HOSTNAME/$( readlink -f "$arg" )" )
           fi
         done
 
@@ -169,7 +174,7 @@ fi
 
 # Switch to dotfiles repository if no arguments are passed
 function dotfiles {
-  local path=`command dotfiles --path`
+  local path=$( command dotfiles --path )
 
   if [ $# -eq 0 ]; then
     cd "$path"
@@ -181,7 +186,7 @@ function dotfiles {
     elif [ -d "$path/vim/bundle/$2" ]; then
       cd "$path/vim/bundle/$2"
     else
-      cd "`command ls -d "$path/vim/bundle/$2"* "$path/$2"* 2>/dev/null | head -1`"
+      cd "$( command ls -d "$path/vim/bundle/$2"* "$path/$2"* 2>/dev/null | head -1 )"
     fi
   else
     command dotfiles "$@"
@@ -198,7 +203,7 @@ function src {
       local project_path=$( command src "$1" )
       if [ -z "$project_path" ]; then
         return 1
-      elif [ $# -eq 2 -a "$2" = '@dev' ]; then
+      elif [ $# -eq 2 ] && [ "$2" = '@dev' ]; then
         cd "$project_path" && command src "$@"
       elif [ $# -gt 1 ]; then
         (cd "$project_path" && command src "$@")
@@ -224,7 +229,7 @@ function src_alias {
   if [ -d "$project_path" ]; then
     local space=''
     [ $# -gt 0 ] && space=' '
-    alias $alias="src $project$space$@"
+    alias $alias="src $project$space$*"
     __git_edit_complete $alias _src_alias "$project_path"
   else
     return 1
@@ -258,7 +263,7 @@ function ssh.mux {
   local first_host="$1"
   shift
 
-  for host in $( echo "$@" | tr " " "\n" | tac ); do
+  for host in $( echo "$@" | tr " " "\\n" | tac ); do
     mux -b -d ssh "$host"
   done
 
