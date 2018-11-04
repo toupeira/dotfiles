@@ -906,38 +906,23 @@ endfunction " }}}
     \ 'typescript': [ 'tslint', 'tsserver' ]
   \ }
 
+  let g:ale_sh_shellcheck_options = '-e 2086,2155,2164'
+
   let g:airline#extensions#ale#show_line_numbers = 0
   let g:airline#extensions#ale#warning_symbol = ''
   let g:airline#extensions#ale#error_symbol = ''
 
-  " let g:syntastic_javascript_checkers = [ 'jshint' ]
-  " let g:syntastic_html_checkers = [ 'htmlhint' ]
-  " let g:syntastic_python_checkers = [ 'python' ]
   " let g:syntastic_elixir_checkers = [ 'dogma' ]
   " let g:syntastic_elm_checkers = [ 'elm_make' ]
-
+  " let g:syntastic_html_checkers = [ 'htmlhint' ]
+  " let g:syntastic_javascript_checkers = [ 'jshint' ]
+  " let g:syntastic_python_checkers = [ 'python' ]
   " let g:syntastic_ruby_checkers = [ 'mri' ]
   " let g:syntastic_sh_checkers = [ 'sh' ]
   " let g:syntastic_slim_checkers = []
 
-  " let g:syntastic_puppet_puppetlint_args = '--no-documentation-check'
-  " let g:syntastic_ruby_rubocop_exec = expand('~/.rbenv/shims/rubocop')
-  " let g:syntastic_ruby_rubocop_args = '-D'
-  " let g:syntastic_ruby_slimrb_exec = expand('~/.rbenv/shims/slimrb')
-  " let g:syntastic_sass_sass_exec = expand('~/.rbenv/shims/sass')
-  " let g:syntastic_sass_sass_args = '-I .'
-  " let g:syntastic_scss_sass_exec = expand('~/.rbenv/shims/sass')
-  " let g:syntastic_scss_sass_args = '-I .'
-  " let g:syntastic_sh_shellcheck_exec = 'shellcheck'
-  " let g:syntastic_sh_shellcheck_args = '-e 2032,2033,2064,2086,2139,2155'
-
   " autocmd vimrc BufRead,BufNewFile ~/.cdist/manifest/*,~/.cdist/type/*/*
   "     \ let b:syntastic_checkers = [ 'sh' ]
-
-  " autocmd vimrc BufRead */app/views/**/*.js.coffee
-  "   \ let b:syntastic_coffee_checkers = []
-  " autocmd vimrc BufEnter *.coffee
-  "   \ let g:syntastic_coffee_checkers = [ 'coffee', 'coffeelint' ]
   " }}}
 
   " neocomplete {{{
