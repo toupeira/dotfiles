@@ -53,6 +53,7 @@ function usage {
   echo "  ca, commitall         Commit all changes"
   echo "  list                  List submodules"
   echo "  up, update [MODULE]   Update submodules (fetch new commits)"
+  echo "  pkg, package [NAME]   Install packages from list"
   echo "  sync                  Update, commit and push"
   echo
   echo "Other arguments:"
@@ -463,10 +464,9 @@ function run {
         fi
       done
       ;;
-    package)
-      [ $# -eq 0 ] && usage
-
-      local list="$DOTFILES/packages/$1"
+    pkg|package)
+      local name=${1:-default}
+      local list="$DOTFILES/packages/$name"
 
       if [ ! -f "$list" ]; then
         abort "Can't find list '$list'"
@@ -475,9 +475,9 @@ function run {
       local packages=$( cat "$list" )
 
       if dpkg -s xorg &>/dev/null; then
-        [ -f "$list.x11" ] && packages=$( echo "$packages"; cat "$list.x11" )
+        [ -f "$list.desktop" ] && packages=$( echo "$packages"; cat "$list.desktop" )
       else
-        [ -f "$list.nox" ] && packages=$( echo "$packages"; cat "$list.nox" )
+        [ -f "$list.server" ] && packages=$( echo "$packages"; cat "$list.server" )
       fi
 
       local packages_apt=$( echo "$packages" | fgrep -v : | sort )
@@ -530,7 +530,7 @@ function run {
            -n "$missing_yarn" -o \
            -n "$missing_pip" ]; then
         output
-        status "{{Missing packages:}}"
+        status "{{Missing $name packages:}}"
         for package in $missing_apt; do
           output "    \e[0;32m[apt] \e[1;32m$package\e[0m"
         done

@@ -20,6 +20,7 @@ httpie
 iotop
 iproute2
 iw
+jq
 less
 locales-all
 lsof
@@ -29,6 +30,7 @@ moreutils
 ncurses-term
 p7zip-full
 parted
+patch
 pinentry-curses
 psmisc
 pv
@@ -37,6 +39,7 @@ ripgrep
 rlwrap
 rsync
 ruby
+shellcheck
 smem
 s-nail
 socat

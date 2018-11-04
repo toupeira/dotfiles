@@ -7,16 +7,11 @@ erlang-dev
 erlang-parsetools
 exuberant-ctags
 g++
-jq
 nodejs
-patch
-postgresql
 python3-pip
 python-pip
 rebar
-redis-server
 ruby-dev
-shellcheck
 sqlite3
 tig
 
