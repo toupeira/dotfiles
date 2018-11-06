@@ -1,0 +1,38 @@
+#!/usr/bin/env ruby
+
+require 'active_support/all'
+
+displays = `xrandr --listactivemonitors`.lines.slice(1, 2)
+message = {}
+
+def get_display(line)
+  name = line.split(/\s/).last
+  resolution = `xrandr | grep -FA1 '#{name} connected'`.lines.last
+  width, height = resolution.scan(/(\d+)x(\d+)/).first
+
+  {
+    name: name,
+    width: width.to_f,
+    height: height.to_f,
+  }
+end
+
+if displays.size == 1
+  message[:title] = 'External display not connected'
+else
+  int = get_display(displays.first)
+  ext = get_display(displays.second)
+
+  scale = (ARGV[0] || (int[:width] / ext[:width] * 1.2)).to_f.round(2)
+  ypos = (ext[:height].to_i * scale).round
+
+  message[:title] = "External display #{ext[:name]}"
+  message[:body] = "Resolution #{ext[:width]}x#{ext[:height]}, scaling to #{scale}x#{scale}"
+
+  system "
+    xrandr --output #{int[:name]} --pos 0x0 \
+           --output #{ext[:name]} --pos 0x-#{ypos} --scale #{scale}x#{scale}
+  "
+end
+
+system "notify-send -h int:transient:1 -i display '#{message[:title]}' '#{message[:body]}'"
