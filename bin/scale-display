@@ -23,15 +23,16 @@ else
   int = get_display(displays.first)
   ext = get_display(displays.second)
 
-  scale = (ARGV[0] || (int[:width] / ext[:width] * 1.2)).to_f.round(2)
-  ypos = (ext[:height].to_i * scale).round
+  xscale = (ARGV[0] || (int[:width]  / ext[:width]  * 1.2)).to_f.round(2)
+  yscale = (ARGV[0] || (int[:height] / ext[:height] * 1.2)).to_f.round(2)
+  ypos = (ext[:height].to_i * yscale).round
 
   message[:title] = "External display #{ext[:name]}"
-  message[:body] = "Resolution #{ext[:width]}x#{ext[:height]}, scaling to #{scale}x#{scale}"
+  message[:body] = "Resolution #{ext[:width]}x#{ext[:height]}, scaling to #{xscale}x#{yscale}"
 
   system "
     xrandr --output #{int[:name]} --pos 0x0 \
-           --output #{ext[:name]} --pos 0x-#{ypos} --scale #{scale}x#{scale}
+           --output #{ext[:name]} --pos 0x-#{ypos} --scale #{xscale}x#{yscale}
   "
 end
 
