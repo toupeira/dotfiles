@@ -119,6 +119,7 @@
   upall = pull-all
   ff = merge --ff-only HEAD@{u}
   ri = rebase -i
+  rem = rebase master
   rim = rebase -i master
   continue = rebase --continue
   skip = rebase --skip
