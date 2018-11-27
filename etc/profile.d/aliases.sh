@@ -119,7 +119,7 @@ if has sudo; then
 
   # debian tools
   _sudo_aliases \
-    apt-get aptitude dpkg-reconfigure \
+    apt apt-get aptitude dpkg-reconfigure \
     update-alternatives update-rc.d invoke-rc.d
 
   alias pkginstall='sudo dpkg -i'

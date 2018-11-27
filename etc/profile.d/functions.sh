@@ -116,7 +116,7 @@ fi
 function _edit {
   local files=$( "$@" )
   if [ -n "$files" ]; then
-    sensible-editor "${files[@]}"
+    sensible-editor $files
   else
     echo "No files found."
   fi

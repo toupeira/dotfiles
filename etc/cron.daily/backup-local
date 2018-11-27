@@ -106,7 +106,9 @@ rdiff-backup --print-statistics --exclude-fifos --exclude-sockets \
   --exclude "$BACKUP" \
   $DEFAULT_EXCLUDE_PATHS $EXCLUDE_PATHS \
   $DEFAULT_INCLUDE_PATHS $INCLUDE_PATHS \
-  --exclude / / "$BACKUP" >> "$LOGFILE"
+  --exclude / / "$BACKUP" \
+  2>&1 | grep -v 'ListError .* Permission denied: .*gvfs' \
+  >> "$LOGFILE"
 
 echo >> "$LOGFILE"
 log "Purging old backups..."

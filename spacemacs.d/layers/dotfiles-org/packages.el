@@ -1,6 +1,7 @@
 (setq dotfiles-org-packages
  '(
    org
+   org-agenda
    org-agenda-property
   ))
 
@@ -10,12 +11,13 @@
    calendar-day-name-array (locale-info 'days)
    calendar-month-name-array (locale-info 'months)
 
-   org-agenda-files '("~/org")
    org-agenda-buffer-name "*agenda*"
-   org-agenda-window-setup 'only-window
-   org-agenda-include-diary nil
    org-agenda-clockreport-parameter-plist '(:link t :maxlevel 5)
+   org-agenda-dim-blocked-tasks nil
+   org-agenda-files '("~/org")
+   org-agenda-include-diary nil
    org-agenda-show-inherited-tags nil
+   org-agenda-window-setup 'only-window
    org-attach-directory "attachments/"
    org-blank-before-new-entry '((heading . auto) (plain-list-item . nil))
    org-clock-history-length 25
@@ -131,27 +133,6 @@
       "Cc" (lambda () (interactive) (org-capture nil "c")))
   )
 
-  (with-eval-after-load 'org-agenda
-    ;; use T to cycle backwords through todo states
-    (define-key org-agenda-mode-map (kbd "T")
-      (lambda () (interactive) (org-agenda-todo 'left)))
-
-    (define-key org-agenda-mode-map (kbd "o") 'org-agenda-open-link)
-
-    ;; use uppercase letters to switch period
-    (define-key org-agenda-mode-map (kbd "D") 'org-agenda-day-view)
-    (define-key org-agenda-mode-map (kbd "W") 'org-agenda-week-view)
-    (define-key org-agenda-mode-map (kbd "M") 'org-agenda-month-view)
-    (define-key org-agenda-mode-map (kbd "Y") 'org-agenda-year-view)
-
-    (define-key org-agenda-mode-map (kbd "d") 'org-agenda-deadline)
-    (define-key org-agenda-mode-map (kbd "s") 'org-agenda-schedule)
-    (define-key org-agenda-mode-map (kbd "w") 'org-save-all-org-buffers)
-
-    ;; don't use $ for archiving
-    (define-key org-agenda-mode-map (kbd "$") 'evil-end-of-line)
-  )
-
   ;; auto-save buffers in agenda
   (advice-add 'org-agenda-quit :before 'org-save-all-org-buffers)
   (advice-add 'org-agenda-redo :before 'org-save-all-org-buffers)
@@ -185,6 +166,43 @@
         ad-do-it))
   )
 )
+
+(defun dotfiles-org/post-init-org-agenda ()
+  (use-package org-agenda
+    :defer t
+    :config
+    (evilified-state-evilify-map org-agenda-mode-map
+      :mode org-agenda-mode
+      :bindings
+
+      ;; use T to cycle backwords through todo states
+      (kbd "T") '(lambda () (interactive) (org-agenda-todo 'left))
+
+                                          ; use o to open links
+      (kbd "o") 'org-agenda-open-link
+
+                                          ; jump to current clock entry
+      (kbd "J") 'org-agenda-clock-goto
+
+      ;; use uppercase letters to switch period
+      (kbd "D") 'org-agenda-day-view
+      (kbd "W") 'org-agenda-week-view
+      (kbd "M") 'org-agenda-month-view
+      (kbd "Y") 'org-agenda-year-view
+
+      (kbd "d") 'org-agenda-deadline
+      (kbd "s") 'org-agenda-schedule
+      (kbd "w") 'org-save-all-org-buffers
+
+      ;; restore normal line movements
+      (kbd "^") 'evil-first-non-blank
+      (kbd "0") 'evil-beginning-of-line
+      (kbd "$") 'evil-end-of-line
+
+      ;; these bindings from layers/+emacs/org somehow get lost
+      (kbd "gd") 'org-agenda-toggle-time-grid
+      (kbd "gr") 'org-agenda-redo
+  )))
 
 ;; show calendar locations in agenda
 (defun dotfiles-org/init-org-agenda-property ()

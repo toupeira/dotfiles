@@ -1,2 +1,7 @@
-set line-graphics = utf8
 set tab-size = 2
+set line-graphics = utf-8
+set truncation-delimiter = utf-8
+
+set ignore-case = smart-case
+set vertical-split = horizontal
+set mouse = yes
