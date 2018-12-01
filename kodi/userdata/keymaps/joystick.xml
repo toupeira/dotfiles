@@ -3,7 +3,7 @@
     <joystick>
       <a>Select</a>
       <b>Back</b>
-      <x>Playlist</x>
+      <x>Info</x>
       <y>ActivateWindow(Favourites)</y>
       <back>ActivateWindow(shutdownmenu)</back>
       <start>ToggleFullScreen</start>
@@ -41,8 +41,8 @@
     <joystick>
       <a>Pause</a>
       <b>Stop</b>
-      <x>OSD</x>
-      <y>Info</y>
+      <x>Info</x>
+      <y>OSD</y>
       <back>ActivateWindow(shutdownmenu)</back>
       <start>ToggleFullScreen</start>
       <leftbumper>AudioNextLanguage</leftbumper>
@@ -81,8 +81,8 @@
     <joystick>
       <a>Pause</a>
       <b>Stop</b>
-      <x>OSD</x>
-      <y>Info</y>
+      <x>Info</x>
+      <y>OSD</y>
       <start>ToggleFullScreen</start>
       <leftbumper>SkipPrevious</leftbumper>
       <rightbumper>SkipNext</rightbumper>
@@ -132,19 +132,20 @@
   </VirtualKeyboard>
   <FullscreenInfo>
     <joystick>
-      <y>Back</y>
+      <x>Back</x>
+      <y>OSD</y>
     </joystick>
   </FullscreenInfo>
   <VideoOSD>
     <joystick>
-      <x>Back</x>
-      <y>noop</y>
+      <x>noop</x>
+      <y>Back</y>
     </joystick>
   </VideoOSD>
   <MusicOSD>
     <joystick>
-      <x>Back</x>
-      <y>noop</y>
+      <x>noop</x>
+      <y>Back</y>
     </joystick>
   </MusicOSD>
 </keymap>
