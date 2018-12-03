@@ -132,6 +132,7 @@
   </VirtualKeyboard>
   <FullscreenInfo>
     <joystick>
+      <a>Pause</a>
       <x>Back</x>
       <y>OSD</y>
     </joystick>

@@ -121,6 +121,8 @@
   ri = rebase -i
   rem = rebase master
   rim = rebase -i master
+  red = rebase development
+  rid = rebase -i development
   continue = rebase --continue
   skip = rebase --skip
   solve = mergetool
@@ -144,7 +146,7 @@
   # shell wrappers
   sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
   bash = "!f() { [ $# -gt 0 ] && bash -ic \"$@\"; }; f"
-  rg = "!rg --smart-case"
+  rg = "!rg"
 
   rake  = "!rake"
   rails = "!rails"

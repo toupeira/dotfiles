@@ -56,10 +56,18 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/home/*/.macromedia
   --exclude **/home/*/.meteor
   --exclude **/home/*/.mozilla/firefox/Crash*
-  --exclude **/home/*/.mozilla/firefox/*/adblockplus
+  --exclude **/home/*/.mozilla/firefox/*/browser-extension*
+  --exclude **/home/*/.mozilla/firefox/*/cert*
   --exclude **/home/*/.mozilla/firefox/*/cookies*
+  --exclude **/home/*/.mozilla/firefox/*/extensions*
+  --exclude **/home/*/.mozilla/firefox/*/favicons*
+  --exclude **/home/*/.mozilla/firefox/*/formhistory*
   --exclude **/home/*/.mozilla/firefox/*/lazarus*
-  --exclude **/home/*/.mozilla/firefox/*/storage
+  --exclude **/home/*/.mozilla/firefox/*/places*
+  --exclude **/home/*/.mozilla/firefox/*/saved-telemetry-pings*
+  --exclude **/home/*/.mozilla/firefox/*/sessionstore*
+  --exclude **/home/*/.mozilla/firefox/*/storage*
+  --exclude **/home/*/.mozilla/firefox/*/webapps*
   --exclude **/home/*/.nenv
   --exclude **/home/*/.node-gyp
   --exclude **/home/*/.npm

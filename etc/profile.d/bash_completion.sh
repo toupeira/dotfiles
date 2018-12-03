@@ -53,12 +53,12 @@ fi
 function _packages_available {
   COMPREPLY=( $(compgen -W "`apt-cache pkgnames ${COMP_WORDS[COMP_CWORD]} 2>/dev/null`") )
 }
-complete -F _packages_available pkget
+complete -F _packages_available pkget pkgshow
 
 function _packages_installed {
   COMPREPLY=( $(compgen -W "`dglob ${COMP_WORDS[COMP_CWORD]}`") )
 }
-complete -F _packages_installed pkglist pkgpurge pkgremove pkgshow debbugs debpackages
+complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
 
 function _src_projects {
   local src_dir=~/src

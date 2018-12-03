@@ -1,9 +1,20 @@
+# AllCops:
+#   TargetRubyVersion: 2.5
+
 ### METRICS
 
 Metrics/LineLength:
   Max: 120
 
+### LAYOUT
+
+Layout/IndentHash:
+  EnforcedStyle: consistent
+
 ### STYLE
+
+Style/TrailingCommaInArguments:
+  EnforcedStyleForMultiline: comma
 
 Style/TrailingCommaInArrayLiteral:
   EnforcedStyleForMultiline: comma

@@ -393,7 +393,7 @@ function run {
 
       output
       install_paths "$DOTFILES"/*
-      run package system
+      run package
       output
       ;;
     install)
