@@ -14,6 +14,7 @@ if [ -d ~/.yarn/bin ]; then
   export PATH="$PATH:$HOME/.yarn/bin"
 fi
 
+alias node='node --preserve-symlinks'
 alias sunpm='sudo npm -g'
 
 function ng {
