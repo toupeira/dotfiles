@@ -1,6 +1,9 @@
 [core]
   pager = less -RFX
 
+[protocol]
+  version = 2
+
 [user]
   name = Markus Koller
   email = markus-koller@gmx.ch
