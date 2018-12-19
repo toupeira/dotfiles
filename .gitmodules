@@ -238,3 +238,9 @@
 [submodule "vim/bundle/matchtagalways"]
   path = vim/bundle/matchtagalways
   url = https://github.com/Valloric/MatchTagAlways.git
+[submodule "rbenv/plugins/update-rubies"]
+	path = rbenv/plugins/update-rubies
+	url = https://github.com/toy/rbenv-update-rubies.git
+[submodule "rbenv/plugins/whatis"]
+	path = rbenv/plugins/whatis
+	url = https://github.com/toy/rbenv-whatis.git
