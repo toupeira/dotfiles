@@ -37,6 +37,7 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/home/*/.config/google-chrome
   --exclude **/home/*/.config/google-chrome-unstable
   --exclude **/home/*/.config/opera
+  --exclude **/home/*/.config/retroarch
   --exclude **/home/*/.config/teamviewer10
   --exclude **/home/*/.config/yarn/global
   --exclude **/home/*/.cordova
