@@ -51,13 +51,13 @@ separator = red.call("»")
 
 Pry.config.prompt = [
   lambda { |object, level, pry|
-    "#{gray.call "[#{pry.input_array.size}]"} #{Pry.config.prompt_name}#{target_string.call(object)} #{separator} "
+    "#{gray.call "[#{pry.input_ring.size}]"} #{Pry.config.prompt_name}#{target_string.call(object)} #{separator} "
   },
   lambda { |object, level, pry|
     prompt = Pry.config.prompt_name.gsub(/\001.*?\002/, '')
 
     spaces = (
-      "[#{pry.input_array.size}]".size +
+      "[#{pry.input_ring.size}]".size +
       prompt.size +
       target_string.call(object).size
     )
