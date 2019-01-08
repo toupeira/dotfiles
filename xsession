@@ -1,5 +1,8 @@
 #!/bin/bash
 
+# disable the Menu key
+xmodmap -e 'keycode 135 = NoSymbol'
+
 # make Dropbox behave
 dropbox=~/.config/autostart/dropbox.desktop
 if [ -f "$dropbox" ]; then

@@ -15,9 +15,11 @@ export IRB_HISTORY_SIZE=3000
 export LESS="-iRM"
 export PASSWORD_STORE_ENABLE_EXTENSIONS="true"
 export PGDATABASE="postgres"
-export QT_QPA_PLATFORMTHEME="gtk2"
 export RI="--format ansi --no-pager"
 export RIPGREP_CONFIG_PATH=~/.config/ripgrep.conf
+
+export QT_AUTO_SCREEN_SCALE_FACTOR=0
+export QT_QPA_PLATFORMTHEME="gtk2"
 
 # Colorize manpages
 export LESS_TERMCAP_mb=$'\e[1;31m'
