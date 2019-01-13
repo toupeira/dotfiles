@@ -36,6 +36,7 @@ fi
 # complete -o bashdefault -o default -F _root_command sudo watch
 complete -o bashdefault -o default -F _command psgrep pskill
 complete -o bashdefault -o default -F _command start @
+complete -o bashdefault -o default -F _command grc
 
 has_completion ssh        && complete -F _ssh        -o default -o bashdefault ping telnet host nc
 has_completion pgrep      && complete -F _pgrep      -o default -o bashdefault psgrep pskill

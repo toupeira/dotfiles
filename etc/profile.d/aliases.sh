@@ -91,11 +91,26 @@ alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'
 alias r='rails'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
+# grc aliases
+if has grc; then
+  function _grc_aliases {
+    while [ $# -gt 0 ]; do
+      eval "alias $1='grc $( (alias "$1" 2>/dev/null || echo "$1") | cut -d\' -f2 )'"
+      shift
+    done
+  }
+
+  # expand aliases in arguments
+  alias grc='grc '
+
+  _grc_aliases ping traceroute netstat stat diff last who mount ps dig ifconfig df du ip iptables lspci lsusb lsof free sysctl lsmod uptime w whois
+fi
+
 # sudo aliases
 if has sudo; then
   function _sudo_aliases {
     while [ $# -gt 0 ]; do
-      eval "alias $1='sudo $1'"
+      eval "alias $1='sudo $( (alias "$1" 2>/dev/null || echo "$1") | cut -d\' -f2 )'"
       shift
     done
   }

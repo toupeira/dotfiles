@@ -23,6 +23,7 @@ fzf
 git
 gnupg
 gnupg2
+grc
 httpie
 iotop
 iproute2
@@ -66,4 +67,5 @@ tree
 unison
 unzip
 wget
+whois
 zip
