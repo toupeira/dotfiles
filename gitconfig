@@ -64,10 +64,6 @@
   prompt = false
   keepBackup = false
 
-[mergetool.splice]
-  cmd = sensible-vim $BASE $LOCAL $REMOTE $MERGED -c 'SpliceInit'
-  trustExitCode = true
-
 [pager]
   log = diff-so-fancy | less -cRX
   show = diff-so-fancy | less -cRX
@@ -94,7 +90,6 @@
 
   di = diff
   dc = diff --cached
-  ds = diff --stat
 
   br = branch
   ls = branch -avv
@@ -129,12 +124,10 @@
   continue = rebase --continue
   skip = rebase --skip
   solve = mergetool
-  splice = mergetool --tool=splice
 
   pu   = push -v --progress
   poof = push -v --progress --force-with-lease
   pusu = -c push.default=current push -v --progress --set-upstream
-  pub  = "!f() { local target=$1; shift; git push . HEAD:$target $@; }; f"
   delbranch = "!f() { git branch -d $1 && git pu -d $1; }; f"
 
   sub = submodule
