@@ -2,15 +2,13 @@
 [ -n "$BASH_INTERACTIVE" -a -z "$BASH_COMPLETION" -a -z "$BASH_COMPLETION_COMPAT_DIR" ] || return
 
 # Check for recent enough version of bash.
-[ ${BASH_VERSINFO[0]} -ge 4 -a ${BASH_VERSINFO[1]} -ge 1 ] || return
+[ ${BASH_VERSINFO[0]} -ge 4 ] || return
 
 # Check for disabled completion
 shopt -q progcomp || return
 
 if [ "`type -t _git`" != "function" -a -r /usr/share/bash-completion/completions/git ]; then
   . /usr/share/bash-completion/completions/git
-
-  _git_rebase_maybe () { _git_rebase; }
 fi
 
 if [ -r /usr/share/bash-completion/bash_completion ]; then
