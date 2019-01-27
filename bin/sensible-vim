@@ -27,6 +27,7 @@ if [ ${#args[@]} -gt 0 ]; then
           | fgrep -vx 'regular file, no read permission' \
           | fgrep -vx 'application/gzip' \
           | fgrep -vx 'application/javascript' \
+          | fgrep -vx 'application/json' \
           | fgrep -vx 'application/octet-stream' \
           | fgrep -vx 'application/pgp-keys' \
           | fgrep -vx 'application/postscript' \
