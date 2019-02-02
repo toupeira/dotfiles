@@ -51,7 +51,7 @@ separator = red.call("»")
 
 Pry.config.prompt = [
   lambda { |object, level, pry|
-    input = pry.try(:input_ring) || pry.input_array
+    input = pry.respond_to?(:input_ring) ? pry.input_ring : pry.input_array
     "#{gray.call "[#{input.size}]"} #{Pry.config.prompt_name}#{target_string.call(object)} #{separator} "
   },
   lambda { |object, level, pry|
