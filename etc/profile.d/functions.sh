@@ -61,7 +61,11 @@ function down {
 # Open files with xdg-open
 function open {
   for file in "$@"; do
-    xdg-open "$file"
+    if [ -f "$file" ]; then
+      xdg-open "$file" &>/dev/null
+    else
+      xdg-open "$file"
+    fi
   done
 }
 
