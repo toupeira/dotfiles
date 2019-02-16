@@ -67,7 +67,7 @@ case "$1" in
     fi
 
     command="$proc $*"
-    options="-r"
+    options="-b"
 
     case "$proc" in
       watcher)
@@ -90,7 +90,6 @@ case "$1" in
       log)
         if [ -f "log/development.log" ]; then
           command="tail -n 0 -f log/development.log"
-          options="-b"
         else
           echo "Can't find log for project."
           exit 1
@@ -138,7 +137,7 @@ case "$1" in
         ;;
     esac
 
-    $0 -t "@$proc" $options "$@" "$0 loop $command"
+    $0 -t "@$proc [$( basename "$PWD" )]" $options "$@" "$0 loop $command"
     ;;
 
   # Store/restore the current directory for the pane

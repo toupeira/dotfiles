@@ -55,10 +55,11 @@ Pry.config.prompt = [
     "#{gray.call "[#{input.size}]"} #{Pry.config.prompt_name}#{target_string.call(object)} #{separator} "
   },
   lambda { |object, level, pry|
+    input = pry.respond_to?(:input_ring) ? pry.input_ring : pry.input_array
     prompt = Pry.config.prompt_name.gsub(/\001.*?\002/, '')
 
     spaces = (
-      "[#{pry.input_ring.size}]".size +
+      "[#{input.size}]".size +
       prompt.size +
       target_string.call(object).size
     )

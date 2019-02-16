@@ -91,6 +91,11 @@ alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'
 alias r='rails'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
+# mux aliases
+for i in server watcher console log; do
+  eval "alias @$i='mux @$i'"
+done
+
 # grc aliases
 if has grc; then
   function _grc_aliases {
