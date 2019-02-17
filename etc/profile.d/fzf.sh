@@ -3,7 +3,7 @@
 
 export FZF_TMUX=0
 export FZF_DEFAULT_COMMAND='rg -l --hidden ""'
-export FZF_DEFAULT_OPTS='-x -m'
+export FZF_DEFAULT_OPTS='--multi --filepath-word --inline-info --reverse --prompt="» "'
 export FZF_COMPLETION_TRIGGER='//'
 
 . /usr/share/bash-completion/completions/fzf

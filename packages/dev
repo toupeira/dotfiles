@@ -8,6 +8,7 @@ erlang-parsetools
 exuberant-ctags
 g++
 nodejs
+python3-neovim
 python3-pip
 python-pip
 rebar
@@ -18,16 +19,21 @@ tig
 gem:activesupport
 gem:awesome_print
 gem:bundler
+gem:neovim
 gem:pry
 gem:ripper-tags
 gem:rubocop
+gem:solargraph
 
 npm:yarn
+
+pip:solargraph-utils.py
 
 yarn:caniuse-cmd
 yarn:csslint
 yarn:eslint
 yarn:htmlhint
+yarn:javascript-typescript-langserver
 yarn:jsonlint
 yarn:tern
 yarn:tslint

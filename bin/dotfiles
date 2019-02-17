@@ -504,7 +504,7 @@ function run {
         missing_npm=$(
           comm -23 \
             <( echo "$packages_npm" | cut -d: -f2 | sort ) \
-            <( npm -g list --depth=0 | grep @ | cut -d\  -f2 | cut -d@ -f1 | sort )
+            <( npm -g list --depth=0 2>/dev/null | grep @ | cut -d\  -f2 | cut -d@ -f1 | sort )
         )
       fi
 
@@ -520,7 +520,7 @@ function run {
         missing_pip=$(
           comm -23 \
             <( echo "$packages_pip" | cut -d: -f2 | sort ) \
-            <( sudo pip list | awk '/\(/ { print $1 }' | sort )
+            <( pip3 list | awk '{ print $1 }' | sort )
         )
       fi
 
@@ -558,7 +558,7 @@ function run {
           [ -n "$missing_yarn" ] && output \
             && mux-wrap yarn global add $missing_yarn
           [ -n "$missing_pip" ] && output \
-            && mux-wrap sudo pip install $missing_pip
+            && mux-wrap sudo pip3 install $missing_pip
         fi
 
         output
