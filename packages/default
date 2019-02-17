@@ -46,6 +46,7 @@ pinentry-curses
 psmisc
 procmail
 pv
+python3-neovim
 rdiff-backup
 rename
 ripgrep

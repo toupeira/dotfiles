@@ -1,8 +1,6 @@
 ### default gems {{{
 %w[
   yaml
-  open-uri
-  awesome_print
   active_support/all
 ].each do |lib|
   begin
@@ -17,11 +15,6 @@ puts
 puts "ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE} patchlevel #{RUBY_PATCHLEVEL}} [#{RUBY_PLATFORM}]"
 puts
 Kernel.at_exit { puts }
-
-# use awesome_print for output
-if respond_to? :ai
-  Pry.print = ->(output, value, _) { Pry::Helpers::BaseHelpers.stagger_output("=> #{value.ai}", output) }
-end
 
 # delete single-letter command aliases
 ('a'..'z').each do |letter|

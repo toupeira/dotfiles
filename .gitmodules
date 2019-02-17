@@ -28,9 +28,6 @@
 [submodule "vim/bundle/endwise"]
   path = vim/bundle/endwise
   url = https://github.com/tpope/vim-endwise.git
-[submodule "vim/bundle/vimproc"]
-  path = vim/bundle/vimproc
-  url = https://github.com/Shougo/vimproc.vim.git
 [submodule "vim/bundle/ansiesc"]
   path = vim/bundle/ansiesc
   url = https://github.com/vim-scripts/AnsiEsc.vim.git
@@ -106,9 +103,6 @@
 [submodule "vim/bundle/targets"]
   path = vim/bundle/targets
   url = https://github.com/wellle/targets.vim.git
-[submodule "vim/bundle/neomru"]
-  path = vim/bundle/neomru
-  url = https://github.com/Shougo/neomru.vim.git
 [submodule "vim/bundle/bbye"]
   path = vim/bundle/bbye
   url = https://github.com/moll/vim-bbye.git
@@ -163,9 +157,6 @@
 [submodule "rbenv/plugins/rbenv-communal-gems"]
   path = rbenv/plugins/rbenv-communal-gems
   url = https://github.com/tpope/rbenv-communal-gems.git
-[submodule "vim/bundle/unite-tag"]
-  path = vim/bundle/unite-tag
-  url = https://github.com/tsukkee/unite-tag.git
 [submodule "vim/bundle/bundler"]
   path = vim/bundle/bundler
   url = https://github.com/tpope/vim-bundler.git
@@ -227,32 +218,32 @@
   path = vim/bundle/matchtagalways
   url = https://github.com/Valloric/MatchTagAlways.git
 [submodule "rbenv/plugins/update-rubies"]
-	path = rbenv/plugins/update-rubies
-	url = https://github.com/toy/rbenv-update-rubies.git
+  path = rbenv/plugins/update-rubies
+  url = https://github.com/toy/rbenv-update-rubies.git
 [submodule "rbenv/plugins/whatis"]
-	path = rbenv/plugins/whatis
-	url = https://github.com/toy/rbenv-whatis.git
+  path = rbenv/plugins/whatis
+  url = https://github.com/toy/rbenv-whatis.git
 [submodule "vim/bundle/language-client"]
-	path = vim/bundle/language-client
-	url = https://github.com/autozimu/LanguageClient-neovim.git
+  path = vim/bundle/language-client
+  url = https://github.com/autozimu/LanguageClient-neovim.git
 [submodule "vim/bundle/ncm2"]
-	path = vim/bundle/ncm2
-	url = https://github.com/ncm2/ncm2.git
+  path = vim/bundle/ncm2
+  url = https://github.com/ncm2/ncm2.git
 [submodule "vim/bundle/nvim-yarp"]
-	path = vim/bundle/nvim-yarp
-	url = https://github.com/roxma/nvim-yarp.git
+  path = vim/bundle/nvim-yarp
+  url = https://github.com/roxma/nvim-yarp.git
 [submodule "vim/bundle/ncm2-bufword"]
-	path = vim/bundle/ncm2-bufword
-	url = https://github.com/ncm2/ncm2-bufword.git
+  path = vim/bundle/ncm2-bufword
+  url = https://github.com/ncm2/ncm2-bufword.git
 [submodule "vim/bundle/ncm2-path"]
-	path = vim/bundle/ncm2-path
-	url = https://github.com/ncm2/ncm2-path.git
+  path = vim/bundle/ncm2-path
+  url = https://github.com/ncm2/ncm2-path.git
 [submodule "vim/bundle/ncm2-otherbuf"]
-	path = vim/bundle/ncm2-otherbuf
-	url = https://github.com/fgrsnau/ncm2-otherbuf.git
+  path = vim/bundle/ncm2-otherbuf
+  url = https://github.com/fgrsnau/ncm2-otherbuf.git
 [submodule "vim/bundle/fzf"]
-	path = vim/bundle/fzf
-	url = https://github.com/junegunn/fzf.vim.git
+  path = vim/bundle/fzf
+  url = https://github.com/junegunn/fzf.vim.git
 [submodule "vim/bundle/nvim-rpc"]
-	path = vim/bundle/nvim-rpc
-	url = https://github.com/roxma/vim-hug-neovim-rpc.git
+  path = vim/bundle/nvim-rpc
+  url = https://github.com/roxma/vim-hug-neovim-rpc.git

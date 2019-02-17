@@ -8,7 +8,6 @@ erlang-parsetools
 exuberant-ctags
 g++
 nodejs
-python3-neovim
 python3-pip
 python-pip
 rebar
@@ -17,7 +16,6 @@ sqlite3
 tig
 
 gem:activesupport
-gem:awesome_print
 gem:bundler
 gem:neovim
 gem:pry
