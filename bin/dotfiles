@@ -365,10 +365,6 @@ function run {
       [ -z "$changes" ] && return
 
       run commit -m "$commit_message" $changes
-
-      if git status | fgrep -q "Your branch is ahead"; then
-        run push
-      fi
       output
 
       ;;
