@@ -893,17 +893,31 @@ endfunction " }}}
   "     \ let b:syntastic_checkers = [ 'sh' ]
   " }}}
 
-  " language-client {{{
-  let g:LanguageClient_serverCommands = {
-    \ 'ruby': ['solargraph', 'stdio'],
-    \ 'javascript': ['javascript-typescript-stdio', '--log', '/dev/null'],
-    \ 'typescript': ['javascript-typescript-stdio', '--log', '/dev/null'],
-  \}
+  " lsp {{{
+  if index(g:pathogen_disabled, 'lsp') == -1
+    au User lsp_setup call lsp#register_server({
+      \ 'name': 'ruby',
+      \ 'cmd': { server_info -> ['solargraph', 'stdio'] },
+      \ 'whitelist': ['ruby']
+    \ })
+    au User lsp_setup call lsp#register_server({
+      \ 'name': 'javascript',
+      \ 'cmd': { server_info -> ['javascript-typescript-stdio'] },
+      \ 'whitelist': ['javascript']
+    \ })
+    au User lsp_setup call lsp#register_server({
+      \ 'name': 'typescript',
+      \ 'cmd': { server_info -> ['javascript-typescript-stdio'] },
+      \ 'whitelist': ['typescript']
+    \ })
+  endif
   " }}}
 
   " ncm2 {{{
-  autocmd BufEnter * call ncm2#enable_for_buffer()
-  inoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<Tab>"
+  if index(g:pathogen_disabled, 'ncm2') == -1
+    autocmd BufEnter * call ncm2#enable_for_buffer()
+    inoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<Tab>"
+  endif
   " }}}
 
   " airline {{{
