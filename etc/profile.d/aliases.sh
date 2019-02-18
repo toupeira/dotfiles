@@ -73,8 +73,7 @@ if has sensible-emacs; then
   alias e='sensible-emacs'
 fi
 
-alias ag='echo "Use rg! 🤯" #'
-alias rg='rg --smart-case --hidden '\
+alias rg='rg --smart-case --hidden --ignore-file ~/.ignore '\
 '  --colors "path:fg:green" '\
 '  --colors "path:style:bold" '\
 '  --colors "match:fg:yellow" '\
@@ -83,11 +82,12 @@ alias rg='rg --smart-case --hidden '\
 '  --colors "line:fg:magenta" '\
 '  --colors "line:style:bold" '\
 '  --colors "column:fg:magenta"'
-alias irb='pry'
+
+alias fd='fdfind --hidden --ignore-file ~/.ignore'
 alias pyserve='python -m SimpleHTTPServer 8080'
 alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'
-alias r='rails'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
+alias r='rails'
 
 # mux aliases
 for i in server watcher console log; do

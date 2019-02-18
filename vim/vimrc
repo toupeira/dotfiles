@@ -6,7 +6,6 @@
   scriptencoding utf-8
 
   let s:vimdir = expand("~") . "/.vim"
-  let s:has_rg = executable('rg')
 
   " disable defaults.vim
   let g:skip_defaults_vim = 1
@@ -58,10 +57,9 @@
   set incsearch
   set hlsearch
 
-  if s:has_rg
+  if executable('rg')
     let &grepprg = "rg --smart-case --hidden --vimgrep"
   endif
-  set dictionary=/usr/share/dict/words
 
   " store swapfiles in a central location
   set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
@@ -761,7 +759,7 @@ endfunction " }}}
   let g:tagbar_compact = 1
   let g:tagbar_previewwin_pos = 'rightbelow'
 
-  nnoremap <silent> ,t :TagbarToggle<CR>
+  nnoremap <silent> ,T :TagbarToggle<CR>
   " }}}
 
   " pasta {{{
@@ -1031,12 +1029,22 @@ endfunction " }}}
         \ . a:action . " | let g:fzf_layout = { 'down': '10' }\<CR>"
     endfunction
 
+    command! -bang -nargs=? -complete=dir Files
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({}, 'right:hidden', '?'), <bang>0)
+
+    command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --column --line-number --no-heading --color=always --smart-case '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('right:50%')
+      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0)
+
     nnoremap <silent> ,f :Files<CR>
     nnoremap <silent> ,r :History<CR>
     nnoremap <silent> ,b :Buffers<CR>
     nnoremap <silent> ,l :BLines<CR>
     nnoremap <silent> ,L :Lines<CR>
-    nnoremap <silent> ,T :BTags<CR>
+    nnoremap <silent> ,t :BTags<CR>
 
     nnoremap <silent> ,gg :Rg<CR>
 

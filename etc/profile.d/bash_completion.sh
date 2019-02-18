@@ -36,12 +36,17 @@ complete -o bashdefault -o default -F _command psgrep pskill
 complete -o bashdefault -o default -F _command start @
 complete -o bashdefault -o default -F _command grc
 
-has_completion ssh        && complete -F _ssh        -o default -o bashdefault ping telnet host nc
-has_completion pgrep      && complete -F _pgrep      -o default -o bashdefault psgrep pskill
-has_completion systemctl  && complete -F _systemctl  -o default -o bashdefault sctl
-has_completion journalctl && complete -F _journalctl -o default -o bashdefault jctl
+has_completion ssh && \
+  complete -F _ssh -o default -o bashdefault ping telnet host nc curl
+has_completion pgrep && \
+  complete -F _pgrep -o default -o bashdefault psgrep pskill
+has_completion systemctl && \
+  complete -F _systemctl -o default -o bashdefault sctl
+has_completion journalctl && \
+  complete -F _journalctl -o default -o bashdefault jctl
 
-has pgcli && has_completion psql && complete -F _psql pgcli
+has pgcli && has_completion psql && \
+  complete -F _psql pgcli
 
 if has dotfiles; then
   __git_edit_complete dotfiles _git `dotfiles --path`
@@ -59,11 +64,12 @@ function _packages_installed {
 }
 complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
 
+# src completion
 function _src_projects {
   local src_dir=~/src
   COMPREPLY=( $(compgen -W "`src list -a | grep "${COMP_WORDS[COMP_CWORD]}"`") )
 }
-complete -F _src_projects src s
+complete -F _src_projects src
 
 function _src_alias {
   local cword="${COMP_WORDS[COMP_CWORD]}"

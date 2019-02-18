@@ -653,7 +653,6 @@ function run {
       fi
       ;;
     build-all)
-      run build "$DOTFILES/vim/bundle/vimproc" make -s
       run build "$DOTFILES/rbenv/rbenv/src"    make -s
       ;;
     git)

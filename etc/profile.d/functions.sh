@@ -127,7 +127,6 @@ function _edit {
 }
 
 alias rg.edit='_edit rg -l'
-alias bun.edit='_edit bun -l'
 
 # rg wraper to view colored and grouped results in less
 function rg.less {

@@ -2,8 +2,8 @@
 [ -n "$BASH_INTERACTIVE" ] && has fzf || return
 
 export FZF_TMUX=0
-export FZF_DEFAULT_COMMAND='rg -l --hidden --ignore-file ~/.ignore ""'
-export FZF_DEFAULT_OPTS='--multi --filepath-word --inline-info --reverse --prompt="» "'
+export FZF_DEFAULT_COMMAND='fdfind --hidden --ignore-file ~/.ignore --type file'
+export FZF_DEFAULT_OPTS='--ansi --multi --filepath-word --inline-info --reverse --prompt "» "'
 export FZF_COMPLETION_TRIGGER='//'
 
 . /usr/share/bash-completion/completions/fzf
@@ -15,4 +15,4 @@ _fzf_orig_completion_nc='_ssh'
 _fzf_orig_completion_curl='_ssh'
 
 complete -F _fzf_complete_ssh ping telnet host nc curl
-complete -o bashdefault -o default -F _fzf_path_completion rg bun
+complete -o bashdefault -o default -F _fzf_path_completion rg
