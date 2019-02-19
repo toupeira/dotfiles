@@ -51,9 +51,7 @@
 # home
 src/**/public/system
 src/**/tmp
-src/*/concrete
 src/archive
-src/puppet/modules/base/files/vim
 src/upstream
 
 # Rails
