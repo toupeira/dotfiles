@@ -2,7 +2,7 @@
 [ -n "$BASH_INTERACTIVE" ] && has fzf || return
 
 export FZF_TMUX=0
-export FZF_DEFAULT_COMMAND='fdfind --hidden --ignore-file ~/.ignore --type file'
+export FZF_DEFAULT_COMMAND='fdfind --hidden --ignore-file ~/.ignore --type file --color always'
 export FZF_DEFAULT_OPTS='--ansi --multi --filepath-word --inline-info --reverse --prompt "» "'
 export FZF_COMPLETION_TRIGGER='//'
 

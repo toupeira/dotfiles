@@ -253,3 +253,6 @@
 [submodule "vim/bundle/ncm2-lsp"]
 	path = vim/bundle/ncm2-lsp
 	url = https://github.com/ncm2/ncm2-vim-lsp.git
+[submodule "vim/bundle/tmux"]
+	path = vim/bundle/tmux
+	url = https://github.com/tmux-plugins/vim-tmux.git
