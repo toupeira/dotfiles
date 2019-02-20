@@ -233,7 +233,7 @@ function src_alias {
     local space=''
     [ $# -gt 0 ] && space=' '
     alias $alias="src $project$space$*"
-    __git_edit_complete $alias _src_alias "$project_path"
+    __git_complete $alias _src_alias "$project_path"
   else
     return 1
   fi

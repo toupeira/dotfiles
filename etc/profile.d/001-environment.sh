@@ -6,7 +6,6 @@ export PATH="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/g
 [ -x /usr/libexec/path_helper ] && eval `/usr/libexec/path_helper -s`
 
 export EDITOR="vim"
-export GIT_EDITOR="vim"
 export PAGER="less"
 which sensible-vim >/dev/null && export EDITOR="sensible-vim"
 

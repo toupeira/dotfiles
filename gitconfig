@@ -94,7 +94,7 @@
   br = branch
   ls = branch -avv
   co = checkout
-  sw = checkout
+  sw = "!f() { [ $# -gt 0 ] && exec git checkout "$@"; branch=$( git branch --format '%(refname:short)' | fzf --no-multi ) && git checkout "$branch"; }; f"
   ours = checkout --ours
   theirs = checkout --theirs
 
@@ -107,6 +107,7 @@
   amend = commit -v --amend
   reword = commit -v --amend --only
   extend = commit -v --amend --no-edit
+  fixup = !hash=$( git -c color.ui=always l | fzf --no-multi ) && git commit --fixup "$( echo "$hash" | cut -d[ -f2 | cut -d] -f1 )"
   initial = commit --allow-empty -m 'Initial commit'
 
   r = remote -v
@@ -142,16 +143,16 @@
   # shell wrappers
   sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
   bash = "!f() { [ $# -gt 0 ] && bash -ic \"$@\"; }; f"
-  rg = "!rg"
+  rg = !rg
 
-  rake  = "!rake"
-  rails = "!rails"
-  guard = "!guard"
-  cap = "!cap"
-  ctags = "!f() { local dir=$( git rev-parse --git-dir); [ -d \"$dir\" ] && git ls-files | ctags -RL - --tag-relative -f \"$dir/tags\"; }; f"
+  rake  = !rake
+  rails = !rails
+  guard = !guard
+  cap = !cap
 
-  mux = "!mux"
-  ed = edit
+  mux = !mux
+  ed = !git edit
+  edit = !files=$( git -c color.ui=always status -s | fzf ) && sensible-editor $( echo "$files" | tr ' ' '\n' | awk 'NR % 2 == 0' )
 
   # try to run a GUI, or tig on terminals
   g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"

@@ -49,8 +49,8 @@ has pgcli && has_completion psql && \
   complete -F _psql pgcli
 
 if has dotfiles; then
-  __git_edit_complete dotfiles _git `dotfiles --path`
-  __git_edit_complete dt _git       `dotfiles --path`
+  __git_complete dotfiles _git `dotfiles --path`
+  __git_complete dt _git       `dotfiles --path`
 fi
 
 # Debian completions

@@ -3,7 +3,7 @@
 
 export FZF_TMUX=0
 export FZF_DEFAULT_COMMAND="fdfind --hidden --ignore-file $HOME/.ignore --color always --type f"
-export FZF_DEFAULT_OPTS='--ansi --multi --filepath-word --inline-info --reverse --prompt "» "'
+export FZF_DEFAULT_OPTS='--ansi --multi --filepath-word --inline-info --reverse --height 10 --prompt "» "'
 export FZF_COMPLETION_TRIGGER='//'
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND --type d --type l"
 export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND/--type f/--type d}"

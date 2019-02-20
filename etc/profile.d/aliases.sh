@@ -4,7 +4,6 @@
 # dotfiles aliases
 alias @='start '
 alias dt='dotfiles'
-has git-edit && alias ed='git-edit'
 
 # general shell aliases
 has dircolors && eval $( dircolors -b )
@@ -63,6 +62,7 @@ alias pkgshow='aptitude show'
 # development
 alias vi='vim'
 alias gvi='gvim'
+alias ed='git edit'
 if has sensible-vim; then
   alias vim='sensible-vim'
   alias gvim='VIMCMD=gvim sensible-vim'

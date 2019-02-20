@@ -5,4 +5,4 @@
 shopt -s histappend
 export HISTSIZE=10000
 export HISTFILESIZE=10000
-export HISTCONTROL="ignorespace"
+export HISTCONTROL="ignoreboth:erasedups"
