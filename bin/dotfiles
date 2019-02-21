@@ -621,6 +621,12 @@ function run {
       status "{{Merging remote changes...}}"
       load_key
       git pull -v --progress --rebase --jobs=8 "$@"
+      local changes=$( git --no-pager l ORIG_HEAD.. )
+      if [ -n "$changes" ]; then
+        echo
+        echo "$changes"
+        echo
+      fi
 
       [ -n "$changes" ] && git stash pop -q
 

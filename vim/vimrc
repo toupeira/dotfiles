@@ -566,14 +566,14 @@ endfunction " }}}
   " ,q and ,e - toggle quickfix window and location list
   nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
   nnoremap <silent> ,e :call <SID>ToggleList('Location List', 'l')<CR>
-  function! GetBufferList() " {{{
+  function! s:GetBufferList() " {{{
     redir =>buflist
     silent! ls
     redir END
     return buflist
   endfunction " }}}
   function! s:ToggleList(bufname, pfx) " {{{
-    let buflist = GetBufferList()
+    let buflist = <SID>GetBufferList()
     for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
       if bufwinnr(bufnum) != -1
         exec(a:pfx.'close')
@@ -615,9 +615,9 @@ endfunction " }}}
   nnoremap <silent><expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
   " ,n / ,p - next/previous buffer
-  nnoremap <silent> ,n :call SwitchBuffer(1)<CR>
-  nnoremap <silent> ,p :call SwitchBuffer(-1)<CR>
-  function! SwitchBuffer(delta)
+  nnoremap <silent> ,n :call <SID>SwitchBuffer(1)<CR>
+  nnoremap <silent> ,p :call <SID>SwitchBuffer(-1)<CR>
+  function! s:SwitchBuffer(delta)
     let buffers = []
     for nr in range(1, bufnr('$'))
       if buflisted(nr) && getbufvar(nr, 'current_syntax') != 'qf'
@@ -687,8 +687,8 @@ endfunction " }}}
   endfunction " }}}
 
   " ,F - toggle fold method
-  nnoremap <silent> ,F :call ToggleFoldMethod()<CR>
-  function! ToggleFoldMethod() " {{{
+  nnoremap <silent> ,F :call <SID>ToggleFoldMethod()<CR>
+  function! s:ToggleFoldMethod() " {{{
     if &foldcolumn == 0
       echohl Question
       echomsg "Folding..."
@@ -919,7 +919,16 @@ endfunction " }}}
   " ncm2 {{{
   if index(g:pathogen_disabled, 'ncm2') == -1
     autocmd BufEnter * call ncm2#enable_for_buffer()
+
+    " <Tab> - accept completion
     inoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<Tab>"
+
+    " <CR> - reject completion and close popup
+    inoremap <CR> <C-r>=<SID>CloseCompletionPopup()<CR><CR>
+    function! s:CloseCompletionPopup()
+      return pumvisible() ? "\<C-e>" : ""
+    endfunction
+    "
   endif
   " }}}
 
