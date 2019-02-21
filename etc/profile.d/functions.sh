@@ -285,3 +285,12 @@ function up {
 function jq.less {
   jq -C . "$1" | less
 }
+
+# Automatically use rails/rake commands
+function r {
+  if grep -q ' rails \([5-9]\.' Gemfile.lock &>/dev/null || [[ "$1" =~ ^(s|server|c|console|g|generate|d|destroy|r|runner|db|dbconsole|new)$ ]]; then
+    rails "$@"
+  else
+    rake "$@"
+  fi
+}

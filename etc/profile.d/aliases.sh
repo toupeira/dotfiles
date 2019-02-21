@@ -87,7 +87,6 @@ alias fd='fdfind --hidden --ignore-file ~/.ignore'
 alias pyserve='python -m SimpleHTTPServer 8080'
 alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
-alias r='rails'
 
 # mux aliases
 for i in server watcher console log; do

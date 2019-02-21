@@ -94,7 +94,7 @@
   br = branch
   ls = branch -avv
   co = checkout
-  sw = "!f() { [ $# -gt 0 ] && exec git checkout "$@"; branch=$( git branch --format '%(refname:short)' | fzf --no-multi ) && git checkout "$branch"; }; f"
+  sw = "!f() { [ $# -gt 0 ] && exec git checkout "$@"; branch=$( git branch -a --format '%(refname)' 2>/dev/null | sed -r 's,^(refs/heads/|refs/remotes/[^/]+/),,' | fgrep -vx HEAD | sort | uniq | fzf --no-multi ) && git checkout "$branch"; }; f"
   ours = checkout --ours
   theirs = checkout --theirs
 
