@@ -558,6 +558,11 @@ endfunction " }}}
     set guioptions-=a
   endif
 
+  " keep clipboard when leaving Vim
+  if exists('$DISPLAY')
+    autocmd VimLeave * call system('xclip -selection clipboard -o | xclip -selection clipboard -i')
+  endif
+
   " ,q and ,e - toggle quickfix window and location list
   nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
   nnoremap <silent> ,e :call <SID>ToggleList('Location List', 'l')<CR>
