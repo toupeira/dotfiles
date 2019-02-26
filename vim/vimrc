@@ -1049,8 +1049,8 @@ endfunction " }}}
     command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
       \   'rg --smart-case --hidden --column --line-number --no-heading --color=always --ignore-file ~/.ignore '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('right:50%')
-      \           : fzf#vim#with_preview('right:50%:hidden', '?'),
+      \   <bang>0 ? fzf#vim#with_preview('right')
+      \           : fzf#vim#with_preview('right:hidden'),
       \   <bang>0)
 
     nnoremap <silent> ,f :Files<CR>
