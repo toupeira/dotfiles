@@ -662,8 +662,8 @@ endfunction " }}}
   " ,X - close the current buffer, not keeping windows
   nnoremap <silent> ,X :silent lclose<CR>:silent bd<CR>
 
-  " ,d - open definition in new window
-  nmap <silent> ,d <C-w>f
+  " ,o - open file in new split
+  nnoremap <silent> ,o <C-w>f
 
   " ,R - reload vimrc
   nnoremap <silent> ,R :runtime! vimrc gvimrc<CR>:nohlsearch<CR>
@@ -684,24 +684,6 @@ endfunction " }}}
     echohl Question
     echo "Trailing whitespace cleared"
     echohl none
-  endfunction " }}}
-
-  " ,F - toggle fold method
-  nnoremap <silent> ,F :call <SID>ToggleFoldMethod()<CR>
-  function! s:ToggleFoldMethod() " {{{
-    if &foldcolumn == 0
-      echohl Question
-      echomsg "Folding..."
-      echohl none
-      if &filetype == 'python'
-        setlocal foldmethod=indent
-      else
-        setlocal foldmethod=syntax
-      endif
-      setlocal foldcolumn=3
-    else
-      setlocal foldcolumn=0 foldmethod=marker
-    endif
   endfunction " }}}
 
   " ,N - toggle line numbers
@@ -763,6 +745,7 @@ endfunction " }}}
   let g:tagbar_autoclose = 1
   let g:tagbar_compact = 1
   let g:tagbar_previewwin_pos = 'rightbelow'
+  let g:tagbar_width = 30
 
   nnoremap <silent> ,T :TagbarToggle<CR>
   " }}}
@@ -1030,28 +1013,8 @@ endfunction " }}}
 
   " fzf {{{
   if index(g:pathogen_disabled, 'fzf') == -1
-    autocmd! FileType fzf
-    autocmd  FileType fzf echo
-      \| set laststatus=0 noshowmode
-      \| autocmd BufLeave <buffer> set laststatus=2 showmode
-
-    let g:fzf_layout = { 'down': '10' }
+    let g:fzf_layout = { 'window': 'enew' }
     let g:fzf_action = { 'ctrl-x': 'split', 'ctrl-v': 'vsplit' }
-
-    function! FzfFullscreen(action)
-      return ":\<C-u>silent! let g:fzf_layout = { 'window': 'enew' } |"
-        \ . a:action . " | let g:fzf_layout = { 'down': '10' }\<CR>"
-    endfunction
-
-    command! -bang -nargs=? -complete=dir Files
-      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({}, 'right:hidden', '?'), <bang>0)
-
-    command! -bang -nargs=* Rg
-      \ call fzf#vim#grep(
-      \   'rg --smart-case --hidden --column --line-number --no-heading --color=always --ignore-file ~/.ignore '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('right')
-      \           : fzf#vim#with_preview('right:hidden'),
-      \   <bang>0)
 
     nnoremap <silent> ,f :Files<CR>
     nnoremap <silent> ,r :History<CR>
@@ -1061,16 +1024,41 @@ endfunction " }}}
     nnoremap <silent> ,t :BTags<CR>
 
     nnoremap <silent> ,gg :Rg<CR>
+    nnoremap ,gG :Rg<Space>
 
     nnoremap <silent> ,gf :GFiles<CR>
     nnoremap <silent> ,gs :GFiles?<CR>
-    nnoremap <silent><expr> ,gl FzfFullscreen('Commits')
-    nnoremap <silent><expr> ,gd FzfFullscreen('BCommits')
+    nnoremap <silent> ,gl :Commits<CR>
+    nnoremap <silent> ,go :BCommits<CR>
 
     nnoremap <silent> ,: :History:<CR>
     nnoremap <silent> ,/ :History/<CR>
     nnoremap <silent> ,? :Maps<CR>
+
+    " hide statusline in bottom window
+    autocmd! FileType fzf
+    autocmd  FileType fzf echo
+      \| set noshowmode
+      \| execute "if winnr() == winnr('$') | set laststatus=0 | endif"
+      \| autocmd BufLeave <buffer> set laststatus=2 showmode
+
+    " add files preview
+    command! -bang -nargs=? -complete=dir Files
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({}, 'right:hidden'), <bang>0)
+
+    " add rg preview
+    command! -bang -nargs=* Rg
+      \ call fzf#vim#grep(
+      \   'rg --smart-case --hidden --column --line-number --no-heading --color=always --ignore-file ~/.ignore '.shellescape(<q-args>), 1,
+      \   <bang>0 ? fzf#vim#with_preview('right')
+      \           : fzf#vim#with_preview('right:hidden'),
+      \   <bang>0)
   endif
+  " }}}
+
+  " signify {{{
+  nnoremap <silent> ,gD :SignifyToggleHighlight<CR>
+  nnoremap <silent> ,gF :SignifyFold!<CR>
   " }}}
 
 " }}}

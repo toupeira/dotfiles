@@ -256,3 +256,9 @@
 [submodule "vim/bundle/tmux"]
 	path = vim/bundle/tmux
 	url = https://github.com/tmux-plugins/vim-tmux.git
+[submodule "vim/bundle/signify"]
+	path = vim/bundle/signify
+	url = https://github.com/mhinz/vim-signify.git
+[submodule "vim/bundle/dirvish"]
+	path = vim/bundle/dirvish
+	url = https://github.com/justinmk/vim-dirvish.git
