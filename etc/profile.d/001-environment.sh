@@ -6,12 +6,13 @@ export PATH="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/g
 [ -x /usr/libexec/path_helper ] && eval `/usr/libexec/path_helper -s`
 
 export EDITOR="vim"
-export PAGER="less"
 which sensible-vim >/dev/null && export EDITOR="sensible-vim"
 
-export ANDROID_HOME="$HOME/src/upstream/android-sdk-linux"
+export PAGER="less"
+export LESS="-iRMK"
+export SYSTEMD_LESS="iRMKFX"
+
 export IRB_HISTORY_SIZE=3000
-export LESS="-iRM"
 export PASSWORD_STORE_ENABLE_EXTENSIONS="true"
 export PGDATABASE="postgres"
 export RI="--format ansi --no-pager"

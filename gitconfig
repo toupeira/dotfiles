@@ -1,5 +1,5 @@
 [core]
-  pager = less -RFX
+  pager = less -FX
 
 [protocol]
   version = 2
@@ -65,9 +65,9 @@
   keepBackup = false
 
 [pager]
-  log = diff-so-fancy | less -cRX
-  show = diff-so-fancy | less -cRX
-  diff = diff-so-fancy | less -cRX
+  log = diff-so-fancy | less -FX
+  show = diff-so-fancy | less -X
+  diff = diff-so-fancy | less -X
 
 [rebase]
   autosquash = true
