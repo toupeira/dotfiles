@@ -662,8 +662,8 @@ endfunction " }}}
   " ,X - close the current buffer, not keeping windows
   nnoremap <silent> ,X :silent lclose<CR>:silent bd<CR>
 
-  " ,o - open file in new split
-  nnoremap <silent> ,o <C-w>f
+  " ,d - open file in new split
+  nmap <silent> ,d <C-w>f
 
   " ,R - reload vimrc
   nnoremap <silent> ,R :runtime! vimrc gvimrc<CR>:nohlsearch<CR>
