@@ -2,7 +2,7 @@
 [ -n "$BASH_INTERACTIVE" ] && has fzf || return
 
 export FZF_TMUX=0
-export FZF_DEFAULT_COMMAND="fdfind --hidden --ignore-file $HOME/.ignore --color always --type f"
+export FZF_DEFAULT_COMMAND="fdfind --hidden --ignore-file /etc/dotfiles/ignore --color always --type f"
 export FZF_DEFAULT_OPTS="--ansi --multi --filepath-word --inline-info --layout default --no-height --prompt '» ' --bind '?:toggle-preview'"
 export FZF_COMPLETION_TRIGGER='//'
 

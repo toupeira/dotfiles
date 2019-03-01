@@ -73,17 +73,7 @@ if has sensible-emacs; then
   alias e='sensible-emacs'
 fi
 
-alias rg='rg --smart-case --hidden --ignore-file ~/.ignore '\
-'  --colors "path:fg:green" '\
-'  --colors "path:style:bold" '\
-'  --colors "match:fg:yellow" '\
-'  --colors "match:bg:yellow" '\
-'  --colors "match:style:bold" '\
-'  --colors "line:fg:magenta" '\
-'  --colors "line:style:bold" '\
-'  --colors "column:fg:magenta"'
-
-alias fd='fdfind --hidden --ignore-file ~/.ignore'
+alias fd='fdfind --hidden --ignore-file /etc/dotfiles/ignore'
 alias pyserve='python -m SimpleHTTPServer 8080'
 alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'

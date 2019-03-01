@@ -58,7 +58,7 @@
   set hlsearch
 
   if executable('rg')
-    let &grepprg = "rg --smart-case --hidden --vimgrep --ignore-file ~/.ignore"
+    let &grepprg = "rg --vimgrep"
   endif
 
   " store swapfiles in a central location
@@ -1049,7 +1049,7 @@ endfunction " }}}
     " add rg preview
     command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
-      \   'rg --smart-case --hidden --column --line-number --no-heading --color=always --ignore-file ~/.ignore '.shellescape(<q-args>), 1,
+      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
       \   <bang>0 ? fzf#vim#with_preview('right')
       \           : fzf#vim#with_preview('right:hidden'),
       \   <bang>0)
