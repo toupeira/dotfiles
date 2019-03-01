@@ -144,15 +144,12 @@
   sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
   bash = "!f() { [ $# -gt 0 ] && bash -ic \"$@\"; }; f"
   rg = !rg
-
   rake  = !rake
   rails = !rails
   guard = !guard
   cap = !cap
-
   mux = !mux
   ed = !git edit
-  edit = !files=$( git -c color.ui=always status -s | fzf ) && sensible-editor $( echo "$files" | tr ' ' '\n' | awk 'NR % 2 == 0' )
 
   # try to run a GUI, or tig on terminals
   g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"

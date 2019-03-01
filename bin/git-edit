@@ -1,0 +1,11 @@
+#!/bin/bash
+
+files=$( git -c color.ui=always status -s )
+
+if [ "$1" != "!" ] && [ "$( echo "$files" | wc -l )" -gt 1 ]; then
+  files=$( echo "$files" | fzf )
+fi
+
+if [ -n "$files" ]; then
+  sensible-editor $( echo "$files" | sed 's/^.* //' )
+fi
