@@ -40,24 +40,25 @@ function usage {
   echo "Usage: $( basename "$0" ) [options] COMMAND [args]"
   echo
   echo "Options:"
-  echo "  -f, --force     Assume yes for all questions"
-  echo "  -v, --verbose   Increase verbosity"
-  echo "  -q, --quiet     Suppress all normal output"
-  echo "  -n, --dry-run   Only show changes, without performing them"
-  echo "      --path      Show path to the dotfiles repository and exit"
+  echo "  -f, --force               Assume yes for all questions"
+  echo "  -v, --verbose             Increase verbosity"
+  echo "  -q, --quiet               Suppress all normal output"
+  echo "  -n, --dry-run             Only show changes, without performing them"
+  echo "      --path                Show path to the dotfiles repository and exit"
   echo
   echo "Commands:"
-  echo "  init                  Install symlinks for all dotfiles"
-  echo "  install PATH...       Install symlink for PATH"
-  echo "  add PATH...           Add file to repository and replace it with a symlink"
-  echo "  ca, commitall         Commit all changes"
-  echo "  list                  List submodules"
-  echo "  up, update [MODULE]   Update submodules (fetch new commits)"
-  echo "  pkg, package [NAME]   Install packages from list"
-  echo "  sync                  Update, commit and push"
+  echo "  init                      Install symlinks for all dotfiles"
+  echo "  install PATH...           Install symlink for PATH"
+  echo "  add PATH...               Add file to repository and replace it with a symlink"
+  echo "  ca, commitall             Commit all changes"
+  echo "  list                      List submodules"
+  echo "  update-submodule [NAME]   Update submodule"
+  echo "  sup, update-submodules    Update all submodules"
+  echo "  pkg, package [NAME]       Install packages from list"
+  echo "  sync                      Update, commit and push"
   echo
   echo "Other arguments:"
-  echo "  COMMAND [ARGS]...     Excecute a Git command inside the dotfiles repository"
+  echo "  COMMAND [ARGS]...         Excecute a Git command inside the dotfiles repository"
   echo "  git COMMAND [ARGS]..."
   echo
 
@@ -284,89 +285,83 @@ function run {
     list)
       awk '/path = / { print $3 }' "$DOTFILES/.gitmodules" | sort
       ;;
-    up|update)
+    update-submodule)
       unset batch
-      [ "$1" = '--batch' ] && batch=1 && shift
-      commit_message="Update submodules"
+      [ "$1" = '--batch' ] && local batch=1 && shift
 
-      if [ -n "$1" ]; then
-        local submodule="$1"
-        shift
+      local submodule="$1"
+      shift
 
-        if [ ! -d "$DOTFILES/$submodule" ]; then
-          submodule=$( run list | grep -m1 "$submodule" )
-          if [ -z "$submodule" ]; then
-            abort "Submodule not found: {{$submodule}}"
-          fi
+      if [ ! -d "$DOTFILES/$submodule" ]; then
+        submodule=$( run list | grep -m1 "$submodule" )
+        if [ -z "$submodule" ]; then
+          abort "Submodule not found: {{$submodule}}"
         fi
+      fi
 
-        commit_message="Update submodule $submodule"
+      cd "$DOTFILES/$submodule" || abort
+      [ -e ".git" ] || abort "Not a git repository: .git"
 
-        (
-          cd "$DOTFILES/$submodule" || abort
-          [ -e ".git" ] || abort "Not a git repository: .git"
+      local old_commit=$( system git rev-parse HEAD )
+      if ! dryrun; then
+        local git_output=$(
+          system git fetch -q origin 2>&1 &&
+          system git reset -q --hard origin/HEAD 2>&1
+        )
+      fi
+      local new_commit=$( system git rev-parse HEAD )
 
-          old_commit=$( system git rev-parse HEAD )
-          if ! dryrun; then
-            system git fetch -q origin
-            system git reset -q --hard origin/master
-          fi
-          new_commit=$( system git rev-parse HEAD )
-
-          if [ "$new_commit" != "$old_commit" ]; then
-            local url=$( system git remote -v | egrep -om1 'https?://[^ ]+' )
-            [ -n "$url" ] && url=" [ {{$url}} ]"
-
-            [ ! $batch ] && output
-            status "Changes in {{$submodule}}$url:" 6
-            quiet || system git -c color.ui=always log --oneline '@{1}..' | sed -r 's/^/    /'
-
-            output
-          elif [ ! $batch ]; then
-            status "No changes in {{$submodule}}" 2
-          fi
-
-        ) # keep cd scope
-      else
+      if [ -n "$git_output" ]; then
+        error "Error while updating {{$submodule}}:"
+        output "\e[1;31m$git_output\e[0m" | sed -r 's/^/    /'
         output
-        run pull -q
-        status "{{Updating submodules:}}"
+      elif [ "$new_commit" != "$old_commit" ]; then
+        local url=$( system git remote -v | egrep -om1 'https?://[^ ]+' )
+        [ -n "$url" ] && url=" [ {{$url}} ]"
 
-        local output=$( mktemp -d ${TMPDIR:-/tmp}/dotfiles.XXXXXX )
+        [ ! $batch ] && output
+        status "Changes in {{$submodule}}$url:" 6
+        quiet || system git -c color.ui=always log --oneline '@{1}..' | sed -r 's/^/    /'
+        output
+      elif [ ! $batch ]; then
+        status "No changes in {{$submodule}}"
+      fi
+      ;;
+    sup|update-submodules)
+      local submodules=$( run list )
+      if [ -n "$1" ]; then
+        submodules=$( echo "$submodules" | egrep "$1" )
+      fi
 
-        output '     \e[1;36m[' -n
+      output
+      status "{{Updating submodules:}}"
 
-        for submodule in $( run list ); do
-          while [ "$( jobs -r | wc -l )" -gt 10 ]; do
-            sleep 0.1
-          done
+      local output=$( mktemp -d ${TMPDIR:-/tmp}/dotfiles.XXXXXX )
 
-          (
-            run update --batch "$submodule" > "$output/${submodule//\//-}"
-            output '\e[0;36m=' -n
-          ) &
+      output '     \e[1;36m[' -n
 
+      for submodule in $submodules; do
+        while [ "$( jobs -r | wc -l )" -gt 10 ]; do
           sleep 0.1
         done
 
-        wait
-        output '\e[1;36m]\e[0m'
-        output
+        (
+          run update-submodule --batch "$submodule" > "$output/${submodule//\//-}" 2>&1
+          output '\e[0;36m=' -n
+        ) &
 
-        cat "$output"/*
-        rm -rf "$output"
+        sleep 0.1
+      done
 
-        run build-all
-      fi
-
-      [ $batch ] && return
-
-      local changes=$( git status | egrep "(\s\.gitmodules\b| \(new commits\)$)" | awk '{ print $2 }' )
-      [ -z "$changes" ] && return
-
-      run commit -m "$commit_message" $changes
+      wait
+      output '\e[1;36m]\e[0m'
       output
 
+      system cat "$output"/*
+      system rm -rf "$output"
+
+      run build-all
+      output
       ;;
     init)
       function install_paths {
