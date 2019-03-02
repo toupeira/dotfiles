@@ -42,7 +42,7 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/home/*/.config/yarn/global
   --exclude **/home/*/.cordova
   --exclude **/home/*/.dropbox
-  --exclude **/home/*/.dropbox-dist
+  --exclude **/home/*/.dropbox-dist*
   --exclude **/home/*/.gem
   --exclude **/home/*/.gvfs
   --exclude **/home/*/.hex

@@ -1,5 +1,5 @@
 # Check for interactive bash and that we haven't already been sourced.
-[ -n "$BASH_INTERACTIVE" -a -z "$BASH_COMPLETION" -a -z "$BASH_COMPLETION_COMPAT_DIR" ] || return
+[ -n "${BASH_VERSION-}" -a -n "${PS1-}" -a -z "${BASH_COMPLETION_VERSINFO-}" ] || return
 
 # Check for recent enough version of bash.
 [ ${BASH_VERSINFO[0]} -ge 4 ] || return

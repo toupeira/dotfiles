@@ -1,2 +1,0 @@
-#!/bin/bash
-exec java -Djava.net.preferIPv4Stack=true -jar ~/.minecraft/minecraft.jar

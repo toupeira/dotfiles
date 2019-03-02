@@ -259,3 +259,6 @@
 [submodule "vim/bundle/dirvish"]
 	path = vim/bundle/dirvish
 	url = https://github.com/justinmk/vim-dirvish.git
+[submodule "vim/bundle/dadbod"]
+	path = vim/bundle/dadbod
+	url = https://github.com/tpope/vim-dadbod.git

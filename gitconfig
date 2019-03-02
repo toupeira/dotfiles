@@ -87,6 +87,7 @@
   l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
   lstat = "!cd ${GIT_PREFIX:-.} && git l --stat"
   ldiff = log -p
+  news = l ORIG_HEAD..
 
   di = diff
   dc = diff --cached
@@ -115,7 +116,6 @@
   shallow = clone --depth 1
 
   up = pull -v --progress
-  upall = pull-all
   ff = merge --ff-only HEAD@{u}
   ri = rebase -i
   rem = rebase master

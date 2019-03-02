@@ -27,7 +27,7 @@ if type __git_ps1 &>/dev/null; then
     s/</ ↓/;
   "
 
-  GIT_PS1='$(__git_ps1 "\[\e[0;32m\]❰\[\e[1;32m\]%s\[\e[0;32m\]❱\[\e[0m\] " | sed -r "$GIT_PS1_SUBSTITUTES")'
+  GIT_PS1='$(__git_ps1 "\[\e[0;32m\]❰\[\e[1;32m\]%s\[\e[0;32m\]❱\[\e[0m\] " | sed "$GIT_PS1_SUBSTITUTES")'
   SUDO_PS1=$PS1
   PS1=$PS1$GIT_PS1
 fi
@@ -62,7 +62,7 @@ if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
   fi
 
   if [ -n "$TMUX" ]; then
-    PROMPT_COMMAND='_last_status=$?; mux store; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
+    PROMPT_COMMAND='_last_status=$?; [ "$PWD" != "$_last_pwd" ] && mux store; _last_pwd="$PWD"; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
   else
     PROMPT_COMMAND='_last_status=$?; _pwd=${PWD/$HOME/\~}; echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
   fi

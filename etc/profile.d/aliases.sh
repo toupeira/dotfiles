@@ -61,17 +61,15 @@ alias pkgshow='aptitude show'
 
 # development
 alias vi='vim'
+alias vim='sensible-vim'
+alias vimdiff='sensible-vim -d'
 alias gvi='gvim'
+alias gvim='VIMCMD=gvim sensible-vim'
 alias ed='git edit'
-if has sensible-vim; then
-  alias vim='sensible-vim'
-  alias gvim='VIMCMD=gvim sensible-vim'
-  alias vip='VIMCMD=vip sensible-vim'
-fi
-if has sensible-emacs; then
-  alias emacs='sensible-emacs'
-  alias e='sensible-emacs'
-fi
+alias vip='VIMCMD=vip sensible-vim'
+
+alias emacs='sensible-emacs'
+alias e='sensible-emacs'
 
 alias fd='fdfind --hidden --ignore-file /etc/dotfiles/ignore'
 alias pyserve='python -m SimpleHTTPServer 8080'
@@ -111,7 +109,7 @@ if has sudo; then
   alias sudo='sudo '
 
   # vim
-  alias suvi='sudo TMUX=$TMUX vim'
+  alias suvi='sudo TMUX=$TMUX sensible-vim'
   alias sudiff='sudo vimdiff'
   alias visudo='sudo visudo'
 
