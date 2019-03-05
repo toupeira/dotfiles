@@ -846,9 +846,6 @@ endfunction " }}}
   " }}}
 
   " ale {{{
-  nnoremap <silent>,l :ALEToggleBuffer<CR>
-  nnoremap <silent>,L :ALELint<CR>
-
   hi ALEWarning ctermbg=238
 
   let g:ale_lint_on_text_changed = 'normal'
@@ -1025,12 +1022,12 @@ endfunction " }}}
     nnoremap <silent> ,t :BTags<CR>
 
     nnoremap <silent> ,gg :Rg<CR>
-    nnoremap ,gG :Rg<Space>
+    nnoremap <expr>   ,G ':Rg '.expand('<cword>')
 
     nnoremap <silent> ,gf :GFiles<CR>
     nnoremap <silent> ,gs :GFiles?<CR>
     nnoremap <silent> ,gl :Commits<CR>
-    nnoremap <silent> ,go :BCommits<CR>
+    nnoremap <silent> ,gL :BCommits<CR>
 
     nnoremap <silent> ,: :History:<CR>
     nnoremap <silent> ,/ :History/<CR>
@@ -1060,6 +1057,8 @@ endfunction " }}}
   " signify {{{
   nnoremap <silent> ,gD :SignifyToggleHighlight<CR>
   nnoremap <silent> ,gF :SignifyFold!<CR>
+
+  let g:signify_vcs_list = ['git']
   " }}}
 
 " }}}
