@@ -48,6 +48,9 @@ has_completion journalctl && \
 has pgcli && has_completion psql && \
   complete -F _psql pgcli
 
+# git completions
+function _git_sw { _git_checkout; }
+
 if has dotfiles; then
   __git_complete dotfiles _git `dotfiles --path`
   __git_complete dt _git       `dotfiles --path`
