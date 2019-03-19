@@ -56,7 +56,6 @@ rsync
 ruby
 shellcheck
 smem
-s-nail
 socat
 software-properties-common
 sqlite3
