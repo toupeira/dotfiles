@@ -101,7 +101,7 @@ if [ -n "$SSH_AUTH_SOCK" ]; then
   function __load_key {
     local key=~/.ssh/id_rsa
     if [ -f "$key" ]; then
-      ssh-add -l | grep -Fq "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
+      ssh-add -l | grep -Fq "SHA256:IeJ24i+E8JoJc+6s7mL/5oCs04D3syjx5BVDuQL1W5I" || ssh-add "$key" </dev/null
     fi
   }
 
