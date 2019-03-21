@@ -45,6 +45,7 @@ DEFAULT_EXCLUDE_PATHS="
   --exclude **/home/*/.dropbox-dist*
   --exclude **/home/*/.gem
   --exclude **/home/*/.gvfs
+  --exclude **/home/*/.helm
   --exclude **/home/*/.hex
   --exclude **/home/*/.kodi
   --exclude **/home/*/.local/lib/python*

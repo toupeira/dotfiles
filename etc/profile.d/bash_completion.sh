@@ -102,3 +102,7 @@ function _mux {
   fi
 }
 complete -o bashdefault -o default -F _mux mux
+
+# kubernetes completion
+has kubectl && eval "$( kubectl completion bash )"
+has helm && eval "$( helm completion bash )"

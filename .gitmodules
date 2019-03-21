@@ -262,3 +262,6 @@
 [submodule "vim/bundle/dadbod"]
 	path = vim/bundle/dadbod
 	url = https://github.com/tpope/vim-dadbod.git
+[submodule "vim/bundle/go"]
+	path = vim/bundle/go
+	url = https://github.com/fatih/vim-go.git

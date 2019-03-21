@@ -58,6 +58,7 @@ src/upstream
 db/archive
 app/assets/javascripts/ace
 app/assets/data
+public/packs
 vendor/assets
 tmp/
 
