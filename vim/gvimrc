@@ -38,18 +38,12 @@ endif
     set columns=120
 
     " font
-    if has('mac')
-      set guifont=DejaVu\ Sans\ Mono\ for\ Powerline:h13
-    elseif has('unix')
-      if hostname() == 'schtube'
-        set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 18
-        set lines=28
-        set columns=80
-      else
-        set guifont=DejaVu\ Sans\ Mono\ for\ Powerline\ 9
-      endif
+    if hostname() == 'schtube'
+      set guifont=DejaVuSansMonoNerdFont\ 12
+      set lines=28
+      set columns=80
     else
-      set guifont=DejaVu_Sans_Mono_for_Powerline:h9:cANSI
+      set guifont=DejaVuSansMonoNerdFont\ 9
     endif
 
     if &diff
