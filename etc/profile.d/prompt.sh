@@ -33,7 +33,7 @@ if type __git_ps1 &>/dev/null; then
 fi
 
 function _prompt_jobs {
-  local jobs=`jobs | grep -vc 'mux store'`
+  local jobs=`jobs | grep -Evc '(mux store|autojump)'`
 
   if [ $jobs -gt 0 ]; then
     printf '[%d job%s] ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
@@ -68,4 +68,42 @@ if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
   fi
 
   unset _hostname
+fi
+
+if has autojump; then
+  . /usr/share/autojump/autojump.sh
+
+  eval "$(
+    echo "_j()";
+    declare -f j \
+      | tail -n +2 \
+      | sed -r 's/echo .*output.*/:/'
+  )"
+
+  function j {
+    if [ $# -gt 0 ]; then
+      _j "$@"
+      return;
+    fi
+
+    local paths=~/.local/share/autojump/autojump.txt
+    local out=$(
+      cat $paths 2>/dev/null \
+        | sort -nr \
+        | cut -f2 \
+        | sed -r "s#^$HOME#~#" \
+        | fzf +s --expect alt-d
+    )
+
+    mapfile -t out <<< "$out"
+    local key="${out[0]}"
+    local path=$( echo "${out[1]}" | sed -r "s#^~#$HOME#" )
+
+    if [ "$key" = "alt-d" ]; then
+      echo "$( grep -v $'\t'"$path$" "$paths" )" > "$paths"
+      echo -e "Removed \e[1;33m$path\e[0m"
+    elif [ -n "$path" ]; then
+      cd "$path"
+    fi
+  }
 fi

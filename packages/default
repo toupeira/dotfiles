@@ -1,5 +1,6 @@
 apt-listchanges
 apt-xapian-index
+autojump
 bash-completion
 bc
 bsd-mailx
@@ -22,6 +23,7 @@ fortunes
 fortunes-off
 fzf
 git
+git-extras
 gnupg
 gnupg2
 grc

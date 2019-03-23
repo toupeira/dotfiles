@@ -1,5 +1,5 @@
-# Check for interactive bash and that we haven't already been sourced.
-[ -n "${BASH_VERSION-}" -a -n "${PS1-}" -a -z "${BASH_COMPLETION_VERSINFO-}" ] || return
+# Check for interactive bash
+[ -n "${BASH_VERSION-}" -a -n "${PS1-}" ] || return
 
 # Check for recent enough version of bash.
 [ ${BASH_VERSINFO[0]} -ge 4 ] || return
@@ -7,16 +7,14 @@
 # Check for disabled completion
 shopt -q progcomp || return
 
-if [ "`type -t _git`" != "function" -a -r /usr/share/bash-completion/completions/git ]; then
-  . /usr/share/bash-completion/completions/git
-fi
-
-if [ -r /usr/share/bash-completion/bash_completion ]; then
-  . /usr/share/bash-completion/bash_completion
-elif [ -r /etc/bash_completion ]; then
-  . /etc/bash_completion
-else
-  return
+if [ -z "${BASH_COMPLETION_VERSINFO-}" ]; then
+  if [ -r /usr/share/bash-completion/bash_completion ]; then
+    . /usr/share/bash-completion/bash_completion
+  elif [ -r /etc/bash_completion ]; then
+    . /etc/bash_completion
+  else
+    return
+  fi
 fi
 
 function has_completion {
@@ -24,11 +22,6 @@ function has_completion {
   _completion_loader "$1"
   type -p "_$1"
 }
-
-# tmux completions
-if [ -f /usr/share/doc/tmux/examples/bash_completion_tmux.sh ]; then
-  . /usr/share/doc/tmux/examples/bash_completion_tmux.sh
-fi
 
 # Custom completions
 # complete -o bashdefault -o default -F _root_command sudo watch
@@ -49,7 +42,15 @@ has pgcli && has_completion psql && \
   complete -F _psql pgcli
 
 # git completions
-function _git_sw { _git_checkout; }
+if has_completion git; then
+  __git_complete g _git
+  __git_complete st _git_status
+  __git_complete co _git_checkout
+  function _git_co { _git_checkout; }
+  function _git_create_branch { _git_checkout; }
+
+  _completion_loader git-extras
+fi
 
 if has dotfiles; then
   __git_complete dotfiles _git `dotfiles --path`

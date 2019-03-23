@@ -1,3 +1,5 @@
+# vim: ft=gitconfig
+
 [core]
   pager = less -FX
 
@@ -93,11 +95,12 @@
   dc = diff --cached
 
   br = branch
+  cb = create-branch
+  db = delete-branch
   ls = branch -avv
-  co = checkout
-  sw = "!f() { [ $# -gt 0 ] && exec git checkout "$@"; branch=$( git branch -a --format '%(refname)' 2>/dev/null | sed -r 's,^(refs/heads/|refs/remotes/[^/]+/),,' | fgrep -vx HEAD | sort | uniq | fzf --no-multi ) && git checkout "$branch"; }; f"
-  ours = checkout --ours
-  theirs = checkout --theirs
+  co = "!f() { [ $# -gt 0 ] && exec git checkout "$@"; branch=$( git branch -a --format '%(refname)' 2>/dev/null | sed -r 's,^(refs/heads/|refs/remotes/[^/]+/),,' | fgrep -vx HEAD | sort | uniq | fzf --no-multi ) && git checkout "$branch"; }; f"
+  cm = checkout master
+  cd = checkout development
 
   ap = add -p
   all = add -A
@@ -129,7 +132,6 @@
   pu   = push -v --progress
   poof = push -v --progress --force-with-lease
   pusu = -c push.default=current push -v --progress --set-upstream
-  delbranch = "!f() { git branch -d $1 && git pu -d $1; }; f"
 
   sub = submodule
   checkout-submodules = submodule update -q --init

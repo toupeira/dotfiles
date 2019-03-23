@@ -103,6 +103,7 @@
   set errorbells
   set visualbell t_vb= " disable bells
   set cmdheight=1
+  set signcolumn=yes
   set synmaxcol=1000 " disable syntax highlighting on long lines
   set lazyredraw
   if !&diff

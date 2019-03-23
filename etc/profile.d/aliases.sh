@@ -65,8 +65,12 @@ alias vim='sensible-vim'
 alias vimdiff='sensible-vim -d'
 alias gvi='gvim'
 alias gvim='VIMCMD=gvim sensible-vim'
-alias ed='git edit'
 alias vip='VIMCMD=vip sensible-vim'
+
+alias g='git'
+alias st='git st'
+alias co='git co'
+alias ed='git edit'
 
 alias emacs='sensible-emacs'
 alias e='sensible-emacs'
