@@ -1,58 +1,75 @@
 [global_config]
   dbus = False
   enabled_plugins = ,
-  title_font = DejaVu Sans Mono for Powerline 9
   title_use_system_font = False
+  title_font = DejaVuSansMono Nerd Font 9
 [keybindings]
-  broadcast_all = None
-  broadcast_group = None
-  broadcast_off = None
-  close_term = None
-  close_window = None
-  copy = <Primary><Shift>c
+  zoom_in = <Primary>plus
+  zoom_out = <Primary>underscore
+  zoom_normal = <Primary>parenright
+  new_tab = None
   cycle_next = None
   cycle_prev = None
-  edit_tab_title = None
-  edit_terminal_title = None
-  edit_window_title = None
-  go_down = None
-  go_left = None
   go_next = None
   go_prev = None
-  go_right = None
   go_up = None
-  group_all = None
-  group_tab = None
-  help = None
-  hide_window = None
-  insert_number = None
-  insert_padded = None
-  layout_launcher = None
-  move_tab_left = None
-  move_tab_right = None
-  new_tab = None
-  new_terminator = None
-  new_window = None
-  next_tab = None
-  prev_tab = None
-  reset = <Primary><Shift>r
+  go_down = None
+  go_left = None
+  go_right = None
+  rotate_cw = None
+  rotate_ccw = None
+  split_horiz = None
+  split_vert = None
+  close_term = None
+  copy = <Primary><Shift>c
+  toggle_scrollbar = None
+  search = None
+  close_window = None
+  resize_up = None
   resize_down = None
   resize_left = None
   resize_right = None
-  resize_up = None
-  rotate_ccw = None
-  rotate_cw = None
-  scaled_zoom = None
-  search = None
-  split_horiz = None
-  split_vert = None
-  toggle_scrollbar = None
+  move_tab_right = None
+  move_tab_left = None
   toggle_zoom = None
+  scaled_zoom = None
+  next_tab = None
+  prev_tab = None
+  reset = <Primary><Shift>r
+  hide_window = None
+  group_all = None
   ungroup_all = None
+  group_tab = None
   ungroup_tab = None
-  zoom_in = <Primary>plus
-  zoom_normal = <Primary>parenright
-  zoom_out = <Primary>underscore
+  new_window = None
+  new_terminator = None
+  broadcast_off = None
+  broadcast_group = None
+  broadcast_all = None
+  insert_number = None
+  insert_padded = None
+  edit_window_title = None
+  edit_tab_title = None
+  edit_terminal_title = None
+  layout_launcher = None
+  help = None
+[profiles]
+  [[default]]
+    visible_bell = True
+    background_darkness = 0.9
+    background_type = transparent
+    cursor_blink = False
+    cursor_color = "#ebebe9"
+    font = DejaVuSansMono Nerd Font 9
+    foreground_color = "#ffffff"
+    show_titlebar = False
+    scrollbar_position = hidden
+    scrollback_lines = 10000
+    word_chars = "-+A-Za-z0-9,./?%&#:_@"
+    login_shell = True
+    use_custom_command = True
+    custom_command = TERM=xterm-256color tmux-reattach
+    use_system_font = False
 [layouts]
   [[default]]
     [[[child1]]]
@@ -63,20 +80,3 @@
       parent = ""
       type = Window
 [plugins]
-[profiles]
-  [[default]]
-    background_darkness = 0.9
-    background_type = transparent
-    cursor_blink = False
-    cursor_color = "#ebebe9"
-    custom_command = TERM=xterm-256color tmux-reattach
-    font = DejaVu Sans Mono for Powerline 9
-    foreground_color = "#ffffff"
-    login_shell = True
-    scrollback_lines = 10000
-    scrollbar_position = hidden
-    show_titlebar = False
-    use_custom_command = True
-    use_system_font = False
-    visible_bell = True
-    word_chars = "-+A-Za-z0-9,./?%&#:_@"
