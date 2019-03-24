@@ -1,31 +1,36 @@
 autoconf
 automake
 build-essential
+docker.io
+google-cloud-sdk
 elixir
-erlang-base
 erlang-dev
 erlang-parsetools
-exuberant-ctags
-g++
+kubectl
+kubectx
+manpages-dev
 nodejs
 python3-pip
+python3-setuptools
 python-pip
+python-setuptools
 rebar
 ruby-dev
 sqlite3
 tig
+universal-ctags
+zlib1g-dev
 
 gem:activesupport
 gem:bundler
 gem:neovim
 gem:pry
-gem:ripper-tags
 gem:rubocop
 gem:solargraph
 
-npm:yarn
-
 pip:solargraph-utils.py
+
+npm:yarn
 
 yarn:caniuse-cmd
 yarn:csslint
