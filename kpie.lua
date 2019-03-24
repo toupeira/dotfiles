@@ -56,6 +56,7 @@ end
 
 -- windows on the right
 if class == 'X-terminal-emulator'
+or class == 'Xfce4-terminal'
 or class == 'Terminator'
 or class == 'kitty'
 or class == 'Gvim'

@@ -1,5 +1,4 @@
 [global_config]
-  dbus = False
   enabled_plugins = ,
   title_use_system_font = False
   title_font = DejaVuSansMono Nerd Font 9
@@ -61,6 +60,38 @@
     cursor_blink = False
     cursor_color = "#ebebe9"
     font = DejaVuSansMono Nerd Font 9
+    foreground_color = "#ffffff"
+    show_titlebar = False
+    scrollbar_position = hidden
+    scrollback_lines = 10000
+    word_chars = "-+A-Za-z0-9,./?%&#:_@"
+    login_shell = True
+    use_custom_command = True
+    custom_command = TERM=xterm-256color tmux-reattach
+    use_system_font = False
+  [[meerkat]]
+    visible_bell = True
+    background_darkness = 0.9
+    background_type = transparent
+    cursor_blink = False
+    cursor_color = "#ebebe9"
+    font = DejaVuSansMono Nerd Font 10.5
+    foreground_color = "#ffffff"
+    show_titlebar = False
+    scrollbar_position = hidden
+    scrollback_lines = 10000
+    word_chars = "-+A-Za-z0-9,./?%&#:_@"
+    login_shell = True
+    use_custom_command = True
+    custom_command = TERM=xterm-256color tmux-reattach
+    use_system_font = False
+  [[schtube]]
+    visible_bell = True
+    background_darkness = 0.9
+    background_type = transparent
+    cursor_blink = False
+    cursor_color = "#ebebe9"
+    font = DejaVuSansMono Nerd Font 12
     foreground_color = "#ffffff"
     show_titlebar = False
     scrollbar_position = hidden
