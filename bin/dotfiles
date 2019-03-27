@@ -1,41 +1,7 @@
 #!/bin/bash
 
-# Check for Bash 4
-if [ "${BASH_VERSION:0:1}" -lt 4 ]; then
-  echo "Sorry, this script requires Bash 4's hash tables!"
-  echo "You're running version $BASH_VERSION"
-  exit 1
-fi
+### usage {{{
 
-# Use Homebrew GNU commands on OS X if available
-if [ "$( uname -s )" = "Darwin" ]; then
-  shopt -s expand_aliases
-  for command in readlink sed; do
-    if which g$command &>/dev/null; then
-      alias $command="g$command"
-    fi
-  done
-fi
-
-COMMAND=
-
-FORCE=0
-VERBOSE=0
-QUIET=0
-DRYRUN=0
-
-# Helpers to check active toggles
-function force   { [ $FORCE   -eq 1 ]; }
-function verbose { [ $VERBOSE -eq 1 ]; }
-function quiet   { [ $QUIET   -eq 1 ]; }
-function dryrun  { [ $DRYRUN  -eq 1 ]; }
-
-# Helper to decorate dry-run output
-function dryrun_message {
-  dryrun && output "[DRY RUN]"
-}
-
-# Show usage help and exit
 function usage {
   echo "Usage: $( basename "$0" ) [options] COMMAND [args]"
   echo
@@ -47,15 +13,22 @@ function usage {
   echo "      --path                Show path to the dotfiles repository and exit"
   echo
   echo "Commands:"
-  echo "  init                      Install symlinks for all dotfiles"
+  echo "  init                      Install symlinks for all dotfiles interactively"
   echo "  install PATH...           Install symlink for PATH"
   echo "  add PATH...               Add file to repository and replace it with a symlink"
-  echo "  ca, commitall             Commit all changes"
-  echo "  list                      List submodules"
+  echo "  sync                      Pull, commit and push"
+  echo "  commit-all, ca            Commit all changes"
+  echo "  pull                      Pull remote changes and checkout submodules"
+  echo "  push                      Push local changes"
+  echo
+  echo "  list-submodules, list     List submodules"
   echo "  update-submodule [NAME]   Update submodule"
-  echo "  sup, update-submodules    Update all submodules"
-  echo "  pkg, package [NAME]       Install packages from list"
-  echo "  sync                      Update, commit and push"
+  echo "  update-submodules, sup    Update all submodules"
+  echo
+  echo "  build PATH COMMAND..      Run build command in path"
+  echo "  build-all                 Run default builds"
+  echo
+  echo "  package, pkg [NAME]       Install packages from list"
   echo
   echo "Other arguments:"
   echo "  COMMAND [ARGS]...         Excecute a Git command inside the dotfiles repository"
@@ -63,6 +36,26 @@ function usage {
   echo
 
   exit 255
+}
+
+### }}}
+
+### output helpers {{{
+
+# Helpers to check active toggles
+function force   { [ "$FORCE"   = 1 ]; }
+function verbose { [ "$VERBOSE" = 1 ]; }
+function quiet   { [ "$QUIET"   = 1 ]; }
+function dryrun  { [ "$DRYRUN"  = 1 ]; }
+
+# Output a string
+function output {
+  local output="$1"
+  local echo_options="$2"
+
+  if verbose || ! quiet; then
+    echo -e $echo_options "$1"
+  fi
 }
 
 # Output a message with a colored arrow in front
@@ -83,16 +76,6 @@ function msg {
 # Helpers for colored messages
 function status  { msg "$1" ${2:-2}; }
 function warning { msg "$1" ${2:-3}; }
-
-# Output a raw string
-function output {
-  local output="$1"
-  local echo_options="$2"
-
-  if verbose || ! quiet; then
-    echo -e $echo_options "$1"
-  fi
-}
 
 # Output error message
 function error {
@@ -116,7 +99,7 @@ function ask {
 }
 
 # Ask a yes/no question, defaulting to yes
-function ask_yes {
+function ask-yes {
   [ $FORCE -eq 1 ] && return
 
   msg "$1 [Y/n] " "$2" -n >&2
@@ -125,16 +108,15 @@ function ask_yes {
 }
 
 # Ask to continue or abort
-function ask_abort {
+function ask-abort {
   STATUS=1
   if ! ask "Do you want to continue?" 1; then
     abort
   fi
 }
 
-# create an associative array to hold all commands and paths used for sudo,
-# so we can avoid duplicate warnings for the same value
-declare -A sudo_history
+### }}}
+### command helpers {{{
 
 # Run a shell command
 function system {
@@ -143,32 +125,21 @@ function system {
 
   # Check for commands that require sudo
   if [ "$command" = "chown" -o "$command" = "chgrp" ]; then
-    if [ -z "${sudo_history["$command"]}" ]; then
-      warning "Using [1;33msudo[0m for command [1m$command[0m"
-    fi
-
-    sudo_history["$command"]=1
+    warning "Using [1;33msudo[0m for command [1m$command[0m"
     command="sudo $command"
   else
     # Check for paths that require sudo
     for arg in "$@"; do
       local dir=$( dirname -- "$arg" )
       if [ "$dir" != "." -a -d "$dir" -a ! -w "$dir" ]; then
-        if [ -z "${sudo_history["$dir"]}" ]; then
-          warning "Using [1;33msudo[0m for directory [1m$dir[0m"
-        fi
-
-        sudo_history["$dir"]=1
+        warning "Using [1;33msudo[0m for directory {{$dir}}"
         command="sudo $command"
         break
       fi
     done
   fi
 
-  force   && command="$command -f"
-  verbose && command="$command -v"
-
-  verbose && output "     executing: $command $* $( dryrun_message )"
+  verbose && output "     executing: $command $* $( dryrun-message )" >&2
   dryrun && return
 
   command $command "$@"
@@ -180,19 +151,24 @@ function git {
     local onerror=":"
     shift
   else
-    local onerror="ask_abort"
+    local onerror="ask-abort"
   fi
 
-  verbose && output "     executing: git $* $( dryrun_message )"
+  verbose && output "     executing: git $* $( dryrun-message )" >&2
   dryrun && return
 
   # Spawn a subshell so we can run the command inside the repository
   # without any nasty side-effects
-  (cd "$DOTFILES" || abort; command git "$@")
+  ( cd "$DOTFILES" || abort; command git "$@" )
   local status=$?
   [ $status -eq 0 ] || $onerror
 
   return $status
+}
+
+# Helper to decorate dry-run output
+function dryrun-message {
+  dryrun && output "[DRY RUN]"
 }
 
 # Run a command in a tmux pane if possible
@@ -204,6 +180,17 @@ function mux-wrap {
   fi
 }
 
+# Load the users' SSH key if necessary
+function load-key {
+  local key=~/.ssh/id_rsa
+  if [ -f "$key" -a "$( uname -s )" != "Darwin" ]; then
+    ssh-add -l | fgrep -q "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
+  fi
+}
+
+### }}}
+### dotfiles helpers {{{
+
 # Make sure the given path is either inside the home directory,
 # or a valid /etc path
 function validate {
@@ -212,14 +199,6 @@ function validate {
     return 1
   else
     return 0
-  fi
-}
-
-# Load the users' SSH key if necessary
-function load_key {
-  local key=~/.ssh/id_rsa
-  if [ -f "$key" -a "$( uname -s )" != "Darwin" ]; then
-    ssh-add -l | fgrep -q "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
   fi
 }
 
@@ -256,20 +235,156 @@ function origin {
   fi
 }
 
-# Run a dotfiles command
+### }}}
+
 function run {
   local command="$1"
   shift
 
   case "$command" in
-    sync)
+    init) # {{{
+      function install-paths {
+        for path in "$@"; do
+          if [ ! -e "$path" -o "$( basename "$path" )" = "README.md" ]; then
+            continue
+          fi
+
+          if [ -e "$path/.skip" ]; then
+            continue
+          elif [ ! -d "$path" -o -L "$path" -o -e "$path/.install" ]; then
+            run install "$path"
+          fi
+
+          if [ -d "$path" -a ! -e "$path/.git" -a ! -L "$path" -a ! -L "$( origin "$path" )" ]; then
+            install-paths "$path"/*
+          fi
+        done
+      }
+
+      output
+      install_paths "$DOTFILES"/*
+      run package
+      output
+      ;;
+    # }}}
+    install) # {{{
+      [ $# -eq 0 ] && usage
+
+      for path in "$@"; do
+        local origin="$path"
+        local target=$( target "$origin" )
+        local force=0
+
+        if [ "${origin:0:1}" != "/" ]; then
+          origin="$PWD/$path"
+        fi
+
+        if [[ "$origin" =~ ^$DOTFILES/ ]]; then
+          target="$origin"
+          origin=$( origin "$target" )
+        fi
+
+        if [ ! -e "$target" ]; then
+          error "Path not found: {{$target}}"
+          continue
+        elif ! validate "$origin"; then
+          continue
+        elif [ -L "$origin" ]; then
+          local link=$( readlink "$origin" 2>/dev/null )
+          if [ ! -e "$link" ]; then
+            error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
+            force=1
+          elif [[ "$link" =~ ^$DOTFILES/ ]]; then
+            msg "Already symlinked: {{$origin}}"
+            continue
+          else
+            msg "Already symlinked: {{$origin}} -> [1;36m$link[0m"
+          fi
+        fi
+
+        if [ -e "$origin" -o -L "$origin" ]; then
+          local ask="ask"
+          local question="Delete {{$origin}} and install symlink?"
+        else
+          local ask="ask-yes"
+          local question="Install symlink for {{$origin}}?"
+        fi
+
+        if [ $force -eq 1 ] || $ask "$question"; then
+          if [ -d "$origin" ]; then
+            if ask "Delete {{$origin}}?"; then
+              system rm -r "$origin"
+            else
+              ask-abort
+            fi
+          elif [ -e "$origin" -o -L "$origin" ]; then
+            system rm "$origin"
+          fi
+
+          local parent=$( dirname "$origin" )
+          if [ ! -d "$parent" ]; then
+            system mkdir -p "$parent"
+          fi
+
+          if [ ! -e "$origin" -o $DRYRUN -eq 1 ] && system ln -s "$target" "$origin"; then
+            status "Successfully installed {{$origin}}"
+          else
+            error "Error while installing {{$origin}}"
+            continue
+          fi
+        fi
+      done
+      ;;
+    # }}}
+    add) # {{{
+      [ $# -eq 0 ] && usage
+
+      for path in "$@"; do
+        local origin=$( readlink -f "$path" 2>/dev/null )
+        local target=$( target "$origin" )
+        local target_dir=$( dirname "$target" )
+
+        if [ ! -e "$origin" ]; then
+          abort "Path not found: {{$origin}}"
+        elif ! validate "$origin"; then
+          continue
+        elif [ -L "$path" ]; then
+          msg "Already symlinked: {{$path}}"
+          continue
+        elif [ -e "$target" ]; then
+          run install "$target" "$origin"
+          continue
+        fi
+
+        ask-yes "Add {{$origin}} to repository?" || continue
+
+        if ( test -d "$target_dir" || system mkdir -p "$target_dir" ) \
+          && system mv "$origin" "$target" \
+          && system ln -s "$target" "$origin"
+        then
+          system rm -f "$target_dir/.skip"
+          [ -O "$target" ] || system chown "$USER:$GROUPS" "$target"
+          [ -d "$target" ] && system chmod g+s "$target"
+          git add "$target"
+
+          status "Successfully added {{$target}}"
+          let added++
+        else
+          error "Error while converting path: {{$origin}}"
+          continue
+        fi
+      done
+      ;;
+    # }}}
+
+    sync) # {{{
       if git ignore-errors status -s | grep -q .; then
         output
         git status
         output
-        ask_abort
+        ask-abort
 
-        run commitall
+        run commit-all
       fi
 
       output
@@ -282,10 +397,62 @@ function run {
 
       output
       ;;
-    list)
+    # }}}
+    commit-all|ca) # {{{
+      if [ "$1" = "-m" ]; then
+        shift
+        local message="$1"
+        shift
+      else
+        local message="Sync dotfiles"
+      fi
+
+      status "{{Committing local changes...}}"
+      git ignore-errors add -A .
+      git ignore-errors commit -a -m "$message" "$@"
+      ;;
+    # }}}
+    pull) # {{{
+      local changes=$( git status -s --ignore-submodules )
+      [ -n "$changes" ] && git stash save | fgrep -q "No local changes to save" && unset changes
+
+      local current=$( git rev-parse HEAD )
+
+      status "{{Merging remote changes...}}"
+      load-key
+      git pull -v --progress --rebase "$@"
+
+      if ! quiet; then
+        local news=$( git -c color.ui=always news )
+        if [ -n "$news" ]; then
+          output
+          status "New commits:"
+          output "$news" | sed -r 's/^/    /'
+          output
+        fi
+      fi
+
+      [ -n "$changes" ] && git stash pop -q
+
+      if [ "$( git rev-parse HEAD )" != "$current" ]; then
+        status "{{Checking out submodules...}}"
+        git checkout-submodules
+        run build-all
+      fi
+      ;;
+    # }}}
+    push) # {{{
+      load-key
+      status "{{Pushing local changes...}}"
+      git push -q "$@"
+      ;;
+    # }}}
+
+    list-submodules|list) # {{{
       awk '/path = / { print $3 }' "$DOTFILES/.gitmodules" | sort
       ;;
-    update-submodule)
+    # }}}
+    update-submodule) # {{{
       unset batch
       [ "$1" = '--batch' ] && local batch=1 && shift
 
@@ -327,7 +494,8 @@ function run {
         status "No changes in {{$submodule}}"
       fi
       ;;
-    sup|update-submodules)
+    # }}}
+    update-submodules|sup) # {{{
       local submodules=$( run list )
       if [ -n "$1" ]; then
         submodules=$( echo "$submodules" | egrep "$1" )
@@ -363,99 +531,35 @@ function run {
       run build-all
       output
       ;;
-    init)
-      function install_paths {
-        for path in "$@"; do
-          if [ ! -e "$path" -o "$( basename "$path" )" = "README.md" ]; then
-            continue
-          fi
+    # }}}
 
-          if [ -e "$path/.skip" ]; then
-            continue
-          elif [ ! -d "$path" -o -L "$path" -o -e "$path/.install" ]; then
-            run install "$path"
-          fi
+    build) # {{{
+      local path="$1"
+      local command="$2"
+      shift 2
 
-          if [ -d "$path" -a ! -e "$path/.git" -a ! -L "$path" -a ! -L "$( origin "$path" )" ]; then
-            install_paths "$path"/*
-          fi
-        done
-      }
+      if [ -z "$path" ] || [ -z "$command" ]; then
+        usage
+      elif [ ! -d "$DOTFILES/$path" ]; then
+        warning "Build path {{$path}} does not exist." 5
+        return
+      fi
 
-      output
-      install_paths "$DOTFILES"/*
-      run package
-      output
+      status "Building {{$path}} $( dryrun-message )" 3
+      dryrun && return
+
+      if ! ( cd "$DOTFILES/$path" && system "$command" "$@" ); then
+        error "Error while building {{$path}}"
+        ask-abort
+      fi
       ;;
-    install)
-      [ $# -eq 0 ] && usage
-
-      for path in "$@"; do
-        local origin="$path"
-        local target=$( target "$origin" )
-        local force=0
-
-        if [ "${origin:0:1}" != "/" ]; then
-          origin="$PWD/$path"
-        fi
-
-        if [[ "$origin" =~ ^$DOTFILES/ ]]; then
-          target="$origin"
-          origin=$( origin "$target" )
-        fi
-
-        if [ ! -e "$target" ]; then
-          error "Path not found: {{$target}}"
-          continue
-        elif ! validate "$origin"; then
-          continue
-        elif [ -L "$origin" ]; then
-          local link=$( readlink "$origin" 2>/dev/null )
-          if [ ! -e "$link" ]; then
-            error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
-            force=1
-          elif [[ "$link" =~ ^$DOTFILES/ ]]; then
-            msg "Already symlinked: {{$origin}}"
-            continue
-          else
-            msg "Already symlinked: {{$origin}} -> [1;36m$link[0m"
-          fi
-        fi
-
-        if [ -e "$origin" -o -L "$origin" ]; then
-          local ask="ask"
-          local question="Delete {{$origin}} and install symlink?"
-        else
-          local ask="ask_yes"
-          local question="Install symlink for {{$origin}}?"
-        fi
-
-        if [ $force -eq 1 ] || $ask "$question"; then
-          if [ -d "$origin" ]; then
-            if ask "Delete {{$origin}}?"; then
-              system rm -r "$origin"
-            else
-              ask_abort
-            fi
-          elif [ -e "$origin" -o -L "$origin" ]; then
-            system rm "$origin"
-          fi
-
-          local parent=$( dirname "$origin" )
-          if [ ! -d "$parent" ]; then
-            system mkdir -p "$parent"
-          fi
-
-          if [ ! -e "$origin" -o $DRYRUN -eq 1 ] && system ln -s "$target" "$origin"; then
-            status "Successfully installed {{$origin}}"
-          else
-            error "Error while installing {{$origin}}"
-            continue
-          fi
-        fi
-      done
+    # }}}
+    build-all) # {{{
+      run build rbenv/rbenv/src sh -c './configure && make -s'
       ;;
-    pkg|package)
+    # }}}
+
+    package|pkg) # {{{
       local name=${1:-default}
       local list="$DOTFILES/packages/$name"
 
@@ -516,10 +620,10 @@ function run {
       fi
 
       if [ -n "$missing_apt" -o \
-           -n "$missing_gem" -o \
-           -n "$missing_npm" -o \
-           -n "$missing_yarn" -o \
-           -n "$missing_pip" ]; then
+            -n "$missing_gem" -o \
+            -n "$missing_npm" -o \
+            -n "$missing_yarn" -o \
+            -n "$missing_pip" ]; then
         output
         status "{{Missing $name packages:}}"
         for package in $missing_apt; do
@@ -539,7 +643,7 @@ function run {
         done
 
         output
-        if ask_yes "{{Install?}}"; then
+        if ask-yes "{{Install?}}"; then
           [ -n "$missing_apt" ] && output \
             && mux-wrap sudo aptitude install $missing_apt
           [ -n "$missing_gem" ] && output \
@@ -555,112 +659,9 @@ function run {
         output
       fi
       ;;
-    add)
-      [ $# -eq 0 ] && usage
+    # }}}
 
-      for path in "$@"; do
-        local origin=$( readlink -f "$path" 2>/dev/null )
-        local target=$( target "$origin" )
-        local target_dir=$( dirname "$target" )
-
-        if [ ! -e "$origin" ]; then
-          abort "Path not found: {{$origin}}"
-        elif ! validate "$origin"; then
-          continue
-        elif [ -L "$path" ]; then
-          msg "Already symlinked: {{$path}}"
-          continue
-        elif [ -e "$target" ]; then
-          run install "$target" "$origin"
-          continue
-        fi
-
-        ask_yes "Add {{$origin}} to repository?" || continue
-
-        if (test -d "$target_dir" || system mkdir -p "$target_dir") \
-          && system mv "$origin" "$target" \
-          && system ln -s "$target" "$origin"
-        then
-          system rm -f "$target_dir/.skip"
-          [ -O "$target" ] || system chown "$USER:$GROUPS" "$target"
-          [ -d "$target" ] && system chmod g+s "$target"
-          git add "$target"
-
-          status "Successfully added {{$target}}"
-          let added++
-        else
-          error "Error while converting path: {{$origin}}"
-          continue
-        fi
-      done
-      ;;
-    ca|commitall)
-      if [ "$1" = "-m" ]; then
-        shift
-        local message="$1"
-        shift
-      else
-        local message="Sync dotfiles"
-      fi
-
-      status "{{Committing local changes...}}"
-      git ignore-errors add -A .
-      git ignore-errors commit -a -m "$message" "$@"
-      ;;
-    pull)
-      local changes=$( git status -s --ignore-submodules )
-      [ -n "$changes" ] && git stash save | fgrep -q "No local changes to save" && unset changes
-
-      local current=$( git rev-parse HEAD )
-
-      status "{{Merging remote changes...}}"
-      load_key
-      git pull -v --progress --rebase "$@"
-
-      if ! quiet; then
-        local news=$( git -c color.ui=always news )
-        if [ -n "$news" ]; then
-          echo
-          status "New commits:"
-          output "$news" | sed -r 's/^/    /'
-          output
-        fi
-      fi
-
-      [ -n "$changes" ] && git stash pop -q
-
-      if [ "$( git rev-parse HEAD )" != "$current" ]; then
-        status "{{Checking out submodules...}}"
-        git checkout-submodules
-        run build-all
-      fi
-      ;;
-    push)
-      load_key
-      status "{{Pushing local changes...}}"
-      git push -q "$@"
-      ;;
-    build)
-      local dir="$1"
-      shift
-
-      if ! which "$1" >/dev/null && ! [ -x "$dir/$1" ]; then
-        warning "Not building {{${dir/$DOTFILES\//}}} (missing {{$1}}) $( dryrun_message )" 5
-        return
-      fi
-
-      status "Building {{${dir/$DOTFILES\//}}} $( dryrun_message )" 3
-      dryrun && return
-
-      if ! (cd "$dir" && system "$@"); then
-        error "Error while building {{$dir}}"
-        ask_abort
-      fi
-      ;;
-    build-all)
-      run build "$DOTFILES/rbenv/rbenv/src"    make -s
-      ;;
-    git)
+    git) # {{{
       command="$1"
       shift
       git ignore-errors $command "$@"
@@ -668,55 +669,57 @@ function run {
     *)
       git ignore-errors $command "$@"
       ;;
+    # }}}
   esac
 }
 
-# Parse arguments and run command
-function main {
-  # find the dotfiles repository
-  if [ -z "$DOTFILES" ]; then
-    if [ -d /etc/dotfiles ]; then
-      DOTFILES=/etc/dotfiles
-    elif [ -d ~/.dotfiles ]; then
-      DOTFILES=~/.dotfiles
-    else
-      abort "Can't find repository in /etc/dotfiles or $HOME/.dotfiles, please set \$DOTFILES"
-    fi
-  fi
+### main {{{
 
-  # resolve symlinks
-  while [ -L "$DOTFILES" ]; do
-    DOTFILES=$( readlink -f "$DOTFILES" )
-  done
-
-  if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
-    abort "Can't find dotfiles script in repository, please check your \$DOTFILES"
-  fi
-
-  # Parse arguments
-  while [ $# -gt 0 ]; do
-    case "$1" in
-      -f|--force)   FORCE=1;;
-      -v|--verbose) VERBOSE=1;;
-      -q|--quiet)   QUIET=1;;
-      -n|--dry-run) DRYRUN=1;;
-         --path)    echo "$DOTFILES"; exit;;
-      -*)           usage;;
-      *)
-        COMMAND=( "$@" )
-        break
-        ;;
-    esac
-    shift
-  done
-
-  if [ ${#COMMAND[@]} -gt 0 ]; then
-    STATUS=0
-    run "${COMMAND[@]}"
-    exit $STATUS
+# find the dotfiles repository
+if [ -z "$DOTFILES" ]; then
+  if [ -d /etc/dotfiles ]; then
+    DOTFILES=/etc/dotfiles
+  elif [ -d ~/.dotfiles ]; then
+    DOTFILES=~/.dotfiles
   else
-    usage
+    abort "Can't find repository in /etc/dotfiles or $HOME/.dotfiles, please set \$DOTFILES"
   fi
-}
+fi
 
-main "$@"
+# resolve symlinks
+while [ -L "$DOTFILES" ]; do
+  DOTFILES=$( readlink -f "$DOTFILES" )
+done
+
+if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
+  abort "Can't find dotfiles script in repository, please check your \$DOTFILES"
+fi
+
+COMMAND=
+STATUS=0
+
+# Parse arguments
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -f|--force)   FORCE=1;;
+    -v|--verbose) VERBOSE=1;;
+    -q|--quiet)   QUIET=1;;
+    -n|--dry-run) DRYRUN=1;;
+       --path)    echo "$DOTFILES"; exit;;
+    -*)           usage;;
+    *)
+      COMMAND=( "$@" )
+      break
+      ;;
+  esac
+  shift
+done
+
+if [ -n "$COMMAND" ]; then
+  run "${COMMAND[@]}"
+  exit $STATUS
+else
+  usage
+fi
+
+### }}}

@@ -97,24 +97,26 @@ function mvln {
 }
 
 # Automatically load key for SSH and Git commands
-if [ -n "$SSH_AUTH_SOCK" ]; then
-  function __load_key {
-    local key=~/.ssh/id_rsa
-    if [ -f "$key" ]; then
-      ssh-add -l | grep -Fq "SHA256:IeJ24i+E8JoJc+6s7mL/5oCs04D3syjx5BVDuQL1W5I" || ssh-add "$key" </dev/null
-    fi
-  }
+function __load_key {
+  [ -n "$SSH_AUTH_SOCK" ] || return
 
-  function ssh {
-    __load_key
-    command ssh "$@"
-  }
+  local key=~/.ssh/id_rsa
+  local fingerprint="SHA256:IeJ24i+E8JoJc+6s7mL/5oCs04D3syjx5BVDuQL1W5I"
 
-  function git {
-    [[ "$1" =~ ^(clone|pull|up|push|pu|poof|fetch|remote|r|rup)$ ]] && __load_key
-    command git "$@"
-  }
-fi
+  if [ -f "$key" ]; then
+    ssh-add -l | grep -Fq "$fingerprint" || ssh-add "$key" </dev/null
+  fi
+}
+
+function ssh {
+  __load_key
+  command ssh "$@"
+}
+
+function git {
+  [[ "$1" =~ ^(clone|pull|up|push|pu|pusu|poof|fetch|remote|r|rup)$ ]] && __load_key
+  command git "$@"
+}
 
 # Wrapper to edit files matching a pattern
 function _edit {

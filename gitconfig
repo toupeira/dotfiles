@@ -118,7 +118,6 @@
   initial = commit --allow-empty -m 'Initial commit'
 
   r = remote -v
-  rup = remote update
   shallow = clone --depth 1
 
   up = pull -v --progress
