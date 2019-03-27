@@ -59,6 +59,7 @@ if class == 'X-terminal-emulator'
 or class == 'Xfce4-terminal'
 or class == 'Terminator'
 or class == 'kitty'
+or class == 'nvim-qt'
 or class == 'Gvim'
 or class == 'Emacs'
 then

@@ -71,7 +71,7 @@ if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
 fi
 
 if has autojump; then
-  . /usr/share/autojump/autojump.sh
+  . /usr/share/autojump/autojump.bash
 
   eval "$(
     echo "_j()";
@@ -101,7 +101,7 @@ if has autojump; then
 
     if [ "$key" = "alt-d" ]; then
       echo "$( grep -v $'\t'"$path$" "$paths" )" > "$paths"
-      echo -e "Removed \e[1;33m$path\e[0m"
+      j
     elif [ -n "$path" ]; then
       cd "$path"
     fi

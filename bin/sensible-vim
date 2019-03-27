@@ -2,18 +2,16 @@
 
 if [ "$VIMCMD" = 'vip' ] || ([ $# -eq 0 ] && df -P .; [ $# -gt 0 ] && df -P -- "$@" 2>/dev/null) | grep -q ^encfs; then
   # run vim in "private" mode on encfs filesystems
-  exec nvim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" \
+  exec vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" \
     --cmd "let g:pathogen_disabled = [ \"neocomplete\", \"unite\" ]" "$@"
 elif [ -n "$VIMCMD" ]; then
   vim="$VIMCMD"
 elif [ -n "$TERM" -a "$TERM" != 'dumb' ] || [ -n "$SSH_CONNECTION" ]; then
-  vim="nvim"
-elif which mvim &>/dev/null; then
-  vim="mvim"
+  vim="vim"
 elif which gvim &>/dev/null; then
   vim="gvim"
 else
-  vim="nvim"
+  vim="vim"
 fi
 
 args=( "$@" )

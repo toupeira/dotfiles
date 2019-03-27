@@ -278,7 +278,7 @@ function ssh.mux {
 
 # Go to project root
 function up {
-  while [ ! -d .git ] && [ "$PWD" != "/" ]; do
+  while [ ! -d .git ] && [ "$PWD" != "$HOME" ] && [ "$PWD" != "/" ]; do
     cd ..
   done
 }

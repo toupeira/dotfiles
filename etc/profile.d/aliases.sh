@@ -61,10 +61,9 @@ alias pkgshow='aptitude show'
 
 # development
 alias vi='vim'
-alias vim='sensible-vim'
 alias gvi='gvim'
-alias gvim='VIMCMD=gvim sensible-vim'
 alias vip='VIMCMD=vip sensible-vim'
+alias gvimdiff='gvim -d'
 
 alias g='git'
 alias st='git st'

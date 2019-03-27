@@ -66,8 +66,8 @@
   prompt = false
   keepBackup = false
 
-[mergetool.vimdiff]
-  path = vimdiff
+[mergetool.gvimdiff]
+  trustExitCode = false
 
 [pager]
   log = diff-so-fancy | less -X
