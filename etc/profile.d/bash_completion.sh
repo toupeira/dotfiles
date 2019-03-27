@@ -105,5 +105,21 @@ function _mux {
 complete -o bashdefault -o default -F _mux mux
 
 # kubernetes completion
-has kubectl && eval "$( kubectl completion bash )"
-has helm && eval "$( helm completion bash )"
+if has kubectl; then
+  eval "$( kubectl completion bash )"
+
+  alias k='kubectl'
+  complete -o default -F __start_kubectl k
+fi
+
+if has kubectx; then
+  alias kctx='kubectx'
+  alias kns='kubens'
+
+  has_completion kubectx && complete -F _kube_contexts kctx
+  has_completion kubens  && complete -F _kube_namespaces kns
+fi
+
+if has helm; then
+  eval "$( helm completion bash )"
+fi

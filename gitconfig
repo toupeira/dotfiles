@@ -1,7 +1,7 @@
 # vim: ft=gitconfig
 
 [core]
-  pager = less -FX
+  pager = less -X
 
 [protocol]
   version = 2
@@ -66,10 +66,13 @@
   prompt = false
   keepBackup = false
 
+[mergetool.vimdiff]
+  path = vimdiff
+
 [pager]
-  log = diff-so-fancy | less -FX
-  show = diff-so-fancy | less -cX
-  diff = diff-so-fancy | less -cX
+  log = diff-so-fancy | less -X
+  show = diff-so-fancy | less -X
+  diff = diff-so-fancy | less -X
 
 [rebase]
   autosquash = true

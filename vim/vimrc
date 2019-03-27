@@ -294,7 +294,7 @@
   autocmd vimrc FileType crontab setlocal nobackup nowritebackup
   autocmd vimrc FileType puppet setlocal commentstring=#%s
   autocmd vimrc FileType help setlocal nonumber norelativenumber
-  autocmd vimrc FileType help nnoremap <silent> q :bd<CR>
+  autocmd vimrc FileType help nnoremap <buffer><silent> q :bd<CR>
   autocmd vimrc FileType org setlocal foldmethod=expr
 
   autocmd vimrc BufRead,BufNewFile *.es6 setlocal ft=javascript
@@ -872,7 +872,7 @@ endfunction " }}}
   " }}}
 
   " ale {{{
-  hi ALEWarning ctermbg=238
+  highlight! link ALEWarning Whitespace
 
   let g:ale_lint_on_text_changed = 'normal'
   let g:ale_lint_on_insert_leave = 1

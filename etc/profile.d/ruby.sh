@@ -5,21 +5,6 @@
 if [ -d ~/.rbenv ]; then
   export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init - --no-rehash)"
-
-  # show ruby version in prompt
-  function __rbenv_ps1 {
-    local version=`rbenv version 2>/dev/null`
-    version="${version/ */}"
-
-    if [ -n "$version" -a "$version" != "system" ]; then
-      version="${version/%-*/}"
-      version="${version/%\.[0-9]/}"
-      printf -- "[$version]"
-    fi
-  }
-
-  # export RBENV_PS1='\[\e[1;33m\]$(__rbenv_ps1)\[\e[0m\]'
-  # export PS1=$SUDO_PS1$RBENV_PS1$GIT_PS1
 fi
 
 # sudo wrapper for RubyGems
@@ -40,22 +25,11 @@ alias sugem='command sudo gem'
 # gem aliases
 has rubocop && alias rubocop='rubocop -D'
 
-# make sure rails commands are run with spring
-function _spring_exec {
-  local command="$1"
-  shift
-
-  if [ -x bin/spring -a -x bin/"$command" ]; then
-    bin/"$command" "$@"
-  elif [ -x script/"$command" ]; then
-    script/"$command" "$@"
+# Automatically use rails/rake commands
+function r {
+  if grep -q ' rails ([5-9]\.' Gemfile.lock &>/dev/null || [[ "$1" =~ ^(s|server|c|console|g|generate|d|destroy|r|runner|db|dbconsole|new)$ ]]; then
+    rails "$@"
   else
-    command "$command" "$@"
+    rake "$@"
   fi
 }
-
-alias  rails='_spring_exec rails'
-alias   rake='_spring_exec rake'
-alias bundle='_spring_exec bundle'
-alias spring='_spring_exec spring'
-alias  rspec='_spring_exec rspec'
