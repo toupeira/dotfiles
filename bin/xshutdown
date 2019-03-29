@@ -3,29 +3,18 @@
 require 'gtk2/base'
 
 class XShutdown < Gtk::Window
-  ICONS = "/usr/share/icons/gnome/32x32/actions"
+  ICONS = '/usr/share/icons/gnome/32x32/actions'.freeze
 
   ACTIONS = [
-    [
-      "_Shutdown", "gnome-shutdown",
-      "xfce4-session-logout --fast --halt",
-    ],
-
-    [
-      "_Reboot", "gtk-refresh",
-      "xfce4-session-logout --fast --reboot",
-    ],
-
-    [
-      "_Logout", "gnome-logout",
-      "xfce4-session-logout --fast --logout",
-    ],
-  ]
+    [ '_Shutdown', 'gnome-shutdown', 'xfce4-session-logout --fast --halt' ],
+    [ '_Reboot',   'gtk-refresh', 'xfce4-session-logout --fast --reboot'  ],
+    [ '_Logout',   'gnome-logout', 'xfce4-session-logout --fast --logout' ],
+  ].freeze
 
   def initialize
     super
 
-    set_title "Shutdown"
+    set_title 'Shutdown'
     set_icon "#{ICONS}/gnome-shutdown.png"
 
     set_resizable false
@@ -33,7 +22,7 @@ class XShutdown < Gtk::Window
     set_window_position Gtk::Window::POS_CENTER
 
     signal_connect('destroy') { Gtk.main_quit }
-    signal_connect('key-press-event') do |view, event|
+    signal_connect('key-press-event') do |_, event|
       Gtk.main_quit if [
         Gdk::Keyval::GDK_KEY_Escape,
         Gdk::Keyval::GDK_KEY_q,
@@ -74,7 +63,7 @@ class XShutdown < Gtk::Window
   end
 end
 
-if __FILE__ == $0
+if $0 == __FILE__
   Gtk.init
   XShutdown.new
   Gtk.main

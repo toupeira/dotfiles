@@ -14,7 +14,6 @@ require 'yaml'
 end
 
 class Lazytile
-
   TILING_MODES = {
     #
     # These are the definitions of all available tiling modes.
@@ -33,137 +32,137 @@ class Lazytile
     #
 
     # Fill the whole screen
-    maximize: lambda { |s, w|
+    maximize: lambda { |_s, _w|
       {}
     },
 
     # Fill the left half of the screen
-    left: lambda { |s, w|
+    left: lambda { |s, _w|
       {
         width: s[:width] / 2,
       }
     },
 
     # Fill the right half of the screen
-    right: lambda { |s, w|
+    right: lambda { |s, _w|
       width = s[:width] / 2
 
       {
         width: width,
-        x:     s[:x] + width,
+        x: s[:x] + width,
       }
     },
 
     # Fill the top half of the screen
-    top: lambda { |s, w|
+    top: lambda { |s, _w|
       {
         height: s[:height] / 2,
       }
     },
 
     # Fill the bottom half of the screen
-    bottom: lambda { |s, w|
+    bottom: lambda { |s, _w|
       height = s[:height] / 2
 
       {
         height: height,
-        y:      s[:y] + height,
+        y: s[:y] + height,
       }
     },
 
     # Fill the left two thirds of the screen
-    wideleft: lambda { |s, w|
+    wideleft: lambda { |s, _w|
       {
         width: s[:width] * 0.7,
       }
     },
 
     # Fill the right two thirds of the screen
-    wideright: lambda { |s, w|
+    wideright: lambda { |s, _w|
       width = s[:width] * 0.7
 
       {
         width: width,
-        x:     s[:x] + s[:width] - width,
+        x: s[:x] + s[:width] - width,
       }
     },
 
     # Fill the top two thirds of the screen
-    widetop: lambda { |s, w|
+    widetop: lambda { |s, _w|
       {
         height: s[:height] * 0.7,
       }
     },
 
     # Fill the bottom two thirds of the screen
-    widebottom: lambda { |s, w|
+    widebottom: lambda { |s, _w|
       height = s[:height] * 0.7
 
-      return  {
+      return {
         height: height,
-        y:      s[:y] + s[:height] - height,
+        y: s[:y] + s[:height] - height,
       }
     },
 
     # Fill the center of the screen, with margin on all sides
-    center: lambda { |s, w|
+    center: lambda { |s, _w|
       width = (s[:width] * 0.8).round
 
       {
-        width:  width,
+        width: width,
         height: s[:height] - 0.5 * s[:y],
-        x:      s[:width] / 2 - width / 2,
-        y:      s[:y] * 1.25,
+        x: s[:width] / 2 - width / 2,
+        y: s[:y] * 1.25,
       }
     },
 
     # Fill the top left corner of the screen
-    topleft: lambda { |s, w|
+    topleft: lambda { |s, _w|
       {
-        width:  s[:width] / 2,
+        width: s[:width] / 2,
         height: s[:height] / 2,
       }
     },
 
     # Fill the top right corner of the screen
-    topright: lambda { |s, w|
+    topright: lambda { |s, _w|
       width = s[:width] / 2
 
       {
-        width:  width,
+        width: width,
         height: s[:height] / 2,
-        x:      s[:x] + width,
+        x: s[:x] + width,
       }
     },
 
     # Fill the bottom left corner of the screen
-    bottomleft: lambda { |s, w|
+    bottomleft: lambda { |s, _w|
       height = s[:height] / 2
 
       {
-        width:  s[:width] / 2,
+        width: s[:width] / 2,
         height: height,
-        y:      s[:y] + height,
+        y: s[:y] + height,
       }
     },
 
     # Fill the bottom right corner of the screen
-    bottomright: lambda { |s, w|
+    bottomright: lambda { |s, _w|
       width = s[:width] / 2
       height = s[:height] / 2
 
       {
-        width:  width,
+        width: width,
         height: height,
-        x:      s[:x] + width,
-        y:      s[:y] + height,
+        x: s[:x] + width,
+        y: s[:y] + height,
       }
     },
 
-  }
+  }.freeze
 
-  CONFIG = "#{ENV['HOME']}/.lazytile.conf"
-  SOCKET = "#{ENV['HOME']}/.lazytile.sock"
+  CONFIG = "#{ENV['HOME']}/.lazytile.conf".freeze
+  SOCKET = "#{ENV['HOME']}/.lazytile.sock".freeze
 
   # Perform a tile command by sending it to the client socket
   def self.tile(mode, id = nil)
@@ -176,7 +175,7 @@ class Lazytile
 
   # Check if the daemon process is running
   def self.running?
-    !!daemon_pid
+    !daemon_pid.nil?
   end
 
   # Fork the daemon process
@@ -192,7 +191,7 @@ class Lazytile
 
     at_exit { stop_daemon }
 
-    debug "opening daemon socket..."
+    debug 'opening daemon socket...'
     @socket = UNIXServer.open(SOCKET)
 
     # Listen for messages
@@ -211,7 +210,7 @@ class Lazytile
     if running?
       # Close the socket
       if @socket
-        debug "closing daemon socket..."
+        debug 'closing daemon socket...'
         @socket.close unless @socket.closed?
       end
 
@@ -234,15 +233,13 @@ class Lazytile
   # Forcefully kill the daemon process
   def self.kill_daemon
     if pid = daemon_pid
-      debug "killing daemon..."
+      debug 'killing daemon...'
       Process.kill 'TERM', pid
       return wait_for { !running? }
     end
 
     !running?
   end
-
-  private
 
   # Capture the stdout of a command
   def self.output(command)
@@ -264,7 +261,7 @@ class Lazytile
 
   # Detect if any of the values in the two hashes differ
   def self.changed(first, second, error_margin = 2)
-    return true unless first and second
+    return true unless first && second
 
     first.find do |key, value|
       diff = (value - second[key].to_i).abs
@@ -276,32 +273,26 @@ class Lazytile
   def self.daemon_pid
     if File.exist? SOCKET
       pid = output "lsof -F p '#{SOCKET}'"
-      if $?.exitstatus == 0
+      if $?.success?
         pid.sub!(/\Ap(\d+).*/m, '\1')
         pid.to_i
-      else
-        nil
       end
     end
   end
 
   # Return a list of all window IDs
   def self.window_list
-    output("xprop -root _NET_CLIENT_LIST").sub(/.*#/, '').strip.split(', ')
+    output('xprop -root _NET_CLIENT_LIST').sub(/.*#/, '').strip.split(', ')
   end
 
   # Return the ID of the active window
   def self.active_window
-    output("xprop -root _NET_ACTIVE_WINDOW")[/\b(0x\w+)/, 1]
+    output('xprop -root _NET_ACTIVE_WINDOW')[/\b(0x\w+)/, 1]
   end
 
   # Return the window properties for the given ID
   def self.window_props(id)
-    if id == :root
-      id = '-root'
-    else
-      id = "-id #{id}"
-    end
+    id = (id == :root) ? '-root' : "-id #{id}"
 
     # Parse the geometry information from the xwininfo output
     x, y, width, height, bleft, bright, btop, bbottom = output("xwininfo -stats -wm #{id} | awk '
@@ -312,10 +303,10 @@ class Lazytile
 
     # Collect the window properties
     props = {
-      width:  width,
+      width: width,
       height: height,
-      x:      x,
-      y:      y,
+      x: x,
+      y: y,
     }
 
     # Collect the window border properties
@@ -324,9 +315,9 @@ class Lazytile
       props[:y] -= btop
 
       props[:border] = {
-        left:   bleft,
-        right:  bright,
-        top:    btop,
+        left: bleft,
+        right: bright,
+        top: btop,
         bottom: bbottom,
       }
     end
@@ -350,7 +341,7 @@ class Lazytile
       @config ||= {}
 
       # Read existing configuration
-      if File.exists? CONFIG
+      if File.exist? CONFIG
         debug "reading configuration from #{CONFIG}..."
         config = YAML.load_file(CONFIG)
         @config = config if config.is_a?(Hash)
@@ -416,15 +407,14 @@ class Lazytile
 
     message = "tiling #{mode.inspect}"
 
-    if same_mode and !moved_from_target and window[:original]
+    if same_mode && !moved_from_target && window[:original]
       mode = :original
-      message = "restoring"
+      message = 'restoring'
       props = window[:last] = window[:original]
 
-    elsif moved_from_last or moved_from_original
+    elsif moved_from_last || moved_from_original
       debug :storing, "window #{id}", current_props
       window[:original] = current_props
-
     end
 
     debug message, "window #{id}", props
@@ -433,16 +423,16 @@ class Lazytile
     window[:last] = props
 
     # Move and resize the window
-    system("xwit -id %s -move %d %d -resize %d %d" % [ id, props[:x], props[:y], props[:width], props[:height] ])
+    system('xwit -id %s -move %d %d -resize %d %d' % [ id, props[:x], props[:y], props[:width], props[:height] ])
 
     # Move the mouse cursor to the center of the window
-    system("xwit -id %s -sync -focus -warp %d %d" % [ id, props[:width] / 2, props[:height] / 2 ])
+    system('xwit -id %s -sync -focus -warp %d %d' % [ id, props[:width] / 2, props[:height] / 2 ])
   end
 
   # Cleanup method that gets called after every tiling action
   def self.cleanup(force = false, cycles = 1000)
     # Only run after the given number of cycles
-    if force or !@counter or (@counter -= 1).zero?
+    if force || !@counter || (@counter -= 1).zero?
       @counter = cycles
 
       # Purge all windows that don't exist anymore
@@ -464,14 +454,14 @@ def run
 
   opts.banner = "Usage: #{File.basename $0} [OPTIONS] MODE"
 
-  opts.separator ""
-  opts.separator "Options:"
+  opts.separator ''
+  opts.separator 'Options:'
 
-  opts.on '-i', '--id WINDOW_ID', String, "Use specified window instead of current window" do |id|
+  opts.on '-i', '--id WINDOW_ID', String, 'Use specified window instead of current window' do |id|
     @id = id
   end
 
-  opts.on '-v', '--verbose', "Show debug information" do
+  opts.on '-v', '--verbose', 'Show debug information' do
     def debug(*message)
       message = message.map do |m|
         m.is_a?(String) ? m : m.inspect
@@ -481,78 +471,77 @@ def run
     end
   end
 
-  opts.on '-h', '--help', "Show this message", &usage
+  opts.on '-h', '--help', 'Show this message', &usage
 
-  opts.separator ""
-  opts.separator "Tiling Modes:"
+  opts.separator ''
+  opts.separator 'Tiling Modes:'
 
-  modes = "  "
+  modes = '  '
   Lazytile::TILING_MODES.keys.map(&:to_s).sort.each_with_index do |mode, i|
-    if i > 0 and i % 5 == 0
+    if i > 0 && (i % 5).zero?
       opts.separator modes
-      modes = "  "
+      modes = '  '
     end
     modes << "#{mode}, "
   end
   opts.separator modes
 
-  opts.separator ""
-  opts.separator "Other Commands:"
-  opts.separator "  status, start, stop, restart"
-  opts.separator ""
+  opts.separator ''
+  opts.separator 'Other Commands:'
+  opts.separator '  status, start, stop, restart'
+  opts.separator ''
 
   opts.parse!
 
   case arg = ARGV[0]
-    # Show the daemon status
-    when 's', 'status'
-      puts "Lazytile daemon is#{Lazytile.running? ? '' : ' not'} running."
-      exit
+  # Show the daemon status
+  when 's', 'status'
+    puts "Lazytile daemon is#{Lazytile.running? ? '' : ' not'} running."
+    exit
 
-    # Kill the daemon
-    when 'stop'
-      unless Lazytile.running?
-        puts "Lazytile daemon is not running."
-        exit false
-      end
+  # Kill the daemon
+  when 'stop'
+    unless Lazytile.running?
+      puts 'Lazytile daemon is not running.'
+      exit false
+    end
 
-      Lazytile.kill_daemon
+    Lazytile.kill_daemon
 
-      if Lazytile.running?
-        puts "Couldn't stop Lazytile daemon."
-        exit true
-      else
-        puts "Successfully stopped Lazytile daemon."
-        exit false
-      end
-
-    # Restart the daemon
-    when 'r', 'start', 'restart'
-      running = Lazytile.running?
-      Lazytile.kill_daemon
-      Lazytile.start_daemon
-      if Lazytile.running?
-        puts "Successfully #{running ? 'restarted' : 'started'} Lazytile daemon."
-        exit true
-      else
-        puts "Couldn't restart Lazytile daemon."
-        exit false
-      end
-
-    # Show the usage help
-    when nil
-      usage.call
-
-    # Use the argument as tiling mode command
+    if Lazytile.running?
+      puts "Couldn't stop Lazytile daemon."
+      exit true
     else
-      if Lazytile::TILING_MODES[arg.to_sym]
-        Lazytile.tile arg, @id
-      else
-        puts "Error: Invalid tiling mode '#{arg}'\n\n"
-        usage.call
-      end
-  end
+      puts 'Successfully stopped Lazytile daemon.'
+      exit false
+    end
 
+  # Restart the daemon
+  when 'r', 'start', 'restart'
+    running = Lazytile.running?
+    Lazytile.kill_daemon
+    Lazytile.start_daemon
+    if Lazytile.running?
+      puts "Successfully #{running ? 'restarted' : 'started'} Lazytile daemon."
+      exit true
+    else
+      puts "Couldn't restart Lazytile daemon."
+      exit false
+    end
+
+  # Show the usage help
+  when nil
+    usage.call
+
+  # Use the argument as tiling mode command
+  else
+    if Lazytile::TILING_MODES[arg.to_sym]
+      Lazytile.tile arg, @id
+    else
+      puts "Error: Invalid tiling mode '#{arg}'\n\n"
+      usage.call
+    end
+  end
 rescue OptionParser::ParseError => exception
   if defined? usage
     puts exception.message

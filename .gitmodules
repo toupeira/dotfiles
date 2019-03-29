@@ -166,9 +166,6 @@
 [submodule "vim/bundle/textobj-variable-segment"]
 	path = vim/bundle/textobj-variable-segment
 	url = https://github.com/Julian/vim-textobj-variable-segment.git
-[submodule "vim/bundle/tagbar"]
-	path = vim/bundle/tagbar
-	url = https://github.com/majutsushi/tagbar.git
 [submodule "vim/bundle/papercolor"]
 	path = vim/bundle/papercolor
 	url = https://github.com/NLKNguyen/papercolor-theme.git
@@ -220,21 +217,9 @@
 [submodule "rbenv/plugins/whatis"]
 	path = rbenv/plugins/whatis
 	url = https://github.com/toy/rbenv-whatis.git
-[submodule "vim/bundle/ncm2"]
-	path = vim/bundle/ncm2
-	url = https://github.com/ncm2/ncm2.git
 [submodule "vim/bundle/nvim-yarp"]
 	path = vim/bundle/nvim-yarp
 	url = https://github.com/roxma/nvim-yarp.git
-[submodule "vim/bundle/ncm2-bufword"]
-	path = vim/bundle/ncm2-bufword
-	url = https://github.com/ncm2/ncm2-bufword.git
-[submodule "vim/bundle/ncm2-path"]
-	path = vim/bundle/ncm2-path
-	url = https://github.com/ncm2/ncm2-path.git
-[submodule "vim/bundle/ncm2-otherbuf"]
-	path = vim/bundle/ncm2-otherbuf
-	url = https://github.com/fgrsnau/ncm2-otherbuf.git
 [submodule "vim/bundle/fzf"]
 	path = vim/bundle/fzf
 	url = https://github.com/junegunn/fzf.vim.git
@@ -247,9 +232,6 @@
 [submodule "vim/bundle/lsp"]
 	path = vim/bundle/lsp
 	url = https://github.com/prabirshrestha/vim-lsp.git
-[submodule "vim/bundle/ncm2-lsp"]
-	path = vim/bundle/ncm2-lsp
-	url = https://github.com/ncm2/ncm2-vim-lsp.git
 [submodule "vim/bundle/tmux"]
 	path = vim/bundle/tmux
 	url = https://github.com/tmux-plugins/vim-tmux.git
@@ -265,3 +247,21 @@
 [submodule "vim/bundle/go"]
 	path = vim/bundle/go
 	url = https://github.com/fatih/vim-go.git
+[submodule "vim/bundle/coc"]
+	path = vim/bundle/coc
+	url = https://github.com/neoclide/coc.nvim.git
+[submodule "vim/bundle/deoplete"]
+	path = vim/bundle/deoplete
+	url = https://github.com/Shougo/deoplete.nvim.git
+[submodule "vim/bundle/deoplete-lsp"]
+	path = vim/bundle/deoplete-lsp
+	url = https://github.com/lighttiger2505/deoplete-vim-lsp.git
+[submodule "vim/bundle/neco-syntax"]
+	path = vim/bundle/neco-syntax
+	url = https://github.com/Shougo/neco-syntax.git
+[submodule "vim/bundle/neco-vim"]
+	path = vim/bundle/neco-vim
+	url = https://github.com/Shougo/neco-vim.git
+[submodule "vim/bundle/vista"]
+	path = vim/bundle/vista
+	url = https://github.com/liuchengxu/vista.vim.git

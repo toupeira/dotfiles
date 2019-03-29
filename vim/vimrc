@@ -16,6 +16,8 @@
     let g:pathogen_disabled = []
   endif
 
+  call add(g:pathogen_disabled, 'coc')
+
   " only enable tmux plugins in tmux sessions
   if empty($TMUX)
     call add(g:pathogen_disabled, 'tmux-complete')
@@ -46,6 +48,7 @@
   set backupcopy=auto
   set modeline
   set modelines=2
+  set updatetime=100
 
   if v:version > 703 && !has('nvim')
     set cryptmethod=blowfish
@@ -99,6 +102,13 @@
 
   syntax on
   colorscheme desertink
+
+  " colorscheme PaperColor
+  " hi! link Folded StatusLineNC
+  " hi! LineNr guibg=#121212
+  " hi! clear Visual
+  " hi! Visual guibg=#005F87
+  " hi! VisualNOS guibg=#004866
 
   " ambience theme from terminator
   if has('nvim')
@@ -182,7 +192,7 @@
   autocmd vimrc QuickFixCmdPost *grep* if len(getqflist()) | copen | endif
 
   " highlight trailing whitespace
-  autocmd vimrc VimEnter,Colorscheme * highlight Whitespace ctermbg=235 guibg=#333333
+  autocmd vimrc VimEnter,Colorscheme * hi! Whitespace ctermbg=235 guibg=#333333
   autocmd vimrc VimEnter,Colorscheme * match Whitespace /[^ \t]\s\+$/
 
   " go to last cursor position when opening files
@@ -480,14 +490,14 @@ endfunction " }}}
   " shortcut for desktop clipboard
   noremap + "+
 
-  " jump to lines with <count><Space>
-  nmap <expr> <Space> v:count ? "gg" : "<Space>"
-
   " don't use exact searches for */#
   noremap * g*
   noremap # g#
   noremap g* *
   noremap g# #
+
+  " break undo chain on new lines
+  inoremap <CR> <C-g>u<CR>
 
   " duplicate the selection
   vnoremap D y`]pgv
@@ -586,7 +596,7 @@ endfunction " }}}
 
   " keep clipboard when leaving Vim
   if exists('$DISPLAY')
-    autocmd VimLeave * call system('xclip -selection clipboard -o | xclip -selection clipboard -i')
+    autocmd vimrc VimLeave * call system('xclip -selection clipboard -o | xclip -selection clipboard -i')
   endif
 
   " ,q and ,e - toggle quickfix window and location list
@@ -625,8 +635,9 @@ endfunction " }}}
   endfunction " }}}
 
   " resize quickfix windows to their content, or 20 lines maximum
-  autocmd vimrc FileType qf call <SID>ResizeWindow(2, 20)
+  autocmd vimrc FileType qf,ale-preview call <SID>ResizeWindow(2, 20)
   function! s:ResizeWindow(min, max) " {{{
+    nnoremap <buffer><silent> q :bd<CR>
     let max = min([a:max, &lines / 3])
     execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
   endfunction " }}}
@@ -768,17 +779,20 @@ endfunction " }}}
   let g:webdevicons_enable_airline_statusline = 0
   " }}}
 
-  " tagbar {{{
-  let g:tagbar_autoclose = 1
-  let g:tagbar_compact = 1
-  let g:tagbar_previewwin_pos = 'rightbelow'
-  let g:tagbar_width = 30
+  " vista {{{
+  nnoremap <silent> ,t :Vista finder vim_lsp<CR>
+  nnoremap <silent> ,T :Vista!!<CR>
 
-  nnoremap <silent> ,T :TagbarToggle<CR>
+  " let g:vista_finder_alternative_executives = [ 'ctags' ]
+  let g:vista_executive_for = {
+    \ 'javascript': 'vim_lsp',
+    \ 'typescript': 'vim_lsp',
+    \ 'ruby': 'vim_lsp'
+  \ }
   " }}}
 
   " pasta {{{
-  let g:pasta_disabled_filetypes = [ 'python', 'coffee', 'markdown', 'yaml', 'slim', 'tagbar' ]
+  let g:pasta_disabled_filetypes = [ 'python', 'coffee', 'markdown', 'yaml', 'slim' ]
   " }}}
 
   " diff-enhanced {{{
@@ -872,70 +886,115 @@ endfunction " }}}
   " }}}
 
   " ale {{{
-  highlight! link ALEWarning Whitespace
+  if index(g:pathogen_disabled, 'ale') == -1
+    nnoremap <silent> ,E :ALEDetail<CR>
 
-  let g:ale_lint_on_text_changed = 'normal'
-  let g:ale_lint_on_insert_leave = 1
-  let g:ale_set_balloons = 0
+    highlight! link ALEWarning Whitespace
 
-  let g:ale_linters = {
-    \ 'ruby': [ 'ruby', 'rubocop' ],
-    \ 'javascript': [ 'eslint' ],
-    \ 'typescript': [ 'tslint', 'tsserver' ]
-  \ }
+    let g:ale_lint_on_text_changed = 'normal'
+    let g:ale_lint_on_insert_leave = 1
+    let g:ale_set_balloons = 0
 
-  let g:ale_sh_shellcheck_options = '-e 2086,2155,2164'
+    let g:ale_linters = {
+      \ 'ruby': [ 'ruby', 'rubocop' ],
+      \ 'javascript': [ 'eslint' ],
+      \ 'typescript': [ 'tslint' ]
+    \ }
 
-  let g:airline#extensions#ale#show_line_numbers = 0
-  let g:airline#extensions#ale#warning_symbol = ''
-  let g:airline#extensions#ale#error_symbol = ''
+    let g:ale_sh_shellcheck_options = '-e 2086,2155,2164'
 
-  " let g:syntastic_elixir_checkers = [ 'dogma' ]
-  " let g:syntastic_elm_checkers = [ 'elm_make' ]
-  " let g:syntastic_html_checkers = [ 'htmlhint' ]
-  " let g:syntastic_javascript_checkers = [ 'jshint' ]
-  " let g:syntastic_python_checkers = [ 'python' ]
-  " let g:syntastic_ruby_checkers = [ 'mri' ]
-  " let g:syntastic_sh_checkers = [ 'sh' ]
-  " let g:syntastic_slim_checkers = []
+    let g:airline#extensions#ale#show_line_numbers = 0
+    let g:airline#extensions#ale#warning_symbol = ''
+    let g:airline#extensions#ale#error_symbol = ''
 
-  " autocmd vimrc BufRead,BufNewFile ~/.cdist/manifest/*,~/.cdist/type/*/*
-  "     \ let b:syntastic_checkers = [ 'sh' ]
+    " let g:syntastic_elixir_checkers = [ 'dogma' ]
+    " let g:syntastic_elm_checkers = [ 'elm_make' ]
+    " let g:syntastic_html_checkers = [ 'htmlhint' ]
+    " let g:syntastic_javascript_checkers = [ 'jshint' ]
+    " let g:syntastic_python_checkers = [ 'python' ]
+    " let g:syntastic_ruby_checkers = [ 'mri' ]
+    " let g:syntastic_sh_checkers = [ 'sh' ]
+    " let g:syntastic_slim_checkers = []
+
+    " autocmd vimrc BufRead,BufNewFile ~/.cdist/manifest/*,~/.cdist/type/*/*
+    "     \ let b:syntastic_checkers = [ 'sh' ]
+  endif
   " }}}
 
   " lsp {{{
   if index(g:pathogen_disabled, 'lsp') == -1
-    au User lsp_setup call lsp#register_server({
-      \ 'name': 'ruby',
-      \ 'cmd': { server_info -> ['solargraph', 'stdio'] },
-      \ 'whitelist': ['ruby']
-    \ })
-    au User lsp_setup call lsp#register_server({
-      \ 'name': 'javascript',
-      \ 'cmd': { server_info -> ['javascript-typescript-stdio'] },
-      \ 'whitelist': ['javascript']
-    \ })
-    au User lsp_setup call lsp#register_server({
-      \ 'name': 'typescript',
-      \ 'cmd': { server_info -> ['javascript-typescript-stdio'] },
-      \ 'whitelist': ['typescript']
-    \ })
+    let g:lsp_diagnostics_enabled = 0
+
+    if executable('solargraph')
+      au User lsp_setup call lsp#register_server({
+        \ 'name': 'ruby',
+        \ 'cmd': { server_info -> ['solargraph', 'stdio'] },
+        \ 'whitelist': ['ruby']
+      \ })
+    endif
+
+    if executable('javascript-typescript-stdio')
+      au User lsp_setup call lsp#register_server({
+        \ 'name': 'javascript',
+        \ 'cmd': { server_info -> ['javascript-typescript-stdio'] },
+        \ 'whitelist': ['javascript']
+      \ })
+      au User lsp_setup call lsp#register_server({
+        \ 'name': 'typescript',
+        \ 'cmd': { server_info -> ['javascript-typescript-stdio'] },
+        \ 'whitelist': ['typescript']
+      \ })
+    endif
   endif
   " }}}
 
-  " ncm2 {{{
-  if index(g:pathogen_disabled, 'ncm2') == -1
-    autocmd BufEnter * call ncm2#enable_for_buffer()
+  " deoplete {{{
+  if index(g:pathogen_disabled, 'deoplete') == -1
+    let g:deoplete#enable_at_startup = 1
 
-    " <Tab> - accept completion
-    inoremap <expr> <Tab> pumvisible() ? "\<C-y>" : "\<Tab>"
+    " <Tab> - trigger and accept completion
+    inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-y>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ deoplete#mappings#manual_complete()
+
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
+    endfunction
 
     " <CR> - reject completion and close popup
-    inoremap <CR> <C-r>=<SID>CloseCompletionPopup()<CR><CR>
-    function! s:CloseCompletionPopup()
-      return pumvisible() ? "\<C-e>" : ""
+    inoremap <CR> <C-r>=(pumvisible() ? "<C-e>" : "")<CR><C-g>u<CR>
+  endif
+  " }}}
+
+  " coc {{{
+  if index(g:pathogen_disabled, 'coc') == -1
+    let g:coc_global_extensions = [
+      \ 'coc-highlight',
+      \ 'coc-pairs',
+      \ 'coc-syntax',
+      \ 'coc-css',
+      \ 'coc-html',
+      \ 'coc-json',
+      \ 'coc-solargraph',
+      \ 'coc-tsserver',
+      \ 'coc-yaml'
+    \ ]
+
+    " <Tab> - trigger and accept completion
+    inoremap <silent><expr> <Tab>
+      \ pumvisible() ? "\<C-y>" :
+      \ <SID>check_back_space() ? "\<Tab>" :
+      \ coc#refresh()
+
+    function! s:check_back_space() abort
+      let col = col('.') - 1
+      return !col || getline('.')[col - 1]  =~ '\s'
     endfunction
-    "
+
+    " <CR> - reject completion and close popup
+    inoremap <CR> <C-r>=(pumvisible() ? "<C-e>" : "")<CR><C-g>u<CR>
   endif
   " }}}
 
@@ -953,9 +1012,8 @@ endfunction " }}}
 
     let g:airline#extensions#hunks#enabled = 0
     let g:airline#extensions#quickfix#enabled = 0
+    let g:airline#extensions#tagbar#enabled = 0
     let g:airline#extensions#whitespace#enabled = 0
-
-    let g:airline#extensions#tagbar#enabled = 1
 
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#buffers_label = 'b'
@@ -1010,23 +1068,28 @@ endfunction " }}}
       \ 'b': 80
     \ }
 
-    " hide tag in small windows
-    call airline#parts#define_minwidth('tagbar', 100)
-
     " show file directory separately from file name
     call airline#parts#define_raw('file', '%t%m')
     call airline#parts#define_raw('filepath', '%#airline_filepath#❰%<%{ProjectFilepath(0)}❱')
     let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
 
-    hi airline_filepath term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
-    hi airline_filepath_inactive term=bold cterm=bold ctermfg=238 ctermbg=235 gui=bold guifg=#555555 guibg=#303030
-    hi airline_filepath_insert term=bold cterm=bold ctermfg=238 ctermbg=135 gui=bold guifg=#555555 guibg=#303030
+    hi! airline_filepath          term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
+    hi! airline_filepath_inactive term=bold cterm=bold ctermfg=238 ctermbg=235 gui=bold guifg=#555555 guibg=#303030
+
+    " show current tag
+    call airline#parts#define_raw('tag', '%#airline_tag#%{VistaTag()}')
+    hi! airline_tag ctermbg=235 guibg=#303030 ctermfg=215 guifg=#ffc266
+
+    function! VistaTag() abort
+      return get(b:, 'vista_nearest_method_or_function', '')
+    endfunction
+    autocmd vimrc VimEnter * call vista#RunForNearestMethodOrFunction()
 
     " switch filetype and format/encoding, and only show
     " file format and encoding if it's not the default
     let g:airline_section_x = airline#section#create([
-      \ 'tagbar',
-      \ "%{&ff == 'unix' ? '' : WebDevIconsGetFileFormatSymbol()}%{&fenc == 'utf-8' ? '' : ' ' . &fenc}"
+      \ 'tag',
+      \ "%{&ff == 'unix' ? '' : '  ' . WebDevIconsGetFileFormatSymbol()}%{&fenc == 'utf-8' ? '' : '   ' . &fenc}"
     \ ])
     let g:airline_section_y = airline#section#create(['%{WebDevIconsGetFileTypeSymbol()} %{&ft}'])
 
@@ -1045,7 +1108,7 @@ endfunction " }}}
     nnoremap <silent> ,b :Buffers<CR>
     nnoremap <silent> ,l :BLines<CR>
     nnoremap <silent> ,L :Lines<CR>
-    nnoremap <silent> ,t :BTags<CR>
+    " nnoremap <silent> ,t :BTags<CR>
 
     nnoremap <silent> ,gg :Rg<CR>
     nnoremap <expr>   ,G ':Rg '.expand('<cword>')
@@ -1054,29 +1117,50 @@ endfunction " }}}
     nnoremap <silent> ,gs :GFiles?<CR>
     nnoremap <silent> ,gl :Commits<CR>
     nnoremap <silent> ,gL :BCommits<CR>
+    nnoremap <silent> ,gb :Branches<CR>
 
     nnoremap <silent> ,: :History:<CR>
     nnoremap <silent> ,/ :History/<CR>
     nnoremap <silent> ,? :Maps<CR>
 
     " hide statusline in bottom window
-    autocmd! FileType fzf
-    autocmd  FileType fzf echo
+    autocmd! vimrc FileType fzf
+    autocmd  vimrc FileType fzf echo
       \| set noshowmode
       \| execute "if winnr() == winnr('$') | set laststatus=0 | endif"
-      \| autocmd BufLeave <buffer> set laststatus=2 showmode
+      \| autocmd vimrc BufLeave <buffer> set laststatus=2 showmode
 
-    " add files preview
+    " add preview to :Files
     command! -bang -nargs=? -complete=dir Files
       \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({}, 'right:hidden'), <bang>0)
 
-    " add rg preview
+    " add preview to :Rg
     command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
       \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
       \   <bang>0 ? fzf#vim#with_preview('right')
       \           : fzf#vim#with_preview('right:hidden'),
       \   <bang>0)
+
+    " add :Branches command
+    function! s:open_branch_fzf(line)
+      let l:parser = split(a:line)
+      let l:branch = l:parser[0]
+      if l:branch ==? '*'
+        let l:branch = l:parser[1]
+      endif
+      execute '!git checkout ' . l:branch
+    endfunction
+
+    command! -bang -nargs=0 Branches
+      \ call fzf#vim#grep(
+      \   'git branches', 0,
+      \   {
+      \     'sink': function('s:open_branch_fzf'),
+      \     'options': ['--prompt', 'Branches>']
+      \   },
+      \   <bang>0
+      \ )
   endif
   " }}}
 

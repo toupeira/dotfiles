@@ -44,9 +44,7 @@ has pgcli && has_completion psql && \
 # git completions
 if has_completion git; then
   __git_complete g _git
-  __git_complete st _git_status
-  __git_complete co _git_checkout
-  function _git_co { _git_checkout; }
+  function _git_c { _git_checkout; }
   function _git_create_branch { _git_checkout; }
 
   _completion_loader git-extras

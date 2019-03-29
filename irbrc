@@ -7,6 +7,7 @@
   begin
     require lib
   rescue LoadError
+    nil
   end
 end
 
@@ -19,10 +20,10 @@ if defined? IRB
   IRB.conf[:AUTO_INDENT] = true
   IRB.conf[:IRB_RC] = proc do |conf|
     prompt = "#{conf.irb_name}[#{conf.workspace.main}] "
-    leader = " " * prompt.size
-    conf.prompt_i = "%N[%m] >>> "
-    conf.prompt_s = leader + " .. "
-    conf.prompt_n = conf.prompt_c = "%N[%m]  .. "
+    leader = ' ' * prompt.size
+    conf.prompt_i = '%N[%m] >>> '
+    conf.prompt_s = leader + ' .. '
+    conf.prompt_n = conf.prompt_c = '%N[%m]  .. '
     conf.return_format = " :: %s\n"
     print "\033]0;#{prompt}\007"
   end
@@ -34,7 +35,7 @@ def ls(*args)
 end
 
 def cd(dir = ENV['HOME'])
-  Dir.chdir(dir.to_s) and ls
+  Dir.chdir(dir.to_s) && ls
 end
 
 class Object

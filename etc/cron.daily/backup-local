@@ -10,92 +10,18 @@ TMPDIR=$(mktemp -d /tmp/backup-$HOSTNAME.XXXXXX)
 cd "$TMPDIR" || exit 1
 
 DEFAULT_EXCLUDE_PATHS="
-  --exclude /etc/dotfiles
   --exclude /proc
-
-  --exclude **/[Cc]ache*
-  --exclude **/*[Cc]ache
-  --exclude **/[Tt]mp
-  --exclude **/[Tt]emp
-  --exclude **/[Tt]rash
-  --exclude **/.[Cc]ache*
-  --exclude **/.[Tt]mp*
-  --exclude **/.[Tt]emp*
-  --exclude **/.[Tt]rash*
-
-  --include **/home/*/Dropbox/org
-  --exclude **/home/*/Dropbox
-  --exclude **/home/*/src
-  --exclude **/home/*/tmp
-
-  --exclude **/home/*/.android/avd
-  --exclude **/home/*/.cdist
-  --exclude **/home/*/.cinv
-  --exclude **/home/*/.config/chromium
-  --exclude **/home/*/.config/deluge/state
-  --exclude **/home/*/.config/Franz
-  --exclude **/home/*/.config/google-chrome
-  --exclude **/home/*/.config/google-chrome-unstable
-  --exclude **/home/*/.config/opera
-  --exclude **/home/*/.config/retroarch
-  --exclude **/home/*/.config/teamviewer10
-  --exclude **/home/*/.config/yarn/global
-  --exclude **/home/*/.cordova
-  --exclude **/home/*/.dropbox
-  --exclude **/home/*/.dropbox-dist*
-  --exclude **/home/*/.gem
-  --exclude **/home/*/.gvfs
-  --exclude **/home/*/.helm
-  --exclude **/home/*/.hex
-  --exclude **/home/*/.kodi
-  --exclude **/home/*/.local/lib/python*
-  --exclude **/home/*/.local/share/akonadi
-  --exclude **/home/*/.local/share/gnome-shell
-  --exclude **/home/*/.local/share/gvfs-metadata
-  --exclude **/home/*/.local/share/heroku
-  --exclude **/home/*/.local/share/teamviewer11
-  --exclude **/home/*/.local/share/Zeal
-  --exclude **/home/*/.macromedia
-  --exclude **/home/*/.meteor
-  --exclude **/home/*/.mozilla/firefox/Crash*
-  --exclude **/home/*/.mozilla/firefox/*/browser-extension*
-  --exclude **/home/*/.mozilla/firefox/*/cert*
-  --exclude **/home/*/.mozilla/firefox/*/cookies*
-  --exclude **/home/*/.mozilla/firefox/*/extensions*
-  --exclude **/home/*/.mozilla/firefox/*/favicons*
-  --exclude **/home/*/.mozilla/firefox/*/formhistory*
-  --exclude **/home/*/.mozilla/firefox/*/lazarus*
-  --exclude **/home/*/.mozilla/firefox/*/places*
-  --exclude **/home/*/.mozilla/firefox/*/saved-telemetry-pings*
-  --exclude **/home/*/.mozilla/firefox/*/sessionstore*
-  --exclude **/home/*/.mozilla/firefox/*/storage*
-  --exclude **/home/*/.mozilla/firefox/*/webapps*
-  --exclude **/home/*/.nenv
-  --exclude **/home/*/.node-gyp
-  --exclude **/home/*/.npm
-  --exclude **/home/*/.password-store
-  --exclude **/home/*/.rbenv
-  --exclude **/home/*/.secrets
-  --exclude **/home/*/.Skype
-  --exclude **/home/*/.thumbnails
-  --exclude **/home/*/.vagrant.d
-  --exclude **/home/*/.vscode
 "
 
 DEFAULT_INCLUDE_PATHS="
-  --include /etc
-  --include /home
-  --include /root
-  --include /var/backups
-  --include /var/mail
 "
 
 function log {
   date "+$( basename "$0" ) [%Y-%m-%d %T] $1" >> "$LOGFILE"
 }
 
-log "Starting backup"
 rm -f "$LOGFILE"
+log "Starting backup"
 
 for file in /etc/backup.d/*; do
   if [ -x "$file" ]; then
@@ -122,7 +48,7 @@ rdiff-backup --print-statistics --exclude-fifos --exclude-sockets \
 
 echo >> "$LOGFILE"
 log "Purging old backups..."
-rdiff-backup --remove-older-than 3M -v2 --force "$BACKUP" >> "$LOGFILE"
+rdiff-backup --remove-older-than 1M -v2 --force "$BACKUP" >> "$LOGFILE"
 
 echo >> "$LOGFILE"
 log "Backing up package lists"

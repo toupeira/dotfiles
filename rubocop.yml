@@ -1,18 +1,68 @@
 AllCops:
+  DisplayCopNames: false
   Exclude:
     - db/schema.rb
-
-### METRICS
-
-Metrics/LineLength:
-  Max: 120
 
 ### LAYOUT
 
 Layout/IndentHash:
   EnforcedStyle: consistent
 
+Layout/SpaceInsideArrayLiteralBrackets:
+  EnforcedStyle: space
+
+Layout/SpaceInsidePercentLiteralDelimiters:
+  Enabled: false
+
+### LINT
+
+Lint/AssignmentInCondition:
+  Enabled: false
+
+### METRICS
+
+Metrics/ClassLength:
+  Max: 300
+
+Metrics/LineLength:
+  Max: 150
+
+Metrics/MethodLength:
+  Max: 40
+
+Metrics/AbcSize:
+  Max: 20
+
+Metrics/CyclomaticComplexity:
+  Max: 20
+
+Metrics/PerceivedComplexity:
+  Max: 20
+
+### SECURITY
+
+Security/Open:
+  Enabled: false
+
 ### STYLE
+
+Style/Documentation:
+  Enabled: false
+
+Style/FormatString:
+  Enabled: false
+
+Style/FormatStringToken:
+  Enabled: false
+
+Style/GuardClause:
+  Enabled: false
+
+Style/TernaryParentheses:
+  EnforcedStyle: require_parentheses_when_complex
+
+Style/SpecialGlobalVars:
+  Enabled: false
 
 Style/TrailingCommaInArguments:
   EnforcedStyleForMultiline: comma

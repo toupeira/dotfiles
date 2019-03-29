@@ -73,12 +73,8 @@ fi
 if has autojump; then
   . /usr/share/autojump/autojump.bash
 
-  eval "$(
-    echo "_j()";
-    declare -f j \
-      | tail -n +2 \
-      | sed -r 's/echo .*output.*/:/'
-  )"
+  # don't output the jumped directory
+  eval "_j() $( declare -f j | tail -n +2 | sed -r 's/echo .*output.*/:/' )"
 
   function j {
     if [ $# -gt 0 ]; then
@@ -92,7 +88,7 @@ if has autojump; then
         | sort -nr \
         | cut -f2 \
         | sed -r "s#^$HOME#~#" \
-        | fzf +s --expect alt-d
+        | fzf +s --no-multi --prompt 'Jump> ' --expect alt-d
     )
 
     mapfile -t out <<< "$out"

@@ -6,6 +6,7 @@
   begin
     require lib
   rescue LoadError
+    nil
   end
 end
 ### }}}
