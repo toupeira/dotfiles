@@ -75,7 +75,7 @@
     background_type = transparent
     cursor_blink = False
     cursor_color = "#ebebe9"
-    font = DejaVuSansMono Nerd Font 10.5
+    font = DejaVuSansMono Nerd Font 10.7
     foreground_color = "#ffffff"
     show_titlebar = False
     scrollbar_position = hidden

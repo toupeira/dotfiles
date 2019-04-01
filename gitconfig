@@ -90,6 +90,7 @@
   h = help
   s = status
   st = status
+  sta = -c diff.ignoreSubmodules=none st
 
   l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
   ls = "!cd ${GIT_PREFIX:-.} && git l --stat"

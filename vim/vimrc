@@ -894,10 +894,9 @@ endfunction " }}}
     let g:ale_lint_on_insert_leave = 1
     let g:ale_lint_on_text_changed = 'normal'
 
-    let g:ale_echo_cursor = 0
     let g:ale_set_balloons = 0
     let g:ale_virtualtext_cursor = 1
-    let g:ale_virtualtext_prefix = '→ '
+    let g:ale_virtualtext_prefix = '// → '
 
     let g:airline#extensions#ale#show_line_numbers = 0
     let g:airline#extensions#ale#warning_symbol = ''
@@ -1169,6 +1168,9 @@ endfunction " }}}
 
   " blame-line {{{
   nnoremap <silent> ,B :ToggleBlameLine<CR>
+
+  let g:blameLineVirtualTextHighlight = 'Question'
+  let g:blameLineVirtualTextPrefix = '// → '
   " }}}
 
 " }}}
