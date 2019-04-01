@@ -9,4 +9,3 @@ rbenv/shims
 rbenv/versions
 spacemacs.d/private
 tmux/.ssh-agent
-vim/tmp

@@ -265,3 +265,9 @@
 [submodule "vim/bundle/vista"]
 	path = vim/bundle/vista
 	url = https://github.com/liuchengxu/vista.vim.git
+[submodule "vim/bundle/blame-line"]
+	path = vim/bundle/blame-line
+	url = https://github.com/tveskag/nvim-blame-line.git
+[submodule "vim/bundle/bufferize"]
+	path = vim/bundle/bufferize
+	url = https://github.com/AndrewRadev/bufferize.vim.git

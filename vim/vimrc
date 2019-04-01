@@ -16,6 +16,9 @@
     let g:pathogen_disabled = []
   endif
 
+  " disable netrw
+  let g:loaded_netrwPlugin = 1
+
   call add(g:pathogen_disabled, 'coc')
 
   " only enable tmux plugins in tmux sessions
@@ -451,7 +454,7 @@ endfunction " }}}
 
   " Spacemacs escape hatch
   nmap <Space>- ,s
-  nmap <Space>\| ,v
+  nmap <Space>= ,v
   nmap <Space><Backspace> ,c
   nmap <Space><CR> ,w
 
@@ -638,6 +641,7 @@ endfunction " }}}
   autocmd vimrc FileType qf,ale-preview call <SID>ResizeWindow(2, 20)
   function! s:ResizeWindow(min, max) " {{{
     nnoremap <buffer><silent> q :bd<CR>
+    nnoremap <buffer><silent> ,E :bd<CR>
     let max = min([a:max, &lines / 3])
     execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
   endfunction " }}}
@@ -733,18 +737,6 @@ endfunction " }}}
     endif
   endfunction " }}}
 
-  " F4 / F5 - change window height
-  nnoremap <silent> <F4> <C-w>+
-  imap <silent> <F4> <C-o><F4>
-  nnoremap <silent> <F5> <C-w>-
-  imap <silent> <F5> <C-o><F5>
-
-  " F6 / F7 - change window width
-  nnoremap <silent> <F6> <C-w>>
-  imap <silent> <F6> <C-o><F6>
-  nnoremap <silent> <F7> <C-w><
-  imap <silent> <F7> <C-o><F7>
-
 " }}}
 
 " Plugin Settings
@@ -782,6 +774,11 @@ endfunction " }}}
   " vista {{{
   nnoremap <silent> ,t :Vista finder vim_lsp<CR>
   nnoremap <silent> ,T :Vista!!<CR>
+
+  let g:vista_sidebar_width = 40
+  let g:vista_blink = [1, 100]
+  let g:vista_icon_indent = ["● ", "▶ "]
+  let g:vista_fzf_preview = ['right:hidden:70%']
 
   " let g:vista_finder_alternative_executives = [ 'ctags' ]
   let g:vista_executive_for = {
@@ -890,10 +887,21 @@ endfunction " }}}
     nnoremap <silent> ,E :ALEDetail<CR>
 
     highlight! link ALEWarning Whitespace
+    highlight! ALEVirtualTextWarning guifg=#777777
+    highlight! ALEVirtualTextError guifg=#ff4040 gui=bold
+    highlight! link ALEVirtualTextInfo Question
 
-    let g:ale_lint_on_text_changed = 'normal'
     let g:ale_lint_on_insert_leave = 1
+    let g:ale_lint_on_text_changed = 'normal'
+
+    let g:ale_echo_cursor = 0
     let g:ale_set_balloons = 0
+    let g:ale_virtualtext_cursor = 1
+    let g:ale_virtualtext_prefix = '→ '
+
+    let g:airline#extensions#ale#show_line_numbers = 0
+    let g:airline#extensions#ale#warning_symbol = ''
+    let g:airline#extensions#ale#error_symbol = ''
 
     let g:ale_linters = {
       \ 'ruby': [ 'ruby', 'rubocop' ],
@@ -902,22 +910,6 @@ endfunction " }}}
     \ }
 
     let g:ale_sh_shellcheck_options = '-e 2086,2155,2164'
-
-    let g:airline#extensions#ale#show_line_numbers = 0
-    let g:airline#extensions#ale#warning_symbol = ''
-    let g:airline#extensions#ale#error_symbol = ''
-
-    " let g:syntastic_elixir_checkers = [ 'dogma' ]
-    " let g:syntastic_elm_checkers = [ 'elm_make' ]
-    " let g:syntastic_html_checkers = [ 'htmlhint' ]
-    " let g:syntastic_javascript_checkers = [ 'jshint' ]
-    " let g:syntastic_python_checkers = [ 'python' ]
-    " let g:syntastic_ruby_checkers = [ 'mri' ]
-    " let g:syntastic_sh_checkers = [ 'sh' ]
-    " let g:syntastic_slim_checkers = []
-
-    " autocmd vimrc BufRead,BufNewFile ~/.cdist/manifest/*,~/.cdist/type/*/*
-    "     \ let b:syntastic_checkers = [ 'sh' ]
   endif
   " }}}
 
@@ -933,16 +925,21 @@ endfunction " }}}
       \ })
     endif
 
-    if executable('javascript-typescript-stdio')
-      au User lsp_setup call lsp#register_server({
-        \ 'name': 'javascript',
-        \ 'cmd': { server_info -> ['javascript-typescript-stdio'] },
-        \ 'whitelist': ['javascript']
-      \ })
+    if executable('typescript-language-server')
+      " https://github.com/ryanolsonx/vim-lsp-typescript
       au User lsp_setup call lsp#register_server({
         \ 'name': 'typescript',
-        \ 'cmd': { server_info -> ['javascript-typescript-stdio'] },
-        \ 'whitelist': ['typescript']
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+        \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
+        \ 'whitelist': ['typescript', 'typescript.tsx'],
+      \ })
+
+      " https://github.com/ryanolsonx/vim-lsp-javascript
+      au User lsp_setup call lsp#register_server({
+        \ 'name': 'javascript',
+        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
+        \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'package.json'))},
+        \ 'whitelist': ['javascript', 'javascript.jsx'],
       \ })
     endif
   endif
@@ -1015,6 +1012,9 @@ endfunction " }}}
     let g:airline#extensions#tagbar#enabled = 0
     let g:airline#extensions#whitespace#enabled = 0
 
+    let g:airline#extensions#branch#format = 2
+    let g:airline#extensions#branch#displayed_head_limit = 16
+
     let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#buffers_label = 'b'
     let g:airline#extensions#tabline#tabs_label = 't'
@@ -1024,26 +1024,16 @@ endfunction " }}}
     let g:airline#extensions#tabline#buffer_min_count = 2
     let g:airline#extensions#tabline#fnamecollapse = 0
 
+    if !exists('g:airline_symbols')
+      let g:airline_symbols = {}
+    endif
+
+    let g:airline_symbols.notexists = '→‽'
+
     if has('gui_running') || exists('$TERMINATOR_UUID')
       let g:airline_powerline_fonts = 1
-
-      let g:airline#extensions#tabline#left_sep = ''
-      let g:airline#extensions#tabline#left_alt_sep = ''
     else
-      " unicode symbols
-      let g:airline_left_sep = '»'
-      let g:airline_left_sep = '▶'
-      let g:airline_right_sep = '«'
-      let g:airline_right_sep = '◀'
-
-      if !exists('g:airline_symbols')
-        let g:airline_symbols = {}
-      endif
       let g:airline_symbols.branch = '@'
-      let g:airline_symbols.linenr = ''
-
-      let g:airline#extensions#tabline#left_sep = g:airline_left_sep
-      let g:airline#extensions#tabline#left_alt_sep = ' '
     endif
 
     " add space after readonly symbol
@@ -1083,7 +1073,7 @@ endfunction " }}}
     function! VistaTag() abort
       return get(b:, 'vista_nearest_method_or_function', '')
     endfunction
-    autocmd vimrc VimEnter * call vista#RunForNearestMethodOrFunction()
+    autocmd vimrc BufRead * call vista#RunForNearestMethodOrFunction()
 
     " switch filetype and format/encoding, and only show
     " file format and encoding if it's not the default
@@ -1117,7 +1107,7 @@ endfunction " }}}
     nnoremap <silent> ,gs :GFiles?<CR>
     nnoremap <silent> ,gl :Commits<CR>
     nnoremap <silent> ,gL :BCommits<CR>
-    nnoremap <silent> ,gb :Branches<CR>
+    nnoremap <silent> ,gc :Checkout<CR>
 
     nnoremap <silent> ,: :History:<CR>
     nnoremap <silent> ,/ :History/<CR>
@@ -1132,18 +1122,27 @@ endfunction " }}}
 
     " add preview to :Files
     command! -bang -nargs=? -complete=dir Files
-      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({}, 'right:hidden'), <bang>0)
+      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({}, 'right:70%:hidden'), <bang>0)
 
     " add preview to :Rg
     command! -bang -nargs=* Rg
       \ call fzf#vim#grep(
       \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('right')
-      \           : fzf#vim#with_preview('right:hidden'),
+      \   <bang>0 ? fzf#vim#with_preview('right:70%')
+      \           : fzf#vim#with_preview('right:70%:hidden'),
       \   <bang>0)
 
-    " add :Branches command
-    function! s:open_branch_fzf(line)
+    " tweak :GFiles
+    command! -bang -nargs=? GFiles
+      \ call fzf#vim#gitfiles(
+      \   <q-args>, { 'options': [
+      \     '--ansi', '--multi', '--nth', '2..,..', '--tiebreak=index', '--prompt', 'GitFiles?> ',
+      \     '--preview', 'git diff --color=always HEAD -- {-1} | sed 1,4d | grep . || fzf-preview {-1}',
+      \     '--preview-window', 'right:70%'
+      \   ] })
+
+    " add :Checkout command
+    function! s:fzf_checkout(line)
       let l:parser = split(a:line)
       let l:branch = l:parser[0]
       if l:branch ==? '*'
@@ -1152,23 +1151,24 @@ endfunction " }}}
       execute '!git checkout ' . l:branch
     endfunction
 
-    command! -bang -nargs=0 Branches
+    command! -bang -nargs=0 Checkout
       \ call fzf#vim#grep(
-      \   'git branches', 0,
-      \   {
-      \     'sink': function('s:open_branch_fzf'),
-      \     'options': ['--prompt', 'Branches>']
-      \   },
-      \   <bang>0
-      \ )
+      \   'git branches', 0, {
+      \     'sink': function('s:fzf_checkout'),
+      \     'options': ['--prompt', 'Checkout> ']
+      \   }, <bang>0)
   endif
   " }}}
 
   " signify {{{
-  nnoremap <silent> ,gD :SignifyToggleHighlight<CR>
-  nnoremap <silent> ,gF :SignifyFold!<CR>
+  nnoremap <silent> ,D :SignifyToggleHighlight<CR>
+  nnoremap <silent> ,F :SignifyFold!<CR>
 
   let g:signify_vcs_list = ['git']
+  " }}}
+
+  " blame-line {{{
+  nnoremap <silent> ,B :ToggleBlameLine<CR>
   " }}}
 
 " }}}

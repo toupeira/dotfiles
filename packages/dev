@@ -28,9 +28,9 @@ npm:yarn
 yarn:caniuse-cmd
 yarn:eslint
 yarn:htmlhint
-yarn:javascript-typescript-langserver
 yarn:jsonlint
 yarn:stylelint
 yarn:tslint
 yarn:typescript
+yarn:typescript-language-server
 yarn:vmd
