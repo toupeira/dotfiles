@@ -198,9 +198,9 @@ case "$1" in
     [ -n "$title" ] || usage
 
     if [[ "$TERM" =~ ^(tmux|screen) ]]; then
-      echo -ne "\\033]0;$title\\007\\033k$title\\033\\"
+      echo -ne "\\033]0;$title\\007\\033k$title\\033\\" >&2
     else
-      echo -ne "\\033]1;$title\\007\\033]2;$title\\007"
+      echo -ne "\\033]1;$title\\007\\033]2;$title\\007" >&2
     fi
     ;;
 

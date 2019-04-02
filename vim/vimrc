@@ -887,9 +887,9 @@ endfunction " }}}
     nnoremap <silent> ,E :ALEDetail<CR>
 
     highlight! link ALEWarning Whitespace
-    highlight! ALEVirtualTextWarning guifg=#777777
+    highlight! ALEVirtualTextWarning guifg=#888888
     highlight! ALEVirtualTextError guifg=#ff4040 gui=bold
-    highlight! link ALEVirtualTextInfo Question
+    highlight! link ALEVirtualTextInfo ALEVirtualTextWarning
 
     let g:ale_lint_on_insert_leave = 1
     let g:ale_lint_on_text_changed = 'normal'

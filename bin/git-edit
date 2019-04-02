@@ -11,5 +11,5 @@ if [ "$1" != "!" ] && [ "$( echo "$files" | wc -l )" -gt 1 ]; then
 fi
 
 if [ -n "$files" ]; then
-  sensible-editor $( echo "$files" | cut -c 12- )
+  sensible-editor $( echo "$files" | sed -r 's/.* //' )
 fi

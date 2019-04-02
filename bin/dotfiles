@@ -608,31 +608,36 @@ function run {
         fi
       }
 
-      local missing_apt=$( get_missing dpkg "$packages_apt" "$(
-        dpkg --get-selections | cut -f1 | cut -d: -f1
-      )" )
+      [ -n "$packages_apt" ] && local missing_apt=$(
+        get_missing dpkg "$packages_apt" \
+        "$( dpkg --get-selections | cut -f1 | cut -d: -f1 )"
+      )
 
-      local missing_gem=$( get_missing gem "$packages_gem" "$(
-        sudo gem list | awk '/\(/ { print $1 }'
-      )" )
+      [ -n "$packages_gem" ] && local missing_gem=$(
+        get_missing gem "$packages_gem" \
+        "$( gem list | awk '/\(/ { print $1 }' )"
+      )
 
-      local missing_npm=$( get_missing npm "$packages_npm" "$(
-        npm -g list --depth=0 2>/dev/null | grep @ | cut -d\  -f2 | cut -d@ -f1
-      )" )
+      [ -n "$packages_npm" ] && local missing_npm=$(
+        get_missing npm "$packages_npm" \
+        "$( command ls /usr/lib/node_modules 2>/dev/null )"
+      )
 
-      local missing_yarn=$( get_missing yarn "$packages_yarn" "$(
-        command ls ~/.config/yarn/global/node_modules 2>/dev/null
-      )" )
+      [ -n "$packages_yarn" ] && local missing_yarn=$(
+        get_missing yarn "$packages_yarn" \
+        "$( command ls ~/.config/yarn/global/node_modules 2>/dev/null)"
+      )
 
-      local missing_pip=$( get_missing pip3 "$packages_pip" "$(
-        pip3 list | awk '{ print $1 }'
-      )" )
+      [ -n "$packages_pip" ] && local missing_pip=$(
+        get_missing pip3 "$packages_pip" \
+        "$( pip3 list | awk '{ print $1 }' )"
+      )
 
-      if [ -z "$missing_apt"  -a \
-           -z "$missing_gem"  -a \
-           -z "$missing_npm"  -a \
-           -z "$missing_yarn" -a \
-           -z "$missing_pip"  ]; then
+      if [ -z "$missing_apt"  ] &&
+         [ -z "$missing_gem"  ] && \
+         [ -z "$missing_npm"  ] && \
+         [ -z "$missing_yarn" ] && \
+         [ -z "$missing_pip"  ]; then
         return
       fi
 

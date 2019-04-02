@@ -4,7 +4,7 @@
 export FZF_TMUX=0
 export FZF_COMPLETION_TRIGGER='//'
 
-export FZF_DEFAULT_COMMAND="fdfind --type f --hidden --color always --ignore-file /etc/dotfiles/ignore"
+export FZF_DEFAULT_COMMAND="fdfind --type f --type l --hidden --color always --ignore-file /etc/dotfiles/ignore"
 export FZF_DEFAULT_OPTS="
   --ansi --multi --filepath-word --inline-info --layout default --no-height
   --history $HOME/.fzf_history
