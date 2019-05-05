@@ -12,7 +12,6 @@ python3-pip
 python3-setuptools
 ruby-dev
 sqlite3
-tig
 universal-ctags
 zlib1g-dev
 

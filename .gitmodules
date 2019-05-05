@@ -7,9 +7,6 @@
 [submodule "vim/bundle/repeat"]
 	path = vim/bundle/repeat
 	url = https://github.com/tpope/vim-repeat.git
-[submodule "vim/bundle/surround"]
-	path = vim/bundle/surround
-	url = https://github.com/tpope/vim-surround.git
 [submodule "vim/bundle/unimpaired"]
 	path = vim/bundle/unimpaired
 	url = https://github.com/tpope/vim-unimpaired.git
@@ -151,9 +148,6 @@
 [submodule "vim/bundle/textobj-line"]
 	path = vim/bundle/textobj-line
 	url = https://github.com/kana/vim-textobj-line
-[submodule "vim/bundle/diff-enhanced"]
-	path = vim/bundle/diff-enhanced
-	url = https://github.com/chrisbra/vim-diff-enhanced.git
 [submodule "rbenv/plugins/rbenv-communal-gems"]
 	path = rbenv/plugins/rbenv-communal-gems
 	url = https://github.com/tpope/rbenv-communal-gems.git
@@ -172,9 +166,6 @@
 [submodule "vim/bundle/css3-syntax"]
 	path = vim/bundle/css3-syntax
 	url = https://github.com/hail2u/vim-css3-syntax.git
-[submodule "vim/bundle/css-color"]
-	path = vim/bundle/css-color
-	url = https://github.com/ap/vim-css-color.git
 [submodule "vim/bundle/test"]
 	path = vim/bundle/test
 	url = https://github.com/janko-m/vim-test.git
@@ -271,3 +262,15 @@
 [submodule "vim/bundle/bufferize"]
 	path = vim/bundle/bufferize
 	url = https://github.com/AndrewRadev/bufferize.vim.git
+[submodule "vim/bundle/didyoumean"]
+	path = vim/bundle/didyoumean
+	url = https://github.com/EinfachToll/DidYouMean.git
+[submodule "vim/bundle/hexokinase"]
+	path = vim/bundle/hexokinase
+	url = https://github.com/RRethy/vim-hexokinase.git
+[submodule "vim/bundle/tig-explorer"]
+	path = vim/bundle/tig-explorer
+	url = https://github.com/iberianpig/tig-explorer.vim.git
+[submodule "vim/bundle/sandwich"]
+	path = vim/bundle/sandwich
+	url = https://github.com/machakann/vim-sandwich.git

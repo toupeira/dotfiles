@@ -113,6 +113,9 @@
   " hi! Visual guibg=#005F87
   " hi! VisualNOS guibg=#004866
 
+  " terminals
+  autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no
+
   " ambience theme from terminator
   if has('nvim')
     let g:terminal_color_0  = '#2e3436'
@@ -287,6 +290,7 @@
 
   " diffing
   "set diffopt+=iwhite
+  set diffopt+=algorithm:patience
 
   " folding
   set foldenable foldmethod=marker
@@ -792,10 +796,6 @@ endfunction " }}}
   let g:pasta_disabled_filetypes = [ 'python', 'coffee', 'markdown', 'yaml', 'slim' ]
   " }}}
 
-  " diff-enhanced {{{
-  autocmd vimrc VimEnter * EnhancedDiff histogram
-  " }}}
-
   " man {{{
   runtime ftplugin/man.vim
   " }}}
@@ -1106,7 +1106,7 @@ endfunction " }}}
     nnoremap <silent> ,gs :GFiles?<CR>
     nnoremap <silent> ,gl :Commits<CR>
     nnoremap <silent> ,gL :BCommits<CR>
-    nnoremap <silent> ,gc :Checkout<CR>
+    nnoremap <silent> ,gb :Branches<CR>
 
     nnoremap <silent> ,: :History:<CR>
     nnoremap <silent> ,/ :History/<CR>
@@ -1140,8 +1140,8 @@ endfunction " }}}
       \     '--preview-window', 'right:70%'
       \   ] })
 
-    " add :Checkout command
-    function! s:fzf_checkout(line)
+    " add :Branches command
+    function! s:fzf_branches(line)
       let l:parser = split(a:line)
       let l:branch = l:parser[0]
       if l:branch ==? '*'
@@ -1150,11 +1150,11 @@ endfunction " }}}
       execute '!git checkout ' . l:branch
     endfunction
 
-    command! -bang -nargs=0 Checkout
+    command! -bang -nargs=0 Branches
       \ call fzf#vim#grep(
       \   'git branches', 0, {
-      \     'sink': function('s:fzf_checkout'),
-      \     'options': ['--prompt', 'Checkout> ']
+      \     'sink': function('s:fzf_branches'),
+      \     'options': ['--prompt', 'Branches> ']
       \   }, <bang>0)
   endif
   " }}}
@@ -1171,6 +1171,15 @@ endfunction " }}}
 
   let g:blameLineVirtualTextHighlight = 'Question'
   let g:blameLineVirtualTextPrefix = '// → '
+  " }}}
+
+  " hexokinase {{{
+  let g:Hexokinase_ftAutoload = ['css', 'sass', 'scss', 'vim']
+  let g:Hexokinase_optInPatterns = ['full_hex', 'triple_hex', 'rgb', 'rgba', 'colour_names']
+  " }}}
+
+  " didyoumean {{{
+  let g:dym_use_fzf = 1
   " }}}
 
 " }}}
