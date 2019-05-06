@@ -1,3 +1,4 @@
+acpi
 apt-listchanges
 apt-xapian-index
 autojump
@@ -5,6 +6,7 @@ bash-completion
 bc
 bsd-mailx
 console-common
+cpufrequtils
 curl
 dctrl-tools
 debconf-utils

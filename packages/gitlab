@@ -1,0 +1,14 @@
+cmake
+golang
+libicu-dev
+libkrb5-dev
+libpq-dev
+libre2-dev
+libreadline-dev
+libsqlite3-dev
+libssl-dev
+pkg-config
+redis
+zlib1g-dev
+
+gem:gitlab-development-kit

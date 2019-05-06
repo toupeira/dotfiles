@@ -2,8 +2,12 @@ apache2-utils
 autoconf
 automake
 build-essential
+ed
+libreadline-dev
+libssl-dev
 manpages-dev
 nodejs
+pkg-config
 python3-pip
 python3-setuptools
 ruby-dev
