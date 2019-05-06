@@ -17,6 +17,7 @@ debtags
 dirmngr
 dnsutils
 eatmydata
+encfs
 fd-find
 file
 fortune-anarchism
@@ -41,6 +42,8 @@ ltrace
 make
 moreutils
 mutt
+needrestart
+needrestart-session
 neovim
 net-tools
 ncurses-term
@@ -69,6 +72,7 @@ telnet
 tig
 tmux
 tree
+unattended-upgrades
 unison
 unzip
 vim-nox

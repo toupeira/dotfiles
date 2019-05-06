@@ -278,9 +278,8 @@ function ssh.mux {
 
 # Go to project root
 function up {
-  while [ ! -d .git ] && [ "$PWD" != "$HOME" ] && [ "$PWD" != "/" ]; do
-    cd ..
-  done
+  local root=$( git root )
+  [ -n "$root" ] && cd "$root"
 }
 
 # Browse a JSON file

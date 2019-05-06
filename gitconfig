@@ -144,6 +144,7 @@
 
   sub = submodule
   checkout-submodules = submodule update -q --init
+  cos = checkout-submodules
 
   sts = stash save
   stp = stash pop

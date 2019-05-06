@@ -2,8 +2,9 @@
 
 export DISPLAY=${DISPLAY:-:0}
 
-PIPE=~/.quodlibet/control
-CURRENT=~/.quodlibet/current
+QUODLIBET=~/.config/quodlibet
+PIPE=$QUODLIBET/control
+CURRENT=$QUODLIBET/current
 
 function _ql {
   [ -t 0 ] && [ -t 1 ] && echo "Sending: $1"
@@ -28,7 +29,7 @@ case "$command" in
   playlist) command="dump-playlist";;
   query-saved)
     position=${argument:-1}
-    argument=$( head -$((position * 2 - 1)) ~/.quodlibet/lists/queries.saved 2>/dev/null | tail -1 )
+    argument=$( head -$((position * 2 - 1)) $QUODLIBET/lists/queries.saved 2>/dev/null | tail -1 )
     if [ -n "$argument" ]; then
       command="query"
     else
@@ -68,7 +69,7 @@ case "$command" in
     ;;
   start-playing)
     shift
-    $0 play || $0 start-hidden --start-playing "$@"
+    $0 play-pause || $0 start-hidden --start-playing "$@"
     exit
     ;;
   start-hidden)
