@@ -76,11 +76,11 @@
      org-agenda-custom-commands
      `(
        ("o" "Agenda for home context"
-        ,(cons '(agenda "") (subseq task-list 0 3))
+        ,(cons '(agenda "") task-list)
         ((org-agenda-tag-filter-preset '("-work"))
          (org-agenda-use-time-grid nil)))
        ("w" "Agenda for work context"
-        ,(cons '(agenda "") (subseq task-list 0 3))
+        ,(cons '(agenda "") task-list)
         ((org-agenda-tag-filter-preset '("+work"))))
 
        ("O" "Review home tasks" ,task-list
@@ -99,15 +99,14 @@
       "* TODO %?")
      ("e" "emacs" checkitem (file+olp "organizer.org" "Projects" "Emacs" "Inbox")
       "- [ ] %?")
+
+     ("w" "work todo" entry (file+olp "work.org" "Inbox")
+      "* NEXT %?")
+     ("p" "work project" entry (file+olp "work.org" "Projects")
+      "* NEXT %?\n:PROPERTIES:\n:CREATED: %U\n:END:")
+
      ("n" "clock note" item (clock)
       "- %U %?")
-
-     ("w" "work inbox" entry (file+olp "work.org" "Inbox")
-      "* NEXT %?\n:PROPERTIES:\n:CREATED: %U\n:END:%^{CATEGORY}p\n\n"
-      :empty-lines-after 1)
-
-     ("W" "work todo" entry (file+olp "work.org" "Inbox")
-      "* TODO %?")
     )
   )
 

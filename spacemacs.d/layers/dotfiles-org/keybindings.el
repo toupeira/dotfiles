@@ -18,7 +18,7 @@
   "Cn" (lambda () (interactive) (org-capture nil "n"))
 
   "Cw" (lambda () (interactive) (org-capture nil "w"))
-  "CW" (lambda () (interactive) (org-capture nil "W"))
+  "Cp" (lambda () (interactive) (org-capture nil "p"))
 
   ;; remove Spacemacs bindings
   "Ci" nil
@@ -41,7 +41,7 @@
   "SPC C n" "clock note"
 
   "SPC C w" "work inbox"
-  "SPC C W" "work todo"
+  "SPC C p" "work project"
   )
 
 (spacemacs/set-leader-keys-for-major-mode 'org-mode
