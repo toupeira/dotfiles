@@ -9,9 +9,7 @@
   (spacemacs/find-dotfile)
 
   (persp-switch (dotfiles/org-directory))
-  (if dotfiles/is-ocelot
-      (dotfiles/org-goto "work" "w")
-    (dotfiles/org-goto "organizer" "o")))
+  (dotfiles/org-goto "work" "w"))
 
 (defun dotfiles/switch-to-project-layout (&rest args)
   (when (projectile-project-p)

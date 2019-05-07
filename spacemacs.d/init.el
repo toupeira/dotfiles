@@ -1,5 +1,6 @@
 (setq dotfiles/directory "/etc/dotfiles/")
 (setq dotfiles/is-server (not (string= (getenv "EMACS_SERVER") "disabled")))
+(setq dotfiles/is-meerkat (string= system-name "meerkat"))
 (setq dotfiles/is-ocelot (string= system-name "ocelot"))
 
 (defvar dotfiles/init-hook nil)
@@ -50,11 +51,11 @@ values."
      (git
       :variables
       git-magit-status-fullscreen t)
-     github
+     ; github
      helm
      mu4e
      (org :variables org-enable-reveal-js-support t)
-     pdf-tools
+     ; pdf-tools
      (ranger :variables ranger-show-dotfiles nil)
      (shell
       :variables
@@ -183,7 +184,7 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font `("DejaVu Sans Mono"
-                               :size ,(if dotfiles/is-ocelot 23 12)
+                               :size ,(if dotfiles/is-ocelot 23 17)
                                :weight normal
                                :width normal
                                :powerline-scale 1.2)
@@ -400,7 +401,7 @@ you should place your code here."
    magit-repository-directories '(("~/src" . 3))
    paradox-github-token t
    persp-kill-foreign-buffer-action 'kill
-   powerline-height (if dotfiles/is-ocelot 28 16)
+   powerline-height (if dotfiles/is-ocelot 28 23)
    ruby-insert-encoding-magic-comment nil
    vc-follow-symlinks t
   )
