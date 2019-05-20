@@ -3,9 +3,9 @@ if pgrep -x firefox >/dev/null; then
   if [ $# -eq 0 ]; then
     xwit -raise -focus -property WM_CLASS -names Navigator
   else
-    eatmydata firefox "$@" &>/dev/null &
+    firefox "$@" &>/dev/null &
   fi
 else
   rm -f ~/.mozilla/firefox/default/{lock,.parentlock}
-  eatmydata firefox "$@" &>/dev/null &
+  firefox "$@" &>/dev/null &
 fi

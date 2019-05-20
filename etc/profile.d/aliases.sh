@@ -128,7 +128,6 @@ if has sudo; then
     update-alternatives update-rc.d invoke-rc.d
 
   alias pkginstall='sudo dpkg -i'
-  has eatmydata && alias aptitude='sudo eatmydata aptitude'
 
   # system tools
   _sudo_aliases \
