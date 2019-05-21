@@ -9,7 +9,40 @@ PS1_HOST=" "
 [ -n "$EMACS" ] && PS1_USER="" && PS1_HOST=""
 [ "$UID" = "0" ] && PS1_USER="\[\e[1;31m\]$PS1_USER"
 
-PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\w\[\e[0;36m\]]\[\e[0m\] "
+PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\$(_prompt_path)\[\e[0;36m\]]\[\e[0m\] "
+
+# Prompt helpers
+function _prompt_path {
+  local pwd="$PWD"
+  pwd=${pwd/#$HOME/\~}
+  pwd=${pwd/#\~\/src\/gitlab\//🦊 }
+  pwd=${pwd/#\~\/src\/gitlab/🦊}
+  pwd=${pwd/#\/etc\/dotfiles\//🛠  }
+  pwd=${pwd/#\/etc\/dotfiles/🛠 }
+
+  echo "$pwd"
+}
+
+function _prompt_jobs {
+  local jobs=`jobs | grep -Evc '(mux store|autojump)'`
+
+  if [ $jobs -gt 0 ]; then
+    printf '[%d job%s] ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
+  fi
+}
+
+function _prompt_exit_status {
+  [ -n "$CYGWIN" -o "$CONQUE" ] && return
+
+  if [ -n "$_last_status" ] && [ $_last_status -gt 0 ]; then
+    tput sc
+    local column=$((COLUMNS-${#_last_status}-3))
+
+    tput cup $LINES $column
+    printf '\e[1;30m[\e[1;31m%s\e[1;30m]\e[0m '  $_last_status
+    tput rc
+  fi
+}
 
 # Use Git prompt if available
 if type __git_ps1 &>/dev/null; then
@@ -33,27 +66,6 @@ if type __git_ps1 &>/dev/null; then
   PS1=$PS1$GIT_PS1
 fi
 
-function _prompt_jobs {
-  local jobs=`jobs | grep -Evc '(mux store|autojump)'`
-
-  if [ $jobs -gt 0 ]; then
-    printf '[%d job%s] ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
-  fi
-}
-
-function _prompt_exit_status {
-  [ -n "$CYGWIN" -o "$CONQUE" ] && return
-
-  if [ -n "$_last_status" ] && [ $_last_status -gt 0 ]; then
-    tput sc
-    local column=$((COLUMNS-${#_last_status}-3))
-
-    tput cup $LINES $column
-    printf '\e[1;30m[\e[1;31m%s\e[1;30m]\e[0m '  $_last_status
-    tput rc
-  fi
-}
-
 # Show user, hostname and pwd in window title
 if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
   if [ -n "$SSH_CONNECTION" ]; then
@@ -62,10 +74,12 @@ if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
     unset _hostname
   fi
 
+  PROMPT_COMMAND='_pwd=$( _prompt_path ); _last_status=$?;'
+
   if [ -n "$TMUX" ]; then
-    PROMPT_COMMAND='_last_status=$?; [ "$PWD" != "$_last_pwd" ] && mux store; _last_pwd="$PWD"; _pwd=${PWD/$HOME/\~}; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
+    PROMPT_COMMAND=$PROMPT_COMMAND'[ "$PWD" != "$_last_pwd" ] && mux store; _last_pwd="$PWD"; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
   else
-    PROMPT_COMMAND='_last_status=$?; _pwd=${PWD/$HOME/\~}; echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
+    PROMPT_COMMAND=$PROMPT_COMMAND'echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
   fi
 
   unset _hostname
