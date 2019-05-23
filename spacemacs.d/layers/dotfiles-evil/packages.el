@@ -19,7 +19,7 @@
   (define-key evil-operator-state-map (kbd "C-c") 'keyboard-quit)
 
   ;; also clear search highlight on C-c
-  (add-hook 'dotfiles/escape-anywhere-hook 'evil-search-highlight-persist-remove-all)
+  (add-hook 'dotfiles/escape-anywhere-hook 'spacemacs/evil-search-clear-highlight)
 
   ;; remove bindings for C-n/p since we have the paste transient state
   (define-key evil-normal-state-map "\C-n" nil)
