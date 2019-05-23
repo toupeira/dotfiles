@@ -305,7 +305,7 @@
   autocmd vimrc FileType python,apache,sshconfig setlocal ts=4 sts=4 sw=4
   autocmd vimrc FileType css,scss setlocal iskeyword+=%
   autocmd vimrc FileType make setlocal noexpandtab
-  autocmd vimrc FileType text,markdown,mail setlocal linebreak
+  autocmd vimrc FileType text,markdown,mail setlocal linebreak spell
   autocmd vimrc FileType tex,plaintex,context setlocal lbr
   autocmd vimrc FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd vimrc FileType crontab setlocal nobackup nowritebackup
@@ -747,7 +747,7 @@ endfunction " }}}
 " {{{
 
   " markdown {{{
-  let g:markdown_enable_spell_checking = 0
+  let g:markdown_enable_insert_mode_mappings = 0
   " }}}
 
   " dispatch {{{
@@ -887,7 +887,7 @@ endfunction " }}}
     nnoremap <silent> ,E :ALEDetail<CR>
 
     highlight! link ALEWarning Whitespace
-    highlight! ALEVirtualTextWarning guifg=#888888
+    highlight! ALEVirtualTextWarning guifg=#999999
     highlight! ALEVirtualTextError guifg=#ff4040 gui=bold
     highlight! link ALEVirtualTextInfo ALEVirtualTextWarning
 

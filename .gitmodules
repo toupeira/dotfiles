@@ -274,3 +274,6 @@
 [submodule "vim/bundle/sandwich"]
 	path = vim/bundle/sandwich
 	url = https://github.com/machakann/vim-sandwich.git
+[submodule "vim/bundle/deoplete-spell"]
+	path = vim/bundle/deoplete-spell
+	url = https://github.com/deathlyfrantic/deoplete-spell.git
