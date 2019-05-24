@@ -1,7 +1,5 @@
 (setq dotfiles/directory "/etc/dotfiles/")
 (setq dotfiles/is-server (not (string= (getenv "EMACS_SERVER") "disabled")))
-(setq dotfiles/is-meerkat (string= system-name "meerkat"))
-(setq dotfiles/is-ocelot (string= system-name "ocelot"))
 
 (defvar dotfiles/init-hook nil)
 (defvar dotfiles/config-hook nil)
@@ -184,7 +182,11 @@ values."
    ;; Default font, or prioritized list of fonts. `powerline-scale' allows to
    ;; quickly tweak the mode-line size to make separators look not too crappy.
    dotspacemacs-default-font `("DejaVu Sans Mono"
-                               :size ,(if dotfiles/is-ocelot 23 17)
+                               :size ,(pcase system-name
+                                             ("ocelot" 23)
+                                             ("meerkat" 17)
+                                             ("schtube" 15)
+                                             (_ 12))
                                :weight normal
                                :width normal
                                :powerline-scale 1.2)
@@ -401,7 +403,10 @@ you should place your code here."
    magit-repository-directories '(("~/src" . 3))
    paradox-github-token t
    persp-kill-foreign-buffer-action 'kill
-   powerline-height (if dotfiles/is-ocelot 28 23)
+   powerline-height (pcase system-name
+                           ("ocelot" 28)
+                           ("meerkat" 23)
+                           (_ 18))
    ruby-insert-encoding-magic-comment nil
    vc-follow-symlinks t
   )

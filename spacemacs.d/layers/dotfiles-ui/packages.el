@@ -55,8 +55,8 @@
 (defun dotfiles-ui/post-init-flycheck ()
   (setq flycheck-check-syntax-automatically '(mode-enabled save))
 
-  (spacemacs/add-flycheck-hook 'lisp-mode-hook)
-  (spacemacs/add-flycheck-hook 'shell-mode-hook)
+  (spacemacs/enable-flycheck 'lisp-mode-hook)
+  (spacemacs/enable-flycheck 'shell-mode-hook)
 
   (add-hook 'flycheck-after-syntax-check-hook 'dotfiles/auto-list-errors)
   (add-hook 'flycheck-error-list-after-refresh-hook 'dotfiles/auto-resize-errors))
