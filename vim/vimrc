@@ -19,8 +19,6 @@
   " disable netrw
   let g:loaded_netrwPlugin = 1
 
-  call add(g:pathogen_disabled, 'coc')
-
   " only enable tmux plugins in tmux sessions
   if empty($TMUX)
     call add(g:pathogen_disabled, 'tmux-complete')
@@ -953,36 +951,6 @@ endfunction " }}}
       \ pumvisible() ? "\<C-y>" :
       \ <SID>check_back_space() ? "\<Tab>" :
       \ deoplete#mappings#manual_complete()
-
-    function! s:check_back_space() abort
-      let col = col('.') - 1
-      return !col || getline('.')[col - 1]  =~ '\s'
-    endfunction
-
-    " <CR> - reject completion and close popup
-    inoremap <CR> <C-r>=(pumvisible() ? "<C-e>" : "")<CR><C-g>u<CR>
-  endif
-  " }}}
-
-  " coc {{{
-  if index(g:pathogen_disabled, 'coc') == -1
-    let g:coc_global_extensions = [
-      \ 'coc-highlight',
-      \ 'coc-pairs',
-      \ 'coc-syntax',
-      \ 'coc-css',
-      \ 'coc-html',
-      \ 'coc-json',
-      \ 'coc-solargraph',
-      \ 'coc-tsserver',
-      \ 'coc-yaml'
-    \ ]
-
-    " <Tab> - trigger and accept completion
-    inoremap <silent><expr> <Tab>
-      \ pumvisible() ? "\<C-y>" :
-      \ <SID>check_back_space() ? "\<Tab>" :
-      \ coc#refresh()
 
     function! s:check_back_space() abort
       let col = col('.') - 1

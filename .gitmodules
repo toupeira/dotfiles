@@ -238,9 +238,6 @@
 [submodule "vim/bundle/go"]
 	path = vim/bundle/go
 	url = https://github.com/fatih/vim-go.git
-[submodule "vim/bundle/coc"]
-	path = vim/bundle/coc
-	url = https://github.com/neoclide/coc.nvim.git
 [submodule "vim/bundle/deoplete"]
 	path = vim/bundle/deoplete
 	url = https://github.com/Shougo/deoplete.nvim.git

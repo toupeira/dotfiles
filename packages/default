@@ -66,6 +66,7 @@ socat
 software-properties-common
 sqlite3
 strace
+s-tui
 sudo
 tcpdump
 telnet
