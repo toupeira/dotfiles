@@ -1,1 +1,28 @@
+set charset = utf-8
+set send_charset = us-ascii:utf-8
+
+set editor = "vim +"
+set include = yes
+set edit_headers = yes
+
 set folder = ~/.mail
+set record = /dev/null
+set confirmappend = no
+set move = no
+set mark_old = no
+
+set pager_index_lines = 8
+set sleep_time = 0
+
+ignore Reply-To X- List- Mail-Followup-To
+unignore Date X-Mailer Importance
+
+color header brightgreen default ^From:
+color header brightcyan default ^Subject:
+color header cyan default ^Date:
+color header red default ^Importance:\ high
+color header magenta default ^X-Mailer:
+color header magenta default ^User-Agent:
+
+color body brightyellow default [\-\.+_a-zA-Z0-9]+@[\-\.a-zA-Z0-9]+
+color body brightwhite default (https?|ftp)://[\-\.,/%~_:?&=\#a-zA-Z0-9]+

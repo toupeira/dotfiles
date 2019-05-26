@@ -60,6 +60,8 @@ if type __git_ps1 &>/dev/null; then
     s/<>/ ⇵/;
     s/>/ ↑/;
     s/</ ↓/;
+    s/\bmaster\b /🛡️ /;
+    s/\bmaster\b/🛡️ /;
   "
 
   GIT_PS1='$(__git_ps1 "\[\e[0;32m\]❰\[\e[1;32m\]%s\[\e[0;32m\]❱\[\e[0m\] " | sed "$GIT_PS1_SUBSTITUTES")'

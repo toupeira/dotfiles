@@ -18,7 +18,7 @@ function usage {
   echo "  add PATH...               Add file to repository and replace it with a symlink"
   echo "  sync                      Pull, commit and push"
   echo "  commit-all, ca            Commit all changes"
-  echo "  pull                      Pull remote changes and checkout submodules"
+  echo "  pull, up                  Pull remote changes and checkout submodules"
   echo "  push                      Push local changes"
   echo
   echo "  list-submodules, list     List submodules"
@@ -416,7 +416,7 @@ function run {
       git ignore-errors commit -a -m "$message" "$@"
       ;;
     # }}}
-    pull) # {{{
+    pull|up) # {{{
       local changes=$( git status -s --ignore-submodules )
       [ -n "$changes" ] && git stash save | fgrep -q "No local changes to save" && unset changes
 
@@ -615,7 +615,7 @@ function run {
 
       [ -n "$packages_gem" ] && local missing_gem=$(
         get_missing gem "$packages_gem" \
-        "$( gem list | awk '/\(/ { print $1 }' )"
+        "$( gem list 2>/dev/null | awk '/\(/ { print $1 }' )"
       )
 
       [ -n "$packages_npm" ] && local missing_npm=$(
@@ -630,7 +630,7 @@ function run {
 
       [ -n "$packages_pip" ] && local missing_pip=$(
         get_missing pip3 "$packages_pip" \
-        "$( pip3 list | awk '{ print $1 }' )"
+        "$( pip3 list 2>/dev/null | awk '{ print $1 }' )"
       )
 
       if [ -z "$missing_apt"  ] &&
