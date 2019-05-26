@@ -20,7 +20,7 @@
   "SPC |" "split-window-right")
 
 ;; use qq/qQ to keep server running
-(when dotspacemacs-persistent-server
+(when dotspacemacs-enable-server
   (spacemacs/set-leader-keys
     "qq" 'dotfiles/prompt-frame-killer
     "qQ" 'spacemacs/frame-killer))

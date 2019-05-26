@@ -1,6 +1,5 @@
 (setq dotfiles-evil-packages
       '(evil
-        evil-goggles
         (rotate-text :location (recipe :fetcher github :repo "debug-ito/rotate-text.el"))
         simpleclip))
 
@@ -146,14 +145,6 @@
     ;; start commit buffers in insert state
     (add-hook 'git-commit-mode-hook 'evil-insert-state))
 )
-
-(defun dotfiles-evil/init-evil-goggles ()
-  (use-package evil-goggles
-    :ensure t
-    :config
-    (evil-goggles-mode)
-    (evil-goggles-use-diff-refine-faces)
-    (setq evil-goggles-duration 0.1)))
 
 (defun dotfiles-evil/init-simpleclip ()
   ;; don't use desktop clipboard for kill ring
