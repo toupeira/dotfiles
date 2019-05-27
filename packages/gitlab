@@ -1,4 +1,5 @@
 cmake
+default-jdk
 golang
 libicu-dev
 libkrb5-dev

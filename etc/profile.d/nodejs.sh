@@ -1,17 +1,21 @@
+export NODE_PATH=/usr/lib/node_modules:/usr/share/javascript
+
+# Add nenv binstubs
+if [ -d ~/.nenv ]; then
+  export PATH="$HOME/.nenv/bin:$PATH"
+fi
+
+# Add yarn global packages
+if [ -d ~/.yarn/bin ]; then
+  export PATH="$PATH:$HOME/.yarn/bin"
+fi
+
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
-export NODE_PATH=/usr/lib/nodejs:/usr/lib/node_modules:/usr/share/javascript
-
-# load nenv
+# Load nenv
 if [ -d ~/.nenv ]; then
-  export PATH="$HOME/.nenv/bin:$PATH"
   eval "$(nenv init - --no-rehash)"
-fi
-
-# add yarn global packages
-if [ -d ~/.yarn/bin ]; then
-  export PATH="$PATH:$HOME/.yarn/bin"
 fi
 
 alias node='node --preserve-symlinks'

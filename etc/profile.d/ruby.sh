@@ -1,9 +1,13 @@
+# Add rbenv binstubs
+if [ -d ~/.rbenv ]; then
+  export PATH="$HOME/.rbenv/bin:$PATH"
+fi
+
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
-# load rbenv
+# Load rbenv
 if [ -d ~/.rbenv ]; then
-  export PATH="$HOME/.rbenv/bin:$PATH"
   eval "$(rbenv init - --no-rehash)"
 fi
 

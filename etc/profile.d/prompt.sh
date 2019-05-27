@@ -5,7 +5,7 @@
 PS1_USER="\u"
 PS1_HOST=" "
 [ -z "$SSH_CONNECTION" ] && [ "$USER" = "toupeira" -o "$USER" = "mak" ] && PS1_USER="λ"
-[ -n "$SSH_CONNECTION" -o "$TERM" = "linux" ] && PS1_HOST="@\h "
+[ -n "$SSH_CONNECTION" ] && PS1_HOST="@\h "
 [ -n "$EMACS" ] && PS1_USER="" && PS1_HOST=""
 [ "$UID" = "0" ] && PS1_USER="\[\e[1;31m\]$PS1_USER"
 

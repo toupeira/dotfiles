@@ -98,8 +98,12 @@ case "$1" in
       server)
         options="-d"
 
-        if [ -x bin/rails ] || [ -x script/rails ]; then
+        if [ -f ../GDK_ROOT ]; then
+          command="gdk run"
+        elif [ -x bin/rails ] || [ -x script/rails ]; then
           command="rails server"
+        elif [ -x bin/middleman ]; then
+          command="middleman server"
         elif [ -f mix.exs ] && grep -q :phoenix mix.exs; then
           command="mix phoenix.server"
         elif [ -f elm-package.json ]; then
@@ -120,6 +124,8 @@ case "$1" in
       console)
         if [ -x bin/rails ]; then
           command="rails console"
+        elif [ -x bin/middleman ]; then
+          command="middleman console"
         elif [ -f elm-package.json ]; then
           command="elm-repl"
         elif [ -f Gruntfile.js ]; then
