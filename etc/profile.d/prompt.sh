@@ -60,8 +60,8 @@ if type __git_ps1 &>/dev/null; then
     s/<>/ ⇵/;
     s/>/ ↑/;
     s/</ ↓/;
-    s/\bmaster\b /🛡️ /;
-    s/\bmaster\b/🛡️ /;
+    s/\\bmaster\\b /🛡️ /;
+    s/\\bmaster\\b/🛡️ /;
     s/([-[:alnum:]]{16})[-[:alnum:]]+/\\1…/;
   "
 
