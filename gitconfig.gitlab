@@ -1,0 +1,4 @@
+# vim: ft=gitconfig
+
+[user]
+  email = mkoller@gitlab.com

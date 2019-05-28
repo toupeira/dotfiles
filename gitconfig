@@ -11,6 +11,9 @@
   email = markus-koller@gmx.ch
   signingKey = A7A2B7B7
 
+[includeIf "gitdir:~/src/gitlab/"]
+  path = .gitconfig.gitlab
+
 [color]
   ui = auto
 
