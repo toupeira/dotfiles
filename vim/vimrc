@@ -58,8 +58,11 @@
   " searching
   set ignorecase
   set smartcase
-  set incsearch
   set hlsearch
+  set incsearch
+  if exists('&inccommand')
+    set inccommand=nosplit
+  endif
 
   if executable('rg')
     let &grepprg = "rg --vimgrep"
@@ -112,7 +115,9 @@
   " hi! VisualNOS guibg=#004866
 
   " terminals
-  autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no
+  if exists('#TermOpen')
+    autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no
+  endif
 
   " ambience theme from terminator
   if has('nvim')
@@ -303,7 +308,7 @@
   autocmd vimrc FileType python,apache,sshconfig setlocal ts=4 sts=4 sw=4
   autocmd vimrc FileType css,scss setlocal iskeyword+=%
   autocmd vimrc FileType make setlocal noexpandtab
-  autocmd vimrc FileType text,markdown,mail setlocal linebreak spell
+  autocmd vimrc FileType text,markdown,mail setlocal linebreak spell suffixesadd+=.md
   autocmd vimrc FileType tex,plaintex,context setlocal lbr
   autocmd vimrc FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd vimrc FileType crontab setlocal nobackup nowritebackup
@@ -476,6 +481,9 @@ endfunction " }}}
   nnoremap <Space>wd <C-w>c
   nnoremap <Space>ws <C-w>s
   nnoremap <Space>wv <C-w>v
+
+  noremap H ^
+  noremap L $
 
   " apply macros with Q (disables the default Ex mode shortcut)
   nnoremap Q @q
@@ -803,15 +811,6 @@ endfunction " }}}
 
   " rails {{{
   hi! link rubyRailsARMethod Statement
-  " }}}
-
-  " incsearch {{{
-  let g:incsearch#consistent_n_direction = 1
-  let g:incsearch#emacs_like_keymap = 1
-
-  map /  <Plug>(incsearch-forward)
-  map ?  <Plug>(incsearch-backward)
-  map g/ <Plug>(incsearch-stay)
   " }}}
 
   " javascript-libraries-syntax {{{
