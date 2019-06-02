@@ -27,11 +27,6 @@
   " load bundles
   call pathogen#infect()
 
-  if has('gui_running')
-    " avoid loading the menu, has to be set before loading filetypes
-    set guioptions+=M
-  endif
-
   augroup vimrc
     autocmd!
   augroup END
@@ -115,8 +110,10 @@
   " hi! VisualNOS guibg=#004866
 
   " terminals
-  if exists('#TermOpen')
-    autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no
+  if has('nvim')
+    autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no | startinsert!
+    autocmd vimrc BufWinEnter,WinEnter term://* startinsert!
+    autocmd vimrc BufWinLeave,WinLeave term://* stopinsert
   endif
 
   " ambience theme from terminator
@@ -257,7 +254,7 @@
 
   " add Unicode marker for tmux navigation
   if !empty($TMUX) || !empty($SUDO_COMMAND)
-    let &iconstring .= " %{mode() == 'n' || &ft == 'fzf' ? '😑' : '😮'}"
+    let &iconstring .= " %{mode(1) == 'n' || mode() == 't' || &ft == 'fzf' ? '😑' : '😮'}"
 
     if has('nvim') || !empty($CYGWIN)
       let &titlestring = &iconstring
@@ -440,16 +437,15 @@ endfunction " }}}
     let g:open_command = 'start'
   endif
   command! -nargs=+ -complete=file_in_path Open call system(g:open_command.' ' . expand("<args>"))
-  command! -nargs=+ Google call system(g:open_command.' "https://www.google.com/search?q=' . expand("<args>") . '"')
-  command! -nargs=+ Dict call system(g:open_command.' "http://dict.leo.org/?lp=ende&search=' . expand("<args>") . '"')
-  command! -nargs=+ Wikipedia call system(g:open_command.' "http://en.wikipedia.org/wiki/Special:Search?search=' . expand("<args>") . '"')
 
   " shortcuts to open tmux splits and windows
   command! -nargs=* Mux call system('mux <args>')
-  command! -nargs=0 Shell    Mux -b
   command! -nargs=0 Pry      Mux -b pry
   command! -nargs=0 Server   Mux @server
   command! -nargs=0 Watcher  Mux @watcher
+
+  nnoremap <silent> ,` :Mux -b<CR>
+  nnoremap <silent> ,~ :Mux -r<CR>
 
   " open markdown preview
   command! -nargs=0 VMD execute 'silent !vmd % &>/dev/null &' | redraw!
@@ -546,6 +542,9 @@ endfunction " }}}
   " toggle paste mode with F12
   set pastetoggle=<f12>
 
+  " terminal
+  tnoremap <Esc> <C-\><C-n>
+
   " navigate windows/tmux panes with Ctrl+jkhl
   function! TmuxNavigate(cmd) " {{{
     let nr = winnr()
@@ -575,6 +574,11 @@ endfunction " }}}
   nnoremap <silent> <c-k> :call TmuxNavigate('k')<CR>
   nnoremap <silent> <c-l> :call TmuxNavigate('l')<CR>
 
+  tnoremap <silent> <c-h> <C-\><C-n>:call TmuxNavigate('h')<CR>
+  tnoremap <silent> <c-j> <C-\><C-n>:call TmuxNavigate('j')<CR>
+  tnoremap <silent> <c-k> <C-\><C-n>:call TmuxNavigate('k')<CR>
+  tnoremap <silent> <c-l> <C-\><C-n>:call TmuxNavigate('l')<CR>
+
   " alias Ctrl-v as Ctrl-q
   noremap <C-q> <C-v>
   inoremap <C-q> <C-v>
@@ -599,12 +603,6 @@ endfunction " }}}
 
     exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
     exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
-  endif
-
-  " For CTRL-v to work autoselect must be off.
-  " On Unix we have two selections, autoselect can be used.
-  if !has('unix')
-    set guioptions-=a
   endif
 
   " keep clipboard when leaving Vim
@@ -898,10 +896,6 @@ endfunction " }}}
     let g:ale_virtualtext_cursor = 1
     let g:ale_virtualtext_prefix = '// → '
 
-    let g:airline#extensions#ale#show_line_numbers = 0
-    let g:airline#extensions#ale#warning_symbol = ''
-    let g:airline#extensions#ale#error_symbol = ''
-
     let g:ale_linters = {
       \ 'ruby': [ 'ruby', 'rubocop' ],
       \ 'javascript': [ 'eslint' ],
@@ -975,16 +969,18 @@ endfunction " }}}
     let g:airline_inactive_collapse = 0
     let g:airline_detect_paste = 0
     let g:airline_detect_iminsert = 0
+    let g:airline_detect_spell = 0
 
-    let g:airline#extensions#hunks#enabled = 0
-    let g:airline#extensions#quickfix#enabled = 0
-    let g:airline#extensions#tagbar#enabled = 0
-    let g:airline#extensions#whitespace#enabled = 0
+    let g:airline_extensions = [ 'ale', 'branch', 'quickfix', 'tabline' ]
 
-    let g:airline#extensions#branch#format = 2
+    let g:airline#extensions#ale#show_line_numbers = 0
+    let g:airline#extensions#ale#warning_symbol = ''
+    let g:airline#extensions#ale#error_symbol = ''
+
     let g:airline#extensions#branch#displayed_head_limit = 16
+    let g:airline#extensions#branch#format = 2
+    let g:airline#extensions#branch#vcs_checks = []
 
-    let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#buffers_label = 'b'
     let g:airline#extensions#tabline#tabs_label = 't'
     let g:airline#extensions#tabline#overflow_marker = ' … '
@@ -996,8 +992,6 @@ endfunction " }}}
     if !exists('g:airline_symbols')
       let g:airline_symbols = {}
     endif
-
-    let g:airline_symbols.notexists = '→‽'
 
     if has('gui_running') || exists('$TERMINATOR_UUID')
       let g:airline_powerline_fonts = 1
