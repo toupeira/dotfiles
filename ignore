@@ -55,12 +55,14 @@ src/archive
 src/upstream
 
 # Rails
-db/archive
-app/assets/javascripts/ace
 app/assets/data
+app/assets/javascripts/ace
+db/archive
 public/packs
-vendor/assets
+spec/fixtures
+test/fixtures
 tmp/
+vendor/assets
 
 # JavaScript
 node_modules

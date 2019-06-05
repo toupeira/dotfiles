@@ -94,6 +94,7 @@
   s = status
   st = status
   sta = -c diff.ignoreSubmodules=none st
+  ss = !git --no-pager show --stat
 
   l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
   ls = "!cd ${GIT_PREFIX:-.} && git l --stat"

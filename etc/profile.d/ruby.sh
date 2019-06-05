@@ -37,3 +37,19 @@ function r {
     rake "$@"
   fi
 }
+
+# Automatically use spring wrappers
+function _spring_exec {
+  local command="$1"
+  shift
+
+  if [ -x bin/spring ]; then
+    spring "$command" "$@"
+  else
+    command "$command" "$@"
+  fi
+}
+
+alias rails='_spring_exec rails'
+alias rake='_spring_exec rake'
+alias rspec='_spring_exec rspec'
