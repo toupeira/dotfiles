@@ -960,11 +960,8 @@ endfunction " }}}
 
   " airline {{{
   if index(g:pathogen_disabled, 'airline') == -1
-    if has('gui_running') || &t_Co > 8
-      let g:airline_theme = 'desertink'
-    else
-      let g:airline_theme = 'dark'
-    endif
+    let g:airline_theme = 'desertink'
+    let g:airline_powerline_fonts = 1
 
     let g:airline_inactive_collapse = 0
     let g:airline_detect_paste = 0
@@ -991,12 +988,6 @@ endfunction " }}}
 
     if !exists('g:airline_symbols')
       let g:airline_symbols = {}
-    endif
-
-    if has('gui_running') || exists('$TERMINATOR_UUID')
-      let g:airline_powerline_fonts = 1
-    else
-      let g:airline_symbols.branch = '@'
     endif
 
     " add space after readonly symbol
