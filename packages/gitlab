@@ -1,6 +1,6 @@
 cmake
 default-jdk
-golang
+golang-1.12
 libicu-dev
 libkrb5-dev
 libpq-dev

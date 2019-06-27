@@ -16,10 +16,12 @@ export IRB_HISTORY_SIZE=3000
 export PASSWORD_STORE_ENABLE_EXTENSIONS="true"
 export PGDATABASE="postgres"
 export RI="--format ansi --no-pager"
-export RIPGREP_CONFIG_PATH=~/.config/ripgrep.conf
+export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep.conf
 
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export QT_QPA_PLATFORMTHEME="gtk2"
+
+export GOPATH="$HOME/src/upstream/go"
 
 # Colorize manpages
 export LESS_TERMCAP_mb=$'\e[1;31m'

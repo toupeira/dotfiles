@@ -96,9 +96,10 @@
   sta = -c diff.ignoreSubmodules=none st
   ss = !git --no-pager show --stat
 
-  l = log --graph --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
+  l = log --pretty=format:\"%C(yellow)[%h]%Creset %C(cyan)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
   ls = "!cd ${GIT_PREFIX:-.} && git l --stat"
   ld = log -p
+  lg = l --graph
   news = l ORIG_HEAD..
 
   d = diff HEAD
@@ -124,7 +125,7 @@
   amend = commit -v --amend
   reword = commit -v --amend --only
   extend = commit -v --amend --no-edit
-  fixup = !hash=$( git -c color.ui=always l | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "$( echo "$hash" | cut -d[ -f2 | cut -d] -f1 )"
+  fixup = !hash=$( git -c color.ui=always l -n 100 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "$( echo "$hash" | cut -d[ -f2 | cut -d] -f1 )"
   initial = commit --allow-empty -m 'Initial commit'
 
   r = remote -v
