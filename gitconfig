@@ -125,7 +125,7 @@
   amend = commit -v --amend
   reword = commit -v --amend --only
   extend = commit -v --amend --no-edit
-  fixup = !hash=$( git -c color.ui=always l -n 100 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "$( echo "$hash" | cut -d[ -f2 | cut -d] -f1 )"
+  fixup = !hash=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "$( echo "$hash" | cut -d[ -f2 | cut -d] -f1 )"
   initial = commit --allow-empty -m 'Initial commit'
 
   r = remote -v

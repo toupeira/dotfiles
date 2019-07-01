@@ -911,13 +911,13 @@ endfunction " }}}
   if index(g:pathogen_disabled, 'lsp') == -1
     let g:lsp_diagnostics_enabled = 0
 
-    if executable('solargraph')
-      au User lsp_setup call lsp#register_server({
-        \ 'name': 'ruby',
-        \ 'cmd': { server_info -> ['solargraph', 'stdio'] },
-        \ 'whitelist': ['ruby']
-      \ })
-    endif
+    " if executable('solargraph')
+    "   au User lsp_setup call lsp#register_server({
+    "     \ 'name': 'ruby',
+    "     \ 'cmd': { server_info -> ['solargraph', 'stdio'] },
+    "     \ 'whitelist': ['ruby']
+    "   \ })
+    " endif
 
     if executable('typescript-language-server')
       " https://github.com/ryanolsonx/vim-lsp-typescript

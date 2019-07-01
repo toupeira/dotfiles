@@ -50,6 +50,6 @@ function _spring_exec {
   fi
 }
 
-alias rails='_spring_exec rails'
-alias rake='_spring_exec rake'
-alias rspec='_spring_exec rspec'
+# alias rails='_spring_exec rails'
+# alias rake='_spring_exec rake'
+# alias rspec='_spring_exec rspec'
