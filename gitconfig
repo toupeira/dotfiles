@@ -9,7 +9,7 @@
 [user]
   name = Markus Koller
   email = markus-koller@gmx.ch
-  signingKey = A7A2B7B7
+  signingKey = DEEC7546D0A869C5AFDFD34AEC9A8B44C0635CE2
 
 [includeIf "gitdir:~/src/gitlab/"]
   path = .gitconfig.gitlab
