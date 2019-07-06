@@ -2,6 +2,7 @@ acpi
 adb
 fonts-noto-color-emoji
 fonts-roboto
+gnome-keyring
 gparted
 libglib2.0-bin
 libgdk-pixbuf2.0-bin
@@ -14,7 +15,6 @@ numix-icon-theme-circle
 pavucontrol
 peek
 quodlibet
-ssh-askpass-gnome
 thermald
 terminator
 wmctrl

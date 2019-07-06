@@ -1,4 +1,3 @@
-.*.swp
 bundle/cache
 nenv/bundles
 nenv/shims
@@ -8,4 +7,3 @@ rbenv/gems
 rbenv/shims
 rbenv/versions
 spacemacs.d/private
-tmux/.ssh-agent
