@@ -895,7 +895,7 @@ endfunction " }}}
 
     let g:ale_set_balloons = 0
     let g:ale_virtualtext_cursor = 1
-    let g:ale_virtualtext_prefix = '// → '
+    let g:ale_virtualtext_prefix = '→ '
 
     let g:ale_linters = {
       \ 'ruby': [ 'ruby', 'rubocop' ],
@@ -1126,7 +1126,7 @@ endfunction " }}}
   nnoremap <silent> ,B :ToggleBlameLine<CR>
 
   let g:blameLineVirtualTextHighlight = 'Question'
-  let g:blameLineVirtualTextPrefix = '// → '
+  let g:blameLineVirtualTextPrefix = '→ '
   " }}}
 
   " hexokinase {{{
