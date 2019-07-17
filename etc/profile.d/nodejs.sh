@@ -2,7 +2,7 @@ export NODE_PATH=/usr/lib/node_modules:/usr/share/javascript
 
 # Add nenv binstubs
 if [ -d ~/.nenv ]; then
-  export PATH="$HOME/.nenv/bin:$PATH"
+  export PATH="$PATH:$HOME/.nenv/bin"
 fi
 
 # Add yarn global packages

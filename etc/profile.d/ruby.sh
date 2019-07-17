@@ -1,6 +1,6 @@
 # Add rbenv binstubs
 if [ -d ~/.rbenv ]; then
-  export PATH="$HOME/.rbenv/bin:$PATH"
+  export PATH="$PATH:$HOME/.rbenv/bin"
 fi
 
 # Check for interactive bash
