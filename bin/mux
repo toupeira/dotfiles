@@ -98,7 +98,7 @@ case "$1" in
       server)
         options="-d"
 
-        if [ -f ../GDK_ROOT ]; then
+        if [ -f GDK_ROOT ] || [ -f ../GDK_ROOT ]; then
           command="gdk run"
         elif [ -x bin/rails ] || [ -x script/rails ]; then
           command="rails server"

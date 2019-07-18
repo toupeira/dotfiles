@@ -48,6 +48,9 @@
 # logs
 *.log
 
+# locales
+**/locale/*/app.js
+
 # home
 src/**/public/system
 src/**/tmp

@@ -108,6 +108,7 @@
 
   c = "!f() { [ $# -gt 0 ] && exec git checkout "$@"; branch=$( git branches 2>/dev/null | fzf +s --no-multi --prompt 'Branches> ' ) && git checkout "$branch"; }; f"
   co = c
+  b = rev-parse --abbrev-ref HEAD
   branches = "!git -c color.ui=always branch -a | grep -Ev '(/HEAD|/master)' | sed -r -e 's,^[\\* ]*,,' -e 's,remotes/[^/]+/,,'"
 
   lb = branch -avv
