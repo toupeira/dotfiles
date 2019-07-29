@@ -17,8 +17,8 @@ function _prompt_path {
   pwd=${pwd/#$HOME/\~}
   pwd=${pwd/#\~\/src\/gitlab\//🦊 }
   pwd=${pwd/#\~\/src\/gitlab/🦊}
-  pwd=${pwd/#\/etc\/dotfiles\//🛠  }
-  pwd=${pwd/#\/etc\/dotfiles/🛠 }
+  pwd=${pwd/#\/etc\/dotfiles\//⚙️  }
+  pwd=${pwd/#\/etc\/dotfiles/⚙️ }
 
   echo "$pwd"
 }

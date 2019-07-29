@@ -218,38 +218,26 @@
   endif
 
   " show the project name and relative path to the current file
-  function! ProjectFilepath(short) " {{{
-    if &ft == 'fzf'
-      return 'fzf'
-    endif
-
-    let l:path = fnamemodify(expand('%'), ':p:h')
+  function! ProjectPath(short) " {{{
     let l:root = getcwd()
 
-    let l:root = substitute(l:path, '^' . l:root . '/', '', '')
-    let l:root = substitute(l:root, '^' . $HOME, '~', '')
-
     if exists('b:git_dir')
-      let l:root = substitute(l:root, '^' . b:git_dir, '', '')
-      let l:project = fnamemodify(b:git_dir, ':h:t')
+      let l:project = fnamemodify(l:root, ':t')
+      let l:path = fnamemodify(expand('%'), ':p:h')
 
-      " only return project name
       if a:short || winwidth(0) < 60
+        " only return project name
         return l:project
-      endif
-
-      " otherwise also add the path
-      if fnamemodify(b:git_dir, ':h') == l:root
-        let l:root = l:project
       else
-        let l:root .= ' @ ' . l:project
+        " return project name with relative path
+        return l:project . l:path[strlen(l:root):]
       endif
+    else
+      return substitute(l:root, '^' . $HOME, '~', '')
     endif
-
-    return l:root
   endfunction " }}}
 
-  let &titlestring = "%t%m%r\ ❰%{ProjectFilepath(1)}❱"
+  let &titlestring = "%t%m%r\ ❰%{ProjectPath(1)}❱"
   let &iconstring = &titlestring
 
   " add Unicode marker for tmux navigation
@@ -831,23 +819,18 @@ endfunction " }}}
   " }}}
 
   " rooter {{{
-  let g:rooter_manual_only = 1
-  let g:rooter_change_directory_for_non_project_files = 0
+  let g:rooter_change_directory_for_non_project_files = 'current'
   let g:rooter_use_lcd = 1
   let g:rooter_silent_chdir = 1
   let g:rooter_patterns = [
     \ 'elm-package.json',
     \ 'ng-package.json',
+    \ 'package.json',
     \ 'Gemfile',
     \ 'mix.exs',
     \ '.git',
     \ '.git/',
-    \ '.svn/'
   \ ]
-
-  if index(g:pathogen_disabled, 'rooter') == -1
-    autocmd vimrc BufEnter * if !isdirectory(expand('%')) | Rooter
-  endif
   " }}}
 
   " matchparen {{{
@@ -1015,7 +998,7 @@ endfunction " }}}
 
     " show file directory separately from file name
     call airline#parts#define_raw('file', '%t%m')
-    call airline#parts#define_raw('filepath', '%#airline_filepath#❰%<%{ProjectFilepath(0)}❱')
+    call airline#parts#define_raw('filepath', '%#airline_filepath#❰%<%{ProjectPath(0)}❱')
     let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
 
     hi! airline_filepath          term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
