@@ -256,9 +256,6 @@
 [submodule "vim/bundle/didyoumean"]
 	path = vim/bundle/didyoumean
 	url = https://github.com/EinfachToll/DidYouMean.git
-[submodule "vim/bundle/hexokinase"]
-	path = vim/bundle/hexokinase
-	url = https://github.com/RRethy/vim-hexokinase.git
 [submodule "vim/bundle/tig-explorer"]
 	path = vim/bundle/tig-explorer
 	url = https://github.com/iberianpig/tig-explorer.vim.git

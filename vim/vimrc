@@ -230,6 +230,12 @@
         return l:project
       else
         " return project name with relative path
+        let l:path = l:path[strlen(l:root) + 1:]
+        if empty(l:path)
+          return l:project
+        else
+          return l:project . ' » ' . l:path
+        endif
         return l:project . l:path[strlen(l:root):]
       endif
     else
@@ -886,7 +892,7 @@ endfunction " }}}
       \ 'typescript': [ 'tslint' ]
     \ }
 
-    let g:ale_sh_shellcheck_options = '-e 2086,2155,2164'
+    " let g:ale_sh_shellcheck_options = '-e 2086,2155'
   endif
   " }}}
 

@@ -1,10 +1,5 @@
 #!/bin/bash
 
-echo
-echo -e '\e[0;32mUpdating remotes...'
-git fetch --all --quiet --prune || exit 1
-git merge --ff-only HEAD@{u} >/dev/null || exit 1
-
 LOCAL_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/heads | sort)
 REMOTE_BRANCHES=$(git for-each-ref --format '%(refname:short)' refs/remotes | sort)
 GIT_WTF_OUTPUT=$(git wtf)
@@ -63,7 +58,6 @@ case "$1" in
 
     if [ -z "$branches" ]; then
       echo -e "\e[0;36mNo merged branches.\e[0m"
-      echo
       exit
     fi
     ;;
