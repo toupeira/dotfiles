@@ -6,6 +6,7 @@ gnome-keyring
 gparted
 libglib2.0-bin
 libgdk-pixbuf2.0-bin
+libpam-gnome-keyring
 menulibre
 mpv
 nautilus-dropbox

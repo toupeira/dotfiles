@@ -165,6 +165,9 @@
   " auto-completion
   set completeopt=menuone,noinsert
   set shortmess+=c
+  if exists('&pumblend')
+    set pumblend=15
+  endif
 
   " line numbers
   set number
@@ -191,7 +194,6 @@
   set history=1000
   set report=0
   set wildmenu
-  set wildmode=list:longest,full
   set wildignore=*.pyc,*.o,*.lo,*.la,*.exe,*.swp,*.db,*.bak,*.old,*.dat,*.,tmp,*.mdb,*~,~*
 
   " automatically open quickfix window after commands that modify the quickfix list
@@ -277,10 +279,7 @@
   set shiftround
 
   " matching
-  set matchpairs=(:),{:},[:],<:>
   set showmatch
-  runtime macros/matchit.vim
-  let b:match_ignorecase = 1
 
   " diffing
   "set diffopt+=iwhite
@@ -1142,5 +1141,9 @@ endfunction " }}}
   let g:go_highlight_variable_declarations = 1
   let g:go_highlight_variable_assignments = 1
   " }}]
+
+  " matchup {{{
+  let g:matchup_matchparen_offscreen = {}
+  " }}}
 
 " }}}
