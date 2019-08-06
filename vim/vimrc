@@ -1037,11 +1037,11 @@ endfunction " }}}
     let g:fzf_action = { 'ctrl-x': 'split', 'ctrl-v': 'vsplit' }
 
     nnoremap <silent> ,f :Files<CR>
+    nnoremap <silent> ,F :Files <C-r>=expand('%:h')<CR>/<CR>
     nnoremap <silent> ,r :History<CR>
     nnoremap <silent> ,b :Buffers<CR>
     nnoremap <silent> ,l :BLines<CR>
     nnoremap <silent> ,L :Lines<CR>
-    " nnoremap <silent> ,t :BTags<CR>
 
     nnoremap <silent> ,gg :Rg<CR>
     nnoremap <expr>   ,G ':Rg '.expand('<cword>')
@@ -1104,14 +1104,13 @@ endfunction " }}}
   " }}}
 
   " signify {{{
-  nnoremap <silent> ,D :SignifyToggleHighlight<CR>
-  nnoremap <silent> ,F :SignifyFold!<CR>
+  nnoremap <silent> ,gD :SignifyToggleHighlight<CR>
 
   let g:signify_vcs_list = ['git']
   " }}}
 
   " blame-line {{{
-  nnoremap <silent> ,B :ToggleBlameLine<CR>
+  nnoremap <silent> ,gB :ToggleBlameLine<CR>
 
   let g:blameLineVirtualTextHighlight = 'Question'
   let g:blameLineVirtualTextPrefix = '→ '
