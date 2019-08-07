@@ -44,6 +44,7 @@
   gpgSign = true
 
 [diff]
+  algorithm = histogram
   renames = copies
   mnemonicprefix = true
   ignoreSubmodules = dirty

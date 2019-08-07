@@ -282,8 +282,7 @@
   set showmatch
 
   " diffing
-  "set diffopt+=iwhite
-  set diffopt+=algorithm:patience
+  set diffopt+=algorithm:histogram,indent-heuristic
 
   " folding
   set foldenable foldmethod=marker
