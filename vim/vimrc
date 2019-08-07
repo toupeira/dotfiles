@@ -265,7 +265,7 @@
   set formatoptions+=j
   set backspace=indent,eol,start
   set whichwrap+=<,>,[,],h,l
-  set iskeyword+=$
+  set iskeyword+=-
   set selection=inclusive
   set nrformats=hex
 

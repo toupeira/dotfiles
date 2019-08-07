@@ -70,9 +70,6 @@
 [submodule "vim/bundle/scriptease"]
 	path = vim/bundle/scriptease
 	url = https://github.com/tpope/vim-scriptease.git
-[submodule "tmux/powerline"]
-	path = tmux/powerline
-	url = https://github.com/powerline/powerline.git
 [submodule "vim/bundle/coffeescript"]
 	path = vim/bundle/coffeescript
 	url = https://github.com/kchmck/vim-coffee-script.git
