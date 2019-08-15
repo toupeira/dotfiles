@@ -305,6 +305,7 @@
   autocmd vimrc FileType help setlocal nonumber norelativenumber
   autocmd vimrc FileType help nnoremap <buffer><silent> q :bd<CR>
   autocmd vimrc FileType org setlocal foldmethod=expr
+  autocmd vimrc FileType qf setlocal nobuflisted
 
   autocmd vimrc BufRead,BufNewFile *.es6 setlocal ft=javascript
   autocmd vimrc BufRead,BufNewFile *.axlsx,*.prawn setlocal ft=ruby
@@ -534,6 +535,9 @@ endfunction " }}}
   " toggle paste mode with F12
   set pastetoggle=<f12>
 
+  " switch to alternate file
+  nnoremap <silent><expr> ,<Tab> empty(getreg('#')) ? ':bnext<CR>' : '<C-^>'
+
   " terminal
   tnoremap <Esc> <C-\><C-n>
 
@@ -656,30 +660,8 @@ endfunction " }}}
   nnoremap <silent><expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
 
   " ,n / ,p - next/previous buffer
-  nnoremap <silent> ,n :call <SID>SwitchBuffer(1)<CR>
-  nnoremap <silent> ,p :call <SID>SwitchBuffer(-1)<CR>
-  function! s:SwitchBuffer(delta)
-    let buffers = []
-    for nr in range(1, bufnr('$'))
-      if buflisted(nr) && getbufvar(nr, 'current_syntax') != 'qf'
-        call add(buffers, nr)
-      end
-    endfor
-
-    if len(buffers) == 0
-      return
-    endif
-
-    let position = index(buffers, bufnr('%')) + a:delta
-
-    if position < 0
-      let position = len(buffers) - 1
-    elseif position > len(buffers) - 1
-      let position = 0
-    endif
-
-    execute 'buffer' . buffers[position]
-  endfunction
+  nnoremap <silent> ,n :bnext<CR>
+  nnoremap <silent> ,p :bprevious<CR>
 
   " ,c - close current window, unless it's the only one
   nnoremap <silent> ,c :call <SID>CloseWindow()<CR>
