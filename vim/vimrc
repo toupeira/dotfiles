@@ -1015,17 +1015,17 @@ endfunction " }}}
   " fzf {{{
   if index(g:pathogen_disabled, 'fzf') == -1
     let g:fzf_layout = { 'window': 'enew' }
-    let g:fzf_action = { 'ctrl-x': 'split', 'ctrl-v': 'vsplit' }
+    let g:fzf_action = { 'ctrl-s': 'split', 'ctrl-v': 'vsplit' }
 
     nnoremap <silent> ,f :Files<CR>
     nnoremap <silent> ,F :Files <C-r>=expand('%:h')<CR>/<CR>
-    nnoremap <silent> ,r :History<CR>
+    nnoremap <silent> ,h :History<CR>
     nnoremap <silent> ,b :Buffers<CR>
     nnoremap <silent> ,l :BLines<CR>
     nnoremap <silent> ,L :Lines<CR>
 
-    nnoremap <silent> ,gg :Rg<CR>
-    nnoremap <expr>   ,G ':Rg '.expand('<cword>')
+    nnoremap <expr>   ,r ':Rg '.expand('<cword>')
+    nnoremap <silent> ,R :Rg<CR>
 
     nnoremap <silent> ,gf :GFiles<CR>
     nnoremap <silent> ,gs :GFiles?<CR>

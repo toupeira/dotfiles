@@ -117,6 +117,7 @@
   db = delete-branch
   cm = checkout master
   cd = checkout development
+  bcontains = branch -a --contains
 
   ap = add -p
   all = add -A
@@ -140,14 +141,14 @@
   rim = rebase -i master
   red = rebase development
   rid = rebase -i development
-  continue = rebase --continue
-  skip = rebase --skip
+  rcontinue = rebase --continue
   solve = mergetool
   pom = up origin master
 
   pu   = push -v --progress
   poof = push -v --progress --force-with-lease
   pusu = -c push.default=current push -v --progress --set-upstream
+  puci = pusu -o ci.skip
 
   sub = submodule
   checkout-submodules = submodule update -q --init

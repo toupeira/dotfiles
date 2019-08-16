@@ -21,6 +21,9 @@ Lint/AssignmentInCondition:
 
 ### METRICS
 
+Metrics/BlockLength:
+  Max: 50
+
 Metrics/ClassLength:
   Max: 300
 
