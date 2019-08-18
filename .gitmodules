@@ -58,9 +58,6 @@
 [submodule "vim/bundle/airline"]
 	path = vim/bundle/airline
 	url = https://github.com/vim-airline/vim-airline.git
-[submodule "vim/bundle/cycle"]
-	path = vim/bundle/cycle
-	url = https://github.com/zef/vim-cycle.git
 [submodule "vim/bundle/rooter"]
 	path = vim/bundle/rooter
 	url = https://github.com/airblade/vim-rooter.git
@@ -229,9 +226,6 @@
 [submodule "vim/bundle/vista"]
 	path = vim/bundle/vista
 	url = https://github.com/liuchengxu/vista.vim.git
-[submodule "vim/bundle/blame-line"]
-	path = vim/bundle/blame-line
-	url = https://github.com/tveskag/nvim-blame-line.git
 [submodule "vim/bundle/bufferize"]
 	path = vim/bundle/bufferize
 	url = https://github.com/AndrewRadev/bufferize.vim.git
@@ -253,3 +247,9 @@
 [submodule "vim/bundle/matchup"]
 	path = vim/bundle/matchup
 	url = https://github.com/andymass/vim-matchup.git
+[submodule "vim/bundle/cycle"]
+	path = vim/bundle/cycle
+	url = https://github.com/bootleq/vim-cycle.git
+[submodule "vim/bundle/jumpy"]
+	path = vim/bundle/jumpy
+	url = https://github.com/arp242/jumpy.vim.git

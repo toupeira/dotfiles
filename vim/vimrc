@@ -102,13 +102,6 @@
   syntax on
   colorscheme desertink
 
-  " colorscheme PaperColor
-  " hi! link Folded StatusLineNC
-  " hi! LineNr guibg=#121212
-  " hi! clear Visual
-  " hi! Visual guibg=#005F87
-  " hi! VisualNOS guibg=#004866
-
   " terminals
   if has('nvim')
     autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no | startinsert!
@@ -151,10 +144,6 @@
   if exists('&ttymouse')
     set ttymouse=xterm2
   endif
-
-  " increase command-line height during startup to avoid prompt on long filenames
-  " set cmdheight=2
-  " autocmd vimrc VimEnter * set cmdheight=1
 
   " windows
   set winheight=3
@@ -201,7 +190,7 @@
 
   " highlight trailing whitespace
   autocmd vimrc VimEnter,Colorscheme * hi! Whitespace ctermbg=235 guibg=#333333
-  autocmd vimrc VimEnter,Colorscheme * match Whitespace /[^ \t]\s\+$/
+  autocmd vimrc VimEnter,Colorscheme * match Whitespace /\s\+$/
 
   " go to last cursor position when opening files
   autocmd vimrc BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") && &ft != 'gitcommit'
@@ -448,29 +437,6 @@ endfunction " }}}
 " Keybindings
 " {{{
 
-  " Spacemacs escape hatch
-  nmap <Space>- ,s
-  nmap <Space>= ,v
-  nmap <Space><Backspace> ,c
-  nmap <Space><CR> ,w
-
-  nmap <Space>bb ,b
-  nmap <Space>ff ,f
-  nmap <Space>pf ,f
-  nmap <Space>ph ,f
-  nmap <Space>fr ,r
-  nnoremap <Space>bn :bnext<CR>
-  nnoremap <Space>bp :bprevious<CR>
-  nnoremap <Space>bd :bd<CR>
-  nnoremap <Space>bR :e<CR>
-  nnoremap <Space>fs :write<CR>
-  nnoremap <Space>qq :q<CR>
-  nnoremap <Space>qz :q<CR>
-  nnoremap <Space>qa :quitall<CR>
-  nnoremap <Space>wd <C-w>c
-  nnoremap <Space>ws <C-w>s
-  nnoremap <Space>wv <C-w>v
-
   noremap H ^
   noremap L $
 
@@ -514,10 +480,6 @@ endfunction " }}}
   inoremap <C-c> <Esc>
   autocmd vimrc CmdWinEnter * nnoremap <buffer> <C-c> :
 
-  " indent with Tab/Shift+Tab in visual mode
-  xnoremap <Tab> >
-  xnoremap <S-Tab> <
-
   " delete to black hole register with X
   noremap X "_d
   nnoremap XX "_dd
@@ -538,7 +500,7 @@ endfunction " }}}
   " switch to alternate file
   nnoremap <silent><expr> ,<Tab> empty(getreg('#')) ? ':bnext<CR>' : '<C-^>'
 
-  " terminal
+  " terminal mappings
   tnoremap <Esc> <C-\><C-n>
 
   " navigate windows/tmux panes with Ctrl+jkhl
@@ -601,51 +563,42 @@ endfunction " }}}
     exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
   endif
 
-  " keep clipboard when leaving Vim
+  " persist clipboard when leaving Vim
   if exists('$DISPLAY')
     autocmd vimrc VimLeave * call system('xclip -selection clipboard -o | xclip -selection clipboard -i')
   endif
 
   " ,q and ,e - toggle quickfix window and location list
-  nnoremap <silent> ,q :call <SID>ToggleList('Quickfix List', 'c')<CR>
-  nnoremap <silent> ,e :call <SID>ToggleList('Location List', 'l')<CR>
-  function! s:GetBufferList() " {{{
-    redir =>buflist
-    silent! ls
-    redir END
-    return buflist
-  endfunction " }}}
-  function! s:ToggleList(bufname, pfx) " {{{
-    let buflist = <SID>GetBufferList()
-    for bufnum in map(filter(split(buflist, '\n'), 'v:val =~ "'.a:bufname.'"'), 'str2nr(matchstr(v:val, "\\d\\+"))')
-      if bufwinnr(bufnum) != -1
-        exec(a:pfx.'close')
-        return
-      endif
-    endfor
+  nnoremap <silent> ,q :call <SID>ToggleList('c')<CR>
+  nnoremap <silent> ,e :call <SID>ToggleList('l')<CR>
+  function! s:ToggleList(command) " {{{
+    let windows = winnr('$')
+    exec(a:command.'close')
+    if windows != winnr('$')
+      return
+    endif
 
-    if a:pfx == 'c' && !len(getqflist())
+    if a:command == 'c' && !len(getqflist())
       echohl Question
       echo "Quickfix list is empty."
       return
-    elseif a:pfx == 'l' && !len(getloclist(0))
+    elseif a:command == 'l' && !len(getloclist(0))
       echohl Question
       echo "Location list is empty."
       return
     endif
 
     let winnr = winnr()
-    exec(a:pfx.'open')
+    exec(a:command.'open')
     if winnr() != winnr
       wincmd p
     endif
   endfunction " }}}
 
-  " resize quickfix windows to their content, or 20 lines maximum
-  autocmd vimrc FileType qf,ale-preview call <SID>ResizeWindow(2, 20)
+  " resize quickfix windows to their content, or 10 lines maximum
+  autocmd vimrc FileType qf,ale-preview call <SID>ResizeWindow(2, 10)
   function! s:ResizeWindow(min, max) " {{{
     nnoremap <buffer><silent> q :bd<CR>
-    nnoremap <buffer><silent> ,E :bd<CR>
     let max = min([a:max, &lines / 3])
     execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
   endfunction " }}}
@@ -663,20 +616,21 @@ endfunction " }}}
   nnoremap <silent> ,n :bnext<CR>
   nnoremap <silent> ,p :bprevious<CR>
 
-  " ,c - close current window, unless it's the only one
+  " ,c - close current window
   nnoremap <silent> ,c :call <SID>CloseWindow()<CR>
   function! s:CloseWindow() " {{{
-    " get number of visible buffers
-    let buffers = len(filter(range(1, bufnr('$')), 'buflisted(v:val)'))
+    if &buftype != 'quickfix'
+      let windows = len(filter(
+        \ range(1, winnr('$')),
+        \ "getbufvar(winbufnr(v:val), '&buftype') != 'quickfix'"
+      \ ))
 
-    if winnr('$') > 1
-      if bufname('%') == '[Command Line]'
-        close
-      else
-        lclose
-        wincmd c
+      if windows == 1
+        return
       endif
     endif
+
+    close
   endfunction " }}}
 
   " ,x - close the current buffer, keeping windows
@@ -687,9 +641,6 @@ endfunction " }}}
 
   " ,d - open file in new split
   nmap <silent> ,d <C-w>f
-
-  " ,R - reload vimrc
-  nnoremap <silent> ,R :runtime! vimrc gvimrc<CR>:nohlsearch<CR>
 
   " ,s - split horizontally
   nnoremap <silent> ,s :split<CR>
@@ -723,6 +674,13 @@ endfunction " }}}
 
 " Plugin Settings
 " {{{
+
+  " fugitive {{{
+  nnoremap <silent> ,gs :G<CR>
+  noremap <silent> ,gl :Gclog<CR>
+  noremap <silent> ,gL :0Gclog<CR>
+  noremap <silent> ,gB :Gblame<CR>
+  " }}}
 
   " markdown {{{
   let g:vim_markdown_conceal = 0
@@ -817,11 +775,6 @@ endfunction " }}}
     \ '.git',
     \ '.git/',
   \ ]
-  " }}}
-
-  " matchparen {{{
-  let g:matchparen_timeout = 50
-  let g:matchparen_insert_timeout = 50
   " }}}
 
   " tabular {{{
@@ -1027,10 +980,6 @@ endfunction " }}}
     nnoremap <expr>   ,r ':Rg '.expand('<cword>')
     nnoremap <silent> ,R :Rg<CR>
 
-    nnoremap <silent> ,gf :GFiles<CR>
-    nnoremap <silent> ,gs :GFiles?<CR>
-    nnoremap <silent> ,gl :Commits<CR>
-    nnoremap <silent> ,gL :BCommits<CR>
     nnoremap <silent> ,gb :Branches<CR>
 
     nnoremap <silent> ,: :History:<CR>
@@ -1088,13 +1037,11 @@ endfunction " }}}
   nnoremap <silent> ,gD :SignifyToggleHighlight<CR>
 
   let g:signify_vcs_list = ['git']
-  " }}}
 
-  " blame-line {{{
-  nnoremap <silent> ,gB :ToggleBlameLine<CR>
-
-  let g:blameLineVirtualTextHighlight = 'Question'
-  let g:blameLineVirtualTextPrefix = '→ '
+  let g:signify_sign_add               = '+ '
+  let g:signify_sign_delete            = '-'
+  let g:signify_sign_delete_first_line = '^'
+  let g:signify_sign_change            = '·'
   " }}}
 
   " hexokinase {{{
@@ -1124,6 +1071,72 @@ endfunction " }}}
 
   " matchup {{{
   let g:matchup_matchparen_offscreen = {}
+  " }}}
+
+  " cycle {{{
+  map <C-a> <Plug>CycleNext
+  map <C-x> <Plug>CyclePrev
+  noremap <Plug>CycleFallbackNext <C-a>
+  noremap <Plug>CycleFallbackPrev <C-x>
+
+  let g:cycle_no_mappings = 1
+
+  let g:cycle_default_groups = [
+    \ [[ '&&', '||' ]],
+    \ [[ '+', '-' ]],
+    \ [[ '+=', '-=' ]],
+    \ [[ '==', '!=' ]],
+    \ [[ '>', '<' ]],
+    \ [[ '>=', '<=' ]],
+    \ [[ 'above', 'below' ]],
+    \ [[ 'active', 'inactive' ]],
+    \ [[ 'add', 'remove' ]],
+    \ [[ 'and', 'or' ]],
+    \ [[ 'asc', 'desc' ]],
+    \ [[ 'assert', 'refute' ]],
+    \ [[ 'before', 'after' ]],
+    \ [[ 'credit', 'debit' ]],
+    \ [[ 'debug', 'info', 'warn', 'error', 'fatal' ]],
+    \ [[ 'enable', 'disable' ]],
+    \ [[ 'even', 'odd' ]],
+    \ [[ 'exclude', 'include' ]],
+    \ [[ 'first', 'last' ]],
+    \ [[ 'get', 'set' ]],
+    \ [[ 'height', 'width' ]],
+    \ [[ 'horizontal', 'vertical' ]],
+    \ [[ 'in', 'out' ]],
+    \ [[ 'internal', 'external' ]],
+    \ [[ 'left', 'right' ]],
+    \ [[ 'max', 'min' ]],
+    \ [[ 'next', 'previous' ]],
+    \ [[ 'only', 'except' ]],
+    \ [[ 'on', 'off' ]],
+    \ [[ 'read', 'write' ]],
+    \ [[ 'show', 'hide' ]],
+    \ [[ 'staging', 'production' ]],
+    \ [[ 'to', 'from' ]],
+    \ [[ 'top', 'bottom' ]],
+    \ [[ 'true', 'false' ]],
+    \ [[ 'up', 'down' ]],
+    \ [[ 'without', 'with' ]],
+    \ [[ 'yes', 'no' ]],
+  \ ]
+
+  let g:cycle_default_groups += [
+    \ [[ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' ]],
+    \ [[ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' ]],
+  \ ]
+
+  let g:cycle_default_groups_for_ruby = [
+    \ [[ 'class', 'module' ]],
+    \ [[ 'else', 'elsif' ]],
+    \ [[ 'get', 'post', 'put', 'patch' ]],
+    \ [[ 'if', 'unless' ]],
+    \ [[ 'present', 'blank' ]],
+  \ ]
+
+  let g:cycle_default_groups_for_eruby = g:cycle_default_groups_for_ruby
+  let g:cycle_default_groups_for_haml = g:cycle_default_groups_for_ruby
   " }}}
 
 " }}}

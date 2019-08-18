@@ -145,10 +145,8 @@ module Lines
           end
         end
       end
-
     end
   end
-
 end
 
 Lines.run!
