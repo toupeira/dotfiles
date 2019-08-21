@@ -1,0 +1,60 @@
+{
+  "*.rb": {
+    "path": [
+      "app/**",
+      "lib/**"
+    ]
+  },
+
+  "ee/*.rb": {
+    "path": [
+      "ee/app/**",
+      "ee/lib/**"
+    ]
+  },
+
+  "ee/app/controllers/*_controller.rb": { "type": "controller" },
+  "ee/app/finders/*_finder.rb":         { "type": "finder"     },
+  "ee/app/helpers/*_helper.rb":         { "type": "helper"     },
+  "ee/app/mailers/*_mailer.rb":         { "type": "mailer"     },
+  "ee/app/models/*.rb":                 { "type": "model"      },
+  "ee/app/policies/*_policy.rb":        { "type": "policy"     },
+  "ee/app/presenters/*_presenter.rb":   { "type": "presenter"  },
+  "ee/app/serializers/*_serializer.rb": { "type": "serializer" },
+  "ee/app/services/*_service.rb":       { "type": "service"    },
+  "ee/app/uploaders/*_uploader.rb":     { "type": "uploader"   },
+  "ee/app/validators/*_validator.rb":   { "type": "validator"  },
+  "ee/app/workers/*_worker.rb":         { "type": "worker"     },
+
+  "ee/app/views/*.*": {
+    "type": "view",
+    "alternate": [
+      "ee/spec/views/{}_spec.rb",
+      "ee/spec/views/{basename}_spec.rb"
+    ],
+    "path": [
+      "ee/app/views/**"
+    ]
+  },
+
+  "ee/lib/*.rb": {
+    "type": "lib",
+    "alternate": [
+      "ee/spec/lib/{}_spec.rb"
+    ]
+  },
+
+  "ee/spec/*_spec.rb": {
+    "type": "spec",
+    "alternate": [
+      "ee/app/{}"
+    ]
+  },
+
+  "ee/spec/lib/*_spec.rb": {
+    "type": "spec",
+    "alternate": [
+      "ee/lib/{}.rb"
+    ]
+  }
+}
