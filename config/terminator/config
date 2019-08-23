@@ -1,7 +1,7 @@
 [global_config]
   enabled_plugins = ,
   title_use_system_font = False
-  title_font = DejaVuSansMono Nerd Font 9
+  title_font = Hack Nerd Font 9
 [keybindings]
   zoom_in = <Primary>plus
   zoom_out = <Primary>underscore
@@ -59,7 +59,7 @@
     background_type = transparent
     cursor_blink = False
     cursor_color = "#ebebe9"
-    font = DejaVuSansMono Nerd Font 9
+    font = Hack Nerd Font 9
     foreground_color = "#ffffff"
     show_titlebar = False
     scrollbar_position = hidden
@@ -75,7 +75,7 @@
     background_type = transparent
     cursor_blink = False
     cursor_color = "#ebebe9"
-    font = DejaVuSansMono Nerd Font 10
+    font = Hack Nerd Font 10
     foreground_color = "#ffffff"
     show_titlebar = False
     scrollbar_position = hidden
@@ -91,7 +91,7 @@
     background_type = transparent
     cursor_blink = False
     cursor_color = "#ebebe9"
-    font = DejaVuSansMono Nerd Font 12
+    font = Hack Nerd Font 12
     foreground_color = "#ffffff"
     show_titlebar = False
     scrollbar_position = hidden

@@ -52,8 +52,8 @@ if type __git_ps1 &>/dev/null; then
   GIT_PS1_SHOWUPSTREAM='auto git'
 
   GIT_PS1_SUBSTITUTES="
-    s/\\*/☼/;
-    s/\\+/⚙/;
+    s/\\*/○/;
+    s/\\+/●/;
     s/%/‽/;
     s/\\\$/$/;
     s/=//;

@@ -3,11 +3,11 @@ if exists('g:GuiLoaded')
   GuiPopupmenu 0
 
   if hostname() == 'meerkat'
-    GuiFont! DejaVuSansMono\ Nerd\ Font:h10
+    GuiFont! Hack\ Nerd\ Font:h10
   elseif hostname() == 'schtube'
-    GuiFont! DejaVuSansMono\ Nerd\ Font:h12
+    GuiFont! Hack\ Nerd\ Font:h12
   else
-    GuiFont! DejaVuSansMono\ Nerd\ Font:h9
+    GuiFont! Hack\ Nerd\ Font:h9
   endif
 
   if &diff
