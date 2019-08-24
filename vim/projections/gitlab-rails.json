@@ -26,7 +26,11 @@
   "ee/app/validators/*_validator.rb":   { "type": "validator"  },
   "ee/app/workers/*_worker.rb":         { "type": "worker"     },
 
-  "ee/app/views/*.*": {
+  "app/views/*": {
+    "type": "view"
+  },
+
+  "ee/app/views/*": {
     "type": "view",
     "alternate": [
       "ee/spec/views/{}_spec.rb",

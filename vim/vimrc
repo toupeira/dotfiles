@@ -210,9 +210,11 @@
 
   " show the project name and relative path to the current file
   function! ProjectPath(short) " {{{
-    let l:root = getcwd()
+    let l:root = substitute(getcwd(), '/\.git$', '', '')
 
-    if exists('b:git_dir')
+    if !exists('b:git_dir')
+      return substitute(l:root, '^' . $HOME, '~', '')
+    else
       let l:project = fnamemodify(l:root, ':t')
       let l:path = fnamemodify(expand('%'), ':p:h')
 
@@ -221,16 +223,14 @@
         return l:project
       else
         " return project name with relative path
-        let l:path = l:path[strlen(l:root) + 1:]
+        let l:path = substitute(l:path, '^\(fugitive://\)\?' . l:root . '/\?', '', '')
+
         if empty(l:path)
           return l:project
         else
           return l:project . ' » ' . l:path
         endif
-        return l:project . l:path[strlen(l:root):]
       endif
-    else
-      return substitute(l:root, '^' . $HOME, '~', '')
     endif
   endfunction " }}}
 
@@ -315,49 +315,15 @@
   let php_alt_AssignByReference = 1
   let php_folding = 1
 
-  " JSON shortcuts
-  nnoremap ck ^ci"
-  nnoremap cv $F"ci"
-
   " show recent log entries in commit messages
-  function! s:EnhanceCommitMessage()
-    " avoid line wrapping
-    let textwidth = &textwidth
-    let &textwidth = 0
-
-    " return if log entries were already added
-    normal gg0
-    if search('^# Latest commits:$')
-      return
-    endif
-
-    if !search('^# Please enter the commit message')
-      return
-    endif
-
-    normal V
-    call search('^# Changes to be committed:$')
-    normal kkd
-
-    normal O# Latest commits:
-
-    let command = 'git log -n 5 --no-color --no-decorate --pretty=%s'
-    for line in split(system(command), '\n')
-      execute 'normal o#  - ' . line
-    endfor
-
-    normal o#
-    normal gg0
-
-    " insert new line for empty commit messages
-    if search('^# Latest commits:$', 'n') == 2
+  " start insert mode when committing
+  function! s:CommitStartInsert()
+    if getline(1) == ''
       normal O
       startinsert
     endif
-
-    let &textwidth = textwidth
   endfunction
-  autocmd vimrc FileType gitcommit call <SID>EnhanceCommitMessage()
+  autocmd vimrc FileType gitcommit call <SID>CommitStartInsert()
 
 " }}}
 
@@ -680,6 +646,8 @@ endfunction " }}}
   noremap <silent> ,gl :Gclog<CR>
   noremap <silent> ,gL :0Gclog<CR>
   noremap <silent> ,gB :Gblame<CR>
+
+  autocmd vimrc FileType fugitive if b:fugitive_type == 'index' | setlocal nobuflisted | endif
   " }}}
 
   " markdown {{{
@@ -691,6 +659,7 @@ endfunction " }}}
 
   " dispatch {{{
   let g:dispatch_no_maps = 1
+  let g:dispatch_handlers = [ 'job' ]
   " }}}
 
   " org-mode {{{
@@ -901,12 +870,13 @@ endfunction " }}}
     let g:airline#extensions#branch#format = 2
     let g:airline#extensions#branch#vcs_checks = []
 
-    let g:airline#extensions#tabline#buffers_label = 'b'
-    let g:airline#extensions#tabline#tabs_label = 't'
+    let g:airline#extensions#tabline#buffers_label = ''
+    let g:airline#extensions#tabline#tabs_label = 'tabs'
     let g:airline#extensions#tabline#overflow_marker = ' … '
-    let g:airline#extensions#tabline#formatter = 'unique_tail'
+    let g:airline#extensions#tabline#formatter = 'unique_tail_improved'
     let g:airline#extensions#tabline#buffer_nr_show = 1
     let g:airline#extensions#tabline#buffer_min_count = 2
+    let g:airline#extensions#tabline#fnamemod = ':t'
     let g:airline#extensions#tabline#fnamecollapse = 0
 
     if !exists('g:airline_symbols')
@@ -921,14 +891,16 @@ endfunction " }}}
       \ '__' : '#',
       \ 'n'  : 'n',
       \ 'i'  : 'i',
+      \ 'ic' : 'i',
+      \ 'ix' : 'i',
       \ 'R'  : 'r',
       \ 'v'  : 'v',
       \ 'V'  : 'V',
       \ 'c'  : 'c',
-      \ "\026" : 'v•b',
+      \ '' : 'v•b',
       \ 's'  : 's',
       \ 'S'  : 'S',
-      \ "\023" : 's•b',
+      \ '' : 's•b',
       \ }
 
     let g:airline#extensions#default#section_truncate_width = {

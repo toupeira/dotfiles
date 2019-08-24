@@ -37,9 +37,6 @@
   commitBeforeMerge = false
   resolveConflict = false
 
-[branch]
-  autosetuprebase = always
-
 [commit]
   gpgSign = true
 
@@ -79,6 +76,9 @@
   diff = diff-so-fancy | less -X
   branch = less -FX
 
+[pull]
+  rebase = true
+
 [rebase]
   autosquash = true
   stat = true
@@ -91,7 +91,6 @@
   fetchJobs = 0
 
 [alias]
-  h = help
   s = status
   st = status
   sta = -c diff.ignoreSubmodules=none st
@@ -104,51 +103,53 @@
   lg = l --graph
   news = l ORIG_HEAD..
 
-  d = diff HEAD
   di = diff
   dc = diff --cached
+  dh = diff HEAD
 
   c = "!f() { [ $# -gt 0 ] && exec git checkout "$@"; branch=$( git branches 2>/dev/null | fzf +s --no-multi --prompt 'Branches> ' ) && git checkout "$branch"; }; f"
   co = c
   b = rev-parse --abbrev-ref HEAD
   branches = "!git -c color.ui=always branch -a | grep -Ev '(/HEAD|/master)' | sed -r -e 's,^[\\* ]*,,' -e 's,remotes/[^/]+/,,'"
+  cm = checkout master
+  cd = checkout development
 
   lb = branch -avv
   cb = create-branch
   db = delete-branch
-  cm = checkout master
-  cd = checkout development
   bcontains = branch -a --contains
 
   ap = add -p
   all = add -A
   unstage = reset HEAD -p
   discard = checkout -p
+
   ci = commit -v
-  ca = commit -va
-  amend = commit -v --amend
-  reword = commit -v --amend --only
-  extend = commit -v --amend --no-edit
+  ca = ci -a
+  amend = ci --amend
+  reword = amend --only
+  extend = amend --no-edit
   fixup = !hash=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "$( echo "$hash" | cut -d[ -f2 | cut -d] -f1 )"
   initial = commit --allow-empty -m 'Initial commit'
 
   r = remote -v
   shallow = clone --depth 1
 
-  up = pull -v --progress
+  up = pull
   ff = merge --ff-only HEAD@{u}
+  re = rebase
   ri = rebase -i
-  rem = rebase master
-  rim = rebase -i master
-  red = rebase development
-  rid = rebase -i development
-  rcontinue = rebase --continue
+  rem = re master
+  rim = ri master
+  red = re development
+  rid = ri development
+  rcontinue = re --continue
   solve = mergetool
   pom = up origin master
 
-  pu   = push -v --progress
-  poof = push -v --progress --force-with-lease
-  pusu = -c push.default=current push -v --progress --set-upstream
+  pu = push -v
+  poof = pu --force-with-lease
+  pusu = -c push.default=current pu --set-upstream
   puci = pusu -o ci.skip
 
   sub = submodule
@@ -161,7 +162,7 @@
   stw = "!cd ${GIT_PREFIX:-.} && git --no-pager -c color.ui=always stash show"
   stl = "!cd ${GIT_PREFIX:-.} && git --no-pager -c color.ui=always stash list"
 
-  # shell wrappers
+  # shell wrappers for src_alias
   sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
   bash = "!f() { [ $# -gt 0 ] && bash -ic \"$@\"; }; f"
   rg = !rg
