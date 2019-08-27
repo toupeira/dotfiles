@@ -253,3 +253,9 @@
 [submodule "vim/bundle/jumpy"]
 	path = vim/bundle/jumpy
 	url = https://github.com/arp242/jumpy.vim.git
+[submodule "vim/bundle/fugitive-gitlab"]
+	path = vim/bundle/fugitive-gitlab
+	url = https://github.com/shumphrey/fugitive-gitlab.vim
+[submodule "vim/bundle/rhubarb"]
+	path = vim/bundle/rhubarb
+	url = https://github.com/tpope/vim-rhubarb.git
