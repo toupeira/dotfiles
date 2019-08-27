@@ -144,6 +144,7 @@
   red = re development
   rid = ri development
   rcontinue = re --continue
+  rabort = re --abort
   solve = mergetool
   pom = up origin master
 
