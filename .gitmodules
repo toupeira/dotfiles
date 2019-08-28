@@ -259,3 +259,6 @@
 [submodule "vim/bundle/rhubarb"]
 	path = vim/bundle/rhubarb
 	url = https://github.com/tpope/vim-rhubarb.git
+[submodule "vim/bundle/splitjoin"]
+	path = vim/bundle/splitjoin
+	url = https://github.com/AndrewRadev/splitjoin.vim.git

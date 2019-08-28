@@ -29,7 +29,7 @@ export FZF_ALT_C_OPTS="
 _fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }
 _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
 
-. /usr/share/bash-completion/completions/fzf
+. /usr/share/doc/fzf/examples/completion.bash
 . /usr/share/doc/fzf/examples/key-bindings.bash
 
 bind '"\C-b": " \C-e\C-ugit c\C-m"'

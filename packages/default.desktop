@@ -4,8 +4,9 @@ fonts-noto-color-emoji
 fonts-roboto
 gnome-keyring
 gparted
-libglib2.0-bin
 libgdk-pixbuf2.0-bin
+libglib2.0-bin
+libnotify-bin
 libpam-gnome-keyring
 menulibre
 mpv
@@ -17,10 +18,11 @@ pavucontrol
 peek
 qt5-gtk2-platformtheme
 quodlibet
-thermald
 terminator
+thermald
 wmctrl
 xautomation
-xdotool
 xclip
+xdotool
+xinput
 xwit

@@ -665,7 +665,7 @@ function run {
         }
 
         install_packages "$missing_apt"  sudo aptitude install
-        install_packages "$missing_gem"  sudo gem install
+        install_packages "$missing_gem"  gem install
         install_packages "$missing_npm"  sudo npm -g install
         install_packages "$missing_yarn" yarn global add
         install_packages "$missing_pip"  sudo pip3 install
