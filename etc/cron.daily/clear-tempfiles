@@ -11,5 +11,5 @@ find /tmp \
   -name '.org.chromium.*' \
   \) -exec rm -rf "{}" \;
 
-find /home/*/.vim/tmp \
-  -type f -mtime +180 -delete
+find /home/*/.local/share/nvim/{swap,undo} \
+  -type f -mtime +90 -delete 2>/dev/null

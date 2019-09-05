@@ -63,20 +63,9 @@
     let &grepprg = "rg --vimgrep"
   endif
 
-  " store swapfiles in a central location
-  set directory=~/.vim/tmp/swap//,.,/var/tmp//,/tmp//
-  if !isdirectory(s:vimdir . '/tmp/swap')
-    call mkdir(s:vimdir . '/tmp/swap', 'p')
-  endif
-
   " enable persistent undo
   if has('persistent_undo')
     set undofile
-    set undodir=~/.vim/tmp/undo
-
-    if !isdirectory(&undodir)
-      call mkdir(&undodir, 'p')
-    endif
   endif
 
   " spell checking
