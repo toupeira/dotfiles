@@ -41,6 +41,16 @@
     ]
   },
 
+  "config/routes/*.rb": {
+    "type": "route",
+    "alternate": "spec/routing/{}_routing_spec.rb"
+  },
+
+  "ee/config/routes/*.rb": {
+    "type": "route",
+    "alternate": "ee/spec/routing/{}_routing_spec.rb"
+  },
+
   "ee/lib/*.rb": {
     "type": "lib",
     "alternate": [
