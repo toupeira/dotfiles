@@ -135,6 +135,10 @@
       <a>Pause</a>
       <x>Back</x>
       <y>OSD</y>
+      <left>SmallStepBack</left>
+      <right>StepForward</right>
+      <up>BigStepForward</up>
+      <down>BigStepBack</down>
     </joystick>
   </FullscreenInfo>
   <VideoOSD>
