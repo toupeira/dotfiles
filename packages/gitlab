@@ -10,6 +10,7 @@ libsqlite3-dev
 libssl-dev
 pkg-config
 redis
+runit
 zlib1g-dev
 
 gem:gitlab-development-kit

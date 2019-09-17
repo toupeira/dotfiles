@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Add rbenv binstubs
 if [ -d ~/.rbenv ]; then
   export PATH="$PATH:$HOME/.rbenv/bin"

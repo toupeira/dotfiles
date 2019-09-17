@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 export NODE_PATH=/usr/lib/node_modules:/usr/share/javascript
 
 # Add nenv binstubs

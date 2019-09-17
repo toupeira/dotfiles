@@ -1,3 +1,5 @@
+# shellcheck shell=bash
+
 # Check for interactive bash and fzf
 [ -n "$BASH_INTERACTIVE" ] && has fzf || return
 
