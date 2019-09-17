@@ -76,7 +76,6 @@ alias e='sensible-emacs'
 
 alias fd='fdfind --hidden --ignore-file /etc/dotfiles/ignore'
 alias pyserve='python -m SimpleHTTPServer 8080'
-alias xvfb-run='xvfb-run -a -s "-screen 0 1280x8192x24" --'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases
