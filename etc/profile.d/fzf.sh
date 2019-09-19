@@ -12,7 +12,7 @@ export FZF_DEFAULT_OPTS="
   --history $HOME/.fzf_history
   --prompt '» '
   --preview-window right:70%:hidden
-  --bind '?:toggle-preview,ctrl-j:down,ctrl-n:down,ctrl-p:up,down:next-history,up:previous-history'"
+  --bind 'ctrl-o:toggle-preview,ctrl-j:down,ctrl-n:down,ctrl-p:up,down:next-history,up:previous-history'"
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND --type d --type l"
 export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND/--type f/--type d}"

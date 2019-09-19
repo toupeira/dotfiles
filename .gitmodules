@@ -46,15 +46,9 @@
 [submodule "vim/bundle/rsi"]
 	path = vim/bundle/rsi
 	url = https://github.com/tpope/vim-rsi.git
-[submodule "vim/bundle/vimlint"]
-	path = vim/bundle/vimlint
-	url = https://github.com/dbakker/vim-lint.git
 [submodule "vim/bundle/javascript-libraries-syntax"]
 	path = vim/bundle/javascript-libraries-syntax
 	url = https://github.com/othree/javascript-libraries-syntax.vim.git
-[submodule "vim/bundle/movar"]
-	path = vim/bundle/movar
-	url = https://github.com/robmiller/vim-movar.git
 [submodule "vim/bundle/airline"]
 	path = vim/bundle/airline
 	url = https://github.com/vim-airline/vim-airline.git
@@ -262,3 +256,18 @@
 [submodule "vim/bundle/splitjoin"]
 	path = vim/bundle/splitjoin
 	url = https://github.com/AndrewRadev/splitjoin.vim.git
+[submodule "vim/bundle/startify"]
+	path = vim/bundle/startify
+	url = https://github.com/mhinz/vim-startify.git
+[submodule "vim/bundle/deleft"]
+	path = vim/bundle/deleft
+	url = https://github.com/AndrewRadev/deleft.vim.git
+[submodule "vim/bundle/multiple-cursors"]
+	path = vim/bundle/multiple-cursors
+	url = https://github.com/terryma/vim-multiple-cursors.git
+[submodule "vim/bundle/pear-tree"]
+	path = vim/bundle/pear-tree
+	url = https://github.com/tmsvg/pear-tree.git
+[submodule "vim/bundle/reply"]
+	path = vim/bundle/reply
+	url = https://github.com/rhysd/reply.vim.git

@@ -502,7 +502,7 @@ function run {
     update-submodules|sup) # {{{
       local submodules=$( run list )
       if [ -n "$1" ]; then
-        submodules=$( echo "$submodules" | egrep "$1" )
+        submodules=$( echo "$submodules" | egrep "${1%/}" )
       fi
 
       output

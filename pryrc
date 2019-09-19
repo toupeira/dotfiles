@@ -30,7 +30,8 @@ end
 cyan     = ->(text) { "\001\e[1;36m\002#{text}\001\e[0m\002" }
 darkcyan = ->(text) { "\001\e[0;36m\002#{text}\001\e[0m\002" }
 red      = ->(text) { "\001\e[1;31m\002#{text}\001\e[0m\002" }
-gray     = ->(text) { "\001\e[1;30m\002#{text}\001\e[0m\002" }
+magenta  = ->(text) { "\001\e[1;35m\002#{text}\001\e[0m\002" }
+gray     = ->(text) { "\001\e[2m\002#{text}\001\e[0m\002" }
 
 target_string = lambda do |object|
   target = Pry.view_clip(object)
@@ -46,19 +47,20 @@ separator = red.call("»")
 Pry.config.prompt = [
   lambda { |object, level, pry|
     input = pry.respond_to?(:input_ring) ? pry.input_ring : pry.input_array
-    "#{gray.call "[#{input.size}]"} #{Pry.config.prompt_name}#{target_string.call(object)} #{separator} "
+    "#{gray.call "[#{input.size}]"} #{Pry.config.prompt_name}#{target_string.call(object)} #{red.call("»")} "
   },
   lambda { |object, level, pry|
     input = pry.respond_to?(:input_ring) ? pry.input_ring : pry.input_array
     prompt = Pry.config.prompt_name.gsub(/\001.*?\002/, '')
 
+    $s = target_string.call(object)
     spaces = (
       "[#{input.size}]".size +
       prompt.size +
-      target_string.call(object).size
+      target_string.call(object).gsub(/(\e\[.*?m|[^[:print:]])/, '').size
     )
 
-    "#{' ' * spaces}  #{separator} "
+    "#{' ' * spaces}  #{magenta.call("»")} "
   }
 ]
 ### }}}

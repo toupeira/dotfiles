@@ -280,7 +280,7 @@
   autocmd vimrc FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd vimrc FileType crontab setlocal nobackup nowritebackup
   autocmd vimrc FileType puppet setlocal commentstring=#%s
-  autocmd vimrc FileType help setlocal nonumber norelativenumber
+  autocmd vimrc FileType help setlocal nonumber norelativenumber nospell
   autocmd vimrc FileType help nnoremap <buffer><silent> q :bd<CR>
   autocmd vimrc FileType org setlocal foldmethod=expr
   autocmd vimrc FileType qf setlocal nobuflisted
@@ -453,7 +453,7 @@ endfunction " }}}
   set pastetoggle=<f12>
 
   " switch to alternate file
-  nnoremap <silent><expr> ,<Tab> empty(getreg('#')) ? ':bnext<CR>' : '<C-^>'
+  nnoremap <silent><expr> ,<Tab> empty(getreg('#')) \|\| !buflisted(getreg('#')) ? ':bnext<CR>' : '<C-^>'
 
   " terminal mappings
   tnoremap <Esc> <C-\><C-n>
@@ -705,11 +705,37 @@ endfunction " }}}
   let g:used_javascript_libs = 'jquery,requirejs'
   " }}}
 
+  " reply {{{
+  nnoremap <silent> ,! :Repl<CR>
+  noremap <silent> ,> :ReplSend<CR>
+  noremap <silent> ,< :ReplRecv<CR>
+
+  function! s:reply_bash() abort
+    return reply#repl#base('bash', {
+      \ 'command_options': ['-l'],
+      \ 'prompt_start': '^[^[]\+ \[[^[]\+]\( ❰.*❱\)\? ',
+      \ 'prompt_continue': '^ *» ',
+    \ })
+  endfunction
+
+  function! s:reply_ruby() abort
+    return reply#repl#base('pry', {
+      \ 'prompt_start': '^\[\d\+] pry\(\[[^]]\+\]\)\? » ',
+      \ 'prompt_continue': '^ *» ',
+    \ })
+  endfunction
+
+  let g:reply_repls = {
+    \ 'sh': [function('s:reply_bash')],
+    \ 'ruby': [function('s:reply_ruby')],
+  \ }
+  " }}}
+
   " test {{{
   let g:test#strategy = 'dispatch'
 
-  nnoremap <silent> ,! :TestFile<CR>
-  nnoremap <silent> ,@ :TestNearest<CR>
+  nnoremap <silent> ,@ :TestFile<CR>
+  nnoremap <silent> ,# :TestNearest<CR>
   " }}}
 
   " ragtag {{{
@@ -1033,7 +1059,7 @@ endfunction " }}}
   let g:go_highlight_fields = 1
   let g:go_highlight_variable_declarations = 1
   let g:go_highlight_variable_assignments = 1
-  " }}]
+  " }}}
 
   " matchup {{{
   let g:matchup_matchparen_offscreen = {}
@@ -1103,6 +1129,65 @@ endfunction " }}}
 
   let g:cycle_default_groups_for_eruby = g:cycle_default_groups_for_ruby
   let g:cycle_default_groups_for_haml = g:cycle_default_groups_for_ruby
+  " }}}
+
+  " startify {{{
+  let g:startify_files_number = 5
+  let g:startify_bookmarks = [ {'c': '/etc/dotfiles/vim/vimrc'} ]
+
+  let g:startify_lists = [
+    \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
+    \ { 'type': 'files',     'header': ['   MRU']            },
+    \ { 'type': 'sessions',  'header': ['   Sessions']       },
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
+    \ { 'type': 'commands',  'header': ['   Commands']       },
+  \ ]
+
+  if has('nvim')
+    let g:startify_ascii = [
+      \ "      .            .",
+      \ "    .,;'           :,.",
+      \ "  .,;;;,,.         ccc;.",
+      \ ".;c::::,,,'        ccccc:",
+      \ ".::cc::,,,,,.      cccccc.",
+      \ ".cccccc;;;;;;'     llllll.",
+      \ ".cccccc.,;;;;;;.   llllll.",
+      \ ".cccccc  ';;;;;;'  oooooo.",
+      \ "'lllllc   .;;;;;;;.oooooo'",
+      \ "'lllllc     ,::::::looooo'",
+      \ "'llllll      .:::::lloddd'",
+      \ ".looool       .;::coooodo.",
+      \ "  .cool         'ccoooc.",
+      \ "    .co          .:o:.",
+      \ "      .           .'",
+    \ ]
+  else
+    let g:startify_ascii = [
+      \ "     ________ ++     ________",
+      \ "    /VVVVVVVV\++++  /VVVVVVVV\\",
+      \ "    \VVVVVVVV/++++++\VVVVVVVV/",
+      \ "     |VVVVVV|++++++++/VVVVV/'",
+      \ "     |VVVVVV|++++++/VVVVV/'",
+      \ "    +|VVVVVV|++++/VVVVV/'+",
+      \ "  +++|VVVVVV|++/VVVVV/'+++++",
+      \ "+++++|VVVVVV|/VVV___++++++++++",
+      \ "  +++|VVVVVVVVVV/##/ +_+_+_+_",
+      \ "    +|VVVVVVVVV___ +/#_#,#_#,\\",
+      \ "     |VVVVVVV//##/+/#/+/#/'/#/",
+      \ "     |VVVVV/'+/#/+/#/+/#/ /#/",
+      \ "     |VVV/'++/#/+/#/ /#/ /#/",
+      \ "     'V/'  /##//##//##//###/",
+      \ "              ++",
+    \ ]
+  endif
+
+  let g:startify_custom_header = map(g:startify_ascii, '"   ".v:val')
+  " }}}
+
+  " multiple-cursors {{{
+  let g:multi_cursor_exit_from_visual_mode = 1
+  let g:multi_cursor_exit_from_insert_mode = 1
+  let g:multi_cursor_quit_key = '<C-c>'
   " }}}
 
 " }}}
