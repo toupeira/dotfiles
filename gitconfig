@@ -96,7 +96,7 @@
   sta = -c diff.ignoreSubmodules=none st
   ss = !git --no-pager show --stat
 
-  l = log --pretty=format:\"%C(yellow)[%h]%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black bold)%ar%Creset\"
+  l = log --pretty=format:\"%C(yellow)[%h]%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(green)%d%Creset %C(black)%ar%Creset\"
   ls = "!cd ${GIT_PREFIX:-.} && git l --stat"
   ld = log -p
   ldf = ld --follow

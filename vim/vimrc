@@ -16,6 +16,8 @@
     let g:pathogen_disabled = []
   endif
 
+  call add(g:pathogen_disabled, 'pear-tree')
+
   " disable netrw
   let g:loaded_netrwPlugin = 1
 

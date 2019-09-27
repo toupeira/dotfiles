@@ -5,6 +5,9 @@ AllCops:
 
 ### LAYOUT
 
+Layout/EndAlignment:
+  EnforcedStyleAlignWith: start_of_line
+
 Layout/IndentFirstHashElement:
   EnforcedStyle: consistent
 
@@ -23,6 +26,8 @@ Lint/AssignmentInCondition:
 
 Metrics/BlockLength:
   Max: 50
+  Exclude:
+    - spec/**/*_spec.rb
 
 Metrics/ClassLength:
   Max: 300
@@ -34,13 +39,18 @@ Metrics/MethodLength:
   Max: 40
 
 Metrics/AbcSize:
-  Max: 20
+  Max: 25
 
 Metrics/CyclomaticComplexity:
   Max: 20
 
 Metrics/PerceivedComplexity:
   Max: 20
+
+### NAMING
+
+Naming/RescuedExceptionsVariableName:
+  Enabled: false
 
 ### SECURITY
 
@@ -61,8 +71,14 @@ Style/FormatStringToken:
 Style/GuardClause:
   Enabled: false
 
+Style/IfUnlessModifier:
+  Enabled: false
+
+Style/NumericPredicate:
+  Enabled: false
+
 Style/TernaryParentheses:
-  EnforcedStyle: require_parentheses_when_complex
+  EnforcedStyle: require_no_parentheses
 
 Style/SpecialGlobalVars:
   Enabled: false
