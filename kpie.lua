@@ -42,7 +42,6 @@ end
 
 -- windows on the left
 if class == 'Nautilus'
-or class == 'Quodlibet'
 or class == 'Evince'
 or class == 'Gitg'
 or class == 'Zeal'

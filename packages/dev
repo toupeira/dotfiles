@@ -3,6 +3,7 @@ autoconf
 automake
 build-essential
 ed
+gettext
 libreadline-dev
 libssl-dev
 manpages-dev

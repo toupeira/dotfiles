@@ -149,6 +149,7 @@
   pom = up origin master
 
   pu = push -v
+  pua  = -c push.default=matching push -v --progress
   poof = pu --force-with-lease
   pusu = -c push.default=current pu --set-upstream
   puci = pusu -o ci.skip
