@@ -756,6 +756,7 @@ endfunction " }}}
     \ 'elm-package.json',
     \ 'ng-package.json',
     \ 'package.json',
+    \ 'go.mod',
     \ 'Gemfile',
     \ 'mix.exs',
     \ '.git',

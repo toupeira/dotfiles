@@ -1,0 +1,9 @@
+[Unit]
+Description=Disable ACPI wake-up
+
+[Service]
+Type=oneshot
+ExecStart=bash -c 'for device in $( grep -l enabled $( find /sys/devices -type f -name wakeup ) ); do echo disabled > "$device"; done'
+
+[Install]
+WantedBy=multi-user.target
