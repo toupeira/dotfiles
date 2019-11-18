@@ -271,3 +271,6 @@
 [submodule "vim/bundle/reply"]
 	path = vim/bundle/reply
 	url = https://github.com/rhysd/reply.vim.git
+[submodule "vim/bundle/smoothie"]
+	path = vim/bundle/smoothie
+	url = https://github.com/psliwka/vim-smoothie.git

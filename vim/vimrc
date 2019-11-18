@@ -1194,4 +1194,8 @@ endfunction " }}}
   let g:multi_cursor_quit_key = '<C-c>'
   " }}}
 
+  " smoothie {{{
+  let g:smoothie_base_speed = 16
+  " }}}
+
 " }}}
