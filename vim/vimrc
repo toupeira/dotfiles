@@ -1195,7 +1195,7 @@ endfunction " }}}
   " }}}
 
   " smoothie {{{
-  let g:smoothie_base_speed = 16
+  let g:smoothie_base_speed = 20
   " }}}
 
 " }}}
