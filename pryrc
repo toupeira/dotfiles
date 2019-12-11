@@ -1,4 +1,4 @@
-### default gems {{{
+# default gems
 %w[
   yaml
   active_support/all
@@ -9,7 +9,6 @@
     nil
   end
 end
-### }}}
 
 # startup message
 puts
@@ -26,7 +25,7 @@ Kernel.at_exit { puts }
   end
 end
 
-### prompt configuration {{{
+# prompt configuration
 cyan     = ->(text) { "\001\e[1;36m\002#{text}\001\e[0m\002" }
 darkcyan = ->(text) { "\001\e[0;36m\002#{text}\001\e[0m\002" }
 red      = ->(text) { "\001\e[1;31m\002#{text}\001\e[0m\002" }
@@ -63,4 +62,3 @@ Pry.config.prompt = [
     "#{' ' * spaces}  #{magenta.call("»")} "
   }
 ]
-### }}}

@@ -2,6 +2,7 @@ cmake
 default-jdk
 golang-1.12
 libicu-dev
+libimage-exiftool-perl
 libkrb5-dev
 libpq-dev
 libre2-dev

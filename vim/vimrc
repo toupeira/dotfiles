@@ -266,8 +266,8 @@
   set diffopt+=algorithm:histogram,indent-heuristic
 
   " folding
-  set foldenable foldmethod=marker
-  autocmd vimrc Syntax * set foldmethod=marker
+  set foldmethod=indent
+  set foldlevel=99999
 
 " }}}
 
@@ -287,25 +287,10 @@
   autocmd vimrc FileType help nnoremap <buffer><silent> q :bd<CR>
   autocmd vimrc FileType org setlocal foldmethod=expr
   autocmd vimrc FileType qf setlocal nobuflisted
+  autocmd vimrc FileType vim setlocal foldmethod=marker foldlevel=0
 
   autocmd vimrc BufRead,BufNewFile *.es6 setlocal ft=javascript
   autocmd vimrc BufRead,BufNewFile Dangerfile,*.axlsx,*.prawn setlocal ft=ruby
-
-  " Ruby syntax highlighting
-  let g:ruby_operators = 1
-  let g:ruby_no_expensive = 1
-
-  " Ruby auto-completion
-  " let g:rubycomplete_rails = 1
-  " let g:rubycomplete_buffer_loading = 1
-
-  " PHP syntax highlighting
-  let php_htmlInStrings = 1
-  let php_baselib = 1
-  let php_special_functions = 1
-  let php_alt_comparisons = 1
-  let php_alt_AssignByReference = 1
-  let php_folding = 1
 
   " show recent log entries in commit messages
   " start insert mode when committing
@@ -398,20 +383,12 @@ endfunction " }}}
   noremap H ^
   noremap L $
 
+  " toggle folds with Tab
+  nnoremap <Tab> za
+
   " apply macros with Q (disables the default Ex mode shortcut)
   nnoremap Q @q
   vnoremap Q :norm @q<CR>
-
-  " run a macro over a visual selection without stopping at errors
-  " https://github.com/stoeffel/.dotfiles/blob/master/vim/visual-at.vim
-  xnoremap @ :<C-u>call <SID>ExecuteMacroOverVisualRange()<CR>
-  function! s:ExecuteMacroOverVisualRange()
-    echo "@".getcmdline()
-    execute ":'<,'>normal @".nr2char(getchar())
-  endfunction
-
-  " reindent whole file
-  nnoremap =+ mzgg=G`z
 
   " shortcut for desktop clipboard
   noremap + "+
@@ -455,7 +432,7 @@ endfunction " }}}
   " toggle paste mode with F12
   set pastetoggle=<f12>
 
-  " switch to alternate file
+  " switch to alternate buffer
   nnoremap <silent><expr> ,<Tab> empty(getreg('#')) \|\| !buflisted(getreg('#')) ? ':bnext<CR>' : '<C-^>'
 
   " terminal mappings
@@ -519,11 +496,6 @@ endfunction " }}}
 
     exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
     exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
-  endif
-
-  " persist clipboard when leaving Vim
-  if exists('$DISPLAY')
-    autocmd vimrc VimLeave * call system('xclip -selection clipboard -o | xclip -selection clipboard -i')
   endif
 
   " ,q and ,e - toggle quickfix window and location list
@@ -698,10 +670,6 @@ endfunction " }}}
 
   " man {{{
   runtime ftplugin/man.vim
-  " }}}
-
-  " rails {{{
-  hi! link rubyRailsARMethod Statement
   " }}}
 
   " javascript-libraries-syntax {{{
@@ -1137,6 +1105,7 @@ endfunction " }}}
 
   " startify {{{
   let g:startify_files_number = 5
+  let g:startify_update_oldfiles = 1
   let g:startify_bookmarks = [ {'c': '/etc/dotfiles/vim/vimrc'} ]
 
   let g:startify_lists = [
@@ -1196,6 +1165,17 @@ endfunction " }}}
 
   " smoothie {{{
   let g:smoothie_base_speed = 20
+  " }}}
+
+  " ruby {{{
+  let g:ruby_operators = 1
+  let g:ruby_pseudo_operators = 1
+  " let g:ruby_no_expensive = 1
+
+  let g:ruby_indent_block_style = 'do'
+  let g:ruby_indent_assignment_style = 'variable'
+
+  hi! link rubyRailsARMethod Statement
   " }}}
 
 " }}}

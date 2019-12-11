@@ -46,17 +46,15 @@ or class == 'Evince'
 or class == 'Gitg'
 or class == 'Zeal'
 or class == 'Electron'
-or (class == 'X-terminal-emulator' and title == 'Terminator Preferences')
 then
   debug_print('Moving to the left...')
   xy(MONITOR_XOFFSET, 0)
   size(MONITOR_WIDTH / 2, MONITOR_HEIGHT)
-  maximize_vertically()
   return
 end
 
 -- windows on the right
-if class == 'X-terminal-emulator'
+if (class == 'X-terminal-emulator' and title ~= 'Terminator Preferences')
 or class == 'Xfce4-terminal'
 or class == 'Terminator'
 or class == 'kitty'
