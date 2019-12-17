@@ -6,36 +6,32 @@ case "$1" in
     exit 0
     ;;
   -f|--flash)
-    tmux select-pane -P 'bg=#111111'
+    tmux select-pane -P 'bg=#333333'
     sleep 0.1
     tmux select-pane -P bg=default
     exit 0
     ;;
 esac
 
+# Forward to vim
+command=$( tmux display -p '#{pane_current_command}' )
 title=$( tmux display -p '#{pane_title}' )
-if [[ "$title" =~ \ 😑$ ]]; then
-  vim=true
-else
-  vim=false
+if [ "$command" != "ssh" ] && [[ "$title" =~ \ 😑$ ]]; then
+  key=$( echo "${1#-}" | tr 'LDUR' 'hjkl' )
+  tmux send-keys "C-$key"
+
+  exit 0
 fi
 
+# Forward to tmux
 pane=$( tmux display -p '#{pane_index}' )
 panes=$( tmux display -p '#{window_panes}' )
 
 if [[ $pane -eq 1 && "$1" =~ ^-[LU]$ ]] ||
    [[ $pane -eq $panes && "$1" =~ ^-[DR]$ ]]; then
-  # cmd="tmux resize-pane -Z"
-  cmd="$0 --flash"
+  exec $0 --flash
 else
-  cmd="tmux select-pane $*"
-fi
-
-if $vim; then
-  key=$( echo "${1#-}" | tr 'LDUR' 'hjkl' )
-  tmux send-keys "C-$key"
-else
-  eval $cmd
+  eval tmux select-pane "$@"
 fi
 
 exit 0

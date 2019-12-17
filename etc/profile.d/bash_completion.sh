@@ -30,6 +30,7 @@ function has_completion {
 complete -o bashdefault -o default -F _command psgrep pskill
 complete -o bashdefault -o default -F _command start @
 complete -o bashdefault -o default -F _command grc
+complete -o bashdefault -o default -F _command spring
 
 has_completion ssh && \
   complete -F _ssh -o default -o bashdefault ping telnet host nc curl

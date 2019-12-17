@@ -1073,6 +1073,7 @@ endfunction " }}}
     \ [[ 'left', 'right' ]],
     \ [[ 'max', 'min' ]],
     \ [[ 'next', 'previous' ]],
+    \ [[ 'old', 'new' ]],
     \ [[ 'only', 'except' ]],
     \ [[ 'on', 'off' ]],
     \ [[ 'read', 'write' ]],
