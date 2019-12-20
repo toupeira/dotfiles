@@ -565,7 +565,7 @@ function run {
 
     package|pkg) # {{{
       local name=${1:-default}
-      local filter_apt='^(apt:)?[^:]+$'
+      local filter_apt='^(apt:)?[^:#]+$'
 
       if [[ "$name" =~ : ]]; then
         local filter="^${name##*:}:"
@@ -601,43 +601,50 @@ function run {
       local packages_npm=$( get_packages '^npm:' )
       local packages_yarn=$( get_packages '^yarn:' )
       local packages_pip=$( get_packages '^pip:' )
+      local packages_flat=$( get_packages '^flat:' )
 
       function get_missing {
-        if [ -n "$2" ] && which "$1" &>/dev/null; then
-          comm -23 <( echo "$2" ) <( echo "$3" | sort )
+        if [ -n "$1" ]; then
+          comm -23 <( echo "$1" ) <( echo "$2" | sort )
         fi
       }
 
       [ -n "$packages_apt" ] && local missing_apt=$(
-        get_missing dpkg "$packages_apt" \
+        get_missing "$packages_apt" \
         "$( dpkg --get-selections | cut -f1 | cut -d: -f1 )"
       )
 
       [ -n "$packages_gem" ] && local missing_gem=$(
-        get_missing gem "$packages_gem" \
-        "$( gem list 2>/dev/null | awk '/\(/ { print $1 }' )"
+        get_missing "$packages_gem" \
+        "$( gem list | awk '/\(/ { print $1 }' )"
       )
 
       [ -n "$packages_npm" ] && local missing_npm=$(
-        get_missing npm "$packages_npm" \
+        get_missing "$packages_npm" \
         "$( command ls /usr/lib/node_modules 2>/dev/null )"
       )
 
       [ -n "$packages_yarn" ] && local missing_yarn=$(
-        get_missing yarn "$packages_yarn" \
+        get_missing "$packages_yarn" \
         "$( command ls ~/.config/yarn/global/node_modules 2>/dev/null)"
       )
 
       [ -n "$packages_pip" ] && local missing_pip=$(
-        get_missing pip3 "$packages_pip" \
-        "$( pip3 list 2>/dev/null | awk '{ print $1 }' )"
+        get_missing "$packages_pip" \
+        "$( pip3 list | awk '{ print $1 }' )"
+      )
+
+      [ -n "$packages_flat" ] && local missing_flat=$(
+        get_missing "$packages_flat" \
+        "$( flatpak list --columns=application | tail -n +1 )"
       )
 
       if [ -z "$missing_apt"  ] &&
          [ -z "$missing_gem"  ] && \
          [ -z "$missing_npm"  ] && \
          [ -z "$missing_yarn" ] && \
-         [ -z "$missing_pip"  ]; then
+         [ -z "$missing_pip"  ] && \
+         [ -z "$missing_flat" ]; then
         return
       fi
 
@@ -656,6 +663,7 @@ function run {
       list_packages npm  "$missing_npm"
       list_packages yarn "$missing_yarn"
       list_packages pip  "$missing_pip"
+      list_packages flat "$missing_flat"
 
       output
       if ask-yes "{{Install?}}"; then
@@ -669,6 +677,7 @@ function run {
         install_packages "$missing_npm"  sudo npm -g install
         install_packages "$missing_yarn" yarn global add
         install_packages "$missing_pip"  sudo pip3 install
+        install_packages "$missing_flat" sudo flatpak install
       fi
       output
       ;;
