@@ -178,7 +178,7 @@
   set wildignore=*.pyc,*.o,*.lo,*.la,*.exe,*.swp,*.db,*.bak,*.old,*.dat,*.,tmp,*.mdb,*~,~*
 
   " automatically open quickfix window after commands that modify the quickfix list
-  autocmd vimrc QuickFixCmdPost *grep* if len(getqflist()) | copen | endif
+  " autocmd vimrc QuickFixCmdPost *grep* if len(getqflist()) > 1 | copen | elseif len(getqflist()) <= 1 | cclose | endif
 
   " highlight trailing whitespace
   autocmd vimrc VimEnter,Colorscheme * hi! Whitespace ctermbg=235 guibg=#333333
@@ -1035,6 +1035,7 @@ endfunction " }}}
 
   " matchup {{{
   let g:matchup_matchparen_offscreen = {}
+  let g:matchup_matchparen_deferred = 1
   " }}}
 
   " cycle {{{
@@ -1171,12 +1172,17 @@ endfunction " }}}
   " ruby {{{
   let g:ruby_operators = 1
   let g:ruby_pseudo_operators = 1
-  " let g:ruby_no_expensive = 1
+  let g:ruby_no_expensive = 1
 
   let g:ruby_indent_block_style = 'do'
   let g:ruby_indent_assignment_style = 'variable'
 
   hi! link rubyRailsARMethod Statement
+  " }}}
+
+  " definitive {{{
+  nnoremap <silent> gd :FindDefinition<CR>
+  nnoremap <silent> gD :SFindDefinition<CR>
   " }}}
 
 " }}}

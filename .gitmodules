@@ -274,3 +274,6 @@
 [submodule "vim/bundle/smoothie"]
 	path = vim/bundle/smoothie
 	url = https://github.com/psliwka/vim-smoothie.git
+[submodule "vim/bundle/definitive"]
+	path = vim/bundle/definitive
+	url = https://github.com/misterbuckley/vim-definitive.git
