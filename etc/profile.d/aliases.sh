@@ -33,6 +33,7 @@ alias egrep='grep -E'
 alias fgrep='grep -F'
 alias rgrep='grep -r'
 alias ssh.direct='ssh -o ControlPath=none'
+alias bat='batcat'
 
 if has http; then
   alias GET='http get'

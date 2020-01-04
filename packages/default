@@ -2,6 +2,7 @@ apt-listchanges
 apt-xapian-index
 autojump
 bash-completion
+bat
 bc
 bsd-mailx
 console-common

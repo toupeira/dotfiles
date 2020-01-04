@@ -3,61 +3,14 @@
 [ "$1" != "--really" ] || exec nice ionice -c3 "$0" --really
 
 HOSTNAME=$( hostname -s )
-BACKUP="/var/backups/$HOSTNAME"
-LOGFILE="/var/log/backup-$HOSTNAME.log"
+BACKUP="/slack/backups/$HOSTNAME"
 
-TMPDIR=$(mktemp -d /tmp/backup-$HOSTNAME.XXXXXX)
-cd "$TMPDIR" || exit 1
-
-DEFAULT_EXCLUDE_PATHS="
-  --exclude /proc
-"
-
-DEFAULT_INCLUDE_PATHS="
-"
-
-function log {
-  date "+$( basename "$0" ) [%Y-%m-%d %T] $1" >> "$LOGFILE"
-}
-
-rm -f "$LOGFILE"
-log "Starting backup"
+mkdir -p "$BACKUP" || exit 1
 
 for file in /etc/backup.d/*; do
   if [ -x "$file" ]; then
-    log "Running $file..."
-    . "$file" >> "$LOGFILE"
+    . "$file"
   fi
 done
 
-echo >> "$LOGFILE"
-log "Excluding paths: $(echo; echo "$DEFAULT_EXCLUDE_PATHS" "$EXCLUDE_PATHS" | grep .)"
-
-echo >> "$LOGFILE"
-log "Including paths: $(echo; echo "$DEFAULT_INCLUDE_PATHS" "$INCLUDE_PATHS" | grep .)"
-
-echo >> "$LOGFILE"
-log "Backing up files..."
-rdiff-backup --print-statistics --exclude-fifos --exclude-sockets \
-  --exclude "$BACKUP" \
-  $DEFAULT_EXCLUDE_PATHS $EXCLUDE_PATHS \
-  $DEFAULT_INCLUDE_PATHS $INCLUDE_PATHS \
-  --exclude / / "$BACKUP" \
-  2>&1 | grep -v 'ListError .* Permission denied: .*gvfs' \
-  >> "$LOGFILE"
-
-echo >> "$LOGFILE"
-log "Purging old backups..."
-rdiff-backup --remove-older-than 1M -v2 --force "$BACKUP" >> "$LOGFILE"
-
-echo >> "$LOGFILE"
-log "Backing up package lists"
-(date; echo; dpkg --get-selections) > "$BACKUP/packages.txt"
-which gem >/dev/null && (date; echo; gem list) > "$BACKUP/gems.txt"
-which npm >/dev/null && (date; echo; npm -g list) > "$BACKUP/npm.txt"
-
-echo >> "$LOGFILE"
-log "Backup finished."
-
-cd /
-rmdir "$TMPDIR"
+(date -Iseconds; echo; dpkg --get-selections) > "$BACKUP/packages.txt"
