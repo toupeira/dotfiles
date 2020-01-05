@@ -603,6 +603,7 @@ endfunction " }}}
   noremap <silent> ,gB :Gblame<CR>
 
   autocmd vimrc FileType fugitive if b:fugitive_type == 'index' | setlocal nobuflisted | endif
+  autocmd vimrc FileType fugitive nmap <buffer> <silent> q gq
   " }}}
 
   " markdown {{{
