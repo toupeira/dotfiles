@@ -67,8 +67,6 @@
     palette = "#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec:#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec"
     word_chars = "-+A-Za-z0-9,./?%&#:_@"
     login_shell = True
-    use_custom_command = True
-    custom_command = tmux-reattach
     use_system_font = False
   [[meerkat]]
     visible_bell = True
@@ -84,8 +82,6 @@
     palette = "#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec:#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec"
     word_chars = "-+A-Za-z0-9,./?%&#:_@"
     login_shell = True
-    use_custom_command = True
-    custom_command = tmux-reattach
     use_system_font = False
   [[schtube]]
     visible_bell = True
@@ -101,8 +97,6 @@
     palette = "#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec:#555753:#ef2929:#8ae234:#fce94f:#729fcf:#ad7fa8:#34e2e2:#eeeeec"
     word_chars = "-+A-Za-z0-9,./?%&#:_@"
     login_shell = True
-    use_custom_command = True
-    custom_command = tmux-reattach
     use_system_font = False
 [layouts]
   [[default]]
