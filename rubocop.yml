@@ -1,5 +1,4 @@
 AllCops:
-  DisplayCopNames: false
   Exclude:
     - db/schema.rb
 
