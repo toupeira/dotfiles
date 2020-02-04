@@ -16,8 +16,6 @@
     let g:pathogen_disabled = []
   endif
 
-  call add(g:pathogen_disabled, 'pear-tree')
-
   " disable netrw
   let g:loaded_netrwPlugin = 1
 
@@ -1175,6 +1173,10 @@ endfunction " }}}
   " definitive {{{
   nnoremap <silent> gd :FindDefinition<CR>
   nnoremap <silent> gD :SFindDefinition<CR>
+  " }}}
+
+  " vue {{{
+  let g:vue_pre_processors = ['scss']
   " }}}
 
 " }}}

@@ -1,6 +1,11 @@
 cmake
 default-jdk
+docker.io
+docker-compose
 golang-1.12
+google-cloud-sdk
+kubectl
+kubectx
 libicu-dev
 libimage-exiftool-perl
 libkrb5-dev

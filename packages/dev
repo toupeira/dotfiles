@@ -25,6 +25,7 @@ gem:solargraph
 pip:pynvim
 pip:solargraph-utils.py
 pip:yamllint
+pip:yq
 
 npm:yarn
 
