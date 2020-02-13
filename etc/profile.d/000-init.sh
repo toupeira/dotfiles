@@ -19,7 +19,7 @@ shopt -s globstar
 # Disable flow control (Ctrl-S/Q)
 stty -ixon
 
-if [ -z "$TMUX" ] && type tmux &>/dev/null; then
+if [ -z "$TMUX" ] && [ -z "$SUDO_USER" ] && type tmux &>/dev/null; then
   # ignore stale tmux sockets
   if [ -n "$TMUX" ] && [ ! -S "$TMUX" ]; then
     unset TMUX
