@@ -29,6 +29,7 @@ function usage {
   echo "  build-all                 Run default builds"
   echo
   echo "  package, pkg [NAME:TYPE]  Install packages from list"
+  echo "  upgrade [TYPE]            Upgrade packages"
   echo
   echo "Other arguments:"
   echo "  COMMAND [ARGS]...         Excecute a Git command inside the dotfiles repository"
@@ -631,7 +632,7 @@ function run {
 
       [ -n "$packages_pip" ] && local missing_pip=$(
         get_missing "$packages_pip" \
-        "$( pip3 list | awk '{ print $1 }' )"
+        "$( pip3 freeze | cut -d= -f1 )"
       )
 
       [ -n "$packages_flat" ] && local missing_flat=$(
@@ -683,6 +684,36 @@ function run {
       ;;
     # }}}
 
+    upgrade) # {{{
+      local filter="$1"
+
+      function upgrade {
+        local type="$1"
+        shift
+
+        if [ -n "$filter" ] && [ "$filter" != "$type" ]; then
+          return
+        elif [ "$filter" = "$type" ] || ask "Upgrade {{$type}} packages?"; then
+          status "Running {{$*}}"
+          mux-wrap -w "$@"
+          echo
+        fi
+      }
+
+      upgrade apt        'sudo apt update && sudo apt upgrade'
+      upgrade gem        gem update
+      upgrade npm        sudo npm -g update
+      upgrade yarn       yarn global upgrade-interactive
+      upgrade flatpak    flatpak update
+      upgrade firmware   fwupdmgr update
+
+      if which gnome-shell >/dev/null; then
+        upgrade gnome-shell xdg-open https://extensions.gnome.org/local
+      fi
+
+      ;;
+    # }}}
+
     git) # {{{
       command="$1"
       shift
@@ -728,7 +759,7 @@ while [ $# -gt 0 ]; do
     -q|--quiet)   QUIET=1;;
     -n|--dry-run) DRYRUN=1;;
        --path)    echo "$DOTFILES"; exit;;
-    -*)           usage;;
+    -*|help)      usage;;
     *)
       COMMAND=( "$@" )
       break

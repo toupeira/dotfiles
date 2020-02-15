@@ -91,7 +91,7 @@
   fetchJobs = 0
 
 [alias]
-  s = status
+  s = status -sb
   st = status
   sta = -c diff.ignoreSubmodules=none st
   ss = !git --no-pager show --stat

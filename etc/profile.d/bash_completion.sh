@@ -1,10 +1,10 @@
 # shellcheck shell=bash
 
 # Check for interactive bash
-[ -n "${BASH_VERSION-}" -a -n "${PS1-}" ] || return
+[ -n "${BASH_VERSION-}" ] && [ -n "${PS1-}" ] || return
 
 # Check for recent enough version of bash.
-[ ${BASH_VERSINFO[0]} -ge 4 ] || return
+[ "${BASH_VERSINFO[0]}" -ge 4 ] || return
 
 # Check for disabled completion
 shopt -q progcomp || return
@@ -54,25 +54,36 @@ if has_completion git; then
 fi
 
 if has dotfiles; then
-  __git_complete dotfiles _git `dotfiles --path`
-  __git_complete dt _git       `dotfiles --path`
+  __git_complete dotfiles _git "$( dotfiles --path )"
+  __git_complete dt _git       "$( dotfiles --path )"
 fi
 
 # Debian completions
 function _packages_available {
-  COMPREPLY=( $(compgen -W "`apt-cache pkgnames ${COMP_WORDS[COMP_CWORD]} 2>/dev/null`") )
+  local cword="${COMP_WORDS[COMP_CWORD]}"
+
+  mapfile -t COMPREPLY < <(
+    compgen -W "$( apt-cache pkgnames "$cword" 2>/dev/null )"
+  )
 }
 complete -F _packages_available pkget pkgshow
 
 function _packages_installed {
-  COMPREPLY=( $(compgen -W "`dglob ${COMP_WORDS[COMP_CWORD]}`") )
+  local cword="${COMP_WORDS[COMP_CWORD]}"
+
+  mapfile -t COMPREPLY < <(
+    compgen -W "$( dglob "$cword" )"
+  )
 }
 complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages
 
 # src completion
 function _src_projects {
-  local src_dir=~/src
-  COMPREPLY=( $(compgen -W "`src list -a | grep "${COMP_WORDS[COMP_CWORD]}"`") )
+  local cword="${COMP_WORDS[COMP_CWORD]}"
+
+  mapfile -t COMPREPLY < <(
+    compgen -W "$( src list -a "$cword" )"
+  )
 }
 complete -F _src_projects src
 
@@ -88,16 +99,16 @@ function _src_alias {
 # mux completion
 function _mux {
   local cword="${COMP_WORDS[COMP_CWORD]}"
+
   if [ -n "$cword" -a "${cword:0:1}" = "@" ]; then
     [ "$cword" = "@" ] && cword="@\w"
 
-    COMPREPLY=(
-      $( compgen -W "$(
-          (cat Procfile 2>/dev/null; echo server: watcher: console: log: | tr ' ' '\n') \
-            | egrep -o "^${cword:1}[-[:alnum:]]*" \
-            | sed -r 's/^/@/'
-         )"
-      )
+    mapfile -t COMPREPLY < <(
+      compgen -W "$(
+        (echo -e "server:\nwatcher:\nconsole:\nlog:"; cat Procfile 2>/dev/null) \
+          | egrep -o "^${cword:1}[-[:alnum:]]*" \
+          | sed -r 's/^/@/'
+      )"
     )
   else
     _command

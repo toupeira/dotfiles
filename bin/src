@@ -4,126 +4,141 @@ SRC=${SRC:-~/src}
 
 function usage {
   echo "Usage:"
-  echo "  src --path                         Show source path"
-  echo "  src [status] [-a]                  Show status for all projects"
-  echo "  src list [-a]                      List all project paths"
-  echo "  src each [COMMAND] [ARGS]          Run command in each project"
+  echo "  src [--path]                        Show source path"
+  echo "  src status [-a] [PROJECT..]         Show status for all projects"
+  echo "  src list [-a] [--path] [PROJECT..]  List all project paths"
+  echo "  src each [-a] COMMAND [PROJECT..]   Run command in each project"
   echo
-  echo "  src PROJECT [--path]               Output project path"
-  echo "  src PROJECT [GIT-COMMAND] [ARGS]   Run Git command"
-  echo "  src PROJECT -e [COMMAND] [ARGS]    Run command"
-  echo "  src PROJECT @MUX                   Run mux command"
+  echo "  src PROJECT [--path]                Output project path"
+  echo "  src PROJECT [GIT-COMMAND] [ARGS]    Run Git command"
+  echo "  src PROJECT -e [COMMAND] [ARGS]     Run command"
+  echo "  src PROJECT @MUX                    Run mux command"
   echo
   exit 255
 }
 
-case "$1" in
-  --path)
+function truncate {
+  sed -r "s|$HOME|~|"
+}
+
+ACTION="$1"
+shift
+if [ "$1" = "-a" ]; then
+  all="-a"
+  shift
+fi
+
+case "$ACTION" in
+  ''|--path)
     exec echo "$SRC"
     ;;
-  ''|status|-a)
-    [ "$1" != "-a" ] && shift
-
-    first=1
-    last=0
-
+  status|st|s)
     echo
-    for project in $( src list "$@" ); do
-      dir="$SRC/$project"
-      [ -d "$dir/.git" ] || continue
+    for project in $( src list $all --path "$@" ); do
+      status=$( git -C "$project" -c color.ui=always status -sb )
 
-      changes=$( cd "$dir"; git status -s | grep -c . )
-      unmerged=$( cd "$dir"; git status | egrep "Your branch is (behind|ahead)" )
+      changes=$( echo "$status" | grep -c '^[^#]' )
+      unmerged=$( echo "$status" | grep -E "^#.*(behind|ahead)" )
 
-      if [ $changes -gt 0 -o -n "$unmerged" ]; then
-        label="changes"
-
-        if [ $changes -gt 0 ]; then
-          label="changes"
-          [ $changes -eq 1 ] && label="change"
-          label="$changes $label"
-        elif echo "$unmerged" | grep -q ahead; then
-          label="unpublished commits"
-        else
-          label="unmerged commits"
-        fi
-
-        [ -z "$first" ] && echo
-        echo -e " \e[1;32m>\e[1;37m You have \e[1;33m$label\e[1;37m in \e[1;36m[$( realpath "$dir" )]\e[0m" | sed -r "s|$HOME|~|"
-        (cd "$dir" || exit 1; git -c color.ui=always status | sed -r 's/^/    /')
-      else
-        [ $last -gt 0 ] && echo
-        echo -e " \e[0;32m>\e[0m No changes in \e[0;36m[$( realpath "$dir" )]\e[0m" | sed -r "s|$HOME|~|"
+      if [ "$changes" = 0 ] && [ -z "$unmerged" ]; then
+        echo -e " \e[0;32m>\e[0m \e[0;36m[$project]\e[0m No changes" | truncate
+        clear=1
+        continue
       fi
 
-      unset first
-      last=$changes
-      [ -n "$unmerged" ] && let last++
+      if [ "$changes" -gt 0 ]; then
+        label="changes"
+        [ "$changes" = 1 ] && label="change"
+        label="$changes $label"
+      elif echo "$unmerged" | grep -q ahead; then
+        label="Unpublished commits"
+      else
+        label="Unmerged commits"
+      fi
+
+      [ "$clear" = 1 ] && echo
+      echo -e " \e[1;32m>\e[1;37m \e[1;36m[$project] \e[1;33m$label\e[0m" | truncate
+      echo "$status" | sed -r 's/^/    /'
+      echo
+      clear=0
     done
-    echo
+    [ "$clear" = 1 ] && echo
 
     exit
     ;;
-  -*)
-    usage
-    ;;
-  list)
-    if [ "$2" = "-a" ]; then
-      unset filter
-    else
-      filter="-not \( -path $SRC/archive -prune \) -not \( -path $SRC/upstream -prune \)"
+  list|ls|l|-l)
+    if [ -z "$all" ]; then
+      filter="
+        -not \( -path $SRC/archive -prune \)
+        -not \( -path $SRC/upstream -prune \)
+      "
     fi
 
-    eval find -L "$SRC" -mindepth 1 -maxdepth 4 -type d $filter -name .git | sed -r "s|^$SRC/(.+)/\.git$|\1|" | egrep -v "^dotfiles/.+" | sort
+    if [ "$1" = "--path" ]; then
+      shift
+      format="\1\2"
+    else
+      format="\2"
+    fi
+
+    pattern="$1"
+    shift
+    [ $# -gt 0 ] && pattern="$pattern$( printf '|%s' "$@" )"
+
+    eval find -L "$SRC" \
+      -mindepth 1 -maxdepth 4 \
+      -type d $filter -name .git \
+      | sed -r "s|^($SRC/)(.+)/\.git$|$format|" \
+      | grep -E "$pattern" \
+      | sort
 
     exit
     ;;
   each)
+    [ $# -lt 1 ] && usage
+    command="$1"
     shift
-    for project in $( src list ); do
-      echo -e "# \e[0;36m$project\e[0m" | sed -r "s|$HOME|~|"
-      (cd "$SRC/$project" || exit 1; "$@")
+
+    echo
+    for project in $( src list $all --path "$@" ); do
+      echo -e " \e[1;32m>\e[1;37m \e[1;36m[$( realpath "$project" )] \e[1;33m$command\e[0m" | truncate
+      (cd "$project" || exit 1; $command)
 
       status=$?
       if [ $status -ne 0 ]; then
         echo -e "# \e[1;31mexit code $status\e[0m"
       fi
       echo
+
     done
 
     exit
     ;;
+  -*)
+    usage
+    ;;
 esac
 
-PROJECT="$1"
-shift
+PROJECT="$ACTION"
 
-if [ -z "$PROJECT" ]; then
-  usage
-elif [ -d "$PROJECT" ]; then
-  PROJECT_PATH="$PROJECT"
-else
+if [ -d "$PROJECT" ]; then
+  PROJECT_PATH=$( realpath "$PROJECT" )
+elif [ -d "$SRC/$PROJECT" ]; then
   PROJECT_PATH="$SRC/$PROJECT"
+else
+  PROJECT_PATH=$( src list --path "$PROJECT" | head -1 )
+
+  if [ -z "$PROJECT_PATH" ]; then
+    PROJECT_PATH=$( src list -a --path "$PROJECT" | head -1 )
+
+    if [ -z "$PROJECT_PATH" ]; then
+      echo "Project not found: $PROJECT" >&2
+      exit 1
+    fi
+  fi
 fi
 
-while [ ! -d "$PROJECT_PATH" ]; do
-  first_match=$( src list | fgrep -m1 "$PROJECT" )
-  if [ -n "$first_match" ]; then
-    PROJECT_PATH="$SRC/$first_match"
-    continue
-  fi
-
-  first_match=$( src list -a | fgrep -m1 "$PROJECT" )
-  if [ -n "$first_match" ]; then
-    PROJECT_PATH="$SRC/$first_match"
-    continue
-  fi
-
-  echo "Project not found: $PROJECT" >&2
-  exit 1
-done
-
-cd "$PROJECT_PATH"
+cd "$PROJECT_PATH" || exit 1
 
 case "$1" in
   --path|'')

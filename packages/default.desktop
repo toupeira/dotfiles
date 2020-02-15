@@ -15,6 +15,7 @@ shim-signed
 # Desktop
 fonts-noto-color-emoji
 fonts-roboto
+fonts-roboto-slab
 gnome-keyring
 gnome-software
 gnome-software-plugin-flatpak

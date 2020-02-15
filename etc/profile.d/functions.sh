@@ -181,19 +181,21 @@ function dotfiles {
 # Wrapper for ~/bin/src to switch project directories
 function src {
   case "$1" in
-    ''|-a|--path|status|list|each)
+    '')
+      cd ~/src
+      ;;
+    -*|status|st|s|list|ls|l|each)
       command src "$@"
       ;;
     *)
-      local project_path=$( command src "$1" )
-      if [ -z "$project_path" ]; then
-        return 1
-      elif [ $# -eq 2 ] && [ "$2" = '@dev' ]; then
-        cd "$project_path" && command src "$@"
-      elif [ $# -gt 1 ]; then
-        (cd "$project_path" && command src "$@")
-      else
-        cd "$project_path"
+      if [ $# -gt 1 ]; then
+        command src "$@"
+        return
+      fi
+
+      local project=$( command src "$1" --path )
+      if [ -n "$project" ]; then
+        cd "$project"
       fi
       ;;
   esac

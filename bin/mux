@@ -26,6 +26,7 @@ function usage {
   echo "  -v            Split window vertically"
   echo "  -b            Small pane on the bottom"
   echo "  -r            Small pane on the right"
+  echo "  -w            Wait after command exits"
   echo
   echo "Pass options to tmux:"
   echo "  -d, -c PATH, -l SIZE, -p PERCENTAGE"
@@ -108,8 +109,8 @@ case "$1" in
           command="mix phoenix.server"
         elif [ -f elm-package.json ]; then
           command="elm live Main.elm"
-        elif [ -f package.json ] && jq -e .scripts.start package.json >/dev/null; then
-          command="yarn -s start --port $((4200+RANDOM%1000)) --open"
+        elif [ -f package.json ] && jq -e .scripts.serve package.json >/dev/null; then
+          command="yarn -s serve --open"
         elif [ -f .ember-cli ]; then
           command="ember serve"
         elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
@@ -251,6 +252,9 @@ case "$1" in
           args="$args $1 $2"
           shift
           ;;
+        -w)
+          wait="echo -ne '\n\e[0;30m[\e[1;37mPress any key\e[0;30m]\e[0m'; read -n 1"
+          ;;
         *)
           usage
           ;;
@@ -271,7 +275,8 @@ case "$1" in
       $0 title '$title';
       cd \"$PWD\";
       $0 store;
-      exec $*
+      $*;
+      $wait
     " || tmux display "Pane too small"
     ;;
 esac
