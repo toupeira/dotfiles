@@ -998,11 +998,6 @@ endfunction " }}}
   let g:signify_sign_change            = '·'
   " }}}
 
-  " hexokinase {{{
-  let g:Hexokinase_ftAutoload = ['css', 'sass', 'scss', 'vim']
-  let g:Hexokinase_optInPatterns = ['full_hex', 'triple_hex', 'rgb', 'rgba', 'colour_names']
-  " }}}
-
   " didyoumean {{{
   let g:dym_use_fzf = 1
   " }}}

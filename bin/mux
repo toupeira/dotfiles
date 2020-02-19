@@ -170,7 +170,10 @@ case "$1" in
 
     while true; do
       clear
+      trap 'kill -9 %1' INT
       (eval "${command[@]}")
+      wait
+      trap - INT
 
       >&2 echo -ne "
  \\e[0;34m[\\e[1;34m ${command[*]} \\e[0;34m]•••\\e[0m
