@@ -1178,4 +1178,8 @@ endfunction " }}}
   let g:vue_pre_processors = ['scss']
   " }}}
 
+  " goldenview {{{
+  let g:goldenview__enable_default_mapping = 0
+  " }}}
+
 " }}}

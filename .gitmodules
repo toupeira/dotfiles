@@ -271,3 +271,6 @@
 [submodule "vim/bundle/definitive"]
 	path = vim/bundle/definitive
 	url = https://github.com/misterbuckley/vim-definitive.git
+[submodule "vim/bundle/goldenview"]
+	path = vim/bundle/goldenview
+	url = https://github.com/zhaocai/GoldenView.Vim.git
