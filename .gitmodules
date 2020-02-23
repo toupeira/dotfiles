@@ -46,9 +46,6 @@
 [submodule "vim/bundle/rsi"]
 	path = vim/bundle/rsi
 	url = https://github.com/tpope/vim-rsi.git
-[submodule "vim/bundle/javascript-libraries-syntax"]
-	path = vim/bundle/javascript-libraries-syntax
-	url = https://github.com/othree/javascript-libraries-syntax.vim.git
 [submodule "vim/bundle/airline"]
 	path = vim/bundle/airline
 	url = https://github.com/vim-airline/vim-airline.git
@@ -127,9 +124,6 @@
 [submodule "vim/bundle/bundler"]
 	path = vim/bundle/bundler
 	url = https://github.com/tpope/vim-bundler.git
-[submodule "vim/bundle/yajs"]
-	path = vim/bundle/yajs
-	url = https://github.com/othree/yajs.vim.git
 [submodule "vim/bundle/papercolor"]
 	path = vim/bundle/papercolor
 	url = https://github.com/NLKNguyen/papercolor-theme.git
@@ -274,3 +268,9 @@
 [submodule "vim/bundle/goldenview"]
 	path = vim/bundle/goldenview
 	url = https://github.com/zhaocai/GoldenView.Vim.git
+[submodule "vim/bundle/palenight"]
+	path = vim/bundle/palenight
+	url = https://github.com/drewtempelmeyer/palenight.vim.git
+[submodule "vim/bundle/javascript"]
+	path = vim/bundle/javascript
+	url = https://github.com/pangloss/vim-javascript.git

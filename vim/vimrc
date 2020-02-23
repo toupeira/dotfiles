@@ -89,7 +89,7 @@
   set termguicolors
 
   syntax on
-  colorscheme desertink
+  colorscheme palenight
 
   " terminals
   if has('nvim')
