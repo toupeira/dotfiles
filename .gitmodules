@@ -274,3 +274,6 @@
 [submodule "vim/bundle/javascript"]
 	path = vim/bundle/javascript
 	url = https://github.com/pangloss/vim-javascript.git
+[submodule "vim/bundle/lastplace"]
+	path = vim/bundle/lastplace
+	url = https://github.com/farmergreg/vim-lastplace.git

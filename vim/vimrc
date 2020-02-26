@@ -89,7 +89,7 @@
   set termguicolors
 
   syntax on
-  colorscheme palenight
+  colorscheme desertink
 
   " terminals
   if has('nvim')
@@ -181,10 +181,6 @@
   " highlight trailing whitespace
   autocmd vimrc VimEnter,Colorscheme * hi! Whitespace ctermbg=235 guibg=#333333
   autocmd vimrc VimEnter,Colorscheme * match Whitespace /\s\+$/
-
-  " go to last cursor position when opening files
-  autocmd vimrc BufReadPost * if line("'\"") > 0 && line("'\"") <= line("$") && &ft != 'gitcommit'
-                                \| exe "normal g'\"" | endif
 
   " window/icon titles
   set title
