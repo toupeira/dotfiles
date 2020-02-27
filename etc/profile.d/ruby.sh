@@ -20,6 +20,16 @@ function _gem_exec {
 
   if rbenv version | grep -q ^system && [[ "$1" =~ (install|uninstall|update|clean|pristine) ]]; then
     command="sudo $command"
+  elif [ "$1" = "cd" ]; then
+    local path
+    path=$( gem open -e echo "$2" )
+    if [ $? -eq 0 ]; then
+      cd "$path"
+      return
+    else
+      echo "$path"
+      return 1
+    fi
   fi
 
   $command "$@"

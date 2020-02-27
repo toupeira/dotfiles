@@ -45,6 +45,7 @@
   renames = copies
   mnemonicprefix = true
   ignoreSubmodules = dirty
+  renameLimit = 10000
 
 [difftool]
   prompt = false

@@ -368,8 +368,8 @@ endfunction " }}}
   noremap H ^
   noremap L $
 
-  " toggle folds with Tab
-  nnoremap <Tab> za
+  " toggle folds with Space
+  nnoremap <Space> za
 
   " apply macros with Q (disables the default Ex mode shortcut)
   nnoremap Q @q
@@ -595,6 +595,8 @@ endfunction " }}}
   noremap <silent> ,gl :Gclog<CR>
   noremap <silent> ,gL :0Gclog<CR>
   noremap <silent> ,gB :Gblame<CR>
+  noremap ,gu :.Gbrowse!<CR>
+  noremap ,gU :.Gbrowse<CR>
 
   autocmd vimrc FileType fugitive if b:fugitive_type == 'index' | setlocal nobuflisted | endif
   autocmd vimrc FileType fugitive nmap <buffer> <silent> q gq
