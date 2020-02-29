@@ -1,8 +1,0 @@
-{
-  "suggest": {
-    "noselect": false
-  },
-  "solargraph": {
-    "checkGemVersion": false
-  }
-}

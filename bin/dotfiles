@@ -22,14 +22,14 @@ function usage {
   echo "  push                      Push local changes"
   echo
   echo "  list-submodules, list     List submodules"
-  echo "  update-submodule [NAME]   Update submodule"
-  echo "  update-submodules, sup    Update all submodules"
+  echo "  upgrade-submodule [NAME]  Upgrade submodule"
+  echo "  upgrade-submodules, sup   Upgrade all submodules"
   echo
   echo "  build PATH COMMAND..      Run build command in path"
   echo "  build-all                 Run default builds"
   echo
-  echo "  package, pkg [NAME:TYPE]  Install packages from list"
-  echo "  upgrade [TYPE]            Upgrade packages"
+  echo "  package, pkg [LIST:TYPE]  Install packages from list"
+  echo "  package upgrade [TYPE]    Upgrade packages"
   echo
   echo "Other arguments:"
   echo "  COMMAND [ARGS]...         Excecute a Git command inside the dotfiles repository"
@@ -175,7 +175,7 @@ function dryrun-message {
 # Run a command in a tmux pane if possible
 function mux-wrap {
   if [ -n "$TMUX" ]; then
-    mux -b "$@"
+    system mux -b "$@"
   else
     system "$@"
   fi
@@ -457,7 +457,7 @@ function run {
       awk '/path = / { print $3 }' "$DOTFILES/.gitmodules" | sort
       ;;
     # }}}
-    update-submodule) # {{{
+    upgrade-submodule) # {{{
       unset batch
       [ "$1" = '--batch' ] && local batch=1 && shift
 
@@ -500,7 +500,7 @@ function run {
       fi
       ;;
     # }}}
-    update-submodules|sup) # {{{
+    upgrade-submodules|sup) # {{{
       local submodules=$( run list )
       if [ -n "$1" ]; then
         submodules=$( echo "$submodules" | egrep "${1%/}" )
@@ -509,7 +509,7 @@ function run {
       output
       status "{{Updating submodules:}}"
 
-      local output=$( mktemp -d ${TMPDIR:-/tmp}/dotfiles.XXXXXX )
+      local tmpdir=$( mktemp -d ${TMPDIR:-/tmp}/dotfiles.XXXXXX )
 
       output '     \e[1;36m[' -n
 
@@ -519,7 +519,7 @@ function run {
         done
 
         (
-          run update-submodule --batch "$submodule" > "$output/${submodule//\//-}" 2>&1
+          run upgrade-submodule --batch "$submodule" > "$tmpdir/${submodule//\//-}" 2>&1
           output '\e[0;36m=' -n
         ) &
 
@@ -530,10 +530,14 @@ function run {
       output '\e[1;36m]\e[0m'
       output
 
-      system cat "$output"/*
-      system rm -rf "$output"
+      if grep -q . "$tmpdir"/* 2>/dev/null; then
+        system cat "$tmpdir"/*
+        run build-all
+      else
+        warning "No upgrades found."
+      fi
 
-      run build-all
+      system rm -rf "$tmpdir"
       output
       ;;
     # }}}
@@ -550,7 +554,7 @@ function run {
         return
       fi
 
-      status "Building {{$path}} $( dryrun-message )" 3
+      warning "Building {{$path}} $( dryrun-message )"
       dryrun && return
 
       if ! ( cd "$DOTFILES/$path" && system "$command" "$@" ); then
@@ -568,7 +572,11 @@ function run {
       local name=${1:-default}
       local filter_apt='^(apt:)?[^:#]+$'
 
-      if [[ "$name" =~ : ]]; then
+      if [ "$name" = "upgrade" ] || [ "$name" = "up" ]; then
+        shift
+        run package-upgrade "$@"
+        return
+      elif [[ "$name" =~ : ]]; then
         local filter="^${name##*:}:"
         local name="${name%%:*}"
         [ "$filter" = "^apt:" ] && filter="$filter_apt"
@@ -670,21 +678,20 @@ function run {
       if ask-yes "{{Install?}}"; then
         function install_packages {
           local missing="$1"; shift
-          [ -n "$missing" ] && output && mux-wrap "$@" $missing
+          [ -n "$missing" ] && output && mux-wrap -w "$@" $missing
         }
 
         install_packages "$missing_apt"  sudo aptitude install
         install_packages "$missing_gem"  gem install
         install_packages "$missing_npm"  sudo npm -g install
         install_packages "$missing_yarn" yarn global add
-        install_packages "$missing_pip"  pip3 install --user
+        install_packages "$missing_pip"  pip3 install --user --upgrade
         install_packages "$missing_flat" sudo flatpak install
       fi
       output
       ;;
     # }}}
-
-    upgrade) # {{{
+    package-upgrade) # {{{
       local filter="$1"
 
       function upgrade {
@@ -757,7 +764,7 @@ while [ $# -gt 0 ]; do
     -f|--force)   FORCE=1;;
     -v|--verbose) VERBOSE=1;;
     -q|--quiet)   QUIET=1;;
-    -n|--dry-run) DRYRUN=1;;
+    -n|--dry-run) DRYRUN=1; VERBOSE=1;;
        --path)    echo "$DOTFILES"; exit;;
     -*|help)      usage;;
     *)

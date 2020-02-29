@@ -11,6 +11,7 @@ nodejs
 pkg-config
 python3-pip
 python3-setuptools
+python3-wheel
 ruby-dev
 sqlite3
 universal-ctags
@@ -20,15 +21,15 @@ gem:activesupport
 gem:bundler
 gem:pry
 gem:rubocop
-gem:solargraph
 
+pip:msgpack
 pip:pynvim
-pip:solargraph-utils.py
 pip:yamllint
 pip:yq
 
 npm:yarn
 
+yarn:bash-language-server
 yarn:caniuse-cmd
 yarn:eslint
 yarn:htmlhint
@@ -36,5 +37,4 @@ yarn:jsonlint
 yarn:stylelint
 yarn:tslint
 yarn:typescript
-yarn:typescript-language-server
 yarn:vmd

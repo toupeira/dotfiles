@@ -89,7 +89,7 @@
   set termguicolors
 
   syntax on
-  colorscheme desertink
+  colorscheme custom
 
   " terminals
   if has('nvim')
@@ -143,9 +143,8 @@
 
   " auto-completion
   set completeopt=menuone,noinsert
-  set shortmess+=c
   if exists('&pumblend')
-    set pumblend=15
+    set pumblend=10
   endif
 
   " line numbers
@@ -168,10 +167,12 @@
 
   " command prompt and status line
   set showcmd
-  set ruler
+  set noshowmode
+  set noruler
   set laststatus=2
   set history=1000
   set report=0
+  set shortmess+=a
   set wildmenu
   set wildignore=*.pyc,*.o,*.lo,*.la,*.exe,*.swp,*.db,*.bak,*.old,*.dat,*.,tmp,*.mdb,*~,~*
 
@@ -209,12 +210,12 @@
         return l:project
       else
         " return project name with relative path
-        let l:path = substitute(l:path, '^\(fugitive://\)\?' . l:root . '/\?', '', '')
+        let l:path = substitute(l:path, '^\(fugitive://\)\?' . substitute(l:root, '\~', '\\~', 'g') . '/\?', '', '')
 
         if empty(l:path)
           return l:project
         else
-          return l:project . ' » ' . l:path
+          return l:project . ': ' . l:path
         endif
       endif
     endif
@@ -272,7 +273,7 @@
   autocmd vimrc FileType python,apache,sshconfig setlocal ts=4 sts=4 sw=4
   autocmd vimrc FileType css,scss setlocal iskeyword+=%
   autocmd vimrc FileType make setlocal noexpandtab
-  autocmd vimrc FileType text,markdown,mail setlocal linebreak spell suffixesadd+=.md
+  autocmd vimrc FileType text,markdown,mail setlocal linebreak suffixesadd+=.md
   autocmd vimrc FileType tex,plaintex,context setlocal lbr
   autocmd vimrc FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd vimrc FileType crontab setlocal nobackup nowritebackup
@@ -300,6 +301,9 @@
 
 " Commands
 " {{{
+
+  " edit vimrc
+  command! RC edit $MYVIMRC
 
   " helper to preserve search and cursor position
   command! -nargs=1 Preserve call <SID>Preserve(<args>)
@@ -602,6 +606,10 @@ endfunction " }}}
   autocmd vimrc FileType fugitive nmap <buffer> <silent> q gq
   " }}}
 
+  " dirvish {{{
+  autocmd vimrc FileType dirvish nmap <buffer> <silent> q gq
+  " }}}
+
   " markdown {{{
   let g:vim_markdown_conceal = 0
   let g:vim_markdown_folding_disabled = 1
@@ -636,7 +644,7 @@ endfunction " }}}
   " }}}
 
   " vista {{{
-  nnoremap <silent> ,t :Vista finder vim_lsp<CR>
+  nnoremap <silent> ,t :Vista finder<CR>
   nnoremap <silent> ,T :Vista!!<CR>
 
   let g:vista_sidebar_width = 40
@@ -644,24 +652,19 @@ endfunction " }}}
   let g:vista_icon_indent = ["● ", "▶ "]
   let g:vista_fzf_preview = ['right:hidden:70%']
 
-  " let g:vista_finder_alternative_executives = [ 'ctags' ]
-  let g:vista_executive_for = {
-    \ 'javascript': 'vim_lsp',
-    \ 'typescript': 'vim_lsp',
-    \ 'ruby': 'vim_lsp'
-  \ }
+  let g:vista_default_executive = 'ctags'
+  let g:vista_finder_alternative_executives = [ 'ctags' ]
+
+  " let g:vista_executive_for = {
+  "   \ 'sh': 'ale',
+  "   \ 'javascript': 'ale',
+  "   \ 'typescript': 'ale',
+  "   \ 'ruby': 'ale'
+  " \ }
   " }}}
 
   " pasta {{{
-  let g:pasta_disabled_filetypes = [ 'python', 'coffee', 'markdown', 'yaml', 'slim' ]
-  " }}}
-
-  " man {{{
-  runtime ftplugin/man.vim
-  " }}}
-
-  " javascript-libraries-syntax {{{
-  let g:used_javascript_libs = 'jquery,requirejs'
+  let g:pasta_disabled_filetypes = ['qf']
   " }}}
 
   " reply {{{
@@ -734,30 +737,17 @@ endfunction " }}}
   noremap <silent> ,a: :Tabular /[^:]:\s\zs/l0r1<CR>
   " }}}
 
-  " netrw {{{
-  let g:netrw_silent = 1
-  let g:netrw_ftpmode = 'ascii'
-  let g:netrw_ftp_cmd = 'ftp -p'
-  let g:netrw_longlist = 1
-  let g:netrw_winsize = 40
-  let g:netrw_altv = 1
-  let g:DrChipTopLvlMenu = 'Plugins.'
-  if has('unix') && exists("$DISPLAY")
-    let g:netrw_browsex_viewer = 'xdg-open'
-  endif
-  " }}}
-
   " ale {{{
   if index(g:pathogen_disabled, 'ale') == -1
     nnoremap <silent> ,E :ALEDetail<CR>
 
-    highlight! link ALEWarning Whitespace
-    highlight! clear ALEErrorSign
-    highlight! clear ALEWarningSign
+    hi! link ALEWarning Whitespace
+    hi! clear ALEErrorSign
+    hi! clear ALEWarningSign
 
-    highlight! ALEVirtualTextError guifg=#ff4040 gui=bold
-    highlight! ALEVirtualTextWarning guifg=#999999
-    highlight! link ALEVirtualTextInfo ALEVirtualTextWarning
+    hi! ALEVirtualTextError guifg=#ff4040 gui=bold
+    hi! ALEVirtualTextWarning guifg=#999999
+    hi! link ALEVirtualTextInfo ALEVirtualTextWarning
 
     let g:ale_sign_error = '🔥'
     let g:ale_sign_warning = '⚠️'
@@ -772,43 +762,11 @@ endfunction " }}}
 
     let g:ale_linters = {
       \ 'ruby': [ 'ruby', 'rubocop' ],
-      \ 'javascript': [ 'eslint' ],
-      \ 'typescript': [ 'tslint' ]
+      \ 'javascript': [ 'eslint', 'tsserver' ],
+      \ 'typescript': [ 'tslint', 'tsserver' ]
     \ }
 
     " let g:ale_sh_shellcheck_options = '-e 2086,2155'
-  endif
-  " }}}
-
-  " lsp {{{
-  if index(g:pathogen_disabled, 'lsp') == -1
-    let g:lsp_diagnostics_enabled = 0
-
-    " if executable('solargraph')
-    "   au User lsp_setup call lsp#register_server({
-    "     \ 'name': 'ruby',
-    "     \ 'cmd': { server_info -> ['solargraph', 'stdio'] },
-    "     \ 'whitelist': ['ruby']
-    "   \ })
-    " endif
-
-    if executable('typescript-language-server')
-      " https://github.com/ryanolsonx/vim-lsp-typescript
-      au User lsp_setup call lsp#register_server({
-        \ 'name': 'typescript',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-        \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'tsconfig.json'))},
-        \ 'whitelist': ['typescript', 'typescript.tsx'],
-      \ })
-
-      " https://github.com/ryanolsonx/vim-lsp-javascript
-      au User lsp_setup call lsp#register_server({
-        \ 'name': 'javascript',
-        \ 'cmd': {server_info->[&shell, &shellcmdflag, 'typescript-language-server --stdio']},
-        \ 'root_uri': {server_info->lsp#utils#path_to_uri(lsp#utils#find_nearest_parent_file_directory(lsp#utils#get_buffer_path(), 'package.json'))},
-        \ 'whitelist': ['javascript', 'javascript.jsx'],
-      \ })
-    endif
   endif
   " }}}
 
@@ -840,11 +798,12 @@ endfunction " }}}
     let g:airline_detect_iminsert = 0
     let g:airline_detect_spell = 0
 
-    let g:airline_extensions = [ 'ale', 'branch', 'quickfix', 'tabline' ]
+    let g:airline_extensions = [ 'ale', 'branch', 'quickfix', 'tabline', 'vista' ]
 
     let g:airline#extensions#ale#show_line_numbers = 0
     let g:airline#extensions#ale#error_symbol = ''
     let g:airline#extensions#ale#warning_symbol = ''
+    let g:airline#extensions#ale#checking_symbol = ''
 
     let g:airline#extensions#branch#displayed_head_limit = 16
     let g:airline#extensions#branch#format = 2
@@ -877,7 +836,7 @@ endfunction " }}}
       \ 'v'  : 'v',
       \ 'V'  : 'V',
       \ 'c'  : 'c',
-      \ '' : 'v•b',
+      \ '' : '^v',
       \ 's'  : 's',
       \ 'S'  : 'S',
       \ '' : 's•b',
@@ -889,31 +848,22 @@ endfunction " }}}
 
     " show file directory separately from file name
     call airline#parts#define_raw('file', '%t%m')
-    call airline#parts#define_raw('filepath', '%#airline_filepath#❰%<%{ProjectPath(0)}❱')
+    call airline#parts#define_raw('filepath', '%#airline_filepath#[%<%{ProjectPath(0)}]')
     let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
-
-    hi! airline_filepath          term=bold cterm=bold ctermfg=244 ctermbg=235 gui=bold guifg=#999999 guibg=#303030
-    hi! airline_filepath_inactive term=bold cterm=bold ctermfg=238 ctermbg=235 gui=bold guifg=#555555 guibg=#303030
-
-    " show current tag
-    call airline#parts#define_raw('tag', '%#airline_tag#%{VistaTag()}')
-    hi! airline_tag ctermbg=235 guibg=#303030 ctermfg=215 guifg=#ffc266
-
-    function! VistaTag() abort
-      return get(b:, 'vista_nearest_method_or_function', '')
-    endfunction
-    autocmd vimrc BufRead * call vista#RunForNearestMethodOrFunction()
 
     " switch filetype and format/encoding, and only show
     " file format and encoding if it's not the default
     let g:airline_section_x = airline#section#create([
-      \ 'tag',
       \ "%{&ff == 'unix' ? '' : '  ' . WebDevIconsGetFileFormatSymbol()}%{&fenc == 'utf-8' ? '' : '   ' . &fenc}"
     \ ])
     let g:airline_section_y = airline#section#create(['%{WebDevIconsGetFileTypeSymbol()} %{&ft}'])
 
     " don't show position percentage
     let g:airline_section_z = airline#section#create(['windowswap', 'linenr', ':%v'])
+
+    hi! airline_filepath          guifg=#697098 guibg=#333747 gui=bold
+    hi! airline_filepath_inactive guifg=#697098 guibg=#333747
+    hi! airline_vista             guifg=#ffc266 guibg=#333747
   endif
   " }}}
 
@@ -933,6 +883,7 @@ endfunction " }}}
     nnoremap <silent> ,R :Rg<CR>
 
     nnoremap <silent> ,gb :Branches<CR>
+    nnoremap <silent> ,gp :Projects<CR>
 
     nnoremap <silent> ,: :History:<CR>
     nnoremap <silent> ,/ :History/<CR>
@@ -941,9 +892,8 @@ endfunction " }}}
     " hide statusline in bottom window
     autocmd! vimrc FileType fzf
     autocmd  vimrc FileType fzf echo
-      \| set noshowmode
       \| execute "if winnr() == winnr('$') | set laststatus=0 | endif"
-      \| autocmd vimrc BufLeave <buffer> set laststatus=2 showmode
+      \| autocmd vimrc BufLeave <buffer> set laststatus=2
 
     " add preview to :Files
     command! -bang -nargs=? -complete=dir Files
@@ -982,11 +932,25 @@ endfunction " }}}
       \     'sink': function('s:fzf_branches'),
       \     'options': ['--prompt', 'Branches> ']
       \   }, <bang>0)
+
+    " add :Projects command
+    function! s:fzf_projects(project)
+      exe 'cd ' . trim(system('src --path')) . '/' . a:project
+      Files
+      call feedkeys('i', 'n')
+    endfunction
+
+    command! -bang -nargs=0 Projects
+      \ call fzf#vim#grep(
+      \   ' src list -a', 0, {
+      \     'sink': function('s:fzf_projects'),
+      \     'options': ['--prompt', 'Projects> ']
+      \    }, <bang>0)
   endif
   " }}}
 
   " signify {{{
-  nnoremap <silent> ,gD :SignifyToggleHighlight<CR>
+  nnoremap <silent> ,gd :SignifyHunkDiff<CR>
 
   let g:signify_vcs_list = ['git']
 
@@ -994,6 +958,10 @@ endfunction " }}}
   let g:signify_sign_delete            = '-'
   let g:signify_sign_delete_first_line = '^'
   let g:signify_sign_change            = '·'
+
+  hi! link SignifySignAdd DiffAdd
+  hi! link SignifySignChange DiffChange
+  hi! link SignifySignDelete DiffDelete
   " }}}
 
   " didyoumean {{{
@@ -1168,8 +1136,10 @@ endfunction " }}}
   " }}}
 
   " definitive {{{
-  nnoremap <silent> gd :FindDefinition<CR>
-  nnoremap <silent> gD :SFindDefinition<CR>
+  nnoremap <silent> gd :call ALEFallback('ALEGoToDefinition', 'FindDefinition')<CR>
+  nnoremap <silent> gD :call ALEFallback('ALEGoToDefinitionInSplit', 'SFindDefinition')<CR>
+
+  let g:definitive_associated_filetypes = {}
   " }}}
 
   " vue {{{
@@ -1178,6 +1148,14 @@ endfunction " }}}
 
   " goldenview {{{
   let g:goldenview__enable_default_mapping = 0
+  " }}}
+
+  " context {{{
+  set maxmempattern=2000
+  let g:context_enabled = 0
+  let g:context_border_char = '━'
+
+  nnoremap <silent> ,C :ContextPeek<CR>
   " }}}
 
 " }}}

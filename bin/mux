@@ -256,7 +256,7 @@ case "$1" in
           shift
           ;;
         -w)
-          wait="echo -ne '\n\e[0;30m[\e[1;37mPress any key\e[0;30m]\e[0m'; read -n 1"
+          wait="echo -ne '\n\e[1;32m[\e[1;37mPress any key\e[1;32m]\e[0m'; read -n 1"
           ;;
         *)
           usage

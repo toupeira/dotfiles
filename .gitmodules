@@ -124,9 +124,6 @@
 [submodule "vim/bundle/bundler"]
 	path = vim/bundle/bundler
 	url = https://github.com/tpope/vim-bundler.git
-[submodule "vim/bundle/papercolor"]
-	path = vim/bundle/papercolor
-	url = https://github.com/NLKNguyen/papercolor-theme.git
 [submodule "vim/bundle/css3-syntax"]
 	path = vim/bundle/css3-syntax
 	url = https://github.com/hail2u/vim-css3-syntax.git
@@ -181,9 +178,6 @@
 [submodule "vim/bundle/async"]
 	path = vim/bundle/async
 	url = https://github.com/prabirshrestha/async.vim.git
-[submodule "vim/bundle/lsp"]
-	path = vim/bundle/lsp
-	url = https://github.com/prabirshrestha/vim-lsp.git
 [submodule "vim/bundle/tmux"]
 	path = vim/bundle/tmux
 	url = https://github.com/tmux-plugins/vim-tmux.git
@@ -202,9 +196,6 @@
 [submodule "vim/bundle/deoplete"]
 	path = vim/bundle/deoplete
 	url = https://github.com/Shougo/deoplete.nvim.git
-[submodule "vim/bundle/deoplete-lsp"]
-	path = vim/bundle/deoplete-lsp
-	url = https://github.com/lighttiger2505/deoplete-vim-lsp.git
 [submodule "vim/bundle/neco-syntax"]
 	path = vim/bundle/neco-syntax
 	url = https://github.com/Shougo/neco-syntax.git
@@ -277,3 +268,15 @@
 [submodule "vim/bundle/lastplace"]
 	path = vim/bundle/lastplace
 	url = https://github.com/farmergreg/vim-lastplace.git
+[submodule "vim/bundle/badwolf"]
+	path = vim/bundle/badwolf
+	url = https://github.com/sjl/badwolf.git
+[submodule "vim/bundle/base16"]
+	path = vim/bundle/base16
+	url = https://github.com/chriskempson/base16-vim.git
+[submodule "vim/bundle/monokai"]
+	path = vim/bundle/monokai
+	url = https://github.com/crusoexia/vim-monokai.git
+[submodule "vim/bundle/context"]
+	path = vim/bundle/context
+	url = https://github.com/wellle/context.vim.git
