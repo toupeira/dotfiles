@@ -117,13 +117,13 @@ let g:airline#themes#palenight#palette.accents = {
 " ---
 " Tabline
 
-let s:airline_tabsel = [s:colors.black.gui, s:colors.blue_purple.gui, s:colors.black.cterm, s:colors.blue_purple.cterm, s:wrap_opts(['bold'])]
+let s:airline_tabsel = [s:colors.black.gui, s:colors.blue_purple.gui, s:colors.black.cterm, s:colors.blue_purple.cterm]
 let s:airline_tabfill = [s:colors.white.gui, s:colors.white_mask_1.gui, s:colors.white.cterm, s:colors.white_mask_1.cterm]
 let g:airline#themes#palenight#palette.tabline = {
       \ 'airline_tabsel':  s:airline_tabsel,
       \ 'airline_tabfill':  s:airline_tabfill,
-      \ 'airline_tabmod': [s:colors.black.gui, s:colors.yellow.gui, s:colors.black.cterm, s:colors.yellow.cterm, s:wrap_opts(['bold', 'italic'])],
-      \ 'airline_tabmod_unsel': [s:colors.yellow.gui, s:colors.white_mask_1.gui, s:colors.yellow.cterm, s:colors.white_mask_1.cterm, s:wrap_opts(['bold', 'italic'])],
+      \ 'airline_tabmod': [s:colors.black.gui, s:colors.yellow.gui, s:colors.black.cterm, s:colors.yellow.cterm],
+      \ 'airline_tabmod_unsel': [s:colors.yellow.gui, s:colors.white_mask_1.gui, s:colors.yellow.cterm, s:colors.white_mask_1.cterm],
       \ 'airline_tabhid': [s:colors.white.gui, s:colors.white_mask_3.gui, s:colors.white.cterm, s:colors.white_mask_3.cterm],
       \ 'airline_tab': [s:colors.white.gui, s:colors.cursor_grey.gui, s:colors.white.cterm, s:colors.cursor_grey.cterm],
       \ }

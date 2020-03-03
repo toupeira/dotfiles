@@ -37,6 +37,7 @@ quodlibet
 terminator
 
 flat:com.github.johnfactotum.Foliate
+flat:nl.hjdskes.gcolor3
 flat:org.gtk.Gtk3theme.Numix
 
 # Xorg

@@ -702,12 +702,17 @@ function run {
           return
         elif [ "$filter" = "$type" ] || ask "Upgrade {{$type}} packages?"; then
           status "Running {{$*}}"
-          mux-wrap -w "$@"
+          if [ "$1" = "xdg-open" ]; then
+            shift
+            xdg-open "$@"
+          else
+            mux-wrap -w "$@"
+          fi
           echo
         fi
       }
 
-      upgrade apt        'sudo apt update && sudo apt upgrade'
+      upgrade apt        'sudo aptitude update && sudo aptitude upgrade'
       upgrade gem        gem update
       upgrade npm        sudo npm -g update
       upgrade yarn       yarn global upgrade
