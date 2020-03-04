@@ -268,3 +268,14 @@ function up {
 function jq.less {
   jq -C . "$1" | less
 }
+
+# Serve a directory over HTTP
+function serve {
+  if [ -n "$1" ]; then
+    cd "$1" || return
+  fi
+
+  local port=$((9000 + RANDOM % 1000))
+  xdg-open "http://localhost:$port/"
+  python -m SimpleHTTPServer "$port"
+}
