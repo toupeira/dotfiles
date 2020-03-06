@@ -1,5 +1,8 @@
 #!/bin/bash
 
+command=$( tmux display -p '#{pane_current_command}' )
+title=$( tmux display -p '#{pane_title}' )
+
 case "$1" in
   -l|--last)
     (tmux last-window || tmux next-window || tmux last-pane) &>/dev/null
@@ -11,11 +14,21 @@ case "$1" in
     tmux select-pane -P bg=default
     exit 0
     ;;
+  -L|-D|-U|-R)
+    ;;
+  -c|--command)
+    if [ "$command" == "$2" ]; then
+      shift 2
+      exec "$@"
+    else
+      exit 1
+    fi
+    ;;
+  *)
+
 esac
 
 # Forward to vim
-command=$( tmux display -p '#{pane_current_command}' )
-title=$( tmux display -p '#{pane_title}' )
 if [ "$command" != "ssh" ] && [[ "$title" =~ \ 😑$ ]]; then
   key=$( echo "${1#-}" | tr 'LDUR' 'hjkl' )
   tmux send-keys "C-$key"

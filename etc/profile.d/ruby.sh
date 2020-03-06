@@ -22,7 +22,7 @@ function _gem_exec {
     command="sudo $command"
   elif [ "$1" = "cd" ]; then
     local path
-    path=$( gem open -e echo "$2" )
+    path=$( bundle exec gem open -e echo "$2" )
     if [ $? -eq 0 ]; then
       cd "$path"
       return

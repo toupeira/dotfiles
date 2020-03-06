@@ -2,7 +2,7 @@ cmake
 default-jdk
 docker.io
 docker-compose
-golang-1.12
+golang
 google-cloud-sdk
 kubectl
 kubectx

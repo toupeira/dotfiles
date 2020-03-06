@@ -31,7 +31,8 @@ hi! link VertSplit LineNr
 
 hi! link mkdHeading Constant
 hi! link mkdLink Statement
-hi! link qfLineNr Comment
+hi! link qfFileName Keyword
+hi! link qfLineNr Structure
 hi! link rubyModuleName Type
 
 """ badwolf

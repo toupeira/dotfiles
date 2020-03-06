@@ -427,6 +427,10 @@ endfunction " }}}
   " terminal mappings
   tnoremap <Esc> <C-\><C-n>
 
+  " don't open tags with Ctrl-LeftClick
+  noremap <C-LeftMouse> <nop>
+  noremap! <C-LeftMouse> <nop>
+
   " navigate windows/tmux panes with Ctrl+jkhl
   function! TmuxNavigate(cmd) " {{{
     let nr = winnr()
@@ -716,9 +720,10 @@ endfunction " }}}
     \ 'elm-package.json',
     \ 'ng-package.json',
     \ 'package.json',
-    \ 'Gemfile',
     \ 'go.mod',
     \ 'mix.exs',
+    \ 'Gemfile',
+    \ 'Rakefile',
     \ '.git',
     \ '.git/',
   \ ]
