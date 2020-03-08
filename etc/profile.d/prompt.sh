@@ -49,7 +49,7 @@ function _prompt_exit_status {
 }
 
 # Use Git prompt if available
-if type __git_ps1 &>/dev/null; then
+if type __git_ps1 &>/dev/null && [ -z "$VIM" ]; then
   GIT_PS1_SHOWDIRTYSTATE=1
   GIT_PS1_SHOWSTASHSTATE=1
   GIT_PS1_SHOWUNTRACKEDFILES=1

@@ -672,16 +672,24 @@ endfunction " }}}
   " }}}
 
   " reply {{{
-  nnoremap <silent> ,! :Repl<CR>
+  nnoremap <silent> ,! :botright Repl<CR>
+  nnoremap <silent> ,` :botright Repl bash --login<CR>
   noremap <silent> ,> :ReplSend<CR>
   noremap <silent> ,< :ReplRecv<CR>
 
+  let g:reply_termwin_max_height = 12
+
   function! s:reply_bash() abort
-    return reply#repl#base('bash', {
-      \ 'command_options': ['-l'],
+    let repl = reply#repl#base('bash', {
       \ 'prompt_start': '^[^[]\+ \[[^[]\+]\( ❰.*❱\)\? ',
       \ 'prompt_continue': '^ *» ',
     \ })
+
+    function! repl.get_command() abort
+      return ['bash', '--login']
+    endfunction
+
+    return repl
   endfunction
 
   function! s:reply_ruby() abort
@@ -693,6 +701,7 @@ endfunction " }}}
 
   let g:reply_repls = {
     \ 'sh': [function('s:reply_bash')],
+    \ 'vim': [function('s:reply_bash')],
     \ 'ruby': [function('s:reply_ruby')],
   \ }
   " }}}
