@@ -105,7 +105,7 @@ function _mux {
 
     mapfile -t COMPREPLY < <(
       compgen -W "$(
-        (echo -e "server:\nwatcher:\nconsole:\nlog:"; cat Procfile 2>/dev/null) \
+        (echo -e "bundle:\nconsole:\nlog:\nmigrate:\nserver:\nwatcher:"; cat Procfile 2>/dev/null) \
           | egrep -o "^${cword:1}[-[:alnum:]]*" \
           | sed -r 's/^/@/'
       )"

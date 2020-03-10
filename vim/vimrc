@@ -5,6 +5,7 @@
   set encoding=utf-8
   scriptencoding utf-8
 
+  let g:python3_host_prog = 'python3'
   let s:vimdir = expand("~") . "/.vim"
 
   " disable defaults.vim
@@ -1153,7 +1154,10 @@ endfunction " }}}
   nnoremap <silent> gd :call ALEFallback('ALEGoToDefinition', 'FindDefinition')<CR>
   nnoremap <silent> gD :call ALEFallback('ALEGoToDefinitionInSplit', 'SFindDefinition')<CR>
 
-  let g:definitive_associated_filetypes = {}
+  let g:definitive_associated_filetypes = {
+    \ 'eruby': 'ruby',
+    \ 'haml': 'ruby',
+  \ }
   " }}}
 
   " vue {{{
@@ -1161,6 +1165,7 @@ endfunction " }}}
   " }}}
 
   " goldenview {{{
+  let g:goldenview__enable_at_startup = 0
   let g:goldenview__enable_default_mapping = 0
   " }}}
 

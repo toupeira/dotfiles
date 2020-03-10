@@ -22,7 +22,6 @@ gem:bundler
 gem:pry
 gem:rubocop
 
-pip:msgpack
 pip:pynvim
 pip:yamllint
 pip:yq

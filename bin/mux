@@ -31,6 +31,7 @@ function usage {
   echo "Pass options to tmux:"
   echo "  -d, -c PATH, -l SIZE, -p PERCENTAGE"
   echo
+
   exit 255
 }
 
@@ -70,21 +71,27 @@ case "$1" in
     command="$proc $*"
     options="-b"
 
+    # Or run a predefined command
     case "$proc" in
-      watcher)
-        options="-d"
+      bundle)
+        [ -f Gemfile ] && mux -b -w bundle
+        [ -f package.json ] && mux -b -w yarn
 
-        if [ -f Guardfile ]; then
-          command="bundle exec guard"
+        exit 0
+        ;;
+      console)
+        if [ -x bin/rails ]; then
+          command="rails console"
+        elif [ -x bin/middleman ]; then
+          command="middleman console"
         elif [ -f elm-package.json ]; then
-          command="elm live Main.elm"
-        elif [ -f angular.json ] || [ -f .angular-cli.json ]; then
-          command="ng test"
-          [ -f yarn.lock ] && command="yarn exec -s -- $command"
-        elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
-          command="grunt watch"
+          command="elm-repl"
+        elif [ -f Gruntfile.js ]; then
+          command="node"
+        elif [ -x bin/console ]; then
+          command="bin/console"
         else
-          echo "Can't find watcher for project."
+          echo "Can't find console for project."
           exit 1
         fi
         ;;
@@ -96,11 +103,22 @@ case "$1" in
           exit 1
         fi
         ;;
+      migrate)
+        if [ -f Gemfile ] && [ -d db/migrate ]; then
+          mux -b -w "rake db:migrate; [ -f db/schema.rb ] && git checkout db/schema.rb"
+        else
+          echo "Can't find migrations for project."
+          exit 1
+        fi
+
+        exit 0
+        ;;
       server)
         options="-d"
 
         if [ -f GDK_ROOT ] || [ -f ../GDK_ROOT ]; then
-          command="gdk run"
+          gdk start
+          command="gdk tail"
         elif [ -x bin/rails ] || [ -x script/rails ]; then
           command="rails server"
         elif [ -x bin/middleman ]; then
@@ -122,19 +140,20 @@ case "$1" in
           exit 1
         fi
         ;;
-      console)
-        if [ -x bin/rails ]; then
-          command="rails console"
-        elif [ -x bin/middleman ]; then
-          command="middleman console"
+      watcher)
+        options="-d"
+
+        if [ -f Guardfile ]; then
+          command="bundle exec guard"
         elif [ -f elm-package.json ]; then
-          command="elm-repl"
-        elif [ -f Gruntfile.js ]; then
-          command="node"
-        elif [ -x bin/console ]; then
-          command="bin/console"
+          command="elm live Main.elm"
+        elif [ -f angular.json ] || [ -f .angular-cli.json ]; then
+          command="ng test"
+          [ -f yarn.lock ] && command="yarn exec -s -- $command"
+        elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
+          command="grunt watch"
         else
-          echo "Can't find console for project."
+          echo "Can't find watcher for project."
           exit 1
         fi
         ;;
@@ -204,8 +223,8 @@ case "$1" in
 
   # Set the current tmux window title
   title)
+    [ $# -eq 2 ] || usage
     title="$2"
-    [ -n "$title" ] || usage
 
     if [[ "$TERM" =~ ^(tmux|screen) ]]; then
       echo -ne "\\033]0;$title\\007\\033k$title\\033\\" >&2
@@ -217,8 +236,7 @@ case "$1" in
   # Create a new window
   *)
     action="new-window"
-    title=$( basename "$PWD" )
-    unset args
+    unset args title
 
     while [ "${1:0:1}" = "-" ]; do
       case "$1" in
@@ -230,7 +248,7 @@ case "$1" in
           action="split-window"
           height=$( tmux list-panes -F '#{pane_active} #{pane_height}' | awk '/^1/ { print $2 }' )
           height=$(( height / 3 ))
-          height=$(( height < 5 ? 5 : height ))
+          height=$(( height < 10 ? 10 : height ))
           args="$args -v -l $height"
           ;;
         -r)
@@ -269,6 +287,8 @@ case "$1" in
     if [ $# -eq 0 ]; then
       set --
       set -- bash --login
+    elif [ -z "$title" ]; then
+      title="$* [$( basename "$PWD" )]"
     fi
 
     cd "$( $0 restore )" || true

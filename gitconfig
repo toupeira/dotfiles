@@ -175,6 +175,8 @@
   guard = !guard
   cap = !cap
   mux = !mux
+  vi = !vi
+  vim = !vim
   ed = !git edit
 
   # try to run a GUI, or tig on terminals
