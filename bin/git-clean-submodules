@@ -1,0 +1,41 @@
+#!/bin/bash
+
+cd "$( git root )" || exit 1
+
+modules=$(
+  git config --get-regexp '^submodule\..*\.active$' \
+    | sed -r 's/^submodule\.(.*)\.active .*/\1/' \
+    | sort
+)
+
+repos=$(
+  cd .git/modules && find -type f -name config -printf '%h\n' \
+    | cut -d/ -f2- \
+    | sort
+)
+
+unused=$( comm -23 <( echo "$repos" ) <( echo "$modules" ) )
+
+echo
+echo "Submodules:"
+printf '%4d submodules   in .git/config\n' $( echo "$modules" | wc -l )
+printf '%4d repositories in .git/modules\n' $( echo "$repos" | wc -l )
+echo
+
+if [ -n "$unused" ]; then
+  echo "Unused repositories:"
+  echo "$unused" | sed -r 's/^/ - /'
+  echo
+  read -p "Delete $( echo "$unused" | wc -l) unused repositories? [Y/n] "
+
+  [ "$REPLY" != "" ] && [ "$REPLY" != "y" ] && exit
+
+  if [ "$REPLY" != "n" ]; then
+    cd .git/modules || exit 1
+
+    for module in $unused; do
+      rm -rf "$module"
+    done
+  fi
+  echo
+fi
