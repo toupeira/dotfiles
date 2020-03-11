@@ -734,6 +734,8 @@ endfunction " }}}
     \ 'mix.exs',
     \ 'Gemfile',
     \ 'Rakefile',
+    \ 'bin/',
+    \ 'lib/',
     \ '.git',
     \ '.git/',
   \ ]
@@ -820,7 +822,7 @@ endfunction " }}}
     let g:airline#extensions#ale#warning_symbol = ''
     let g:airline#extensions#ale#checking_symbol = ''
 
-    let g:airline#extensions#branch#displayed_head_limit = 16
+    let g:airline#extensions#branch#displayed_head_limit = 24
     let g:airline#extensions#branch#format = 2
     let g:airline#extensions#branch#vcs_checks = []
 
@@ -1073,6 +1075,10 @@ endfunction " }}}
 
   let g:cycle_default_groups_for_eruby = g:cycle_default_groups_for_ruby
   let g:cycle_default_groups_for_haml = g:cycle_default_groups_for_ruby
+
+  let g:cycle_default_groups_for_gitrebase = [
+    \ [[ 'pick', 'reword', 'edit', 'squash', 'fixup', 'drop' ]],
+  \ ]
   " }}}
 
   " startify {{{
