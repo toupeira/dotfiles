@@ -795,7 +795,7 @@ endfunction " }}}
     inoremap <silent><expr> <Tab>
       \ pumvisible() ? "\<C-y>" :
       \ <SID>check_back_space() ? "\<Tab>" :
-      \ deoplete#mappings#manual_complete()
+      \ deoplete#complete()
 
     function! s:check_back_space() abort
       let col = col('.') - 1
