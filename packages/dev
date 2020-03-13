@@ -4,6 +4,7 @@ automake
 build-essential
 ed
 gettext
+ipython3
 libreadline-dev
 libssl-dev
 manpages-dev

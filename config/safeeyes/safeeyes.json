@@ -1,0 +1,133 @@
+{
+    "allow_postpone": false,
+    "break_interval": 15,
+    "long_break_duration": 60,
+    "long_breaks": [
+        {
+            "name": "Walk for a while"
+        },
+        {
+            "name": "Lean back at your seat and relax"
+        }
+    ],
+    "meta": {
+        "config_version": "6.0.0"
+    },
+    "no_of_short_breaks_per_long_break": 5,
+    "persist_state": false,
+    "plugins": [
+        {
+            "enabled": false,
+            "id": "donotdisturb",
+            "settings": {
+                "skip_break_windows": "zoom",
+                "take_break_windows": "",
+                "unfullscreen": true,
+                "while_on_battery": false
+            },
+            "version": "0.0.2"
+        },
+        {
+            "enabled": true,
+            "id": "notification",
+            "version": "0.0.1"
+        },
+        {
+            "enabled": true,
+            "id": "audiblealert",
+            "settings": {
+                "pre_break_alert": true
+            },
+            "version": "0.0.2"
+        },
+        {
+            "enabled": true,
+            "id": "trayicon",
+            "settings": {
+                "disable_options": [
+                    {
+                        "time": 30,
+                        "unit": "minute"
+                    },
+                    {
+                        "time": 1,
+                        "unit": "hour"
+                    },
+                    {
+                        "time": 2,
+                        "unit": "hour"
+                    },
+                    {
+                        "time": 3,
+                        "unit": "hour"
+                    }
+                ],
+                "show_time_in_tray": false
+            },
+            "version": "0.0.1"
+        },
+        {
+            "enabled": false,
+            "id": "smartpause",
+            "settings": {
+                "idle_time": 3,
+                "interpret_idle_as_break": false
+            },
+            "version": "0.0.2"
+        },
+        {
+            "enabled": false,
+            "id": "screensaver",
+            "settings": {
+                "command": "",
+                "min_seconds": 3
+            },
+            "version": "0.0.1"
+        },
+        {
+            "enabled": true,
+            "id": "healthstats",
+            "version": "0.0.1"
+        },
+        {
+            "enabled": true,
+            "id": "donotdisturb-apps",
+            "settings": {
+                "skip_break_windows": "zoom",
+                "while_on_battery": false
+            },
+            "version": "0.0.2"
+        }
+    ],
+    "postpone_duration": 5,
+    "pre_break_warning_time": 10,
+    "rpc_port": 7200,
+    "short_break_duration": 15,
+    "short_breaks": [
+        {
+            "name": "Tightly close your eyes"
+        },
+        {
+            "name": "Roll your eyes a few times to each side"
+        },
+        {
+            "name": "Rotate your eyes in clockwise direction"
+        },
+        {
+            "name": "Rotate your eyes in counterclockwise direction"
+        },
+        {
+            "name": "Blink your eyes"
+        },
+        {
+            "name": "Focus on a point in the far distance"
+        },
+        {
+            "name": "Have some water"
+        }
+    ],
+    "shortcut_disable_time": 2,
+    "shortcut_postpone": 65,
+    "shortcut_skip": 9,
+    "strict_break": false
+}

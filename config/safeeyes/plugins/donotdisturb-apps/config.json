@@ -1,0 +1,28 @@
+{
+    "meta": {
+        "name": "Do Not Disturb Apps",
+        "description": "Skip break if certain apps are running",
+        "version": "0.0.2"
+    },
+    "dependencies": {
+        "python_modules": [],
+        "shell_commands": ["xprop"],
+        "operating_systems": [],
+        "desktop_environments": [],
+        "resources": []
+    },
+    "settings": [{
+            "id": "skip_break_windows",
+            "label": "Do not interrupt these windows anytime",
+            "type": "TEXT",
+            "default": ""
+        },
+        {
+            "id": "while_on_battery",
+            "label": "Do not disturb while on battery",
+            "type": "BOOL",
+            "default": false
+        }
+    ],
+    "break_override_allowed": true
+}
