@@ -74,8 +74,8 @@ case "$1" in
     # Or run a predefined command
     case "$proc" in
       bundle)
-        [ -f Gemfile ] && mux -b -w bundle
-        [ -f package.json ] && mux -b -w yarn
+        [ -f Gemfile ] && mux -b -d -w bundle
+        [ -f package.json ] && mux -b -d -w yarn
 
         exit 0
         ;;
@@ -105,7 +105,7 @@ case "$1" in
         ;;
       migrate)
         if [ -f Gemfile ] && [ -d db/migrate ]; then
-          mux -b -w "rake db:migrate; [ -f db/schema.rb ] && git checkout db/schema.rb"
+          mux -b -d -w "rake db:migrate; [ -f db/schema.rb ] && git checkout db/schema.rb"
         else
           echo "Can't find migrations for project."
           exit 1

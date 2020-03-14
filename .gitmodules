@@ -280,3 +280,6 @@
 [submodule "vim/bundle/context"]
 	path = vim/bundle/context
 	url = https://github.com/wellle/context.vim.git
+[submodule "vim/bundle/searchlight"]
+	path = vim/bundle/searchlight
+	url = https://github.com/PeterRincker/vim-searchlight.git

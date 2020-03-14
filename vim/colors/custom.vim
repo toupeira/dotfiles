@@ -8,22 +8,23 @@ let g:palenight_color_overrides = {
 
 runtime colors/palenight.vim
 
-hi! LineNr     guibg=#11131a
-hi! SignColumn guibg=#11131a
-hi! FoldColumn guibg=#11131a
+hi! LineNr      guibg=#11131a
+hi! SignColumn  guibg=#11131a
+hi! FoldColumn  guibg=#11131a
 
-hi! Folded     guibg=#2f3347 gui=bold
+hi! Folded      guibg=#2f3347 gui=bold
 
-hi! Search     guifg=#ffffff guibg=#6b8e23 gui=bold
-hi! IncSearch  guifg=#ffffff guibg=#3a663a gui=bold
+hi! Search      guifg=#d7ffaf guibg=#2d402d gui=bold
+hi! IncSearch   guifg=#d7ffaf guibg=#2d402d gui=bold
+hi! Searchlight guifg=#ecffd9 guibg=#5f875f gui=bold
 
-hi! PmenuSel   guifg=#000000 guibg=#939ede
-hi! PmenuThumb guibg=#697098
+hi! PmenuSel    guifg=#000000 guibg=#939ede
+hi! PmenuThumb  guibg=#697098
 
-hi! DiffAdd    guifg=#d7ffaf guibg=#5f875f
-hi! DiffChange guifg=#d7d7ff guibg=#5f5f87
-hi! DiffDelete guifg=#ff8080 guibg=#cc6666 gui=bold
-hi! DiffText   guifg=#5f5f87 guibg=#81a2be gui=bold
+hi! DiffAdd     guifg=#d7ffaf guibg=#5f875f
+hi! DiffChange  guifg=#d7d7ff guibg=#5f5f87
+hi! DiffDelete  guifg=#ff8080 guibg=#cc6666 gui=bold
+hi! DiffText    guifg=#5f5f87 guibg=#81a2be gui=bold
 
 hi! link MatchParen Visual
 hi! link QuickFixLine Visual

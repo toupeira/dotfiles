@@ -1,7 +1,7 @@
 // Unattended-Upgrade::Origins-Pattern controls which packages are
 // upgraded.
 //
-// Lines below have the format is "keyword=value,...".  A
+// Lines below have the format "keyword=value,...".  A
 // package will be upgraded only if the values in its metadata match
 // all the supplied keywords in a line.  (In other words, omitted
 // keywords are wild cards.) The keywords originate from the Release
@@ -147,3 +147,6 @@ Unattended-Upgrade::MailReport "only-on-error";
 // Print debugging information both in unattended-upgrades and
 // in unattended-upgrade-shutdown
 // Unattended-Upgrade::Debug "false";
+
+// Allow package downgrade if Pin-Priority exceeds 1000
+// Unattended-Upgrade::Allow-downgrade "false";

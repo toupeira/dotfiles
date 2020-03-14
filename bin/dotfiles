@@ -175,7 +175,7 @@ function dryrun-message {
 # Run a command in a tmux pane if possible
 function mux-wrap {
   if [ -n "$TMUX" ]; then
-    system mux -b "$@"
+    system mux -b -d -w "$@"
   else
     system "$@"
   fi
@@ -678,7 +678,7 @@ function run {
       if ask-yes "{{Install?}}"; then
         function install_packages {
           local missing="$1"; shift
-          [ -n "$missing" ] && output && mux-wrap -w "$@" $missing
+          [ -n "$missing" ] && output && mux-wrap "$@" $missing
         }
 
         install_packages "$missing_apt"  sudo aptitude install
@@ -700,13 +700,13 @@ function run {
 
         if [ -n "$filter" ] && [ "$filter" != "$type" ]; then
           return
-        elif [ "$filter" = "$type" ] || ask "Upgrade {{$type}} packages?"; then
+        elif [ "$filter" = "$type" ] || ask-yes "Upgrade {{$type}} packages?"; then
           status "Running {{$*}}"
           if [ "$1" = "xdg-open" ]; then
             shift
             xdg-open "$@"
           else
-            mux-wrap -w "$@"
+            mux-wrap "$@"
           fi
           echo
         fi
