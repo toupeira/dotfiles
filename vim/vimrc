@@ -887,6 +887,7 @@ endfunction " }}}
   if index(g:pathogen_disabled, 'fzf') == -1
     let g:fzf_layout = { 'window': 'enew' }
     let g:fzf_action = { 'ctrl-s': 'split', 'ctrl-v': 'vsplit' }
+    let g:fzf_preview_window = 'right:70%:hidden'
 
     nnoremap <silent> ,f :Files<CR>
     nnoremap <silent> ,F :Files <C-r>=expand('%:h')<CR>/<CR>
@@ -910,27 +911,6 @@ endfunction " }}}
     autocmd  vimrc FileType fzf echo
       \| execute "if winnr() == winnr('$') | set laststatus=0 | endif"
       \| autocmd vimrc BufLeave <buffer> set laststatus=2
-
-    " add preview to :Files
-    command! -bang -nargs=? -complete=dir Files
-      \ call fzf#vim#files(<q-args>, fzf#vim#with_preview({}, 'right:70%:hidden'), <bang>0)
-
-    " add preview to :Rg
-    command! -bang -nargs=* Rg
-      \ call fzf#vim#grep(
-      \   'rg --column --line-number --no-heading --color=always '.shellescape(<q-args>), 1,
-      \   <bang>0 ? fzf#vim#with_preview('right:70%')
-      \           : fzf#vim#with_preview('right:70%:hidden'),
-      \   <bang>0)
-
-    " tweak :GFiles
-    command! -bang -nargs=? GFiles
-      \ call fzf#vim#gitfiles(
-      \   <q-args>, { 'options': [
-      \     '--ansi', '--multi', '--nth', '2..,..', '--tiebreak=index', '--prompt', 'GitFiles?> ',
-      \     '--preview', 'git diff --color=always HEAD -- {-1} | sed 1,4d | grep . || fzf-preview {-1}',
-      \     '--preview-window', 'right:70%'
-      \   ] })
 
     " add :Branches command
     function! s:fzf_branches(line)
