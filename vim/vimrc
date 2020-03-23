@@ -348,10 +348,6 @@ endfunction " }}}
   CommandAlias Wq! wq!
   CommandAlias wQ! wq!
 
-  " diff shortcuts for visual mode
-  command! Dg diffget
-  command! Dp diffput
-
   " shortcuts to open files externally and perform online searches
   if has('mac')
     let g:open_command = 'open'

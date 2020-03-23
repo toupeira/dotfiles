@@ -20,4 +20,4 @@ redis
 runit
 zlib1g-dev
 
-gem:gitlab-development-kit
+gem: gitlab-development-kit

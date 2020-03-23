@@ -602,7 +602,7 @@ function run {
       fi
 
       function get_packages {
-        echo "$packages" | grep -E "$1" | cut -d: -f2 | sort
+        echo "$packages" | grep -E "$1" | awk '{ print $2 }' | sort
       }
 
       local packages_apt=$( get_packages "$filter_apt" )
@@ -610,7 +610,7 @@ function run {
       local packages_npm=$( get_packages '^npm:' )
       local packages_yarn=$( get_packages '^yarn:' )
       local packages_pip=$( get_packages '^pip:' )
-      local packages_flat=$( get_packages '^flat:' )
+      local packages_flat=$( get_packages '^flatpak:' )
 
       function get_missing {
         if [ -n "$1" ]; then

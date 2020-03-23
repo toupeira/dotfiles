@@ -18,23 +18,23 @@ sqlite3
 universal-ctags
 zlib1g-dev
 
-gem:activesupport
-gem:bundler
-gem:pry
-gem:rubocop
+gem: activesupport
+gem: bundler
+gem: pry
+gem: rubocop
 
-pip:pynvim
-pip:yamllint
-pip:yq
+pip: pynvim
+pip: yamllint
+pip: yq
 
-npm:yarn
+npm: yarn
 
-yarn:bash-language-server
-yarn:caniuse-cmd
-yarn:eslint
-yarn:htmlhint
-yarn:jsonlint
-yarn:stylelint
-yarn:tslint
-yarn:typescript
-yarn:vmd
+yarn: bash-language-server
+yarn: caniuse-cmd
+yarn: eslint
+yarn: htmlhint
+yarn: jsonlint
+yarn: stylelint
+yarn: tslint
+yarn: typescript
+yarn: vmd

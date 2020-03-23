@@ -4,8 +4,9 @@ deluge-web
 deluged
 i965-va-driver-shaders
 joystick
-kodi
 libvisual-projectm
 projectm-pulseaudio
 scummvm
 vainfo
+
+flatpak: tv.kodi.Kodi

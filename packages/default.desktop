@@ -36,9 +36,9 @@ qt5-gtk2-platformtheme
 quodlibet
 terminator
 
-flat:com.github.johnfactotum.Foliate
-flat:nl.hjdskes.gcolor3
-flat:org.gtk.Gtk3theme.Numix
+flatpak: com.github.johnfactotum.Foliate
+flatpak: nl.hjdskes.gcolor3
+flatpak: org.gtk.Gtk3theme.Numix
 
 # Xorg
 wmctrl
