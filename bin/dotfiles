@@ -31,6 +31,9 @@ function usage {
   echo "  package, pkg [LIST:TYPE]  Install packages from list"
   echo "  package upgrade [TYPE]    Upgrade packages"
   echo
+  echo "  dconf load                Load custom dconf settings"
+  echo "  dconf dump                Dump custom dconf settings"
+  echo
   echo "Other arguments:"
   echo "  COMMAND [ARGS]...         Excecute a Git command inside the dotfiles repository"
   echo "  git COMMAND [ARGS]..."
@@ -723,6 +726,22 @@ function run {
         upgrade gnome-shell xdg-open https://extensions.gnome.org/local
       fi
 
+      ;;
+    # }}}
+
+    dconf) # {{{
+      for file in "$DOTFILES"/dconf/*.dconf; do
+        local dir="/$( basename "$file" .dconf | tr . / )/"
+
+        if [ "$1" = "load" ]; then
+          ask "Load settings for {{$dir}}?" || continue
+          dconf load "$dir" < "$file"
+        elif [ "$1" = "dump" ]; then
+          dconf dump "$dir" > "$file"
+        else
+          usage
+        fi
+      done
       ;;
     # }}}
 

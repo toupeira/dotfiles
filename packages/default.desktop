@@ -13,6 +13,8 @@ grub-efi-amd64-signed
 shim-signed
 
 # Desktop
+dconf-cli
+dconf-editor
 fonts-noto-color-emoji
 fonts-roboto
 fonts-roboto-slab
@@ -35,6 +37,7 @@ peek
 qt5-gtk2-platformtheme
 quodlibet
 terminator
+tilix
 
 flatpak: com.github.johnfactotum.Foliate
 flatpak: nl.hjdskes.gcolor3

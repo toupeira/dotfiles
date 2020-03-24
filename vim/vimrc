@@ -222,7 +222,7 @@
     endif
   endfunction " }}}
 
-  let &titlestring = "%t%m%r\ ❰%{ProjectPath(1)}❱"
+  let &titlestring = "%t%m%r\ [%{ProjectPath(1)}]"
   let &iconstring = &titlestring
 
   " add Unicode marker for tmux navigation
@@ -800,6 +800,10 @@ endfunction " }}}
     " <CR> - reject completion and close popup
     inoremap <CR> <C-r>=(pumvisible() ? "<C-e>" : "")<CR><C-g>u<CR>
   endif
+  " }}}
+
+  " neco-syntax {{{
+  let g:necosyntax#max_syntax_lines = 500
   " }}}
 
   " airline {{{

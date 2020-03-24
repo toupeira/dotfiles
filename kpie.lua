@@ -12,6 +12,7 @@ id    = window_xid()
 title = window_title()
 class = window_class()
 type  = window_type()
+role  = window_role()
 
 -- get current monitor resolution
 pipe = io.popen('xmonitorinfo ' .. id, 'r')
@@ -57,6 +58,7 @@ end
 if (class == 'X-terminal-emulator' and title ~= 'Terminator Preferences')
 or class == 'Xfce4-terminal'
 or class == 'Terminator'
+or (class == 'Tilix' and role ~= 'quake')
 or class == 'kitty'
 or class == 'nvim-qt'
 or class == 'Gvim'
