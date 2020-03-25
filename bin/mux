@@ -105,7 +105,7 @@ case "$1" in
         ;;
       migrate)
         if [ -f Gemfile ] && [ -d db/migrate ]; then
-          mux -b -d -w "rake db:migrate; [ -f db/schema.rb ] && git checkout db/schema.rb"
+          mux -b -d -w "rake db:migrate; [ -f db/schema.rb ] && git checkout db/schema.rb; [ -f db/structure.sql ] && git checkout db/structure.sql"
         else
           echo "Can't find migrations for project."
           exit 1

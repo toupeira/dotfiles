@@ -139,8 +139,8 @@
 
   up = pull
   ff = merge --ff-only HEAD@{u}
-  re = rebase
-  ri = rebase -i
+  re = !OVERCOMMIT_DISABLE=1 git rebase
+  ri = re -i
   rem = re master
   rim = ri master
   red = re development
@@ -149,6 +149,7 @@
   rabort = re --abort
   solve = mergetool
   pom = up origin master
+  pick = !OVERCOMMIT_DISABLE=1 git cherry-pick
 
   pu = push -v
   pua  = -c push.default=matching push -v --progress

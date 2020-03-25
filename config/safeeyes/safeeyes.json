@@ -1,19 +1,25 @@
 {
-    "allow_postpone": false,
-    "break_interval": 15,
-    "long_break_duration": 60,
+    "allow_postpone": true,
+    "break_interval": 20,
+    "long_break_duration": 300,
     "long_breaks": [
         {
-            "name": "Walk for a while"
+            "name": "Walk around for a while"
         },
         {
-            "name": "Lean back at your seat and relax"
+            "name": "Get up and stretch your arms and legs"
+        },
+        {
+            "name": "Do some small chores"
+        },
+        {
+            "name": "Get some fresh air"
         }
     ],
     "meta": {
         "config_version": "6.0.0"
     },
-    "no_of_short_breaks_per_long_break": 5,
+    "no_of_short_breaks_per_long_break": 3,
     "persist_state": false,
     "plugins": [
         {
@@ -102,7 +108,7 @@
     "postpone_duration": 5,
     "pre_break_warning_time": 10,
     "rpc_port": 7200,
-    "short_break_duration": 15,
+    "short_break_duration": 20,
     "short_breaks": [
         {
             "name": "Tightly close your eyes"
@@ -123,7 +129,10 @@
             "name": "Focus on a point in the far distance"
         },
         {
-            "name": "Have some water"
+            "name": "Lean back at your seat and relax"
+        },
+        {
+            "name": "Close your eyes and focus on your breath"
         }
     ],
     "shortcut_disable_time": 2,
