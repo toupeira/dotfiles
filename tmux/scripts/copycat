@@ -1,0 +1,42 @@
+#!/bin/bash
+
+key="$1"
+command=$( tmux display -p '#{pane_current_command}' )
+
+if [ "$command" != "bash" ]; then
+  tmux send-keys "$key"
+  exit 0
+fi
+
+search=~/.tmux/copycat/scripts/copycat_search.sh
+start=~/.tmux/copycat/scripts/copycat_mode_start.sh
+git=~/.tmux/copycat/scripts/copycat_git_special.sh
+
+case "$1" in
+  # freeform search
+  M-/) $search;;
+
+  # paths
+  M-p) $start '(\.?/|\b[^:[:space:]]+?/)[^:[:space:]]+?(:[0-9]+)?\b';;
+
+  # git status
+  M-P) $git;;
+
+  # lines
+  M-l) $start "^$USER.*|.*";;
+
+  # prompts
+  M-k) $start "^λ.*";;
+
+  # interesting things (URLs, emails, hashes, IPs)
+  M-i)
+    urls=$( tmux show-options -gv @copycat_search_C-u )
+    emails='[-_\.[:alnum:]]+@[-_\.[:alnum:]]+'
+    hashes=$( tmux show-options -gv @copycat_search_M-h )
+    ips=$( tmux show-options -gv @copycat_search_M-i )
+
+    $start "($urls|$emails|$hashes|$ips)"
+    ;;
+esac
+
+exit 0

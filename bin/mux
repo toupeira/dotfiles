@@ -1,10 +1,5 @@
 #!/bin/bash
 
-if [ -z "$TMUX" ]; then
-  echo "Not running in tmux."
-  exit 1
-fi
-
 PROCFILE=$( find ~/.procfile.d/"$( basename "$PWD" )" Procfile 2>/dev/null | head -1 )
 
 function usage {
@@ -227,9 +222,9 @@ case "$1" in
     title="$2"
 
     if [[ "$TERM" =~ ^(tmux|screen) ]]; then
-      echo -ne "\\033]0;$title\\007\\033k$title\\033\\" >&2
+      echo -ne "\e]0;$title\ek$title\e" >&2
     else
-      echo -ne "\\033]1;$title\\007\\033]2;$title\\007" >&2
+      echo -ne "\e]1;$title\\007\e]2;$title\\007" >&2
     fi
     ;;
 

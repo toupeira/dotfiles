@@ -97,12 +97,6 @@
 [submodule "vim/bundle/dispatch"]
 	path = vim/bundle/dispatch
 	url = https://github.com/tpope/vim-dispatch.git
-[submodule "nenv/plugins/nenv-binstubs"]
-	path = nenv/plugins/nenv-binstubs
-	url = https://github.com/madumlao/nenv-binstubs.git
-[submodule "nenv/nenv"]
-	path = nenv/nenv
-	url = https://github.com/ryuone/nenv.git
 [submodule "vim/bundle/tmux-complete"]
 	path = vim/bundle/tmux-complete
 	url = https://github.com/wellle/tmux-complete.vim.git

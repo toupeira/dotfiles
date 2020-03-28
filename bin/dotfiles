@@ -643,7 +643,7 @@ function run {
 
       [ -n "$packages_pip" ] && local missing_pip=$(
         get_missing "$packages_pip" \
-        "$( pip3 freeze --user | cut -d= -f1 )"
+        "$( python3 -m pip freeze --user | cut -d= -f1 )"
       )
 
       [ -n "$packages_flat" ] && local missing_flat=$(
@@ -688,7 +688,7 @@ function run {
         install_packages "$missing_gem"  gem install
         install_packages "$missing_npm"  sudo npm -g install
         install_packages "$missing_yarn" yarn global add
-        install_packages "$missing_pip"  pip3 install --user --upgrade
+        install_packages "$missing_pip"  python3 -m pip install --user --upgrade
         install_packages "$missing_flat" sudo flatpak install
       fi
       output
@@ -719,13 +719,12 @@ function run {
       upgrade gem        gem update
       upgrade npm        sudo npm -g update
       upgrade yarn       yarn global upgrade
-      upgrade flatpak    flatpak update
+      upgrade flatpak    'flatpak update && flatpak uninstall --unused'
       upgrade firmware   fwupdmgr update
 
       if which gnome-shell >/dev/null; then
         upgrade gnome-shell xdg-open https://extensions.gnome.org/local
       fi
-
       ;;
     # }}}
 

@@ -1,6 +1,10 @@
 " Initialisation
 " {{{
 
+  augroup vimrc
+    autocmd!
+  augroup END
+
   set nocompatible
   set encoding=utf-8
   scriptencoding utf-8
@@ -12,7 +16,6 @@
   let g:skip_defaults_vim = 1
 
   " set up pathogen
-  runtime bundle/pathogen/autoload/pathogen.vim
   if !exists('g:pathogen_disabled')
     let g:pathogen_disabled = []
   endif
@@ -25,12 +28,9 @@
     call add(g:pathogen_disabled, 'tmux-complete')
   endif
 
-  " load bundles
+  " load bundle
+  runtime bundle/pathogen/autoload/pathogen.vim
   call pathogen#infect()
-
-  augroup vimrc
-    autocmd!
-  augroup END
 
 " }}}
 
@@ -143,7 +143,7 @@
   set splitright
 
   " auto-completion
-  set completeopt=menuone,noinsert
+  set completeopt=menuone,noinsert,preview
   if exists('&pumblend')
     set pumblend=10
   endif

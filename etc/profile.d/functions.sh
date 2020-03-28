@@ -260,7 +260,7 @@ function ssh.mux {
 
 # Go to project root
 function up {
-  local root=$( git root )
+  local root=$( git rev-parse --show-toplevel )
   [ -n "$root" ] && cd "$root"
 }
 

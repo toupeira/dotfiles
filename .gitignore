@@ -1,7 +1,3 @@
-bundle/cache
-nenv/bundles
-nenv/shims
-nenv/versions
 rbenv/bundles
 rbenv/gems
 rbenv/shims

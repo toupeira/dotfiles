@@ -11,24 +11,33 @@ PS1_HOST=" "
 [ -n "$EMACS" ] && PS1_USER="" && PS1_HOST=""
 [ "$UID" = "0" ] && PS1_USER="\[\e[0m\e[1;31m\]$PS1_USER"
 
-PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\$(_prompt_path)\[\e[0;36m\]]\[\e[0m\] "
+PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\$_prompt_path\[\e[0;36m\]]\[\e[0m\] "
 PS2=" \[\e[1;35m\]»\[\e[0m\] "
+
+# Update title when path changes
+PROMPT_COMMAND='_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_path=$( _prompt_path) && mux store; [ ${#_prompt_path} -gt 24 ] && mux title "${_prompt_path:0:24}…" || mux title "$_prompt_path"; _last_pwd="$PWD"'
 
 # Prompt helpers
 function _prompt_path {
-  local pwd="$PWD"
-  pwd=${pwd/#$HOME/\~}
-  pwd=${pwd/#\~\/src\/gitlab\//🦊 }
-  pwd=${pwd/#\~\/src\/gitlab/🦊}
-  pwd=${pwd/#\/etc\/dotfiles\/rbenv\/gems\//♦️  }
-  pwd=${pwd/#\/etc\/dotfiles\//⚙️  }
-  pwd=${pwd/#\/etc\/dotfiles/⚙️ }
+  local path="$PWD"
+  local root=$( git rev-parse --show-toplevel 2>/dev/null )
 
-  echo "$pwd"
+  if [ -n "$root" ]; then
+    path="${path#${root%/*}/}"
+    path=${path/#dotfiles\/rbenv\/gems\//♦️  }
+    path=${path/#dotfiles\//⚙️  }
+    path=${path/#dotfiles/⚙️ }
+  fi
+
+  path=${path/#$HOME/\~}
+  path=${path/#\~\/src\/gitlab\//🦊 }
+  path=${path/#\~\/src\/gitlab/🦊}
+
+  echo "$path"
 }
 
 function _prompt_jobs {
-  local jobs=`jobs | grep -Evc '(mux store|autojump)'`
+  local jobs=`jobs | grep -Evc 'mux (store|title)'`
 
   if [ $jobs -gt 0 ]; then
     printf '[%d job%s] ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
@@ -72,57 +81,4 @@ if type __git_ps1 &>/dev/null && [ -z "$VIM" ]; then
   GIT_PS1='$(__git_ps1 "\[\e[0;32m\]❰\[\e[1;32m\]%s\[\e[0;32m\]❱\[\e[0m\] " | sed -r "$GIT_PS1_SUBSTITUTES")'
   SUDO_PS1=$PS1
   PS1=$PS1$GIT_PS1
-fi
-
-# Show user, hostname and pwd in window title
-if [[ "$TERM" =~ ^(rxvt|xterm|tmux|screen) ]]; then
-  if [ -n "$SSH_CONNECTION" ]; then
-    _hostname="$USER@$HOSTNAME: "
-  else
-    unset _hostname
-  fi
-
-  PROMPT_COMMAND='_pwd=$( _prompt_path ); _last_status=$?;'
-
-  if [ -n "$TMUX" ]; then
-    PROMPT_COMMAND=$PROMPT_COMMAND'[ "$PWD" != "$_last_pwd" ] && mux store; _last_pwd="$PWD"; echo -ne "\e]0;'$_hostname'$_pwd\007\ek$_pwd\e\\"'
-  else
-    PROMPT_COMMAND=$PROMPT_COMMAND'echo -ne "\e]1;'$_hostname'$_pwd\007\e]2;'$_hostname'$_pwd\007"'
-  fi
-
-  unset _hostname
-fi
-
-if has autojump; then
-  . /usr/share/autojump/autojump.bash
-
-  # don't output the jumped directory
-  eval "_j() $( declare -f j | tail -n +2 | sed -r 's/echo .*output.*/:/' )"
-
-  function j {
-    if [ $# -gt 0 ]; then
-      _j "$@"
-      return;
-    fi
-
-    local paths=~/.local/share/autojump/autojump.txt
-    local out=$(
-      cat $paths 2>/dev/null \
-        | sort -nr \
-        | cut -f2 \
-        | sed -r "s#^$HOME#~#" \
-        | fzf +s --no-multi --prompt 'Jump> ' --expect alt-d
-    )
-
-    mapfile -t out <<< "$out"
-    local key="${out[0]}"
-    local path=$( echo "${out[1]}" | sed -r "s#^~#$HOME#" )
-
-    if [ "$key" = "alt-d" ]; then
-      echo "$( grep -v $'\t'"$path$" "$paths" )" > "$paths"
-      j
-    elif [ -n "$path" ]; then
-      cd "$path"
-    fi
-  }
 fi

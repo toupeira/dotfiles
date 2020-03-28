@@ -32,9 +32,7 @@ npm: yarn
 yarn: bash-language-server
 yarn: caniuse-cmd
 yarn: eslint
-yarn: htmlhint
 yarn: jsonlint
-yarn: stylelint
 yarn: tslint
 yarn: typescript
 yarn: vmd
