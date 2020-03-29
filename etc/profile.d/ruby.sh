@@ -36,7 +36,7 @@ function _gem_exec {
 }
 
 alias gem='_gem_exec gem'
-alias sugem='command sudo gem'
+alias sugem='sudo /usr/bin/gem'
 
 # gem aliases
 has rubocop && alias rubocop='rubocop -D'

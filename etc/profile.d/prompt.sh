@@ -20,18 +20,18 @@ PROMPT_COMMAND='_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_path=$( _
 # Prompt helpers
 function _prompt_path {
   local path="$PWD"
-  local root=$( git rev-parse --show-toplevel 2>/dev/null )
+  path=${path/*\/src\/gitlab\//🦊 }
+  path=${path/*\/src\/gitlab/🦊}
 
+  local root=$( git rev-parse --show-toplevel 2>/dev/null )
   if [ -n "$root" ]; then
     path="${path#${root%/*}/}"
     path=${path/#dotfiles\/rbenv\/gems\//♦️  }
     path=${path/#dotfiles\//⚙️  }
     path=${path/#dotfiles/⚙️ }
+  else
+    path=${path/#$HOME/\~}
   fi
-
-  path=${path/#$HOME/\~}
-  path=${path/#\~\/src\/gitlab\//🦊 }
-  path=${path/#\~\/src\/gitlab/🦊}
 
   echo "$path"
 }
