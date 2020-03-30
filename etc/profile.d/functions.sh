@@ -9,15 +9,21 @@ function login_message {
     return
   elif [ "$PWD" = "$HOME" ]; then
     clear
-    echo -e "\\e[1;37m$( uname -a )\\e[0m"
-    uptime
-    echo
 
-    if [ -f /etc/motd ]; then
-      cat /etc/motd
+    if [ -f /run/motd.dynamic ]; then
+      local motd=$( cat /run/motd.dynamic )
+    elif [ -f /etc/motd ]; then
+      local motd=$( cat /etc/motd )
+    else
+      local motd=$( uname -a )
+    fi
+    echo -e "\e[1;37m$motd\e[0m"
+    if [ "$( echo "$motd" | wc -l )" != 1 ]; then
       echo
     fi
 
+    uptime
+    echo
     if [ "$SSH_CONNECTION" ] || [ -z "$DISPLAY" ]; then
       if [ -n "$CYGWIN" ]; then
         local hostname="$HOSTNAME"

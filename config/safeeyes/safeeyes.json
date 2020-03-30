@@ -108,7 +108,7 @@
     "postpone_duration": 5,
     "pre_break_warning_time": 10,
     "rpc_port": 7200,
-    "short_break_duration": 20,
+    "short_break_duration": 15,
     "short_breaks": [
         {
             "name": "Tightly close your eyes"
@@ -133,6 +133,9 @@
         },
         {
             "name": "Close your eyes and focus on your breath"
+        },
+        {
+            "name": "Roll your shoulders"
         }
     ],
     "shortcut_disable_time": 2,

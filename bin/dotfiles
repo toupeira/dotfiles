@@ -643,7 +643,7 @@ function run {
 
       [ -n "$packages_pip" ] && local missing_pip=$(
         get_missing "$packages_pip" \
-        "$( python3 -m pip freeze --user | cut -d= -f1 )"
+        "$( python3 -m pip -- freeze --system | cut -d= -f1 )"
       )
 
       [ -n "$packages_flat" ] && local missing_flat=$(
@@ -688,7 +688,7 @@ function run {
         install_packages "$missing_gem"  gem install
         install_packages "$missing_npm"  sudo npm -g install
         install_packages "$missing_yarn" yarn global add
-        install_packages "$missing_pip"  python3 -m pip install --user --upgrade
+        install_packages "$missing_pip"  sudo python3 -m pip install --system --upgrade
         install_packages "$missing_flat" sudo flatpak install
       fi
       output
