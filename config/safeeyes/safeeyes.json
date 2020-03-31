@@ -73,11 +73,11 @@
             "version": "0.0.1"
         },
         {
-            "enabled": false,
+            "enabled": true,
             "id": "smartpause",
             "settings": {
-                "idle_time": 3,
-                "interpret_idle_as_break": false
+                "idle_time": 60.0,
+                "interpret_idle_as_break": true
             },
             "version": "0.0.2"
         },
@@ -108,13 +108,10 @@
     "postpone_duration": 5,
     "pre_break_warning_time": 10,
     "rpc_port": 7200,
-    "short_break_duration": 15,
+    "short_break_duration": 20,
     "short_breaks": [
         {
             "name": "Tightly close your eyes"
-        },
-        {
-            "name": "Roll your eyes a few times to each side"
         },
         {
             "name": "Rotate your eyes in clockwise direction"
@@ -136,6 +133,9 @@
         },
         {
             "name": "Roll your shoulders"
+        },
+        {
+            "name": "Completely straighten your back"
         }
     ],
     "shortcut_disable_time": 2,

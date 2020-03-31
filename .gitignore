@@ -1,3 +1,4 @@
+bundle/cache
 rbenv/bundles
 rbenv/gems
 rbenv/shims
