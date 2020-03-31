@@ -428,17 +428,7 @@ function run {
 
       status "{{Merging remote changes...}}"
       load-key
-      git pull -v --progress --rebase "$@"
-
-      if ! quiet; then
-        local news=$( git -c color.ui=always news )
-        if [ -n "$news" ]; then
-          output
-          status "New commits:"
-          output "$news" | sed -r 's/^/    /'
-          output
-        fi
-      fi
+      git pull "$@"
 
       [ -n "$changes" ] && git stash pop -q
 
