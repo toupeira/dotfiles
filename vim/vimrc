@@ -143,7 +143,7 @@
   set splitright
 
   " auto-completion
-  set completeopt=menuone,noinsert,preview
+  set completeopt=menuone,noinsert
   if exists('&pumblend')
     set pumblend=10
   endif
