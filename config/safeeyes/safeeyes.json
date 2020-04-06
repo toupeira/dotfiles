@@ -114,16 +114,10 @@
             "name": "Tightly close your eyes"
         },
         {
-            "name": "Rotate your eyes in clockwise direction"
-        },
-        {
-            "name": "Rotate your eyes in counterclockwise direction"
+            "name": "Rotate your eyes"
         },
         {
             "name": "Blink your eyes"
-        },
-        {
-            "name": "Focus on a point in the far distance"
         },
         {
             "name": "Lean back at your seat and relax"
@@ -136,6 +130,9 @@
         },
         {
             "name": "Completely straighten your back"
+        },
+        {
+            "name": "Release the tension in your legs"
         }
     ],
     "shortcut_disable_time": 2,
