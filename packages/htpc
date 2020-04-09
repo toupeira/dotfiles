@@ -1,12 +1,16 @@
 deluge
 deluge-console
-deluge-web
 deluged
-i965-va-driver-shaders
+deluge-web
+intel-media-va-driver-non-free
 joystick
+kodi
+kodi-peripheral-joystick
+kodi-pvr-zattoo
+kodi-repository-kodi
 libvisual-projectm
 projectm-pulseaudio
 scummvm
 vainfo
 
-flatpak: tv.kodi.Kodi
+flatpak: com.valvesoftware.Steam
