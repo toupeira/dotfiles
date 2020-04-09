@@ -97,8 +97,8 @@
   sta = -c diff.ignoreSubmodules=none st
   ss = !git --no-pager show --stat
 
-  l = log --pretty=format:\"%C(yellow)❰%h❱%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(auto)%d%Creset %C(black)%ar%Creset\"
-  rl = reflog --date=format:%T --pretty=format:\"%C(yellow)❰%h❱%Creset %C(037)%gD:%Creset %C(white)%gs%Creset%C(auto)%d%Creset\"
+  l = log --pretty=format:\"%C(yellow)%h%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(auto)%d%Creset %C(black)%ar%Creset\"
+  rl = reflog --date=format:%T --pretty=format:\"%C(yellow)%h%Creset %C(037)%gD:%Creset %C(white)%gs%Creset%C(auto)%d%Creset\"
   ls = "!cd ${GIT_PREFIX:-.} && git l --stat"
   ld = log -p
   ldf = ld --follow
@@ -131,7 +131,7 @@
   amend = ci --amend
   reword = amend --only
   extend = amend --no-edit
-  fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "$( echo "$sha" | cut -d[ -f2 | cut -d] -f1 )"
+  fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "$( echo "$sha" | cut -d\\  -f1 )"
   initial = commit --allow-empty -m 'Initial commit'
 
   r = remote -v
