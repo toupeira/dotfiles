@@ -262,15 +262,9 @@
 [submodule "vim/bundle/lastplace"]
 	path = vim/bundle/lastplace
 	url = https://github.com/farmergreg/vim-lastplace.git
-[submodule "vim/bundle/badwolf"]
-	path = vim/bundle/badwolf
-	url = https://github.com/sjl/badwolf.git
 [submodule "vim/bundle/base16"]
 	path = vim/bundle/base16
 	url = https://github.com/chriskempson/base16-vim.git
-[submodule "vim/bundle/monokai"]
-	path = vim/bundle/monokai
-	url = https://github.com/crusoexia/vim-monokai.git
 [submodule "vim/bundle/context"]
 	path = vim/bundle/context
 	url = https://github.com/wellle/context.vim.git
