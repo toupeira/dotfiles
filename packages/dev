@@ -13,7 +13,6 @@ pkg-config
 python3-pip
 python3-setuptools
 python3-wheel
-ruby-dev
 sqlite3
 universal-ctags
 zlib1g-dev

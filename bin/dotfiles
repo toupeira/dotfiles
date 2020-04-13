@@ -595,7 +595,7 @@ function run {
       fi
 
       function get_packages {
-        echo "$packages" | grep -E "$1" | awk '{ print $2 }' | sort
+        echo "$packages" | grep -E "$1" | sed 's/.*: //' | sort
       }
 
       local packages_apt=$( get_packages "$filter_apt" )
@@ -660,12 +660,12 @@ function run {
         done
       }
 
-      list_packages apt  "$missing_apt"
-      list_packages gem  "$missing_gem"
-      list_packages npm  "$missing_npm"
-      list_packages yarn "$missing_yarn"
-      list_packages pip  "$missing_pip"
-      list_packages flat "$missing_flat"
+      list_packages apt     "$missing_apt"
+      list_packages gem     "$missing_gem"
+      list_packages npm     "$missing_npm"
+      list_packages yarn    "$missing_yarn"
+      list_packages pip     "$missing_pip"
+      list_packages flatpak "$missing_flat"
 
       output
       if ask-yes "{{Install?}}"; then

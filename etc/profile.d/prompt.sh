@@ -29,10 +29,9 @@ function _prompt_path {
     path=${path/#dotfiles\/rbenv\/gems\//♦️  }
     path=${path/#dotfiles\//⚙️  }
     path=${path/#dotfiles/⚙️ }
-  else
-    path=${path/#$HOME/\~}
   fi
 
+  path=${path/#$HOME/\~}
   echo "$path"
 }
 

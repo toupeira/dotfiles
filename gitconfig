@@ -131,7 +131,7 @@
   amend = ci --amend
   reword = amend --only
   extend = amend --no-edit
-  fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "$( echo "$sha" | cut -d\\  -f1 )"
+  fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "${sha%% *}"
   initial = commit --allow-empty -m 'Initial commit'
 
   r = remote -v
