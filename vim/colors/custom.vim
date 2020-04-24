@@ -31,5 +31,5 @@ hi! link VertSplit LineNr
 hi! link mkdHeading Constant
 hi! link mkdLink Statement
 hi! link qfFileName Keyword
-hi! link qfLineNr Structure
+hi! link qfLineNr String
 hi! link rubyModuleName Type

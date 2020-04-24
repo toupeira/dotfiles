@@ -140,7 +140,7 @@
   up = pull
   ff = merge --ff-only HEAD@{u}
   re = !OVERCOMMIT_DISABLE=1 git rebase
-  ri = re -i
+  ri = !OVERCOMMIT_DISABLE=1 git rebase -i
   rem = re master
   rim = ri master
   red = re development
