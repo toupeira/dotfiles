@@ -153,7 +153,7 @@
 	url = https://github.com/leafgarland/typescript-vim
 [submodule "vim/bundle/ale"]
 	path = vim/bundle/ale
-	url = https://github.com/w0rp/ale.git
+	url = https://github.com/dense-analysis/ale.git
 [submodule "rbenv/plugins/update-rubies"]
 	path = rbenv/plugins/update-rubies
 	url = https://github.com/toy/rbenv-update-rubies.git
