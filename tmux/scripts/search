@@ -1,0 +1,38 @@
+#!/bin/bash
+
+key="$1"
+command=$( tmux display -p '#{pane_current_command}' )
+
+if [ "$command" != "bash" ]; then
+  tmux send-keys "$key"
+  exit 0
+fi
+
+tmux copy-mode
+
+function search {
+  tmux send-keys -FX search-backward "$1"
+}
+
+case "$1" in
+  # freeform search
+  "") tmux send-keys /;;
+
+  # paths
+  M-p) search '(\.?/|\b[^:[:space:]]+?/)[^:[:space:]]+?(:[0-9]+)?\b';;
+
+  # prompts
+  M-l) search "^(.* )?λ.*";;
+
+  # interesting things (URLs, emails, hashes, IPs)
+  M-i)
+    urls='(https?://|git@|git://|ssh://|ftp://|file:///)[[:alnum:]?=%/_.:,;~@!#$&()*+-]*'
+    emails='[-_\.[:alnum:]]+@[-_\.[:alnum:]]+'
+    hashes='\b([0-9a-f]{7,40}|[[:alnum:]]{52}|[0-9a-f]{64})\b'
+    ips='[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}\.[[:digit:]]{1,3}'
+
+    search "($urls|$emails|$hashes|$ips)"
+    ;;
+esac
+
+exit 0

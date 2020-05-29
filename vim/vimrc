@@ -1020,6 +1020,7 @@ endfunction " }}}
     \ [[ 'even', 'odd' ]],
     \ [[ 'exclude', 'include' ]],
     \ [[ 'first', 'last' ]],
+    \ [[ 'forward', 'backward' ]],
     \ [[ 'get', 'set' ]],
     \ [[ 'height', 'width' ]],
     \ [[ 'horizontal', 'vertical' ]],
