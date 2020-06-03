@@ -1,11 +1,12 @@
 # System
 acpi
-flatpak
 firmware-linux-free
 firmware-linux-nonfree
+flatpak
 fwupd
 intel-microcode
 thermald
+wireless-regdb
 
 # SecureBoot
 fwupd-amd64-signed
@@ -37,7 +38,6 @@ pavucontrol
 peek
 qt5-gtk2-platformtheme
 quodlibet
-terminator
 tilix
 
 flatpak: com.github.johnfactotum.Foliate
