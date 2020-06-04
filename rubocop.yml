@@ -4,10 +4,13 @@ AllCops:
 
 ### LAYOUT
 
+Layout/LineLength:
+  Max: 150
+
 Layout/EndAlignment:
   EnforcedStyleAlignWith: start_of_line
 
-Layout/IndentFirstHashElement:
+Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
 Layout/SpaceInsideArrayLiteralBrackets:
@@ -30,9 +33,6 @@ Metrics/BlockLength:
 
 Metrics/ClassLength:
   Max: 300
-
-Metrics/LineLength:
-  Max: 150
 
 Metrics/MethodLength:
   Max: 40

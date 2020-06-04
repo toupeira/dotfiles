@@ -772,8 +772,8 @@ endfunction " }}}
 
     let g:ale_linters = {
       \ 'ruby': [ 'ruby', 'rubocop' ],
-      \ 'javascript': [ 'eslint', 'tsserver' ],
-      \ 'typescript': [ 'tslint', 'tsserver' ]
+      \ 'javascript': [ 'eslint' ],
+      \ 'typescript': [ 'tslint' ]
     \ }
 
     " let g:ale_sh_shellcheck_options = '-e 2086,2155'
