@@ -8,6 +8,12 @@ intel-microcode
 thermald
 wireless-regdb
 
+# Firewall
+firewall-config
+firewalld
+ipset
+nftables
+
 # SecureBoot
 fwupd-amd64-signed
 grub-efi-amd64-signed
