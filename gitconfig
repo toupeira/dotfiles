@@ -91,6 +91,12 @@
 [submodule]
   fetchJobs = 0
 
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
+
 [alias]
   s = status -sb
   st = status
@@ -140,8 +146,8 @@
 
   up = pull
   ff = merge --ff-only HEAD@{u}
-  re = !OVERCOMMIT_DISABLE=1 git rebase
-  ri = !OVERCOMMIT_DISABLE=1 git rebase -i
+  re = rebase
+  ri = re -i
   rem = re master
   rim = ri master
   red = re development
@@ -150,7 +156,7 @@
   rabort = re --abort
   solve = mergetool
   pom = up origin master
-  pick = !OVERCOMMIT_DISABLE=1 git cherry-pick
+  pick = cherry-pick
 
   pu = push -v
   pua  = -c push.default=matching push -v --progress
@@ -167,6 +173,8 @@
   std = "!git stash drop && git stl"
   stw = "!cd ${GIT_PREFIX:-.} && git --no-pager -c color.ui=always stash show"
   stl = "!cd ${GIT_PREFIX:-.} && git --no-pager -c color.ui=always stash list"
+
+  skip-overcommit = !OVERCOMMIT_DISABLE=1 git
 
   # shell wrappers for src_alias
   sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
