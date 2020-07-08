@@ -10,14 +10,11 @@ Layout/LineLength:
 Layout/EndAlignment:
   EnforcedStyleAlignWith: start_of_line
 
-Layout/FirstHashElementIndentation:
+Layout/FirstArrayElementIndentation:
   EnforcedStyle: consistent
 
-Layout/SpaceInsideArrayLiteralBrackets:
-  EnforcedStyle: space
-
-Layout/SpaceInsidePercentLiteralDelimiters:
-  Enabled: false
+Layout/FirstHashElementIndentation:
+  EnforcedStyle: consistent
 
 ### LINT
 

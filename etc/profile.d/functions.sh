@@ -282,6 +282,6 @@ function serve {
   fi
 
   local port=$((9000 + RANDOM % 1000))
-  xdg-open "http://localhost:$port/"
-  python -m SimpleHTTPServer "$port"
+  xdg-open "http://localhost:$port/" &>/dev/null
+  python3 -m http.server "$port"
 }
