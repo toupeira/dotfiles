@@ -1,3 +1,5 @@
+# frozen_string_literal: true
+
 # default gems
 %w[
   yaml
@@ -6,59 +8,48 @@
   begin
     require lib
   rescue LoadError
-    nil
+    puts "Couldn't load #{lib}"
   end
 end
 
-# startup message
-puts
-puts "ruby #{RUBY_VERSION} (#{RUBY_RELEASE_DATE} patchlevel #{RUBY_PATCHLEVEL}} [#{RUBY_PLATFORM}]"
-puts
-Kernel.at_exit { puts }
+lambda {
+  gray     = ->(text) { "\001\e[2m\002#{text}\001\e[0m\002" }
+  darkcyan = ->(text) { "\001\e[0;36m\002#{text}\001\e[0m\002" }
+  red      = ->(text) { "\001\e[1;31m\002#{text}\001\e[0m\002" }
+  magenta  = ->(text) { "\001\e[1;35m\002#{text}\001\e[0m\002" }
+  cyan     = ->(text) { "\001\e[1;36m\002#{text}\001\e[0m\002" }
 
-# delete single-letter command aliases
-('a'..'z').each do |letter|
-  begin
-    Pry.commands.delete letter
-  rescue ArgumentError
-    next
-  end
-end
+  # startup message
+  puts
+  puts gray.call("ruby #{RUBY_VERSION} [#{RUBY_PLATFORM}]")
+  puts
+  Kernel.at_exit { puts }
 
-# prompt configuration
-cyan     = ->(text) { "\001\e[1;36m\002#{text}\001\e[0m\002" }
-darkcyan = ->(text) { "\001\e[0;36m\002#{text}\001\e[0m\002" }
-red      = ->(text) { "\001\e[1;31m\002#{text}\001\e[0m\002" }
-magenta  = ->(text) { "\001\e[1;35m\002#{text}\001\e[0m\002" }
-gray     = ->(text) { "\001\e[2m\002#{text}\001\e[0m\002" }
+  # prompt configuration
 
-target_string = lambda do |object|
-  target = Pry.view_clip(object)
-  if target != 'main'
-    "#{darkcyan.call '['}#{cyan.call target}#{darkcyan.call ']'}"
-  else
-    ''
-  end
-end
+  prompt = lambda { |object, _level, pry|
+    object_name = Pry.view_clip(object)
+    object_name =
+      if object_name == 'main'
+        ''
+      else
+        "#{darkcyan.call '['}#{cyan.call(object_name)}#{darkcyan.call ']'}"
+      end
 
-separator = red.call("»")
-
-Pry.config.prompt = [
-  lambda { |object, level, pry|
-    input = pry.respond_to?(:input_ring) ? pry.input_ring : pry.input_array
-    "#{gray.call "[#{input.size}]"} #{Pry.config.prompt_name}#{target_string.call(object)} #{red.call("»")} "
-  },
-  lambda { |object, level, pry|
-    input = pry.respond_to?(:input_ring) ? pry.input_ring : pry.input_array
-    prompt = Pry.config.prompt_name.gsub(/\001.*?\002/, '')
-
-    $s = target_string.call(object)
-    spaces = (
-      "[#{input.size}]".size +
-      prompt.size +
-      target_string.call(object).gsub(/(\e\[.*?m|[^[:print:]])/, '').size
-    )
-
-    "#{' ' * spaces}  #{magenta.call("»")} "
+    "#{gray.call "[#{pry.input_ring.size}]"} #{Pry.config.prompt_name}#{object_name}#{red.call('>')} "
   }
-]
+
+  Pry.config.prompt = Pry::Prompt.new(
+    'custom', nil,
+    [
+      prompt,
+
+      lambda { |*args|
+        spaces = prompt.call(*args).gsub(/(\e\[.*?m|[^[:print:]])/, '').size - 2
+        "#{' ' * spaces}#{magenta.call('>')} "
+      },
+    ]
+  )
+}.call
+
+# vim: ft=ruby
