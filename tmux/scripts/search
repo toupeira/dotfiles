@@ -19,7 +19,10 @@ case "$1" in
   "") tmux send-keys /;;
 
   # paths
-  M-p) search '(\.?/|\b[^:[:space:]]+?/)[^:[:space:]]+?(:[0-9]+)?\b';;
+  M-p)
+    path="[^][ '\"]";
+    search "(/$path+|$path*/|$path*\.$path+)$path*"
+    ;;
 
   # prompts
   M-l) search "^(.* )?λ.*";;
