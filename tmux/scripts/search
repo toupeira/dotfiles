@@ -11,7 +11,7 @@ fi
 tmux copy-mode
 
 function search {
-  tmux send-keys -FX search-backward "$1"
+  tmux send-keys -X search-backward "$1"
 }
 
 case "$1" in

@@ -1,0 +1,17 @@
+#!/bin/sh
+
+steam="exec flatpak run com.valvesoftware.Steam"
+
+(cd ~/.var/app/com.valvesoftware.Steam 2>/dev/null && rm -f images music)
+
+if [ "$1" = "--run" ]; then
+  shift
+  gamepath="/slack/games/steam/steamapps/common/$1"
+  gamebin="$2"
+
+  $steam --run sh -c "cd '$gamepath'; exec ./$gamebin"
+elif [ -n "$1" ]; then
+  $steam -silent "$@"
+else
+  $steam
+fi
