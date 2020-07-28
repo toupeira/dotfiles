@@ -1,0 +1,10 @@
+[Unit]
+Description=Fix Bluetooth after resume from suspend
+After=suspend.target
+
+[Service]
+Type=oneshot
+ExecStart=/usr/bin/systemctl --no-block restart bluetooth.service
+
+[Install]
+WantedBy=suspend.target
