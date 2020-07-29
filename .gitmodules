@@ -64,9 +64,6 @@
 [submodule "vim/bundle/html5"]
 	path = vim/bundle/html5
 	url = https://github.com/othree/html5.vim.git
-[submodule "vim/bundle/puppet"]
-	path = vim/bundle/puppet
-	url = https://github.com/ajf/puppet-vim.git
 [submodule "vim/bundle/ruby"]
 	path = vim/bundle/ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
