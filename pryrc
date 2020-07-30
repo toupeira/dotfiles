@@ -26,6 +26,7 @@ lambda {
   Kernel.at_exit { puts }
 
   # prompt configuration
+  break if Pry::VERSION < '0.13'
 
   prompt = lambda { |object, _level, pry|
     object_name = Pry.view_clip(object)
