@@ -16,7 +16,7 @@ function search {
 
 case "$1" in
   # freeform search
-  "") tmux send-keys /;;
+  "") tmux send-keys ?;;
 
   # paths
   M-p)

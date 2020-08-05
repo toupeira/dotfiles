@@ -28,6 +28,25 @@
     call add(g:pathogen_disabled, 'tmux-complete')
   endif
 
+  " disable plugins that are broken in vscode-neovim
+  if exists('g:vscode')
+    call add(g:pathogen_disabled, 'airline')
+    call add(g:pathogen_disabled, 'ale')
+    call add(g:pathogen_disabled, 'bbye')
+    call add(g:pathogen_disabled, 'context')
+    call add(g:pathogen_disabled, 'deoplete')
+    call add(g:pathogen_disabled, 'deoplete-spell')
+    call add(g:pathogen_disabled, 'didyoumean')
+    call add(g:pathogen_disabled, 'dirvish')
+    call add(g:pathogen_disabled, 'dispatch')
+    call add(g:pathogen_disabled, 'fzf')
+    call add(g:pathogen_disabled, 'multiple-cursors')
+    call add(g:pathogen_disabled, 'searchlight')
+    call add(g:pathogen_disabled, 'smoothie')
+    call add(g:pathogen_disabled, 'startify')
+    call add(g:pathogen_disabled, 'vista')
+  endif
+
   " load bundle
   runtime bundle/pathogen/autoload/pathogen.vim
   call pathogen#infect()
