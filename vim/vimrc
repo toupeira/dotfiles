@@ -41,6 +41,7 @@
     call add(g:pathogen_disabled, 'dispatch')
     call add(g:pathogen_disabled, 'fzf')
     call add(g:pathogen_disabled, 'multiple-cursors')
+    call add(g:pathogen_disabled, 'signify')
     call add(g:pathogen_disabled, 'searchlight')
     call add(g:pathogen_disabled, 'smoothie')
     call add(g:pathogen_disabled, 'startify')
@@ -108,8 +109,10 @@
   let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
 
-  syntax on
-  colorscheme custom
+  if !exists('g:vscode')
+    syntax on
+    colorscheme custom
+  endif
 
   " terminals
   if has('nvim')
@@ -545,8 +548,8 @@ endfunction " }}}
   " Ctrl-c - remove highlighted search and redraw
   nnoremap <silent> <C-c> :nohlsearch<CR>:redraw!<CR>
 
-  " <count>` - switch buffers
-  nnoremap <silent><expr> ` v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "`"
+  " <count><Enter> - switch buffers
+  nnoremap <silent><expr> <CR> v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "<CR>"
 
   " <count>~ - delete buffers
   nnoremap <silent><expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"

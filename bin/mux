@@ -231,7 +231,7 @@ case "$1" in
   # Create a new window
   *)
     action="new-window"
-    unset args title
+    unset args title wait
 
     while [ "${1:0:1}" = "-" ]; do
       case "$1" in
@@ -269,7 +269,7 @@ case "$1" in
           shift
           ;;
         -w)
-          wait="echo -ne '\n\e[1;32m[\e[1;37mPress any key\e[1;32m]\e[0m'; read -n 1"
+          wait=1
           ;;
         *)
           usage
@@ -287,6 +287,10 @@ case "$1" in
     fi
 
     cd "$( $0 restore )" || true
+
+    if [ "$wait" ]; then
+      wait="echo -ne '\n\e[1;32m[\e[0;32mDone: \e[1;32m$*]\e[0m '; read -n 1"
+    fi
 
     tmux $action $args -- "
       export PATH=\"$PATH\";
