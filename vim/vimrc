@@ -750,7 +750,6 @@ endfunction " }}}
     \ 'mix.exs',
     \ 'Gemfile',
     \ 'Rakefile',
-    \ 'README.md',
     \ '.git',
     \ '.git/',
   \ ]
