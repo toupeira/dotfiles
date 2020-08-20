@@ -309,7 +309,6 @@
 
   autocmd vimrc BufRead,BufNewFile *.es6 setlocal ft=javascript
   autocmd vimrc BufRead,BufNewFile Dangerfile,*.axlsx,*.prawn setlocal ft=ruby
-  autocmd vimrc BufRead,BufNewFile *_shared_examples.rb,*_shared_context.rb setlocal ft=rspec
 
   " show recent log entries in commit messages
   " start insert mode when committing
