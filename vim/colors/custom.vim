@@ -32,4 +32,6 @@ hi! link mkdHeading Constant
 hi! link mkdLink Statement
 hi! link qfFileName Keyword
 hi! link qfLineNr String
+hi! link rspecGroupMethods Statement
+hi! link rspecBeforeAndAfter Identifier
 hi! link rubyModuleName Type

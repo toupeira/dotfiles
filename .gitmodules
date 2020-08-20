@@ -67,9 +67,6 @@
 [submodule "vim/bundle/ruby"]
 	path = vim/bundle/ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
-[submodule "vim/bundle/rspec-syntax"]
-	path = vim/bundle/rspec-syntax
-	url = https://github.com/sheerun/rspec.vim.git
 [submodule "vim/bundle/targets"]
 	path = vim/bundle/targets
 	url = https://github.com/wellle/targets.vim.git
@@ -268,3 +265,6 @@
 [submodule "vim/bundle/searchlight"]
 	path = vim/bundle/searchlight
 	url = https://github.com/PeterRincker/vim-searchlight.git
+[submodule "vim/bundle/rspec"]
+	path = vim/bundle/rspec
+	url = git@github.com:keith/rspec.vim.git
