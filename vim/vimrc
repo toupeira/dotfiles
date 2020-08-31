@@ -1167,6 +1167,8 @@ endfunction " }}}
   let g:definitive_associated_filetypes = {
     \ 'eruby': 'ruby',
     \ 'haml': 'ruby',
+    \ 'rspec': 'ruby',
+    \ 'rspec.ruby': 'ruby',
   \ }
   " }}}
 

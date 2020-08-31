@@ -3,7 +3,6 @@ default-jdk
 docker.io
 docker-compose
 golang
-google-cloud-sdk
 kubectl
 kubectx
 libicu-dev
