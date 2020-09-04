@@ -263,10 +263,17 @@
 
   set formatoptions+=j
   set backspace=indent,eol,start
-  set whichwrap+=<,>,[,],h,l
   set iskeyword+=-
   set selection=inclusive
   set nrformats=hex
+
+  " line wrapping
+  set wrap
+  set breakindent
+  set linebreak
+
+  let showbreak = ' •• '
+  let breakat = ' 	'
 
   " indents
   set autoindent
