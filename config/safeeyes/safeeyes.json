@@ -7,13 +7,10 @@
             "name": "Walk around for a while"
         },
         {
-            "name": "Get up and stretch your arms and legs"
-        },
-        {
             "name": "Do some small chores"
         },
         {
-            "name": "Get some fresh air"
+            "name": "Open the windows and get some fresh air"
         }
     ],
     "meta": {
@@ -136,6 +133,9 @@
         },
         {
             "name": "Stretch your hands and fingers"
+        },
+        {
+            "name": "Get up and stretch your body"
         }
     ],
     "shortcut_disable_time": 2,

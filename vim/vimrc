@@ -773,6 +773,8 @@ endfunction " }}}
   noremap <silent> ,a= :Tabular /\(\|\|\)\?=\+>\?<CR>
   noremap <silent> ,a, :Tabular /,\zs/l0r1<CR>
   noremap <silent> ,a: :Tabular /[^:]:\s\zs/l0r1<CR>
+
+  autocmd vimrc FileType markdown noremap <silent><buffer> ,a\| :silent TableFormat<CR>
   " }}}
 
   " ale {{{

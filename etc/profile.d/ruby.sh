@@ -35,12 +35,6 @@ function _gem_exec {
   $command "$@"
 }
 
-alias gem='_gem_exec gem'
-alias sugem='sudo /usr/bin/gem'
-
-# gem aliases
-has rubocop && alias rubocop='rubocop -D'
-
 # Automatically use rails/rake commands
 function r {
   if grep -q ' rails ([5-9]\.' Gemfile.lock &>/dev/null || [[ "$1" =~ ^(s|server|c|console|g|generate|d|destroy|r|runner|db|dbconsole|new)$ ]]; then
@@ -62,6 +56,15 @@ function _spring_exec {
   fi
 }
 
-# alias rails='_spring_exec rails'
-# alias rake='_spring_exec rake'
-# alias rspec='_spring_exec rspec'
+alias gem='_gem_exec gem'
+alias sugem='sudo /usr/bin/gem'
+
+alias rspec='rspec -f doc'
+
+alias _spring_exec='_spring_exec '
+alias srails='_spring_exec rails'
+alias srake='_spring_exec rake'
+alias srspec='_spring_exec rspec'
+
+# gem aliases
+has rubocop && alias rubocop='rubocop -D'
