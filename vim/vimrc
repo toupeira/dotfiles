@@ -270,10 +270,10 @@
   " line wrapping
   set wrap
   set breakindent
-  set linebreak
+  let &showbreak = ' •• '
 
-  let showbreak = ' •• '
-  let breakat = ' 	'
+  " set nolinebreak
+  " let &breakat = ' 	'
 
   " indents
   set autoindent
@@ -657,11 +657,6 @@ endfunction " }}}
   command! -nargs=* -range SpeedDatingFormat echo
   " }}}
 
-  " elm {{{
-  let g:elm_detailed_complete = 1
-  let g:elm_jump_to_error = 0
-  " }}}
-
   " json {{{
   let g:vim_json_syntax_conceal = (&conceallevel > 0)
   let g:vim_json_syntax_concealcursor = &concealcursor
@@ -730,13 +725,6 @@ endfunction " }}}
     \ 'vim': [function('s:reply_bash')],
     \ 'ruby': [function('s:reply_ruby')],
   \ }
-  " }}}
-
-  " test {{{
-  let g:test#strategy = 'dispatch'
-
-  nnoremap <silent> ,@ :TestFile<CR>
-  nnoremap <silent> ,# :TestNearest<CR>
   " }}}
 
   " ragtag {{{
@@ -1183,20 +1171,6 @@ endfunction " }}}
 
   " vue {{{
   let g:vue_pre_processors = ['scss']
-  " }}}
-
-  " goldenview {{{
-  let g:goldenview__enable_at_startup = 0
-  let g:goldenview__enable_default_mapping = 0
-  " }}}
-
-  " context {{{
-  set maxmempattern=2000
-  let g:context_enabled = 0
-  let g:context_add_mappings = 0
-  let g:context_border_char = '━'
-
-  nnoremap <silent> ,C :ContextPeek<CR>
   " }}}
 
 " }}}

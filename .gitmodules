@@ -25,9 +25,6 @@
 [submodule "vim/bundle/endwise"]
 	path = vim/bundle/endwise
 	url = https://github.com/tpope/vim-endwise.git
-[submodule "vim/bundle/ansiesc"]
-	path = vim/bundle/ansiesc
-	url = https://github.com/vim-scripts/AnsiEsc.vim.git
 [submodule "vim/bundle/abolish"]
 	path = vim/bundle/abolish
 	url = https://github.com/tpope/vim-abolish.git
@@ -58,9 +55,6 @@
 [submodule "vim/bundle/scriptease"]
 	path = vim/bundle/scriptease
 	url = https://github.com/tpope/vim-scriptease.git
-[submodule "vim/bundle/coffeescript"]
-	path = vim/bundle/coffeescript
-	url = https://github.com/kchmck/vim-coffee-script.git
 [submodule "vim/bundle/html5"]
 	path = vim/bundle/html5
 	url = https://github.com/othree/html5.vim.git
@@ -115,9 +109,6 @@
 [submodule "vim/bundle/css3-syntax"]
 	path = vim/bundle/css3-syntax
 	url = https://github.com/hail2u/vim-css3-syntax.git
-[submodule "vim/bundle/test"]
-	path = vim/bundle/test
-	url = https://github.com/janko-m/vim-test.git
 [submodule "vim/bundle/devicons"]
 	path = vim/bundle/devicons
 	url = https://github.com/ryanoasis/vim-devicons.git
@@ -130,9 +121,6 @@
 [submodule "vim/bundle/elixir"]
 	path = vim/bundle/elixir
 	url = https://github.com/elixir-lang/vim-elixir.git
-[submodule "vim/bundle/elm"]
-	path = vim/bundle/elm
-	url = https://github.com/ElmCast/elm-vim.git
 [submodule "emacs.d"]
 	path = emacs.d
 	url = https://github.com/syl20bnr/spacemacs
@@ -157,15 +145,12 @@
 [submodule "vim/bundle/nvim-yarp"]
 	path = vim/bundle/nvim-yarp
 	url = https://github.com/roxma/nvim-yarp.git
-[submodule "vim/bundle/fzf"]
-	path = vim/bundle/fzf
+[submodule "vim/bundle/fzf-vim"]
+	path = vim/bundle/fzf-vim
 	url = https://github.com/junegunn/fzf.vim.git
 [submodule "vim/bundle/nvim-rpc"]
 	path = vim/bundle/nvim-rpc
 	url = https://github.com/roxma/vim-hug-neovim-rpc.git
-[submodule "vim/bundle/async"]
-	path = vim/bundle/async
-	url = https://github.com/prabirshrestha/async.vim.git
 [submodule "vim/bundle/tmux"]
 	path = vim/bundle/tmux
 	url = https://github.com/tmux-plugins/vim-tmux.git
@@ -175,9 +160,6 @@
 [submodule "vim/bundle/dirvish"]
 	path = vim/bundle/dirvish
 	url = https://github.com/justinmk/vim-dirvish.git
-[submodule "vim/bundle/dadbod"]
-	path = vim/bundle/dadbod
-	url = https://github.com/tpope/vim-dadbod.git
 [submodule "vim/bundle/go"]
 	path = vim/bundle/go
 	url = https://github.com/fatih/vim-go.git
@@ -229,9 +211,6 @@
 [submodule "vim/bundle/startify"]
 	path = vim/bundle/startify
 	url = https://github.com/mhinz/vim-startify.git
-[submodule "vim/bundle/deleft"]
-	path = vim/bundle/deleft
-	url = https://github.com/AndrewRadev/deleft.vim.git
 [submodule "vim/bundle/multiple-cursors"]
 	path = vim/bundle/multiple-cursors
 	url = https://github.com/terryma/vim-multiple-cursors.git
@@ -244,9 +223,6 @@
 [submodule "vim/bundle/definitive"]
 	path = vim/bundle/definitive
 	url = https://github.com/misterbuckley/vim-definitive.git
-[submodule "vim/bundle/goldenview"]
-	path = vim/bundle/goldenview
-	url = https://github.com/zhaocai/GoldenView.Vim.git
 [submodule "vim/bundle/palenight"]
 	path = vim/bundle/palenight
 	url = https://github.com/drewtempelmeyer/palenight.vim.git
@@ -259,12 +235,12 @@
 [submodule "vim/bundle/base16"]
 	path = vim/bundle/base16
 	url = https://github.com/chriskempson/base16-vim.git
-[submodule "vim/bundle/context"]
-	path = vim/bundle/context
-	url = https://github.com/wellle/context.vim.git
 [submodule "vim/bundle/searchlight"]
 	path = vim/bundle/searchlight
 	url = https://github.com/PeterRincker/vim-searchlight.git
 [submodule "vim/bundle/rspec"]
 	path = vim/bundle/rspec
 	url = https://github.com/keith/rspec.vim.git
+[submodule "vim/bundle/fzf"]
+	path = vim/bundle/fzf
+	url = https://github.com/junegunn/fzf.git

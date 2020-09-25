@@ -486,7 +486,9 @@ function run {
 
         [ ! $batch ] && output
         status "Changes in {{$submodule}}$url:" 6
-        quiet || system git -c color.ui=always log --oneline '@{1}..' | sed -r 's/^/    /'
+        quiet \
+          || system git -c color.ui=always log --oneline --no-merges '@{1}..' \
+          | sed -r 's/^/    /'
         output
       elif [ ! $batch ]; then
         status "No changes in {{$submodule}}"
@@ -558,6 +560,7 @@ function run {
     # }}}
     build-all) # {{{
       run build rbenv/rbenv/src sh -c './configure && make -s'
+      run build vim/bundle/fzf ./install --bin
       ;;
     # }}}
 
