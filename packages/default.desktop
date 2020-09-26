@@ -35,7 +35,6 @@ libnotify-bin
 libpam-gnome-keyring
 menulibre
 mpv
-nautilus-dropbox
 neovim-qt
 numix-gtk-theme
 numix-icon-theme-circle
@@ -47,6 +46,7 @@ quodlibet
 tilix
 
 flatpak: com.github.johnfactotum.Foliate
+flatpak: me.kozec.syncthingtk
 flatpak: nl.hjdskes.gcolor3
 flatpak: org.gtk.Gtk3theme.Numix
 

@@ -65,6 +65,7 @@ software-properties-common
 sqlite3
 strace
 s-tui
+syncthing
 sudo
 tcpdump
 telnet
