@@ -278,10 +278,11 @@ function jq.less {
 # Serve a directory over HTTP
 function serve {
   if [ -n "$1" ]; then
-    cd "$1" || return
+    local port="$1"
+  else
+    local port=$((9000 + RANDOM % 1000))
   fi
 
-  local port=$((9000 + RANDOM % 1000))
   xdg-open "http://localhost:$port/" &>/dev/null
   python3 -m http.server "$port"
 }
