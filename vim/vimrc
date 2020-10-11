@@ -15,13 +15,17 @@
   " disable defaults.vim
   let g:skip_defaults_vim = 1
 
+  " disable netrw
+  let g:loaded_netrwPlugin = 1
+
   " set up pathogen
   if !exists('g:pathogen_disabled')
     let g:pathogen_disabled = []
   endif
 
-  " disable netrw
-  let g:loaded_netrwPlugin = 1
+  call add(g:pathogen_disabled, 'treesitter')
+  call add(g:pathogen_disabled, 'treesitter-refactor')
+  call add(g:pathogen_disabled, 'treesitter-textobjects')
 
   " only enable tmux plugins in tmux sessions
   if empty($TMUX)
@@ -1174,40 +1178,42 @@ endfunction " }}}
   " }}}
 
   " treesitter {{{
-  lua <<EOF
-    require'nvim-treesitter.configs'.setup {
-      ensure_installed = {
-        "bash",
-        "css",
-        "go",
-        "html",
-        "javascript",
-        "json",
-        "markdown",
-        "python",
-        "ruby",
-        "typescript",
-        "vue",
-        "yaml",
-      },
-      highlight = { enable = true },
-      textobjects = {
-        select = {
-          enable = true,
-          keymaps = {
-            ["af"] = "@function.outer",
-            ["if"] = "@function.inner",
-            ["ac"] = "@class.outer",
-            ["ic"] = "@class.inner",
+  if index(g:pathogen_disabled, 'treesitter') == -1
+    lua <<EOF
+      require'nvim-treesitter.configs'.setup {
+        ensure_installed = {
+          "bash",
+          "css",
+          "go",
+          "html",
+          "javascript",
+          "json",
+          "markdown",
+          "python",
+          "ruby",
+          "typescript",
+          "vue",
+          "yaml",
+        },
+        highlight = { enable = true },
+        textobjects = {
+          select = {
+            enable = true,
+            keymaps = {
+              ["af"] = "@function.outer",
+              ["if"] = "@function.inner",
+              ["ac"] = "@class.outer",
+              ["ic"] = "@class.inner",
+            },
           },
         },
-      },
-      refactor = {
-        navigation = { enable = true },
-        smart_rename = { enable = true },
-      },
-    }
+        refactor = {
+          navigation = { enable = true },
+          smart_rename = { enable = true },
+        },
+      }
 EOF
+  endif
   " }}}
 
 " }}}

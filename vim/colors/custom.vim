@@ -24,6 +24,7 @@ hi! DiffChange  guifg=#d7d7ff guibg=#5f5f87
 hi! DiffDelete  guifg=#ff8080 guibg=#cc6666 gui=bold
 hi! DiffText    guifg=#5f5f87 guibg=#81a2be gui=bold
 
+hi! link Delimiter Statement
 hi! link MatchParen Visual
 hi! link QuickFixLine Visual
 hi! link VertSplit LineNr
@@ -35,3 +36,5 @@ hi! link qfLineNr String
 hi! link rspecGroupMethods Statement
 hi! link rspecBeforeAndAfter Identifier
 hi! link rubyModuleName Type
+hi! link TSKeyword Statement
+hi! link TSLabel Identifier
