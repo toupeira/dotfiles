@@ -16,9 +16,6 @@
 [submodule "vim/bundle/pathogen"]
 	path = vim/bundle/pathogen
 	url = https://github.com/tpope/vim-pathogen.git
-[submodule "vim/bundle/loremipsum"]
-	path = vim/bundle/loremipsum
-	url = https://github.com/vim-scripts/loremipsum
 [submodule "vim/bundle/tabular"]
 	path = vim/bundle/tabular
 	url = https://github.com/godlygeek/tabular.git
@@ -142,15 +139,9 @@
 [submodule "rbenv/plugins/whatis"]
 	path = rbenv/plugins/whatis
 	url = https://github.com/toy/rbenv-whatis.git
-[submodule "vim/bundle/nvim-yarp"]
-	path = vim/bundle/nvim-yarp
-	url = https://github.com/roxma/nvim-yarp.git
 [submodule "vim/bundle/fzf-vim"]
 	path = vim/bundle/fzf-vim
 	url = https://github.com/junegunn/fzf.vim.git
-[submodule "vim/bundle/nvim-rpc"]
-	path = vim/bundle/nvim-rpc
-	url = https://github.com/roxma/vim-hug-neovim-rpc.git
 [submodule "vim/bundle/tmux"]
 	path = vim/bundle/tmux
 	url = https://github.com/tmux-plugins/vim-tmux.git
