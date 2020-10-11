@@ -1173,4 +1173,41 @@ endfunction " }}}
   let g:vue_pre_processors = ['scss']
   " }}}
 
+  " treesitter {{{
+  lua <<EOF
+    require'nvim-treesitter.configs'.setup {
+      ensure_installed = {
+        "bash",
+        "css",
+        "go",
+        "html",
+        "javascript",
+        "json",
+        "markdown",
+        "python",
+        "ruby",
+        "typescript",
+        "vue",
+        "yaml",
+      },
+      highlight = { enable = true },
+      textobjects = {
+        select = {
+          enable = true,
+          keymaps = {
+            ["af"] = "@function.outer",
+            ["if"] = "@function.inner",
+            ["ac"] = "@class.outer",
+            ["ic"] = "@class.inner",
+          },
+        },
+      },
+      refactor = {
+        navigation = { enable = true },
+        smart_rename = { enable = true },
+      },
+    }
+EOF
+  " }}}
+
 " }}}

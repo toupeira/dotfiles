@@ -235,3 +235,12 @@
 [submodule "vim/bundle/fzf"]
 	path = vim/bundle/fzf
 	url = https://github.com/junegunn/fzf.git
+[submodule "vim/bundle/treesitter"]
+	path = vim/bundle/treesitter
+	url = https://github.com/nvim-treesitter/nvim-treesitter.git
+[submodule "vim/bundle/treesitter-textobjects"]
+	path = vim/bundle/treesitter-textobjects
+	url = https://github.com/nvim-treesitter/nvim-treesitter-textobjects.git
+[submodule "vim/bundle/treesitter-refactor"]
+	path = vim/bundle/treesitter-refactor
+	url = https://github.com/nvim-treesitter/nvim-treesitter-refactor.git
