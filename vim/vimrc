@@ -5,17 +5,10 @@
     autocmd!
   augroup END
 
-  set nocompatible
-  set encoding=utf-8
-  scriptencoding utf-8
-
   let g:python3_host_prog = 'python3'
-  let s:vimdir = expand("~") . "/.vim"
 
-  " disable defaults.vim
+  " disable builtin plugins
   let g:skip_defaults_vim = 1
-
-  " disable netrw
   let g:loaded_netrwPlugin = 1
 
   " set up pathogen
@@ -33,7 +26,7 @@
   endif
 
   " disable plugins that are broken in vscode-neovim
-  if exists('g:vscode')
+  if exists('g:vscode') " {{{
     call add(g:pathogen_disabled, 'airline')
     call add(g:pathogen_disabled, 'ale')
     call add(g:pathogen_disabled, 'bbye')
@@ -50,7 +43,7 @@
     call add(g:pathogen_disabled, 'smoothie')
     call add(g:pathogen_disabled, 'startify')
     call add(g:pathogen_disabled, 'vista')
-  endif
+  endif " }}}
 
   " load bundle
   runtime bundle/pathogen/autoload/pathogen.vim
@@ -58,109 +51,25 @@
 
 " }}}
 
-" General Settings
-" {{{
-
-  " file handling
-  filetype plugin indent on
-  set hidden
-  set nobackup
-  set writebackup
-  set backupcopy=auto
-  set modeline
-  set modelines=2
-  set updatetime=100
-
-  if v:version > 703 && !has('nvim')
-    set cryptmethod=blowfish
-  endif
-
-  " searching
-  set ignorecase
-  set smartcase
-  set hlsearch
-  set incsearch
-  if exists('&inccommand')
-    set inccommand=nosplit
-  endif
-
-  if executable('rg')
-    let &grepprg = "rg --vimgrep"
-  endif
-
-  " enable persistent undo
-  if has('persistent_undo')
-    set undofile
-  endif
-
-  " spell checking
-  if has('spell')
-    set nospell
-    set spellfile=~/.vim/spells/en.add
-
-    if !isdirectory(s:vimdir . '/spells')
-      call mkdir(s:vimdir . '/spells', 'p')
-    endif
-  endif
-
-" }}}
-
-" Display Settings
+" Settings
 " {{{
 
   " interface
-  let &t_8f = "\<Esc>[38;2;%lu;%lu;%lum"
-  let &t_8b = "\<Esc>[48;2;%lu;%lu;%lum"
   set termguicolors
+  set lazyredraw
+  set updatetime=100
+  set mouse=a
 
   if !exists('g:vscode')
-    syntax on
+    syntax enable
     colorscheme custom
   endif
 
-  " terminals
-  if has('nvim')
-    autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no | startinsert!
-    autocmd vimrc BufWinEnter,WinEnter term://* startinsert!
-    autocmd vimrc BufWinLeave,WinLeave term://* stopinsert
-  endif
-
-  " ambience theme from terminator
-  if has('nvim')
-    let g:terminal_color_0  = '#555753'
-    let g:terminal_color_1  = '#ef2929'
-    let g:terminal_color_2  = '#8ae234'
-    let g:terminal_color_3  = '#fce94f'
-    let g:terminal_color_4  = '#729fcf'
-    let g:terminal_color_5  = '#ad7fa8'
-    let g:terminal_color_6  = '#34e2e2'
-    let g:terminal_color_7  = '#eeeeec'
-
-    let g:terminal_color_8  = '#555753'
-    let g:terminal_color_9  = '#ef2929'
-    let g:terminal_color_10 = '#8ae234'
-    let g:terminal_color_11 = '#fce94f'
-    let g:terminal_color_12 = '#729fcf'
-    let g:terminal_color_13 = '#ad7fa8'
-    let g:terminal_color_14 = '#34e2e2'
-    let g:terminal_color_15 = '#eeeeec'
-  endif
-
-  set errorbells
-  set visualbell t_vb= " disable bells
-  set cmdheight=1
-  set signcolumn=yes
-  set synmaxcol=1000 " disable syntax highlighting on long lines
-  set lazyredraw
-  if !&diff
-    set nocursorline
-  endif
-
-  " mouse support
-  set mouse=a
-  if exists('&ttymouse')
-    set ttymouse=xterm2
-  endif
+  " buffers
+  set hidden
+  set scrolloff=5
+  set sidescrolloff=8
+  set virtualedit+=block
 
   " windows
   set winheight=3
@@ -168,59 +77,63 @@
   set splitbelow
   set splitright
 
-  " auto-completion
-  set completeopt=menuone,noinsert
-  if exists('&pumblend')
-    set pumblend=10
-  endif
-
-  " line numbers
+  " line numbers and signs
   set number
   set numberwidth=6
-  set norelativenumber
-
-  " scrolling
-  set scrolloff=5
-  set sidescrolloff=8
-  set sidescroll=1
-  set virtualedit+=block
-  set nostartofline
-  set display+=lastline
-
-  if has('conceal')
-    set concealcursor=nvc
-    set conceallevel=0
-  endif
+  set signcolumn=yes
 
   " command prompt and status line
-  set showcmd
   set noshowmode
   set noruler
-  set laststatus=2
-  set history=1000
   set report=0
   set shortmess+=a
-  set wildmenu
-  set wildignore=*.pyc,*.o,*.lo,*.la,*.exe,*.swp,*.db,*.bak,*.old,*.dat,*.,tmp,*.mdb,*~,~*
+  set wildmode=longest:full,full
 
-  " automatically open quickfix window after commands that modify the quickfix list
-  " autocmd vimrc QuickFixCmdPost *grep* if len(getqflist()) > 1 | copen | elseif len(getqflist()) <= 1 | cclose | endif
+  " auto-completion
+  set completeopt=menuone,noinsert
+  set pumblend=10
 
-  " highlight trailing whitespace
-  autocmd vimrc VimEnter,Colorscheme * hi! Whitespace ctermbg=235 guibg=#333333
-  autocmd vimrc VimEnter,Colorscheme * match Whitespace /\s\+$/
+  " indenting
+  set ts=2 sts=2 sw=2
+  set expandtab
+  set shiftround
 
-  " window/icon titles
-  set title
-  set icon
+  " line wrapping
+  set breakindent
+  let &showbreak = ' •• '
+  " set nolinebreak
+  " let &breakat = ' 	'
 
-  if match($TERM, '^\(tmux\|screen\)-') == 0
-    let &t_ts = "\033k"
-    let &t_fs = "\033\\"
+  " searching
+  set ignorecase
+  set smartcase
+  set inccommand=nosplit
+  set iskeyword+=-
 
-    let &t_IS = "\033]0;"
-    let &t_IE = "\007"
+  if executable('rg')
+    let &grepprg = "rg --vimgrep"
   endif
+
+  " concealing
+  set concealcursor=nvc
+  set conceallevel=0
+
+  " diffing
+  set diffopt+=algorithm:histogram,indent-heuristic
+
+  " folding
+  set foldmethod=indent
+  set foldlevel=99999
+
+  " matching
+  set showmatch
+
+  " persistent undo
+  set undofile
+
+  " window title
+  set title
+  let &titlestring = "%t%m%r\ [%{ProjectPath(1)}]"
 
   " show the project name and relative path to the current file
   function! ProjectPath(short) " {{{
@@ -248,116 +161,79 @@
     endif
   endfunction " }}}
 
-  let &titlestring = "%t%m%r\ [%{ProjectPath(1)}]"
-  let &iconstring = &titlestring
-
   " add Unicode marker for tmux navigation
   if !empty($TMUX) || !empty($SUDO_COMMAND)
-    let &iconstring .= " %{mode(1) == 'n' || mode() == 't' || &ft == 'fzf' ? '😑' : '😮'}"
-
-    if has('nvim') || !empty($CYGWIN)
-      let &titlestring = &iconstring
-    endif
+    let &titlestring .= " %{mode(1) == 'n' || mode() == 't' || &ft == 'fzf' ? '😑' : '😮'}"
   endif
 
-" }}}
-
-" Text Formatting
-" {{{
-
-  set formatoptions+=j
-  set backspace=indent,eol,start
-  set iskeyword+=-
-  set selection=inclusive
-  set nrformats=hex
-
-  " line wrapping
-  set wrap
-  set breakindent
-  let &showbreak = ' •• '
-
-  " set nolinebreak
-  " let &breakat = ' 	'
-
-  " indents
-  set autoindent
-
-  " tabs
-  set ts=2 sts=2 sw=2
-  set expandtab
-  set smarttab
-  set shiftround
-
-  " matching
-  set showmatch
-
-  " diffing
-  set diffopt+=algorithm:histogram,indent-heuristic
-
-  " folding
-  set foldmethod=indent
-  set foldlevel=99999
+  " highlight trailing whitespace
+  autocmd vimrc VimEnter,Colorscheme * hi! Whitespace ctermbg=235 guibg=#333333
+  autocmd vimrc VimEnter,Colorscheme * match Whitespace /\s\+$/
 
 " }}}
 
-" Filetype Settings
+" Filetypes
 " {{{
 
-  autocmd vimrc FileType c,cs,cpp,php setlocal ts=3 sts=3 sw=3
-  autocmd vimrc FileType python,apache,sshconfig setlocal ts=4 sts=4 sw=4
   autocmd vimrc FileType css,scss setlocal iskeyword+=%
   autocmd vimrc FileType make setlocal noexpandtab
   autocmd vimrc FileType text,markdown,mail setlocal linebreak suffixesadd+=.md
-  autocmd vimrc FileType tex,plaintex,context setlocal lbr
   autocmd vimrc FileType gitcommit,gitrebase setlocal colorcolumn=50,72
-  autocmd vimrc FileType crontab setlocal nobackup nowritebackup
-  autocmd vimrc FileType puppet setlocal commentstring=#%s
-  autocmd vimrc FileType help setlocal nonumber norelativenumber nospell
+  autocmd vimrc FileType crontab setlocal nowritebackup
   autocmd vimrc FileType help nnoremap <buffer><silent> q :bd<CR>
   autocmd vimrc FileType org setlocal foldmethod=expr
   autocmd vimrc FileType qf setlocal nobuflisted
   autocmd vimrc FileType vim setlocal foldmethod=marker foldlevel=0
 
-  autocmd vimrc BufRead,BufNewFile *.es6 setlocal ft=javascript
-  autocmd vimrc BufRead,BufNewFile Dangerfile,*.axlsx,*.prawn setlocal ft=ruby
+  " resize quickfix windows to their content, or 10 lines maximum
+  autocmd vimrc FileType qf,ale-preview call <SID>ResizeWindow(2, 10)
+  function! s:ResizeWindow(min, max) " {{{
+    nnoremap <buffer><silent> q :bd<CR>
+    let max = min([a:max, &lines / 3])
+    execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
+  endfunction " }}}
 
-  " show recent log entries in commit messages
   " start insert mode when committing
-  function! s:CommitStartInsert()
+  function! s:CommitStartInsert() " {{{
     if getline(1) == ''
       normal O
       startinsert
     endif
-  endfunction
+  endfunction " }}}
   autocmd vimrc FileType gitcommit call <SID>CommitStartInsert()
+
+  " terminals
+  autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no | startinsert!
+  autocmd vimrc BufWinEnter,WinEnter term://* startinsert!
+  autocmd vimrc BufWinLeave,WinLeave term://* stopinsert
+
+  " ambience theme from terminator
+  " {{{
+  let g:terminal_color_0  = '#555753'
+  let g:terminal_color_1  = '#ef2929'
+  let g:terminal_color_2  = '#8ae234'
+  let g:terminal_color_3  = '#fce94f'
+  let g:terminal_color_4  = '#729fcf'
+  let g:terminal_color_5  = '#ad7fa8'
+  let g:terminal_color_6  = '#34e2e2'
+  let g:terminal_color_7  = '#eeeeec'
+
+  let g:terminal_color_8  = '#555753'
+  let g:terminal_color_9  = '#ef2929'
+  let g:terminal_color_10 = '#8ae234'
+  let g:terminal_color_11 = '#fce94f'
+  let g:terminal_color_12 = '#729fcf'
+  let g:terminal_color_13 = '#ad7fa8'
+  let g:terminal_color_14 = '#34e2e2'
+  let g:terminal_color_15 = '#eeeeec'
+  " }}}
 
 " }}}
 
 " Commands
 " {{{
 
-  " edit vimrc
-  command! RC edit $MYVIMRC
-
-  " helper to preserve search and cursor position
-  command! -nargs=1 Preserve call <SID>Preserve(<args>)
-  function! s:Preserve(command) " {{{
-    let search=@/
-    let line = line('.')
-    let column = col('.')
-    execute a:command
-    let @/ = search
-    call cursor(line, column)
-  endfunction " }}}
-
-  command! -nargs=1 PreserveSearch call <SID>PreserveSearch(<args>)
-  function! s:PreserveSearch(command) " {{{
-    let search=@/
-    execute a:command
-    let @/ = search
-  endfunction " }}}
-
-  " Replace a builtin command using cabbrev
+  " abbreviate commands
   " http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
   command! -nargs=+ CommandAlias call <SID>CommandAlias(<f-args>)
   function! s:CommandAlias(abbreviation, expansion) " {{{
@@ -381,24 +257,26 @@ endfunction " }}}
   CommandAlias Wq! wq!
   CommandAlias wQ! wq!
 
-  " shortcuts to open files externally and perform online searches
-  if has('mac')
-    let g:open_command = 'open'
-  elseif has('unix')
-    let g:open_command = 'xdg-open'
-  else
-    let g:open_command = 'start'
-  endif
-  command! -nargs=+ -complete=file_in_path Open call system(g:open_command.' ' . expand("<args>"))
-
   " open markdown preview
   command! -nargs=0 VMD execute 'silent !vmd % &>/dev/null &' | redraw!
+
+  " helper to preserve current search and cursor position
+  command! -nargs=1 Preserve call <SID>Preserve(<args>)
+  function! s:Preserve(command) " {{{
+    let search=@/
+    let line = line('.')
+    let column = col('.')
+    execute a:command
+    let @/ = search
+    call cursor(line, column)
+  endfunction " }}}
 
 " }}}
 
 " Keybindings
 " {{{
 
+  " horizontal movements
   noremap H ^
   noremap L $
 
@@ -447,9 +325,6 @@ endfunction " }}}
 
   " select pasted text
   nmap vp `[v`]
-
-  " toggle paste mode with F12
-  set pastetoggle=<f12>
 
   " switch to alternate buffer
   nnoremap <silent><expr> ,<Tab> empty(getreg('#')) \|\| !buflisted(getreg('#')) ? ':bnext<CR>' : '<C-^>'
@@ -501,25 +376,14 @@ endfunction " }}}
   cnoremap <C-q> <C-v>
 
   " Copy & Paste shortcuts
-  if has('mac')
-    vnoremap <D-c> "+y
-    vnoremap <D-x> "+d
+  vnoremap <C-c> "+ygv<Esc>
+  vnoremap <C-x> "+d<Esc>
 
-    map <D-v>  "+gP
-    cmap <D-v> <C-R>+
+  noremap <C-v>  "+gP
+  cnoremap <C-v> <C-r>+
 
-    exe 'inoremap <script> <D-v>' paste#paste_cmd['i']
-    exe 'vnoremap <script> <D-v>' paste#paste_cmd['v']
-  else
-    vnoremap <C-c> "+ygv<Esc>
-    vnoremap <C-x> "+d<Esc>
-
-    noremap <C-v>  "+gP
-    cnoremap <C-v> <C-r>+
-
-    exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
-    exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
-  endif
+  exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
+  exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
 
   " ,q and ,e - toggle quickfix window and location list
   nnoremap <silent> ,q :call <SID>ToggleList('c')<CR>
@@ -546,14 +410,6 @@ endfunction " }}}
     if winnr() != winnr
       wincmd p
     endif
-  endfunction " }}}
-
-  " resize quickfix windows to their content, or 10 lines maximum
-  autocmd vimrc FileType qf,ale-preview call <SID>ResizeWindow(2, 10)
-  function! s:ResizeWindow(min, max) " {{{
-    nnoremap <buffer><silent> q :bd<CR>
-    let max = min([a:max, &lines / 3])
-    execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
   endfunction " }}}
 
   " Ctrl-c - remove highlighted search and redraw
@@ -1099,43 +955,23 @@ endfunction " }}}
     \ { 'type': 'commands',  'header': ['   Commands']       },
   \ ]
 
-  if has('nvim')
-    let g:startify_ascii = [
-      \ "      .            .",
-      \ "    .,;'           :,.",
-      \ "  .,;;;,,.         ccc;.",
-      \ ".;c::::,,,'        ccccc:",
-      \ ".::cc::,,,,,.      cccccc.",
-      \ ".cccccc;;;;;;'     llllll.",
-      \ ".cccccc.,;;;;;;.   llllll.",
-      \ ".cccccc  ';;;;;;'  oooooo.",
-      \ "'lllllc   .;;;;;;;.oooooo'",
-      \ "'lllllc     ,::::::looooo'",
-      \ "'llllll      .:::::lloddd'",
-      \ ".looool       .;::coooodo.",
-      \ "  .cool         'ccoooc.",
-      \ "    .co          .:o:.",
-      \ "      .           .'",
-    \ ]
-  else
-    let g:startify_ascii = [
-      \ "     ________ ++     ________",
-      \ "    /VVVVVVVV\++++  /VVVVVVVV\\",
-      \ "    \VVVVVVVV/++++++\VVVVVVVV/",
-      \ "     |VVVVVV|++++++++/VVVVV/'",
-      \ "     |VVVVVV|++++++/VVVVV/'",
-      \ "    +|VVVVVV|++++/VVVVV/'+",
-      \ "  +++|VVVVVV|++/VVVVV/'+++++",
-      \ "+++++|VVVVVV|/VVV___++++++++++",
-      \ "  +++|VVVVVVVVVV/##/ +_+_+_+_",
-      \ "    +|VVVVVVVVV___ +/#_#,#_#,\\",
-      \ "     |VVVVVVV//##/+/#/+/#/'/#/",
-      \ "     |VVVVV/'+/#/+/#/+/#/ /#/",
-      \ "     |VVV/'++/#/+/#/ /#/ /#/",
-      \ "     'V/'  /##//##//##//###/",
-      \ "              ++",
-    \ ]
-  endif
+  let g:startify_ascii = [
+    \ "      .            .",
+    \ "    .,;'           :,.",
+    \ "  .,;;;,,.         ccc;.",
+    \ ".;c::::,,,'        ccccc:",
+    \ ".::cc::,,,,,.      cccccc.",
+    \ ".cccccc;;;;;;'     llllll.",
+    \ ".cccccc.,;;;;;;.   llllll.",
+    \ ".cccccc  ';;;;;;'  oooooo.",
+    \ "'lllllc   .;;;;;;;.oooooo'",
+    \ "'lllllc     ,::::::looooo'",
+    \ "'llllll      .:::::lloddd'",
+    \ ".looool       .;::coooodo.",
+    \ "  .cool         'ccoooc.",
+    \ "    .co          .:o:.",
+    \ "      .           .'",
+  \ ]
 
   let g:startify_custom_header = map(g:startify_ascii, '"   ".v:val')
   " }}}
