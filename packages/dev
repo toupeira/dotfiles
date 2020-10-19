@@ -28,7 +28,6 @@ pip: yq
 
 npm: yarn
 
-yarn: bash-language-server
 yarn: caniuse-cmd
 yarn: eslint
 yarn: jsonlint

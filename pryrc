@@ -21,7 +21,7 @@ lambda {
 
   # startup message
   puts
-  puts gray.call("ruby #{RUBY_VERSION} [#{RUBY_PLATFORM}]")
+  puts gray.call("ruby #{RUBY_VERSION}p#{RUBY_PATCHLEVEL}")
   puts
   Kernel.at_exit { puts }
 
