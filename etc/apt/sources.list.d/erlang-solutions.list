@@ -1,1 +1,1 @@
-deb http://packages.erlang-solutions.com/debian wily contrib
+deb http://packages.erlang-solutions.com/debian buster contrib
