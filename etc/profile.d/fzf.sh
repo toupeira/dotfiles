@@ -47,5 +47,5 @@ _fzf_orig_completion_host='_ssh'
 _fzf_orig_completion_nc='_ssh'
 _fzf_orig_completion_curl='_ssh'
 
-complete -F _fzf_complete_ssh ping telnet host nc curl
+complete -F _fzf_host_completion ping host nc curl
 complete -o bashdefault -o default -F _fzf_path_completion rg
