@@ -15,7 +15,6 @@ ipset
 nftables
 
 # SecureBoot
-fwupd-amd64-signed
 grub-efi-amd64-signed
 shim-signed
 

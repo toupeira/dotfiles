@@ -244,3 +244,6 @@
 [submodule "vim/bundle/treesitter-refactor"]
 	path = vim/bundle/treesitter-refactor
 	url = https://github.com/nvim-treesitter/nvim-treesitter-refactor.git
+[submodule "vim/bundle/toml"]
+	path = vim/bundle/toml
+	url = https://github.com/cespare/vim-toml.git

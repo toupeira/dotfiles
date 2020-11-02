@@ -170,7 +170,7 @@ function dotfiles {
   if [ $# -eq 0 ]; then
     cd "$path"
   elif [ "$1" = "b" ]; then
-    if [ -z "$2" ]; then
+    if [ $# -eq 1 ]; then
       cd "$path/vim/bundle"
     elif [ -d "$path/$2" ]; then
       cd "$path/$2"
@@ -179,6 +179,8 @@ function dotfiles {
     else
       cd "$( command ls -d "$path/vim/bundle/$2"* "$path/$2"* 2>/dev/null | head -1 )"
     fi
+  elif [ "$1" = "dconf" ] && [ $# -eq 1 ]; then
+    cd "$path/dconf"
   else
     command dotfiles "$@"
   fi

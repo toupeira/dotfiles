@@ -722,13 +722,23 @@ function run {
     # }}}
 
     dconf) # {{{
-      for file in "$DOTFILES"/dconf/*.dconf; do
-        local dir="/$( basename "$file" .dconf | tr . / )/"
+      local action="$1"
+      shift
 
-        if [ "$1" = "load" ]; then
+      if [ -n "$1" ]; then
+        local files=( "$@" )
+      else
+        local files=( "$DOTFILES"/dconf/*.ini )
+      fi
+
+      for file in "${files[@]}"; do
+        local dir="/$( basename "$file" .ini | tr . / )/"
+        local file="$DOTFILES/dconf/$( basename "$file" .ini ).ini"
+
+        if [ "$action" = "load" ]; then
           ask "Load settings for {{$dir}}?" || continue
           dconf load "$dir" < "$file"
-        elif [ "$1" = "dump" ]; then
+        elif [ "$action" = "dump" ]; then
           dconf dump "$dir" > "$file"
         else
           usage
