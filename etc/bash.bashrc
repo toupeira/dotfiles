@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/bin/bash
 
 # System-wide .bashrc file for interactive bash(1) shells.
 

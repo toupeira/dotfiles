@@ -1,31 +1,22 @@
-# shellcheck shell=bash
-
-# Add rbenv binstubs
-if [ -d ~/.rbenv ]; then
-  export PATH="$PATH:$HOME/.rbenv/bin"
-fi
+#!/bin/bash
 
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
-# Load rbenv
-if [ -d ~/.rbenv ]; then
-  eval "$(rbenv init - --no-rehash)"
+# Load asdf
+if [ -d ~/.asdf ]; then
+  . ~/.asdf/asdf.sh
 fi
 
-# sudo wrapper for RubyGems
 function _gem_exec {
   local command="$1"
   shift
 
-  if rbenv version | grep -q ^system && [[ "$1" =~ (install|uninstall|update|clean|pristine) ]]; then
-    command="sudo $command"
-  elif [ "$1" = "cd" ]; then
+  if [ "$1" = "cd" ]; then
     local path
-    path=$( bundle exec gem open -e echo "$2" )
-    if [ $? -eq 0 ]; then
-      cd "$path"
-      return
+    if path=$( bundle exec gem open -e echo "$2" ); then
+      cd "$path" || return $?
+      return 0
     else
       echo "$path"
       return 1
@@ -57,7 +48,6 @@ function _spring_exec {
 }
 
 alias gem='_gem_exec gem'
-alias sugem='sudo /usr/bin/gem'
 
 alias rspec='rspec -f doc'
 

@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/bin/bash
 
 # Helper to check for commands
 has() {

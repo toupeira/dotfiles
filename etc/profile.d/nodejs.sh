@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/bin/bash
 
 # Add yarn global packages
 if [ -d ~/.yarn/bin ]; then

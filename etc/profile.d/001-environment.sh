@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/bin/bash
 
 . /etc/default/locale
 export LANG LC_MESSAGES LC_NUMERIC LC_CTYPE

@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/bin/bash
 
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
@@ -26,7 +26,8 @@ function _prompt_path {
   local root=$( git rev-parse --show-toplevel 2>/dev/null )
   if [ -n "$root" ]; then
     path="${path#${root%/*}/}"
-    path=${path/#dotfiles\/rbenv\/gems\//♦️  }
+    path=${path/#asdf\/installs\/ruby\/*\/lib\/ruby\/gems\//♦️  }
+    path=${path/#asdf\/installs\/ruby\//♦️  }
     path=${path/#dotfiles\//⚙️  }
     path=${path/#dotfiles/⚙️ }
   fi

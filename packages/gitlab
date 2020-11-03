@@ -2,9 +2,6 @@ cmake
 default-jdk
 docker.io
 docker-compose
-golang
-kubectl
-kubectx
 libicu-dev
 libidn11-dev
 libimage-exiftool-perl
@@ -15,7 +12,6 @@ libreadline-dev
 libsqlite3-dev
 libssl-dev
 pkg-config
-redis
 runit
 zlib1g-dev
 

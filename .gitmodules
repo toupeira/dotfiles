@@ -64,21 +64,9 @@
 [submodule "vim/bundle/bbye"]
 	path = vim/bundle/bbye
 	url = https://github.com/moll/vim-bbye.git
-[submodule "rbenv/plugins/ruby-build"]
-	path = rbenv/plugins/ruby-build
-	url = https://github.com/sstephenson/ruby-build.git
-[submodule "rbenv/rbenv"]
-	path = rbenv/rbenv
-	url = https://github.com/sstephenson/rbenv.git
-[submodule "rbenv/plugins/rbenv-default-gems"]
-	path = rbenv/plugins/rbenv-default-gems
-	url = https://github.com/sstephenson/rbenv-default-gems.git
 [submodule "vim/bundle/slim"]
 	path = vim/bundle/slim
 	url = https://github.com/slim-template/vim-slim.git
-[submodule "rbenv/plugins/rbenv-binstubs"]
-	path = rbenv/plugins/rbenv-binstubs
-	url = https://github.com/ianheggie/rbenv-binstubs.git
 [submodule "vim/bundle/dispatch"]
 	path = vim/bundle/dispatch
 	url = https://github.com/tpope/vim-dispatch.git
@@ -97,9 +85,6 @@
 [submodule "vim/bundle/fetch"]
 	path = vim/bundle/fetch
 	url = https://github.com/kopischke/vim-fetch.git
-[submodule "rbenv/plugins/rbenv-communal-gems"]
-	path = rbenv/plugins/rbenv-communal-gems
-	url = https://github.com/tpope/rbenv-communal-gems.git
 [submodule "vim/bundle/bundler"]
 	path = vim/bundle/bundler
 	url = https://github.com/tpope/vim-bundler.git
@@ -133,12 +118,6 @@
 [submodule "vim/bundle/ale"]
 	path = vim/bundle/ale
 	url = https://github.com/dense-analysis/ale.git
-[submodule "rbenv/plugins/update-rubies"]
-	path = rbenv/plugins/update-rubies
-	url = https://github.com/toy/rbenv-update-rubies.git
-[submodule "rbenv/plugins/whatis"]
-	path = rbenv/plugins/whatis
-	url = https://github.com/toy/rbenv-whatis.git
 [submodule "vim/bundle/fzf-vim"]
 	path = vim/bundle/fzf-vim
 	url = https://github.com/junegunn/fzf.vim.git
@@ -247,3 +226,6 @@
 [submodule "vim/bundle/toml"]
 	path = vim/bundle/toml
 	url = https://github.com/cespare/vim-toml.git
+[submodule "asdf"]
+	path = asdf
+	url = https://github.com/asdf-vm/asdf.git

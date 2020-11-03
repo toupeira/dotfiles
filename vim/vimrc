@@ -654,7 +654,8 @@ endfunction " }}}
       \ 'typescript': [ 'tslint' ]
     \ }
 
-    " let g:ale_sh_shellcheck_options = '-e 2086,2155'
+    let g:ale_ruby_rubocop_executable = 'bundle'
+    let g:ale_sh_shellcheck_options = '-e 1090,2113'
   endif
   " }}}
 

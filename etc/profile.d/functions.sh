@@ -1,4 +1,4 @@
-# shellcheck shell=bash
+#!/bin/bash
 
 # Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return

@@ -559,7 +559,6 @@ function run {
       ;;
     # }}}
     build-all) # {{{
-      run build rbenv/rbenv/src sh -c './configure && make -s'
       run build vim/bundle/fzf ./install --bin
       ;;
     # }}}

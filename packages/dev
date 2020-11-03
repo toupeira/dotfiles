@@ -8,7 +8,6 @@ ipython3
 libreadline-dev
 libssl-dev
 manpages-dev
-nodejs
 pkg-config
 python3-pip
 python3-setuptools
@@ -25,8 +24,6 @@ gem: rubocop
 pip: pynvim
 pip: yamllint
 pip: yq
-
-npm: yarn
 
 yarn: caniuse-cmd
 yarn: eslint
