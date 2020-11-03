@@ -1,9 +1,0 @@
-#!/bin/sh
-
-url="https://mail.google.com/mail"
-
-if [ -n "$1" ]; then
-  url="$url?view=cm&tf=0&to=`echo "$1" | sed 's/^mailto://'`"
-fi
-
-xdg-open "$url"
