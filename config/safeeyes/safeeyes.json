@@ -31,7 +31,7 @@
             "version": "0.0.2"
         },
         {
-            "enabled": true,
+            "enabled": false,
             "id": "notification",
             "version": "0.0.1"
         },
