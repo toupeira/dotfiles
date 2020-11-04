@@ -655,7 +655,7 @@ endfunction " }}}
     \ }
 
     let g:ale_ruby_rubocop_executable = 'bundle'
-    let g:ale_sh_shellcheck_options = '-e 1090,2113'
+    let g:ale_sh_shellcheck_exclusions = 'SC1090,SC2113'
   endif
   " }}}
 
