@@ -735,7 +735,7 @@ function run {
         local file="$DOTFILES/dconf/$( basename "$file" .ini ).ini"
 
         if [ "$action" = "load" ]; then
-          ask "Load settings for {{$dir}}?" || continue
+          ask-yes "Load settings for {{$dir}}?" || continue
           dconf load "$dir" < "$file"
         elif [ "$action" = "dump" ]; then
           dconf dump "$dir" > "$file"
