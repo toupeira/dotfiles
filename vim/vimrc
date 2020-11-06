@@ -16,9 +16,9 @@
     let g:pathogen_disabled = []
   endif
 
-  call add(g:pathogen_disabled, 'treesitter')
-  call add(g:pathogen_disabled, 'treesitter-refactor')
-  call add(g:pathogen_disabled, 'treesitter-textobjects')
+  " call add(g:pathogen_disabled, 'treesitter')
+  " call add(g:pathogen_disabled, 'treesitter-refactor')
+  " call add(g:pathogen_disabled, 'treesitter-textobjects')
 
   " only enable tmux plugins in tmux sessions
   if empty($TMUX)
@@ -1019,20 +1019,20 @@ endfunction " }}}
     lua <<EOF
       require'nvim-treesitter.configs'.setup {
         ensure_installed = {
-          "bash",
+          -- "bash",
           "css",
           "go",
-          "html",
+          -- "html",
           "javascript",
           "json",
-          "markdown",
-          "python",
+          -- "markdown",
           "ruby",
           "typescript",
           "vue",
           "yaml",
         },
         highlight = { enable = true },
+        indent = { enable = true },
         textobjects = {
           select = {
             enable = true,
@@ -1041,6 +1041,25 @@ endfunction " }}}
               ["if"] = "@function.inner",
               ["ac"] = "@class.outer",
               ["ic"] = "@class.inner",
+            },
+          },
+          move = {
+            enable = true,
+            goto_next_start = {
+              ["]m"] = "@function.outer",
+              ["]]"] = "@class.outer",
+            },
+            goto_next_end = {
+              ["]M"] = "@function.outer",
+              ["]["] = "@class.outer",
+            },
+            goto_previous_start = {
+              ["[m"] = "@function.outer",
+              ["[["] = "@class.outer",
+            },
+            goto_previous_end = {
+              ["[M"] = "@function.outer",
+              ["[]"] = "@class.outer",
             },
           },
         },
