@@ -35,7 +35,7 @@ function login_message {
       echo
     fi
 
-    if has fortune && [ -z "$SSH_CONNECTION" ]; then
+    if has fortune && [ -z "$SSH_CONNECTION" ] && [ -z "$FLOATING_TERMINAL" ]; then
       fortune -acs -n $((${LINES:-10}*40)) | awk '
         /^\(.+\)$/ { print "\033[1;32mfortune" $0 "\033[0m"; next }
         /^%$/ { next }

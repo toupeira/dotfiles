@@ -197,16 +197,14 @@ function dconf-filter {
   local keys
 
   case "$1" in
-    com.gexperts.Tilix)
-      keys=( font );;
     org.gnome.desktop.interface)
-      keys=( cursor-size text-scaling-factor );;
+      keys='cursor-size monospace-font-name text-scaling-factor show-battery-percentage';;
     org.gnome.software)
-      keys=( check-timestamp first-run online-updates-timestamp );;
+      keys='check-timestamp first-run online-updates-timestamp';;
   esac
 
-  if [ -v keys ]; then
-    IFS='|' eval 'keys=${keys[*]}'
+  if [ -n "$keys" ]; then
+    keys=$( echo "$keys" | tr ' ' '|' )
     grep -Ev "^($keys)="
   else
     cat
@@ -747,14 +745,15 @@ function run {
 
       for file in "${files[@]}"; do
         local name=$( basename "$file" .ini )
-        local dir="/$( echo "$name" | tr . / )/"
+        local path="/$( echo "$name" | tr . / )/"
         local file="$DOTFILES/dconf/$name.ini"
 
         if [ "$action" = "load" ]; then
-          ask-yes "Load settings for {{$dir}}?" || continue
-          dconf load "$dir" < "$file"
+          status "Loading {{$name}}"
+          dconf load "$path" < "$file"
         elif [ "$action" = "dump" ]; then
-          dconf dump "$dir" | dconf-filter "$name" > "$file"
+          status "Dumping {{$name}}"
+          dconf dump "$path" | dconf-filter "$name" > "$file"
         else
           usage
         fi
