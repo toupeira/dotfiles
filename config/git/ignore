@@ -13,9 +13,5 @@ doc/tags-*
 Session.vim
 .projections.json
 
-# emacs
-.projectile
-*.md.temp
-
 # ruby
 .rake_tasks~

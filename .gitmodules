@@ -103,9 +103,6 @@
 [submodule "vim/bundle/elixir"]
 	path = vim/bundle/elixir
 	url = https://github.com/elixir-lang/vim-elixir.git
-[submodule "emacs.d"]
-	path = emacs.d
-	url = https://github.com/syl20bnr/spacemacs
 [submodule "vim/bundle/org-mode"]
 	path = vim/bundle/org-mode
 	url = https://github.com/jceb/vim-orgmode.git
