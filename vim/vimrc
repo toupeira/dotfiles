@@ -135,6 +135,10 @@
   set title
   let &titlestring = "%t%m%r\ [%{ProjectPath(1)}]"
 
+  " highlight yanked region
+  autocmd vimrc TextYankPost * silent! lua
+    \ require'vim.highlight'.on_yank { timeout=100 }
+
   " show the project name and relative path to the current file
   function! ProjectPath(short) " {{{
     let l:root = substitute(getcwd(), '/\.git$', '', '')
@@ -486,14 +490,18 @@ endfunction " }}}
 
   " fugitive {{{
   nnoremap <silent> ,gs :G<CR>
-  noremap <silent> ,gl :Gclog<CR>
-  noremap <silent> ,gL :0Gclog<CR>
+  noremap <silent> ,gl :Gclog %<CR>
+  noremap <silent> ,gL :Gclog<CR>
+  noremap <silent> ,gd :silent Git -p log -p %<CR>
   noremap <silent> ,gB :Gblame<CR>
   noremap ,gu :.Gbrowse!<CR>
   noremap ,gU :.Gbrowse<CR>
 
   autocmd vimrc FileType fugitive if b:fugitive_type == 'index' | setlocal nobuflisted | endif
-  autocmd vimrc FileType fugitive nmap <buffer> <silent> q gq
+  autocmd vimrc FileType fugitive nnoremap <buffer><silent> q :bd<CR>
+  autocmd vimrc FileType git if b:fugitive_type == 'temp' | setlocal nonumber | nnoremap <buffer><silent> q :bd<CR> | endif
+
+  autocmd vimrc FileType help nnoremap <buffer><silent> q :bd<CR>
   " }}}
 
   " dirvish {{{
@@ -823,8 +831,6 @@ endfunction " }}}
   " }}}
 
   " signify {{{
-  nnoremap <silent> ,gd :SignifyHunkDiff<CR>
-
   let g:signify_vcs_list = ['git']
 
   let g:signify_sign_add               = '+ '
