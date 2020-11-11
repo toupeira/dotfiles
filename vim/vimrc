@@ -16,9 +16,9 @@
     let g:pathogen_disabled = []
   endif
 
-  " call add(g:pathogen_disabled, 'treesitter')
-  " call add(g:pathogen_disabled, 'treesitter-refactor')
-  " call add(g:pathogen_disabled, 'treesitter-textobjects')
+  call add(g:pathogen_disabled, 'treesitter')
+  call add(g:pathogen_disabled, 'treesitter-refactor')
+  call add(g:pathogen_disabled, 'treesitter-textobjects')
 
   " only enable tmux plugins in tmux sessions
   if empty($TMUX)

@@ -110,7 +110,7 @@
   ldf = ld --follow
   lg = l --graph
   news = l ORIG_HEAD..
-  msg = show -s --pretty=%B
+  msg = show -s --pretty=%b
 
   di = diff
   dc = diff --cached
