@@ -199,6 +199,8 @@ function dconf-filter {
   case "$1" in
     org.gnome.desktop.interface)
       keys='cursor-size monospace-font-name text-scaling-factor show-battery-percentage';;
+    org.gnome.nautilus)
+      keys='initial-size';;
     org.gnome.software)
       keys='check-timestamp first-run online-updates-timestamp';;
   esac
