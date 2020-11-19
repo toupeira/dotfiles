@@ -73,9 +73,6 @@
 [submodule "vim/bundle/tmux-complete"]
 	path = vim/bundle/tmux-complete
 	url = https://github.com/wellle/tmux-complete.vim.git
-[submodule "tmux/copycat"]
-	path = tmux/copycat
-	url = https://github.com/tmux-plugins/tmux-copycat.git
 [submodule "tmux/yank"]
 	path = tmux/yank
 	url = https://github.com/tmux-plugins/tmux-yank.git

@@ -18,17 +18,17 @@ case "$1" in
   # freeform search
   "") tmux send-keys ?;;
 
-  # paths
-  M-p)
+  paths)
     path="[^][ '\"]";
     search "(/$path+|$path*/|$path*\.$path+)$path*"
     ;;
 
-  # prompts
-  M-l) search "^(.* )?λ.*";;
+  prompts)
+    search "^(.* )?λ.*"
+    ;;
 
   # interesting things (URLs, emails, hashes, IPs)
-  M-i)
+  interesting)
     urls='(https?://|git@|git://|ssh://|ftp://|file:///)[[:alnum:]?=%/_.:,;~@!#$&()*+-]*'
     emails='[-_\.[:alnum:]]+@[-_\.[:alnum:]]+'
     hashes='\b(([0-9a-f]{7,40}|[[:alnum:]]{52}|[0-9a-f]{64})(\.{2,3})?)+\b'
