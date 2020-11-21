@@ -8,7 +8,7 @@ alias dt='dotfiles'
 alias @='mux -b -d -w'
 
 # general shell aliases
-has dircolors && eval $( dircolors -b )
+eval $( dircolors -b )
 alias ls='ls --color --quoting-style=literal'
 alias ll='ls -lh'
 alias l='ls -A'
@@ -35,13 +35,6 @@ alias rgrep='grep -r'
 alias ssh.direct='ssh -o ControlPath=none'
 alias bat='batcat'
 
-if has http; then
-  alias GET='http get'
-  alias HEAD='http -h get'
-  alias POST='http post'
-  alias PUT='http put'
-fi
-
 # system administration
 alias sctl='systemctl'
 alias jctl='journalctl'
@@ -61,6 +54,7 @@ alias pkglist='dpkg -L'
 alias pkgname='apt-cache pkgnames'
 alias pkgsearch='apt-cache search'
 alias pkgshow='command aptitude show'
+alias pkginstall='sudo dpkg -i'
 
 # development
 alias vi='vim'
@@ -80,58 +74,40 @@ for i in bundle console log migrate server watcher; do
   eval "alias @$i='mux @$i'"
 done
 
-# grc aliases
-if has grc; then
-  function _grc_aliases {
-    while [ $# -gt 0 ]; do
-      eval "alias $1='grc $( (alias "$1" 2>/dev/null || echo "$1") | cut -d\' -f2 )'"
-      shift
-    done
-  }
-
-  # expand aliases in arguments
-  alias grc='grc '
-
-  _grc_aliases ping traceroute netstat stat diff last who mount ps dig ifconfig df du ip iptables lspci lsusb lsof free sysctl lsmod uptime w whois
-fi
-
 # sudo aliases
-if has sudo; then
-  function _sudo_aliases {
-    while [ $# -gt 0 ]; do
-      eval "alias $1='sudo $( (alias "$1" 2>/dev/null || echo "$1") | cut -d\' -f2 )'"
-      shift
-    done
-  }
 
-  # expand aliases in arguments
-  alias sudo='sudo '
+# expand aliases in arguments
+alias sudo='sudo '
 
-  # vim
-  alias suvi='sudo TMUX=$TMUX sensible-vim'
-  alias sudiff='sudo vimdiff'
-  alias visudo='sudo visudo'
+# vim
+alias suvi='sudo TMUX=$TMUX sensible-vim'
+alias sudiff='sudo vimdiff'
+alias visudo='sudo visudo'
 
-  # file management
-  alias sucp='sudo cp -vi'
-  alias sumv='sudo mv -vi'
-  alias surm='sudo rm -v'
-  alias suln='sudo ln -svfi'
-  alias sush='sudo -i'
-  alias suown='sudo chown -vR root:root'
-  alias sumod='sudo chmod -vR 644'
+# file management
+alias sucp='sudo cp -vi'
+alias sumv='sudo mv -vi'
+alias surm='sudo rm -v'
+alias suln='sudo ln -svfi'
+alias sush='sudo -i'
+alias suown='sudo chown -vR root:root'
+alias sumod='sudo chmod -vR 644'
 
-  # debian tools
-  _sudo_aliases \
-    apt apt-get aptitude dpkg-reconfigure \
-    update-alternatives update-rc.d invoke-rc.d
+# debian tools
+alias apt='sudo apt'
+alias apt-get='sudo apt-get'
+alias aptitude='sudo aptitude'
+alias dpkg-reconfigure='sudo dpkg-reconfigure'
+alias update-alternatives='sudo update-alternatives'
 
-  alias pkginstall='sudo dpkg -i'
-
-  # system tools
-  _sudo_aliases \
-    modprobe rmmod ifup ifdown ethtool nft iptables ip6tables \
-    tcpdump jnettop fdisk parted lvm
-
-  alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+|:\w+"'
-fi
+# system tools
+alias modprobe='sudo modprobe'
+alias rmmod='sudo rmmod'
+alias ifup='sudo ifup'
+alias ifdown='sudo ifdown'
+alias ethtool='sudo ethtool'
+alias nft='sudo nft'
+alias iptables='sudo iptables'
+alias ip6tables='sudo ip6tables'
+alias tcpdump='sudo tcpdump'
+alias lsop='sudo lsof -ni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+|:\w+"'

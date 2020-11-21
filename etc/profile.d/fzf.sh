@@ -40,12 +40,3 @@ _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
 . /etc/dotfiles/vim/bundle/fzf/shell/key-bindings.bash
 
 bind '"\C-b": " \C-e\C-ugit c\C-m"'
-
-_fzf_orig_completion_ping='_ssh'
-_fzf_orig_completion_telnet='_ssh'
-_fzf_orig_completion_host='_ssh'
-_fzf_orig_completion_nc='_ssh'
-_fzf_orig_completion_curl='_ssh'
-
-complete -F _fzf_host_completion ping host nc curl
-complete -o bashdefault -o default -F _fzf_path_completion rg

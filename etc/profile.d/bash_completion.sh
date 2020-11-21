@@ -26,36 +26,26 @@ function has_completion {
 }
 
 # Custom completions
-# complete -o bashdefault -o default -F _root_command sudo watch
-complete -o bashdefault -o default -F _command psgrep pskill
-complete -o bashdefault -o default -F _command start @
-complete -o bashdefault -o default -F _command grc
-complete -o bashdefault -o default -F _command spring
+complete -F _command psgrep pskill
+complete -F _command start @
+complete -F _command spring
 
-has_completion ssh && \
-  complete -F _ssh -o default -o bashdefault ping telnet host nc curl
-has_completion pgrep && \
-  complete -F _pgrep -o default -o bashdefault psgrep pskill
-has_completion systemctl && \
-  complete -F _systemctl -o default -o bashdefault sctl
-has_completion journalctl && \
-  complete -F _journalctl -o default -o bashdefault jctl
-
-has pgcli && has_completion psql && \
-  complete -F _psql pgcli
+has_completion pgrep && complete -F _pgrep psgrep pskill
+has_completion systemctl && complete -F _systemctl sctl
+has_completion journalctl && complete -F _journalctl jctl
 
 # git completions
 if has_completion git; then
   __git_complete g _git
   function _git_c { _git_checkout; }
   function _git_create_branch { _git_checkout; }
-
-  _completion_loader git-extras
 fi
 
 if has dotfiles; then
-  __git_complete dotfiles _git "$( dotfiles --path )"
-  __git_complete dt _git       "$( dotfiles --path )"
+  _path=$( dotfiles --path )
+  __git_complete dotfiles _git "$_path"
+  __git_complete dt _git       "$_path"
+  unset _path
 fi
 
 # Debian completions
@@ -114,24 +104,4 @@ function _mux {
     _command
   fi
 }
-complete -o bashdefault -o default -F _mux mux
-
-# kubernetes completion
-if has kubectl; then
-  eval "$( kubectl completion bash )"
-
-  alias k='kubectl'
-  complete -o default -F __start_kubectl k
-fi
-
-if has kubectx; then
-  alias kctx='kubectx'
-  alias kns='kubens'
-
-  has_completion kubectx && complete -F _kube_contexts kctx
-  has_completion kubens  && complete -F _kube_namespaces kns
-fi
-
-if has helm; then
-  eval "$( helm completion bash )"
-fi
+complete -F _mux mux

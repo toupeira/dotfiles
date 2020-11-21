@@ -2,7 +2,7 @@
 
 # Helper to check for commands
 has() {
-  which "$1" &>/dev/null
+  command -v "$1" &>/dev/null
 }
 
 # Define helper variables for interactive and login shells
