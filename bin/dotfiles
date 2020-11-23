@@ -124,20 +124,21 @@ function ask-abort {
 
 # Run a shell command
 function system {
+  unset sudo
   local command="$1"
   shift
 
   # Check for commands that require sudo
   if [ "$command" = "chown" ] || [ "$command" = "chgrp" ]; then
     warning "Using [1;33msudo[0m for command [1m$command[0m"
-    command="sudo $command"
+    sudo="sudo"
   else
     # Check for paths that require sudo
     for arg in "$@"; do
       local dir=$( dirname -- "$arg" )
       if [ "$dir" != "." ] && [ -d "$dir" ] && [ ! -w "$dir" ]; then
         warning "Using [1;33msudo[0m for directory {{$dir}}"
-        command="sudo $command"
+        sudo="sudo"
         break
       fi
     done
@@ -146,7 +147,7 @@ function system {
   verbose && output "     executing: $command $* $( dryrun-message )" >&2
   dryrun && return
 
-  command "$command" "$@"
+  command $sudo "$command" "$@"
 }
 
 # Run a Git command
