@@ -686,7 +686,7 @@ function run {
       if ask-yes "{{Install?}}"; then
         function install_packages {
           [ -n "$1" ] || return
-          mapfile -t packages <<< "${1/\n/ }"
+          mapfile -t packages <<< "${1/\\n/ }"
           shift
 
           output
