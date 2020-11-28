@@ -108,7 +108,6 @@
   set ignorecase
   set smartcase
   set inccommand=nosplit
-  set iskeyword+=-
 
   if executable('rg')
     let &grepprg = "rg --vimgrep"
