@@ -5,6 +5,8 @@ firmware-linux-nonfree
 flatpak
 fwupd
 intel-microcode
+plymouth
+plymouth-label
 thermald
 wireless-regdb
 
