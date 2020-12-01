@@ -45,6 +45,7 @@ peek
 qt5-gtk2-platformtheme
 quodlibet
 tilix
+ttf-mscorefonts-installer
 
 flatpak: com.github.johnfactotum.Foliate
 flatpak: me.kozec.syncthingtk
