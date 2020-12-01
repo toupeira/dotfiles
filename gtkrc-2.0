@@ -1,2 +1,4 @@
-include "/usr/share/themes/Numix/gtk-2.0/gtkrc"
+gtk-theme-name="Numix"
+gtk-icon-theme-name="Numix-Circle"
 gtk-key-theme-name = "Emacs"
+gtk-toolbar-style=GTK_TOOLBAR_BOTH_HORIZ
