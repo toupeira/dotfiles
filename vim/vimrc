@@ -418,8 +418,13 @@ endfunction " }}}
   " Ctrl-c - remove highlighted search and redraw
   nnoremap <silent> <C-c> :nohlsearch<CR>:redraw!<CR>
 
-  " <count><Enter> - switch buffers
-  nnoremap <silent><expr> <CR> v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "<CR>"
+  " ,1-9 - switch buffers
+  for i in range(1, 9)
+    execute "nnoremap <silent>  ," . i . " :b" . i . "<CR>"
+  endfor
+
+  " <count>` - switch buffers
+  nnoremap <silent><expr> ` v:count ? ":<C-u>b<C-r>=v:count<CR><CR>" : "`"
 
   " <count>~ - delete buffers
   nnoremap <silent><expr> ~ v:count ? ":<C-u>bd<C-r>=v:count<CR><CR>" : "~"
@@ -933,6 +938,7 @@ endfunction " }}}
   \ ]
 
   let g:cycle_default_groups_for_ruby = [
+    \ [[ 'build', 'create' ]],
     \ [[ 'class', 'module' ]],
     \ [[ 'else', 'elsif' ]],
     \ [[ 'get', 'post', 'put', 'patch' ]],
