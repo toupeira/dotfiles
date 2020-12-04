@@ -9,10 +9,12 @@ libssl-dev
 manpages-dev
 pkg-config
 python3-pip
+python3-pynvim
 python3-setuptools
 python3-wheel
 sqlite3
 universal-ctags
+yamllint
 zlib1g-dev
 
 gem: activesupport
@@ -20,8 +22,6 @@ gem: bundler
 gem: pry
 gem: rubocop
 
-pip: pynvim
-pip: yamllint
 pip: yq
 
 yarn: caniuse-cmd

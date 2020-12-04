@@ -50,7 +50,6 @@ pinentry-curses
 procmail
 psmisc
 pv
-rdiff-backup
 rename
 ripgrep
 rlwrap
@@ -64,6 +63,7 @@ strace
 s-tui
 syncthing
 sudo
+task-english
 tcpdump
 telnet
 tig
