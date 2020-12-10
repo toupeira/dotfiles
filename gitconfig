@@ -101,6 +101,8 @@
   s = status -sb
   st = status
   sta = -c diff.ignoreSubmodules=none st
+  modified = !git --no-pager diff HEAD --name-only
+  untracked = ls-files --others --exclude-standard
   ss = !git --no-pager show --stat
 
   l = log --pretty=format:\"%C(yellow)%h%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(auto)%d%Creset %C(black bold)%ar%Creset\"
@@ -109,7 +111,6 @@
   ld = log -p
   ldf = ld --follow
   lg = l --graph
-  news = l ORIG_HEAD..
   msg = show -s --pretty=%b
 
   di = diff
@@ -186,7 +187,6 @@
   mux = !mux
   vi = !vi
   vim = !vim
-  ed = !git edit
 
   # try to run a GUI, or tig on terminals
   g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"

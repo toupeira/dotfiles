@@ -1,15 +1,23 @@
 #!/bin/bash
 
-if [ -n "$1" ] && [ "$1" != "!" ]; then
+if [ -n "$1" ] && [ "$1" != "-" ]; then
   exec sensible-editor "$@"
 fi
 
-files=$( git -c color.ui=always status -s | sort -rk2 )
+files=$( git -c color.ui=always status -s | sort -rk2 | grep -vE "\[[0-9]+mD[^\w]+ " )
+count=$( echo "$files" | grep -c . )
 
-if [ "$1" != "!" ] && [ "$( echo "$files" | wc -l )" -gt 1 ]; then
+if [ "$count" = 0 ]; then
+  files=$( $FZF_CTRL_T_COMMAND | fzf )
+elif [ "$1" = "-" ]; then
+  shift
+  echo "$files"
+  echo -e " \e[1;32m>\e[0m \e[1;37mEditing $count modified files...\e[0m"
+elif [ "$count" -gt 1 ]; then
   files=$( echo "$files" | fzf )
 fi
 
 if [ -n "$files" ]; then
-  sensible-editor $( echo "$files" | sed -r 's/.* //' )
+  mapfile -t files < <(echo "$files" | sed -r 's/.* //')
+  sensible-editor "$@" "${files[@]}"
 fi

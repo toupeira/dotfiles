@@ -64,7 +64,7 @@ alias vimdiff='vim -d'
 alias gvimdiff='gvim -d'
 
 alias g='git'
-alias ed='git edit'
+alias e='git edit'
 
 alias fd='fdfind --hidden --ignore-file /etc/dotfiles/ignore'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
