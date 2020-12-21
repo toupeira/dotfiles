@@ -39,6 +39,7 @@ ltrace
 make
 moreutils
 mutt
+netcat
 ncurses-term
 needrestart
 neovim

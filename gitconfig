@@ -115,6 +115,7 @@
 
   di = diff
   dc = diff --cached
+  ds = diff --stat
   dh = diff HEAD
 
   c = "!f() { [ $# -gt 0 ] && exec git checkout "$@"; branch=$( git branches 2>/dev/null | fzf +s --no-multi --prompt 'Branches> ' ) && git checkout "$branch"; }; f"
