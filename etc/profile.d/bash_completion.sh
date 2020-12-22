@@ -20,9 +20,11 @@ fi
 [ -n "$BASH_INTERACTIVE" ] || return
 
 function has_completion {
-  type -p "_$1" && return
+  local name="${2:-_$1}"
+
+  type -p "$name" && return
   _completion_loader "$1"
-  type -p "_$1"
+  type -p "$name"
 }
 
 # Custom completions
@@ -35,8 +37,8 @@ has_completion systemctl && complete -F _systemctl sctl
 has_completion journalctl && complete -F _journalctl jctl
 
 # git completions
-if has_completion git; then
-  __git_complete g _git
+if has_completion git __git_main; then
+  __git_complete g __git_main
   function _git_c { _git_checkout; }
   function _git_create_branch { _git_checkout; }
 fi

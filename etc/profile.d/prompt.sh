@@ -73,8 +73,8 @@ if type __git_ps1 &>/dev/null && [ -z "$VIM" ]; then
     s/<>/ ⇵/;
     s/>/ ↑/;
     s/</ ↓/;
-    s/\\bmaster\\b /🛡️ /;
-    s/\\bmaster\\b/🛡️ /;
+    s/\\b(main|master)\\b /🛡️ /;
+    s/\\b(main|master)\\b/🛡️ /;
     s/([-[:alnum:]]{24})[-[:alnum:]]+/\\1…/;
   "
 
