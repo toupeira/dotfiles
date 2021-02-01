@@ -28,6 +28,7 @@ fonts-roboto-slab
 gcolor3
 gnome-software-plugin-flatpak
 gparted
+libgdk-pixbuf2.0-bin
 libnotify-bin
 menulibre
 mpv

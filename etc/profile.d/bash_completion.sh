@@ -45,8 +45,8 @@ fi
 
 if has dotfiles; then
   _path=$( dotfiles --path )
-  __git_complete dotfiles _git "$_path"
-  __git_complete dt _git       "$_path"
+  __git_complete dotfiles __git_main "$_path"
+  __git_complete dt __git_main       "$_path"
   unset _path
 fi
 
@@ -84,7 +84,7 @@ function _src_alias {
   if [ -n "$cword" -a "${cword:0:1}" = "@" ]; then
     _mux
   else
-    _git
+    __git_main
   fi
 }
 

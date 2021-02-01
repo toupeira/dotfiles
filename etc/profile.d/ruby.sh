@@ -9,6 +9,7 @@ if [ -d ~/.asdf ]; then
 fi
 
 # Aliases and functions
+alias be='bundle exec'
 alias rspec='bundle exec rspec -f doc'
 
 function gem {
