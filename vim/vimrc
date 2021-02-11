@@ -108,6 +108,7 @@
   set ignorecase
   set smartcase
   set inccommand=nosplit
+  set iskeyword+=-
 
   if executable('rg')
     let &grepprg = "rg --vimgrep"
@@ -388,6 +389,9 @@ endfunction " }}}
   exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
   exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
 
+  " Ctrl-g - copy current filename to clipboard
+  nnoremap <silent> <C-g> :let @+ = expand('%')<CR><C-g>
+
   " ,q and ,e - toggle quickfix window and location list
   nnoremap <silent> ,q :call <SID>ToggleList('c')<CR>
   nnoremap <silent> ,e :call <SID>ToggleList('l')<CR>
@@ -664,6 +668,12 @@ endfunction " }}}
       \ 'ruby': [ 'ruby', 'rubocop' ],
       \ 'javascript': [ 'eslint' ],
       \ 'typescript': [ 'tslint' ]
+    \ }
+
+    let g:ale_fix_on_save = 1
+    let g:ale_fixers = {
+      \ 'javascript': ['prettier'],
+      \ 'vue': ['prettier'],
     \ }
 
     let g:ale_ruby_rubocop_executable = 'bundle'
