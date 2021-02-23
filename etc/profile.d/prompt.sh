@@ -75,7 +75,7 @@ if type __git_ps1 &>/dev/null && [ -z "$VIM" ]; then
     s/</ ↓/;
     s/\\b(main|master)\\b /🛡️ /;
     s/\\b(main|master)\\b/🛡️ /;
-    s/([-[:alnum:]]{24})[-[:alnum:]]+/\\1…/;
+    s/([-_[:alnum:]]{24})[-_[:alnum:]]+/\\1…/;
   "
 
   GIT_PS1='$(__git_ps1 "\[\e[0;32m\]❰\[\e[1;32m\]%s\[\e[0;32m\]❱\[\e[0m\] " | sed -r "$GIT_PS1_SUBSTITUTES")'
