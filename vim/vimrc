@@ -676,7 +676,6 @@ endfunction " }}}
       \ 'vue': ['prettier'],
     \ }
 
-    let g:ale_ruby_rubocop_executable = 'bundle'
     let g:ale_sh_shellcheck_exclusions = 'SC1090,SC2113,SC2155'
   endif
   " }}}

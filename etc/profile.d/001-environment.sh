@@ -15,10 +15,8 @@ export PAGER="less"
 export LESS="-iRMK"
 export SYSTEMD_LESS="iRMKFX"
 
-export IRB_HISTORY_SIZE=3000
 export PASSWORD_STORE_ENABLE_EXTENSIONS="true"
 export PGDATABASE="postgres"
-export RI="--format ansi --no-pager"
 export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep.conf
 
 export MOZ_ENABLE_WAYLAND=1
