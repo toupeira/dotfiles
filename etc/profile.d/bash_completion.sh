@@ -55,7 +55,7 @@ function _packages_available {
   local cword="${COMP_WORDS[COMP_CWORD]}"
 
   mapfile -t COMPREPLY < <(
-    compgen -W "$( apt-cache pkgnames "$cword" 2>/dev/null )"
+    compgen -W "$( apt-cache --no-generate pkgnames -- "$cword" 2>/dev/null )"
   )
 }
 complete -F _packages_available pkget pkgshow
@@ -64,7 +64,7 @@ function _packages_installed {
   local cword="${COMP_WORDS[COMP_CWORD]}"
 
   mapfile -t COMPREPLY < <(
-    compgen -W "$( dglob "$cword" )"
+    compgen -W "$( dglob -- "$cword" 2>/dev/null )"
   )
 }
 complete -F _packages_installed pkglist pkgpurge pkgremove debbugs debpackages

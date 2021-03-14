@@ -1,4 +1,5 @@
 #!/bin/bash
+# vim: foldmethod=marker
 
 ### usage {{{
 
@@ -21,15 +22,15 @@ function usage {
   echo "  pull, up                  Pull remote changes and checkout submodules"
   echo "  push                      Push local changes"
   echo
-  echo "  list-submodules, list     List submodules"
-  echo "  upgrade-submodule [NAME]  Upgrade submodule"
-  echo "  upgrade-submodules, sup   Upgrade all submodules"
+  echo "  list [NAME]               List submodules"
+  echo "  update [NAME]             Update submodule"
+  echo "  update-all, sup [NAME]    Update all submodules"
   echo
   echo "  build PATH COMMAND..      Run build command in path"
   echo "  build-all                 Run default builds"
   echo
   echo "  package, pkg [LIST:TYPE]  Install packages from list"
-  echo "  package upgrade [TYPE]    Upgrade packages"
+  echo "  package update [TYPE]     Update packages"
   echo
   echo "  dconf load                Load custom dconf settings"
   echo "  dconf dump                Dump custom dconf settings"
@@ -470,11 +471,11 @@ function run {
       ;;
     # }}}
 
-    list-submodules|list) # {{{
-      awk '/path = / { print $3 }' "$DOTFILES/.gitmodules" | sort
+    list|list-submodules) # {{{
+      awk "/path = .*$1/ { print \$3 }" "$DOTFILES/.gitmodules" | sort
       ;;
     # }}}
-    upgrade-submodule) # {{{
+    update|update-submodule) # {{{
       unset batch
       [ "$1" = '--batch' ] && local batch=1 && shift
 
@@ -482,7 +483,7 @@ function run {
       shift
 
       if [ ! -d "$DOTFILES/$submodule" ]; then
-        submodule=$( run list | grep -m1 "$submodule" )
+        submodule=$( run list "$submodule" | head -1 )
         if [ -z "$submodule" ]; then
           abort "Submodule not found: {{$submodule}}"
         fi
@@ -519,10 +520,11 @@ function run {
       fi
       ;;
     # }}}
-    upgrade-submodules|sup) # {{{
-      local submodules=$( run list )
+    update-all|sup) # {{{
       if [ -n "$1" ]; then
-        submodules=$( echo "$submodules" | grep -E "${1%/}" )
+        local submodules=$( run list "$1" )
+      else
+        local submodules=$( run list | grep -vx asdf )
       fi
 
       output
@@ -538,7 +540,7 @@ function run {
         done
 
         (
-          run upgrade-submodule --batch "$submodule" > "$tmpdir/${submodule//\//-}" 2>&1
+          run update-submodule --batch "$submodule" > "$tmpdir/${submodule//\//-}" 2>&1
           output '\e[0;36m=' -n
         ) &
 
@@ -553,7 +555,7 @@ function run {
         system cat "$tmpdir"/*
         run build-all
       else
-        warning "No upgrades found."
+        warning "No updates found."
       fi
 
       system rm -rf "$tmpdir"
@@ -591,9 +593,9 @@ function run {
       local name=${1:-default}
       local filter_apt='^(apt:)?[^:#]+$'
 
-      if [ "$name" = "upgrade" ] || [ "$name" = "up" ]; then
+      if [ "$name" = "update" ] || [ "$name" = "up" ]; then
         shift
-        run package-upgrade "$@"
+        run update-packages "$@"
         return
       elif [[ "$name" =~ : ]]; then
         local filter="^${name##*:}:"
@@ -705,16 +707,16 @@ function run {
       output
       ;;
     # }}}
-    package-upgrade) # {{{
+    update-packages) # {{{
       local filter="$1"
 
-      function upgrade {
+      function update {
         local type="$1"
         shift
 
         if [ -n "$filter" ] && [ "$filter" != "$type" ]; then
           return
-        elif [ "$filter" = "$type" ] || ask-yes "Upgrade {{$type}} packages?"; then
+        elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
           status "Running {{$*}}"
           if [ "$1" = "xdg-open" ]; then
             shift
@@ -726,14 +728,15 @@ function run {
         fi
       }
 
-      upgrade apt        'sudo aptitude update && sudo aptitude upgrade'
-      upgrade gem        gem update
-      upgrade yarn       yarn global upgrade
-      upgrade flatpak    'flatpak update && flatpak uninstall --unused'
-      upgrade firmware   fwupdmgr update
+      update apt        'sudo aptitude update && sudo aptitude upgrade'
+      update asdf       'asdf update && asdf plugin update --all && asdf install'
+      update gem        gem update
+      update yarn       yarn global upgrade
+      update flatpak    'flatpak update && flatpak uninstall --unused'
+      update firmware   fwupdmgr update
 
       if which gnome-shell >/dev/null; then
-        upgrade gnome-shell xdg-open https://extensions.gnome.org/local
+        update gnome-shell xdg-open https://extensions.gnome.org/local
       fi
       ;;
     # }}}
