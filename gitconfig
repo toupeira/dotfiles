@@ -126,11 +126,12 @@
   bcontains = branch -a --contains
 
   co = checkout
-  cm = checkout master
+  cm = !git checkout $( git default-branch )
   cd = checkout development
   switch-branch = "!f() { [ $# -gt 0 ] && exec git switch "$@"; branch=$( git branches 2>/dev/null | fzf +s --no-multi --prompt 'Branches> ' ) && git switch "$branch"; }; f"
   sb = switch-branch
-  branches = "!git -c color.ui=always branch -a | grep -Ev '(/HEAD|/master)' | sed -r -e 's,^[\\* ]*,,' -e 's,remotes/[^/]+/,,'"
+  branches = "!git -c color.ui=always branch -a | grep -Ev '(/HEAD|/(main|master))' | sed -r -e 's,^[\\* ]*,,' -e 's,remotes/[^/]+/,,'"
+  default-branch = !git branch -la origin/main 2>/dev/null | grep -q . && echo 'main' || echo 'master'
 
   ap = add -p
   all = add -A
@@ -152,12 +153,12 @@
   ff = merge --ff-only HEAD@{u}
   re = rebase
   ri = rebase -i
-  rem = rebase master
-  rim = rebase -i master
+  rem = !git rebase $( git default-branch )
+  rim = !git rebase -i $( git default-branch )
   rcontinue = rebase --continue
   rabort = rebase --abort
   solve = mergetool
-  pom = up origin master
+  pom = !git pull origin $( git default-branch )
   pick = cherry-pick
 
   pu = push -v

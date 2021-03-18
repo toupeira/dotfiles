@@ -105,16 +105,14 @@ function mvln {
 }
 
 # Wrapper to edit files matching a pattern
-function _edit {
-  local files=$( "$@" )
+function rg.edit {
+  local files=$( rg --vimgrep -- "$@" | cut -d: -f1-3 )
   if [ -n "$files" ]; then
     sensible-vim $files
   else
     echo "No files found."
   fi
 }
-
-alias rg.edit='_edit rg -l'
 
 # rg wraper to view colored and grouped results in less
 function rg.less {
