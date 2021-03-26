@@ -56,6 +56,9 @@
 [fetch]
   prune = true
 
+[init]
+  defaultBranch = main
+
 [log]
   abbrevCommit = true
   decorate = true

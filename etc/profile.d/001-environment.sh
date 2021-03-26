@@ -19,7 +19,6 @@ export PASSWORD_STORE_ENABLE_EXTENSIONS="true"
 export PGDATABASE="postgres"
 export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep.conf
 
-export MOZ_ENABLE_WAYLAND=1
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export QT_QPA_PLATFORMTHEME="gtk2"
 
