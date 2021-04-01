@@ -2,3 +2,44 @@
 .findbar-container > * {
   display: -moz-box !important;
 }
+
+/* Fix favicons for container bookmarks */
+.bookmark-item[image*="mail.google.com"] image {
+  background-image: url(page-icon:https://mail.google.com) !important;
+  background-size: contain !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 0 16px 16px !important;
+}
+
+.bookmark-item[image*="calendar.google.com"] image {
+  background-image: url(page-icon:https://calendar.google.com) !important;
+  background-size: contain !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 0 16px 16px !important;
+}
+
+.bookmark-item[image*="contacts.google.com"] image {
+  background-image: url(page-icon:https://contacts.google.com) !important;
+  background-size: contain !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 0 16px 16px !important;
+}
+
+.bookmark-item[image*="drive.google.com"] image {
+  background-image: url(page-icon:https://drive.google.com) !important;
+  background-size: contain !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 0 16px 16px !important;
+}
+
+.bookmark-item[image*="docs.google.com"] image {
+  background-image: url(page-icon:https://docs.google.com) !important;
+  background-size: contain !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 0 16px 16px !important;
+}
