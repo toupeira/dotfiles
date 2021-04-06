@@ -3,6 +3,15 @@
   display: -moz-box !important;
 }
 
+/* Remove context menu items */
+menu[label="Firefox Multi-Account Containers"] {
+  display: none !important;
+}
+
+menuitem[label="Show 1Password"] {
+  display: none !important;
+}
+
 /* Fix favicons for container bookmarks */
 .bookmark-item[image*="mail.google.com"] image {
   background-image: url(page-icon:https://mail.google.com) !important;
