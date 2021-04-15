@@ -501,7 +501,7 @@ endfunction " }}}
   noremap <silent> ,gl :Gclog %<CR>
   noremap <silent> ,gL :Gclog<CR>
   noremap <silent> ,gd :silent Git -p log -p %<CR>
-  noremap <silent> ,gB :Gblame<CR>
+  noremap <silent> ,gB :Git blame<CR>
   noremap ,gu :.Gbrowse!<CR>
   noremap ,gU :.Gbrowse<CR>
 
