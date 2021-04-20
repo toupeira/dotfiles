@@ -94,6 +94,9 @@
 [submodule]
   fetchJobs = 0
 
+[tag]
+  gpgSign = true
+
 [filter "lfs"]
   clean = git-lfs clean -- %f
   smudge = git-lfs smudge -- %f
