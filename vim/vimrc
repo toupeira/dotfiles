@@ -1092,8 +1092,4 @@ EOF
   endif
   " }}}
 
-  " godot {{{
-  let g:godot_executable = 'godot3'
-  " }}}
-
 " }}}
