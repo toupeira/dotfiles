@@ -37,6 +37,9 @@
   commitBeforeMerge = false
   resolveConflict = false
 
+[checkout]
+  defaultRemote = origin
+
 [commit]
   gpgSign = true
 
