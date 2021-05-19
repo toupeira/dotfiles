@@ -239,7 +239,7 @@ function systemctl {
     shift
   done
 
-  if ! [[ "$1" =~ ^(|status|(get|is|list|show).*)$ ]]; then
+  if ! [[ "$1" =~ ^(|status|(get|is|list|show).*)$ ]] && ! [[ "${args[*]}" =~ --user ]]; then
     command="sudo systemctl"
   fi
 
