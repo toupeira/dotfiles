@@ -51,6 +51,7 @@
 
 # locales
 locale/**/*.po
+**/locale/*/app.js
 
 # home
 src/**/public/system
