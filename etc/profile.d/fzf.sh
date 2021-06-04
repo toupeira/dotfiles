@@ -39,4 +39,4 @@ _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
 . /etc/dotfiles/vim/bundle/fzf/shell/completion.bash
 . /etc/dotfiles/vim/bundle/fzf/shell/key-bindings.bash
 
-bind '"\C-b": " \C-e\C-ugit switch-branch\C-m"'
+bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
