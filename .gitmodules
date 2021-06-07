@@ -82,9 +82,6 @@
 [submodule "vim/bundle/fetch"]
 	path = vim/bundle/fetch
 	url = https://github.com/kopischke/vim-fetch.git
-[submodule "vim/bundle/bundler"]
-	path = vim/bundle/bundler
-	url = https://github.com/tpope/vim-bundler.git
 [submodule "vim/bundle/css3-syntax"]
 	path = vim/bundle/css3-syntax
 	url = https://github.com/hail2u/vim-css3-syntax.git
