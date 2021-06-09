@@ -1,4 +1,5 @@
 AllCops:
+  NewCops: enable
   Exclude:
     - db/schema.rb
 
@@ -54,6 +55,9 @@ Security/Open:
   Enabled: false
 
 ### STYLE
+
+Style/Alias:
+  EnforcedStyle: prefer_alias_method
 
 Style/Documentation:
   Enabled: false
