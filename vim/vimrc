@@ -502,8 +502,8 @@ endfunction " }}}
   noremap <silent> ,gL :Gclog<CR>
   noremap <silent> ,gd :silent Git -p log -p %<CR>
   noremap <silent> ,gB :Git blame<CR>
-  noremap ,gu :.Gbrowse!<CR>
-  noremap ,gU :.Gbrowse<CR>
+  noremap ,gu :.GBrowse!<CR>
+  noremap ,gU :.GBrowse<CR>
 
   autocmd vimrc FileType fugitive if b:fugitive_type == 'index' | setlocal nobuflisted | endif
   autocmd vimrc FileType fugitive nnoremap <buffer><silent> q :bd<CR>
