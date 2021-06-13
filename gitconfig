@@ -14,6 +14,13 @@
 [includeIf "gitdir:~/src/gitlab/"]
   path = .gitconfig.gitlab
 
+[pager]
+  diff = delta
+  show = delta
+  log = delta
+  reflog = delta
+  branch = less -FX
+
 [color]
   ui = auto
 
@@ -25,11 +32,21 @@
   new = green bold
   whitespace = red reverse
 
-[color "diff-highlight"]
-  oldNormal = red bold
-  oldHighlight = red bold 52
-  newNormal = green bold
-  newHighlight = green bold 22
+[delta]
+  navigate = true
+  tabs = 2
+
+  plus-emph-style = bold syntax auto
+  minus-style = normal auto
+  minus-emph-style = bold normal auto
+
+  commit-decoration-style = yellow ul
+  file-style = bold blue
+  file-decoration-style = blue ul
+  hunk-header-style = magenta line-number
+  hunk-header-decoration-style = magenta
+  hunk-header-file-style = bold magenta
+  hunk-header-line-number-style = bold magenta
 
 [advice]
   pushUpdateRejected = false
@@ -53,9 +70,6 @@
 [difftool]
   prompt = false
 
-[diff-so-fancy]
-  markEmptyLines = false
-
 [fetch]
   prune = true
 
@@ -76,12 +90,6 @@
 
 [mergetool.gvimdiff]
   trustExitCode = false
-
-[pager]
-  log = diff-so-fancy | less
-  diff = diff-so-fancy | less
-  show = diff-so-fancy | less
-  branch = less -FX
 
 [pull]
   rebase = true
@@ -105,6 +113,9 @@
   smudge = git-lfs smudge -- %f
   process = git-lfs filter-process
   required = true
+
+[git-extras]
+  default-branch = main
 
 [alias]
   s = status -sb
