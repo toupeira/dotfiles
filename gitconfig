@@ -34,6 +34,7 @@
 
 [delta]
   navigate = true
+  paging = always
   tabs = 2
 
   plus-emph-style = bold syntax auto
