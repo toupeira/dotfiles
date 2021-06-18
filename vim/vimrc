@@ -545,24 +545,26 @@ endfunction " }}}
   " }}}
 
   " vista {{{
-  nnoremap <silent> ,t :Vista finder<CR>
-  nnoremap <silent> ,T :Vista!!<CR>
+  if index(g:pathogen_disabled, 'vista') == -1
+    nnoremap <silent> ,t :Vista finder<CR>
+    nnoremap <silent> ,T :Vista!!<CR>
 
-  let g:vista_sidebar_width = 40
-  let g:vista_blink = [1, 100]
-  let g:vista_icon_indent = ["● ", "▶ "]
-  let g:vista_fzf_preview = ['right:hidden:70%']
+    let g:vista_sidebar_width = 40
+    let g:vista_blink = [1, 100]
+    let g:vista_icon_indent = ["● ", "▶ "]
+    let g:vista_fzf_preview = ['right:hidden:70%']
 
-  let g:vista_default_executive = 'ctags'
-  let g:vista_finder_alternative_executives = [ 'ctags' ]
+    let g:vista_default_executive = 'ctags'
+    let g:vista_finder_alternative_executives = [ 'ctags' ]
 
-  " let g:vista_executive_for = {
-  "   \ 'sh': 'ale',
-  "   \ 'javascript': 'ale',
-  "   \ 'typescript': 'ale',
-  "   \ 'ruby': 'ale'
-  " \ }
-  " }}}
+    " let g:vista_executive_for = {
+    "   \ 'sh': 'ale',
+    "   \ 'javascript': 'ale',
+    "   \ 'typescript': 'ale',
+    "   \ 'ruby': 'ale'
+    " \ }
+    " }}}
+  endif
 
   " pasta {{{
   let g:pasta_disabled_filetypes = ['qf']
@@ -671,6 +673,7 @@ endfunction " }}}
     \ }
 
     let g:ale_fix_on_save = 1
+    let g:ale_fix_on_save_ignore = ['rubocop']
     let g:ale_fixers = {
       \ 'javascript': ['prettier'],
       \ 'ruby': ['rubocop'],
@@ -714,7 +717,9 @@ endfunction " }}}
     let g:airline_detect_iminsert = 0
     let g:airline_detect_spell = 0
 
-    let g:airline_extensions = [ 'ale', 'branch', 'quickfix', 'tabline', 'vista' ]
+    let g:airline_extensions = filter([
+      \ 'ale', 'branch', 'quickfix', 'tabline', 'vista'
+    \ ], {_, extension -> index(g:pathogen_disabled, extension) < 0})
 
     let g:airline#extensions#ale#show_line_numbers = 0
     let g:airline#extensions#ale#error_symbol = ''

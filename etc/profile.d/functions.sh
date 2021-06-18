@@ -106,9 +106,9 @@ function mvln {
 
 # Wrapper to edit files matching a pattern
 function rg.edit {
-  local files=$( rg --vimgrep -- "$@" | cut -d: -f1-3 )
+  local files=$( rg -l -- "$@" )
   if [ -n "$files" ]; then
-    sensible-vim $files
+    sensible-vim "+/$1" $files
   else
     echo "No files found."
   fi

@@ -57,6 +57,7 @@ alias pkgshow='command aptitude show'
 alias pkginstall='sudo dpkg -i'
 
 # development
+alias vim='sensible-vim'
 alias vi='vim'
 alias gvi='gvim'
 alias vip='VIMCMD=vip sensible-vim'
