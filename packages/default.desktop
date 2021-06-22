@@ -48,6 +48,7 @@ tilix
 xdg-user-dirs-gtk
 
 flatpak: com.github.johnfactotum.Foliate
+flatpak: com.github.tchx84.Flatseal
 flatpak: org.gtk.Gtk3theme.Numix
 
 # Xorg
