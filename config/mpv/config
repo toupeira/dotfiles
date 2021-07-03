@@ -1,0 +1,20 @@
+[default]
+# video
+hwdec=auto
+geometry=50%:50%
+
+# audio
+volume=100
+ao=pulse,alsa
+audio-device=alsa/hdmi
+audio-channels=5.1
+audio-spdif=ac3,eac3,dts,dts-hd
+
+# subtitles
+sub=auto
+sub-auto=fuzzy
+slang=en,eng,de,ger
+
+# osd
+osd-scale=0.7
+osd-bar-align-y=0.7
