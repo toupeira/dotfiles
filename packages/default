@@ -15,6 +15,7 @@ debtags
 dirmngr
 dnsutils
 encfs
+ethtool
 fd-find
 file
 fortune-anarchism
@@ -39,10 +40,10 @@ ltrace
 make
 moreutils
 mutt
-netcat
 ncurses-term
 needrestart
 neovim
+netcat
 net-tools
 p7zip-full
 parted
@@ -62,8 +63,8 @@ software-properties-common
 sqlite3
 strace
 s-tui
-syncthing
 sudo
+syncthing
 task-english
 tcpdump
 telnet
