@@ -187,6 +187,7 @@
   autocmd vimrc FileType help nnoremap <buffer><silent> q :bd<CR>
   autocmd vimrc FileType org setlocal foldmethod=expr
   autocmd vimrc FileType qf setlocal nobuflisted
+  autocmd vimrc FileType ruby setlocal iskeyword+=?,!
   autocmd vimrc FileType vim setlocal foldmethod=marker foldlevel=0
 
   " resize quickfix windows to their content, or 10 lines maximum
@@ -1035,6 +1036,10 @@ endfunction " }}}
     \ 'haml': 'ruby',
     \ 'rspec': 'ruby',
     \ 'rspec.ruby': 'ruby',
+  \ }
+
+  let g:definitive_definitions = {
+    \ 'ruby': '\<\(\(def\|class\|module\|alias\)\s\+\(self\.\)\=%1\>\|%1\s*=\|\<\(alias_method\|attr_reader\|attr_accessor\|attribute\|serialize\|scope\|has_one\|has_many\|belongs_to\) :%1\>\)',
   \ }
   " }}}
 

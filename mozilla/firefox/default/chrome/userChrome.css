@@ -4,11 +4,19 @@
 }
 
 /* Remove context menu items */
-menu[label="Firefox Multi-Account Containers"] {
+menuitem[label="Email Image…"] {
+  display: none !important;
+}
+
+menuitem[label="Set Image as Desktop Background…"] {
   display: none !important;
 }
 
 menuitem[label="Show 1Password"] {
+  display: none !important;
+}
+
+menu[label="Firefox Multi-Account Containers"] {
   display: none !important;
 }
 
