@@ -391,7 +391,7 @@ endfunction " }}}
   exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
 
   " Ctrl-g - copy current filename to clipboard
-  nnoremap <silent> <C-g> :let @+ = expand('%')<CR><C-g>
+  nnoremap <silent> <C-g> :let @+ = expand('%') . ':' . line('.')<CR><C-g>
 
   " ,q and ,e - toggle quickfix window and location list
   nnoremap <silent> ,q :call <SID>ToggleList('c')<CR>

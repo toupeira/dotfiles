@@ -25,8 +25,16 @@ argument="$2"
 case "$command" in
   play-file) command="play-file";;
   queue) command="enqueue";;
-  rate) command="set-rating";;
-  playlist) command="dump-playlist";;
+  rate)
+    command="rating"
+    stars="Rating set to "
+
+    for _ in $( seq 0.2 0.2 "$argument" ); do
+      stars="$stars⭐"
+    done
+
+    notify-send -i quodlibet -h int:transient:1 "$( quodlibet --print-playing )" "$stars"
+    ;;
   query-saved)
     position=${argument:-1}
     argument=$( head -$((position * 2 - 1)) $QUODLIBET/lists/queries.saved 2>/dev/null | tail -1 )
@@ -91,17 +99,10 @@ case "$command" in
   current)
     cat $CURRENT
     ;;
-  status|dump-playlist|dump-queue)
-    tmp=$( mktemp )
-    _ql "$command $tmp"
-    sleep 0.05
-    cat $tmp
-    rm -f $tmp
-    ;;
   next|previous|play|pause|play-pause|hide-window|show-window|toggle-window|focus)
     _ql "$command"
     ;;
-  seek|shuffle|repeat|volume|query|play-file|set-rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue|query|search)
+  seek|shuffle|repeat|volume|query|play-file|rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue|query|search)
     case "$command" in
       shuffle|repeat) argument=${argument:-toggle};;
     esac
