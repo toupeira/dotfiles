@@ -12,6 +12,10 @@ menuitem[label="Set Image as Desktop Background…"] {
   display: none !important;
 }
 
+menuitem[label="Print Selection"] {
+  display: none !important;
+}
+
 menuitem[label="Show 1Password"] {
   display: none !important;
 }

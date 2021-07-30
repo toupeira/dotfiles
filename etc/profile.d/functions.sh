@@ -104,7 +104,7 @@ function mvln {
   fi
 }
 
-# Wrapper to edit files matching a pattern
+# rg wrapper to edit files matching a pattern
 function rg.edit {
   local files=$( rg -l -- "$@" )
   if [ -n "$files" ]; then
@@ -114,9 +114,22 @@ function rg.edit {
   fi
 }
 
-# rg wraper to view colored and grouped results in less
+# rg wrapper to view colored and grouped results in less
 function rg.less {
   rg --pretty "$@" | less
+}
+
+# rg wrapper to search application directories
+function rg.app {
+  local dirs=()
+  for dir in app lib ee/app ee/lib; do
+    if [ -d "$dir" ]; then
+      dirs=( "${dirs[@]}" "$dir" )
+    fi
+
+  done
+
+  rg "$@" "${dirs[@]}"
 }
 
 # GVim wrapper for SSH connections to pass a file to a local instance

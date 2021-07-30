@@ -165,6 +165,7 @@
   reword = amend --only
   extend = amend --no-edit
   fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "${sha%% *}"
+  wip = "!git commit -m \"WIP: Changes in $( echo $( git diff --cached --name-only ) )\""
   initial = commit --allow-empty -m 'Initial commit'
 
   r = remote -v
