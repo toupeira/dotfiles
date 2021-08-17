@@ -99,7 +99,7 @@ case "$command" in
   current)
     cat $CURRENT
     ;;
-  next|previous|play|pause|play-pause|hide-window|show-window|toggle-window|focus)
+  next|previous|play|stop|pause|play-pause|hide-window|show-window|toggle-window|focus)
     _ql "$command"
     ;;
   seek|shuffle|repeat|volume|query|play-file|rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue|query|search)

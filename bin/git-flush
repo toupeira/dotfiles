@@ -1,6 +1,9 @@
 #!/bin/bash
 
-merged_branches=$( git branch --format '%(refname:short)' --merged | grep -Fvx "$( git default-branch )" )
+merged_branches=$(
+  git branch --format '%(refname:short)' --merged \
+    | grep -Evx "$( git default-branch )|$( git rev-parse --abbrev-ref HEAD)|develop|development"
+)
 
 function ask_yes {
   echo -ne "$1 [Y/n]\e[0m "
