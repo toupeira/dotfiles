@@ -6,10 +6,10 @@ export LANG LC_MESSAGES LC_NUMERIC LC_CTYPE
 export PATH="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
 [ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
 [ -d ~/.local/bin ] && export PATH="$PATH:$HOME/.local/bin"
-[ -x /usr/libexec/path_helper ] && eval `/usr/libexec/path_helper -s`
+[ -x /usr/libexec/path_helper ] && eval $( /usr/libexec/path_helper -s )
 
 export EDITOR="vim"
-which sensible-vim >/dev/null && export EDITOR="sensible-vim"
+command -v sensible-vim >/dev/null && export EDITOR="sensible-vim"
 
 export PAGER="less"
 export LESS="-iRMK"
@@ -34,4 +34,4 @@ export LESS_TERMCAP_ue=$'\e[0m'
 
 [ -n "$SSH_CONNECTION" ] && export GPG_TTY=$( tty )
 [ -x /usr/bin/phantomjs ] && export PHANTOMJS_BIN="/usr/bin/phantomjs"
-which chromium &>/dev/null && export CHROME_BIN="chromium"
+command -v chromium &>/dev/null && export CHROME_BIN="chromium"

@@ -735,7 +735,7 @@ function run {
       update flatpak    'flatpak update && flatpak uninstall --unused'
       update firmware   fwupdmgr update
 
-      if which gnome-shell >/dev/null; then
+      if command -v gnome-shell >/dev/null; then
         update gnome-shell xdg-open https://extensions.gnome.org/local
       fi
       ;;

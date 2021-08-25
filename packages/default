@@ -43,7 +43,7 @@ mutt
 ncurses-term
 needrestart
 neovim
-netcat
+netcat-openbsd
 net-tools
 p7zip-full
 parted

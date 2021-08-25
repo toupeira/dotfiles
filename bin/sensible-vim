@@ -8,7 +8,7 @@ elif [ -n "$VIMCMD" ]; then
   vim="$VIMCMD"
 elif [ -n "$TERM" -a "$TERM" != 'dumb' ] || [ -n "$SSH_CONNECTION" ]; then
   vim="vim"
-elif which gvim &>/dev/null; then
+elif command -v gvim &>/dev/null; then
   vim="gvim"
 else
   vim="vim"

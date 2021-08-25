@@ -4,7 +4,7 @@
 if [ "$1" = "-" ]; then
   shift
   for app in $@; do
-    if ! which "$app" &>/dev/null; then
+    if ! command -v "$app" &>/dev/null; then
       echo " [1;34m$app[0m not found"
       continue
     fi
@@ -12,7 +12,7 @@ if [ "$1" = "-" ]; then
     $app &>/dev/null &
   done
 else
-  which "$1" &>/dev/null || exec echo " [1;34m$1[0m not found"
+  command -v "$1" &>/dev/null || exec echo " [1;34m$1[0m not found"
   echo " started [1;34m$1[0m"
   exec "$@" &>/dev/null &
 fi
