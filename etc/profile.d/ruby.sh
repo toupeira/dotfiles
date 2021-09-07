@@ -14,7 +14,13 @@ fi
 function gem {
   if [ "$1" = "cd" ]; then
     local path
-    if path=$( gem open -e echo "$2" ); then
+    if [ -n "$2" ]; then
+      path=$( gem open -e echo "$2" )
+    else
+      path=$( gem env path | cut -d: -f1 )/gems
+    fi
+
+    if [ -n "$path" ]; then
       cd "$path" || return $?
       return 0
     else
