@@ -28,8 +28,8 @@ function _prompt_path {
     path="${path#${root%/*}/}"
     path=${path/#asdf\/installs\/ruby\/*\/lib\/ruby\/gems\//♦️  }
     path=${path/#asdf\/installs\/ruby\//♦️  }
-    path=${path/#dotfiles\//⚙️  }
-    path=${path/#dotfiles/⚙️ }
+    path=${path/#dotfiles\//📦 }
+    path=${path/#dotfiles/📦}
   fi
 
   path=${path/#$HOME/\~}
