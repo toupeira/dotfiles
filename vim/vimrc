@@ -304,6 +304,9 @@ endfunction " }}}
   " break undo chain on new lines
   inoremap <CR> <C-g>u<CR>
 
+  " don't map Y to y$
+  nunmap Y
+
   " duplicate the selection
   vnoremap D y`]pgv
 
