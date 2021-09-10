@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # Automatically use Gemfile when present in tree

@@ -22,8 +22,6 @@ gem: bundler
 gem: pry
 gem: rubocop
 
-pip: yq
-
 yarn: caniuse-cmd
 yarn: eslint
 yarn: jsonlint

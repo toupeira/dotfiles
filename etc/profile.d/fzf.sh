@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Check for interactive bash and fzf
 [ -n "$BASH_INTERACTIVE" ] && has fzf || return
 
 export FZF_TMUX=0

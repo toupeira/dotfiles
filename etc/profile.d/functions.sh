@@ -1,6 +1,5 @@
 #!/bin/bash
 
-# Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # Show the login message

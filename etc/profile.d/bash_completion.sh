@@ -16,7 +16,6 @@ if [ "x${BASH_VERSION-}" != x -a "x${PS1-}" != x -a "x${BASH_COMPLETION_VERSINFO
     fi
 fi
 
-# Check for interactive bash
 [ -n "$BASH_INTERACTIVE" ] || return
 
 function has_completion {
