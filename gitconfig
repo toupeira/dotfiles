@@ -18,7 +18,6 @@
   diff = delta
   show = delta
   log = delta
-  reflog = delta
   branch = less -FX
 
 [color]

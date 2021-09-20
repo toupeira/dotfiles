@@ -944,6 +944,7 @@ endfunction " }}}
     \ [[ 'old', 'new' ]],
     \ [[ 'only', 'except' ]],
     \ [[ 'on', 'off' ]],
+    \ [[ 'public', 'private' ]],
     \ [[ 'read', 'write' ]],
     \ [[ 'show', 'hide' ]],
     \ [[ 'staging', 'production' ]],
