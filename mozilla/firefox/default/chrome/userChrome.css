@@ -24,6 +24,10 @@ menu[label="Firefox Multi-Account Containers"] {
   display: none !important;
 }
 
+menu[label="1Password – Password Manager"] {
+  display: none !important;
+}
+
 /* Fix favicons for container bookmarks */
 .bookmark-item[image*="mail.google.com"] image {
   background-image: url(page-icon:https://mail.google.com) !important;
