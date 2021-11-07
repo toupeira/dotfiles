@@ -6,7 +6,6 @@ geometry=50%:50%
 # audio
 volume=100
 ao=pulse,alsa
-audio-device=alsa/hdmi
 audio-channels=5.1
 audio-spdif=ac3,eac3,dts,dts-hd
 

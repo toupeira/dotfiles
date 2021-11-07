@@ -1,3 +1,0 @@
-#!/bin/sh
-xwit -raise -focus -property 'WM_CLASS' -names 'Navigator' && exit
-firefox "$@" &>/dev/null &
