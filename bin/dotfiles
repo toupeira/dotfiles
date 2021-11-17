@@ -205,6 +205,8 @@ function dconf-filter {
       keys='natural-scroll two-finger-scrolling-enabled';;
     org.gnome.nautilus)
       keys='default-folder-viewer default-zoom-level initial-size';;
+    org.gnome.shell.extensions.dash-to-panel)
+      keys='available-monitors';;
     org.gnome.software)
       keys='check-timestamp first-run online-updates-timestamp';;
   esac
