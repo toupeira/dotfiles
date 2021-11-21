@@ -1,32 +1,20 @@
 #!/bin/bash
 
-export DISPLAY=${DISPLAY:-:0}
-
-QUODLIBET=~/.config/quodlibet
-PIPE=$QUODLIBET/control
-CURRENT=$QUODLIBET/current
-
-function _ql {
-  [ -t 0 ] && [ -t 1 ] && echo "Sending: $1"
-  echo "$1" > $PIPE
-}
-
-function is_running {
-  [ -p $PIPE ] && pgrep -x quodlibet &>/dev/null
-}
-
-function _song {
-  awk -F= "/^$1=(.*)/ { print \$2 }" $CURRENT
-}
+CONTROL=~/.config/quodlibet/control
 
 command="$1"
 argument="$2"
 
 case "$command" in
-  play-file) command="play-file";;
-  queue) command="enqueue";;
-  rate)
-    command="rating"
+  start-playing)
+    quodlibet --run --play --start-hidden &>/dev/null &
+    exit
+    ;;
+  start-stopped)
+    quodlibet --run --stop --start-hidden &>/dev/null &
+    exit
+    ;;
+  rating)
     stars="Rating set to "
 
     for _ in $( seq 0.2 0.2 "$argument" ); do
@@ -35,98 +23,17 @@ case "$command" in
 
     notify-send -i quodlibet -h int:transient:1 "$( quodlibet --print-playing )" "$stars"
     ;;
-  query-saved)
-    position=${argument:-1}
-    argument=$( head -$((position * 2 - 1)) $QUODLIBET/lists/queries.saved 2>/dev/null | tail -1 )
-    if [ -n "$argument" ]; then
-      command="query"
-    else
-      echo "E: Can't find saved query at position $position"
-      exit 1
-    fi
-    ;;
-  fastforward)
-    command="seek"
-    argument="+0:5"
-    ;;
-  rewind)
-    command="seek"
-    argument="-0:5"
-    ;;
-  start)
-    if is_running; then
-      quodlibet --show-window
-      xwit -raise -focus -property WM_CLASS -names quodlibet
-      exit
-    else
-      shift
-      quodlibet "$@" &>/dev/null &
-
-      for _ in $( seq 1 300 ); do
-        sleep 0.2
-
-        if is_running; then
-          sleep 0.5
-          exit
-        fi
-      done
-
-      echo "Couldn't start Quod Libet, giving up."
-      exit 1
-    fi
-    ;;
-  start-playing)
-    shift
-    $0 play-pause || $0 start-hidden --start-playing "$@"
-    exit
-    ;;
-  start-hidden)
-    shift
-    $0 start --start-hidden "$@"
-    exit
-    ;;
-  is-running)
-    is_running
-    exit
-    ;;
 esac
 
-if ! is_running; then
+if [ ! -p "$CONTROL" ] || ! pgrep -x quodlibet &>/dev/null; then
+  echo "Quod Libet is not running."
   exit 1
 fi
 
-case "$command" in
-  current)
-    cat $CURRENT
-    ;;
-  next|previous|play|stop|pause|play-pause|hide-window|show-window|toggle-window|focus)
-    _ql "$command"
-    ;;
-  seek|shuffle|repeat|volume|query|play-file|rating|set-browser|open-browser|song-list|random|filter|enqueue|unqueue|query|search)
-    case "$command" in
-      shuffle|repeat) argument=${argument:-toggle};;
-    esac
+[ -t 0 ] && [ -t 1 ] && echo "Sending: $command $argument"
 
-    if [ -n "$argument" ]; then
-      _ql "$command $argument"
-    else
-      echo "E: '$command' needs an argument."
-      exit 1
-    fi
-    ;;
-  volume-up)
-    _ql "volume +"
-    ;;
-  volume-down)
-    _ql "volume -"
-    ;;
-  quit)
-    timeout 10 quodlibet --quit
-    killall quodlibet &>/dev/null
-    killall -9 quodlibet &>/dev/null
-    ;;
-  *)
-    echo "E: unknown command '$command'."
-    exit 1
-    ;;
-esac
+if [ -n "$argument" ]; then
+  echo "$command $argument" > "$CONTROL"
+else
+  echo "$command" > "$CONTROL"
+fi
