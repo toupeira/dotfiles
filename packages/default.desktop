@@ -5,6 +5,7 @@ flatpak
 fwupd
 intel-media-va-driver-non-free
 intel-microcode
+linux-image-rt-amd64
 plymouth
 plymouth-label
 thermald
