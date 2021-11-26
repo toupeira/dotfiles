@@ -287,6 +287,11 @@ function jq.less {
   jq -C . "$1" | less
 }
 
+# Tail a JSON logfile
+function jq.tail {
+  tail -f "$1" | jq --unbuffered .
+}
+
 # Serve a directory over HTTP
 function serve {
   if [ -n "$1" ]; then
