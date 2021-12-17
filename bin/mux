@@ -1,7 +1,5 @@
 #!/bin/bash
 
-PROCFILE=$( find ~/.procfile.d/"$( basename "$PWD" )" Procfile 2>/dev/null | head -1 )
-
 function usage {
   echo "Usage: mux [OPTIONS] [COMMAND..]"
   echo
@@ -36,8 +34,8 @@ case "$1" in
     proc="${1:1}"
     shift
 
-    if [ -f "$PROCFILE" ]; then
-      commands=$( grep -Eo "^$proc.*:.+" "$PROCFILE" )
+    if [ -f Procfile ]; then
+      commands=$( grep -Eo "^$proc.*:.+" Procfile )
       count=$( echo "$commands" | grep -c . )
 
       if [ $count -gt 0 ]; then

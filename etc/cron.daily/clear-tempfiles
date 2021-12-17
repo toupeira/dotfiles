@@ -2,7 +2,6 @@
 
 find /tmp \
   -maxdepth 1 -mtime +1 \( \
-  -name 'dropbox-*' -o \
   -name 'gitaly-*' -o \
   -name 'karma-*' -o \
   -name 'ruby-*' -o \
