@@ -1,12 +1,16 @@
 #!/bin/bash
 
 CONTROL=~/.config/quodlibet/control
+CONFIG=~/.config/quodlibet/config
+
+DEFAULT_QUERY="\&(#(rating > 0.4), #(added < 1 year))"
 
 command="$1"
 argument="$2"
 
 case "$command" in
   start-playing)
+    [ -f "$CONFIG" ] && sed -ri "s/^(query_text =).*/\1 $DEFAULT_QUERY/" "$CONFIG"
     quodlibet --run --play --start-hidden &>/dev/null &
     exit
     ;;

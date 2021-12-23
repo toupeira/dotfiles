@@ -1,0 +1,22 @@
+#!/bin/bash
+
+cd /slack/sound/manuals || exit 1
+
+if [ $# -eq 0 ]; then
+  exec xdg-open .
+fi
+
+pattern="$*"
+[ -n "$pattern" ] || exec echo "Usage: sman MANUAL"
+
+shopt -s nocaseglob
+
+for manual in "$pattern"* *"$pattern"*; do
+  if [ -f "$manual" ]; then
+    echo "Opening $manual..."
+    xdg-open "$manual"
+    exit
+  fi
+done
+
+echo "Couldn't find manual for '$pattern'"

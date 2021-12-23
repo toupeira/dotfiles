@@ -15,6 +15,7 @@ has() {
 # Tweak globbing
 shopt -s extglob
 shopt -s globstar
+shopt -s nocaseglob
 
 # Disable flow control (Ctrl-S/Q)
 stty -ixon
