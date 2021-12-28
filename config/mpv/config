@@ -5,7 +5,7 @@ geometry=50%:50%
 
 # audio
 volume=100
-ao=pulse,alsa
+ao=pulse
 audio-channels=5.1
 audio-spdif=ac3,eac3,dts,dts-hd
 

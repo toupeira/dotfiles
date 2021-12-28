@@ -7,7 +7,6 @@ intel-media-va-driver-non-free
 intel-microcode
 plymouth
 plymouth-label
-rtkit
 thermald
 wireless-regdb
 
@@ -21,6 +20,16 @@ nftables
 grub-efi-amd64-signed
 shim-signed
 
+# Audio
+libspa-0.2-bluetooth
+pavucontrol
+pipewire
+pipewire-audio-client-libraries
+pipewire-pulse
+pulseaudio-utils
+rtkit
+wireplumber
+
 # Desktop
 dconf-cli
 dconf-editor
@@ -28,31 +37,17 @@ fonts-noto-color-emoji
 fonts-roboto
 fonts-roboto-slab
 fonts-vlgothic
-gcolor3
 gnome-software-plugin-flatpak
-gparted
 libgdk-pixbuf2.0-bin
 libnotify-bin
 menulibre
-mpv
-neovim-qt
 numix-gtk-theme
 numix-icon-theme-circle
-paprefs
-pavucontrol
-peek
 qt5-gtk2-platformtheme
-quodlibet
-syncthing-gtk
 task-desktop
 task-gnome-desktop
-tilix
+vainfo
 xdg-user-dirs-gtk
-
-flatpak: com.github.johnfactotum.Foliate
-flatpak: com.github.tchx84.Flatseal
-flatpak: com.rafaelmardojai.Blanket
-flatpak: org.gtk.Gtk3theme.Numix
 
 # Xorg
 wmctrl
@@ -64,3 +59,20 @@ xwit
 
 # Android
 adb
+
+# Apps
+firefox
+gcolor3
+gparted
+mpv
+neovim-qt
+peek
+quodlibet
+scummvm
+syncthing-gtk
+tilix
+
+flatpak: com.github.johnfactotum.Foliate
+flatpak: com.github.tchx84.Flatseal
+flatpak: com.rafaelmardojai.Blanket
+flatpak: org.gtk.Gtk3theme.Numix

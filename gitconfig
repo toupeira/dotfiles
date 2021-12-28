@@ -191,7 +191,7 @@
   checkout-submodules = submodule update -q --init
   cos = checkout-submodules
 
-  sts = stash push -k
+  sts = stash push
   stp = stash pop
   std = "!git stash drop && git stl"
   stw = "!cd ${GIT_PREFIX:-.} && git stash show"
