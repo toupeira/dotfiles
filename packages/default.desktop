@@ -1,4 +1,6 @@
 # System
+dosfstools
+exfatprogs
 firmware-linux-free
 firmware-linux-nonfree
 flatpak

@@ -8,6 +8,7 @@ volume=100
 ao=pulse
 audio-channels=5.1
 audio-spdif=ac3,eac3,dts,dts-hd
+audio-display=no
 
 # subtitles
 sub=auto
