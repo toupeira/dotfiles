@@ -9,14 +9,17 @@ command="$1"
 argument="$2"
 
 case "$command" in
-  start-playing)
+  start-hidden)
+    shift
     [ -f "$CONFIG" ] && sed -ri "s/^(query_text =).*/\1 $DEFAULT_QUERY/" "$CONFIG"
-    quodlibet --run --play --start-hidden &>/dev/null &
+    quodlibet --run --start-hidden "$@" &>/dev/null &
     exit
     ;;
+  start-playing)
+    exec $0 start-hidden --play
+    ;;
   start-stopped)
-    quodlibet --run --stop --start-hidden &>/dev/null &
-    exit
+    exec $0 start-hidden --stop
     ;;
   rating)
     stars="Rating set to "
