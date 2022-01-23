@@ -53,11 +53,9 @@ xdg-user-dirs-gtk
 
 # Xorg
 wmctrl
-xautomation
 xclip
 xdotool
 xinput
-xwit
 
 # Android
 adb

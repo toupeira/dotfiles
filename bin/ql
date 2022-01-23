@@ -35,9 +35,9 @@ esac
 if [ ! -p "$CONTROL" ] || ! pgrep -x quodlibet &>/dev/null; then
   echo "Quod Libet is not running."
   exit 1
+elif [ "$command" = "running" ]; then
+  exit 0
 fi
-
-[ -t 0 ] && [ -t 1 ] && echo "Sending: $command $argument"
 
 if [ -n "$argument" ]; then
   echo "$command $argument" > "$CONTROL"

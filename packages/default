@@ -34,6 +34,7 @@ iproute2
 iw
 jq
 less
+libnss-systemd
 locales-all
 lsof
 ltrace
@@ -56,11 +57,9 @@ rename
 ripgrep
 rlwrap
 rsync
-shellcheck
 smem
 socat
 software-properties-common
-sqlite3
 strace
 s-tui
 sudo
