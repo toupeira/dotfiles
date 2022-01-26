@@ -1,8 +1,7 @@
 # System
 dosfstools
 exfatprogs
-firmware-linux-free
-firmware-linux-nonfree
+firmware-linux
 flatpak
 fwupd
 intel-media-va-driver-non-free
