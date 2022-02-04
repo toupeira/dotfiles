@@ -5,6 +5,7 @@ env:
   node: true
   jasmine: true
   jquery: true
+  mozilla: true
 globals:
   imports: readonly
 parserOptions:
