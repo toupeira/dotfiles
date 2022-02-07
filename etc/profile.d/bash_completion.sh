@@ -14,6 +14,7 @@ if [ "x${BASH_VERSION-}" != x -a "x${PS1-}" != x -a "x${BASH_COMPLETION_VERSINFO
             . /usr/share/bash-completion/bash_completion
         fi
     fi
+
 fi
 
 [ -n "$BASH_INTERACTIVE" ] || return

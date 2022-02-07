@@ -3,7 +3,7 @@
 [ -n "$BASH_INTERACTIVE" ] || return
 
 # Automatically use Gemfile when present in tree
-export RUBYGEMS_GEMDEPS=-
+# export RUBYGEMS_GEMDEPS=-
 
 # Load asdf
 if [ -d ~/.asdf ]; then
@@ -30,6 +30,22 @@ function gem {
 
   command gem "$@"
 }
+
+function _bundle_exec {
+  local command="$1"
+  shift
+
+  if [ -f Gemfile ]; then
+    bundle exec "$command" "$@"
+  else
+    command "$command" "$@"
+  fi
+}
+
+alias be='bundle exec '
+alias rake='_bundle_exec rake'
+alias rspec='_bundle_exec rspec'
+alias rubocop='_bundle_exec rubocop'
 
 function _spring_exec {
   local command="$1"
