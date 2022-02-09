@@ -278,8 +278,8 @@ function ssh.mux {
 
 # Go to project root
 function up {
-  local root=$( git rev-parse --show-toplevel )
-  [ -n "$root" ] && cd "$root"
+  local root=$( git rev-parse --show-toplevel 2>/dev/null )
+  [ -n "$root" ] && cd "$root" || cd ..
 }
 
 # Browse a JSON file
