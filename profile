@@ -15,4 +15,4 @@ if [ -d ~/.profile.d ]; then
   unset i
 fi
 
-[ -n "$BASH_INTERACTIVE" ] && login_message
+[ -n "$BASH_INTERACTIVE" ] && login_banner

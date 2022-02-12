@@ -2,10 +2,11 @@
 
 [ -n "$BASH_INTERACTIVE" ] || return
 
-# Show the login message
-function login_message {
+function login_banner {
   if [ -z "$BASH_LOGIN" ]; then
     return
+  elif [ $LINES -lt 25 ] && [ "$TMUX_PANE" != "%0" ]; then
+    down
   elif [ "$PWD" = "$HOME" ]; then
     clear
 
@@ -57,10 +58,9 @@ function login_message {
 
 # Clear the screen and show the prompt at the bottom
 function down {
-  local lines=$( tput lines )
   local i
 
-  for (( i = 0; i < lines; i++ )); do
+  for (( i = 0; i < LINES; i++ )); do
     echo
   done
 }
