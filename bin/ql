@@ -1,7 +1,8 @@
 #!/bin/bash
 
-CONTROL=~/.config/quodlibet/control
-CONFIG=~/.config/quodlibet/config
+QL=~/.config/quodlibet
+CONTROL=$QL/control
+CONFIG=$QL/config
 
 DEFAULT_QUERY="\&(#(rating > 0.4), #(added < 1 year))"
 
@@ -20,13 +21,20 @@ case "$command" in
     exec $0 start-hidden --play
     ;;
   rating)
+    icon="quodlibet"
     stars="Rating set to "
 
     for _ in $( seq 0.2 0.2 "$argument" ); do
       stars="$stars⭐"
     done
 
-    notify-send -i quodlibet -h int:transient:1 "$( quodlibet --print-playing )" "$stars"
+    filename=$( awk -F= '/^~filename/ { print $2 }' $QL/current 2>/dev/null )
+    if [ -f "$filename" ]; then
+      cover=$( find "$( dirname "$filename" )"/cover.* 2>/dev/null | head -1 )
+      [ -f "$cover" ] && icon="$cover"
+    fi
+
+    notify -i "$icon" -h string:desktop-entry:quodlibet "$( quodlibet --print-playing )" "$stars"
     ;;
 esac
 

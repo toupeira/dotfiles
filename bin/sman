@@ -19,4 +19,4 @@ for manual in "$pattern"* *"$pattern"*; do
   fi
 done
 
-echo "Couldn't find manual for '$pattern'"
+notify -i dialog-no "Couldn't find manual for '$pattern'"

@@ -1,0 +1,9 @@
+#!/bin/bash
+
+icon="info"
+if [ "$1" = "-i" ]; then
+  icon="$2"
+  shift 2
+fi
+
+exec notify-send -i "$icon" -h int:transient:1 "$@"
