@@ -4,7 +4,7 @@ if [ -n "$1" ] && [ "$1" != "-" ]; then
   exec sensible-editor "$@"
 fi
 
-files=$( git -c color.ui=always status -s | sort -rk2 | grep -vE "\[[0-9]+mD[^\w]+ " )
+files=$( git -c color.ui=always status -s | sort -k2 | grep -vE "\[[0-9]+mD[^\w]+ " )
 count=$( echo "$files" | grep -c . )
 
 if [ "$count" = 0 ]; then
@@ -14,7 +14,7 @@ elif [ "$1" = "-" ]; then
   echo "$files"
   echo -e " \e[1;32m>\e[0m \e[1;37mEditing $count modified files...\e[0m"
 elif [ "$count" -gt 1 ]; then
-  files=$( echo "$files" | fzf )
+  files=$( echo "$files" | fzf --tac )
 fi
 
 if [ -n "$files" ]; then
