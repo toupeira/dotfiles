@@ -1,39 +1,54 @@
 #!/bin/bash
 
 if [ -z "$1" ]; then
-  echo "Usage: $0 [-w] [-o OPTIONS] [--standard|--extreme|--insane|--<kbps>] FILES"
-  echo " -w  don't encode, only save .wav files"
-  echo " -o  set LAME options"
-  echo " --* set LAME preset"
+  echo "Usage: $0 [-f FORMAT] FILES"
   exit
 fi
 
-options="--preset extreme"
-unset wav
+if [ $# -eq 1 ] && [ "$( basename "$1" )" = "converted" ]; then
+  mv -vi "$1"/* . && rmdir -v "$1"
+  exit
+fi
+
+format=flac
 
 while [ $# -gt 0 ]; do
   case "$1" in
-    -w ) wav=1; shift;;
-    -o ) options="$2"; shift 2;;
-    --*) options="--preset $2"; shift 2;;
+    -f ) format="$2"; shift 2;;
     *  ) break;;
   esac
 done
 
-for file in "$@"; do
+readarray -d '' files < <( find "$@" -type f ! -path '*/converted/*' -print0 | sort -z )
+
+for file in "${files[@]}"; do
   ext=${file##*.}
-  name=`basename "$file" ".$ext"`
+  dirname=$( dirname "$file" )
+  basename=$( basename "$file" ".$ext" )
+  unset options
 
-  echo " [1;34m>>>[0m [1;37m$file[0m"
+  case "$ext" in
+    flac)
+      if file "$file" | grep -q '24 bit.*96 kHz'; then
+        options="-sample_fmt s16 -ar 48000"
+      fi
+      ;;
+    wav)
+      ;;
+    *)
+      echo " [1;33m>>>[0m Skipping [1;37m$file[0m"
+      continue
+      ;;
+  esac
 
-  if [ "$ext" != "wav" -a ! -f "$name.wav" ]; then
-    nice mpv -ao pcm:file="$name.wav" --no-video "$file"
-    file="$name.wav"
+  target="$dirname/converted/$basename.$format"
+  mkdir -p "$( dirname "$target" )"
+
+  echo " [1;32m>>>[0m Converting [1;37m$basename [0;32m{[1;35m.$ext[0;32m => [1;32m.$format[0;32m}[0m "
+
+  if [ "$format" = "mp3" ]; then
+    options="$options -q:a 0"
   fi
 
-  if [ ! "$wav" ]; then
-    [ "$ext" = "wav" -o -f "$name.wav" ] && nice lame $options "$file" "$name.mp3"
-    [ "$ext" != "wav" ] && rm -fv "$name.wav"
-  fi
-  echo
+  ffmpeg -loglevel warning -i "$file" $options "$target"
 done
