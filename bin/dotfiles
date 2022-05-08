@@ -734,7 +734,7 @@ function run {
       update asdf       'asdf update && asdf plugin update --all && asdf install'
       update gem        'gem update && gem cleanup'
       update yarn       yarn global upgrade
-      update flatpak    'flatpak update && flatpak uninstall --unused'
+      update flatpak    'sudo flatpak update && sudo flatpak uninstall --unused'
       update firmware   fwupdmgr update
 
       if command -v gnome-shell >/dev/null; then
