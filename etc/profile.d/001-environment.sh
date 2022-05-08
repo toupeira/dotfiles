@@ -21,6 +21,7 @@ export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep.conf
 
 export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export QT_QPA_PLATFORMTHEME="gtk2"
+export CALIBRE_USE_DARK_PALETTE=1
 
 export GOPATH="$HOME/src/upstream/go"
 
