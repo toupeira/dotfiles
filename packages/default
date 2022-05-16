@@ -14,7 +14,6 @@ debian-keyring
 debtags
 dirmngr
 dnsutils
-encfs
 ethtool
 fd-find
 file
@@ -26,6 +25,7 @@ git
 git-extras
 gnupg
 gnupg2
+gocryptfs
 graphicsmagick
 graphicsmagick-imagemagick-compat
 httpie
