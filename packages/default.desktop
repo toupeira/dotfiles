@@ -17,10 +17,6 @@ firewalld
 ipset
 nftables
 
-# SecureBoot
-grub-efi-amd64-signed
-shim-signed
-
 # Audio
 libspa-0.2-bluetooth
 pavucontrol
@@ -38,13 +34,13 @@ fonts-noto-color-emoji
 fonts-roboto
 fonts-roboto-slab
 fonts-vlgothic
-gnome-software-plugin-flatpak
+gnome-core-shim
 libgdk-pixbuf2.0-bin
 libnotify-bin
 menulibre
 numix-gtk-theme
 numix-icon-theme-circle
-qt5-gtk2-platformtheme
+qt5-gtk-platformtheme
 task-desktop
 task-gnome-desktop
 vainfo
