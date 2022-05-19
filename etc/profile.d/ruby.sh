@@ -14,9 +14,9 @@ function gem {
   if [ "$1" = "cd" ]; then
     local path
     if [ -n "$2" ]; then
-      path=$( gem open -e echo "$2" )
+      path=$( bundle exec gem open -e echo "$2" )
     else
-      path=$( gem env path | cut -d: -f1 )/gems
+      path=$( bundle exec gem env path | cut -d: -f1 )/gems
     fi
 
     if [ -n "$path" ]; then

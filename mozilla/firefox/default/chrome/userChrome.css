@@ -4,32 +4,32 @@
 }
 
 /* Remove context menu items */
-menuitem[label="Email Image…"] {
+#context_openANewTab,
+#context_bookmarkTab,
+#context_bookmarkSelectedTabs,
+#context_duplicateTab,
+#context_duplicateTabs,
+#context_moveTabOptions
+{
   display: none !important;
 }
 
-menuitem[label="Set Image as Desktop Background…"] {
-  display: none !important;
-}
-
-menuitem[label="Print Selection"] {
-  display: none !important;
-}
-
-menuitem[label="Show 1Password"] {
-  display: none !important;
-}
-
-menu[label="Firefox Multi-Account Containers"] {
-  display: none !important;
-}
-
-menu[label="1Password – Password Manager"] {
+#context-openlink,
+#context-openlinkprivate,
+#context-sendimage,
+#context-print-selection,
+#context-searchselect,
+#context-searchselect-private,
+#context-setDesktopBackground,
+menuitem[label="Show 1Password"],
+menu[label="1Password – Password Manager"],
+menu[label="Firefox Multi-Account Containers"]
+{
   display: none !important;
 }
 
 /* Fix favicons for container bookmarks */
-.bookmark-item[image*="mail.google.com"] image {
+#PlacesToolbarItems image[src*="mail.google.com"] {
   background-image: url(page-icon:https://mail.google.com) !important;
   background-size: contain !important;
   width: 0 !important;
@@ -37,7 +37,7 @@ menu[label="1Password – Password Manager"] {
   padding: 0 0 16px 16px !important;
 }
 
-.bookmark-item[image*="calendar.google.com"] image {
+#PlacesToolbarItems image[src*="calendar.google.com"] {
   background-image: url(page-icon:https://calendar.google.com) !important;
   background-size: contain !important;
   width: 0 !important;
@@ -45,7 +45,7 @@ menu[label="1Password – Password Manager"] {
   padding: 0 0 16px 16px !important;
 }
 
-.bookmark-item[image*="contacts.google.com"] image {
+#PlacesToolbarItems image[src*="contacts.google.com"] {
   background-image: url(page-icon:https://contacts.google.com) !important;
   background-size: contain !important;
   width: 0 !important;
@@ -53,7 +53,7 @@ menu[label="1Password – Password Manager"] {
   padding: 0 0 16px 16px !important;
 }
 
-.bookmark-item[image*="drive.google.com"] image {
+#PlacesToolbarItems image[src*="drive.google.com"] {
   background-image: url(page-icon:https://drive.google.com) !important;
   background-size: contain !important;
   width: 0 !important;
@@ -61,7 +61,7 @@ menu[label="1Password – Password Manager"] {
   padding: 0 0 16px 16px !important;
 }
 
-.bookmark-item[image*="docs.google.com"] image {
+#PlacesToolbarItems image[src*="docs.google.com"] {
   background-image: url(page-icon:https://docs.google.com) !important;
   background-size: contain !important;
   width: 0 !important;

@@ -9,6 +9,7 @@ user_pref("browser.urlbar.trimURLs", false);
 
 user_pref("ui.key.menuAccessKeyFocuses", false);
 user_pref("ui.key.textcontrol.prefer_native_key_bindings_over_builtin_shortcut_key_definitions", true);
+user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 
 user_pref("media.hardwaremediakeys.enabled", false);
 
