@@ -40,7 +40,7 @@ libnotify-bin
 menulibre
 numix-gtk-theme
 numix-icon-theme-circle
-qt5-gtk-platformtheme
+qt5-gtk2-platformtheme
 task-desktop
 task-gnome-desktop
 vainfo
