@@ -59,7 +59,6 @@ rlwrap
 rsync
 smem
 socat
-software-properties-common
 strace
 s-tui
 sudo
