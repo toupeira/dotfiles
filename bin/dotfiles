@@ -194,31 +194,6 @@ function load-key {
   fi
 }
 
-# Remove certain keys from dconf dumps
-function dconf-filter {
-  local keys
-
-  case "$1" in
-    org.gnome.desktop.interface)
-      keys='cursor-size monospace-font-name text-scaling-factor show-battery-percentage';;
-    org.gnome.desktop.peripherals)
-      keys='natural-scroll two-finger-scrolling-enabled';;
-    org.gnome.nautilus)
-      keys='default-folder-viewer default-zoom-level initial-size';;
-    org.gnome.shell.extensions.dash-to-panel)
-      keys='available-monitors';;
-    org.gnome.software)
-      keys='check-timestamp first-run online-updates-timestamp';;
-  esac
-
-  if [ -n "$keys" ]; then
-    keys=$( echo "$keys" | tr ' ' '|' )
-    grep -Ev "^($keys)="
-  else
-    cat
-  fi
-}
-
 ### }}}
 ### dotfiles helpers {{{
 
@@ -763,7 +738,28 @@ function run {
           dconf load "$path" < "$file"
         elif [ "$action" = "dump" ]; then
           status "Dumping {{$name}}"
-          dconf dump "$path" | dconf-filter "$name" > "$file"
+
+          if [ -f "$file" ] && grep -Fqx '# :skip-dump:' "$file"; then
+            warning "Skipping {{$name}}"
+            continue
+          else
+            local output=$( dconf dump "$path" )
+          fi
+
+          if [ -f "$file" ]; then
+            local skipped_keys=$( grep '^#.*=$' "$file" |
+              cut -d# -f2 |
+              tr "\n" "|"
+            )
+
+            if [ -n "$skipped_keys" ]; then
+              output=$(echo "$output" |
+                sed -r "s/^(${skipped_keys%|}).*$/#\1/"
+              )
+            fi
+          fi
+
+          echo "$output" > "$file"
         else
           usage
         fi

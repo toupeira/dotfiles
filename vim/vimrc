@@ -62,7 +62,12 @@
 
   if !exists('g:vscode')
     syntax enable
-    colorscheme custom
+
+    if exists("$DISPLAY")
+      colorscheme custom
+    else
+      colorscheme ron
+    endif
   endif
 
   " buffers
