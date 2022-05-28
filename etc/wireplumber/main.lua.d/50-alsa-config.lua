@@ -1,3 +1,4 @@
+alsa_monitor.enabled = true
 
 alsa_monitor.properties = {
   -- Create a JACK device. This is not enabled by default because
@@ -7,9 +8,14 @@ alsa_monitor.properties = {
   --["alsa.jack-device"] = false,
 
   -- Reserve devices via org.freedesktop.ReserveDevice1 on D-Bus
+  -- Disable if you are running a system-wide instance, which
+  -- doesn't have access to the D-Bus user session
   ["alsa.reserve"] = true,
   --["alsa.reserve.priority"] = -20,
   --["alsa.reserve.application-name"] = "WirePlumber",
+
+  -- Enables MIDI functionality
+  ["alsa.midi"] = true,
 
   -- Enables monitoring of alsa MIDI devices
   ["alsa.midi.monitoring"] = true,
@@ -17,7 +23,7 @@ alsa_monitor.properties = {
 
 alsa_monitor.rules = {
   -- An array of matches/actions to evaluate.
-  -- 
+  --
   -- If you want to disable some devices or nodes, you can apply properties per device as the following example.
   -- The name can be found by running pw-cli ls Device, or pw-cli dump Device
   --{
