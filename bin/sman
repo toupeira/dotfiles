@@ -6,17 +6,15 @@ if [ $# -eq 0 ]; then
   exec xdg-open .
 fi
 
-pattern="$*"
-[ -n "$pattern" ] || exec echo "Usage: sman MANUAL"
+files=$( find -type f | fzf -f "$*" )
+manual=$( echo "$files" | grep -im1 manual )
 
-shopt -s nocaseglob
+if [ ! -f "$manual" ]; then
+  manual=$( echo "$files" | head -1 )
+fi
 
-for manual in "$pattern"* *"$pattern"*; do
-  if [ -f "$manual" ]; then
-    echo "Opening $manual..."
-    xdg-open "$manual"
-    exit
-  fi
-done
-
-notify -i dialog-no "Couldn't find manual for '$pattern'"
+if [ -f "$manual" ]; then
+  xdg-open "$manual"
+else
+  notify -i dialog-no "Couldn't find manual for '$*'"
+fi
