@@ -64,6 +64,7 @@ app/assets/data
 app/assets/javascripts/ace
 db/archive
 public/packs
+spec/examples.txt
 spec/fixtures
 test/fixtures
 tmp/
