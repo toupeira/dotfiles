@@ -29,11 +29,12 @@ function usage {
   echo "  build PATH COMMAND..      Run build command in path"
   echo "  build-all                 Run default builds"
   echo
-  echo "  package, pkg [LIST:TYPE]  Install packages from list"
-  echo "  package update [TYPE]     Update packages"
+  echo "  package, pkg [:TYPE]      Install default packages"
+  echo "  pkg LIST[:TYPE]           Install packages from list"
+  echo "  pkg up, pkg TYPE          Update packages"
   echo
-  echo "  dconf load                Load custom dconf settings"
-  echo "  dconf dump                Dump custom dconf settings"
+  echo "  dconf load [KEY]          Load custom dconf settings"
+  echo "  dconf dump [KEY]          Dump custom dconf settings"
   echo
   echo "Other arguments:"
   echo "  COMMAND [ARGS]...         Excecute a Git command inside the dotfiles repository"
@@ -574,6 +575,9 @@ function run {
         shift
         run update-packages "$@"
         return
+      elif [[ "$name" =~ ^(apt|asdf|gem|yarn|flatpak|firmware)$ ]]; then
+        run update-packages "$name"
+        return
       elif [[ "$name" =~ : ]]; then
         local filter="^${name##*:}:"
         local name="${name%%:*}"
@@ -701,7 +705,7 @@ function run {
           else
             mux-wrap "$@"
           fi
-          echo
+          [ -n "$filter" ] || echo
         fi
       }
 
