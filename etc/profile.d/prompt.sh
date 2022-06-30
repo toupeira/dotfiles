@@ -19,10 +19,8 @@ PROMPT_COMMAND='_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_path=$( _
 # Prompt helpers
 function _prompt_path {
   local path="$PWD"
-  path=${path/*\/src\/gitlab\//🦊 }
-  path=${path/*\/src\/gitlab/🦊}
-
   local root=$( git rev-parse --show-toplevel 2>/dev/null )
+
   if [ -n "$root" ]; then
     path="${path#${root%/*}/}"
     path=${path/#asdf\/installs\/ruby\/*\/lib\/ruby\/gems\//♦️  }

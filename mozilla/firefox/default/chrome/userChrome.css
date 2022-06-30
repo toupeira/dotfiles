@@ -21,50 +21,7 @@
 #context-searchselect,
 #context-searchselect-private,
 #context-setDesktopBackground,
-menuitem[label="Show 1Password"],
-menu[label="1Password – Password Manager"],
 menu[label="Firefox Multi-Account Containers"]
 {
   display: none !important;
-}
-
-/* Fix favicons for container bookmarks */
-#PlacesToolbarItems image[src*="mail.google.com"] {
-  background-image: url(page-icon:https://mail.google.com) !important;
-  background-size: contain !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 0 16px 16px !important;
-}
-
-#PlacesToolbarItems image[src*="calendar.google.com"] {
-  background-image: url(page-icon:https://calendar.google.com) !important;
-  background-size: contain !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 0 16px 16px !important;
-}
-
-#PlacesToolbarItems image[src*="contacts.google.com"] {
-  background-image: url(page-icon:https://contacts.google.com) !important;
-  background-size: contain !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 0 16px 16px !important;
-}
-
-#PlacesToolbarItems image[src*="drive.google.com"] {
-  background-image: url(page-icon:https://drive.google.com) !important;
-  background-size: contain !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 0 16px 16px !important;
-}
-
-#PlacesToolbarItems image[src*="docs.google.com"] {
-  background-image: url(page-icon:https://docs.google.com) !important;
-  background-size: contain !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 0 16px 16px !important;
 }
