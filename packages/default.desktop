@@ -1,5 +1,6 @@
 # System
 dosfstools
+exfat-fuse
 exfatprogs
 firmware-linux
 flatpak
