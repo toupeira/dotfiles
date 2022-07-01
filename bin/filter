@@ -1,6 +1,0 @@
-#!/bin/bash
-
-pattern="$1"
-shift
-
-exec "$@" 2>&1 | egrep -v "$pattern"
