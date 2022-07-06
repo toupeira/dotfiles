@@ -29,7 +29,6 @@ gstreamer1.0-plugins-bad
 libavcodec-extra
 libavfilter-extra
 libavformat-extra
-libspa-0.2-bluetooth
 pavucontrol
 pipewire
 pipewire-audio-client-libraries
