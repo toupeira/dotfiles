@@ -1,0 +1,33 @@
+#!/bin/bash
+
+hostname=$( hostname )
+
+if [ "$hostname" = "schtube" ]; then
+  target="meerkat"
+else
+  target="schtube"
+fi
+
+paths=${1:-music sound photos games}
+
+for path in $paths; do
+  echo
+  echo -e " \e[1;35m>\e[0m \e[1;37mSyncing \e[1;32m$path \e[1;37mwith \e[1;33m$target\e[0m"
+
+  case "$path" in
+    games)
+      args=( -ignore 'Path steam' );;
+    *)
+      args=();;
+  esac
+
+  unison \
+    -log=false \
+    -fastercheckUNSAFE=true \
+    -fastcheck=true \
+    -links=true \
+    -sortnewfirst \
+    "${args[@]}" \
+    "/slack/$path/" \
+    "ssh://$target//slack/$path/"
+done

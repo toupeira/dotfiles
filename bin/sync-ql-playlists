@@ -1,0 +1,40 @@
+#!/bin/bash
+
+MUSIC="/slack/music"
+QUERIES=~/.config/quodlibet/lists/queries.saved
+
+ql running >/dev/null || ql start-hidden
+while ! ql running >/dev/null; do
+  sleep 0.5
+done
+
+echo -e " \e[1;32m>\e[0m \e[1;37mExporting playlists...\e[0m"
+
+while read -r query; do
+  read -r title
+  [[ "$title" =~ ^(Favourite|Good|Recently) ]] || continue
+
+  playlist="$MUSIC/$title.m3u"
+  files=$( quodlibet --print-query="$query" | sed "s,^$MUSIC/,," | sort )
+
+  if [ -f "$playlist" ]; then
+    # shellcheck disable=SC2002
+    previous=$( cat "$playlist" | wc -l )
+  else
+    previous=0
+  fi
+
+  if [ -n "$files" ]; then
+    count=$( echo "$files" | wc -l )
+    diff=$(( count - previous ))
+    echo -ne "   - \e[1;34m$title\e[0m: $count songs"
+    [ "$diff" -ne 0 ] && printf ' \e[1;32m(%+d)\e[0m' "$diff" || printf ' (no changes)'
+    echo
+    echo "$files" > "$playlist"
+  else
+    echo -ne "   - \e[1;34m$title\e[0m: No songs, deleting... $previous"
+    [ "$previous" -gt 0 ] && printf '(-%d)' "$previous"
+    echo
+    rm -f "$playlist"
+  fi
+done < "$QUERIES"
