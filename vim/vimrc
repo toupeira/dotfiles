@@ -312,6 +312,9 @@ endfunction " }}}
   " don't map Y to y$
   nunmap Y
 
+  " sort the selection
+  vnoremap <silent> gs :sort l<CR>
+
   " duplicate the selection
   vnoremap D y`]pgv
 

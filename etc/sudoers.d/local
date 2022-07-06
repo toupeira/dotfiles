@@ -1,0 +1,4 @@
+Defaults	secure_path="/usr/local/sbin:/usr/local/bin:/usr/sbin:/usr/bin:/sbin:/bin:/root/bin"
+Defaults  insults, shell_noargs
+Defaults  !env_editor, editor = /usr/bin/vim
+Defaults  !tty_tickets

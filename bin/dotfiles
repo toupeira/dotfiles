@@ -259,7 +259,7 @@ function run {
           if [ ! -d "$path" ] || [ -L "$path" ] || [ -e "$path/.install" ]; then
             run install "$path"
           elif [ -e "$path/.skip" ]; then
-              continue
+            continue
           elif [ -d "$path" ] && [ ! -e "$path/.git" ] && [ ! -L "$path" ]; then
             install-paths "$path"/*
           fi

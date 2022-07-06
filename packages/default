@@ -7,6 +7,7 @@ bsd-mailx
 cpufrequtils
 curl
 dctrl-tools
+ddate
 debconf-utils
 debian-archive-keyring
 debian-goodies
@@ -38,6 +39,7 @@ libnss-systemd
 locales-all
 lsof
 ltrace
+mailutils
 make
 moreutils
 mutt
@@ -59,10 +61,14 @@ rlwrap
 rsync
 smem
 socat
+ssh
 strace
 s-tui
 sudo
 syncthing
+systemd
+systemd-sysv
+systemd-timesyncd
 task-english
 tcpdump
 telnet
@@ -75,3 +81,4 @@ unzip
 wget
 whois
 zip
+zstd

@@ -1,15 +1,20 @@
 # System
+dnsmasq-base
 dosfstools
+eject
+esmtp-run
 exfat-fuse
 exfatprogs
 firmware-linux
 flatpak
 fwupd
+intel-gpu-tools
 intel-media-va-driver-non-free
 intel-microcode
 plymouth
 plymouth-label
 thermald
+tlp
 wireless-regdb
 
 # Firewall
@@ -18,33 +23,47 @@ firewalld
 ipset
 nftables
 
-# Audio
+# Multimedia
+gstreamer1.0-libav
+gstreamer1.0-plugins-bad
+libavcodec-extra
+libavfilter-extra
+libavformat-extra
 libspa-0.2-bluetooth
 pavucontrol
 pipewire
 pipewire-audio-client-libraries
 pipewire-pulse
+pulseaudio
 pulseaudio-utils
 rtkit
+vainfo
 wireplumber
 
 # Desktop
+chrome-gnome-shell
 dconf-cli
 dconf-editor
+fonts-liberation
 fonts-noto-color-emoji
 fonts-roboto
 fonts-roboto-slab
 fonts-vlgothic
 gnome-core-shim
+gnome-screenshot
+gnome-shell-extension-prefs
+gnome-tweaks
 libgdk-pixbuf2.0-bin
 libnotify-bin
 menulibre
+network-manager-gnome
 numix-gtk-theme
 numix-icon-theme-circle
 qt5-gtk2-platformtheme
+seahorse
 task-desktop
 task-gnome-desktop
-vainfo
+ttf-mscorefonts-installer
 xdg-user-dirs-gtk
 
 # Xorg
@@ -57,9 +76,15 @@ xinput
 adb
 
 # Apps
+calibre
+chromium
+file-roller
 firefox
 gcolor3
+gimp
+gimp-plugin-registry
 gparted
+libreoffice
 mpv
 neovim-qt
 peek
@@ -67,6 +92,7 @@ quodlibet
 scummvm
 syncthing-gtk
 tilix
+youtube-dl
 
 flatpak: com.github.johnfactotum.Foliate
 flatpak: com.github.tchx84.Flatseal
