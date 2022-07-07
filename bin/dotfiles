@@ -683,7 +683,7 @@ function run {
         install_packages "$missing_gem"  gem install
         install_packages "$missing_yarn" yarn global add
         install_packages "$missing_pip"  sudo python3 -m pip install --system --upgrade
-        install_packages "$missing_flat" sudo flatpak install
+        install_packages "$missing_flat" flatpak install
       fi
       output
       ;;
@@ -713,7 +713,7 @@ function run {
       update asdf       'asdf update && asdf plugin update --all && asdf install'
       update gem        'gem update && gem cleanup'
       update yarn       yarn global upgrade
-      update flatpak    'sudo flatpak update && sudo flatpak uninstall --unused'
+      update flatpak    'flatpak update && flatpak uninstall --unused'
       update firmware   fwupdmgr update
 
       if command -v gnome-shell >/dev/null; then
