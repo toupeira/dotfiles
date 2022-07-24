@@ -540,11 +540,6 @@ endfunction " }}}
   let g:dispatch_handlers = [ 'job' ]
   " }}}
 
-  " org-mode {{{
-  " silence warning about missing plugin
-  command! -nargs=* -range SpeedDatingFormat echo
-  " }}}
-
   " json {{{
   let g:vim_json_syntax_conceal = (&conceallevel > 0)
   let g:vim_json_syntax_concealcursor = &concealcursor
