@@ -22,18 +22,18 @@ if [ ${#args[@]} -gt 0 ]; then
     if [ -f "$file" ]; then
       binary_type=$(
         file -L --brief --mime-type -- "$file" \
-          | fgrep -vx 'regular file, no read permission' \
-          | fgrep -vx 'application/gzip' \
-          | fgrep -vx 'application/javascript' \
-          | fgrep -vx 'application/json' \
-          | fgrep -vx 'application/octet-stream' \
-          | fgrep -vx 'application/pgp-keys' \
-          | fgrep -vx 'application/postscript' \
-          | fgrep -vx 'application/xml' \
-          | fgrep -vx 'application/zip' \
-          | fgrep -vx 'application/zlib' \
-          | fgrep -vx 'image/svg+xml' \
-          | egrep -vx 'inode/(directory|x-empty)' \
+          | grep -Fvx 'regular file, no read permission' \
+          | grep -Fvx 'application/gzip' \
+          | grep -Fvx 'application/javascript' \
+          | grep -Fvx 'application/json' \
+          | grep -Fvx 'application/octet-stream' \
+          | grep -Fvx 'application/pgp-keys' \
+          | grep -Fvx 'application/postscript' \
+          | grep -Fvx 'application/xml' \
+          | grep -Fvx 'application/zip' \
+          | grep -Fvx 'application/zlib' \
+          | grep -Fvx 'image/svg+xml' \
+          | grep -Evx 'inode/(directory|x-empty)' \
           | grep -P '^((?!text/).+|text/rtf)$'
       )
 

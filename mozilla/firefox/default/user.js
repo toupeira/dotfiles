@@ -16,6 +16,9 @@ user_pref("ui.key.menuAccessKeyFocuses", false);
 user_pref("ui.key.textcontrol.prefer_native_key_bindings_over_builtin_shortcut_key_definitions", true);
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 
+// Enable hardware video acceleration
+user_pref("media.ffmpeg.vaapi.enabled", true);
+
 // Don't ask for notification permissions
 user_pref("permissions.default.desktop-notification", 2);
 
