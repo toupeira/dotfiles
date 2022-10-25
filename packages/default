@@ -32,6 +32,7 @@ graphicsmagick
 graphicsmagick-imagemagick-compat
 httpie
 iotop
+inetutils-telnet
 iproute2
 iw
 jq
@@ -72,7 +73,6 @@ systemd-sysv
 systemd-timesyncd
 task-english
 tcpdump
-telnet
 tig
 tmux
 tree

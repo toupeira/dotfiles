@@ -31,7 +31,6 @@ libavfilter-extra
 libavformat-extra
 pavucontrol
 pipewire
-pipewire-audio-client-libraries
 pipewire-pulse
 pulseaudio
 pulseaudio-utils
