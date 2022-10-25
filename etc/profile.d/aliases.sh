@@ -42,7 +42,7 @@ alias ftrace='strace -fe trace=file'
 alias ptrace='strace -fe trace=process'
 alias psgrep='pgrep -fla'
 alias pskill='pkill -fe'
-alias smem='smem -kt'
+alias smem='smem -akt'
 alias watch='watch -cd -n 1 '
 
 # package managment
