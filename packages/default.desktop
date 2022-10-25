@@ -8,6 +8,7 @@ exfatprogs
 firmware-linux
 flatpak
 fwupd
+fwupd-amd64-signed
 intel-gpu-tools
 intel-media-va-driver-non-free
 intel-microcode
@@ -24,6 +25,7 @@ ipset
 nftables
 
 # Multimedia
+alsa-utils
 gstreamer1.0-libav
 gstreamer1.0-plugins-bad
 libavcodec-extra
