@@ -1,5 +1,4 @@
 // Browser interface
-user_pref("browser.download.alwaysOpenPanel", false);
 user_pref("browser.search.hiddenOneOffs", "Google,DuckDuckGo");
 user_pref("browser.search.separatePrivateDefault", true);
 user_pref("browser.search.separatePrivateDefault.ui.enabled", true);
@@ -10,6 +9,10 @@ user_pref("browser.urlbar.shortcuts.history", false);
 user_pref("browser.urlbar.shortcuts.tabs", false);
 user_pref("browser.urlbar.suggest.calculator", true);
 user_pref("browser.urlbar.trimURLs", false);
+
+// Downloads
+user_pref("browser.download.alwaysOpenPanel", false);
+user_pref("browser.download.start_downloads_in_tmp_dir", true);
 
 // UI settings
 user_pref("ui.key.menuAccessKeyFocuses", false);
