@@ -34,6 +34,7 @@ for file in "${files[@]}"; do
       fi
       ;;
     wav)
+      options="-sample_fmt s16"
       ;;
     *)
       echo " [1;33m>>>[0m Skipping [1;37m$file[0m"

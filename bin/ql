@@ -4,16 +4,17 @@ QL=~/.config/quodlibet
 CONTROL=$QL/control
 CONFIG=$QL/config
 
-DEFAULT_QUERY="\&(#(rating > 0.4), #(added < 1 year))"
-
 command="$1"
 argument="$2"
 
 case "$command" in
   start-hidden)
     shift
-    [ -f "$CONFIG" ] && sed -ri "s/^(query_text =).*/\1 $DEFAULT_QUERY/" "$CONFIG"
+
+    default_query=$( head -1 "$QL/lists/queries.saved" | sed -r 's/&/\\&/' )
+    [ -f "$CONFIG" ] && sed -ri "s/^(query_text =).*/\1 $default_query/" "$CONFIG"
     [ "$( hostname )" = "schtube" ] && stop='--stop'
+
     quodlibet --run --start-hidden $stop "$@" &>/dev/null &
     exit
     ;;

@@ -32,6 +32,7 @@ export LESS_TERMCAP_me=$'\e[0m'
 export LESS_TERMCAP_se=$'\e[0m'
 export LESS_TERMCAP_ue=$'\e[0m'
 
+[ "$XDG_SESSION_TYPE" = "wayland" ] && export MOZ_ENABLE_WAYLAND=1
 [ -n "$SSH_CONNECTION" ] && export GPG_TTY=$( tty )
 [ -x /usr/bin/phantomjs ] && export PHANTOMJS_BIN="/usr/bin/phantomjs"
 command -v chromium &>/dev/null && export CHROME_BIN="chromium"
