@@ -36,6 +36,7 @@ pipewire
 pipewire-pulse
 pulseaudio
 pulseaudio-utils
+pulseaudio-module-bluetooth
 rtkit
 vainfo
 wireplumber
