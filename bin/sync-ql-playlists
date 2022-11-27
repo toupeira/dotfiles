@@ -18,8 +18,7 @@ while read -r query; do
   files=$( quodlibet --print-query="$query" | sed "s,^$MUSIC/,," | sort )
 
   if [ -f "$playlist" ]; then
-    # shellcheck disable=SC2002
-    previous=$( cat "$playlist" | wc -l )
+    previous=$( wc -l < "$playlist" )
   else
     previous=0
   fi
