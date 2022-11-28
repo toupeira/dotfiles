@@ -8,7 +8,6 @@ exfatprogs
 firmware-linux
 flatpak
 fwupd
-fwupd-amd64-signed
 intel-gpu-tools
 intel-media-va-driver-non-free
 intel-microcode
@@ -85,7 +84,6 @@ gcolor3
 gimp
 gimp-plugin-registry
 gparted
-libreoffice
 mpv
 neovim-qt
 peek
@@ -93,7 +91,7 @@ quodlibet
 scummvm
 syncthing-gtk
 tilix
-youtube-dl
+yt-dlp
 
 flatpak: com.github.johnfactotum.Foliate
 flatpak: com.github.tchx84.Flatseal

@@ -23,9 +23,6 @@ gem: bundler
 gem: pry
 gem: rubocop
 
-yarn: caniuse-cmd
 yarn: eslint
 yarn: jsonlint
-yarn: tslint
-yarn: typescript
 yarn: vmd

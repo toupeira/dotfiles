@@ -716,7 +716,7 @@ function run {
       }
 
       update apt        'sudo aptitude update && sudo aptitude upgrade'
-      update asdf       'asdf update && asdf plugin update --all && asdf global ruby latest:3 && asdf global yarn latest && asdf install'
+      update asdf       'asdf update && asdf plugin update --all; asdf global ruby latest:3; asdf global yarn latest; asdf install'
       update gem        'gem update && gem cleanup'
       update yarn       yarn global upgrade
       update flatpak    'flatpak update && flatpak uninstall --unused'
