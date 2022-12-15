@@ -22,8 +22,11 @@ user_pref("browser.send_pings", false);
 user_pref("browser.startup.homepage_override.mstone", "ignore");
 user_pref("browser.tabs.firefox-view", false);
 user_pref("datareporting.healthreport.uploadEnabled", false);
+user_pref("dom.push.enabled", false);
 user_pref("dom.security.https_only_mode_ever_enabled", true);
 user_pref("dom.security.https_only_mode", true);
+user_pref("dom.serviceWorkers.enabled", false);
+user_pref("dom.webnotifications.enabled", false);
 user_pref("experiments.activeExperiment", false);
 user_pref("experiments.enabled", false);
 user_pref("experiments.manifest.uri", "");
@@ -39,7 +42,7 @@ user_pref("network.allow-experiments", false);
 user_pref("network.captive-portal-service.enabled", false);
 user_pref("network.dns.disablePrefetchFromHTTPS", true);
 user_pref("network.dns.disablePrefetch", true);
-user_pref("network.http.referer.XOriginPolicy", 2);
+user_pref("network.http.referer.XOriginPolicy", 1);
 user_pref("network.http.speculative-parallel-limit", 0);
 user_pref("network.predictor.enabled", false);
 user_pref("network.predictor.enable-prefetch", false);
@@ -80,9 +83,6 @@ user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 
 // Enable hardware video acceleration
 user_pref("media.ffmpeg.vaapi.enabled", true);
-
-// Don't ask for notification permissions
-user_pref("permissions.default.desktop-notification", 2);
 
 // Disable MPRIS integration
 user_pref("media.hardwaremediakeys.enabled", false);

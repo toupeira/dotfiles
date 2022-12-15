@@ -6,6 +6,7 @@ gettext
 ipython3
 libreadline-dev
 libssl-dev
+libxml2-utils
 manpages-dev
 pkg-config
 python3-pip

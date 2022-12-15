@@ -16,42 +16,4 @@ fi
 
 args=( "$@" )
 
-# Detect binary filetypes
-if [ ${#args[@]} -gt 0 ]; then
-  for file in "$@"; do
-    if [ -f "$file" ]; then
-      binary_type=$(
-        file -L --brief --mime-type -- "$file" \
-          | grep -Fvx 'regular file, no read permission' \
-          | grep -Fvx 'application/gzip' \
-          | grep -Fvx 'application/javascript' \
-          | grep -Fvx 'application/json' \
-          | grep -Fvx 'application/octet-stream' \
-          | grep -Fvx 'application/pgp-keys' \
-          | grep -Fvx 'application/postscript' \
-          | grep -Fvx 'application/xml' \
-          | grep -Fvx 'application/zip' \
-          | grep -Fvx 'application/zlib' \
-          | grep -Fvx 'image/svg+xml' \
-          | grep -Evx 'inode/(directory|x-empty)' \
-          | grep -P '^((?!text/).+|text/rtf)$'
-      )
-
-      if [ -n "$binary_type" ]; then
-        echo -ne "Open \e[1;37m$file \e[1;30m[$binary_type]\e[0m as binary? [Y/n] "
-        read
-        if [ "$REPLY" != "n" ]; then
-          for (( i = 0; i < ${#args[@]}; i++ )); do
-            exec xdg-open "${args[i]}"
-          done
-
-          exit
-        fi
-
-        break
-      fi
-    fi
-  done
-fi
-
 exec $vim "${args[@]}"

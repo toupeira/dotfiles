@@ -6,7 +6,7 @@ if [ $# -eq 0 ]; then
   exec xdg-open .
 fi
 
-files=$( find -type f | fzf -f "$*" )
+files=$( find . -name '*.pdf' | fzf -f "$*" )
 manual=$( echo "$files" | grep -im1 manual )
 
 if [ ! -f "$manual" ]; then
