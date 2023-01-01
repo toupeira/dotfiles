@@ -4,9 +4,11 @@ build-essential
 ed
 gettext
 ipython3
+libffi-dev
 libreadline-dev
 libssl-dev
 libxml2-utils
+libyaml-dev
 manpages-dev
 pkg-config
 python3-pip

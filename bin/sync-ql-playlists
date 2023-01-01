@@ -37,3 +37,16 @@ while read -r query; do
     rm -f "$playlist"
   fi
 done < "$QUERIES"
+
+# TODO: Create links for phone syncing
+
+# SYNC=/slack/music/.sync
+
+# rm -rf "$SYNC"
+# mkdir "$SYNC"
+# cd "$SYNC" || exit
+
+# cat ../{Favourite,Good,Recently}*.m3u | sort | uniq | while read file; do
+#   mkdir -p "$(dirname "$file")"
+#   ln -s "/slack/music/$file" "$file"
+# done

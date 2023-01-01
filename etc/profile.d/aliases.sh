@@ -101,6 +101,7 @@ alias dpkg-reconfigure='sudo dpkg-reconfigure'
 alias update-alternatives='sudo update-alternatives'
 
 # system tools
+alias bootctl='sudo bootctl'
 alias modprobe='sudo modprobe'
 alias rmmod='sudo rmmod'
 alias ifup='sudo ifup'
