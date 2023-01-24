@@ -41,7 +41,6 @@ vainfo
 wireplumber
 
 # Desktop
-chrome-gnome-shell
 dconf-cli
 dconf-editor
 fonts-liberation
@@ -49,6 +48,7 @@ fonts-noto-color-emoji
 fonts-roboto
 fonts-roboto-slab
 fonts-vlgothic
+gnome-browser-connector
 gnome-core-shim
 gnome-screenshot
 gnome-shell-extension-prefs

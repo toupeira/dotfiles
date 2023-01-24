@@ -27,11 +27,10 @@ git-extras
 gnupg
 gnupg2
 gocryptfs
-graphicsmagick
-graphicsmagick-imagemagick-compat
 httpie
-iotop
+imagemagick
 inetutils-telnet
+iotop
 iproute2
 iw
 jq

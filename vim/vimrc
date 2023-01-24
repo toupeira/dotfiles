@@ -570,8 +570,8 @@ endfunction " }}}
     "   \ 'typescript': 'ale',
     "   \ 'ruby': 'ale'
     " \ }
-    " }}}
   endif
+  " }}}
 
   " pasta {{{
   let g:pasta_disabled_filetypes = ['qf']
