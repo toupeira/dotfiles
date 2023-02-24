@@ -1,2 +1,2 @@
-deb http://ftp.ch.debian.org/debian sid main non-free contrib
-deb http://ftp.ch.debian.org/debian experimental main non-free contrib
+deb http://ftp.ch.debian.org/debian sid main non-free non-free-firmware contrib
+deb http://ftp.ch.debian.org/debian experimental main non-free non-free-firmware contrib

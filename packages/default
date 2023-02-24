@@ -4,7 +4,6 @@ bash-completion
 bat
 bc
 bsd-mailx
-cpufrequtils
 curl
 dctrl-tools
 ddate
@@ -36,6 +35,7 @@ iw
 jq
 less
 libnss-systemd
+linux-cpupower
 locales-all
 lsof
 ltrace

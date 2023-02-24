@@ -11,8 +11,11 @@ case "$command" in
   start-hidden)
     shift
 
-    default_query=$( head -1 "$QL/lists/queries.saved" | sed -r 's/&/\\&/' )
-    [ -f "$CONFIG" ] && sed -ri "s/^(query_text =).*/\1 $default_query/" "$CONFIG"
+    if [ -f "$CONFIG" ] && grep -q "^query_text = *$" "$CONFIG"; then
+      default_query=$( head -1 "$QL/lists/queries.saved" | sed -r 's/&/\\&/' )
+      sed -ri "s/^(query_text =).*/\1 $default_query/" "$CONFIG"
+    fi
+
     [ "$( hostname )" = "schtube" ] && stop='--stop'
 
     quodlibet --run --start-hidden $stop "$@" &>/dev/null &
