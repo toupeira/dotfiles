@@ -16,9 +16,7 @@ case "$command" in
       sed -ri "s/^(query_text =).*/\1 $default_query/" "$CONFIG"
     fi
 
-    [ "$( hostname )" = "schtube" ] && stop='--stop'
-
-    quodlibet --run --start-hidden $stop "$@" &>/dev/null &
+    quodlibet --run --start-hidden "$@" &>/dev/null &
     exit
     ;;
   start-playing)
