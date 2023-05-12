@@ -13,8 +13,8 @@ manpages-dev
 pkg-config
 python3-pip
 python3-pynvim
-python3-setuptools
-python3-wheel
+python-dev-is-python3
+python-is-python3
 shellcheck
 sqlite3
 universal-ctags
