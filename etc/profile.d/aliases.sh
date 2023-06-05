@@ -33,6 +33,8 @@ alias fgrep='grep -F'
 alias rgrep='grep -r'
 alias ssh.direct='ssh -o ControlPath=none'
 alias bat='batcat'
+alias ffmpeg='ffmpeg -hide_banner'
+alias ffprobe='ffprobe -hide_banner'
 
 # system administration
 alias sctl='systemctl'
