@@ -1,5 +1,6 @@
 [default]
 # video
+fullscreen=yes
 hwdec=auto
 geometry=50%:50%
 
@@ -15,9 +16,9 @@ sub=auto
 sub-auto=fuzzy
 sub-font=Roboto Slab
 sub-font-size=38
-sub-border-size=4
-sub-border-color=0/0/0/0.7
-sub-color=1/1/1/0.7
+sub-border-size=3
+sub-border-color=0/0/0/0.6
+sub-color=1/1/1/0.6
 slang=en,eng,de,ger
 
 # osd

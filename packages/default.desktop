@@ -60,6 +60,7 @@ network-manager-gnome
 numix-gtk-theme
 numix-icon-theme-circle
 qt5-gtk2-platformtheme
+qt6-gtk-platformtheme
 seahorse
 task-desktop
 task-gnome-desktop

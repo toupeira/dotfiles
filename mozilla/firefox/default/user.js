@@ -91,8 +91,3 @@ user_pref("general.smoothScroll.lines.durationMaxMS", 100);
 user_pref("general.smoothScroll.lines.durationMinMS", 50);
 user_pref("general.smoothScroll.mouseWheel.durationMaxMS", 100);
 user_pref("general.smoothScroll.mouseWheel.durationMinMS", 50);
-
-// Make background throttling more aggressive
-user_pref("dom.min_background_timeout_value", 60000);
-user_pref("dom.min_background_timeout_value_without_budget_throttling", 30000);
-user_pref("dom.timeout.throttling_delay", 10000);
