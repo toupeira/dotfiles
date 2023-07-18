@@ -23,10 +23,10 @@ for path in $paths; do
 
   unison \
     -log=false \
-    -fastercheckUNSAFE=true \
     -fastcheck=true \
     -links=true \
     -sortnewfirst \
+    -ignoreinodenumbers \
     "${args[@]}" \
     "/slack/$path/" \
     "ssh://$target//slack/$path/"
