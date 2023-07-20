@@ -1,3 +1,4 @@
+apt-file
 apt-listchanges
 apt-xapian-index
 bash-completion

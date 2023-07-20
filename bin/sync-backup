@@ -1,0 +1,18 @@
+#!/bin/bash
+
+BACKUP="/media/$USER/SLACK-BACKUP"
+
+if [ ! -d "$BACKUP" ]; then
+  echo "$BACKUP is not mounted."
+  exit 1
+fi
+
+cd /slack || exit 1
+
+DIRS="backups books games music photos scrapbook sound"
+
+if [ "$HOSTNAME" = "schtube" ]; then
+  DIRS="$DIRS movies series"
+fi
+
+rsync -av --delete $DIRS "$BACKUP" "$@"
