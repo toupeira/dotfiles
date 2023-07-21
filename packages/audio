@@ -1,4 +1,8 @@
 a2jmidid
+bitwig-studio
 jackd2
 pulseaudio-module-jack
 qjackctl
+
+flatpak: org.audacityteam.Audacity
+flatpak: org.musescore.MuseScore
