@@ -1,4 +1,5 @@
 a2jmidid
+audacity
 bitwig-studio
 jackd2
 pulseaudio-module-jack
@@ -12,5 +13,4 @@ libsndfile1-dev
 libjson-glib-dev
 libgtk-3-dev
 
-flatpak: org.audacityteam.Audacity
 flatpak: org.musescore.MuseScore
