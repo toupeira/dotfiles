@@ -9,10 +9,13 @@ fi
 
 cd /slack || exit 1
 
-DIRS="backups books games music photos scrapbook sound"
+DIRS="books games music photos scrapbook sound"
 
 if [ "$HOSTNAME" = "schtube" ]; then
-  DIRS="$DIRS movies series"
+  DIRS="$DIRS backups movies series"
+  sudo=sudo
+else
+  unset sudo
 fi
 
-rsync -av --delete $DIRS "$BACKUP" "$@"
+$sudo rsync -av --delete $DIRS "$BACKUP" "$@"
