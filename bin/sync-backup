@@ -18,4 +18,6 @@ else
   unset sudo
 fi
 
-$sudo rsync -av --delete $DIRS "$BACKUP" "$@"
+$sudo rsync -av --delete \
+  --exclude steam \
+  $DIRS "$BACKUP" "$@"
