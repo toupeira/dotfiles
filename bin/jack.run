@@ -1,0 +1,14 @@
+#!/bin/bash
+
+if pgrep -x pipewire >/dev/null; then
+  exec pw-jack -- "$@"
+elif ! command -v jack_control >/dev/null || jack_control status >/dev/null; then
+  exec "$@"
+else
+  qjackctl &>/dev/null &
+
+  "$@"
+
+  kill %1
+  wait
+fi
