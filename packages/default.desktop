@@ -10,10 +10,11 @@ flatpak
 fwupd
 intel-gpu-tools
 intel-media-va-driver-non-free
-intel-microcode
 lm-sensors
+mesa-va-drivers
 plymouth
 plymouth-label
+radeontop
 thermald
 tlp
 wireless-regdb
