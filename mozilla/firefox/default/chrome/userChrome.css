@@ -1,22 +1,23 @@
 /* Remove context menu items */
-#context_openANewTab,
-#context_bookmarkTab,
-#context_bookmarkSelectedTabs,
-#context_duplicateTab,
-#context_duplicateTabs,
-#context_moveTabOptions
+menuitem#context_openANewTab,
+menuitem#context_openANewTab + menuseparator,
+menuitem#context_bookmarkTab,
+menuitem#context_bookmarkSelectedTabs,
+menuitem#context_duplicateTab,
+menuitem#context_duplicateTabs,
+menu#context_moveTabOptions
 {
   display: none !important;
 }
 
-#context-openlink,
-#context-openlinkprivate,
-#context-sendimage,
-#context-print-selection,
-#context-searchselect,
-#context-searchselect-private,
-#context-setDesktopBackground,
-menu[label="Firefox Multi-Account Containers"]
+menuitem#context-openlink,
+menuitem#context-openlinkprivate,
+menuitem#context-sendimage,
+menuitem#context-print-selection,
+menuitem#context-searchselect-private,
+menuitem#context-setDesktopBackground,
+menuseparator#frame-sep,
+menuseparator#context-media-eme-separator
 {
   display: none !important;
 }

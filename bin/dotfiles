@@ -17,7 +17,7 @@ function usage {
   echo "  init                      Install symlinks for all dotfiles interactively"
   echo "  install PATH...           Install symlink for PATH"
   echo "  add PATH...               Add file to repository and replace it with a symlink"
-  echo "  broken                    Find broken symlinks"
+  echo "  lint                      Find broken symlinks"
   echo
   echo "  sync                      Pull, commit and push"
   echo "  commit-all, ca            Commit all changes"
@@ -389,7 +389,7 @@ function run {
       done
       ;;
     # }}}
-    broken) # {{{
+    lint) # {{{
       sudo find ~ /etc -xtype l -exec ls --color -ld "{}" \;
       ;;
     # }}}
