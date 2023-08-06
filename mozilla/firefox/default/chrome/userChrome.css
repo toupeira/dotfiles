@@ -1,4 +1,4 @@
-/* Remove context menu items */
+/* Remove tab context menu items */
 menuitem#context_openANewTab,
 menuitem#context_openANewTab + menuseparator,
 menuitem#context_bookmarkTab,
@@ -10,6 +10,7 @@ menu#context_moveTabOptions
   display: none !important;
 }
 
+/* Remove link context menu items */
 menuitem#context-openlink,
 menuitem#context-openlinkprivate,
 menuitem#context-sendimage,
@@ -17,11 +18,13 @@ menuitem#context-print-selection,
 menuitem#context-searchselect-private,
 menuitem#context-setDesktopBackground,
 menuseparator#frame-sep,
-menuseparator#context-media-eme-separator
+menuseparator#context-media-eme-separator,
+menu[label="Firefox Multi-Account Containers"]
 {
   display: none !important;
 }
 
+/* Fix favicons */
 #PlacesToolbarItems image[src*="mail.proton.me"] {
   background-image: url(https://mail.proton.me/assets/favicon.782cda472f79b5eed726.svg) !important;
   background-size: contain !important;

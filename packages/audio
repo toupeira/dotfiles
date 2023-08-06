@@ -5,6 +5,7 @@ elektroid
 jackd2
 pulseaudio-module-jack
 qjackctl
+rtkit
 
 flatpak: net.sourceforge.kmidimon
 flatpak: org.musescore.MuseScore
