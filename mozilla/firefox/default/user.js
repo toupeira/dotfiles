@@ -33,6 +33,7 @@ user_pref("experiments.manifest.uri", "");
 user_pref("experiments.supported", false);
 user_pref("extensions.getAddons.cache.enabled", false);
 user_pref("extensions.getAddons.showPane", false);
+user_pref("extensions.htmlaboutaddons.recommendations.enabled", false);
 user_pref("extensions.pocket.enabled", false);
 user_pref("extensions.shield-recipe-client.api_url", "");
 user_pref("extensions.shield-recipe-client.enabled", false);
