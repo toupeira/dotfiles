@@ -19,6 +19,7 @@ menuitem#context-searchselect-private,
 menuitem#context-setDesktopBackground,
 menuseparator#frame-sep,
 menuseparator#context-media-eme-separator,
+menuseparator#context-sep-setbackground,
 menu[label="Firefox Multi-Account Containers"]
 {
   display: none !important;

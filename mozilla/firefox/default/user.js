@@ -92,3 +92,6 @@ user_pref("general.smoothScroll.lines.durationMaxMS", 100);
 user_pref("general.smoothScroll.lines.durationMinMS", 50);
 user_pref("general.smoothScroll.mouseWheel.durationMaxMS", 100);
 user_pref("general.smoothScroll.mouseWheel.durationMinMS", 50);
+
+// Ignore zoom changes on PDF links
+user_pref("pdfjs.ignoreDestinationZoom", true);

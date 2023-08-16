@@ -29,7 +29,7 @@ for file in "${files[@]}"; do
 
   case "$ext" in
     flac)
-      if file "$file" | grep -q '24 bit.*96 kHz'; then
+      if file "$file" | grep -Eq '24 bit.* (96|192) kHz'; then
         options="-sample_fmt s16 -ar 48000"
       fi
       ;;
