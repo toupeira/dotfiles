@@ -8,10 +8,10 @@ exfatprogs
 firmware-linux
 flatpak
 fwupd
-intel-gpu-tools
 intel-media-va-driver-non-free
 lm-sensors
 mesa-va-drivers
+nvtop
 plymouth
 plymouth-label
 radeontop
@@ -97,5 +97,4 @@ yt-dlp
 
 flatpak: com.github.johnfactotum.Foliate
 flatpak: com.github.tchx84.Flatseal
-flatpak: com.rafaelmardojai.Blanket
 flatpak: org.gtk.Gtk3theme.Numix
