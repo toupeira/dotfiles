@@ -1,0 +1,17 @@
+[Unit]
+Description=Configure AMDGPU power profile
+
+[Service]
+Type=simple
+RemainAfterExit=yes
+ExecStart=sh -c "\
+  echo manual > /sys/class/drm/renderD128/device/power_dpm_force_performance_level; \
+  echo 2 > /sys/class/drm/renderD128/device/pp_power_profile_mode \
+"
+ExecStop=sh -xc "\
+  echo auto > /sys/class/drm/renderD128/device/power_dpm_force_performance_level; \
+  echo 0 > /sys/class/drm/renderD128/device/pp_power_profile_mode \
+"
+
+[Install]
+WantedBy=multi-user.target
