@@ -192,7 +192,7 @@ function dotfiles {
   elif [ "$1" = "dconf" ] && [ $# -eq 1 ]; then
     cd "$path/dconf"
   else
-    command dotfiles "$@"
+    /etc/dotfiles/bin/dotfiles "$@"
   fi
 }
 

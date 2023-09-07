@@ -7,7 +7,7 @@ HOSTNAME = socket.gethostname()
 METADATA_EXPORT = '/slack/scrapbook/config/quodlibet/metadata.' + HOSTNAME + '.tsv'
 
 if HOSTNAME == 'schtube':
-    METADATA_IMPORT = METADATA_EXPORT.replace(HOSTNAME, 'meerkat')
+    METADATA_IMPORT = METADATA_EXPORT.replace(HOSTNAME, 'ocelot')
 else:
     METADATA_IMPORT = METADATA_EXPORT.replace(HOSTNAME, 'schtube')
 
@@ -17,6 +17,10 @@ def status(message):
 def ask(message):
     reply = input(' \033[0;33m> \033[1;33m%s \033[0;33m[Y/n]\033[0m ' % message).lower()
     return not len(reply) or reply[0] != 'n'
+
+def ask_no(message):
+    reply = input(' \033[0;33m> \033[1;33m%s \033[0;33m[y/N]\033[0m ' % message).lower()
+    return len(reply) and reply[0] == 'y'
 
 last_file = None
 def log(file, message):
@@ -63,7 +67,7 @@ if os.path.exists(METADATA_IMPORT):
         rating = round(float(rating), 1)
         if rating >= 0 and rating != old_rating:
             log(filename, '\033[1;32mrating: %.1f -> %.1f' % (old_rating, rating))
-            if old_rating == -1 or ask('%s rating from %.1f to %.1f?' % ('Raise' if rating > old_rating else 'Lower', old_rating, rating)):
+            if old_rating == -1 or ask_no('%s rating from %.1f to %.1f?' % ('Raise' if rating > old_rating else 'Lower', old_rating, rating)):
                 song['~#rating'] = rating
                 changes = True
 

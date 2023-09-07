@@ -569,7 +569,7 @@ function run {
       ;;
     # }}}
     build-all) # {{{
-      run build vim/bundle/fzf ./install --bin
+      run build fzf ./install --bin
       ;;
     # }}}
 

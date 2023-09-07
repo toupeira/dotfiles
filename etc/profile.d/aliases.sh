@@ -9,7 +9,7 @@ alias @='mux -b -d -w'
 # general shell aliases
 eval $( dircolors -b )
 alias ls='ls --color --quoting-style=literal'
-alias ll='ls -lh'
+alias ll='ls -lFh'
 alias l='ls -A'
 alias ..='cd ..'
 alias ...='cd ../..'

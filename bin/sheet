@@ -1,0 +1,15 @@
+#!/bin/bash
+
+cd /slack/sound/sheets || exit 1
+
+if [ $# -eq 0 ]; then
+  exec xdg-open .
+fi
+
+sheet=$( find . -name '*.pdf' | fzf -f "$*" | sort | head -1 )
+
+if [ -f "$sheet" ]; then
+  xdg-open "$sheet"
+else
+  notify -i dialog-no "Couldn't find sheet music for '$*'"
+fi

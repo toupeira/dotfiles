@@ -3,7 +3,7 @@
 hostname=$( hostname )
 
 if [ "$hostname" = "schtube" ]; then
-  target="meerkat"
+  target="ocelot"
 else
   target="schtube"
 fi

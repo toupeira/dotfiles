@@ -2,7 +2,7 @@
 
 BACKUP="/media/$USER/SLACK-BACKUP"
 
-if [ ! -d "$BACKUP" ]; then
+if ! mountpoint -q "$BACKUP"; then
   echo "$BACKUP is not mounted."
   exit 1
 fi
@@ -13,11 +13,8 @@ DIRS="books games music photos scrapbook sound"
 
 if [ "$HOSTNAME" = "schtube" ]; then
   DIRS="$DIRS backups movies series"
-  sudo=sudo
-else
-  unset sudo
 fi
 
-$sudo rsync -av --delete \
+rsync -av --delete \
   --exclude steam \
   $DIRS "$BACKUP" "$@"
