@@ -719,7 +719,7 @@ function run {
       update flatpak    'flatpak update && flatpak uninstall --unused'
       update firmware   fwupdmgr update
 
-      update asdf       'asdf update && asdf plugin update --all; asdf global ruby latest:3; asdf global yarn latest; asdf install'
+      update asdf       'asdf update && asdf plugin update --all; echo; asdf global ruby latest:3; asdf global yarn latest; asdf install'
       update gem        'gem update && gem cleanup'
       update yarn       yarn global upgrade
 
