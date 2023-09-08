@@ -3,4 +3,4 @@ ACTION=="add", SUBSYSTEM=="usb", ATTRS{idVendor}=="046d", ATTRS{idProduct}=="c52
 
 # USB controller causing problems with suspend
 # https://gitlab.freedesktop.org/drm/amd/-/issues/2173
-ACTION=="add", SUBSYSTEM=="pci", DRIVERS=="xhci_hcd", ENV{PCI_SLOT_NAME}=="0000:11:00.0", ATTR{power/wakeup}="disabled"
+ACTION=="add", SUBSYSTEM=="pci", DRIVERS=="xhci_hcd", ENV{PCI_ID}=="1022:43F7", ATTR{power/wakeup}="disabled"

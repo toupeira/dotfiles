@@ -66,6 +66,7 @@ task-desktop
 task-gnome-desktop
 ttf-mscorefonts-installer
 xdg-user-dirs-gtk
+xdg-utils
 
 # Xorg
 wmctrl

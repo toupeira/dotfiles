@@ -95,3 +95,7 @@ user_pref("general.smoothScroll.mouseWheel.durationMinMS", 50);
 
 // Ignore zoom changes on PDF links
 user_pref("pdfjs.ignoreDestinationZoom", true);
+
+// Disable notification and location requests
+user_pref("permissions.default.desktop-notification", 2);
+user_pref("permissions.default.geo", 2);
