@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /slack/sound/sheets || exit 1
+cd ~/documents/sheets || exit 1
 
 if [ $# -eq 0 ]; then
   exec xdg-open .
