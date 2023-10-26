@@ -20,6 +20,7 @@ sub-border-size=3
 sub-border-color=0/0/0/0.6
 sub-color=1/1/1/0.6
 slang=en,eng,de,ger
+subs-with-matching-audio=yes
 
 # osd
 osd-scale=0.5

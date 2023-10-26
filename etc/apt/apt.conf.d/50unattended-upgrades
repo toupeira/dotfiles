@@ -28,15 +28,16 @@ Unattended-Upgrade::Origins-Pattern {
         // but the Debian release itself will not be automatically upgraded.
 //      "origin=Debian,codename=${distro_codename}-updates";
 //      "origin=Debian,codename=${distro_codename}-proposed-updates";
-        "origin=Debian,codename=${distro_codename},label=Debian";
-        "origin=Debian,codename=${distro_codename},label=Debian-Security";
-        "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+//      "origin=Debian,codename=${distro_codename},label=Debian";
+//      "origin=Debian,codename=${distro_codename},label=Debian-Security";
+//      "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
 
         // Archive or Suite based matching:
         // Note that this will silently match a different release after
         // migration to the specified archive (e.g. testing becomes the
         // new stable).
-//      "o=Debian,a=stable";
+        "o=Debian,a=unstable,l=Debian";
+        "o=liquorix,a=unstable,l=kernel";
 //      "o=Debian,a=stable-updates";
 //      "o=Debian,a=proposed-updates";
 //      "o=Debian Backports,a=${distro_codename}-backports,l=Debian Backports";
@@ -97,7 +98,7 @@ Unattended-Upgrade::Mail "root";
 //    "always", "only-on-error" or "on-change"
 // If this is not set, then any legacy MailOnlyOnError (boolean) value
 // is used to chose between "only-on-error" and "on-change"
-Unattended-Upgrade::MailReport "only-on-error";
+Unattended-Upgrade::MailReport "on-change";
 
 // Remove unused automatically installed kernel-related packages
 // (kernel images, kernel headers and kernel version locked tools).
