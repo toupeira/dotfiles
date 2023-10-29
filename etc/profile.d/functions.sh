@@ -269,7 +269,7 @@ function ssh.mux {
   shift
 
   for host in $( echo "$@" | tr " " "\\n" | tac ); do
-    mux -b -d ssh "$host"
+    tmux split-window -vd ssh "$host"
   done
 
   tmux select-layout even-vertical

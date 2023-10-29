@@ -150,7 +150,6 @@ case "$1" in
     shift 2
     ;;
   @*)
-    mux store
     command="mux $1"
     shift
     ;;

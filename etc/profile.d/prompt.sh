@@ -14,7 +14,7 @@ PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_
 PS2=" \[\e[1;35m\]»\[\e[0m\] "
 
 # Update title when path changes
-PROMPT_COMMAND='_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_path=$( _prompt_path) && [ -n "$TMUX" ] && mux store; [ ${#_prompt_path} -gt 24 ] && mux title "${_prompt_path:0:24}…" || mux title "$_prompt_path"; _last_pwd="$PWD"'
+PROMPT_COMMAND='_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_path=$( _prompt_path); [ ${#_prompt_path} -gt 24 ] && mux title "${_prompt_path:0:24}…" || mux title "$_prompt_path"; _last_pwd="$PWD"'
 
 # Prompt helpers
 function _prompt_path {
@@ -34,7 +34,7 @@ function _prompt_path {
 }
 
 function _prompt_jobs {
-  local jobs=`jobs | grep -Evc 'mux (store|title)'`
+  local jobs=`jobs | grep -Fvc 'mux title'`
 
   if [ $jobs -gt 0 ]; then
     printf '[%d job%s] ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"

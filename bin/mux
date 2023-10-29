@@ -8,8 +8,6 @@ function usage {
   echo "  mux COMMAND..         Run a command in a new window"
   echo "  mux @PROCESS          Run a process from a Procfile in a new window"
   echo
-  echo "  mux store [PATH]      Store the current directory for the pane"
-  echo "  mux restore           Restore the current directory for the pane"
   echo "  mux loop COMMAND..    Run a command repeatedly"
   echo "  mux title TITLE       Set the current tmux window title"
   echo
@@ -17,8 +15,6 @@ function usage {
   echo "  -t TITLE      Specify title for new window"
   echo "  -s            Split window horizontally"
   echo "  -v            Split window vertically"
-  echo "  -b            Small pane on the bottom"
-  echo "  -r            Small pane on the right"
   echo "  -w            Wait after command exits"
   echo
   echo "Pass options to tmux:"
@@ -38,7 +34,7 @@ case "$1" in
       commands=$( grep -Eo "^$proc.*:.+" Procfile )
       count=$( echo "$commands" | grep -c . )
 
-      if [ $count -gt 0 ]; then
+      if [ "$count" -gt 0 ]; then
         echo "$commands" | while read -r command; do
           localproc=$( echo "$command" | cut -d: -f1 )
           command=$( echo "$command" | cut -d: -f2- )
@@ -159,22 +155,6 @@ case "$1" in
     $0 -t "@$proc [$( basename "$PWD" )]" $options "$@" "$0 loop $command"
     ;;
 
-  # Store/restore the current directory for the pane
-  store|restore)
-    if [ -n "$TMUX_PANE" ]; then
-      pane=$( echo "$TMUX_PANE" | tr -d % )
-    else
-      pane=$( tmux display -p '#D' | tr -d % )
-    fi
-
-    if [ "$1" = "store" ]; then
-      tmux setenv "TMUXPWD_$pane" "${2:-$PWD}"
-    else
-      path=$( tmux showenv "TMUXPWD_$pane" 2>/dev/null | cut -d= -f2- )
-      [ -n "$path" ] && cd "$path" && echo "$path"
-    fi
-    ;;
-
   # Run a process repeatedly
   loop)
     shift
@@ -237,20 +217,6 @@ case "$1" in
           title="$2"
           shift
           ;;
-        -b)
-          action="split-window"
-          height=$( tmux list-panes -F '#{pane_active} #{pane_height}' | awk '/^1/ { print $2 }' )
-          height=$(( height / 3 ))
-          height=$(( height < 10 ? 10 : height ))
-          args="$args -v -l $height"
-          ;;
-        -r)
-          action="split-window"
-          width=$( tmux list-panes -F '#{pane_active} #{pane_width}' | awk '/^1/ { print $2 }' )
-          width=$(( width * 5 / 14 ))
-          width=$(( width < 30 ? 30 : width ))
-          args="$args -h -l $width"
-          ;;
         -s)
           action="split-window"
           args="$args -v"
@@ -284,17 +250,12 @@ case "$1" in
       title="$* [$( basename "$PWD" )]"
     fi
 
-    cd "$( $0 restore )" || true
-
     if [ "$wait" ]; then
       wait="echo -ne '\n\e[0;32m[\e[1;37mDone: \e[1;32m$*\e[0;32m]\e[0m '; read -n 1"
     fi
 
     tmux $action $args -- "
-      export PATH=\"$PATH\";
       $0 title '$title';
-      cd \"$PWD\";
-      $0 store;
       $*;
       $wait
     " || tmux display "Pane too small"

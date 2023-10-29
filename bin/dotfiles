@@ -183,7 +183,8 @@ function dryrun-message {
 # Run a command in a tmux pane if possible
 function mux-wrap {
   if [ -n "$TMUX" ]; then
-    system mux -b -d -w "$@"
+    system mux -s -d -w "$@"
+    system tmux select-layout even-vertical
   else
     system "$@"
   fi
@@ -706,8 +707,7 @@ function run {
         elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
           status "Running {{$*}}"
           if [ "$1" = "xdg-open" ]; then
-            shift
-            xdg-open "$@"
+            "$@"
           else
             mux-wrap "$@"
           fi
