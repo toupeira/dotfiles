@@ -10,7 +10,9 @@ flatpak
 fwupd
 intel-media-va-driver-non-free
 lm-sensors
+mesa-utils
 mesa-va-drivers
+mesa-vulkan-drivers
 nvtop
 plymouth
 plymouth-label
