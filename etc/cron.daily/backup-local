@@ -4,13 +4,18 @@
 
 HOSTNAME=$( hostname -s )
 BACKUP="/slack/backups/$HOSTNAME"
+USER=$( getent passwd 1000 | cut -d: -f1 )
 
 mkdir -p "$BACKUP" || exit 1
+
+(dpkg --get-selections) > "$BACKUP/packages.txt"
+
+if [ -n "$USER" ] && [ -d "/home/$USER/.config/dconf" ]; then
+  sudo -u "$USER" dconf dump / > "$BACKUP/dconf.ini"
+fi
 
 for file in /etc/backup.d/*; do
   if [ -x "$file" ]; then
     . "$file"
   fi
 done
-
-(date -Iseconds; echo; dpkg --get-selections) > "$BACKUP/packages.txt"

@@ -6,7 +6,7 @@ if [ $# -eq 0 ]; then
   exec xdg-open .
 fi
 
-sheet=$( find . -name '*.pdf' | fzf -f "$*" | sort | head -1 )
+sheet=$( find . -name '*.pdf' | fzf -f "$*" | head -1 )
 
 if [ -f "$sheet" ]; then
   xdg-open "$sheet"

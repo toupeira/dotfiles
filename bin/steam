@@ -1,17 +1,23 @@
 #!/bin/sh
 
-steam="exec flatpak run com.valvesoftware.Steam"
-
-(cd ~/.var/app/com.valvesoftware.Steam 2>/dev/null && rm -f music)
+steam="flatpak run com.valvesoftware.Steam"
 
 if [ "$1" = "--run" ]; then
   shift
   gamepath="/slack/games/steam/steamapps/common/$1"
   gamebin="$2"
 
-  $steam --run sh -c "cd '$gamepath'; exec ./$gamebin"
+  exec $steam --run sh -c "cd '$gamepath'; exec ./$gamebin"
 elif [ -n "$1" ]; then
-  $steam -silent "$@"
-else
-  $steam -forcedesktopscaling=1.5
+  exec $steam -silent "$@"
 fi
+
+bluetoothctl power on
+
+if xrandr | grep -q '3840x2160.*\*'; then
+  $steam -forcedesktopscaling=1.5
+else
+  $steam -forcedesktopscaling="$(gsettings get org.gnome.desktop.interface text-scaling-factor)"
+fi
+
+bluetoothctl power off

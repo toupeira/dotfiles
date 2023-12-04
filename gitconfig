@@ -150,8 +150,8 @@
   cd = checkout development
   switch-branch = "!f() { [ $# -gt 0 ] && exec git switch "$@"; branch=$( git branches 2>/dev/null | fzf +s --no-multi --prompt 'Branches> ' ) && git switch "$branch"; }; f"
   sb = switch-branch
-  branches = "!git -c color.ui=always branch -a | grep -Ev '(/HEAD|/(main|master))' | sed -r -e 's,^[\\* ]*,,' -e 's,remotes/[^/]+/,,'"
-  default-branch = !git symbolic-ref --short refs/remotes/origin/HEAD | cut -c8-
+  branches = "!git -c color.ui=always branch -a --sort=-committerdate | grep -Ev '(/HEAD|/(main|master))' | sed -r -e 's,^[\\* ]*,,' -e 's,remotes/[^/]+/,,'"
+  default-branch = !(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || git symbolic-ref --short refs/remotes/upstream/HEAD) | cut -d/ -f2-
 
   ap = add -p
   all = add -A

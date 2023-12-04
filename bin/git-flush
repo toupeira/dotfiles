@@ -2,7 +2,7 @@
 
 merged_branches=$(
   git branch --format '%(refname:short)' --merged \
-    | grep -Evx "$( git default-branch )|$( git rev-parse --abbrev-ref HEAD)|develop|development"
+    | grep -Evx "$( git default-branch )|$( git rev-parse --abbrev-ref HEAD )|develop|development"
 )
 
 function ask_yes {
