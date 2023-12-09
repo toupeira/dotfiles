@@ -253,6 +253,10 @@ function run {
 
   case "$command" in
     init) # {{{
+      local repository=$( git config remote.origin.url | sed 's|.*github.com[:/]||' )
+      git remote set-url --no-push origin "https://github.com/$repository"
+      git remote set-url --push    origin "git@github.com:$repository"
+
       function install-paths {
         for path in "$@"; do
           if [ ! -e "$path" ] || [ "$( basename "$path" )" = "README.md" ]; then
