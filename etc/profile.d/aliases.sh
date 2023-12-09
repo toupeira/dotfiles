@@ -4,7 +4,7 @@
 
 # dotfiles aliases
 alias dt='dotfiles'
-alias @='mux -b -d -w'
+alias @='mux -s -d -w'
 
 # general shell aliases
 eval $( dircolors -b )

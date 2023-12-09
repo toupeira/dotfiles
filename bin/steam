@@ -10,9 +10,11 @@ if [ "$1" = "--run" ]; then
   exec $steam --run sh -c "cd '$gamepath'; exec ./$gamebin"
 elif [ -n "$1" ]; then
   exec $steam -silent "$@"
+elif pgrep -x steam >/dev/null; then
+  running=1;
 fi
 
-bluetoothctl power on
+[ "$running" ] || bluetoothctl power on
 
 if xrandr | grep -q '3840x2160.*\*'; then
   $steam -forcedesktopscaling=1.5
@@ -20,4 +22,4 @@ else
   $steam -forcedesktopscaling="$(gsettings get org.gnome.desktop.interface text-scaling-factor)"
 fi
 
-bluetoothctl power off
+[ "$running" ] || bluetoothctl power off
