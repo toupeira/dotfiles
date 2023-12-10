@@ -125,8 +125,8 @@
   untracked = ls-files --others --exclude-standard
   ss = !git --no-pager show --stat
 
-  l = log --date=human-local --pretty=format:\"%C(yellow)%h%Creset %C(green)[%ad]%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(auto)%d%Creset\"
-  rl = reflog --date=format:%T --pretty=format:\"%C(yellow)%h%Creset %C(037)%gD:%Creset %C(white)%gs%Creset%C(auto)%d%Creset\"
+  l = log --date=human-local --pretty=format:'%C(yellow)%h%Creset %C(green)[%ad]%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(auto)%d%Creset'
+  rl = reflog --date=format:'%F %T' --pretty=format:'%C(yellow)%h%Creset %C(037)%gD:%Creset %C(white)%gs%Creset%C(auto)%d%Creset'
   ls = "!cd ${GIT_PREFIX:-.} && git l --stat"
   ld = log -p
   ldf = ld --follow
