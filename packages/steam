@@ -1,0 +1,4 @@
+flatpak: com.valvesoftware.Steam
+flatpak: com.github.Matoking.protontricks
+flatpak: org.freedesktop.Platform.VulkanLayer.MangoHud
+flatpak: org.freedesktop.Platform.VulkanLayer.gamescope
