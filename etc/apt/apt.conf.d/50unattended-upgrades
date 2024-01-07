@@ -98,7 +98,7 @@ Unattended-Upgrade::Mail "root";
 //    "always", "only-on-error" or "on-change"
 // If this is not set, then any legacy MailOnlyOnError (boolean) value
 // is used to chose between "only-on-error" and "on-change"
-Unattended-Upgrade::MailReport "on-change";
+Unattended-Upgrade::MailReport "only-on-error";
 
 // Remove unused automatically installed kernel-related packages
 // (kernel images, kernel headers and kernel version locked tools).
