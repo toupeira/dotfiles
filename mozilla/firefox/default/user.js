@@ -99,3 +99,6 @@ user_pref("pdfjs.ignoreDestinationZoom", true);
 // Disable notification and location requests
 user_pref("permissions.default.desktop-notification", 2);
 user_pref("permissions.default.geo", 2);
+
+// Disable Firefox Relay
+user_pref("signon.firefoxRelay.feature", "disabled");
