@@ -4,6 +4,7 @@ bitwig-studio
 elektroid
 jackd2
 lsp-plugins-clap
+pipewire-jack
 pulseaudio-module-jack
 qjackctl
 rtkit

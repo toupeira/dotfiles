@@ -1,0 +1,47 @@
+#!/bin/bash
+
+PIPEWIRE=( pipewire{,-pulse}.{service,socket} wireplumber.service )
+PULSEAUDIO=( pulseaudio.{service,socket} )
+
+function status {
+  echo
+  echo -n "  PipeWire:   "
+  pgrep -x pipewire >/dev/null && echo -ne "\e[1;32mrunning\e[0m, " || echo -ne "\e[1;31mstopped\e[0m, "
+  systemctl --user is-enabled pipewire
+
+  echo -n "  PulseAudio: "
+  pgrep -x pulseaudio >/dev/null && echo -ne "\e[1;32mrunning\e[0m, " || echo -ne "\e[1;31mstopped\e[0m, "
+  systemctl --user is-enabled pulseaudio
+  echo
+}
+
+case "$1" in
+  ""|status)
+    status
+    ;;
+  restart)
+    systemctl --user restart "${PIPEWIRE[@]}"
+    ;;
+  enable)
+    systemctl --user stop "${PULSEAUDIO[@]}"
+
+    systemctl --user mask "${PULSEAUDIO[@]}"
+    systemctl --user unmask "${PIPEWIRE[@]}"
+    systemctl --user daemon-reload
+
+    systemctl --user start "${PIPEWIRE[@]}"
+
+    status
+    ;;
+  disable)
+    systemctl --user stop "${PIPEWIRE[@]}"
+
+    systemctl --user mask "${PIPEWIRE[@]}"
+    systemctl --user unmask "${PULSEAUDIO[@]}"
+    systemctl --user daemon-reload
+
+    systemctl --user start "${PULSEAUDIO[@]}"
+
+    status
+    ;;
+esac
