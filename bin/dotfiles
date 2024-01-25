@@ -17,7 +17,7 @@ function usage {
   echo "  init                      Install symlinks for all dotfiles interactively"
   echo "  install PATH...           Install symlink for PATH"
   echo "  add PATH...               Add file to repository and replace it with a symlink"
-  echo "  lint                      Find broken symlinks"
+  echo "  lint                      Report configuration problems"
   echo
   echo "  sync                      Pull, commit and push"
   echo "  commit-all, ca            Commit all changes"
@@ -397,15 +397,14 @@ function run {
     lint) # {{{
       echo
       warning "{{Broken symlinks}}"
-      sudo find /etc ~ \
-        \( -path ~/.local/share/flatpak/repo -o -path ~/.var/app -o -name lock \) -prune -o \
-        -xtype l -exec ls --color -ld "{}" \;
+      sudo fdfind . ~ /etc --unrestricted --follow --mount --type symlink \
+        --exclude /.local/share/flatpak --exclude /.var/app \
+        --color always | grep -Ev '[0-9]mlock\b'
+        # --exclude lock doesn't work: https://github.com/sharkdp/fd/issues/746
       echo
 
       warning "{{Configuration updates}}"
-      sudo find /etc \
-        \( -name '*.dpkg-*' -o -name '*.ucf-*' \) \
-        -exec ls --color "{}" \;
+      sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --unrestricted
       echo
       ;;
     # }}}
