@@ -1,18 +1,26 @@
 #!/bin/bash
 
-[ "$1" != "--really" ] || exec nice ionice -c3 "$0" --really
+[ "$1" != "--really" ] || exec nice ionice "$0" --really
 
 HOSTNAME=$( hostname -s )
 BACKUP="/slack/backups/$HOSTNAME"
 USER=$( getent passwd 1000 | cut -d: -f1 )
 
-mkdir -p "$BACKUP" || exit 1
+if [ ! -n "$USER" ]; then
+  echo "Couldn't find default user"
+  exit 1
+fi
 
-(dpkg --get-selections) > "$BACKUP/packages.txt"
+mkdir -p "$BACKUP" || exit 1
+cd "$BACKUP" || exit 1
+
+dpkg --get-selections > packages.txt
 
 if [ -n "$USER" ] && [ -d "/home/$USER/.config/dconf" ]; then
-  sudo -u "$USER" dconf dump / > "$BACKUP/dconf.ini"
+  sudo -u "$USER" dconf dump / > dconf.ini
 fi
+
+chown "$USER":"$USER" . {packages.txt,dconf.ini}
 
 for file in /etc/backup.d/*; do
   if [ -x "$file" ]; then

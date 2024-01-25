@@ -395,7 +395,18 @@ function run {
       ;;
     # }}}
     lint) # {{{
-      sudo find ~ /etc -xtype l -exec ls --color -ld "{}" \;
+      echo
+      warning "{{Broken symlinks}}"
+      sudo find /etc ~ \
+        \( -path ~/.local/share/flatpak/repo -o -path ~/.var/app -o -name lock \) -prune -o \
+        -xtype l -exec ls --color -ld "{}" \;
+      echo
+
+      warning "{{Configuration updates}}"
+      sudo find /etc \
+        \( -name '*.dpkg-*' -o -name '*.ucf-*' \) \
+        -exec ls --color "{}" \;
+      echo
       ;;
     # }}}
 
