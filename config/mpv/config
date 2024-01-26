@@ -5,10 +5,6 @@ hwdec=auto
 geometry=50%:50%
 
 # audio
-volume=100
-ao=pulse
-audio-channels=stereo
-audio-spdif=ac3,eac3,dts,dts-hd
 audio-display=no
 
 # subtitles

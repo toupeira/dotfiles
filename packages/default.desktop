@@ -34,13 +34,9 @@ libavcodec-extra
 libavfilter-extra
 libavformat-extra
 pavucontrol
-pipewire
-pipewire-pulse
-pulseaudio
+pipewire-audio
 pulseaudio-utils
-pulseaudio-module-bluetooth
 vainfo
-wireplumber
 
 # Desktop
 dconf-cli
