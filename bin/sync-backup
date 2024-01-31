@@ -12,7 +12,7 @@ cd /slack || exit 1
 DIRS="books music photos scrapbook sound"
 
 if [ "$HOSTNAME" = "schtube" ]; then
-  DIRS="$DIRS backups movies series"
+  DIRS="$DIRS movies series"
 fi
 
 rsync -av --update --delete \

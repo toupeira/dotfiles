@@ -2,10 +2,10 @@
 
 hostname=$( hostname )
 
-if [ "$hostname" = "schtube" ]; then
-  target="ocelot"
-else
+if [ "$hostname" = "ocelot" ]; then
   target="schtube"
+else
+  target="ocelot"
 fi
 
 paths=${1:-music sound photos games}

@@ -6,6 +6,7 @@ lsp-plugins-clap
 pipewire-jack
 pulseaudio-module-jack
 qjackctl
+qpwgraph
 rtkit
 
 flatpak: net.sourceforge.kmidimon

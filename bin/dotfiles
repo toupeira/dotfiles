@@ -399,6 +399,7 @@ function run {
       warning "{{Broken symlinks}}"
       sudo fdfind . ~ /etc --unrestricted --follow --mount --type symlink \
         --exclude /.local/share/flatpak --exclude /.var/app \
+        --exclude src --exclude tmp \
         --color always | grep -Ev '[0-9]mlock\b'
         # --exclude lock doesn't work: https://github.com/sharkdp/fd/issues/746
       echo
