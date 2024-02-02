@@ -22,9 +22,6 @@ export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export QT_QPA_PLATFORMTHEME="gtk2"
 export CALIBRE_USE_DARK_PALETTE=1
 
-export GOPATH="$HOME/src/upstream/go"
-export PGDATABASE="postgres"
-
 # Colorize manpages
 export LESS_TERMCAP_mb=$'\e[1;31m'
 export LESS_TERMCAP_md=$'\e[1;32m'

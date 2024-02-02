@@ -102,3 +102,6 @@ user_pref("permissions.default.geo", 2);
 
 // Disable Firefox Relay
 user_pref("signon.firefoxRelay.feature", "disabled");
+
+// Disable spellcheck
+user_pref("layout.spellcheckDefault", "disabled");

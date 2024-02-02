@@ -9,10 +9,13 @@
 [user]
   name = Markus Koller
   email = markus@snafu.ch
-  signingKey = DEEC7546D0A869C5AFDFD34AEC9A8B44C0635CE2
+  signingKey = ~/.ssh/id_ed25519.pub
 
-[includeIf "gitdir:~/src/gitlab/"]
-  path = .gitconfig.gitlab
+[gpg]
+  format = ssh
+
+[includeIf "gitdir:~/src/denteo/"]
+  path = .gitconfig.denteo
 
 [pager]
   diff = delta
