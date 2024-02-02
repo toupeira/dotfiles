@@ -48,6 +48,7 @@ alias pskill='pkill -fe'
 alias smem='smem -akt'
 alias watch='watch -cd -n 1 '
 alias cpufreq='watch "sudo cpupower -c all frequency-info | grep assert"'
+alias sleeplog='journalctl -u sleep.target --no-pager | grep ".*Stopped.*\|$"'
 
 # package managment
 alias pkget='aptitude -Z install'
