@@ -312,3 +312,15 @@ function serve {
   xdg-open "http://localhost:$port/" &>/dev/null
   python3 -m http.server "$port"
 }
+
+function dusort {
+  (
+    if [ $# -eq 0 ]; then
+      du -sch -- *
+    elif [ $# -eq 1 ]; then
+      du -sch -- "${1%/}"/*
+    else
+      du -sch -- "${@%/}"
+    fi
+  ) | sort -h
+}

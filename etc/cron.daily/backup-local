@@ -6,21 +6,25 @@ HOSTNAME=$( hostname -s )
 BACKUP="/slack/backups/$HOSTNAME"
 USER=$( getent passwd 1000 | cut -d: -f1 )
 
-if [ ! -n "$USER" ]; then
+if [ -z "$USER" ]; then
   echo "Couldn't find default user"
   exit 1
 fi
 
+function user {
+  sudo -u "$USER" sh -c "$1"
+}
+
+umask 0027
 mkdir -p "$BACKUP" || exit 1
 cd "$BACKUP" || exit 1
+chown "$USER:$USER" "$BACKUP"
 
-dpkg --get-selections > packages.txt
+user "dpkg --get-selections > packages.txt"
 
-if [ -n "$USER" ] && [ -d "/home/$USER/.config/dconf" ]; then
-  sudo -u "$USER" dconf dump / > dconf.ini
+if [ -d "/home/$USER/.config/dconf" ]; then
+  user "dconf dump / > dconf.ini"
 fi
-
-chown "$USER":"$USER" . {packages.txt,dconf.ini}
 
 for file in /etc/backup.d/*; do
   if [ -x "$file" ]; then
