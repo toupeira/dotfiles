@@ -85,22 +85,31 @@ function mvln {
     local echo=""
   fi
 
-  local source=$( readlink -f "$1" 2>/dev/null )
+  local source=$( realpath "$1" 2>/dev/null )
   local target=$( realpath "$2" 2>/dev/null )
-  [ -z "$target" ] && target="$2"
 
-  [ -z "$source" ] || [ -z "$target" ] && echo "Usage: mvln [-n] SOURCE TARGET" && return 1
-  [ ! -e "$source" ] && echo "$source: No such file or directory" && return 1
-  [ "$source" = "$target" ] && echo "Source and target are the same." && return 1
-
-  $echo mv -v "$source" "$target" || return 1
+  if [ -z "$source" ] || [ -z "$target" ]; then
+    echo "Usage: mvln [-n] SOURCE TARGET"
+    return 1
+  elif [ ! -e "$source" ]; then
+    echo "$1: No such file or directory"
+    return 1
+  elif [ -L "$source" ]; then
+    echo "$1: Is already a symlink"
+    return 1
+  elif [ "$source" = "$target" ]; then
+    echo "$1: Source and target are the same."
+    return 1
+  fi
 
   if [ -d "$target" ]; then
-    local name=$( basename "$source" )
-    $echo ln -sv "$target/$name" "$source"
+    local link_target="$target/$( basename "$source" )"
   else
-    $echo ln -sv "$target" "$source"
+    local link_target="$target"
   fi
+
+  $echo mv -v "$source" "$target" || return 1
+  $echo ln -sv "$link_target" "$source"
 }
 
 # rg wrapper to edit files matching a pattern

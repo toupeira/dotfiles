@@ -1,8 +1,6 @@
 #!/bin/bash
 
-hostname=$( hostname )
-
-if [ "$hostname" = "ocelot" ]; then
+if [ "$HOSTNAME" = "ocelot" ]; then
   target="schtube"
 else
   target="ocelot"
