@@ -1,17 +1,2 @@
-# temporary files
-.#*
-.~*
-.DS_Store
-
 # binary files
 *.pyc
-
-# vim
-.*.sw?
-doc/tags
-doc/tags-*
-Session.vim
-.projections.json
-
-# ruby
-.rake_tasks~

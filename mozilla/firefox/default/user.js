@@ -105,3 +105,6 @@ user_pref("signon.firefoxRelay.feature", "disabled");
 
 // Disable spellcheck
 user_pref("layout.spellcheckDefault", "disabled");
+
+// Disable middle-click paste
+user_pref("middlemouse.paste", false);

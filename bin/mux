@@ -41,16 +41,7 @@ case "$1" in
           title=${localproc:${#proc}+1}
           title=${title:-$localproc}
 
-          case "$localproc" in
-            watcher)
-              options="-d -r"
-              ;;
-            *)
-              options="-d"
-              ;;
-          esac
-
-          $0 -t "@$title" $options "$@" "$0 loop '$command'"
+          $0 -t "@$title" -d "$@" "$0 loop '$command'"
         done
 
         exit
@@ -220,6 +211,10 @@ case "$1" in
         -s)
           action="split-window"
           args="$args -v"
+          ;;
+        -b)
+          action="split-window"
+          args="$args -v -l 15"
           ;;
         -v)
           action="split-window"
