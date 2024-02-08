@@ -5,13 +5,6 @@
 # Automatically use Gemfile when present in tree
 # export RUBYGEMS_GEMDEPS=-
 
-# Load asdf
-if [ -d ~/.asdf ]; then
-  export ASDF_NODEJS_LEGACY_FILE_DYNAMIC_STRATEGY="latest_available"
-
-  . ~/.asdf/asdf.sh
-fi
-
 function gem {
   if [ "$1" = "cd" ]; then
     local path
