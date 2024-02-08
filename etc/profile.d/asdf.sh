@@ -4,8 +4,6 @@
 
 # Load asdf
 if [ -d ~/.asdf ]; then
-  export ASDF_NODEJS_LEGACY_FILE_DYNAMIC_STRATEGY="latest_available"
-
   . ~/.asdf/asdf.sh
 fi
 

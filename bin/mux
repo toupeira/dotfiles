@@ -75,6 +75,20 @@ case "$1" in
           exit 1
         fi
         ;;
+      dev)
+        options="-d"
+
+        if [ -x bin/dev ]; then
+          command="bin/dev"
+        elif [ -f Procfile.dev ]; then
+          command="foreman Procfile.dev"
+        elif [ -f Procfile ]; then
+          command="foreman Procfile"
+        else
+          echo "Can't find development setup for project."
+          exit 1
+        fi
+        ;;
       log)
         if [ -f "log/development.log" ]; then
           command="tail -n 0 -f log/development.log"

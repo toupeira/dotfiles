@@ -75,7 +75,7 @@ alias fd='fdfind --hidden --ignore-file /etc/dotfiles/ignore'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases
-for i in bundle console log migrate server watcher; do
+for i in bundle console dev log migrate server watcher; do
   eval "alias @$i='mux @$i'"
 done
 
