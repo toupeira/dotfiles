@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ -n "$1" ] && [ "$1" != "-" ]; then
+if [ -n "$1" ] && [ "$1" != "." ]; then
   exec sensible-editor "$@"
 fi
 
@@ -9,7 +9,7 @@ count=$( echo "$files" | grep -c . )
 
 if [ "$count" = 0 ]; then
   files=$( $FZF_CTRL_T_COMMAND | fzf )
-elif [ "$1" = "-" ]; then
+elif [ "$1" = "." ]; then
   shift
   echo "$files"
   echo -e " \e[1;32m>\e[0m \e[1;37mEditing $count modified files...\e[0m"

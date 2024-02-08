@@ -223,6 +223,9 @@
 [submodule "vim/bundle/godot"]
 	path = vim/bundle/godot
 	url = https://github.com/habamax/vim-godot.git
-[submodule "oh-my-zsh"]
-	path = oh-my-zsh
+[submodule "zsh/oh-my-zsh"]
+	path = zsh/oh-my-zsh
 	url = https://github.com/ohmyzsh/ohmyzsh.git
+[submodule "zsh/themes/powerlevel10k"]
+	path = zsh/themes/powerlevel10k
+	url = https://github.com/romkatv/powerlevel10k.git

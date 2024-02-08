@@ -23,7 +23,8 @@ has() {
 
 # oh-my-zsh setup {{{
 
-export ZSH=$HOME/.oh-my-zsh
+export ZSH=~/.zsh/oh-my-zsh
+export ZSH_CUSTOM=~/.zsh
 
 ZSH_THEME="powerlevel10k/powerlevel10k"
 
@@ -61,9 +62,6 @@ zstyle ':omz:plugins:bundler' aliases no
 zstyle ':omz:plugins:git'     aliases no
 zstyle ':omz:plugins:tmux'    aliases no
 
-source $ZSH/oh-my-zsh.sh
-
 # }}}
 
-# load powerline10k prompt
-[[ ! -f ~/.p10k.zsh ]] || source ~/.p10k.zsh
+. $ZSH/oh-my-zsh.sh

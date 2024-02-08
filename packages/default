@@ -1,19 +1,14 @@
 apt-file
 apt-listchanges
-apt-xapian-index
 bash-completion
 bat
 bc
 bsd-mailx
 curl
-dctrl-tools
 ddate
 debconf-utils
 debian-archive-keyring
-debian-goodies
 debian-keyring
-debtags
-dirmngr
 dnsutils
 ethtool
 fakeroot
@@ -25,7 +20,6 @@ fortunes
 git
 git-extras
 gnupg
-gnupg2
 gocryptfs
 httpie
 imagemagick
