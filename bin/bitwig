@@ -1,0 +1,22 @@
+#!/bin/bash
+
+if pgrep -x bitwig-studio >/dev/null; then
+  exec wmctrl -xa com.bitwig.BitwigStudio
+fi
+
+if [ ! -L ~/"Bitwig Studio" ] && [ -d /slack/sound/bitwig/workspace ]; then
+  rm -rf ~/"Bitwig Studio"
+  ln -s /slack/sound/bitwig/workspace ~/"Bitwig Studio"
+fi
+
+wmctrl -s 1
+jack.run bitwig-studio "$@"
+
+if [ -L ~/"Bitwig Studio" ]; then
+  rm -f ~/"Bitwig Studio"
+fi
+
+if [ -d ~/Downloads ]; then
+  rm -f ~/Downloads/*.bwtemplate
+  rmdir --ignore-fail-on-non-empty ~/Downloads
+fi
