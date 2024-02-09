@@ -108,3 +108,6 @@ user_pref("layout.spellcheckDefault", "disabled");
 
 // Disable middle-click paste
 user_pref("middlemouse.paste", false);
+
+// Disable builtin emoji font
+user_pref("font.name-list.emoji", "Noto Color Emoji");
