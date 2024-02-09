@@ -140,48 +140,6 @@ function rg.app {
   rg "$@" "${dirs[@]}"
 }
 
-# GVim wrapper for SSH connections to pass a file to a local instance
-if [ -n "$SSH_CONNECTION" ]; then
-  [ "$( type -t gvi )" = "alias" ] && unalias gvi
-
-  function gvi {
-    local wait=1
-
-    if [ -z "$DISPLAY" ] || [ ! -x /usr/bin/gvim ]; then
-      echo "Can't find GVim instance..."
-      vim "$@"
-      return
-    fi
-
-    while true; do
-      # Check if a GVim server is running, this will be passed through X11 to the local instance
-      if command gvim --serverlist | grep -q .; then
-        args=()
-        options=
-        for arg in "$@"; do
-          if [ "${arg:0:1}" = "@" ]; then
-            options="$options --servername ${arg:1}"
-          else
-            # Transform file paths into scp:// URIs
-            args=( "${args[@]}" "scp://$HOSTNAME/$( readlink -f "$arg" )" )
-          fi
-        done
-
-        # Execute GVim in the root directory to avoid errors when the cwd
-        # doesn't exist on the local machine
-        (cd /; command gvim $options --remote "${args[@]}")
-
-        return
-      else
-        # Wait until a local GVim server can be found
-        [ $wait -eq 1 ] && echo "Waiting for GVim server..."
-        wait=0
-        sleep 1
-      fi
-    done
-  }
-fi
-
 # Switch to dotfiles repository if no arguments are passed
 function dotfiles {
   local path=$( command dotfiles --path )

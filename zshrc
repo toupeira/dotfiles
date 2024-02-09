@@ -56,7 +56,10 @@ plugins=(
 
 export FZF_BASE=/etc/dotfiles/fzf
 export ZSH_THEME_GIT_PROMPT_CACHE=true
-export ZSH_TMUX_AUTOSTART=true
+
+if [ -z "$SUDO_USER" ] && [ "$TERM" != "linux" ]; then
+  export ZSH_TMUX_AUTOSTART=true
+fi
 
 zstyle ':omz:plugins:bundler' aliases no
 zstyle ':omz:plugins:git'     aliases no

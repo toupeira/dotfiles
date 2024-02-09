@@ -20,7 +20,7 @@ shopt -s nocaseglob
 # Disable flow control (Ctrl-S/Q)
 stty -ixon
 
-if [ -z "$TMUX" ] && [ -z "$SUDO_USER" ] && type tmux &>/dev/null; then
+if [ -z "$TMUX" ] && [ -z "$SUDO_USER" ] && [ "$TERM" != "linux" ] && type tmux &>/dev/null; then
   # ignore stale tmux sockets
   if [ -n "$TMUX" ] && [ ! -S "$TMUX" ]; then
     unset TMUX

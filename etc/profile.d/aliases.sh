@@ -36,6 +36,7 @@ alias ssh.syncthing='echo "Opening Syncthing proxy in http://localhost:9393"; ss
 alias bat='batcat'
 alias ffmpeg='ffmpeg -hide_banner'
 alias ffprobe='ffprobe -hide_banner'
+alias colortest='colortest-python -np'
 
 # system administration
 alias sctl='systemctl'

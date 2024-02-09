@@ -4,6 +4,7 @@ bash-completion
 bat
 bc
 bsd-mailx
+colortest-python
 curl
 ddate
 debconf-utils

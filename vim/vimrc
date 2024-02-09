@@ -63,10 +63,10 @@
   if !exists('g:vscode')
     syntax enable
 
-    if exists("$DISPLAY")
-      colorscheme custom
-    else
+    if $TERM == "linux"
       colorscheme ron
+    else
+      colorscheme custom
     endif
   endif
 
