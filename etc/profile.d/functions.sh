@@ -86,7 +86,7 @@ function mvln {
   fi
 
   local source=$( realpath "$1" 2>/dev/null )
-  local target=$( realpath "$2" 2>/dev/null )
+  local target="${2%/}"
 
   if [ -z "$source" ] || [ -z "$target" ]; then
     echo "Usage: mvln [-n] SOURCE TARGET"
@@ -97,7 +97,7 @@ function mvln {
   elif [ -L "$source" ]; then
     echo "$1: Is already a symlink"
     return 1
-  elif [ "$source" = "$target" ]; then
+  elif [ "$source" = "$( realpath "$target" )" ]; then
     echo "$1: Source and target are the same."
     return 1
   fi

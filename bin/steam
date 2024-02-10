@@ -3,6 +3,9 @@
 export MANGOHUD=1
 export MANGOHUD_CONFIG=no_display,cpu_temp,gpu_temp,time
 
+# https://github.com/flatpak/flatpak/issues/1971
+rm -f ~/.var/app/com.valvesoftware.Steam/images
+
 steam="flatpak run com.valvesoftware.Steam"
 
 if [ "$1" = "--run" ]; then

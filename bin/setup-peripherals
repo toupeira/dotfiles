@@ -1,0 +1,53 @@
+#!/bin/bash
+
+case "$HOSTNAME" in
+  ocelot)
+    # Setup display
+    dconf write /org/gnome/desktop/interface/text-scaling-factor 1.35
+
+    # Setup audio
+    cards=$( pactl list short cards )
+
+    if [[ "$cards" =~ "Logitech_BRIO" ]]; then
+      pactl set-card-profile alsa_card.usb-046d_Logitech_BRIO_41416119-02 input:analog-stereo
+      pactl set-default-source alsa_input.usb-046d_Logitech_BRIO_41416119-02.analog-stereo
+      pactl set-source-volume alsa_input.usb-046d_Logitech_BRIO_41416119-02.analog-stereo 100%
+    fi
+
+    if [[ "$cards" =~ "TASCAM_Model_12" ]]; then
+      pactl set-sink-volume alsa_output.usb-TASCAM_Model_12_no_serial_number-00.output-stereo 41350 # -12dB
+
+      if jack_control status >/dev/null; then
+        pactl set-default-sink jack_out
+        pactl set-sink-volume jack_out 41350
+      else
+        pactl set-default-sink alsa_output.usb-TASCAM_Model_12_no_serial_number-00.output-stereo
+      fi
+    fi
+    ;;
+
+  meerkat)
+    # Setup display
+    dconf write /org/gnome/desktop/interface/text-scaling-factor 1.35
+
+    # Setup audio
+    pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:analog-stereo+input:analog-stereo
+    pactl set-default-source alsa_input.pci-0000_00_1f.3.analog-stereo
+    ;;
+
+  schtube)
+    # Setup display
+    dconf write /org/gnome/desktop/interface/text-scaling-factor 1.25
+
+    # Setup audio
+    pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:hdmi-surround
+
+    # Setup keyboard
+    solaar config 1 fn-swap off
+    ;;
+
+  *)
+    echo "Unsupported host $HOSTNAME"
+    exit 1
+    ;;
+esac

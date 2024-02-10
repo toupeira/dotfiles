@@ -1,0 +1,78 @@
+#!/bin/bash
+
+function usage {
+  echo "Usage: v.rename [-ni] [movie|tv] PATH [-q QUERY]"
+  exit 1
+}
+
+args=()
+action="keeplink"
+
+if [ "$1" = "-n" ]; then
+  action="test"
+  shift
+elif [ "$1" = "-i" ]; then
+  args+=( --mode interactive )
+  shift
+fi
+
+type="$1"
+path="$2"
+shift 2
+if [ -z "$type" ] || [ ! -e "$path" ]; then
+  usage
+fi
+
+subtitles="{if (subt == '.eng') '.en'}{if (subt == '.ger') '.de'}"
+
+if [ "$1" = "-q" ] || [ "$1" = "--query" ]; then
+  args+=( --q "$2" )
+  shift 2
+fi
+args+=( "$@" )
+
+case "$type" in
+  movie)
+    db="TheMovieDB"
+    output="/slack/movies"
+    format="{if (genres.contains('Documentary')) 'Documentaries/'}{if (genres == ['Music']) 'Music/'}{n.colon(' - ')} ({y})$subtitles"
+    filter="
+      (f.video || (f.subtitle && ['.eng', '.ger'].contains(subt))) \
+        && ![ 'ts' ].contains(ext) \
+        && ![ 'sample', 'rarbg', 'etrg' ].contains(fn.toLowerCase()) \
+        && ![ 'sample', 'extras', 'featurettes', '.unwanted' ].contains(f.dir.name.toLowerCase())
+    "
+    ;;
+  tv)
+    db="TheMovieDB::TV"
+    output="/slack/series"
+    format="{n}/{episode.special ? 'Specials' : 'Season '+s}/{n} {episode.special ? '00x'+special.pad(2) : s.pad(2)+'x'+e.pad(2)} - {t}$subtitles"
+    filter="
+      (f.video || (f.subtitle && ['.eng', '.ger'].contains(subt)))
+    "
+    ;;
+  *)
+    usage
+    ;;
+esac
+
+flatpak run --cwd="$(realpath "$PWD")" net.filebot.FileBot \
+  -r \
+  -non-strict \
+  -unixfs \
+  -rename "$path" \
+  --action "$action" \
+  --db "$db" \
+  --output "$output" \
+  --format "$format" \
+  --file-filter "$filter" \
+  --conflict skip \
+  "${args[@]}"
+status="$?"
+
+if [ $status -eq 0 ] && [ "$action" != "test" ]; then
+  # update Kodi
+  curl -s --connect-timeout 1 --data-binary '{ "jsonrpc": "2.0", "method": "VideoLibrary.Scan", "id": "deluge.postprocess"}' -H 'content-type: application/json;' http://localhost:8080/jsonrpc >/dev/null
+fi
+
+exit "$status"

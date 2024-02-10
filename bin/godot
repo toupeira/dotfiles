@@ -1,0 +1,6 @@
+#!/bin/sh
+cd ~/src/upstream/godot || exit 1
+
+bin=$( find . -type f -name 'Godot_*' | sort | tail -1 )
+
+exec "$bin" "$@"

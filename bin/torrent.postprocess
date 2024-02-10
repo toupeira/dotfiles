@@ -1,0 +1,40 @@
+#!/bin/bash
+
+if [ $# -ne 3 ]; then
+  echo "Usage: $0 TORRENT NAME PATH"
+  exit 1
+fi
+
+hash="$1"
+name="$2"
+path="$3"
+
+# cleanup
+rmdir -p /slack/series/**/* 2>/dev/null
+find /slack/movies -type f -iname '*.srt' | while read -r subtitle; do
+  find "${subtitle%%.*}"* ! -iname '*.srt' | grep -q . || rm -f "$subtitle"
+done
+
+if echo "$path" | grep -q "/slack/download/movies"; then
+  type="movie"
+  output=$( v.rename movie "$path" )
+  status=$?
+elif echo "$path" | grep -q "/slack/download/series"; then
+  type="tv"
+  output=$( v.rename tv "$path" )
+  status=$?
+else
+  exit 0
+fi
+
+if [ $status -ne 0 ] || echo "$output" | grep -q '^Failed ' || ! find "$path" -type l | grep -q .; then
+  notify -i dialog-no "Couldn't auto-detect $name" "$output"
+  exit 1
+elif [ "$type" = "tv" ]; then
+  size=$( du -sk "$path" | cut -f1 )
+  if [ "$size" -lt 1024 ]; then
+    curl http://localhost:9090/api/v2/torrents/delete --data "hashes=$hash&deleteFiles=true"
+  else
+    curl http://localhost:9090/api/v2/torrents/pause --data "hashes=$hash"
+  fi
+fi

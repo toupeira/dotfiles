@@ -1,0 +1,9 @@
+[Desktop Entry]
+Name=Godot Engine
+Exec=godot -p
+Icon=godot
+Terminal=false
+PrefersNonDefaultGPU=true
+Type=Application
+MimeType=application/x-godot-project;
+Categories=Development;IDE;
