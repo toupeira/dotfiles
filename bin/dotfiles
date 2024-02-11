@@ -749,26 +749,33 @@ function run {
       shift
 
       if [ -n "$1" ]; then
-        local files=( "$@" )
+        local paths=( "$@" )
       else
-        local files=( "$DOTFILES"/dconf/*.ini )
+        local paths=( "$DOTFILES"/dconf/*.ini )
       fi
 
-      for file in "${files[@]}"; do
-        local name=$( basename "$file" .ini )
-        local path="/$( echo "$name" | tr . / )/"
+      for path in "${paths[@]}"; do
+        if [ -f "$path" ] || [ "$path" != "${path%.ini}" ]; then
+          local path=$( basename "$path" )
+        fi
+
+        local name=${path%.ini}
+        local name=${name#/}
+        local name=${name%/}
+        local name=${name//\//.}
+
         local file="$DOTFILES/dconf/$name.ini"
+        local path="/${name//./\/}/"
 
         if [ "$action" = "load" ]; then
           status "Loading {{$name}}"
           dconf load "$path" < "$file"
         elif [ "$action" = "dump" ]; then
-          status "Dumping {{$name}}"
-
           if [ -f "$file" ] && grep -Fqx '# :skip-dump:' "$file"; then
             warning "Skipping {{$name}}"
             continue
           else
+            status "Dumping {{$name}}"
             local output=$( dconf dump "$path" )
           fi
 
