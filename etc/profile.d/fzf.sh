@@ -11,8 +11,8 @@ export FZF_DEFAULT_OPTS="
   --ansi --multi --cycle --filepath-word --inline-info --layout default --no-height --no-separator
   --history $HOME/.fzf_history
   --prompt '» '
-  --preview-window right:70%:hidden
-  --bind 'ctrl-a:toggle-all,ctrl-o:toggle-preview,ctrl-j:down,ctrl-n:down,ctrl-p:up,down:next-history,up:previous-history'
+  --preview-window 'right,50%,hidden,<60(up,80%,hidden)'
+  --bind 'ctrl-a:toggle-all,ctrl-/:toggle-preview,ctrl-n:down,ctrl-p:up,down:next-history,up:previous-history'
 "
 
 export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND --type d --type l"
@@ -20,8 +20,8 @@ export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND/--type f/--type d}"
 
 export FZF_CTRL_R_OPTS="
   --prompt 'History» '
-  --preview 'echo {} | cut -d\\  -f4-'
-  --preview-window up:3:hidden:wrap
+  --preview 'echo {} | sed -r \"s/^[0-9]*\\t*//\"'
+  --preview-window 'default,up,5,hidden,wrap'
 "
 export FZF_CTRL_T_OPTS="
   --prompt 'Path» '

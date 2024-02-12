@@ -240,6 +240,9 @@
 " Commands
 " {{{
 
+  " edit vimrc
+  command! RC execute 'edit ' . system('realpath ' . $MYVIMRC)
+
   " abbreviate commands
   " http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
   command! -nargs=+ CommandAlias call <SID>CommandAlias(<f-args>)
@@ -505,9 +508,8 @@ endfunction " }}}
   noremap ,gu :.GBrowse!<CR>
   noremap ,gU :.GBrowse<CR>
 
-  autocmd vimrc User FugitiveIndex setlocal nobuflisted
-  autocmd vimrc User FugitiveIndex,FugitivePager nmap q gq
-  autocmd vimrc User FugitiveObject nmap q :cclose<CR>:bd<CR>
+  autocmd vimrc User FugitiveIndex setlocal nobuflisted | nmap <buffer><silent> q gq
+  autocmd vimrc User FugitiveObject nmap <buffer><silent> q :cclose<CR>:bd<CR>
   " }}}
 
   " dirvish {{{
@@ -787,7 +789,6 @@ endfunction " }}}
   if index(g:pathogen_disabled, 'fzf') == -1
     let g:fzf_layout = { 'window': 'enew' }
     let g:fzf_action = { 'ctrl-s': 'split', 'ctrl-v': 'vsplit' }
-    let g:fzf_preview_window = 'right:70%:hidden'
 
     nnoremap <silent> ,f :Files<CR>
     nnoremap <silent> ,F :Files <C-r>=expand('%:h')<CR>/<CR>
@@ -799,6 +800,7 @@ endfunction " }}}
     nnoremap <expr>   ,r ':Rg '.expand('<cword>')
     nnoremap <silent> ,R :Rg<CR>
 
+    nnoremap <silent> ,gm :GFiles?<CR>
     nnoremap <silent> ,gb :Branches<CR>
     nnoremap <silent> ,gp :Projects<CR>
 
@@ -807,8 +809,7 @@ endfunction " }}}
     nnoremap <silent> ,? :Maps<CR>
 
     " hide statusline in bottom window
-    autocmd! vimrc FileType fzf
-    autocmd  vimrc FileType fzf echo
+    autocmd vimrc FileType fzf echo
       \| execute "if winnr() == winnr('$') | set laststatus=0 | endif"
       \| autocmd vimrc BufLeave <buffer> set laststatus=2
 
@@ -819,7 +820,7 @@ endfunction " }}}
       if l:branch ==? '*'
         let l:branch = l:parser[1]
       endif
-      execute '!git checkout ' . l:branch
+      execute 'Git checkout ' . l:branch
     endfunction
 
     command! -bang -nargs=0 Branches
@@ -831,9 +832,8 @@ endfunction " }}}
 
     " add :Projects command
     function! s:fzf_projects(project)
-      exe 'cd ' . trim(system('src --path')) . '/' . a:project
+      exe 'lcd ' . trim(system('src --path')) . '/' . a:project
       Files
-      call feedkeys('i', 'n')
     endfunction
 
     command! -bang -nargs=0 Projects
@@ -970,23 +970,25 @@ endfunction " }}}
   " }}}
 
   " startify {{{
-  let g:startify_files_number = 3
+  let g:startify_change_to_dir = 0
   let g:startify_update_oldfiles = 1
-  let g:startify_custom_indices = map(range(1,10), 'string(v:val)')
+  let g:startify_files_number = 9
+  let g:startify_custom_indices = map(range(1,9), 'string(v:val)')
 
-  let g:startify_lists = [
-    \ { 'type': 'files',     'header': ['   History']   },
-    \ { 'type': 'bookmarks', 'header': ['   Bookmarks'] },
-  \ ]
+  let g:startify_lists = []
 
   let s:cwd = fnamemodify(getcwd(), ':~')
-  if s:cwd != '~'
-    let g:startify_lists = [{ 'type': 'dir', 'header': ['   ' . s:cwd] }] + g:startify_lists
+  if s:cwd == '~'
+    let g:startify_lists += [{ 'type': 'files', 'header': ['   Recent' ] }]
+  else
+    let g:startify_lists += [{ 'type': 'dir', 'header': ['   Recent in ' . s:cwd] }]
     f
   endif
 
+  let g:startify_lists += [{ 'type': 'bookmarks', 'header': ['   Bookmarks'] }]
+
   let g:startify_bookmarks = [
-    \ {'c': '/etc/dotfiles/vim/vimrc'}
+    \ {'c': '/etc/vim/vimrc'}
   \ ]
 
   let g:startify_ascii = [
