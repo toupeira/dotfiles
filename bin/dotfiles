@@ -7,7 +7,6 @@ function usage {
   echo "Usage: $( basename "$0" ) [options] COMMAND [args]"
   echo
   echo "Options:"
-  echo "  -f, --force               Assume yes for all questions"
   echo "  -v, --verbose             Increase verbosity"
   echo "  -q, --quiet               Suppress all normal output"
   echo "  -n, --dry-run             Only show changes, without performing them"
@@ -51,7 +50,6 @@ function usage {
 ### output helpers {{{
 
 # Helpers to check active toggles
-function force   { [ "$FORCE"   = 1 ]; }
 function verbose { [ "$VERBOSE" = 1 ]; }
 function quiet   { [ "$QUIET"   = 1 ]; }
 function dryrun  { [ "$DRYRUN"  = 1 ]; }
@@ -99,8 +97,6 @@ function abort {
 
 # Ask a yes/no question, defaulting to no
 function ask {
-  [ "$FORCE" = 1 ] && return
-
   msg "$1 [y/N] " "${2:-6}" -n >&2
   read -r
   [ "${REPLY:0:1}" = "Y" ] || [ "${REPLY:0:1}" = "y" ]
@@ -108,8 +104,6 @@ function ask {
 
 # Ask a yes/no question, defaulting to yes
 function ask-yes {
-  [ "$FORCE" = 1 ] && return
-
   msg "$1 [Y/n] " "$2" -n >&2
   read -r
   [ "${REPLY:0:1}" != "N" ] && [ "${REPLY:0:1}" != "n" ]
@@ -312,7 +306,7 @@ function run {
           if [ ! -e "$link" ]; then
             error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
             force=1
-          elif [[ "$link" =~ "$target" ]]; then
+          elif [ "$link" = "$target" ]; then
             msg "Already symlinked: {{$origin}}"
             continue
           else
@@ -509,13 +503,13 @@ function run {
         local url=$( system git remote -v | grep -Eom1 'https?://[^ ]+' )
         [ -n "$url" ] && url=" [ {{$url}} ]"
 
-        [ ! $batch ] && output
+        [ ! "$batch" ] && output
         status "Changes in {{$submodule}}$url:" 6
         quiet \
           || system git -c color.ui=always log --oneline --no-merges '@{1}..' \
           | sed -r 's/^/    /'
         output
-      elif [ ! $batch ]; then
+      elif [ ! "$batch" ]; then
         status "No changes in {{$submodule}}"
       fi
       ;;
@@ -840,7 +834,6 @@ STATUS=0
 # Parse arguments
 while [ $# -gt 0 ]; do
   case "$1" in
-    -f|--force)   FORCE=1;;
     -v|--verbose) VERBOSE=1;;
     -q|--quiet)   QUIET=1;;
     -n|--dry-run) DRYRUN=1; VERBOSE=1;;
