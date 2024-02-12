@@ -68,7 +68,7 @@ function output {
 
 # Output a message with a colored arrow in front
 function msg {
-  local message="${1/$HOME/~}"
+  local message="${1/$HOME/\~}"
   local color=${2:-4}
   local echo_options="$3"
 
@@ -296,6 +296,10 @@ function run {
           origin=$( origin "$target" )
         fi
 
+        if [ -L "$target" ]; then
+          target=$( readlink -f "$target" )
+        fi
+
         if [ ! -e "$target" ]; then
           error "Path not found: {{$target}}"
           continue
@@ -308,16 +312,12 @@ function run {
           if [ ! -e "$link" ]; then
             error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
             force=1
-          elif [[ "$link" =~ ^$DOTFILES/ ]]; then
+          elif [[ "$link" =~ "$target" ]]; then
             msg "Already symlinked: {{$origin}}"
             continue
           else
-            msg "Already symlinked: {{$origin}} -> [1;36m$link[0m"
+            warning "Symlinked to different path: {{$origin}} -> [1;36m$link[0m"
           fi
-        fi
-
-        if [ -L "$target" ]; then
-          target=$( readlink -f "$target" )
         fi
 
         if [ -e "$origin" ] || [ -L "$origin" ]; then
