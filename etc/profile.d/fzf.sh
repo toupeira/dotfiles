@@ -8,7 +8,7 @@ export FZF_COMPLETION_TRIGGER='//'
 export FZF_DEFAULT_COMMAND="fdfind --type f --type l --hidden --color always --ignore-file /etc/dotfiles/ignore"
 export FZF_DEFAULT_OPTS="
   --color=dark,gutter:-1
-  --ansi --multi --cycle --filepath-word --inline-info --layout default --no-height
+  --ansi --multi --cycle --filepath-word --inline-info --layout default --no-height --no-separator
   --history $HOME/.fzf_history
   --prompt '» '
   --preview-window right:70%:hidden
@@ -19,16 +19,16 @@ export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND --type d --type l"
 export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND/--type f/--type d}"
 
 export FZF_CTRL_R_OPTS="
-  --prompt 'History> '
+  --prompt 'History» '
   --preview 'echo {} | cut -d\\  -f4-'
   --preview-window up:3:hidden:wrap
 "
 export FZF_CTRL_T_OPTS="
-  --prompt 'Path> '
+  --prompt 'Path» '
   --preview 'fzf-preview {}'
 "
 export FZF_ALT_C_OPTS="
-  --prompt 'Directory> '
+  --prompt 'Directory» '
   --preview 'tree -C {}'
 "
 

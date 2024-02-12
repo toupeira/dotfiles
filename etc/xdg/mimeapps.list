@@ -1,0 +1,21 @@
+[Default Applications]
+application/json=nvim-qt.desktop
+application/xml=nvim-qt.desktop;
+application/x-shellscript=nvim-qt.desktop
+text/calendar=nvim-qt.desktop;
+text/org=nvim-qt.desktop;
+text/plain=nvim-qt.desktop
+text/x-python3=nvim-qt.desktop
+text/x-ruby=nvim-qt.desktop
+
+image/jpeg=org.gnome.eog.desktop
+image/png=org.gnome.eog.desktop
+image/svg+xml=org.gnome.eog.desktop
+image/tiff=org.gnome.eog.desktop
+image/webp=org.gnome.eog.desktop
+
+application/pdf=org.gnome.Evince.desktop
+audio/vnd.wave=audacity.desktop
+inode/directory=org.gnome.Nautilus.desktop
+x-scheme-handler/http=firefox.desktop
+x-scheme-handler/https=firefox.desktop

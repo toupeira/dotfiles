@@ -175,10 +175,6 @@
     let &titlestring .= " %{mode(1) == 'n' || mode() == 't' || &ft == 'fzf' ? '😑' : '😮'}"
   endif
 
-  " highlight trailing whitespace
-  autocmd vimrc VimEnter,Colorscheme * hi! Whitespace ctermbg=235 guibg=#333333
-  autocmd vimrc VimEnter,Colorscheme * match Whitespace /\s\+$/
-
 " }}}
 
 " Filetypes
@@ -214,6 +210,7 @@
 
   " terminals
   autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no | startinsert!
+  autocmd vimrc TermClose * if !v:event.status | bd | endif
   autocmd vimrc BufWinEnter,WinEnter term://* startinsert!
   autocmd vimrc BufWinLeave,WinLeave term://* stopinsert
 
@@ -484,15 +481,6 @@ endfunction " }}}
   " ,w - write current buffer
   nnoremap <silent> ,w :write<CR>:redraw<CR>
 
-  " ,$ - clear trailing whitespace
-  nnoremap <silent> ,$ :call <SID>ClearTrailingWhitespace()<CR>
-  function! s:ClearTrailingWhitespace() " {{{
-    Preserve 'silent %s/\s\s*$//e'
-    echohl Question
-    echo "Trailing whitespace cleared"
-    echohl none
-  endfunction " }}}
-
   " ,N - toggle line numbers
   nnoremap <silent> ,N :call <SID>ToggleLineNumbers()<CR>
   function! s:ToggleLineNumbers() " {{{
@@ -517,11 +505,9 @@ endfunction " }}}
   noremap ,gu :.GBrowse!<CR>
   noremap ,gU :.GBrowse<CR>
 
-  autocmd vimrc FileType fugitive if b:fugitive_type == 'index' | setlocal nobuflisted | endif
-  autocmd vimrc FileType fugitive nnoremap <buffer><silent> q :bd<CR>
-  autocmd vimrc FileType git if b:fugitive_type == 'temp' | setlocal nonumber | nnoremap <buffer><silent> q :bd<CR> | endif
-
-  autocmd vimrc FileType help nnoremap <buffer><silent> q :bd<CR>
+  autocmd vimrc User FugitiveIndex setlocal nobuflisted
+  autocmd vimrc User FugitiveIndex,FugitivePager nmap q gq
+  autocmd vimrc User FugitiveObject nmap q :cclose<CR>:bd<CR>
   " }}}
 
   " dirvish {{{
@@ -661,6 +647,8 @@ endfunction " }}}
     hi! ALEVirtualTextError guifg=#ff4040 gui=bold
     hi! ALEVirtualTextWarning guifg=#999999
     hi! link ALEVirtualTextInfo ALEVirtualTextWarning
+
+    let g:ale_use_neovim_diagnostics_api = 0
 
     let g:ale_sign_error = '🔥'
     let g:ale_sign_warning = '⚠️'
@@ -838,7 +826,7 @@ endfunction " }}}
       \ call fzf#vim#grep(
       \   'git branches', 0, {
       \     'sink': function('s:fzf_branches'),
-      \     'options': ['--prompt', 'Branches> ']
+      \     'options': ['--prompt', 'Branches» ']
       \   }, <bang>0)
 
     " add :Projects command
@@ -852,7 +840,7 @@ endfunction " }}}
       \ call fzf#vim#grep(
       \   ' src list -a', 0, {
       \     'sink': function('s:fzf_projects'),
-      \     'options': ['--prompt', 'Projects> ']
+      \     'options': ['--prompt', 'Projects» ']
       \    }, <bang>0)
   endif
   " }}}
@@ -982,16 +970,23 @@ endfunction " }}}
   " }}}
 
   " startify {{{
-  let g:startify_files_number = 5
+  let g:startify_files_number = 3
   let g:startify_update_oldfiles = 1
-  let g:startify_bookmarks = [ {'c': '/etc/dotfiles/vim/vimrc'} ]
+  let g:startify_custom_indices = map(range(1,10), 'string(v:val)')
 
   let g:startify_lists = [
-    \ { 'type': 'dir',       'header': ['   MRU '. getcwd()] },
-    \ { 'type': 'files',     'header': ['   MRU']            },
-    \ { 'type': 'sessions',  'header': ['   Sessions']       },
-    \ { 'type': 'bookmarks', 'header': ['   Bookmarks']      },
-    \ { 'type': 'commands',  'header': ['   Commands']       },
+    \ { 'type': 'files',     'header': ['   History']   },
+    \ { 'type': 'bookmarks', 'header': ['   Bookmarks'] },
+  \ ]
+
+  let s:cwd = fnamemodify(getcwd(), ':~')
+  if s:cwd != '~'
+    let g:startify_lists = [{ 'type': 'dir', 'header': ['   ' . s:cwd] }] + g:startify_lists
+    f
+  endif
+
+  let g:startify_bookmarks = [
+    \ {'c': '/etc/dotfiles/vim/vimrc'}
   \ ]
 
   let g:startify_ascii = [
@@ -1113,6 +1108,13 @@ endfunction " }}}
       }
 EOF
   endif
+  " }}}
+
+  " better-whitespace {{{
+  noremap <silent> ,$ :StripWhitespace<CR>
+
+  let g:better_whitespace_ctermcolor = 235
+  let g:better_whitespace_guicolor = '#333333'
   " }}}
 
 " }}}

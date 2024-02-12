@@ -151,7 +151,7 @@
   co = checkout
   cm = !git checkout $( git default-branch )
   cd = checkout development
-  switch-branch = "!f() { [ $# -gt 0 ] && exec git switch "$@"; branch=$( git branches 2>/dev/null | fzf +s --no-multi --prompt 'Branches> ' ) && git switch "$branch"; }; f"
+  switch-branch = "!f() { [ $# -gt 0 ] && exec git switch "$@"; branch=$( git branches 2>/dev/null | fzf +s --no-multi --prompt 'Branches» ' ) && git switch "$branch"; }; f"
   sb = switch-branch
   branches = "!git -c color.ui=always branch -a --sort=-committerdate | grep -Ev '(/HEAD|/(main|master))' | sed -r -e 's,^[\\* ]*,,' -e 's,remotes/[^/]+/,,'"
   default-branch = !(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || git symbolic-ref --short refs/remotes/upstream/HEAD) | cut -d/ -f2-
@@ -166,7 +166,7 @@
   amend = ci --amend
   reword = amend --only
   extend = amend --no-edit
-  fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup> ' ) && git commit --fixup "${sha%% *}"
+  fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup» ' ) && git commit --fixup "${sha%% *}"
   wip = "!git commit -m \"WIP: Changes in $( echo $( git diff --cached --name-only ) )\""
   initial = commit --allow-empty -m 'Initial commit'
 

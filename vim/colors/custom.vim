@@ -27,6 +27,7 @@ hi! DiffText    guifg=#5f5f87 guibg=#81a2be gui=bold
 hi! link Delimiter Statement
 hi! link MatchParen Visual
 hi! link QuickFixLine Visual
+hi! link ExtraWhitespace Visual
 hi! link VertSplit LineNr
 
 hi! link mkdHeading Constant
