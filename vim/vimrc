@@ -642,13 +642,7 @@ endfunction " }}}
   if index(g:pathogen_disabled, 'ale') == -1
     nnoremap <silent> ,E :ALEDetail<CR>
 
-    hi! link ALEWarning Whitespace
-    hi! clear ALEErrorSign
-    hi! clear ALEWarningSign
-
-    hi! ALEVirtualTextError guifg=#ff4040 gui=bold
-    hi! ALEVirtualTextWarning guifg=#999999
-    hi! link ALEVirtualTextInfo ALEVirtualTextWarning
+    hi! link ALEVirtualTextError Error
 
     let g:ale_use_neovim_diagnostics_api = 0
 
@@ -714,9 +708,11 @@ endfunction " }}}
     let g:airline_detect_iminsert = 0
     let g:airline_detect_spell = 0
 
-    let g:airline_extensions = filter([
-      \ 'ale', 'branch', 'quickfix', 'tabline', 'vista'
-    \ ], {_, extension -> index(g:pathogen_disabled, extension) < 0})
+    let g:airline#extensions#hunks#enabled = 0
+    let g:airline#extensions#keymap#enabled = 0
+    let g:airline#extensions#searchcount#enabled = 0
+    let g:airline#extensions#whitespace#enabled = 0
+    let g:airline#extensions#wordcount#enabled = 0
 
     let g:airline#extensions#ale#show_line_numbers = 0
     let g:airline#extensions#ale#error_symbol = ''
@@ -727,6 +723,7 @@ endfunction " }}}
     let g:airline#extensions#branch#format = 2
     let g:airline#extensions#branch#vcs_checks = []
 
+    let g:airline#extensions#tabline#enabled = 1
     let g:airline#extensions#tabline#buffers_label = ''
     let g:airline#extensions#tabline#tabs_label = 'tabs'
     let g:airline#extensions#tabline#overflow_marker = ' … '
@@ -807,11 +804,6 @@ endfunction " }}}
     nnoremap <silent> ,: :History:<CR>
     nnoremap <silent> ,/ :History/<CR>
     nnoremap <silent> ,? :Maps<CR>
-
-    " hide statusline in bottom window
-    autocmd vimrc FileType fzf echo
-      \| execute "if winnr() == winnr('$') | set laststatus=0 | endif"
-      \| autocmd vimrc BufLeave <buffer> set laststatus=2
 
     " add :Branches command
     function! s:fzf_branches(line)

@@ -28,7 +28,13 @@ case "$HOSTNAME" in
 
   meerkat)
     # Setup display
-    dconf write /org/gnome/desktop/interface/text-scaling-factor 1.35
+    displays=$( xrandr | grep -wc connected )
+
+    if [ "$displays" = 1 ]; then
+      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.4
+    else
+      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.5
+    fi
 
     # Setup audio
     pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:analog-stereo+input:analog-stereo
