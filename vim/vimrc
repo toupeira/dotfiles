@@ -508,7 +508,7 @@ endfunction " }}}
   noremap ,gu :.GBrowse!<CR>
   noremap ,gU :.GBrowse<CR>
 
-  autocmd vimrc User FugitiveIndex setlocal nobuflisted | nmap <buffer><silent> q gq
+  autocmd vimrc User FugitiveIndex setlocal nobuflisted | nmap <buffer><silent> q gq | nmap <buffer><silent> <space> =
   autocmd vimrc User FugitiveObject nmap <buffer><silent> q :cclose<CR>:bd<CR>
   " }}}
 
