@@ -14,6 +14,9 @@
 [gpg]
   format = ssh
 
+[gpg.ssh]
+  allowedSignersFile = ~/.ssh/allowed_signers
+
 [includeIf "gitdir:~/src/denteo/"]
   path = .gitconfig.denteo
 
@@ -56,6 +59,9 @@
   statusHints = false
   commitBeforeMerge = false
   resolveConflict = false
+
+[blame]
+  date = human-local
 
 [checkout]
   defaultRemote = origin

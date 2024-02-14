@@ -504,12 +504,13 @@ endfunction " }}}
   noremap <silent> ,gl :Gclog %<CR>
   noremap <silent> ,gL :Gclog<CR>
   noremap <silent> ,gd :silent Git -p log -p %<CR>
-  noremap <silent> ,gB :Git blame<CR>
+  noremap <silent> ,gb :Git blame<CR>
   noremap ,gu :.GBrowse!<CR>
   noremap ,gU :.GBrowse<CR>
 
-  autocmd vimrc User FugitiveIndex setlocal nobuflisted | nmap <buffer><silent> q gq | nmap <buffer><silent> <space> =
+  autocmd vimrc User FugitiveIndex setlocal nobuflisted|nmap <buffer><silent> q gq|nmap <buffer><silent> <space> =
   autocmd vimrc User FugitiveObject nmap <buffer><silent> q :cclose<CR>:bd<CR>
+  autocmd vimrc User FugitivePager if maparg('gq', 'n')!=''|nmap <buffer><silent> q gq|endif
   " }}}
 
   " dirvish {{{
@@ -562,7 +563,7 @@ endfunction " }}}
   " }}}
 
   " pasta {{{
-  let g:pasta_disabled_filetypes = ['qf']
+  let g:pasta_disabled_filetypes = ['qf', 'fugitiveblame']
   " }}}
 
   " reply {{{
@@ -798,8 +799,8 @@ endfunction " }}}
     nnoremap <silent> ,R :Rg<CR>
 
     nnoremap <silent> ,gm :GFiles?<CR>
-    nnoremap <silent> ,gb :Branches<CR>
-    nnoremap <silent> ,gp :Projects<CR>
+    nnoremap <silent> ,gB :Branches<CR>
+    nnoremap <silent> ,gP :Projects<CR>
 
     nnoremap <silent> ,: :History:<CR>
     nnoremap <silent> ,/ :History/<CR>
@@ -813,6 +814,7 @@ endfunction " }}}
         let l:branch = l:parser[1]
       endif
       execute 'Git checkout ' . l:branch
+      AirlineRefresh
     endfunction
 
     command! -bang -nargs=0 Branches
@@ -825,6 +827,7 @@ endfunction " }}}
     " add :Projects command
     function! s:fzf_projects(project)
       exe 'lcd ' . trim(system('src --path')) . '/' . a:project
+      AirlineRefresh
       Files
     endfunction
 
