@@ -13,7 +13,6 @@ libyaml-dev
 manpages-dev
 pkg-config
 python3-pip
-python3-pynvim
 python3-venv
 python-dev-is-python3
 python-is-python3

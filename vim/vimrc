@@ -113,7 +113,7 @@
   set ignorecase
   set smartcase
   set inccommand=nosplit
-  set iskeyword+=-
+  set iskeyword+=-,:
 
   if executable('rg')
     let &grepprg = "rg --vimgrep"
@@ -210,7 +210,7 @@
 
   " terminals
   autocmd vimrc TermOpen * setlocal nonumber norelativenumber signcolumn=no | startinsert!
-  autocmd vimrc TermClose * if !v:event.status | bd | endif
+  autocmd vimrc TermClose * if !v:event.status && &ft != 'fzf' | bd | endif
   autocmd vimrc BufWinEnter,WinEnter term://* startinsert!
   autocmd vimrc BufWinLeave,WinLeave term://* stopinsert
 
@@ -644,6 +644,7 @@ endfunction " }}}
     nnoremap <silent> ,E :ALEDetail<CR>
 
     hi! link ALEVirtualTextError Error
+    hi! link ALEVirtualTextWarning WarningMsg
 
     let g:ale_use_neovim_diagnostics_api = 0
 
