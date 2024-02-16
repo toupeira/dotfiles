@@ -765,13 +765,13 @@ function run {
           status "Loading {{$name}}"
           dconf load "$path" < "$file"
         elif [ "$action" = "dump" ]; then
-          if [ -f "$file" ] && grep -Fqx '# :skip-dump:' "$file"; then
+          if [ -f "$file" ] && grep -Fqx '# skip:dump' "$file"; then
             warning "Skipping {{$name}}"
             continue
-          else
-            status "Dumping {{$name}}"
-            local output=$( dconf dump "$path" )
           fi
+
+          status "Dumping {{$name}}"
+          local output=$( dconf dump "$path" )
 
           if [ -f "$file" ]; then
             local skipped_keys=$( grep '^#.*=$' "$file" |
@@ -782,6 +782,17 @@ function run {
             if [ -n "$skipped_keys" ]; then
               output=$(echo "$output" |
                 sed -r "s/^(${skipped_keys%|}).*$/#\1/"
+              )
+            fi
+
+            local skipped_after=$( grep '^# skip:after ' "$file" )
+
+            if [ -n "$skipped_after" ]; then
+              local pattern=$( echo "${skipped_after//\//\\/}" | cut -d\  -f3- )
+
+              output=$(
+                echo "$output" | sed "/$pattern/q" | head -n -1;
+                echo "$skipped_after"
               )
             fi
           fi
