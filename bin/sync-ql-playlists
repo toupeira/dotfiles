@@ -3,7 +3,7 @@
 MUSIC="/slack/music"
 QUERIES=~/.config/quodlibet/lists/queries.saved
 
-ql running >/dev/null || ql start-hidden
+ql running >/dev/null || ql start-hidden "$@"
 while ! ql running >/dev/null; do
   sleep 0.5
 done

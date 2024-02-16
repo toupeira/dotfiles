@@ -1,6 +1,6 @@
 #!/usr/bin/env python3
 
-import os, sys, socket
+import os, sys, socket, subprocess
 
 MUSIC = '/slack/music'
 HOSTNAME = socket.gethostname()
@@ -34,7 +34,11 @@ def log(file, message):
 
 ### Init
 
+ql_args = ''
 if os.system('ql running >/dev/null') == 0:
+    if 'playing' in subprocess.getoutput('quodlibet --status'):
+        ql_args = '--play'
+
     os.system('ql quit')
 
 from quodlibet._init import init
@@ -106,4 +110,4 @@ with open(METADATA_EXPORT, 'w') as metadata:
 
 ### Export playlists
 
-os.system('sync-ql-playlists')
+os.system(f'sync-ql-playlists {ql_args}')

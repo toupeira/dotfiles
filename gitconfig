@@ -1,11 +1,5 @@
 # vim: ft=gitconfig
 
-[core]
-  pager = less
-
-[protocol]
-  version = 2
-
 [user]
   name = Markus Koller
   email = markus@snafu.ch
@@ -20,11 +14,14 @@
 [includeIf "gitdir:~/src/denteo/"]
   path = .gitconfig.denteo
 
+[core]
+  pager = delta
+
 [pager]
-  diff = delta
-  show = delta
-  log = delta
   branch = less -FX
+
+[interactive]
+  diffFilter = delta --color-only
 
 [color]
   ui = auto
@@ -38,30 +35,32 @@
   whitespace = red reverse
 
 [delta]
-  navigate = true
   paging = always
+  navigate = true
+  hyperlinks = true
   tabs = 2
 
+  plus-style = syntax "#003000"
   plus-emph-style = bold syntax auto
-  minus-style = normal auto
-  minus-emph-style = bold normal auto
+  minus-style = syntax "#400000"
+  minus-emph-style = bold syntax auto
 
   commit-decoration-style = yellow ul
   file-style = bold blue
   file-decoration-style = blue ul
+
   hunk-header-style = magenta line-number
   hunk-header-decoration-style = magenta
   hunk-header-file-style = bold magenta
   hunk-header-line-number-style = bold magenta
+
+  blame-format = " {commit:<8}  {author:<15.14} {timestamp:>15} "
 
 [advice]
   pushUpdateRejected = false
   statusHints = false
   commitBeforeMerge = false
   resolveConflict = false
-
-[blame]
-  date = human-local
 
 [checkout]
   defaultRemote = origin
@@ -90,6 +89,7 @@
   decorate = true
 
 [merge]
+  conflictstyle = zdiff3
   stat = true
   tool = vimdiff
 

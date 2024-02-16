@@ -14,6 +14,7 @@ export PAGER="less"
 export LESS="-iRMK"
 export SYSTEMD_LESS="iRMKFX"
 export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep.conf
+export BAT_THEME="TwoDark"
 
 export GTK_A11Y=none
 export NO_AT_BRIDGE=1

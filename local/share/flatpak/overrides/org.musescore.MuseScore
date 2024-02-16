@@ -1,2 +1,2 @@
 [Context]
-filesystems=/slack/sound
+filesystems=!home;xdg-documents/Noten;/slack/sound:ro;

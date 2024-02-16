@@ -112,7 +112,7 @@
   set ignorecase
   set smartcase
   set inccommand=nosplit
-  set iskeyword+=-,:
+  set iskeyword+=-
 
   if executable('rg')
     let &grepprg = "rg --vimgrep"
@@ -500,12 +500,13 @@ endfunction " }}}
 
   " fugitive {{{
   nnoremap <silent> ,gs :G<CR>
-  noremap <silent> ,gl :Gclog %<CR>
-  noremap <silent> ,gL :Gclog<CR>
-  noremap <silent> ,gd :silent Git -p log -p %<CR>
-  noremap <silent> ,gb :Git blame<CR>
-  noremap ,gu :.GBrowse!<CR>
-  noremap ,gU :.GBrowse<CR>
+  nnoremap <silent><expr> ,gl empty(expand('%')) ? ':Gclog<CR>' : ':Gclog %<CR>'
+  vnoremap <silent> ,gl :Glog<CR>
+  noremap  <silent> ,gL :Gclog<CR>
+  nnoremap <silent> ,gd :silent Git -p log -p %<CR>
+  noremap  <silent> ,gb :Git blame --date human-local<CR>
+  noremap  <silent> ,gu :.GBrowse!<CR>
+  noremap  <silent> ,gU :.GBrowse<CR>
 
   autocmd vimrc User FugitiveIndex setlocal nobuflisted|nmap <buffer><silent> q gq|nmap <buffer><silent> <space> =
   autocmd vimrc User FugitiveObject nmap <buffer><silent> q :cclose<CR>:bd<CR>

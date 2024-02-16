@@ -82,12 +82,12 @@ calibre
 chromium
 file-roller
 firefox
+foliate
 gcolor3
 gimp
 gimp-plugin-registry
 gparted
 mpv
-neovim-qt
 peek
 quodlibet
 scummvm
@@ -95,6 +95,5 @@ syncthing-gtk
 tilix
 yt-dlp
 
-flatpak: com.github.johnfactotum.Foliate
 flatpak: com.github.tchx84.Flatseal
 flatpak: org.gtk.Gtk3theme.Numix

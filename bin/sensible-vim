@@ -1,15 +1,12 @@
 #!/bin/bash
 
-if [ "$VIMCMD" = 'vip' ] || ([ $# -eq 0 ] && df -P .; [ $# -gt 0 ] && df -P -- "$@" 2>/dev/null) | grep -q ^encfs; then
-  # run vim in "private" mode on encfs filesystems
+if [ "$VIMCMD" = 'vip' ] || [[ "$PWD" =~ /\.secrets ]]; then
   exec vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" -c "set shada=" \
     --cmd "let g:pathogen_disabled = [ 'ale', 'startify', 'vista' ]" "$@"
 elif [ -n "$VIMCMD" ]; then
   vim="$VIMCMD"
-elif [ -n "$TERM" -a "$TERM" != 'dumb' ] || [ -n "$SSH_CONNECTION" ]; then
-  vim="vim"
-elif command -v gvim &>/dev/null; then
-  vim="gvim"
+elif [ -z "$TERM" ] || [ "$TERM" = "dumb" ]; then
+  vim="xdg-terminal-exec vim"
 else
   vim="vim"
 fi
