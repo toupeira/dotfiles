@@ -5,7 +5,7 @@
 function login_banner {
   if [ -z "$BASH_LOGIN" ]; then
     return
-  elif [ $LINES -lt 25 ] && [ "$TMUX_PANE" != "%0" ]; then
+  elif [ $LINES -lt 25 ] || [ -n "$FLOATING_TERMINAL" ]; then
     down
   elif [ "$PWD" = "$HOME" ]; then
     clear
@@ -35,7 +35,7 @@ function login_banner {
       echo
     fi
 
-    if has fortune && [ -z "$SSH_CONNECTION" ] && [ -z "$FLOATING_TERMINAL" ]; then
+    if has fortune && [ -z "$SSH_CONNECTION" ]; then
       fortune -acs -n $((${LINES:-10}*40)) | awk '
         /^\(.+\)$/ { print "\033[1;32mfortune" $0 "\033[0m"; next }
         /^%$/ { next }

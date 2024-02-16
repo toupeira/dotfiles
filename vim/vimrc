@@ -56,7 +56,6 @@
 
   " interface
   set termguicolors
-  set lazyredraw
   set updatetime=100
   set mouse=a
 
