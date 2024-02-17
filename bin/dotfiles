@@ -184,12 +184,9 @@ function mux-wrap {
   fi
 }
 
-# Load the users' SSH key if necessary
-function load-key {
-  local key=~/.ssh/id_rsa
-  if [ -f "$key" ] && [ "$( uname -s )" != "Darwin" ]; then
-    ssh-add -l | grep -Fq "/.ssh/id_rsa (RSA)" || ssh-add "$key" </dev/null
-  fi
+# Escape a regex
+function escape-regex {
+  echo "${1//\//\\/}"
 }
 
 ### }}}
@@ -446,7 +443,6 @@ function run {
       local current=$( git rev-parse HEAD )
 
       status "{{Merging remote changes...}}"
-      load-key
       git pull "$@"
 
       [ -n "$changes" ] && git stash pop -q
@@ -459,14 +455,13 @@ function run {
       ;;
     # }}}
     push) # {{{
-      load-key
       status "{{Pushing local changes...}}"
       git push -q "$@"
       ;;
     # }}}
 
     list|list-submodules) # {{{
-      awk "/path = .*$1/ { print \$3 }" "$DOTFILES/.gitmodules" | sort
+      awk "/path = .*$( escape-regex "$1" )/ { print \$3 }" "$DOTFILES/.gitmodules" | sort
       ;;
     # }}}
     update|update-submodule) # {{{
@@ -765,35 +760,29 @@ function run {
           status "Loading {{$name}}"
           dconf load "$path" < "$file"
         elif [ "$action" = "dump" ]; then
-          if [ -f "$file" ] && grep -Fqx '# skip:dump' "$file"; then
-            warning "Skipping {{$name}}"
-            continue
-          fi
-
           status "Dumping {{$name}}"
           local output=$( dconf dump "$path" )
 
           if [ -f "$file" ]; then
-            local skipped_keys=$( grep '^#.*=$' "$file" |
-              cut -d# -f2 |
-              tr "\n" "|"
-            )
+            local skip_markers=$( grep -E '^#( skip:.*)?$' "$file" )
+            local skip_keys=$( echo "$skip_markers" | sed -rn 's/^# skip: +(.*)/^\1=/p' | tr "\n" "|" )
+            local skip_sections=$( echo "$skip_markers" | sed -rn 's/^# skip:section +(.*)/\1/p' | tr "\n" "|" )
 
-            if [ -n "$skipped_keys" ]; then
-              output=$(echo "$output" |
-                sed -r "s/^(${skipped_keys%|}).*$/#\1/"
-              )
+            if [ -n "$skip_keys" ]; then
+              output=$( echo "$output" | grep -Ev "${skip_keys%|}" )
             fi
 
-            local skipped_after=$( grep '^# skip:after ' "$file" )
+            if [ -n "$skip_sections" ]; then
+              output=$( echo "$output" | awk "
+                BEGIN { output = 1 };
+                /^\[$( escape-regex "${skip_sections%|}" )\]$/ { output = 0; next };
+                /^\[.*\]$/ { output = 1 };
+                output
+              " )
+            fi
 
-            if [ -n "$skipped_after" ]; then
-              local pattern=$( echo "${skipped_after//\//\\/}" | cut -d\  -f3- )
-
-              output=$(
-                echo "$output" | sed "/$pattern/q" | head -n -1;
-                echo "$skipped_after"
-              )
+            if [ -n "$skip_markers" ]; then
+              output=$( echo -e "$skip_markers\n\n$output" )
             fi
           fi
 

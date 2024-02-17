@@ -48,8 +48,12 @@ user_pref("network.predictor.enabled", false);
 user_pref("network.predictor.enable-prefetch", false);
 user_pref("network.prefetch-next", false);
 user_pref("network.trr.mode", 5);
+user_pref("permissions.default.desktop-notification", 2);
+user_pref("permissions.default.geo", 2);
 user_pref("privacy.query_stripping", true);
 user_pref("privacy.trackingprotection.enabled", true);
+user_pref("signon.firefoxRelay.feature", "disabled");
+user_pref("signon.rememberSignons", false);
 
 // Tabs
 user_pref("browser.tabs.loadBookmarksInBackground", true);
@@ -96,12 +100,8 @@ user_pref("general.smoothScroll.mouseWheel.durationMinMS", 50);
 // Ignore zoom changes on PDF links
 user_pref("pdfjs.ignoreDestinationZoom", true);
 
-// Disable notification and location requests
-user_pref("permissions.default.desktop-notification", 2);
-user_pref("permissions.default.geo", 2);
-
-// Disable Firefox Relay
-user_pref("signon.firefoxRelay.feature", "disabled");
+// Wrap lines when viewing source
+user_pref("view_source.wrap_long_lines", true);
 
 // Disable spellcheck
 user_pref("layout.spellcheckDefault", "disabled");
