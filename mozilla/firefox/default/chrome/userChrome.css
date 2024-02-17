@@ -48,3 +48,11 @@ menu[label="Firefox Multi-Account Containers"]
   height: 0 !important;
   padding: 0 0 16px 16px !important;
 }
+
+#PlacesToolbarItems image[src*="web.whatsapp.com"] {
+  background-image: url(view-source:https://web.whatsapp.com/img/favicon/1x/favicon.png) !important;
+  background-size: contain !important;
+  width: 0 !important;
+  height: 0 !important;
+  padding: 0 0 16px 16px !important;
+}

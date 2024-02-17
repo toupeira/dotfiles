@@ -6,10 +6,10 @@
 # absolute path. No other format is supported.
 #
 XDG_DESKTOP_DIR="$HOME/Desktop"
-XDG_DOWNLOAD_DIR="$HOME/tmp"
-XDG_TEMPLATES_DIR="$HOME/documents"
-XDG_PUBLICSHARE_DIR="$HOME/tmp"
-XDG_DOCUMENTS_DIR="$HOME/documents"
+XDG_DOWNLOAD_DIR="/slack/tmp"
+XDG_TEMPLATES_DIR="/slack/documents"
+XDG_PUBLICSHARE_DIR="/slack/tmp"
+XDG_DOCUMENTS_DIR="/slack/documents"
 XDG_MUSIC_DIR="/slack/music"
-XDG_PICTURES_DIR="$HOME/images"
-XDG_VIDEOS_DIR="$HOME/images"
+XDG_PICTURES_DIR="/slack/images"
+XDG_VIDEOS_DIR="/slack/images"
