@@ -1,0 +1,3 @@
+# Disable wakeup for USB controller causing problems with suspend
+# https://gitlab.freedesktop.org/drm/amd/-/issues/2173
+ACTION=="add", SUBSYSTEM=="pci", DRIVERS=="xhci_hcd", ENV{PCI_ID}=="1022:43F7", ATTR{power/wakeup}="disabled"
