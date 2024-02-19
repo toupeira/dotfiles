@@ -18,7 +18,6 @@ export BAT_THEME="TwoDark"
 
 export GTK_A11Y=none
 export NO_AT_BRIDGE=1
-export QT_AUTO_SCREEN_SCALE_FACTOR=0
 export QT_QPA_PLATFORMTHEME="gtk2"
 
 export CALIBRE_USE_DARK_PALETTE=1
