@@ -2,13 +2,14 @@
 
 find /tmp \
   -maxdepth 1 -mtime +1 \( \
-  -name 'gitaly-*' -o \
   -name 'karma-*' -o \
   -name 'ruby-*' -o \
-  -name 'xvfb-run.*' -o \
   -name '.com.google.*' -o \
   -name '.org.chromium.*' \
   \) -exec rm -rf "{}" \;
 
-find /home/*/{.cache/nvim,.local/{share,state}/nvim/{swap,undo}} \
-  -type f -mtime +90 -delete 2>/dev/null
+for path in /home/*/{.cache/nvim,.local/{share,state}/nvim/{swap,undo}}; do
+  if [ -d "$path" ]; then
+    find "$path" -type f -mtime +90 -delete
+  fi
+done
