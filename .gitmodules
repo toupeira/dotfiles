@@ -94,9 +94,6 @@
 [submodule "vim/bundle/elixir"]
 	path = vim/bundle/elixir
 	url = https://github.com/elixir-lang/vim-elixir.git
-[submodule "vim/bundle/org-mode"]
-	path = vim/bundle/org-mode
-	url = https://github.com/jceb/vim-orgmode.git
 [submodule "vim/bundle/vue"]
 	path = vim/bundle/vue
 	url = https://github.com/posva/vim-vue.git
@@ -147,7 +144,7 @@
 	url = https://github.com/deathlyfrantic/deoplete-spell.git
 [submodule "vim/bundle/markdown"]
 	path = vim/bundle/markdown
-	url = https://github.com/plasticboy/vim-markdown.git
+	url = https://github.com/preservim/vim-markdown.git
 [submodule "vim/bundle/matchup"]
 	path = vim/bundle/matchup
 	url = https://github.com/andymass/vim-matchup.git

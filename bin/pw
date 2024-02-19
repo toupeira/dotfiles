@@ -19,8 +19,8 @@ case "$1" in
   ""|status)
     status
     ;;
-  restart)
-    systemctl --user restart "${PIPEWIRE[@]}"
+  start|stop|restart)
+    systemctl --user "$1" "${PIPEWIRE[@]}"
     ;;
   enable)
     systemctl --user stop "${PULSEAUDIO[@]}"
@@ -43,5 +43,9 @@ case "$1" in
     systemctl --user start "${PULSEAUDIO[@]}"
 
     status
+    ;;
+  *)
+    echo "Usage: $( basename "$0" ) [status|start|stop|restart|enable|disable]"
+    exit 1
     ;;
 esac

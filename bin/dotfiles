@@ -386,17 +386,23 @@ function run {
       ;;
     # }}}
     lint) # {{{
+      if [ "$1" = "fix" ]; then
+        local delete=( --threads=1 --exec rm -vi {} )
+      else
+        unset delete
+      fi
+
       echo
       warning "{{Broken symlinks}}"
       sudo fdfind . ~ /etc --unrestricted --follow --mount --type symlink \
         --exclude /.local/share/flatpak --exclude /.var/app \
         --exclude src --exclude tmp \
-        --color always | grep -Ev '[0-9]mlock\b'
+        --color always "${delete[@]}" | grep -Ev '[0-9]mlock\b'
         # --exclude lock doesn't work: https://github.com/sharkdp/fd/issues/746
       echo
 
       warning "{{Configuration updates}}"
-      sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --unrestricted
+      sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --unrestricted "${delete[@]}"
       echo
       ;;
     # }}}
