@@ -23,8 +23,8 @@ function _prompt_path {
 
   if [ -n "$root" ]; then
     path="${path#${root%/*}/}"
-    path=${path/#asdf\/installs\/ruby\/*\/lib\/ruby\/gems\//♦️  }
-    path=${path/#asdf\/installs\/ruby\//♦️  }
+    path=${path/#asdf\/installs\/ruby\/*\/lib\/ruby\/gems\//💎 }
+    path=${path/#asdf\/installs\/ruby\//💎 }
     path=${path/#dotfiles\//📦 }
     path=${path/#dotfiles/📦}
   fi
