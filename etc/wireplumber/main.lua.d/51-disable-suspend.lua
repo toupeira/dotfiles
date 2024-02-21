@@ -7,5 +7,6 @@ table.insert (alsa_monitor.rules, {
   apply_properties = {
     ["session.suspend-timeout-seconds"] = 0,
     ["node.always-process"] = true,
+    ["dither.noise"] = 1,
   },
 })
