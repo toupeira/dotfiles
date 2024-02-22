@@ -85,8 +85,7 @@ alias sudo='sudo '
 
 # vim
 alias suvi='sudo TMUX=$TMUX sensible-vim'
-alias sudiff='sudo vimdiff'
-alias visudo='sudo visudo'
+alias sudiff='suvi -d'
 
 # file management
 alias sucp='sudo cp -vi'

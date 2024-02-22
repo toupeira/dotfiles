@@ -11,7 +11,7 @@ esac
 command=$( tmux display -p '#{pane_current_command}' )
 title=$( tmux display -p '#{pane_title}' )
 
-if [ "$command" != "ssh" ] && [[ "$title" =~ \ 😑$ ]]; then
+if [ "$command" != "ssh" ] && [[ "$title" =~  ]]; then
   key=$( echo "${1#-}" | tr 'LDUR' 'hjkl' )
   tmux send-keys "C-$key"
 

@@ -137,7 +137,7 @@
 
   " window title
   set title
-  let &titlestring = "%t%m%r\ [%{ProjectPath(1)}]"
+  let &titlestring = "  %t%m%r\ [%{ProjectPath(1)}]"
 
   " highlight yanked region
   autocmd vimrc TextYankPost * silent! lua
@@ -168,11 +168,6 @@
       endif
     endif
   endfunction " }}}
-
-  " add Unicode marker for tmux navigation
-  if !empty($TMUX) || !empty($SUDO_COMMAND)
-    let &titlestring .= " %{mode(1) == 'n' || mode() == 't' || &ft == 'fzf' ? '😑' : '😮'}"
-  endif
 
 " }}}
 

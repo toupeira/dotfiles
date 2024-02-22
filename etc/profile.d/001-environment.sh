@@ -3,7 +3,7 @@
 . /etc/default/locale
 export LANG LC_MESSAGES LC_NUMERIC LC_CTYPE
 
-export PATH="/usr/sbin:/usr/bin:/sbin:/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
+export PATH="/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
 [ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
 [ -d ~/.local/bin ] && export PATH="$PATH:$HOME/.local/bin"
 
