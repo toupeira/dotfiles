@@ -25,6 +25,7 @@ has_completion journalctl && complete -F _journalctl jctl
 if has_completion git __git_main; then
   __git_complete g __git_main
   function _git_create_branch { _git_checkout; }
+  function _git_delete_branch { _git_checkout; }
 fi
 
 if has dotfiles; then
