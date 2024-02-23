@@ -41,9 +41,9 @@
   tabs = 2
 
   plus-style = syntax "#003000"
-  plus-emph-style = bold syntax auto
+  plus-emph-style = bold normal auto
   minus-style = syntax "#400000"
-  minus-emph-style = bold syntax auto
+  minus-emph-style = bold normal auto
 
   commit-decoration-style = yellow ul
   file-style = bold blue

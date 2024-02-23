@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ -n "$BASH_INTERACTIVE" ] || return
+[ "$BASH_INTERACTIVE" ] || return
 
 # Automatically use Gemfile when present in tree
 # export RUBYGEMS_GEMDEPS=-
@@ -8,13 +8,13 @@
 function gem {
   if [ "$1" = "cd" ]; then
     local path
-    if [ -n "$2" ]; then
+    if [ "$2" ]; then
       path=$( bundle exec gem open -e echo "$2" )
     else
       path=$( bundle exec gem env path | cut -d: -f1 )/gems
     fi
 
-    if [ -n "$path" ]; then
+    if [ "$path" ]; then
       cd "$path" || return $?
       return 0
     else

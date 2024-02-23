@@ -8,7 +8,7 @@ find /tmp \
   -name '.org.chromium.*' \
   \) -exec rm -rf "{}" \;
 
-for path in /home/*/{.cache/nvim,.local/{share,state}/nvim/{swap,undo}}; do
+for path in {/home/*,/root}/{.cache/nvim,.local/{share,state}/nvim/{swap,undo}}; do
   if [ -d "$path" ]; then
     find "$path" -type f -mtime +90 -delete
   fi

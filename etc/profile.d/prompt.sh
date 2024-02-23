@@ -1,28 +1,29 @@
 #!/bin/bash
+# shellcheck disable=SC2016,SC2034,SC2154
 
-[ -n "$BASH_INTERACTIVE" ] || return
+[ "$BASH_INTERACTIVE" ] || return
 
 # Prompt configuration
 PS1_USER="λ"
 PS1_HOST=" "
-[ -n "$SSH_CONNECTION" ] || [ -n "$SUDO_USER" ] && PS1_USER="\u"
-[ -n "$SSH_CONNECTION" ] && PS1_HOST="@\h "
-[ -n "$EMACS" ] && PS1_USER="" && PS1_HOST=""
+[ "$SSH_CONNECTION" ] || [ "$SUDO_USER" ] && PS1_USER="\u"
+[ "$SSH_CONNECTION" ] && PS1_HOST="@\h "
+[ "$EMACS" ] && PS1_USER="" && PS1_HOST=""
 [ "$UID" = "0" ] && PS1_USER="\[\e[0m\e[1;31m\]$PS1_USER"
 
 PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\$_prompt_path\[\e[0;36m\]]\[\e[0m\] "
 PS2=" \[\e[1;35m\]»\[\e[0m\] "
 
 # Update title when path changes
-PROMPT_COMMAND='_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_path=$( _prompt_path); [ ${#_prompt_path} -gt 24 ] && mux title "${_prompt_path:0:24}…" || mux title "$_prompt_path"; _last_pwd="$PWD"'
+PROMPT_COMMAND=( '_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_path=$( _prompt_path); [ ${#_prompt_path} -gt 24 ] && mux title "${_prompt_path:0:24}…" || mux title "$_prompt_path"; _last_pwd="$PWD"' )
 
 # Prompt helpers
 function _prompt_path {
   local path="$PWD"
   local root=$( git rev-parse --show-toplevel 2>/dev/null )
 
-  if [ -n "$root" ]; then
-    path="${path#${root%/*}/}"
+  if [ "$root" ]; then
+    path="${path#"${root%/*}"/}"
     path=${path/#asdf\/installs\/ruby\/*\/lib\/ruby\/gems\//💎 }
     path=${path/#asdf\/installs\/ruby\//💎 }
     path=${path/#dotfiles\//📦 }
@@ -34,22 +35,20 @@ function _prompt_path {
 }
 
 function _prompt_jobs {
-  local jobs=`jobs | grep -Fvc 'mux title'`
+  local jobs=$( jobs | grep -Fvc 'mux title' )
 
-  if [ $jobs -gt 0 ]; then
-    printf '[%d job%s] ' $jobs "`([ $jobs -eq 1 ] || echo -n s)`"
+  if [ "$jobs" -gt 0 ]; then
+    printf '[%d job%s] ' "$jobs" "$( [ "$jobs" -eq 1 ] || echo -n s )"
   fi
 }
 
 function _prompt_exit_status {
-  [ -n "$CYGWIN" -o "$CONQUE" ] && return
-
-  if [ -n "$_last_status" ] && [ $_last_status -gt 0 ]; then
+  if [ "$_last_status" ] && [ "$_last_status" -gt 0 ]; then
     tput sc
     local column=$((COLUMNS-${#_last_status}-3))
 
     tput cup $LINES $column
-    printf '\e[1;30m[\e[1;31m%s\e[1;30m]\e[0m '  $_last_status
+    printf '\e[1;30m[\e[1;31m%s\e[1;30m]\e[0m '  "$_last_status"
     tput rc
   fi
 }

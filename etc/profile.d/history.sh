@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ -n "$BASH_INTERACTIVE" ] || return
+[ "$BASH_INTERACTIVE" ] || return
 
 # History settings
 shopt -s histappend

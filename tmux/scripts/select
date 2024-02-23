@@ -25,7 +25,7 @@ panes=$( tmux display -p '#{window_panes}' )
 if [[ $pane -eq 1 && "$1" =~ ^-[LU]$ ]] ||
    [[ $pane -eq $panes && "$1" =~ ^-[DR]$ ]]; then
   tmux select-pane -P 'bg=#333333'
-  sleep 0.1
+  sleep 0.03
   tmux select-pane -P bg=default
 else
   eval tmux select-pane "$@"

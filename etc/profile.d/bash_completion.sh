@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ -n "$BASH_INTERACTIVE" ] || return
+[ "$BASH_INTERACTIVE" ] || return
 
 . /usr/share/bash-completion/bash_completion
 

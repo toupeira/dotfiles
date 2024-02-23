@@ -209,10 +209,6 @@ function target {
 
   if [[ "$origin" =~ ^$HOME/ ]]; then
     local target="${1:${#HOME}+1}"
-  elif [[ "$origin" =~ ^/private/etc/ ]]; then
-    local target="${1:8}"
-  elif [[ "$origin" =~ ^/usr/local/etc/ ]]; then
-    local target="${1:10}"
   elif [[ "$origin" =~ ^/etc/ ]]; then
     local target="${1:1}"
   else
@@ -250,23 +246,31 @@ function run {
 
       function install-paths {
         for path in "$@"; do
+          path=${path%/}
+
           if [ ! -e "$path" ] || [ "$( basename "$path" )" = "README.md" ]; then
             continue
           fi
 
-          if [ ! -d "$path" ] || [ -L "$path" ] || [ -e "$path/.install" ]; then
+          if [ -f "$path" ] || [ -L "$path" ] || [ -e "$path/.install" ]; then
             run install "$path"
-          elif [ -e "$path/.skip" ]; then
+          elif [ -e "$path/.skip" ] || [ -e "$path/.git" ]; then
             continue
-          elif [ -d "$path" ] && [ ! -e "$path/.git" ] && [ ! -L "$path" ]; then
+          elif [ -d "$path" ]; then
             install-paths "$path"/*
+          else
+            abort "Unknown filetype: $path"
           fi
         done
       }
 
       output
-      install-paths "$DOTFILES"/*
-      run package
+      if [ $# -gt 0 ]; then
+        install-paths "$@"
+      else
+        install-paths "$DOTFILES"/*
+        run package
+      fi
       output
       ;;
     # }}}
@@ -394,7 +398,7 @@ function run {
 
       echo
       warning "{{Broken symlinks}}"
-      sudo fdfind . ~ /etc --unrestricted --follow --mount --type symlink \
+      sudo fdfind . ~ /root /etc --unrestricted --follow --mount --type symlink \
         --exclude /.local/share/flatpak --exclude /.var/app \
         --exclude src --exclude tmp \
         --color always "${delete[@]}" | grep -Ev '[0-9]mlock\b'

@@ -1,11 +1,11 @@
 #!/bin/bash
 
-[ -n "$BASH_INTERACTIVE" ] || return
+[ "$BASH_INTERACTIVE" ] || return
 
 function login_banner {
   if [ -z "$BASH_LOGIN" ]; then
     return
-  elif [ $LINES -lt 25 ] || [ -n "$FLOATING_TERMINAL" ]; then
+  elif [ $LINES -lt 25 ] || [ "$FLOATING_TERMINAL" ]; then
     down
   elif [ "$PWD" = "$HOME" ]; then
     clear
@@ -25,13 +25,7 @@ function login_banner {
     uptime
     echo
     if [ "$SSH_CONNECTION" ] || [ -z "$DISPLAY" ]; then
-      if [ -n "$CYGWIN" ]; then
-        local hostname="$HOSTNAME"
-      else
-        local hostname=$( hostname -f )
-      fi
-
-      echo -e "\\e[0;36mWelcome \\e[1;36m${USERNAME:-$USER}\\e[0;36m on \\e[1;33m$hostname\\e[0m"
+      echo -e "\\e[0;36mWelcome \\e[1;36m${USERNAME:-$USER}\\e[0;36m on \\e[1;33m$( hostname -f )\\e[0m"
       echo
     fi
 
@@ -47,7 +41,7 @@ function login_banner {
     ls
     echo
     local mails=$( from -c 2>/dev/null | grep -v "There are 0 messages" )
-    if [ -n "$mails" ]; then
+    if [ "$mails" ]; then
       echo -e " 🎯 \\033[1;32m$mails\\033[0m"
       echo
     fi
@@ -115,8 +109,8 @@ function mvln {
 # rg wrapper to edit files matching a pattern
 function rg.edit {
   local files=$( rg -l -- "$@" )
-  if [ -n "$files" ]; then
-    sensible-vim "+/$1" $files
+  if [ "$files" ]; then
+    sensible-vim "+silent /\\v$1" "+normal ggn" $files
   else
     echo "No files found."
   fi
@@ -179,7 +173,7 @@ function src {
       fi
 
       local project=$( command src "$1" --path )
-      if [ -n "$project" ]; then
+      if [ "$project" ]; then
         cd "$project"
       fi
       ;;
@@ -246,7 +240,7 @@ function ssh.mux {
 # Go to project root
 function up {
   local root=$( git rev-parse --show-toplevel 2>/dev/null )
-  [ -n "$root" ] && cd "$root" || cd ..
+  [ "$root" ] && cd "$root" || cd ..
 }
 
 # Browse a JSON file
@@ -261,7 +255,7 @@ function jq.tail {
 
 # Serve a directory over HTTP
 function serve {
-  if [ -n "$1" ]; then
+  if [ "$1" ]; then
     local port="$1"
   else
     local port=$((9000 + RANDOM % 1000))

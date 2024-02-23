@@ -4,16 +4,16 @@
 export LANG LC_MESSAGES LC_NUMERIC LC_CTYPE
 
 export PATH="/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
-[ -d ~/bin ] && export PATH="$HOME/bin:$PATH"
-[ -d ~/.local/bin ] && export PATH="$PATH:$HOME/.local/bin"
+[ -d ~/bin ] && export PATH=~/bin:"$PATH"
+[ -d ~/.local/bin ] && export PATH="$PATH":~/.local/bin
 
 export EDITOR="vim"
 command -v sensible-vim >/dev/null && export EDITOR="sensible-vim"
 
 export PAGER="less"
-export LESS="-iRMK"
-export SYSTEMD_LESS="iRMKFX"
-export RIPGREP_CONFIG_PATH=$HOME/.config/ripgrep.conf
+export LESS="-iRMK --mouse"
+export SYSTEMD_LESS="iRMKFX --mouse"
+export RIPGREP_CONFIG_PATH=~/.config/rg/config
 export BAT_THEME="TwoDark"
 
 export GTK_A11Y=none

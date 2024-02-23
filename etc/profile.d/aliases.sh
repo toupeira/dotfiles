@@ -1,6 +1,6 @@
 #!/bin/bash
 
-[ -n "$BASH_INTERACTIVE" ] || return
+[ "$BASH_INTERACTIVE" ] || return
 
 # dotfiles aliases
 alias dt='dotfiles'
@@ -70,7 +70,7 @@ alias vimdiff='vim -d'
 alias g='git'
 alias e='git edit'
 
-alias fd='fdfind --hidden --ignore-file /etc/dotfiles/ignore'
+alias fd='fdfind --hidden'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases

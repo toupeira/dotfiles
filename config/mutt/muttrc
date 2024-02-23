@@ -5,7 +5,7 @@ set editor = "vim +"
 set include = yes
 set edit_headers = yes
 
-set folder = ~/.mail
+set folder = /var/mail
 set record = /dev/null
 set confirmappend = no
 set move = no

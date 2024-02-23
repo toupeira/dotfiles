@@ -1,8 +1,7 @@
-# vim: ft=conf
 --smart-case
 --hidden
 --ignore-file
-  /etc/dotfiles/ignore
+  /etc/dotfiles/config/rg/ignore
 --colors
   path:fg:green
 --colors

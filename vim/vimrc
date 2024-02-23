@@ -190,6 +190,9 @@
   autocmd vimrc FileType qf,ale-preview call <SID>ResizeWindow(2, 10)
   function! s:ResizeWindow(min, max) " {{{
     nnoremap <buffer><silent> q :bd<CR>
+    if &ft == 'ale-preview'
+      nnoremap <buffer><silent> ,E :bd<CR>
+    endif
     let max = min([a:max, &lines / 3])
     execute max([a:min, min([max, line('$') + 1])]).'wincmd _'
   endfunction " }}}
@@ -675,7 +678,6 @@ endfunction " }}}
     \ }
 
     let g:ale_ruby_rubocop_auto_correct_all = 1
-    let g:ale_sh_shellcheck_exclusions = 'SC1090,SC2113,SC2155'
   endif
   " }}}
 

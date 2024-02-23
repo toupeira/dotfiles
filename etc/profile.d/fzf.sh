@@ -1,11 +1,11 @@
 #!/bin/bash
 
-[ -n "$BASH_INTERACTIVE" ] && has fzf || return
+[ "$BASH_INTERACTIVE" ] && has fzf || return
 
 export FZF_TMUX=0
 export FZF_COMPLETION_TRIGGER='//'
 
-export FZF_DEFAULT_COMMAND="fdfind --type f --type l --hidden --color always --ignore-file /etc/dotfiles/ignore"
+export FZF_DEFAULT_COMMAND="fdfind --type f --type l --hidden --color always"
 export FZF_DEFAULT_OPTS="
   --color=dark,gutter:-1
   --ansi --multi --cycle --filepath-word --inline-info --layout default --no-height --no-separator
@@ -35,7 +35,7 @@ export FZF_ALT_C_OPTS="
 _fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }
 _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
 
-if [ -n "$BASH_VERSION" ]; then
+if [ "$BASH_VERSION" ]; then
   . /etc/dotfiles/fzf/shell/completion.bash
   . /etc/dotfiles/fzf/shell/key-bindings.bash
 

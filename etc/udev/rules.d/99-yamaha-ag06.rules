@@ -1,1 +1,0 @@
-ACTION=="add", SUBSYSTEM=="sound", ENV{ID_VENDOR}=="Yamaha_Corporation", ENV{ID_MODEL}=="AG06_AG03", ENV{SYSTEMD_USER_WANTS}+="pulseaudio-loopback-yamaha-ag06.service"
