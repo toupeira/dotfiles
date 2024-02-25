@@ -67,6 +67,7 @@
 
 [commit]
   gpgSign = true
+  verbose = true
 
 [diff]
   algorithm = histogram
@@ -167,7 +168,7 @@
   unstage = reset HEAD -p
   discard = checkout -p
 
-  ci = commit -v
+  ci = commit
   ca = ci -a
   amend = ci --amend
   reword = amend --only
@@ -191,7 +192,7 @@
   pom = !git pull origin $( git default-branch )
   pick = cherry-pick
 
-  pu = push -v
+  pu = push
   poof = pu --force-with-lease
   pusu = -c push.default=current pu --set-upstream
   puci = pusu -o ci.skip

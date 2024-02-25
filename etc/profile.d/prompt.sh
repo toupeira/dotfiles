@@ -19,7 +19,7 @@ PROMPT_COMMAND=( '_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_path=$(
 
 # Prompt helpers
 function _prompt_path {
-  local path="$PWD"
+  local path="${PWD%/}"
   local root=$( git rev-parse --show-toplevel 2>/dev/null )
 
   if [ "$root" ]; then

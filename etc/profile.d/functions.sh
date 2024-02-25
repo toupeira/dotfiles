@@ -139,19 +139,17 @@ function dotfiles {
   local path=$( command dotfiles --path )
 
   if [ $# -eq 0 ]; then
-    cd "$path"
+    cd "$path" || return 1
   elif [ "$1" = "b" ]; then
     if [ $# -eq 1 ]; then
-      cd "$path/vim/bundle"
+      cd "$path/vim/bundle" || return 1
     elif [ -d "$path/$2" ]; then
-      cd "$path/$2"
+      cd "$path/$2" || return 1
     elif [ -d "$path/vim/bundle/$2" ]; then
-      cd "$path/vim/bundle/$2"
+      cd "$path/vim/bundle/$2" || return 1
     else
-      cd "$( command ls -d "$path/vim/bundle/$2"* "$path/$2"* 2>/dev/null | head -1 )"
+      cd "$( command ls -d "$path/vim/bundle/$2"* "$path/$2"* 2>/dev/null | head -1 )" || return 1
     fi
-  elif [ "$1" = "dconf" ] && [ $# -eq 1 ]; then
-    cd "$path/dconf"
   else
     /etc/dotfiles/bin/dotfiles "$@"
   fi

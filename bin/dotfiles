@@ -8,8 +8,6 @@ function usage {
   echo
   echo "Options:"
   echo "  -v, --verbose             Increase verbosity"
-  echo "  -q, --quiet               Suppress all normal output"
-  echo "  -n, --dry-run             Only show changes, without performing them"
   echo "      --path                Show path to the dotfiles repository and exit"
   echo
   echo "Commands:"
@@ -18,7 +16,7 @@ function usage {
   echo "  add PATH...               Add file to repository and replace it with a symlink"
   echo "  lint                      Report configuration problems"
   echo
-  echo "  sync                      Pull, commit and push"
+  echo "  sync                      Commit, pull, and push changes"
   echo "  commit-all, ca            Commit all changes"
   echo "  pull, up                  Pull remote changes and checkout submodules"
   echo "  push                      Push local changes"
@@ -34,8 +32,9 @@ function usage {
   echo "  pkg LIST[:TYPE]           Install packages from list"
   echo "  pkg up, pkg TYPE          Update packages"
   echo
-  echo "  dconf load [KEY]          Load custom dconf settings"
-  echo "  dconf dump [KEY]          Dump custom dconf settings"
+  echo "  dconf sync                Load dconf settings if no local changes are found"
+  echo "  dconf load [KEY]          Load dconf settings"
+  echo "  dconf dump [KEY]          Dump dconf settings"
   echo
   echo "Other arguments:"
   echo "  COMMAND [ARGS]...         Excecute a Git command inside the dotfiles repository"
@@ -49,39 +48,33 @@ function usage {
 
 ### output helpers {{{
 
-# Helpers to check active toggles
-function verbose { [ "$VERBOSE" = 1 ]; }
-function quiet   { [ "$QUIET"   = 1 ]; }
-function dryrun  { [ "$DRYRUN"  = 1 ]; }
-
-# Output a string
-function output {
-  local output="$1"
-  local echo_options="$2"
-
-  if verbose || ! quiet; then
-    echo -e "$echo_options" "$output"
-  fi
-}
-
 # Output a message with a colored arrow in front
 function msg {
   local message="${1/$HOME/\~}"
   local color=${2:-4}
-  local echo_options="$3"
 
-  if verbose || ! quiet || [ "$color" = 1 ]; then
-    if [ -n "$message" ]; then
-      echo -e "$echo_options" " \e[1;3${color}m>\e[0m $message" | sed -r 's/\{\{/\o033[1m/g' | sed -r 's/\}\}/\o033[0m/g'
-    else
-      echo -e "$echo_options"
-    fi
+  if [ $# -gt 2 ]; then
+    shift 2
+    local echo_options=( "$@" )
+  fi
+
+  if [ -n "$message" ]; then
+    echo -e "${echo_options[@]}" " \e[1;3${color}m>\e[0m $message" | sed -r 's/\{\{/\o033[1m/g' | sed -r 's/\}\}/\o033[0m/g'
+  else
+    echo -e "${echo_options[@]}"
   fi
 }
 
 # Helpers for colored messages
 function status  { msg "$1" "${2:-2}"; }
 function warning { msg "$1" "${2:-3}"; }
+
+# Output verbose message
+function verbose {
+  [ "$VERBOSE" = 1 ] || return
+
+  msg "\e[0;35m$1\e[0m" 5 >&2
+}
 
 # Output error message
 function error {
@@ -91,6 +84,7 @@ function error {
 
 # Output error message and exit
 function abort {
+  STATUS=1
   [ -n "$1" ] && error "$@"
   exit 1
 }
@@ -104,15 +98,14 @@ function ask {
 
 # Ask a yes/no question, defaulting to yes
 function ask-yes {
-  msg "$1 [Y/n] " "$2" -n >&2
+  msg "$1 [Y/n] " "${2:-6}" -n >&2
   read -r
   [ "${REPLY:0:1}" != "N" ] && [ "${REPLY:0:1}" != "n" ]
 }
 
 # Ask to continue or abort
 function ask-abort {
-  STATUS=1
-  if ! ask "Do you want to continue?" 1; then
+  if ! ask "{{Do you want to continue?}}" 1; then
     abort
   fi
 }
@@ -128,22 +121,19 @@ function system {
 
   # Check for commands that require sudo
   if [ "$command" = "chown" ] || [ "$command" = "chgrp" ]; then
-    warning "Using [1;33msudo[0m for command [1m$command[0m"
     sudo="sudo"
   else
     # Check for paths that require sudo
     for arg in "$@"; do
       local dir=$( dirname -- "$arg" )
       if [ "$dir" != "." ] && [ -d "$dir" ] && [ ! -w "$dir" ]; then
-        warning "Using [1;33msudo[0m for directory {{$dir}}"
         sudo="sudo"
         break
       fi
     done
   fi
 
-  verbose && output "     executing: $command $* $( dryrun-message )" >&2
-  dryrun && return
+  verbose "[exec] $command $*"
 
   command $sudo "$command" "$@"
 }
@@ -157,8 +147,7 @@ function git {
     local onerror="ask-abort"
   fi
 
-  verbose && output "     executing: git $* $( dryrun-message )" >&2
-  dryrun && return
+  verbose "[exec] git $*"
 
   # Spawn a subshell so we can run the command inside the repository
   # without any nasty side-effects
@@ -167,11 +156,6 @@ function git {
   [ $status -eq 0 ] || $onerror
 
   return $status
-}
-
-# Helper to decorate dry-run output
-function dryrun-message {
-  dryrun && output "[DRY RUN]"
 }
 
 # Run a command in a tmux pane if possible
@@ -235,6 +219,8 @@ function origin {
 ### }}}
 
 function run {
+  verbose "[run] $*"
+
   local command="$1"
   shift
 
@@ -264,14 +250,13 @@ function run {
         done
       }
 
-      output
       if [ $# -gt 0 ]; then
         install-paths "$@"
       else
         install-paths "$DOTFILES"/*
         run package
+        run dconf sync
       fi
-      output
       ;;
     # }}}
     install) # {{{
@@ -308,7 +293,6 @@ function run {
             error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
             force=1
           elif [ "$link" = "$target" ]; then
-            msg "Already symlinked: {{$origin}}"
             continue
           else
             warning "Symlinked to different path: {{$origin}} -> [1;36m$link[0m"
@@ -318,20 +302,15 @@ function run {
         if [ -e "$origin" ] || [ -L "$origin" ]; then
           local ask="ask"
           local question="Delete {{$origin}} and install symlink?"
+          local color=3
         else
           local ask="ask-yes"
-          local question="Install symlink for {{$origin}}?"
+          local question="Install {{$origin}}?"
         fi
 
-        if [ $force -eq 1 ] || $ask "$question"; then
-          if [ -d "$origin" ]; then
-            if ask "Delete {{$origin}}?"; then
-              system rm -r "$origin"
-            else
-              ask-abort
-            fi
-          elif [ -e "$origin" ] || [ -L "$origin" ]; then
-            system rm "$origin"
+        if [ $force -eq 1 ] || $ask "$question" "$color"; then
+          if [ -e "$origin" ]; then
+            system rm -r "$origin"
           fi
 
           local parent=$( dirname "$origin" )
@@ -339,7 +318,7 @@ function run {
             system mkdir -p "$parent"
           fi
 
-          if [ ! -e "$origin" ] || [ "$DRYRUN" = 1 ] && system ln -s "$target" "$origin"; then
+          if [ ! -e "$origin" ] && system ln -s "$target" "$origin"; then
             status "Successfully installed {{$origin}}"
           else
             error "Error while installing {{$origin}}"
@@ -413,23 +392,22 @@ function run {
 
     sync) # {{{
       if git ignore-errors status -s | grep -q .; then
-        output
-        git status
-        output
-        ask-abort
-
-        run commit-all
+        echo
+        warning "{{Found local changes:}}"
+        git status -s
+        echo
+        if ask "{{Commit?}}"; then
+          run commit-all
+        else
+          abort
+        fi
       fi
 
-      output
       run pull
 
       if git status | grep -Fq "Your branch is ahead"; then
-        output
         run push
       fi
-
-      output
       ;;
     # }}}
     commit-all|ca) # {{{
@@ -447,24 +425,23 @@ function run {
       ;;
     # }}}
     pull|up) # {{{
-      local changes=$( git status -s --ignore-submodules )
-      [ -n "$changes" ] && git stash save | grep -Fq "No local changes to save" && unset changes
-
       local current=$( git rev-parse HEAD )
 
-      status "{{Merging remote changes...}}"
-      git pull "$@"
-
-      [ -n "$changes" ] && git stash pop -q
+      status "{{Fetching remote changes...}}"
+      git ignore-errors pull -q || abort
 
       if [ "$( git rev-parse HEAD )" != "$current" ]; then
         status "{{Checking out submodules...}}"
         git checkout-submodules
         run build-all
       fi
+
+      if git diff --stat "$current".. | grep -q ' dconf/'; then
+        run dconf sync
+      fi
       ;;
     # }}}
-    push) # {{{
+    push|pu) # {{{
       status "{{Pushing local changes...}}"
       git push -q "$@"
       ;;
@@ -492,28 +469,25 @@ function run {
       [ -e ".git" ] || abort "Not a git repository: .git"
 
       local old_commit=$( system git rev-parse HEAD )
-      if ! dryrun; then
-        local git_output=$(
-          system git fetch -q origin 2>&1 &&
-          system git reset -q --hard origin/HEAD 2>&1
-        )
-      fi
+      local git_output=$(
+        system git fetch -q origin 2>&1 &&
+        system git reset -q --hard origin/HEAD 2>&1
+      )
       local new_commit=$( system git rev-parse HEAD )
 
       if [ -n "$git_output" ]; then
         error "Error while updating {{$submodule}}:"
-        output "\e[1;31m$git_output\e[0m" | sed -r 's/^/    /'
-        output
+        echo -e "\e[1;31m$git_output\e[0m" | sed -r 's/^/    /'
+        echo
       elif [ "$new_commit" != "$old_commit" ]; then
         local url=$( system git remote -v | grep -Eom1 'https?://[^ ]+' )
         [ -n "$url" ] && url=" [ {{$url}} ]"
 
-        [ ! "$batch" ] && output
+        [ ! "$batch" ] && echo
         status "Changes in {{$submodule}}$url:" 6
-        quiet \
-          || system git -c color.ui=always log --oneline --no-merges '@{1}..' \
+        system git -c color.ui=always log --oneline --no-merges '@{1}..' \
           | sed -r 's/^/    /'
-        output
+        echo
       elif [ ! "$batch" ]; then
         status "No changes in {{$submodule}}"
       fi
@@ -526,12 +500,12 @@ function run {
         local submodules=$( run list | grep -vx asdf )
       fi
 
-      output
+      echo
       status "{{Updating submodules:}}"
 
       local tmpdir=$( mktemp -d "${TMPDIR:-/tmp}/dotfiles.XXXXXX" )
 
-      output '     \e[1;36m[' -n
+      echo -ne '     \e[1;36m['
 
       for submodule in $submodules; do
         while [ "$( jobs -r | wc -l )" -gt 10 ]; do
@@ -540,15 +514,15 @@ function run {
 
         (
           run update-submodule --batch "$submodule" > "$tmpdir/${submodule//\//-}" 2>&1
-          output '\e[0;36m=' -n
+          echo -ne '\e[0;36m='
         ) &
 
         sleep 0.1
       done
 
       wait
-      output '\e[1;36m]\e[0m'
-      output
+      echo -e '\e[1;36m]\e[0m'
+      echo
 
       if grep -q . "$tmpdir"/* 2>/dev/null; then
         system cat "$tmpdir"/*
@@ -558,7 +532,7 @@ function run {
       fi
 
       system rm -rf "$tmpdir"
-      output
+      echo
       ;;
     # }}}
 
@@ -574,8 +548,7 @@ function run {
         return
       fi
 
-      warning "Building {{$path}} $( dryrun-message )"
-      dryrun && return
+      warning "Building {{$path}}"
 
       if ! ( cd "$DOTFILES/$path" && system "$command" "$@" ); then
         error "Error while building {{$path}}"
@@ -673,13 +646,13 @@ function run {
         return
       fi
 
-      output
+      echo
       status "{{Missing $name packages:}}"
 
       function list_packages {
         [ -n "$2" ] || return
         for package in $2; do
-          output "    \\e[0;32m[$1] \\e[1;32m$package\\e[0m"
+          echo -e "    \\e[0;32m[$1] \\e[1;32m$package\\e[0m"
         done
       }
 
@@ -689,14 +662,13 @@ function run {
       list_packages pip     "$missing_pip"
       list_packages flatpak "$missing_flat"
 
-      output
+      echo
       if ask-yes "{{Install?}}"; then
         function install_packages {
           [ -n "$1" ] || return
           mapfile -t packages <<< "$1"
           shift
 
-          output
           mux-wrap "$@" "${packages[@]}"
         }
 
@@ -706,7 +678,7 @@ function run {
         install_packages "$missing_pip"  sudo python3 -m pip install --system --upgrade
         install_packages "$missing_flat" flatpak install
       fi
-      output
+      echo
       ;;
     # }}}
     update-packages) # {{{
@@ -747,6 +719,23 @@ function run {
       local action="$1"
       shift
 
+      if [ "$action" = "sync" ]; then
+        status "{{Dumping dconf settings}}"
+        run dconf dump >/dev/null
+
+        if git ignore-errors status dconf | grep -q 'nothing to commit'; then
+          status "{{Loading dconf settings}}"
+          run dconf load >/dev/null
+          exit
+        else
+          echo
+          warning "{{Found local changes:}}"
+          git status -s dconf
+          echo
+          abort
+        fi
+      fi
+
       if [ -n "$1" ]; then
         local paths=( "$@" )
       else
@@ -768,10 +757,10 @@ function run {
 
         if [ "$action" = "load" ]; then
           status "Loading {{$name}}"
-          dconf load "$path" < "$file"
+          system dconf load "$path" < "$file"
         elif [ "$action" = "dump" ]; then
           status "Dumping {{$name}}"
-          local output=$( dconf dump "$path" )
+          local output=$( system dconf dump "$path" )
 
           if [ -f "$file" ]; then
             local skip_markers=$( grep -E '^#( skip:.*)?$' "$file" )
@@ -845,8 +834,6 @@ STATUS=0
 while [ $# -gt 0 ]; do
   case "$1" in
     -v|--verbose) VERBOSE=1;;
-    -q|--quiet)   QUIET=1;;
-    -n|--dry-run) DRYRUN=1; VERBOSE=1;;
        --path)    echo "$DOTFILES"; exit;;
     -*|help)      usage;;
     *)

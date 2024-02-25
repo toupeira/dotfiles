@@ -96,13 +96,10 @@ case "$ACTION" in
     ;;
   each)
     [ $# -lt 1 ] && usage
-    command="$1"
-    shift
-
     echo
-    for project in $( src list $all --path "$@" ); do
-      echo -e " \e[1;32m>\e[1;37m \e[1;36m[$( realpath "$project" )] \e[1;33m$command\e[0m" | truncate
-      (cd "$project" || exit 1; $command)
+    for project in $( src list $all --path ); do
+      echo -e " \e[1;32m>\e[1;37m \e[1;36m[$( realpath "$project" )] \e[1;33m$*\e[0m" | truncate
+      (cd "$project" || exit 1; "$@")
 
       status=$?
       if [ $status -ne 0 ]; then
