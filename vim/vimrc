@@ -987,7 +987,9 @@ endfunction " }}}
   let g:startify_lists += [{ 'type': 'bookmarks', 'header': ['   Bookmarks'] }]
 
   let g:startify_bookmarks = [
-    \ {'c': '/etc/vim/vimrc'}
+    \ {'v': '~/.config/nvim/init.vim'},
+    \ {'g': '~/.config/git/config'},
+    \ {'t': '~/.config/tmux/tmux.conf'},
   \ ]
 
   let g:startify_ascii = [

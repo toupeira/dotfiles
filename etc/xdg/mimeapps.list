@@ -18,6 +18,7 @@ image/svg+xml=org.gnome.eog.desktop
 image/tiff=org.gnome.eog.desktop
 image/webp=org.gnome.eog.desktop
 
+application/epub+zip=com.github.johnfactotum.Foliate.desktop
 application/pdf=org.gnome.Evince.desktop
 audio/vnd.wave=audacity.desktop
 inode/directory=org.gnome.Nautilus.desktop

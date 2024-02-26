@@ -115,7 +115,7 @@ function ask-abort {
 
 # Run a shell command
 function system {
-  unset sudo
+  local sudo
   local command="$1"
   shift
 
@@ -372,7 +372,7 @@ function run {
       if [ "$1" = "fix" ]; then
         local delete=( --threads=1 --exec rm -vi {} )
       else
-        unset delete
+        local delete
       fi
 
       echo
@@ -452,7 +452,7 @@ function run {
       ;;
     # }}}
     update|update-submodule) # {{{
-      unset batch
+      local batch
       [ "$1" = '--batch' ] && local batch=1 && shift
 
       local submodule="$1"
@@ -793,11 +793,16 @@ function run {
       ;;
     # }}}
 
-    git) # {{{
-      command="$1"
-      shift
-      git ignore-errors "$command" "$@"
+    vim|v) # {{{
+      git edit config/nvim/init.vim
       ;;
+    git|g)
+      git edit config/git/config
+      ;;
+    tmux|t)
+      git edit config/tmux/tmux.conf
+      ;;
+    # }}}
     *)
       git ignore-errors "$command" "$@"
       ;;

@@ -2,6 +2,9 @@
 
 [ "$BASH_INTERACTIVE" ] || return
 
+export GIT_COMPLETION_SHOW_ALL=1
+export GIT_COMPLETION_SHOW_ALL_COMMANDS=1
+
 . /usr/share/bash-completion/bash_completion
 
 function has_completion {
@@ -23,16 +26,14 @@ has_completion journalctl && complete -F _journalctl jctl
 
 # git completions
 if has_completion git __git_main; then
-  __git_complete g __git_main
+  __git_complete g git
   function _git_create_branch { _git_checkout; }
   function _git_delete_branch { _git_checkout; }
-fi
 
-if has dotfiles; then
-  _path=$( dotfiles --path )
-  __git_complete dotfiles __git_main "$_path"
-  __git_complete dt __git_main       "$_path"
-  unset _path
+  if has dotfiles; then
+    __git_complete dotfiles git
+    __git_complete dt git
+  fi
 fi
 
 # Debian completions
@@ -67,7 +68,7 @@ function _src_alias {
   if [ "${cword:0:1}" = "@" ]; then
     _mux
   else
-    __git_main
+    __git_wrap__git_main
   fi
 }
 
@@ -76,8 +77,6 @@ function _mux {
   local cword="${COMP_WORDS[COMP_CWORD]}"
 
   if [ "${cword:0:1}" = "@" ]; then
-    [ "$cword" = "@" ] && cword="@\w"
-
     mapfile -t COMPREPLY < <(
       compgen -W "$(
         (echo -e "bundle:\nconsole:\ndev:\nlog:\nmigrate:\nserver:\nwatcher:"; cat Procfile 2>/dev/null) \
