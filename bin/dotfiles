@@ -161,8 +161,7 @@ function git {
 # Run a command in a tmux pane if possible
 function mux-wrap {
   if [ -n "$TMUX" ]; then
-    system mux -s -d -w "$@"
-    system tmux select-layout even-vertical
+    system mux -s -d "$@"
   else
     system "$@"
   fi
@@ -391,7 +390,7 @@ function run {
     # }}}
 
     sync) # {{{
-      if git ignore-errors status -s | grep -q .; then
+      if git status -s | grep -q .; then
         echo
         warning "{{Found local changes:}}"
         git status -s
@@ -669,7 +668,8 @@ function run {
           mapfile -t packages <<< "$1"
           shift
 
-          mux-wrap "$@" "${packages[@]}"
+          mux-wrap -w "$@" "${packages[@]}"
+          system tmux select-layout even-vertical
         }
 
         install_packages "$missing_apt"  sudo aptitude install
@@ -691,13 +691,12 @@ function run {
         if [ -n "$filter" ] && [ "$filter" != "$type" ]; then
           return
         elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
-          status "Running {{$*}}"
           if [ "$1" = "xdg-open" ]; then
             "$@"
           else
-            mux-wrap "$@"
+            mux-wrap -w "$@"
+            system tmux select-layout even-vertical
           fi
-          [ -n "$filter" ] || echo
         fi
       }
 
@@ -708,10 +707,6 @@ function run {
       update asdf       'asdf update && asdf plugin update --all; echo; asdf global ruby latest:3; asdf global yarn latest; asdf install'
       update gem        'gem update && gem cleanup'
       update yarn       yarn global upgrade
-
-      if command -v gnome-shell >/dev/null; then
-        update gnome-shell xdg-open https://extensions.gnome.org/local
-      fi
       ;;
     # }}}
 
@@ -723,17 +718,20 @@ function run {
         status "{{Dumping dconf settings}}"
         run dconf dump >/dev/null
 
-        if git ignore-errors status dconf | grep -q 'nothing to commit'; then
-          status "{{Loading dconf settings}}"
-          run dconf load >/dev/null
-          exit
-        else
+        if git status -s dconf | grep -q .; then
           echo
           warning "{{Found local changes:}}"
           git status -s dconf
           echo
-          abort
+          mux-wrap git diff dconf
+
+          ask "{{Ignore changes?}}" || abort
+          git checkout dconf
         fi
+
+        status "{{Loading dconf settings}}"
+        run dconf load >/dev/null
+        exit
       fi
 
       if [ -n "$1" ]; then
