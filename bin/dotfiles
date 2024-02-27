@@ -262,6 +262,7 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
+        local path=${path%/}
         local origin="$path"
         local target=$( target "$origin" )
         local force=0
