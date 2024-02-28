@@ -78,6 +78,15 @@ user_pref("browser.search.suggest.enabled.private", false);
 user_pref("browser.download.alwaysOpenPanel", false);
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
 
+// Devtools
+user_pref("devtools.accessibility.enabled", false);
+user_pref("devtools.application.enabled", false);
+user_pref("devtools.debugger.remote-enabled", true);
+user_pref("devtools.screenshot.audio.enabled", false);
+user_pref("devtools.screenshot.clipboard.enabled", true);
+user_pref("devtools.toolbox.tabsOrder", "webconsole,inspector,netmonitor,jsdebugger,styleeditor,storage,performance,memory,accessibility");
+user_pref("devtools.toolbox.zoomValue", 1.2);
+
 // Keyboard shortcuts
 user_pref("ui.key.menuAccessKeyFocuses", false);
 user_pref("ui.key.textcontrol.prefer_native_key_bindings_over_builtin_shortcut_key_definitions", true);

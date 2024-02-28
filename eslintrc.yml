@@ -1,15 +1,8 @@
 extends: 'eslint:recommended'
 env:
-  es6: true
   browser: true
-  node: true
-  jasmine: true
-  jquery: true
-  mozilla: true
 globals:
-  imports: readonly
-parserOptions:
-  sourceType: module
+  user_pref: readonly
 rules:
   indent:
     - error
