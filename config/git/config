@@ -12,7 +12,7 @@
   allowedSignersFile = ~/.ssh/allowed_signers
 
 [includeIf "gitdir:~/src/denteo/"]
-  path = .gitconfig.denteo
+  path = config.denteo
 
 [core]
   pager = delta

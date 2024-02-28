@@ -510,6 +510,8 @@ endfunction " }}}
   autocmd vimrc User FugitiveIndex setlocal nobuflisted|nmap <buffer><silent> q gq|nmap <buffer><silent> <space> =
   autocmd vimrc User FugitiveObject nmap <buffer><silent> q :cclose<CR>:bd<CR>
   autocmd vimrc User FugitivePager if maparg('gq', 'n')!=''|nmap <buffer><silent> q gq|endif
+
+  let g:fugitive_gitlab_domains = ['https://git.panter.ch']
   " }}}
 
   " dirvish {{{

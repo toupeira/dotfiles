@@ -1,0 +1,4 @@
+[user]
+  name = Markus Koller
+  email = markus@denteo.com
+  signingKey = ~/.ssh/id_denteo.pub
