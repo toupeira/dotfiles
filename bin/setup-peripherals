@@ -39,7 +39,7 @@ case "$HOSTNAME" in
     # Setup audio
     pactl set-card-profile alsa_card.pci-0000_00_1f.3 output:analog-stereo+input:analog-stereo
     pactl set-default-source alsa_input.pci-0000_00_1f.3.analog-stereo
-    pactl set-source-volume alsa_input.pci-0000_00_1f.3.analog-stereo 50%
+    pactl set-source-volume alsa_input.pci-0000_00_1f.3.analog-stereo 40%
     ;;
 
   schtube)
