@@ -44,6 +44,7 @@ needrestart
 neovim
 netcat-openbsd
 net-tools
+nftables
 p7zip-full
 parted
 patch
@@ -64,6 +65,7 @@ s-tui
 sudo
 syncthing
 systemd
+systemd-cron
 systemd-sysv
 systemd-timesyncd
 task-english

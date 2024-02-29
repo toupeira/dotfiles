@@ -5,6 +5,8 @@ eject
 esmtp-run
 exfat-fuse
 exfatprogs
+firewall-config
+firewalld
 firmware-linux
 flatpak
 fwupd
@@ -19,12 +21,6 @@ plymouth-label
 thermald
 tlp
 wireless-regdb
-
-# Firewall
-firewall-config
-firewalld
-ipset
-nftables
 
 # Multimedia
 alsa-utils

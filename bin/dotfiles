@@ -1,5 +1,5 @@
 #!/bin/bash
-# vim: foldmethod=marker
+# vim: foldmethod=marker foldlevel=0
 
 ### usage {{{
 
@@ -14,7 +14,7 @@ function usage {
   echo "  init                      Install symlinks for all dotfiles interactively"
   echo "  install PATH...           Install symlink for PATH"
   echo "  add PATH...               Add file to repository and replace it with a symlink"
-  echo "  lint                      Report configuration problems"
+  echo "  lint [fix]                Report or fix configuration problems"
   echo
   echo "  sync                      Commit, pull, and push changes"
   echo "  commit-all, ca            Commit all changes"
@@ -73,7 +73,7 @@ function warning { msg "$1" "${2:-3}"; }
 function verbose {
   [ "$VERBOSE" = 1 ] || return
 
-  msg "\e[0;35m$1\e[0m" 5 >&2
+  echo -e "\e[0;35m$( printf '%10s' "$1" ): │ \e[1;35m$2\e[0m" >&2
 }
 
 # Output error message
@@ -133,7 +133,7 @@ function system {
     done
   fi
 
-  verbose "[exec] $command $*"
+  verbose exec "$command $*"
 
   command $sudo "$command" "$@"
 }
@@ -147,7 +147,7 @@ function git {
     local onerror="ask-abort"
   fi
 
-  verbose "[exec] git $*"
+  verbose exec "git $*"
 
   # Spawn a subshell so we can run the command inside the repository
   # without any nasty side-effects
@@ -156,6 +156,11 @@ function git {
   [ $status -eq 0 ] || $onerror
 
   return $status
+}
+
+# Check for Git changes
+function has-changes {
+  git diff --stat "ORIG_HEAD.." "$@" | grep -q .
 }
 
 # Run a command in a tmux pane if possible
@@ -178,7 +183,7 @@ function escape-regex {
 # Make sure the given path is either inside the home directory,
 # or a valid /etc path
 function validate {
-  if ! [[ "$1" =~ ^($HOME|(/private|/usr/local)?/etc)($|/) ]]; then
+  if ! [[ "$1" =~ ^($HOME|/etc)($|/) ]]; then
     error "Path is not inside \$HOME or /etc: {{$1}}"
     return 1
   else
@@ -206,7 +211,7 @@ function origin {
   local target="${1:${#DOTFILES}+1}"
   local topdir="${target%%/*}"
 
-  if [ "$topdir" = "etc" ] || [ "$topdir" = "private" ]; then
+  if [ "$topdir" = "etc" ]; then
     echo "/$target"
   elif [ -e "$HOME/$topdir" ]; then
     echo "$HOME/$target"
@@ -218,7 +223,7 @@ function origin {
 ### }}}
 
 function run {
-  verbose "[run] $*"
+  verbose run "$*"
 
   local command="$1"
   shift
@@ -377,7 +382,7 @@ function run {
 
       echo
       warning "{{Broken symlinks}}"
-      sudo fdfind . ~ /root /etc --unrestricted --follow --mount --type symlink \
+      system sudo fdfind . ~ /root /etc --unrestricted --follow --mount --type symlink \
         --exclude /.local/share/flatpak --exclude /.var/app \
         --exclude src --exclude tmp \
         --color always "${delete[@]}" | grep -Ev '[0-9]mlock\b'
@@ -385,7 +390,7 @@ function run {
       echo
 
       warning "{{Configuration updates}}"
-      sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --unrestricted "${delete[@]}"
+      system sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --unrestricted "${delete[@]}"
       echo
       ;;
     # }}}
@@ -425,19 +430,15 @@ function run {
       ;;
     # }}}
     pull|up) # {{{
-      local current=$( git rev-parse HEAD )
-
       status "{{Fetching remote changes...}}"
       git ignore-errors pull -q || abort
 
-      if [ "$( git rev-parse HEAD )" != "$current" ]; then
+      if has-changes; then
         status "{{Checking out submodules...}}"
         git checkout-submodules
-        run build-all
-      fi
 
-      if git diff --stat "$current".. | grep -q ' dconf/'; then
-        run dconf sync
+        run build-all
+        has-changes dconf && run dconf sync
       fi
       ;;
     # }}}
@@ -557,7 +558,7 @@ function run {
       ;;
     # }}}
     build-all) # {{{
-      run build fzf ./install --bin
+      has-changes vim/bundle/fzf && run build fzf ./install --bin
       ;;
     # }}}
 
@@ -625,7 +626,7 @@ function run {
 
       [ -n "$packages_yarn" ] && local missing_yarn=$(
         get_missing "$packages_yarn" \
-        "$( command ls ~/.config/yarn/global/node_modules 2>/dev/null)"
+        "$( ls ~/.config/yarn/global/node_modules 2>/dev/null)"
       )
 
       [ -n "$packages_pip" ] && local missing_pip=$(
@@ -848,7 +849,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-if [ -v COMMAND ]; then
+if [ "${#COMMAND[@]}" ]; then
   run "${COMMAND[@]}"
   exit $STATUS
 else

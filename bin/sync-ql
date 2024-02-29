@@ -39,6 +39,7 @@ if os.system('ql running >/dev/null') == 0:
     if 'playing' in subprocess.getoutput('quodlibet --status'):
         ql_args = '--play'
 
+    os.system('ql refresh')
     os.system('ql quit')
 
 from quodlibet._init import init

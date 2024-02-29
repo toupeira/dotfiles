@@ -11,8 +11,8 @@ case "$1" in
   "") tmux send-keys "?";;
 
   paths)
-    path="[^][<> :'\"]";
-    search "(/$path+|$path*/|$path*\.$path+)$path*(:[0-9]+)*"
+    path='[-_.[:alnum:]]';
+    search "(/$path+|$path+/|$path*\.$path+)+$path*(:[0-9]+)*"
     ;;
 
   prompts)

@@ -7,7 +7,7 @@ alias dt='dotfiles'
 alias @='mux -s -d -w'
 
 # general shell aliases
-eval $( dircolors -b )
+eval "$( dircolors -b )"
 alias ls='ls --color --quoting-style=literal'
 alias ll='ls -lFh'
 alias l='ls -A'
@@ -33,6 +33,7 @@ alias fgrep='grep -F'
 alias rgrep='grep -r'
 alias ssh.direct='ssh -o ControlPath=none'
 alias ssh.syncthing='echo "Opening Syncthing proxy in http://localhost:9393"; ssh.direct -NL 9393:localhost:8384'
+alias fd='fdfind --hidden'
 alias bat='batcat'
 alias ffmpeg='ffmpeg -hide_banner'
 alias ffprobe='ffprobe -hide_banner'
@@ -51,7 +52,7 @@ alias watch='watch -cd -n 1 '
 alias cpufreq='sudo watch "cpupower -c all frequency-info | grep assert"'
 alias sleeplog='journalctl -u sleep.target --no-pager | grep ".*Stopped.*\|$"'
 
-# package managment
+# package management
 alias pkget='aptitude -Z install'
 alias pkgpurge='aptitude -Z purge'
 alias pkgremove='aptitude -Z remove'
@@ -70,7 +71,6 @@ alias vimdiff='vim -d'
 alias g='git'
 alias e='git edit'
 
-alias fd='fdfind --hidden'
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases
@@ -104,14 +104,9 @@ alias dpkg-reconfigure='sudo dpkg-reconfigure'
 alias update-alternatives='sudo update-alternatives'
 
 # system tools
-alias bootctl='sudo bootctl'
 alias modprobe='sudo modprobe'
 alias rmmod='sudo rmmod'
-alias ifup='sudo ifup'
-alias ifdown='sudo ifdown'
 alias ethtool='sudo ethtool'
 alias nft='sudo nft'
-alias iptables='sudo iptables'
-alias ip6tables='sudo ip6tables'
 alias tcpdump='sudo tcpdump'
 alias lsop='sudo lsof -Pni | grep --color=never LISTEN | egrep --color=auto "^[^ ]+|:\w+"'
