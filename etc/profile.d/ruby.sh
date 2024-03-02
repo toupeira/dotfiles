@@ -7,18 +7,22 @@
 
 function gem {
   if [ "$1" = "cd" ]; then
-    local path
+    local dir
+    local bundle
+
+    [ -f Gemfile ] && bundle='bundle exec'
+
     if [ "$2" ]; then
-      path=$( bundle exec gem open -e echo "$2" )
+      dir=$( $bundle gem open -e echo "$2" )
     else
-      path=$( bundle exec gem env path | cut -d: -f1 )/gems
+      dir=$( $bundle gem env home | cut -d: -f1 )/gems
     fi
 
-    if [ "$path" ]; then
-      cd "$path" || return $?
+    if [ "$dir" ]; then
+      cd "$dir" || return $?
       return 0
     else
-      echo "$path"
+      echo "$dir"
       return 1
     fi
   fi

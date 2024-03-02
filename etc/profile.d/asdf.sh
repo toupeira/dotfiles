@@ -8,8 +8,8 @@ if [ -d ~/.asdf ]; then
 fi
 
 # Add yarn global packages
-if [ -d ~/.config/yarn/global/node_modules/.bin ]; then
-  export PATH="$PATH":~/.config/yarn/global/node_modules/.bin
+if [ -d ~/.yarn/bin ]; then
+  export PATH="$PATH":~/.yarn/bin
 fi
 
 [ "$BASH_INTERACTIVE" ] || return

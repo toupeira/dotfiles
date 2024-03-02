@@ -11,27 +11,27 @@ PS1_HOST=" "
 [ "$EMACS" ] && PS1_USER="" && PS1_HOST=""
 [ "$UID" = "0" ] && PS1_USER="\[\e[0m\e[1;31m\]$PS1_USER"
 
-PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\$_prompt_path\[\e[0;36m\]]\[\e[0m\] "
+PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\$_prompt_dir\[\e[0;36m\]]\[\e[0m\] "
 PS2=" \[\e[1;35m\]»\[\e[0m\] "
 
-# Update title when path changes
-PROMPT_COMMAND=( '_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_path=$( _prompt_path); [ ${#_prompt_path} -gt 24 ] && mux title "${_prompt_path:0:24}…" || mux title "$_prompt_path"; _last_pwd="$PWD"' )
+# Update title when directory changes
+PROMPT_COMMAND=( '_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_dir=$( _prompt_dir); [ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir"; _last_pwd="$PWD"' )
 
 # Prompt helpers
-function _prompt_path {
-  local path="${PWD%/}"
+function _prompt_dir {
+  local dir="${PWD%/}"
   local root=$( git rev-parse --show-toplevel 2>/dev/null )
 
   if [ "$root" ]; then
-    path="${path#"${root%/*}"/}"
-    path=${path/#asdf\/installs\/ruby\/*\/lib\/ruby\/gems\//💎 }
-    path=${path/#asdf\/installs\/ruby\//💎 }
-    path=${path/#dotfiles\//📦 }
-    path=${path/#dotfiles/📦}
+    dir="${dir#"${root%/*}"/}"
+    dir=${dir/#asdf\/installs\/ruby\/*\/lib\/ruby\/gems\//💎 }
+    dir=${dir/#asdf\/installs\/ruby\//💎 }
+    dir=${dir/#dotfiles\//📦 }
+    dir=${dir/#dotfiles/📦}
   fi
 
-  path=${path/#$HOME/\~}
-  echo "$path"
+  dir=${dir/#$HOME/\~}
+  echo "$dir"
 }
 
 function _prompt_jobs {
@@ -65,10 +65,13 @@ if type __git_ps1 &>/dev/null && [ -z "$VIM" ]; then
     s/\\+/●/;
     s/%/‽/;
     s/\\\$/$/;
-    s/=//;
+    s/ ?=//;
     s/<>/ ⇵/;
     s/>/ ↑/;
     s/</ ↓/;
+    s/\(/[/;
+    s/\)/]/;
+    s/\.\.\.//;
     s/\\b(main|master)\\b /🔰/;
     s/\\b(main|master)\\b/🔰/;
     s/([-_[:alnum:]]{24})[-_[:alnum:]]+/\\1…/;

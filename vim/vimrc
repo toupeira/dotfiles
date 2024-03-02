@@ -1046,6 +1046,7 @@ endfunction " }}}
     \ 'haml': 'ruby',
     \ 'rspec': 'ruby',
     \ 'rspec.ruby': 'ruby',
+    \ 'zsh': 'sh',
   \ }
 
   let g:definitive_definitions = {

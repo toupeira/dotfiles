@@ -6,6 +6,6 @@
 mkdir -p ~/.local/share/bash
 HISTFILE=~/.local/share/bash/history
 HISTSIZE=10000
-HISTFILESIZE=100000
+HISTFILESIZE=10000
 HISTCONTROL="ignoreboth:erasedups"
 shopt -s histappend

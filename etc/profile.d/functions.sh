@@ -38,7 +38,7 @@ function login_banner {
       echo
     fi
 
-    ls
+    ls -C
     echo
     local mails=$( from -c 2>/dev/null | grep -v "There are 0 messages" )
     if [ "$mails" ]; then
@@ -52,11 +52,8 @@ function login_banner {
 
 # Clear the screen and show the prompt at the bottom
 function down {
-  local i
-
-  for (( i = 0; i < LINES; i++ )); do
-    echo
-  done
+  clear
+  tput cup $LINES
 }
 
 # Open files with xdg-open
@@ -136,19 +133,19 @@ function rg.app {
 
 # Switch to dotfiles repository if no arguments are passed
 function dotfiles {
-  local path=$( command dotfiles --path )
+  local dotfiles=$( command dotfiles --path )
 
   if [ $# -eq 0 ]; then
-    cd "$path" || return 1
+    cd "$dotfiles" || return 1
   elif [ "$1" = "b" ]; then
     if [ $# -eq 1 ]; then
-      cd "$path/vim/bundle" || return 1
-    elif [ -d "$path/$2" ]; then
-      cd "$path/$2" || return 1
-    elif [ -d "$path/vim/bundle/$2" ]; then
-      cd "$path/vim/bundle/$2" || return 1
+      cd "$dotfiles/vim/bundle" || return 1
+    elif [ -d "$dotfiles/$2" ]; then
+      cd "$dotfiles/$2" || return 1
+    elif [ -d "$dotfiles/vim/bundle/$2" ]; then
+      cd "$dotfiles/vim/bundle/$2" || return 1
     else
-      cd "$( command ls -d "$path/vim/bundle/$2"* "$path/$2"* 2>/dev/null | head -1 )" || return 1
+      cd "$( command ls -d "$dotfiles/vim/bundle/$2"* "$dotfiles/$2"* 2>/dev/null | head -1 )" || return 1
     fi
   else
     /etc/dotfiles/bin/dotfiles "$@"
@@ -159,7 +156,7 @@ function dotfiles {
 function src {
   case "$1" in
     '')
-      cd ~/src
+      cd ~/src || return 1
       ;;
     -*|status|st|s|list|ls|l|each)
       command src "$@"
@@ -172,7 +169,7 @@ function src {
 
       local project=$( command src "$1" --path )
       if [ "$project" ]; then
-        cd "$project"
+        cd "$project" || return 1
       fi
       ;;
   esac
@@ -238,7 +235,11 @@ function ssh.mux {
 # Go to project root
 function up {
   local root=$( git rev-parse --show-toplevel 2>/dev/null )
-  [ "$root" ] && cd "$root" || cd ..
+  if [ "$root" ]; then
+    cd "$root" || return 1
+  else
+    cd ..
+  fi
 }
 
 # Browse a JSON file
