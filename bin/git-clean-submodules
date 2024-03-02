@@ -10,17 +10,14 @@ function modules {
 }
 
 function repos {
-  cd .git/modules && find -type f -name config -printf '%h\n' \
+  cd .git/modules && find . -type f -name config -printf '%h\n' \
     | cut -d/ -f2- \
     | sort \
     | uniq
 }
 
-modules=$( modules )
-for module in $modules; do
-  git config --remove-section "submodule.$module"
-done
-git submodule init -q
+git submodule init
+git submodule sync -q
 
 modules=$( modules )
 repos=$( repos )
@@ -28,15 +25,15 @@ unused=$( comm -23 <( echo "$repos" ) <( echo "$modules" ) )
 
 echo
 echo " Submodules:"
-printf ' %4d submodules   in .git/config\n' $( echo "$modules" | wc -l )
-printf ' %4d repositories in .git/modules\n' $( echo "$repos" | wc -l )
+printf ' %4d submodules   in .git/config\n' "$( echo "$modules" | wc -l )"
+printf ' %4d repositories in .git/modules\n' "$( echo "$repos" | wc -l )"
 echo
 
 if [ -n "$unused" ]; then
   echo " Unused repositories:"
   echo "$unused" | sed -r 's/^/  - /'
   echo
-  read -p " Delete $( echo "$unused" | wc -l) unused repositories? [Y/n] "
+  read -rp " Delete $( echo "$unused" | wc -l) unused repositories? [Y/n] "
 
   [ "$REPLY" != "" ] && [ "$REPLY" != "y" ] && exit
 

@@ -1038,8 +1038,8 @@ endfunction " }}}
   " }}}
 
   " definitive {{{
-  nnoremap <silent> gd :call ALEFallback('ALEGoToDefinition', 'FindDefinition')<CR>
-  nnoremap <silent> gD :call ALEFallback('ALEGoToDefinitionInSplit', 'SFindDefinition')<CR>
+  nnoremap <silent> gd :call ALEFallback('ALEGoToDefinition', 'FindDefinition')<CR>zvzz
+  nnoremap <silent> gD :call ALEFallback('ALEGoToDefinitionInSplit', 'SFindDefinition')<CR>zvzz
 
   let g:definitive_associated_filetypes = {
     \ 'eruby': 'ruby',

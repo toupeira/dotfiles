@@ -115,9 +115,6 @@
 [submodule "vim/bundle/dirvish"]
 	path = vim/bundle/dirvish
 	url = https://github.com/justinmk/vim-dirvish.git
-[submodule "vim/bundle/go"]
-	path = vim/bundle/go
-	url = https://github.com/fatih/vim-go.git
 [submodule "vim/bundle/deoplete"]
 	path = vim/bundle/deoplete
 	url = https://github.com/Shougo/deoplete.nvim.git
