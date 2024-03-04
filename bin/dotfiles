@@ -160,7 +160,7 @@ function git {
 
 # Check for Git changes
 function has-changes {
-  git diff --stat "ORIG_HEAD.." "$@" | grep -q .
+  git diff --stat ORIG_HEAD "$@" | grep -q .
 }
 
 # Run a command in a tmux pane if possible
@@ -431,14 +431,18 @@ function run {
     # }}}
     pull|up) # {{{
       status "{{Fetching remote changes...}}"
-      git ignore-errors pull -q || abort
+      git ignore-errors pull || abort
 
-      if has-changes; then
+      mapfile -t modules < <( run list )
+      if has-changes "${modules[@]}"; then
         status "{{Checking out submodules...}}"
         git checkout-submodules
 
         run build-all
-        has-changes dconf && run dconf sync
+      fi
+
+      if has-changes dconf; then
+        run dconf sync
       fi
       ;;
     # }}}

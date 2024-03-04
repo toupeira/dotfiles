@@ -2,17 +2,28 @@
 
 case "$1" in
   start)
-    pasuspender -- jack_control start
+    if pgrep -x pipewire >/dev/null; then
+      id=$( awk '/M12/ { print $1 }' /proc/asound/cards )
+      pw-reserve -r -n "Audio$id" >/dev/null &
+      jack_control start
+      kill %1
+    else
+      pasuspender -- jack_control start
+    fi
     ;;
   stop)
-    killall -9 overwitch
-    jack_control stop
+    killall -9 overwitch 2>/dev/null
+    jack_control exit
     ;;
   status)
     jack_control status
     ;;
   run)
-    if ! command -v jack_control >/dev/null || jack_control status >/dev/null; then
+    shift
+
+    if pgrep -x pipewire >/dev/null; then
+      exec pw-jack "$@"
+    elif ! command -v jack_control >/dev/null || jack_control status >/dev/null; then
       exec "$@"
     else
       qjackctl &>/dev/null &
