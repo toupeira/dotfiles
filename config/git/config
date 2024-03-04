@@ -145,8 +145,8 @@
 
   di = diff
   dc = diff --cached
-  ds = diff --stat
-  dh = diff HEAD
+  ds = -c core.pager='less -FX' diff --stat
+  news = ds ORIG_HEAD..
 
   b = rev-parse --abbrev-ref HEAD
   br = branch -vv
