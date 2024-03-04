@@ -16,7 +16,12 @@ function repos {
     | uniq
 }
 
-git submodule init
+modules=$( modules )
+for module in $modules; do
+  git config --remove-section "submodule.$module"
+done
+
+git submodule init -q
 git submodule sync -q
 
 modules=$( modules )

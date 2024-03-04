@@ -10,7 +10,7 @@ if [ ! -L ~/"Bitwig Studio" ] && [ -d /slack/sound/bitwig/workspace ]; then
 fi
 
 wmctrl -s 1
-jack.run bitwig-studio "$@"
+jack run bitwig-studio "$@"
 
 if [ -L ~/"Bitwig Studio" ]; then
   rm -f ~/"Bitwig Studio"

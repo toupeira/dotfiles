@@ -1,0 +1,31 @@
+#!/bin/bash
+
+case "$1" in
+  start)
+    pasuspender -- jack_control start
+    ;;
+  stop)
+    killall -9 overwitch
+    jack_control stop
+    ;;
+  status)
+    jack_control status
+    ;;
+  run)
+    if ! command -v jack_control >/dev/null || jack_control status >/dev/null; then
+      exec "$@"
+    else
+      qjackctl &>/dev/null &
+
+      "$@"
+
+      kill %1
+      wait
+    fi
+    ;;
+  *)
+    echo "Usage: jack [start|stop|status]"
+    echo "       jack run COMMAND.."
+    exit 1
+    ;;
+esac
