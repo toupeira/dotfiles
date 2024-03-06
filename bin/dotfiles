@@ -431,10 +431,15 @@ function run {
     # }}}
     pull|up) # {{{
       status "{{Fetching remote changes...}}"
-      git ignore-errors pull || abort
+      git ignore-errors pull -q || abort
+
+      if has-changes; then
+        git diff --stat ORIG_HEAD
+      fi
 
       mapfile -t modules < <( run list )
       if has-changes "${modules[@]}"; then
+        echo
         status "{{Checking out submodules...}}"
         git checkout-submodules
 
@@ -442,6 +447,7 @@ function run {
       fi
 
       if has-changes dconf; then
+        echo
         run dconf sync
       fi
       ;;
