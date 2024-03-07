@@ -1043,6 +1043,20 @@ endfunction " }}}
   hi! link rubyRailsARMethod Statement
   " }}}
 
+  " projectionist {{{
+  function! s:AlternateCreate() abort
+    let pre = &confirm
+    try
+      set confirm
+      A
+    finally
+      let &confirm = pre
+    endtry
+  endfunction
+
+  command! AC :call <SID>AlternateCreate()
+  " }}}
+
   " definitive {{{
   nnoremap <silent> gd :call ALEFallback('ALEGoToDefinition', 'FindDefinition')<CR>zvzz
   nnoremap <silent> gD :call ALEFallback('ALEGoToDefinitionInSplit', 'SFindDefinition')<CR>zvzz
