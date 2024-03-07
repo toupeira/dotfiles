@@ -434,7 +434,7 @@ function run {
       git ignore-errors pull -q || abort
 
       if has-changes; then
-        git diff --stat ORIG_HEAD
+        git --no-pager diff --stat ORIG_HEAD
       fi
 
       mapfile -t modules < <( run list )
