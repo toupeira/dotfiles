@@ -82,9 +82,6 @@
 [submodule "vim/bundle/css3-syntax"]
 	path = vim/bundle/css3-syntax
 	url = https://github.com/hail2u/vim-css3-syntax.git
-[submodule "vim/bundle/devicons"]
-	path = vim/bundle/devicons
-	url = https://github.com/ryanoasis/vim-devicons.git
 [submodule "vim/bundle/json"]
 	path = vim/bundle/json
 	url = https://github.com/elzr/vim-json.git
@@ -220,3 +217,6 @@
 [submodule "vim/bundle/better-whitespace"]
 	path = vim/bundle/better-whitespace
 	url = https://github.com/ntpeters/vim-better-whitespace.git
+[submodule "vim/bundle/webdevicons"]
+	path = vim/bundle/webdevicons
+	url = https://github.com/ryanoasis/vim-devicons.git

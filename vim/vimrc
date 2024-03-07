@@ -541,9 +541,8 @@ endfunction " }}}
   " }}}
 
   " devicons {{{
-  let g:webdevicons_enable = 0
-  let g:webdevicons_enable_airline_tabline = 0
   let g:webdevicons_enable_airline_statusline = 0
+  let g:webdevicons_enable_airline_tabline = 0
   " }}}
 
   " vista {{{
@@ -551,10 +550,12 @@ endfunction " }}}
     nnoremap <silent> ,t :Vista finder<CR>
     nnoremap <silent> ,T :Vista!!<CR>
 
+    autocmd vimrc VimEnter * call vista#RunForNearestMethodOrFunction()
+
     let g:vista_sidebar_width = 40
     let g:vista_blink = [1, 100]
     let g:vista_icon_indent = ["● ", "▶ "]
-    let g:vista_fzf_preview = ['right:hidden:70%']
+    let g:vista_fzf_preview = ['right,50%,hidden']
 
     let g:vista_default_executive = 'ctags'
     let g:vista_finder_alternative_executives = [ 'ctags' ]
@@ -773,19 +774,24 @@ endfunction " }}}
     call airline#parts#define_raw('filepath', '%#airline_filepath#[%<%{ProjectPath(0)}]')
     let g:airline_section_c = airline#section#create(['file', g:airline_symbols.space, 'readonly', 'filepath'])
 
+    hi! link airline_filepath          airline_c_inactive_bold
+    hi! link airline_filepath_inactive airline_c_inactive
+
     " switch filetype and format/encoding, and only show
     " file format and encoding if it's not the default
-    let g:airline_section_x = airline#section#create([
-      \ "%{&ff == 'unix' ? '' : '  ' . WebDevIconsGetFileFormatSymbol()}%{&fenc == 'utf-8' ? '' : '   ' . &fenc}"
-    \ ])
-    let g:airline_section_y = airline#section#create(['%{WebDevIconsGetFileTypeSymbol()} %{&ft}'])
+    autocmd vimrc User AirlineAfterInit
+      \ let g:airline_section_x = airline#section#create([
+        \ 'vista',
+        \ "%{&ff == 'unix' ? '' : '  ' . WebDevIconsGetFileFormatSymbol()}%{&fenc == 'utf-8' ? '' : '   ' . &fenc}"
+      \ ])
+    autocmd vimrc User AirlineAfterInit
+      \ let g:airline_section_y = airline#section#create(['%{WebDevIconsGetFileTypeSymbol()} %{&ft}'])
 
-    " don't show position percentage
-    let g:airline_section_z = airline#section#create(['windowswap', 'linenr', ':%v'])
-
-    hi! airline_filepath          guifg=#697098 guibg=#333747 gui=bold
-    hi! airline_filepath_inactive guifg=#697098 guibg=#333747
-    hi! airline_vista             guifg=#ffc266 guibg=#333747
+    " tweak file position, don't show percentage
+    let g:airline_symbols.linenr = ''
+    let g:airline_symbols.maxlinenr = ''
+    let g:airline_symbols.colnr = ':'
+    let g:airline_section_z = airline#section#create(['linenr', '/%L', ':%#__accent_bold#%v'])
   endif
   " }}}
 
