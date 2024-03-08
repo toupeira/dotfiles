@@ -12,7 +12,10 @@ menu#context_moveTabOptions
 
 /* Remove link context menu items */
 menuitem#context-openlink,
+menuitem#context-stripOnShareLink,
 menuitem#context-sendimage,
+menuitem#context-sendvideo,
+menuitem#context-sendaudio,
 menuitem#context-print-selection,
 menuitem#context-searchselect-private,
 menuitem#context-setDesktopBackground,

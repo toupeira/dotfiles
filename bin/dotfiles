@@ -424,13 +424,13 @@ function run {
         local message="Sync dotfiles"
       fi
 
-      status "{{Committing local changes...}}"
+      status "{{Committing changes...}}"
       git ignore-errors add -A .
       git ignore-errors commit -a -m "$message" "$@"
       ;;
     # }}}
     pull|up) # {{{
-      status "{{Fetching remote changes...}}"
+      status "{{Fetching changes...}}"
       git ignore-errors pull -q || abort
 
       if has-changes; then
@@ -440,7 +440,7 @@ function run {
       mapfile -t modules < <( run list )
       if has-changes "${modules[@]}"; then
         echo
-        status "{{Checking out submodules...}}"
+        status "{{Updating submodules...}}"
         git checkout-submodules
 
         run build-all
@@ -453,7 +453,7 @@ function run {
       ;;
     # }}}
     push|pu) # {{{
-      status "{{Pushing local changes...}}"
+      status "{{Pushing changes...}}"
       git push -q "$@"
       ;;
     # }}}
