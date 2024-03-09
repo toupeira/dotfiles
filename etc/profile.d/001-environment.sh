@@ -1,8 +1,5 @@
 #!/bin/bash
 
-. /etc/default/locale
-export LANG LC_MESSAGES LC_NUMERIC LC_CTYPE
-
 export PATH="/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
 [ -d ~/bin ] && export PATH=~/bin:"$PATH"
 [ -d ~/.local/bin ] && export PATH="$PATH":~/.local/bin

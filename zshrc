@@ -14,7 +14,6 @@ has() {
 . /etc/profile.d/functions.sh
 . /etc/profile.d/fzf.sh
 . /etc/profile.d/ruby.sh
-. /etc/profile.d/zzz-tmux.sh
 
 . ~/.profile
 
