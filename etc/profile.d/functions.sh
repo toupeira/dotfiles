@@ -5,9 +5,9 @@
 function login_banner {
   if [ -z "$BASH_LOGIN" ]; then
     return
-  elif [ $LINES -lt 25 ] || [ "$FLOATING_TERMINAL" ]; then
+  elif [ "$PWD" != "$HOME" ] || [ $LINES -lt 25 ] || [ "$FLOATING_TERMINAL" ]; then
     down
-  elif [ "$PWD" = "$HOME" ]; then
+  else
     clear
 
     if [ -f /run/motd.dynamic ]; then
