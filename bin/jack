@@ -12,8 +12,7 @@ case "$1" in
     fi
     ;;
   stop)
-    killall -9 overwitch 2>/dev/null
-    jack_control exit
+    jack_control stop
     ;;
   status)
     jack_control status

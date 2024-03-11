@@ -1,14 +1,10 @@
 audacity
-bitwig-studio
 elektroid
-jackd2
-lsp-plugins-clap
 pipewire-jack
-pulseaudio-module-jack
-qjackctl
 qpwgraph
 rtkit
 
+flatpak: com.bitwig.BitwigStudio
 flatpak: net.sourceforge.kmidimon
 flatpak: org.musescore.MuseScore
 

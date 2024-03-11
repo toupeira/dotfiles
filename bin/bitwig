@@ -4,19 +4,18 @@ if pgrep -x bitwig-studio >/dev/null; then
   exec wmctrl -xa com.bitwig.BitwigStudio
 fi
 
-if [ ! -L ~/"Bitwig Studio" ] && [ -d /slack/sound/bitwig/workspace ]; then
-  rm -rf ~/"Bitwig Studio"
-  ln -s /slack/sound/bitwig/workspace ~/"Bitwig Studio"
+workspace=~/.var/app/com.bitwig.BitwigStudio/"Bitwig Studio"
+if [ ! -L "$workspace" ] && [ -d /slack/sound/bitwig/workspace ]; then
+  rm -rf "$workspace"
+  ln -s /slack/sound/bitwig/workspace "$workspace"
 fi
 
 wmctrl -s 1
-jack run bitwig-studio "$@"
 
-if [ -L ~/"Bitwig Studio" ]; then
-  rm -f ~/"Bitwig Studio"
-fi
+export PIPEWIRE_QUANTUM=192/48000
 
-if [ -d ~/Downloads ]; then
-  rm -f ~/Downloads/*.bwtemplate
-  rmdir --ignore-fail-on-non-empty ~/Downloads
-fi
+pw-jack overwitch &>/dev/null &
+flatpak run com.bitwig.BitwigStudio "$@"
+killall -9 overwitch 2>/dev/null
+
+wmctrl -s 0
