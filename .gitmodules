@@ -49,9 +49,6 @@
 [submodule "vim/bundle/scriptease"]
 	path = vim/bundle/scriptease
 	url = https://github.com/tpope/vim-scriptease.git
-[submodule "vim/bundle/html5"]
-	path = vim/bundle/html5
-	url = https://github.com/othree/html5.vim.git
 [submodule "vim/bundle/ruby"]
 	path = vim/bundle/ruby
 	url = https://github.com/vim-ruby/vim-ruby.git
@@ -61,9 +58,6 @@
 [submodule "vim/bundle/bbye"]
 	path = vim/bundle/bbye
 	url = https://github.com/moll/vim-bbye.git
-[submodule "vim/bundle/slim"]
-	path = vim/bundle/slim
-	url = https://github.com/slim-template/vim-slim.git
 [submodule "vim/bundle/dispatch"]
 	path = vim/bundle/dispatch
 	url = https://github.com/tpope/vim-dispatch.git
@@ -82,30 +76,18 @@
 [submodule "vim/bundle/css3-syntax"]
 	path = vim/bundle/css3-syntax
 	url = https://github.com/hail2u/vim-css3-syntax.git
-[submodule "vim/bundle/json"]
-	path = vim/bundle/json
-	url = https://github.com/elzr/vim-json.git
 [submodule "vim/bundle/projectionist"]
 	path = vim/bundle/projectionist
 	url = https://github.com/tpope/vim-projectionist.git
 [submodule "vim/bundle/elixir"]
 	path = vim/bundle/elixir
 	url = https://github.com/elixir-lang/vim-elixir.git
-[submodule "vim/bundle/vue"]
-	path = vim/bundle/vue
-	url = https://github.com/posva/vim-vue.git
-[submodule "vim/bundle/typescript"]
-	path = vim/bundle/typescript
-	url = https://github.com/leafgarland/typescript-vim
 [submodule "vim/bundle/ale"]
 	path = vim/bundle/ale
 	url = https://github.com/dense-analysis/ale.git
 [submodule "vim/bundle/fzf-vim"]
 	path = vim/bundle/fzf-vim
 	url = https://github.com/junegunn/fzf.vim.git
-[submodule "vim/bundle/tmux"]
-	path = vim/bundle/tmux
-	url = https://github.com/tmux-plugins/vim-tmux.git
 [submodule "vim/bundle/signify"]
 	path = vim/bundle/signify
 	url = https://github.com/mhinz/vim-signify.git
@@ -157,9 +139,6 @@
 [submodule "vim/bundle/startify"]
 	path = vim/bundle/startify
 	url = https://github.com/mhinz/vim-startify.git
-[submodule "vim/bundle/multiple-cursors"]
-	path = vim/bundle/multiple-cursors
-	url = https://github.com/terryma/vim-multiple-cursors.git
 [submodule "vim/bundle/reply"]
 	path = vim/bundle/reply
 	url = https://github.com/rhysd/reply.vim.git
@@ -172,18 +151,9 @@
 [submodule "vim/bundle/palenight"]
 	path = vim/bundle/palenight
 	url = https://github.com/drewtempelmeyer/palenight.vim.git
-[submodule "vim/bundle/javascript"]
-	path = vim/bundle/javascript
-	url = https://github.com/pangloss/vim-javascript.git
 [submodule "vim/bundle/lastplace"]
 	path = vim/bundle/lastplace
 	url = https://github.com/farmergreg/vim-lastplace.git
-[submodule "vim/bundle/base16"]
-	path = vim/bundle/base16
-	url = https://github.com/chriskempson/base16-vim.git
-[submodule "vim/bundle/searchlight"]
-	path = vim/bundle/searchlight
-	url = https://github.com/PeterRincker/vim-searchlight.git
 [submodule "vim/bundle/rspec"]
 	path = vim/bundle/rspec
 	url = https://github.com/keith/rspec.vim.git
@@ -199,9 +169,6 @@
 [submodule "vim/bundle/treesitter-refactor"]
 	path = vim/bundle/treesitter-refactor
 	url = https://github.com/nvim-treesitter/nvim-treesitter-refactor.git
-[submodule "vim/bundle/toml"]
-	path = vim/bundle/toml
-	url = https://github.com/cespare/vim-toml.git
 [submodule "asdf"]
 	path = asdf
 	url = https://github.com/asdf-vm/asdf.git

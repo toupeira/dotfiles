@@ -5,8 +5,6 @@
     autocmd!
   augroup END
 
-  let g:python3_host_prog = 'python3'
-
   " disable builtin plugins
   let g:skip_defaults_vim = 1
   let g:loaded_netrwPlugin = 1
@@ -20,7 +18,7 @@
   call add(g:pathogen_disabled, 'treesitter-refactor')
   call add(g:pathogen_disabled, 'treesitter-textobjects')
 
-  " only enable tmux plugins in tmux sessions
+  " only enable tmux-complete in tmux sessions
   if empty($TMUX)
     call add(g:pathogen_disabled, 'tmux-complete')
   endif
@@ -37,9 +35,7 @@
     call add(g:pathogen_disabled, 'dirvish')
     call add(g:pathogen_disabled, 'dispatch')
     call add(g:pathogen_disabled, 'fzf')
-    call add(g:pathogen_disabled, 'multiple-cursors')
     call add(g:pathogen_disabled, 'signify')
-    call add(g:pathogen_disabled, 'searchlight')
     call add(g:pathogen_disabled, 'smoothie')
     call add(g:pathogen_disabled, 'startify')
     call add(g:pathogen_disabled, 'vista')
@@ -535,11 +531,6 @@ endfunction " }}}
   let g:dispatch_handlers = [ 'job' ]
   " }}}
 
-  " json {{{
-  let g:vim_json_syntax_conceal = (&conceallevel > 0)
-  let g:vim_json_syntax_concealcursor = &concealcursor
-  " }}}
-
   " devicons {{{
   let g:webdevicons_enable_airline_statusline = 0
   let g:webdevicons_enable_airline_tabline = 0
@@ -619,8 +610,6 @@ endfunction " }}}
   let g:rooter_cd_cmd = 'lcd'
   let g:rooter_silent_chdir = 1
   let g:rooter_patterns = [
-    \ 'elm-package.json',
-    \ 'ng-package.json',
     \ 'package.json',
     \ 'go.mod',
     \ 'mix.exs',
@@ -1021,12 +1010,6 @@ endfunction " }}}
   let g:startify_custom_header = map(g:startify_ascii, '"   ".v:val')
   " }}}
 
-  " multiple-cursors {{{
-  let g:multi_cursor_exit_from_visual_mode = 1
-  let g:multi_cursor_exit_from_insert_mode = 1
-  let g:multi_cursor_quit_key = '<C-c>'
-  " }}}
-
   " smoothie {{{
   let g:smoothie_base_speed = 20
   " }}}
@@ -1072,10 +1055,6 @@ endfunction " }}}
   let g:definitive_definitions = {
     \ 'ruby': '\<\(\(def\|class\|module\|alias\)\s\+\(self\.\)\=%1\>\|%1\s*=\|\<\(alias_method\|attr_reader\|attr_accessor\|attribute\|serialize\|scope\|has_one\|has_many\|belongs_to\) :%1\>\)',
   \ }
-  " }}}
-
-  " vue {{{
-  let g:vue_pre_processors = ['scss']
   " }}}
 
   " treesitter {{{

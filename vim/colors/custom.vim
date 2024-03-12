@@ -14,7 +14,7 @@ hi! Folded      guibg=#2f3347 gui=bold
 
 hi! Search      guifg=#d7ffaf guibg=#2d402d gui=bold
 hi! IncSearch   guifg=#d7ffaf guibg=#2d402d gui=bold
-hi! Searchlight guifg=#ecffd9 guibg=#5f875f gui=bold
+hi! CurSearch   guifg=#ecffd9 guibg=#5f875f gui=bold
 
 hi! PmenuSel    guifg=#000000 guibg=#939ede
 hi! PmenuThumb  guibg=#697098
