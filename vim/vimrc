@@ -99,11 +99,12 @@
   set expandtab
   set shiftround
 
+  " line endings
+  set fileformats+=mac
+
   " line wrapping
   set breakindent
   let &showbreak = ' •• '
-  " set nolinebreak
-  " let &breakat = ' 	'
 
   " searching
   set ignorecase
