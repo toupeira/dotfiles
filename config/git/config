@@ -70,7 +70,7 @@
   verbose = true
 
 [diff]
-  algorithm = histogram
+  algorithm = patience
   renames = copies
   mnemonicprefix = true
   ignoreSubmodules = dirty
