@@ -43,6 +43,10 @@ if [ -n "$unused" ]; then
   [ "$REPLY" != "" ] && [ "$REPLY" != "y" ] && exit
 
   if [ "$REPLY" != "n" ]; then
+    for module in $unused; do
+      rm -rf "$module"
+    done
+
     cd .git/modules || exit 1
 
     for module in $unused; do
