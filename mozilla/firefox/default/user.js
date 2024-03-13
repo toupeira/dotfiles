@@ -58,6 +58,13 @@ user_pref("signon.rememberSignons", false);
 // Tabs
 user_pref("browser.tabs.loadBookmarksInBackground", true);
 
+// Scrolling
+user_pref("widget.non-native-theme.scrollbar.size.override", 16);
+user_pref("general.smoothScroll.lines.durationMaxMS", 100);
+user_pref("general.smoothScroll.lines.durationMinMS", 50);
+user_pref("general.smoothScroll.mouseWheel.durationMaxMS", 100);
+user_pref("general.smoothScroll.mouseWheel.durationMinMS", 50);
+
 // Location bar
 user_pref("browser.urlbar.groupLabels.enabled", false);
 user_pref("browser.urlbar.quicksuggest.enabled", false);
@@ -99,12 +106,6 @@ user_pref("media.ffmpeg.vaapi.enabled", true);
 
 // Disable MPRIS integration
 user_pref("media.hardwaremediakeys.enabled", false);
-
-// Make smooth scrolling more snappy
-user_pref("general.smoothScroll.lines.durationMaxMS", 100);
-user_pref("general.smoothScroll.lines.durationMinMS", 50);
-user_pref("general.smoothScroll.mouseWheel.durationMaxMS", 100);
-user_pref("general.smoothScroll.mouseWheel.durationMinMS", 50);
 
 // Ignore zoom changes on PDF links
 user_pref("pdfjs.ignoreDestinationZoom", true);
