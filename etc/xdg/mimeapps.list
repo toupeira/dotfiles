@@ -28,3 +28,6 @@ audio/mpeg=audacity.desktop
 audio/vnd.wave=audacity.desktop
 
 inode/directory=org.gnome.Nautilus.desktop
+
+[Added Associations]
+text/plain=libreoffice-calc.desktop
