@@ -20,6 +20,7 @@ shellcheck
 sqlite3
 sqlitebrowser
 universal-ctags
+visidata
 yamllint
 zlib1g-dev
 

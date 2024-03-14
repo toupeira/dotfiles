@@ -59,7 +59,7 @@ user_pref("signon.rememberSignons", false);
 user_pref("browser.tabs.loadBookmarksInBackground", true);
 
 // Scrolling
-user_pref("widget.non-native-theme.scrollbar.size.override", 16);
+user_pref("widget.non-native-theme.scrollbar.size.override", 32);
 user_pref("general.smoothScroll.lines.durationMaxMS", 100);
 user_pref("general.smoothScroll.lines.durationMinMS", 50);
 user_pref("general.smoothScroll.mouseWheel.durationMaxMS", 100);
