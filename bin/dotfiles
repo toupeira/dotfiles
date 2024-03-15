@@ -172,11 +172,6 @@ function mux-wrap {
   fi
 }
 
-# Escape slashes in a regex
-function slash-regex {
-  echo "${1//\//\\/}"
-}
-
 ### }}}
 ### dotfiles helpers {{{
 
@@ -475,7 +470,7 @@ function run {
     # }}}
 
     list|list-submodules) # {{{
-      awk "/path = .*$( slash-regex "$1" )/ { print \$3 }" "$DOTFILES/.gitmodules" | sort
+      git list-submodules
       ;;
     # }}}
     update|update-submodule) # {{{
@@ -789,28 +784,31 @@ function run {
 
           if [ -f "$file" ]; then
             local skip_markers=$( grep -E '^#( skip:.*)?$' "$file" )
-            local skip_keys=$( echo "$skip_markers" | sed -rn 's/^# skip: +(.*)/^\1=/p' | tr "\n" "|" )
-            local skip_sections=$( echo "$skip_markers" | sed -rn 's/^# skip:section +(.*)/\1/p' | tr "\n" "|" )
+            local skip_keys=$( echo "$skip_markers" | sed -rn 's/^# skip: +(.*)/\1/p' )
+            local skip_sections=$( echo "$skip_markers" | sed -rn 's/^# skip:section +(.*)/\1/p' )
 
-            if [ -n "$skip_keys" ]; then
-              output=$( echo "$output" | grep -Ev "${skip_keys%|}" )
-            fi
+            (echo "$skip_markers"; echo "$output") \
+              | sed -r 's/^\[(.*)\]$/[root "\1"]/' \
+              > "$file"
 
-            if [ -n "$skip_sections" ]; then
-              output=$( echo "$output" | awk "
-                BEGIN { output = 1 };
-                /^\[$( slash-regex "${skip_sections%|}" )\]$/ { output = 0; next };
-                /^\[.*\]$/ { output = 1 };
-                output
-              " )
-            fi
+            for key in $skip_keys; do
+              [[ $key == *.* ]] && key="root.$key" || key="root./.$key"
+              command git config -f "$file" --unset "$key"
+            done
 
-            if [ -n "$skip_markers" ]; then
-              output=$( echo -e "$skip_markers\n\n$output" )
-            fi
+            for pattern in $skip_sections; do
+              local sections=$( command git config -f "$file" --get-regexp --name-only "^root\.$pattern\." | cut -d. -f1-2 | uniq )
+              for section in $sections; do
+                command git config -f "$file" --remove-section "$section"
+              done
+            done
+
+            sed -ri '/^$/d' "$file"
+            sed -ri 's/^\[root "(.*)"\]$/\n[\1]/' "$file"
+            sed -ri '1{/^$/d}' "$file"
+          else
+            echo "$output" > "$file"
           fi
-
-          echo "$output" > "$file"
         else
           usage
         fi
