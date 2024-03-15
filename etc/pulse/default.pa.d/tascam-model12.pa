@@ -1,2 +1,0 @@
-load-module module-remap-source source_name=model12-microphone remix=no master=alsa_input.usb-TASCAM_Model_12_no_serial_number-00.input-all channels=1 master_channel_map=aux2 channel_map=mono
-update-source-proplist model12-microphone device.description="Model 12 Microphone"

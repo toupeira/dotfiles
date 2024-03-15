@@ -50,7 +50,7 @@ function usage {
 
 # Output a message with a colored arrow in front
 function msg {
-  local message="${1/$HOME/\~}"
+  local message=${1/$HOME/\~}
   local color=${2:-4}
 
   if [ $# -gt 2 ]; then
@@ -172,8 +172,8 @@ function mux-wrap {
   fi
 }
 
-# Escape a regex
-function escape-regex {
+# Escape slashes in a regex
+function slash-regex {
   echo "${1//\//\\/}"
 }
 
@@ -186,9 +186,29 @@ function validate {
   if ! [[ "$1" =~ ^($HOME|/etc)($|/) ]]; then
     error "Path is not inside \$HOME or /etc: {{$1}}"
     return 1
-  else
-    return 0
   fi
+
+  if ! [ "$SCOPED_PATHS" ]; then
+    function read-paths {
+      local paths=$( git config -f "$DOTFILES/rules.ini" --get-regexp "^$1$" | cut -d\  -f2 )
+      paths=${paths//./\\.}
+      paths=${paths//$'\n'/|}
+      echo "^($paths)"
+    }
+
+    SCOPED_PATHS=$(  read-paths ".*\.install$" )
+    HOST_PATHS=$(    read-paths "$HOSTNAME\.install" )
+    SKIPPED_PATHS=$( read-paths "(global|$HOSTNAME)\.skip" )
+  fi
+
+  local path=$( target "$1" )
+  path=${path:${#DOTFILES}+1}
+  if [[ $path =~ $SKIPPED_PATHS ]] || { [[ $path =~ $SCOPED_PATHS ]] && ! [[ $path =~ $HOST_PATHS ]]; }; then
+    verbose skipping "$path"
+    return 1
+  fi
+
+  return 0
 }
 
 # Transform a filesystem path into a repository path
@@ -238,14 +258,10 @@ function run {
         for path in "$@"; do
           path=${path%/}
 
-          if [ ! -e "$path" ] || [ "$( basename "$path" )" = "README.md" ]; then
+          if [ ! -e "$path" ] || [ -e "$path/.git" ]; then
             continue
-          fi
-
-          if [ -f "$path" ] || [ -L "$path" ] || [ -e "$path/.install" ]; then
+          elif [ -f "$path" ] || [ -L "$path" ] || [ -e "$path/.install" ]; then
             run install "$path"
-          elif [ -e "$path/.skip" ] || [ -e "$path/.git" ]; then
-            continue
           elif [ -d "$path" ]; then
             install-paths "$path"/*
           else
@@ -257,7 +273,8 @@ function run {
       if [ $# -gt 0 ]; then
         install-paths "$@"
       else
-        install-paths "$DOTFILES"/*
+        status "{{Installing symlinks...}}"
+        (cd "$DOTFILES" && install-paths -- *)
         run package
         run dconf sync
       fi
@@ -359,7 +376,6 @@ function run {
           && system mv "$origin" "$target" \
           && system ln -s "$target" "$origin"
         then
-          system rm -f "$target_dir/.skip"
           [ -O "$target" ] || system chown "$USER:${GROUPS[0]}" "$target"
           [ -d "$target" ] && system chmod g+s "$target"
           git add "$target"
@@ -459,7 +475,7 @@ function run {
     # }}}
 
     list|list-submodules) # {{{
-      awk "/path = .*$( escape-regex "$1" )/ { print \$3 }" "$DOTFILES/.gitmodules" | sort
+      awk "/path = .*$( slash-regex "$1" )/ { print \$3 }" "$DOTFILES/.gitmodules" | sort
       ;;
     # }}}
     update|update-submodule) # {{{
@@ -727,7 +743,6 @@ function run {
       shift
 
       if [ "$action" = "sync" ]; then
-        status "{{Dumping dconf settings}}"
         run dconf dump >/dev/null
 
         if git status -s dconf | grep -q .; then
@@ -741,7 +756,7 @@ function run {
           git checkout dconf
         fi
 
-        status "{{Loading dconf settings}}"
+        status "{{Loading dconf settings...}}"
         run dconf load >/dev/null
         exit
       fi
@@ -784,7 +799,7 @@ function run {
             if [ -n "$skip_sections" ]; then
               output=$( echo "$output" | awk "
                 BEGIN { output = 1 };
-                /^\[$( escape-regex "${skip_sections%|}" )\]$/ { output = 0; next };
+                /^\[$( slash-regex "${skip_sections%|}" )\]$/ { output = 0; next };
                 /^\[.*\]$/ { output = 1 };
                 output
               " )
@@ -822,7 +837,7 @@ function run {
 
 ### main {{{
 
-# find the dotfiles repository
+# Find the dotfiles repository
 if [ -z "$DOTFILES" ]; then
   if [ -d /etc/dotfiles ]; then
     DOTFILES=/etc/dotfiles
@@ -833,7 +848,7 @@ if [ -z "$DOTFILES" ]; then
   fi
 fi
 
-# resolve symlinks
+# Resolve symlinks
 while [ -L "$DOTFILES" ]; do
   DOTFILES=$( readlink -f "$DOTFILES" )
 done
