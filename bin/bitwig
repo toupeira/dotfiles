@@ -16,6 +16,6 @@ export PIPEWIRE_QUANTUM=192/48000
 
 pw-jack overwitch &>/dev/null &
 flatpak run com.bitwig.BitwigStudio "$@"
-killall -9 overwitch 2>/dev/null
+killall overwitch 2>/dev/null
 
 wmctrl -s 0

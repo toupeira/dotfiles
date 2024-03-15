@@ -1,0 +1,21 @@
+# frozen_string_literal: true
+
+%w[
+  active_support/all
+].each do |lib|
+  require lib
+rescue LoadError
+  puts "Couldn't load #{lib}"
+end
+
+IRB.conf[:SAVE_HISTORY] = 10_000
+IRB.conf[:HISTORY_FILE] = "#{Dir.home}/.local/share/irb/irb_history"
+FileUtils.mkdir_p(File.dirname(IRB.conf[:HISTORY_FILE]))
+
+IRB.conf[:COMMAND_ALIASES].merge!(
+  '?': :show_doc,
+  cd: :pushws,
+  '..': :popws,
+)
+
+load('.irbrc') if File.exist?('.irbrc')

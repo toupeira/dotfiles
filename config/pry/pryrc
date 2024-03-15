@@ -1,15 +1,11 @@
 # frozen_string_literal: true
 
-# default gems
 %w[
-  yaml
   active_support/all
 ].each do |lib|
-  begin
-    require lib
-  rescue LoadError
-    puts "Couldn't load #{lib}"
-  end
+  require lib
+rescue LoadError
+  puts "Couldn't load #{lib}"
 end
 
 lambda {
