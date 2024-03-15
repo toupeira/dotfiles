@@ -69,6 +69,9 @@ alias vi='vim'
 alias vip='VIMCMD=vip sensible-vim'
 alias vimdiff='vim -d'
 
+alias lazyvim='NVIM_APPNAME=lazyvim vim'
+alias lvi='lazyvim'
+
 alias g='git'
 alias e='git edit'
 
