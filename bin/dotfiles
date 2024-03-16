@@ -1,6 +1,8 @@
 #!/bin/bash
 # vim: foldmethod=marker foldlevel=0
 
+DOTFILES="/etc/dotfiles"
+
 ### usage {{{
 
 function usage {
@@ -207,7 +209,7 @@ function validate {
       local paths=$( read-rules "$@" )
       if [ "$paths" ]; then
         paths=${paths//./\\.}
-        paths=${paths//$'\n'/|}
+        paths=${paths//$'\n'/($|/)|}
         echo "^($paths)"
       else
         echo "^$"
@@ -519,7 +521,7 @@ function run {
     # }}}
 
     list|list-submodules) # {{{
-      git list-submodules
+      git list-submodules "$@"
       ;;
     # }}}
     update|update-submodule) # {{{
@@ -887,22 +889,6 @@ function run {
 
 ### main {{{
 
-# Find the dotfiles repository
-if [ -z "$DOTFILES" ]; then
-  if [ -d /etc/dotfiles ]; then
-    DOTFILES=/etc/dotfiles
-  elif [ -d ~/.dotfiles ]; then
-    DOTFILES=~/.dotfiles
-  else
-    abort "Can't find repository in /etc/dotfiles or $HOME/.dotfiles, please set \$DOTFILES"
-  fi
-fi
-
-# Resolve symlinks
-while [ -L "$DOTFILES" ]; do
-  DOTFILES=$( readlink -f "$DOTFILES" )
-done
-
 if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
   abort "Can't find dotfiles script in repository, please check your \$DOTFILES"
 fi
@@ -914,7 +900,7 @@ STATUS=0
 while [ $# -gt 0 ]; do
   case "$1" in
     -v|--verbose) VERBOSE=1;;
-       --path)    echo "$DOTFILES"; exit;;
+       --path)    exec echo "$DOTFILES";;
     -*|help)      usage;;
     *)
       COMMAND=( "$@" )

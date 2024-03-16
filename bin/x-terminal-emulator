@@ -1,0 +1,9 @@
+#!/bin/bash
+
+case "$HOSTNAME" in
+  schtube)
+    geometry="87x44+961+0"
+    ;;
+esac
+
+exec tilix --geometry="$geometry" "$@"

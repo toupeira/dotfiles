@@ -1,8 +1,7 @@
 #!/bin/bash
 
-export PATH="/usr/sbin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
-[ -d ~/bin ] && export PATH=~/bin:"$PATH"
-[ -d ~/.local/bin ] && export PATH="$PATH":~/.local/bin
+export PATH="/usr/sbin:/etc/dotfiles/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
+[ -d ~/bin ] && export PATH="$PATH":~/bin
 
 export EDITOR="vim"
 command -v sensible-vim >/dev/null && export EDITOR="sensible-vim"

@@ -135,22 +135,25 @@ function rg.app {
 
 # Switch to dotfiles repository if no arguments are passed
 function dotfiles {
-  local dotfiles=$( command dotfiles --path )
+  local dotfiles="/etc/dotfiles"
 
   if [ $# -eq 0 ]; then
     cd "$dotfiles" || return 1
-  elif [ "$1" = "b" ]; then
-    if [ $# -eq 1 ]; then
-      cd "$dotfiles/vim/bundle" || return 1
-    elif [ -d "$dotfiles/$2" ]; then
-      cd "$dotfiles/$2" || return 1
-    elif [ -d "$dotfiles/vim/bundle/$2" ]; then
-      cd "$dotfiles/vim/bundle/$2" || return 1
+  elif [ "$1" = "cd" ]; then
+    if [ -d "$dotfiles/$2" ]; then
+      local path="$dotfiles/$2"
     else
-      cd "$( command ls -d "$dotfiles/vim/bundle/$2"* "$dotfiles/$2"* 2>/dev/null | head -1 )" || return 1
+      local path=$( dt list "$2" | head -1 )
+    fi
+
+    if [ "$path" ]; then
+      cd "$path" || return 1
+    else
+      echo "$2: No such directory or submodule"
+      return 1
     fi
   else
-    /etc/dotfiles/bin/dotfiles "$@"
+    "$dotfiles/bin/dotfiles" "$@"
   fi
 }
 

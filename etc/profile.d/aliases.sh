@@ -1,5 +1,7 @@
 #!/bin/bash
 
+eval "$( dircolors -b )"
+
 [ "$BASH_INTERACTIVE" ] || return
 
 # dotfiles aliases
@@ -7,7 +9,6 @@ alias dt='dotfiles'
 alias @='mux -s -d -w'
 
 # general shell aliases
-eval "$( dircolors -b )"
 alias ls='ls --color --quoting-style=literal'
 alias ll='ls -lFh'
 alias l='ls -A'

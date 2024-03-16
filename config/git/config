@@ -200,7 +200,7 @@
   sub = submodule
   checkout-submodules = submodule update -q --init
   cos = checkout-submodules
-  list-submodules = "!f() { git config -f .gitmodules --get-regexp \"^submodule\\..*$1\\.path\" | cut -d\\  -f2 | sort; }; f"
+  list-submodules = "!f() { git config -f .gitmodules --get-regexp \"^submodule\\..*$1.*\\.path\" | cut -d\\  -f2 | sort; }; f"
 
   sts = stash push
   stp = stash pop
