@@ -64,12 +64,6 @@
 [submodule "vim/bundle/tmux-complete"]
 	path = vim/bundle/tmux-complete
 	url = https://github.com/wellle/tmux-complete.vim.git
-[submodule "tmux/yank"]
-	path = tmux/yank
-	url = https://github.com/tmux-plugins/tmux-yank.git
-[submodule "tmux/open"]
-	path = tmux/open
-	url = https://github.com/tmux-plugins/tmux-open.git
 [submodule "vim/bundle/fetch"]
 	path = vim/bundle/fetch
 	url = https://github.com/kopischke/vim-fetch.git
@@ -187,3 +181,9 @@
 [submodule "vim/bundle/webdevicons"]
 	path = vim/bundle/webdevicons
 	url = https://github.com/ryanoasis/vim-devicons.git
+[submodule "config/tmux/yank"]
+	path = config/tmux/yank
+	url = https://github.com/tmux-plugins/tmux-yank.git
+[submodule "config/tmux/open"]
+	path = config/tmux/open
+	url = https://github.com/tmux-plugins/tmux-open.git

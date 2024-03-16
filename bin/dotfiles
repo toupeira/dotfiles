@@ -415,31 +415,39 @@ function run {
     # }}}
     lint) # {{{
       if [ "$1" = "fix" ]; then
-        local delete=( --threads=1 --exec rm -vi {} )
+        local delete_file=( --threads=1 --exec rm -vi {} )
+        local delete_dir=(  --threads=1 --exec rmdir -v {} )
         local fix=1
       else
-        local delete
+        local delete_file
+        local delete_dir
       fi
 
-      if [ "$fix" ]; then
-        echo
-        warning "{{Fixing permissions}}"
-        system sudo chown -v root:root etc/sudoers.d/dotfiles
-      fi
+      echo
+      warning "{{Empty directories}}"
+      fdfind . "$DOTFILES" --type directory --type empty \
+        "${delete_dir[@]}"
 
       echo
       warning "{{Broken symlinks}}"
-      system sudo fdfind . ~ /root /etc --unrestricted --follow --mount --type symlink \
+      sudo fdfind . ~ /root /etc --unrestricted --follow --mount --type symlink \
         --exclude dotfiles \
         --exclude /.local/share/flatpak --exclude /.var/app \
         --exclude src --exclude tmp \
-        --color always "${delete[@]}" | grep -Ev '[0-9]mlock\b'
+        --color always "${delete_file[@]}" | grep -Ev '[0-9]mlock\b'
         # --exclude lock doesn't work: https://github.com/sharkdp/fd/issues/746
       echo
 
-      warning "{{Configuration updates}}"
-      system sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --unrestricted "${delete[@]}"
+      warning "{{Package configuration files}}"
+      sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --unrestricted \
+        "${delete_dir[@]}"
       echo
+
+      if [ "$fix" ]; then
+        warning "{{Fixing permissions}}"
+        sudo chown -v root:root "$DOTFILES/etc/sudoers.d/dotfiles"
+        echo
+      fi
       ;;
     # }}}
 
