@@ -11,6 +11,7 @@ firmware-linux
 flatpak
 fwupd
 intel-media-va-driver-non-free
+linux-cpupower
 lm-sensors
 mesa-utils
 mesa-va-drivers

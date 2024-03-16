@@ -31,7 +31,6 @@ iw
 jq
 less
 libnss-systemd
-linux-cpupower
 locales-all
 lsof
 ltrace
@@ -48,7 +47,6 @@ nftables
 p7zip-full
 parted
 patch
-pinentry-curses
 procmail
 psmisc
 pv

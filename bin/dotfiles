@@ -106,6 +106,7 @@ function ask-yes {
 
 # Ask to continue or abort
 function ask-abort {
+  echo
   [ -n "$1" ] && error "$@"
   if ! ask "{{Do you want to continue?}}" 1; then
     abort
@@ -190,7 +191,7 @@ function read-rules {
   local pattern=$( printf '|%s' "$@" )
   pattern=${pattern:1}
 
-  git config -f "$DOTFILES/rules.ini" --get-regexp "^($pattern)$" | cut -d\  -f2
+  command git config -f "$DOTFILES/rules.ini" --get-regexp "^($pattern)$" | cut -d\  -f2
 }
 
 # Make sure the given path is either inside the home directory,
@@ -204,12 +205,16 @@ function validate {
   if ! [ "$SCOPED_PATHS" ]; then
     function read-paths {
       local paths=$( read-rules "$@" )
-      paths=${paths//./\\.}
-      paths=${paths//$'\n'/|}
-      echo "^($paths)"
+      if [ "$paths" ]; then
+        paths=${paths//./\\.}
+        paths=${paths//$'\n'/|}
+        echo "^($paths)"
+      else
+        echo "^$"
+      fi
     }
 
-    SCOPED_PATHS=$(  read-paths ".*\.install$" )
+    SCOPED_PATHS=$(  read-paths ".*\.install" )
     HOST_PATHS=$(    read-paths "$HOSTNAME\.install" )
     SKIPPED_PATHS=$( read-paths "global.skip" "$HOSTNAME\.skip" )
   fi
@@ -409,13 +414,21 @@ function run {
     lint) # {{{
       if [ "$1" = "fix" ]; then
         local delete=( --threads=1 --exec rm -vi {} )
+        local fix=1
       else
         local delete
+      fi
+
+      if [ "$fix" ]; then
+        echo
+        warning "{{Fixing permissions}}"
+        system sudo chown -v root:root etc/sudoers.d/dotfiles
       fi
 
       echo
       warning "{{Broken symlinks}}"
       system sudo fdfind . ~ /root /etc --unrestricted --follow --mount --type symlink \
+        --exclude dotfiles \
         --exclude /.local/share/flatpak --exclude /.var/app \
         --exclude src --exclude tmp \
         --color always "${delete[@]}" | grep -Ev '[0-9]mlock\b'
