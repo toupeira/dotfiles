@@ -9,6 +9,7 @@ application/x-shellscript=nvim.desktop
 text/calendar=nvim.desktop
 text/org=nvim.desktop;
 text/plain=nvim.desktop
+text/x-diff=nvim.desktop
 text/x-python3=nvim.desktop
 text/x-ruby=nvim.desktop
 

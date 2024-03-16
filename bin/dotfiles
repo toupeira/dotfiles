@@ -10,25 +10,28 @@ function usage {
   echo
   echo "Options:"
   echo "  -v, --verbose             Increase verbosity"
+  echo "  -d, --debug               Output debug information"
   echo "      --path                Show path to the dotfiles repository and exit"
   echo
   echo "Commands:"
   echo "  init                      Install symlinks for all dotfiles interactively"
   echo "  install PATH...           Install symlink for PATH"
   echo "  add PATH...               Add file to repository and replace it with a symlink"
-  echo "  lint [fix]                Report or fix configuration problems"
-  echo "  test                      Run tests"
   echo
   echo "  sync                      Commit, pull, and push changes"
   echo "  commit-all, ca            Commit all changes"
   echo "  pull, up                  Pull remote changes and checkout submodules"
-  echo "  push                      Push local changes"
+  echo "  push, pu                  Push local changes"
+  echo
+  echo "  rules KEY...              Output rules for given keys"
+  echo "  lint [fix]                Report (and fix) configuration problems"
+  echo "  test                      Run tests"
   echo
   echo "  list [NAME]               List submodules"
   echo "  update [NAME]             Update submodule"
   echo "  update-all, sup [NAME]    Update all submodules"
   echo
-  echo "  build PATH COMMAND..      Run build command in path"
+  echo "  build PATH COMMAND...     Run build command in path"
   echo "  build-all                 Run default builds"
   echo
   echo "  packages, pkg [:TYPE]     Install packages"
@@ -41,7 +44,6 @@ function usage {
   echo
   echo "Other arguments:"
   echo "  COMMAND [ARGS]...         Excecute a Git command inside the dotfiles repository"
-  echo "  git COMMAND [ARGS]..."
   echo
 
   exit 255
@@ -51,68 +53,78 @@ function usage {
 
 ### output helpers {{{
 
-# Output a message with a colored arrow in front
+# Output a message with a colored symbol in front
 function msg {
   local message=${1/$HOME/\~}
   local color=${2:-4}
+  local symbol=${3:-●}
 
-  if [ $# -gt 2 ]; then
-    shift 2
+  if [ $# -gt 3 ]; then
+    shift 3
     local echo_options=( "$@" )
   fi
 
   if [ -n "$message" ]; then
-    echo -e "${echo_options[@]}" " \e[1;3${color}m>\e[0m $message" | sed -r 's/\{\{/\o033[1m/g' | sed -r 's/\}\}/\o033[0m/g'
+    echo -e "${echo_options[@]}" " \e[0;3${color}m$symbol\e[0m $message\e[0m" \
+      | sed -r 's/\{\{/\o033[1m/g' \
+      | sed -r 's/\}\}/\o033[22m/g'
   else
     echo -e "${echo_options[@]}"
   fi
 }
 
 # Helpers for colored messages
-function status  { msg "$1" "${2:-2}"; }
-function warning { msg "$1" "${2:-3}"; }
-
-# Output verbose message
-function verbose {
-  [ "$VERBOSE" = 1 ] || return
-
-  echo -e "\e[0;35m$( printf '%10s' "$1" ): │ \e[1;35m$2\e[0m" >&2
-}
-
-# Output error message
-function error {
-  STATUS=1
-  msg "$1" 1
-}
+function status  { msg "{{$1}}" 2; }
+function info    { msg "\e[0;34m$1" 4; }
+function warning { msg "\e[0;33m$1" 3; }
+function error   { warning "$1"; STATUS=1; }
 
 # Output error message and exit
 function abort {
-  STATUS=1
   [ -n "$1" ] && error "$@"
   exit 1
 }
 
 # Ask a yes/no question, defaulting to no
 function ask {
-  msg "$1 [y/N] " "${2:-6}" -n >&2
+  msg "$1 \e[0;36m[y/\e[1;36mN\e[0;36m] " "${2:-6}" "»" -n >&2
   read -r
   [ "${REPLY:0:1}" = "Y" ] || [ "${REPLY:0:1}" = "y" ]
 }
 
 # Ask a yes/no question, defaulting to yes
 function ask-yes {
-  msg "$1 [Y/n] " "${2:-6}" -n >&2
+  msg "$1 \e[0;36m[\e[1;36mY\e[0;36m/n] " "${2:-6}" "»" -n >&2
   read -r
   [ "${REPLY:0:1}" != "N" ] && [ "${REPLY:0:1}" != "n" ]
 }
 
 # Ask to continue or abort
 function ask-abort {
-  echo
   [ -n "$1" ] && error "$@"
   if ! ask "{{Do you want to continue?}}" 1; then
     abort
   fi
+}
+
+# Output verbose message
+function verbose {
+  [ "$VERBOSE" = 1 ] && info "$@"
+}
+
+# Output debug message
+function debug {
+  [ "$DEBUG" = 1 ] || return
+
+  echo -e "\e[0;35m$( printf '%10s' "$1" ): │ \e[1m$2\e[0m" >&2
+}
+
+# Output indentation
+function indent {
+  local count=${1:-2}
+  for (( i = 0; i < count; i++ )) do
+    printf ' '
+  done
 }
 
 ### }}}
@@ -138,7 +150,7 @@ function system {
     done
   fi
 
-  verbose exec "$command $*"
+  debug exec "$command $*"
 
   command $sudo "$command" "$@" || ask-abort "{{Error:}} $command $*"
 }
@@ -150,11 +162,10 @@ function git {
     shift
   fi
 
-  verbose exec "git $*"
+  debug exec "git $*"
 
-  # Spawn a subshell so we can run the command inside the repository
-  # without any nasty side-effects
-  ( cd "$DOTFILES" || abort; command git "$@" )
+  (cd "$DOTFILES" && command git "$@")
+
   local status=$?
   [ $status -eq 0 ] || $onerror ask-abort "{{Error:}} git $*"
 
@@ -190,41 +201,46 @@ function is-desktop {
 
 # Load rules for the given keys
 function read-rules {
-  local pattern=$( printf '|%s' "$@" )
-  pattern=${pattern:1}
+  if ! [[ $* = *.* ]]; then
+    local prefix="(global\.|$HOSTNAME\.)"
+  fi
 
-  command git config -f "$DOTFILES/rules.ini" --get-regexp "^($pattern)$" | cut -d\  -f2
+  local pattern=$( printf '|%s' "$@" )
+  pattern="^$prefix(${pattern:1})$"
+
+  command git config -f "$DOTFILES/rules.ini" \
+    --get-regexp "$pattern" | cut -d\  -f2
 }
 
-# Make sure the given path is either inside the home directory,
-# or a valid /etc path
+# Check if a path can be installed or added to the repository
 function validate {
   if ! [[ "$1" =~ ^($HOME|/etc)($|/) ]]; then
-    error "Path is not inside \$HOME or /etc: {{$1}}"
+    error "Path is not inside {{\$HOME}} or {{/etc}}: {{$1}}"
     return 1
   fi
 
-  if ! [ "$SCOPED_PATHS" ]; then
+  if ! [ "$SKIP_PATHS" ]; then
     function read-paths {
-      local paths=$( read-rules "$@" )
-      if [ "$paths" ]; then
-        paths=${paths//./\\.}
-        paths=${paths//$'\n'/($|/)|}
-        echo "^($paths)"
+      mapfile -t paths < <( read-rules "$@" | sed -r 's/\./\\./g' )
+      if [ ${#paths[@]} ]; then
+        paths=$( printf '|%s($|/)' "${paths[@]}" )
+        echo "^(${paths:1})"
       else
         echo "^$"
       fi
     }
 
-    SCOPED_PATHS=$(  read-paths ".*\.install" )
-    HOST_PATHS=$(    read-paths "$HOSTNAME\.install" )
-    SKIPPED_PATHS=$( read-paths "global.skip" "$HOSTNAME\.skip" )
+    SKIP_PATHS=$( read-paths skip )
+    HOST_PATHS=$( read-paths install )
+    INSTALL_PATHS=$( read-paths ".*\.install" )
   fi
 
   local path=$( target "$1" )
   path=${path:${#DOTFILES}+1}
-  if [[ $path =~ $SKIPPED_PATHS ]] || { [[ $path =~ $SCOPED_PATHS ]] && ! [[ $path =~ $HOST_PATHS ]]; }; then
-    verbose skipping "$path"
+
+  if [[ $path =~ $SKIP_PATHS ]] || \
+   { [[ $path =~ $INSTALL_PATHS ]] && ! [[ $path =~ $HOST_PATHS ]]; }; then
+    debug skipping "$path"
     return 1
   fi
 
@@ -263,7 +279,7 @@ function origin {
 ### }}}
 
 function run {
-  verbose run "$*"
+  debug run "$*"
 
   local command="$1"
   shift
@@ -297,7 +313,7 @@ function run {
       if [ $# -gt 0 ]; then
         install-paths "$@"
       else
-        status "{{Installing symlinks...}}"
+        status "Installing symlinks..."
         (cd "$DOTFILES" && install-paths -- *)
         run packages
         is-desktop && run dconf sync
@@ -308,14 +324,9 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        local path=${path%/}
-        local origin="$path"
+        local origin=$( realpath -s "${path%/}" )
         local target=$( target "$origin" )
         local force=0
-
-        if [ "${origin:0:1}" != "/" ]; then
-          origin="$PWD/$path"
-        fi
 
         if [[ "$origin" =~ ^$DOTFILES/ ]]; then
           target="$origin"
@@ -336,12 +347,13 @@ function run {
         if [ -L "$origin" ]; then
           local link=$( readlink "$origin" 2>/dev/null )
           if [ ! -e "$link" ]; then
-            error "Broken symlink: {{$origin}} -> [1;36m$link[0m"
+            warning "Broken symlink: {{$origin}} -> \e[1;36m$link"
             force=1
           elif [ "$link" = "$target" ]; then
+            verbose "Already symlinked: {{$origin}}"
             continue
           else
-            warning "Symlinked to different path: {{$origin}} -> [1;36m$link[0m"
+            warning "Symlinked to different path: {{$origin}} -> \e[1;36m$link"
           fi
         fi
 
@@ -355,7 +367,7 @@ function run {
         fi
 
         if [ $force -eq 1 ] || $ask "$question" "$color"; then
-          if [ -e "$origin" ]; then
+          if [ -e "$origin" ] || [ -L "$origin" ]; then
             system rm -r "$origin"
           fi
 
@@ -387,16 +399,13 @@ function run {
         elif ! validate "$origin"; then
           continue
         elif [ -L "$path" ]; then
-          msg "Already symlinked: {{$path}}"
-          continue
-        elif [ -e "$target" ]; then
-          run install "$target" "$origin"
+          info "Already symlinked: {{$path}}"
           continue
         fi
 
         ask-yes "Add {{$origin}} to repository?" || continue
 
-        if ( test -d "$target_dir" || system mkdir -p "$target_dir" ) \
+        if (test -d "$target_dir" || system mkdir -p "$target_dir") \
           && system mv "$origin" "$target" \
           && system ln -s "$target" "$origin"
         then
@@ -404,63 +413,20 @@ function run {
           [ -d "$target" ] && system chmod g+s "$target"
           git add "$target"
 
-          status "Successfully added {{$target}}"
+          info "Successfully added {{$target}}"
           (( added++ ))
         else
-          error "Error while converting path: {{$origin}}"
+          error "Error while adding path: {{$origin}}"
           continue
         fi
       done
-      ;;
-    # }}}
-    lint) # {{{
-      if [ "$1" = "fix" ]; then
-        local delete_file=( --threads=1 --exec rm -vi {} )
-        local delete_dir=(  --threads=1 --exec rmdir -v {} )
-        local fix=1
-      else
-        local delete_file
-        local delete_dir
-      fi
-
-      echo
-      warning "{{Empty directories}}"
-      fdfind . "$DOTFILES" --type directory --type empty \
-        "${delete_dir[@]}"
-
-      echo
-      warning "{{Broken symlinks}}"
-      sudo fdfind . ~ /root /etc --unrestricted --follow --mount --type symlink \
-        --exclude dotfiles \
-        --exclude /.local/share/flatpak --exclude /.var/app \
-        --exclude src --exclude tmp \
-        --color always "${delete_file[@]}" | grep -Ev '[0-9]mlock\b'
-        # --exclude lock doesn't work: https://github.com/sharkdp/fd/issues/746
-      echo
-
-      warning "{{Package configuration files}}"
-      sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --unrestricted \
-        "${delete_dir[@]}"
-      echo
-
-      if [ "$fix" ]; then
-        warning "{{Fixing permissions}}"
-        sudo chown -v root:root "$DOTFILES/etc/sudoers.d/dotfiles"
-        echo
-      fi
-      ;;
-    # }}}
-
-    test) # {{{
-      status "{{Running tests...}}"
-      sh -c ". $DOTFILES/etc/profile" || abort "{{/etc/profile is broken}}"
       ;;
     # }}}
 
     sync) # {{{
       if has-changes; then
         echo
-        warning "{{Found local changes:}}"
+        status "Found local changes:"
         git status -s
         echo
         if ask "{{Commit?}}"; then
@@ -487,16 +453,16 @@ function run {
       fi
 
       if has-changes; then
-        status "{{Committing changes...}}"
+        status "Committing changes..."
         git ignore-errors add -A .
         git ignore-errors commit -a -m "$message" "$@"
       else
-        status "{{No changes.}}"
+        status "No changes."
       fi
       ;;
     # }}}
     pull|up) # {{{
-      status "{{Fetching changes...}}"
+      status "Fetching changes..."
       git ignore-errors pull -q || abort
 
       if has-news; then
@@ -506,7 +472,7 @@ function run {
       mapfile -t modules < <( run list )
       if has-news "${modules[@]}"; then
         echo
-        status "{{Updating submodules...}}"
+        status "Updating submodules..."
         git checkout-submodules
 
         run build-all
@@ -523,16 +489,122 @@ function run {
       ;;
     # }}}
     push|pu) # {{{
-      status "{{Pushing changes...}}"
+      status "Pushing changes..."
       git push -q "$@"
       ;;
     # }}}
 
-    list|list-submodules) # {{{
+    rules) # {{{
+      read-rules "$@"
+      ;;
+    # }}}
+    lint) # {{{
+      local paths
+      [ "$1" = "fix" ] && local fix=1
+
+      local count=0
+      local total=5
+      function lint {
+        (( count++ ))
+        info "[{{$count/$total}}] $( printf '%8s' "$1" ): {{$2}}"
+      }
+
+      function list {
+        indent 3; warning "{{$1}}"
+      }
+
+      function fix {
+        [ "$fix" ] && indent 6 && "$@"
+      }
+
+      lint dotfiles "Empty directories"
+      paths=$( fdfind . "$DOTFILES" -t d -t e )
+
+      for path in $paths; do
+        list "$path"
+        fix system rmdir -v "$path"
+      done
+
+      lint system "Orphaned symlinks"
+      paths=$(
+        sudo fdfind . ~ /root /etc -u -t l \
+          --follow \
+          --mount \
+          --exclude dotfiles \
+          --exclude /.local/share/flatpak --exclude /.var/app \
+          --exclude src --exclude tmp
+      )
+
+      for path in $paths; do
+        if [ "$(basename "$path")" = "lock" ]; then
+          # --exclude lock doesn't work: https://github.com/sharkdp/fd/issues/746
+          continue
+        fi
+
+        list "$path"
+        fix system rm -v "$path"
+      done
+
+      lint system "Configuration file clutter"
+      paths=$( sudo fdfind '.*\.(dpkg|ucf)-.*' /etc -u )
+
+      for path in $paths; do
+        list "$path"
+        fix system rm -v "$path"
+      done
+
+      lint system "Incorrect permissions"
+
+      local sudoers="$DOTFILES/etc/sudoers.d/dotfiles"
+      if [ "$( stat -c %U:%G "$sudoers" )" != "root:root" ]; then
+        list "$sudoers"
+        fix system chown -v root:root "$sudoers"
+      fi
+
+      if [ -d /etc/plymouth ]; then
+        local plymouth="/etc/plymouth/plymouthd.conf"
+        if [ "$( stat -c %i "$plymouth" )" != "$( stat -c %i "$DOTFILES/$plymouth" )" ]; then
+          list "$plymouth"
+          fix system ln -fv "$DOTFILES$plymouth" "$plymouth"
+        fi
+      fi
+
+      lint root "Home directory"
+
+      paths=$( sudo fdfind '^(\.bashrc|\.profile)$' /root -t f )
+      for path in $paths; do
+        list "$path"
+        fix system rm -v "$path"
+      done
+
+      for path in config/nvim config/rg zsh zshrc; do
+        local target=$( target "$path" )
+        local origin=$( origin "$DOTFILES/$path" )
+        origin=${origin/#$HOME/\/root}
+
+        sudo test -L "$origin" && continue
+
+        list "$origin"
+        fix sudo ln -svfi "$target" "$origin"
+      done
+      ;;
+    # }}}
+    test) # {{{
+      status "Running tests..."
+
+      [ "$DOTFILES" = "$( "$DOTFILES/bin/dotfiles" --path )" ] \
+        || abort "{{bin/dotfiles is broken!}}"
+
+      sh -c ". $DOTFILES/etc/profile" \
+        || abort "{{/etc/profile is broken!}}"
+      ;;
+    # }}}
+
+    list) # {{{
       git list-submodules "$@"
       ;;
     # }}}
-    update|update-submodule) # {{{
+    update) # {{{
       local batch
       [ "$1" = '--batch' ] && local batch=1 && shift
 
@@ -562,15 +634,15 @@ function run {
         echo
       elif [ "$new_commit" != "$old_commit" ]; then
         local url=$( system git remote -v | grep -Eom1 'https?://[^ ]+' )
-        [ -n "$url" ] && url=" [ {{$url}} ]"
+        [ -n "$url" ] && url=" [{{$url}}]"
 
         [ ! "$batch" ] && echo
-        status "Changes in {{$submodule}}$url:" 6
+        info "Changes in {{$submodule}}$url:" 6
         system git -c color.ui=always log --oneline --no-merges '@{1}..' \
           | sed -r 's/^/    /'
         echo
       elif [ ! "$batch" ]; then
-        status "No changes in {{$submodule}}"
+        info "No changes in {{$submodule}}"
       fi
       ;;
     # }}}
@@ -582,7 +654,7 @@ function run {
       fi
 
       echo
-      status "{{Updating submodules:}}"
+      status "Updating submodules:"
 
       local tmpdir=$( mktemp -d "${TMPDIR:-/tmp}/dotfiles.XXXXXX" )
 
@@ -594,7 +666,7 @@ function run {
         done
 
         (
-          run update-submodule --batch "$submodule" > "$tmpdir/${submodule//\//-}" 2>&1
+          run update --batch "$submodule" > "$tmpdir/${submodule//\//-}" 2>&1
           echo -ne '\e[0;36m='
         ) &
 
@@ -607,13 +679,11 @@ function run {
 
       if grep -q . "$tmpdir"/* 2>/dev/null; then
         system cat "$tmpdir"/*
+        echo
         run build-all
-      else
-        warning "No updates found."
       fi
 
       system rm -rf "$tmpdir"
-      echo
       ;;
     # }}}
 
@@ -625,13 +695,13 @@ function run {
       if [ -z "$path" ] || [ -z "$command" ]; then
         usage
       elif [ ! -d "$DOTFILES/$path" ]; then
-        warning "Build path {{$path}} does not exist." 5
+        error "Build path {{$path}} does not exist."
         return
       fi
 
       warning "Building {{$path}}"
 
-      if ! ( cd "$DOTFILES/$path" && system "$command" "$@" ); then
+      if ! (cd "$DOTFILES/$path" && system "$command" "$@"); then
         ask-abort "{{Error}}: $command $*"
       fi
       ;;
@@ -643,7 +713,7 @@ function run {
 
     packages|pkg) # {{{
       if [ $# -eq 0 ]; then
-        for list in $( read-rules "global.packages" "$HOSTNAME.packages" ); do
+        for list in $( read-rules packages ); do
           run packages "$list"
         done
         return
@@ -730,7 +800,7 @@ function run {
       fi
 
       echo
-      status "{{Missing $name packages:}}"
+      status "Missing $name packages:"
 
       function list_packages {
         [ -n "$2" ] || return
@@ -812,7 +882,7 @@ function run {
           git checkout dconf
         fi
 
-        status "{{Loading dconf settings...}}"
+        status "Loading dconf settings..."
         run dconf load >/dev/null
         exit
       fi
@@ -837,10 +907,10 @@ function run {
         local path="/${name//./\/}/"
 
         if [ "$action" = "load" ]; then
-          status "Loading {{$name}}"
+          info "Loading {{$name}}"
           system dconf load "$path" < "$file"
         elif [ "$action" = "dump" ]; then
-          status "Dumping {{$name}}"
+          info "Dumping {{$name}}"
           local output=$( system dconf dump "$path" )
 
           if [ -f "$file" ]; then
@@ -877,19 +947,12 @@ function run {
       ;;
     # }}}
 
-    vim|v) # {{{
-      git edit config/nvim/init.vim
-      ;;
-    git|g)
-      git edit config/git/config
-      ;;
-    tmux|t)
-      git edit config/tmux/tmux.conf
-      ;;
-    # }}}
+    vim|v)  git edit config/nvim/init.vim;;
+    git|g)  git edit config/git/config;;
+    tmux|t) git edit config/tmux/tmux.conf;;
+
     *)
       git ignore-errors "$command" "$@"
-      STATUS=$?
       ;;
     # }}}
   esac
@@ -902,12 +965,13 @@ if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
 fi
 
 COMMAND=
-STATUS=0
+STATUS=
 
 # Parse arguments
 while [ $# -gt 0 ]; do
   case "$1" in
     -v|--verbose) VERBOSE=1;;
+    -d|--debug)   DEBUG=1;;
        --path)    exec echo "$DOTFILES";;
     -*|help)      usage;;
     *)
@@ -920,7 +984,7 @@ done
 
 if [ "${#COMMAND[@]}" ]; then
   run "${COMMAND[@]}"
-  exit $STATUS
+  exit ${STATUS:$?}
 else
   usage
 fi

@@ -9,7 +9,7 @@ rescue LoadError
 end
 
 lambda {
-  gray     = ->(text) { "\001\e[2m\002#{text}\001\e[0m\002" }
+  gray     = ->(text) { "\001\e[1;30m\002#{text}\001\e[0m\002" }
   darkcyan = ->(text) { "\001\e[0;36m\002#{text}\001\e[0m\002" }
   red      = ->(text) { "\001\e[1;31m\002#{text}\001\e[0m\002" }
   magenta  = ->(text) { "\001\e[1;35m\002#{text}\001\e[0m\002" }
@@ -33,7 +33,7 @@ lambda {
         "#{darkcyan.call '['}#{cyan.call(object_name)}#{darkcyan.call ']'}"
       end
 
-    "#{gray.call "[#{pry.input_ring.size}]"} #{Pry.config.prompt_name}#{object_name}#{red.call('>')} "
+    "#{gray.call "[#{pry.input_ring.size}]"} #{Pry.config.prompt_name}#{object_name}#{red.call('»')} "
   }
 
   Pry.config.prompt = Pry::Prompt.new(
@@ -43,7 +43,7 @@ lambda {
 
       lambda { |*args|
         spaces = prompt.call(*args).gsub(/(\e\[.*?m|[^[:print:]])/, '').size - 2
-        "#{' ' * spaces}#{magenta.call('>')} "
+        "#{' ' * spaces}#{magenta.call('»')} "
       },
     ]
   )
