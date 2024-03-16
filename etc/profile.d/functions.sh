@@ -30,11 +30,13 @@ function login_banner {
     fi
 
     if has fortune && [ -z "$SSH_CONNECTION" ]; then
-      fortune -acs -n $((${LINES:-10}*40)) | awk '
-        /^\(.+\)$/ { print "\033[1;32mfortune" $0 "\033[0m"; next }
-        /^%$/ { next }
-        { print "  \033[0;32m" $0 "\033[0m" }
-      '
+      fortune -acs -n $((LINES*15)) \
+        | fold -sw $((COLUMNS-3)) \
+        | awk '
+          NR == 1 && match($0, /^\((.+)\)$/, a) { print "🍪 \033[0;32m❰\033[1;32m" a[1] "\033[0;32m❱\033[0m"; next }
+          NR == 2 { next }
+          { print "  \033[0;32m" $0 "\033[0m" }
+        '
       echo
     fi
 

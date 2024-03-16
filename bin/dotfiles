@@ -15,6 +15,7 @@ function usage {
   echo "  install PATH...           Install symlink for PATH"
   echo "  add PATH...               Add file to repository and replace it with a symlink"
   echo "  lint [fix]                Report or fix configuration problems"
+  echo "  test                      Run tests"
   echo
   echo "  sync                      Commit, pull, and push changes"
   echo "  commit-all, ca            Commit all changes"
@@ -28,7 +29,7 @@ function usage {
   echo "  build PATH COMMAND..      Run build command in path"
   echo "  build-all                 Run default builds"
   echo
-  echo "  package, pkg [:TYPE]      Install default packages"
+  echo "  packages, pkg [:TYPE]     Install packages"
   echo "  pkg LIST[:TYPE]           Install packages from list"
   echo "  pkg up, pkg TYPE          Update packages"
   echo
@@ -105,6 +106,7 @@ function ask-yes {
 
 # Ask to continue or abort
 function ask-abort {
+  [ -n "$1" ] && error "$@"
   if ! ask "{{Do you want to continue?}}" 1; then
     abort
   fi
@@ -135,7 +137,7 @@ function system {
 
   verbose exec "$command $*"
 
-  command $sudo "$command" "$@"
+  command $sudo "$command" "$@" || ask-abort "{{Error:}} $command $*"
 }
 
 # Run a Git command
@@ -143,8 +145,6 @@ function git {
   if [ "$1" = "ignore-errors" ]; then
     local onerror=":"
     shift
-  else
-    local onerror="ask-abort"
   fi
 
   verbose exec "git $*"
@@ -153,13 +153,18 @@ function git {
   # without any nasty side-effects
   ( cd "$DOTFILES" || abort; command git "$@" )
   local status=$?
-  [ $status -eq 0 ] || $onerror
+  [ $status -eq 0 ] || $onerror ask-abort "{{Error:}} git $*"
 
   return $status
 }
 
-# Check for Git changes
+# Check for local Git changes
 function has-changes {
+  git status -s "$@" | grep -q .
+}
+
+# Check for remote Git changes
+function has-news {
   git diff --stat ORIG_HEAD "$@" | grep -q .
 }
 
@@ -175,6 +180,19 @@ function mux-wrap {
 ### }}}
 ### dotfiles helpers {{{
 
+# Check if machine is a desktop
+function is-desktop {
+  [ -x /usr/bin/Xorg ]
+}
+
+# Load rules for the given keys
+function read-rules {
+  local pattern=$( printf '|%s' "$@" )
+  pattern=${pattern:1}
+
+  git config -f "$DOTFILES/rules.ini" --get-regexp "^($pattern)$" | cut -d\  -f2
+}
+
 # Make sure the given path is either inside the home directory,
 # or a valid /etc path
 function validate {
@@ -185,7 +203,7 @@ function validate {
 
   if ! [ "$SCOPED_PATHS" ]; then
     function read-paths {
-      local paths=$( git config -f "$DOTFILES/rules.ini" --get-regexp "^$1$" | cut -d\  -f2 )
+      local paths=$( read-rules "$@" )
       paths=${paths//./\\.}
       paths=${paths//$'\n'/|}
       echo "^($paths)"
@@ -193,7 +211,7 @@ function validate {
 
     SCOPED_PATHS=$(  read-paths ".*\.install$" )
     HOST_PATHS=$(    read-paths "$HOSTNAME\.install" )
-    SKIPPED_PATHS=$( read-paths "(global|$HOSTNAME)\.skip" )
+    SKIPPED_PATHS=$( read-paths "global.skip" "$HOSTNAME\.skip" )
   fi
 
   local path=$( target "$1" )
@@ -249,6 +267,10 @@ function run {
       git remote set-url --no-push origin "https://github.com/$repository"
       git remote set-url --push    origin "git@github.com:$repository"
 
+      local hook="$DOTFILES/.git/hooks/pre-commit"
+      echo -e "#!/bin/sh\nbin/dotfiles test" > "$hook"
+      chmod +x "$hook"
+
       function install-paths {
         for path in "$@"; do
           path=${path%/}
@@ -270,8 +292,8 @@ function run {
       else
         status "{{Installing symlinks...}}"
         (cd "$DOTFILES" && install-paths -- *)
-        run package
-        run dconf sync
+        run packages
+        is-desktop && run dconf sync
       fi
       ;;
     # }}}
@@ -406,8 +428,14 @@ function run {
       ;;
     # }}}
 
+    test) # {{{
+      status "{{Running tests...}}"
+      sh -c ". $DOTFILES/etc/profile" || abort "{{/etc/profile is broken}}"
+      ;;
+    # }}}
+
     sync) # {{{
-      if git status -s | grep -q .; then
+      if has-changes; then
         echo
         warning "{{Found local changes:}}"
         git status -s
@@ -435,21 +463,25 @@ function run {
         local message="Sync dotfiles"
       fi
 
-      status "{{Committing changes...}}"
-      git ignore-errors add -A .
-      git ignore-errors commit -a -m "$message" "$@"
+      if has-changes; then
+        status "{{Committing changes...}}"
+        git ignore-errors add -A .
+        git ignore-errors commit -a -m "$message" "$@"
+      else
+        status "{{No changes.}}"
+      fi
       ;;
     # }}}
     pull|up) # {{{
       status "{{Fetching changes...}}"
       git ignore-errors pull -q || abort
 
-      if has-changes; then
+      if has-news; then
         git --no-pager diff --stat ORIG_HEAD
       fi
 
       mapfile -t modules < <( run list )
-      if has-changes "${modules[@]}"; then
+      if has-news "${modules[@]}"; then
         echo
         status "{{Updating submodules...}}"
         git checkout-submodules
@@ -457,7 +489,11 @@ function run {
         run build-all
       fi
 
-      if has-changes dconf; then
+      if has-news packages; then
+        run packages
+      fi
+
+      if has-news dconf && is-desktop; then
         echo
         run dconf sync
       fi
@@ -573,18 +609,24 @@ function run {
       warning "Building {{$path}}"
 
       if ! ( cd "$DOTFILES/$path" && system "$command" "$@" ); then
-        error "Error while building {{$path}}"
-        ask-abort
+        ask-abort "{{Error}}: $command $*"
       fi
       ;;
     # }}}
     build-all) # {{{
-      has-changes vim/bundle/fzf && run build fzf ./install --bin
+      has-news vim/bundle/fzf && run build fzf ./install --bin
       ;;
     # }}}
 
-    package|pkg) # {{{
-      local name=${1:-default}
+    packages|pkg) # {{{
+      if [ $# -eq 0 ]; then
+        for list in $( read-rules "global.packages" "$HOSTNAME.packages" ); do
+          run packages "$list"
+        done
+        return
+      fi
+
+      local name=$1
       local filter_apt='^(apt:)?[^:#]+$'
 
       if [ "$name" = "update" ] || [ "$name" = "up" ]; then
@@ -609,13 +651,9 @@ function run {
 
       local packages=$( grep -E "$filter" "$list" )
 
-      if dpkg -s xorg &>/dev/null; then
+      if is-desktop; then
         [ -f "$list.desktop" ] && packages=$(
           echo "$packages"; grep -E "$filter" "$list.desktop"
-        )
-      else
-        [ -f "$list.server" ] && packages=$(
-          echo "$packages"; grep -E "$filter" "$list.server"
         )
       fi
 
@@ -740,7 +778,7 @@ function run {
       if [ "$action" = "sync" ]; then
         run dconf dump >/dev/null
 
-        if git status -s dconf | grep -q .; then
+        if has-changes dconf; then
           echo
           warning "{{Found local changes:}}"
           git status -s dconf
@@ -828,6 +866,7 @@ function run {
     # }}}
     *)
       git ignore-errors "$command" "$@"
+      STATUS=$?
       ;;
     # }}}
   esac

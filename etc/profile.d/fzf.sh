@@ -13,7 +13,9 @@ export FZF_DEFAULT_OPTS="
   --bind 'ctrl-a:toggle-all,ctrl-/:toggle-preview,ctrl-n:down,ctrl-p:up,down:next-history,up:previous-history'
 "
 
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND --type d --type l"
+[ "$BASH_INTERACTIVE" ] || return
+
+export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND --type d"
 export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND/--type f/--type d}"
 
 export FZF_CTRL_R_OPTS="
@@ -30,7 +32,6 @@ export FZF_ALT_C_OPTS="
   --preview 'tree -C {}'
 "
 
-[ "$BASH_INTERACTIVE" ] && has fzf || return
 [ "$ZSH_VERSION" ] && return
 
 _fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }
