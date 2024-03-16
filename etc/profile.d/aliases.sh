@@ -16,6 +16,7 @@ alias ...='cd ../..'
 alias ....='cd ../../..'
 alias cd_='cd "$_"'
 alias back='cd "$OLDPWD"'
+alias -- -=back
 alias cp='cp -v'
 alias mv='mv -v'
 alias rm='rm -v'

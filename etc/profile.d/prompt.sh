@@ -4,7 +4,7 @@
 [ "$BASH_INTERACTIVE" ] || return
 
 # Prompt configuration
-PS1_USER="λ"
+PS1_USER="𝝺"
 PS1_HOST=" "
 [ "$SSH_CONNECTION" ] || [ "$SUDO_USER" ] && PS1_USER="\u"
 [ "$SSH_CONNECTION" ] && PS1_HOST="@\h "
@@ -14,8 +14,15 @@ PS1_HOST=" "
 PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\$_prompt_dir\[\e[0;36m\]]\[\e[0m\] "
 PS2=" \[\e[1;35m\]»\[\e[0m\] "
 
-# Update title when directory changes
-PROMPT_COMMAND=( '_last_status=$?; [ "$PWD" != "$_last_pwd" ] && _prompt_dir=$( _prompt_dir); [ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir"; _last_pwd="$PWD"' )
+# Set current directory and update title on changes
+PROMPT_COMMAND=( '
+  if [ "$PWD" != "$_last_pwd" ]; then
+    _prompt_dir=$( _prompt_dir);
+    [ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir";
+  fi;
+
+  _last_pwd="$PWD"
+' )
 
 # Prompt helpers
 function _prompt_dir {
@@ -28,6 +35,11 @@ function _prompt_dir {
     dir=${dir/#asdf\/installs\/ruby\//💎 }
     dir=${dir/#dotfiles\//📦 }
     dir=${dir/#dotfiles/📦}
+    dir=${dir/#dental\//🦷 }
+    dir=${dir/#dental/🦷}
+  else
+    dir=${dir/#\/slack\//🎱 }
+    dir=${dir/#\/slack/🎱}
   fi
 
   dir=${dir/#$HOME/\~}
@@ -39,17 +51,6 @@ function _prompt_jobs {
 
   if [ "$jobs" -gt 0 ]; then
     printf '[%d job%s] ' "$jobs" "$( [ "$jobs" -eq 1 ] || echo -n s )"
-  fi
-}
-
-function _prompt_exit_status {
-  if [ "$_last_status" ] && [ "$_last_status" -gt 0 ]; then
-    tput sc
-    local column=$((COLUMNS-${#_last_status}-3))
-
-    tput cup $LINES $column
-    printf '\e[1;30m[\e[1;31m%s\e[1;30m]\e[0m '  "$_last_status"
-    tput rc
   fi
 }
 

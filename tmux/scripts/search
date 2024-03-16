@@ -16,7 +16,7 @@ case "$1" in
     ;;
 
   prompts)
-    search "^(.* )?λ.*"
+    search ".*𝝺.*"
     ;;
 
   # interesting things (URLs, emails, hashes, IPs)

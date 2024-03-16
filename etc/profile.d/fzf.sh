@@ -1,7 +1,5 @@
 #!/bin/bash
 
-[ "$BASH_INTERACTIVE" ] && has fzf || return
-
 export FZF_TMUX=0
 export FZF_COMPLETION_TRIGGER='//'
 
@@ -32,12 +30,13 @@ export FZF_ALT_C_OPTS="
   --preview 'tree -C {}'
 "
 
+[ "$BASH_INTERACTIVE" ] && has fzf || return
+[ "$ZSH_VERSION" ] && return
+
 _fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }
 _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
 
-if [ "$BASH_VERSION" ]; then
-  . /etc/dotfiles/fzf/shell/completion.bash
-  . /etc/dotfiles/fzf/shell/key-bindings.bash
+. /etc/dotfiles/fzf/shell/completion.bash
+. /etc/dotfiles/fzf/shell/key-bindings.bash
 
-  bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
-fi
+bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
