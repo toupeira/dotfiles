@@ -141,13 +141,13 @@ function dotfiles {
     cd "$dotfiles" || return 1
   elif [ "$1" = "cd" ]; then
     if [ -d "$dotfiles/$2" ]; then
-      local path="$dotfiles/$2"
+      local path="$2"
     else
       local path=$( dt list "$2" | head -1 )
     fi
 
     if [ "$path" ]; then
-      cd "$path" || return 1
+      cd "$dotfiles/$path" || return 1
     else
       echo "$2: No such directory or submodule"
       return 1
@@ -239,7 +239,9 @@ function ssh.mux {
 
 # Go to project root
 function up {
-  local root=$( git rev-parse --show-toplevel 2>/dev/null )
+  local root=$( git rev-parse --show-superproject-working-tree 2>/dev/null )
+  [ "$root" ] || root=$( git rev-parse --show-toplevel 2>/dev/null )
+
   if [ "$root" ]; then
     cd "$root" || return 1
   else

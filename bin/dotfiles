@@ -76,8 +76,8 @@ function msg {
 # Helpers for colored messages
 function status  { msg "{{$1}}" 2; }
 function info    { msg "\e[0;34m$1" 4; }
-function warning { msg "\e[0;33m$1" 3; }
-function error   { warning "$1"; STATUS=1; }
+function warning { msg "\e[0;33m$1" 3 >&2; }
+function error   { msg "\e[0;33m$1" 1 >&2; STATUS=1; }
 
 # Output error message and exit
 function abort {
@@ -298,9 +298,9 @@ function run {
         for path in "$@"; do
           path=${path%/}
 
-          if [ ! -e "$path" ] || [ -e "$path/.git" ]; then
+          if [ ! -e "$path" ]; then
             continue
-          elif [ -f "$path" ] || [ -L "$path" ] || [ -e "$path/.install" ]; then
+          elif [ -f "$path" ] || [ -L "$path" ] || [ -e "$path/.install" ] || [ -e "$path/.git" ]; then
             run install "$path"
           elif [ -d "$path" ]; then
             install-paths "$path"/*
@@ -324,7 +324,7 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        local origin=$( realpath -s "${path%/}" )
+        local origin=$( realpath -s -- "${path%/}" )
         local target=$( target "$origin" )
         local force=0
 
@@ -377,7 +377,7 @@ function run {
           fi
 
           if [ ! -e "$origin" ] && system ln -s "$target" "$origin"; then
-            status "Successfully installed {{$origin}}"
+            info "Successfully installed {{$origin}}"
           else
             error "Error while installing {{$origin}}"
             continue
@@ -414,7 +414,6 @@ function run {
           git add "$target"
 
           info "Successfully added {{$target}}"
-          (( added++ ))
         else
           error "Error while adding path: {{$origin}}"
           continue
@@ -511,7 +510,7 @@ function run {
       function fix  { [ "$fix" ] && indent 6 && "$@"; }
 
       lint dotfiles "Empty directories"
-      paths=$( fdfind . "$DOTFILES" -t d -t e )
+      paths=$( fdfind . "$DOTFILES" --type d --type e )
 
       for path in $paths; do
         list "$path"
@@ -520,7 +519,7 @@ function run {
 
       lint home+etc "Orphaned symlinks"
       paths=$(
-        sudo fdfind . ~ /root /etc -u -t l \
+        sudo fdfind . ~ /root /etc --type l -u \
           --follow \
           --mount \
           --exclude dotfiles \
@@ -539,7 +538,7 @@ function run {
       done
 
       lint etc "Configuration file clutter"
-      paths=$( sudo fdfind '.*\.(dpkg|ucf)-.*' /etc -u )
+      paths=$( sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --type f -u )
 
       for path in $paths; do
         list "$path"
@@ -564,7 +563,7 @@ function run {
 
       lint root "Home directory"
 
-      paths=$( sudo fdfind '^(\.bashrc|\.profile)$' /root -t f )
+      paths=$( sudo fdfind '^(\.bashrc|\.profile)$' /root --type f -u )
       for path in $paths; do
         list "$path"
         fix system rm -v "$path"
@@ -866,12 +865,12 @@ function run {
 
         if has-changes dconf; then
           echo
-          warning "{{Found local changes:}}"
+          warning "{{Found dconf changes:}}"
           git status -s dconf
           echo
           mux-wrap git diff dconf
 
-          ask "{{Ignore changes?}}" || abort
+          ask "{{Ignore and load defaults?}}" || abort
           git checkout dconf
         fi
 

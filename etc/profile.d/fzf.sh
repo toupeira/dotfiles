@@ -7,7 +7,7 @@ export FZF_DEFAULT_OPTS="
   --ansi --multi --cycle --filepath-word --inline-info --layout default --no-height --no-separator
   --history $HOME/.local/state/history/fzf
   --prompt '» '
-  --preview-window 'right,50%,hidden,<60(up,80%,hidden)'
+  --preview-window 'right,50%,hidden,<60(up,70%,hidden)'
   --bind 'ctrl-a:toggle-all,ctrl-n:down,ctrl-p:up,down:next-history,up:previous-history,ctrl-/:toggle-preview,ctrl-e:preview-down,ctrl-y:preview-up,ctrl-f:preview-half-page-down,ctrl-b:preview-half-page-up'
 "
 
@@ -15,8 +15,8 @@ export FZF_DEFAULT_OPTS="
 
 FZF_COMPLETION_TRIGGER='//'
 
-FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND -t f -t l -t d"
-FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
+FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
+FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
 
 FZF_CTRL_R_OPTS="
   --prompt 'History» '
@@ -24,11 +24,10 @@ FZF_CTRL_R_OPTS="
   --preview-window 'default,up,5,hidden,wrap'
 "
 FZF_CTRL_T_OPTS="
-  --prompt 'Path» '
   --preview 'fzf-preview {}'
 "
 FZF_ALT_C_OPTS="
-  --prompt 'Directory» '
+  --prompt 'Dir» '
   --preview 'tree -C {}'
 "
 
