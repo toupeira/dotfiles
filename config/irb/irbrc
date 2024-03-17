@@ -9,8 +9,7 @@ rescue LoadError
 end
 
 IRB.conf[:SAVE_HISTORY] = 10_000
-IRB.conf[:HISTORY_FILE] = "#{Dir.home}/.local/share/irb/irb_history"
-FileUtils.mkdir_p(File.dirname(IRB.conf[:HISTORY_FILE]))
+IRB.conf[:HISTORY_FILE] = "#{Dir.home}/.local/state/history/irb"
 
 IRB.conf[:COMMAND_ALIASES].merge!(
   '?': :show_doc,

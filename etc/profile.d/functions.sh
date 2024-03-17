@@ -5,7 +5,7 @@
 function login_banner {
   if [ -z "$BASH_LOGIN" ]; then
     return
-  elif [ "$PWD" != "$HOME" ] || [ $LINES -lt 25 ] || [ "$FLOATING_TERMINAL" ]; then
+  elif [ "$PWD" != "$HOME" ] || [ "$FLOATING_TERMINAL" ] || { [ $LINES -lt 25 ] && ! [ "$SSH_CONNECTION" ]; }; then
     down
   else
     clear

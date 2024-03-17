@@ -11,6 +11,10 @@ else
   vim="vim"
 fi
 
+if [ -z "$FZF_DEFAULT_OPTS" ]; then
+  BASH_INTERACTIVE='' . "$( dirname "$0" )/../etc/profile.d/fzf.sh"
+fi
+
 args=( "$@" )
 
 exec $vim "${args[@]}"

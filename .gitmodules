@@ -151,9 +151,6 @@
 [submodule "vim/bundle/rspec"]
 	path = vim/bundle/rspec
 	url = https://github.com/keith/rspec.vim.git
-[submodule "vim/bundle/fzf"]
-	path = vim/bundle/fzf
-	url = https://github.com/junegunn/fzf.git
 [submodule "vim/bundle/treesitter"]
 	path = vim/bundle/treesitter
 	url = https://github.com/nvim-treesitter/nvim-treesitter.git
@@ -187,3 +184,6 @@
 [submodule "config/tmux/open"]
 	path = config/tmux/open
 	url = https://github.com/tmux-plugins/tmux-open.git
+[submodule "fzf"]
+	path = fzf
+	url = https://github.com/junegunn/fzf.git

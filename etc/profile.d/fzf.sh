@@ -1,43 +1,44 @@
 #!/bin/bash
+# shellcheck disable=SC2034
 
-export FZF_TMUX=0
-export FZF_COMPLETION_TRIGGER='//'
-
-export FZF_DEFAULT_COMMAND="fdfind --type f --type l --hidden --color always"
+export FZF_DEFAULT_COMMAND="fdfind --hidden --color always"
 export FZF_DEFAULT_OPTS="
   --color=dark,gutter:-1
   --ansi --multi --cycle --filepath-word --inline-info --layout default --no-height --no-separator
-  --history $HOME/.fzf_history
+  --history $HOME/.local/state/history/fzf
   --prompt '» '
   --preview-window 'right,50%,hidden,<60(up,80%,hidden)'
-  --bind 'ctrl-a:toggle-all,ctrl-/:toggle-preview,ctrl-n:down,ctrl-p:up,down:next-history,up:previous-history'
+  --bind 'ctrl-a:toggle-all,ctrl-n:down,ctrl-p:up,down:next-history,up:previous-history,ctrl-/:toggle-preview,ctrl-e:preview-down,ctrl-y:preview-up,ctrl-f:preview-half-page-down,ctrl-b:preview-half-page-up'
 "
 
 [ "$BASH_INTERACTIVE" ] || return
 
-export FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND --type d"
-export FZF_ALT_C_COMMAND="${FZF_DEFAULT_COMMAND/--type f/--type d}"
+FZF_COMPLETION_TRIGGER='//'
 
-export FZF_CTRL_R_OPTS="
+FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND -t f -t l -t d"
+FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND -t d"
+
+FZF_CTRL_R_OPTS="
   --prompt 'History» '
   --preview 'echo {} | sed -r \"s/^[0-9]*\\t*//\"'
   --preview-window 'default,up,5,hidden,wrap'
 "
-export FZF_CTRL_T_OPTS="
+FZF_CTRL_T_OPTS="
   --prompt 'Path» '
   --preview 'fzf-preview {}'
 "
-export FZF_ALT_C_OPTS="
+FZF_ALT_C_OPTS="
   --prompt 'Directory» '
   --preview 'tree -C {}'
 "
 
-[ "$ZSH_VERSION" ] && return
-
 _fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }
 _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
 
-. /etc/dotfiles/fzf/shell/completion.bash
-. /etc/dotfiles/fzf/shell/key-bindings.bash
+if [ "$BASH_VERSION" ]; then
+  eval "$( fzf --bash )"
 
-bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
+  bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
+elif [ "$ZSH_VERSION" ]; then
+  eval "$( fzf --zsh )"
+fi

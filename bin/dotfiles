@@ -499,23 +499,16 @@ function run {
       ;;
     # }}}
     lint) # {{{
-      local paths
-      [ "$1" = "fix" ] && local fix=1
+      status "{{Running linters...}}"
 
-      local count=0
-      local total=5
-      function lint {
-        (( count++ ))
-        info "[{{$count/$total}}] $( printf '%8s' "$1" ): {{$2}}"
-      }
+      [ "$1" = "fix" ] && local fix=1 && shift
+      [ $# -eq 0 ] || usage
 
-      function list {
-        indent 3; warning "{{$1}}"
-      }
+      local paths count
 
-      function fix {
-        [ "$fix" ] && indent 6 && "$@"
-      }
+      function lint { info "[{{$(( ++count ))/5}}] $( printf '%8s' "$1" ): {{$2}}"; }
+      function list { indent 3; warning "{{$1}}"; }
+      function fix  { [ "$fix" ] && indent 6 && "$@"; }
 
       lint dotfiles "Empty directories"
       paths=$( fdfind . "$DOTFILES" -t d -t e )
@@ -525,7 +518,7 @@ function run {
         fix system rmdir -v "$path"
       done
 
-      lint system "Orphaned symlinks"
+      lint home+etc "Orphaned symlinks"
       paths=$(
         sudo fdfind . ~ /root /etc -u -t l \
           --follow \
@@ -545,7 +538,7 @@ function run {
         fix system rm -v "$path"
       done
 
-      lint system "Configuration file clutter"
+      lint etc "Configuration file clutter"
       paths=$( sudo fdfind '.*\.(dpkg|ucf)-.*' /etc -u )
 
       for path in $paths; do
@@ -553,7 +546,7 @@ function run {
         fix system rm -v "$path"
       done
 
-      lint system "Incorrect permissions"
+      lint etc "Incorrect permissions"
 
       local sudoers="$DOTFILES/etc/sudoers.d/dotfiles"
       if [ "$( stat -c %U:%G "$sudoers" )" != "root:root" ]; then
@@ -707,7 +700,7 @@ function run {
       ;;
     # }}}
     build-all) # {{{
-      has-news vim/bundle/fzf && run build fzf ./install --bin
+      has-news fzf && run build fzf ./install --bin
       ;;
     # }}}
 
