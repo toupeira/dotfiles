@@ -1,9 +1,8 @@
 #!/bin/bash
 
 case "$HOSTNAME" in
-  schtube)
-    geometry="87x44+961+0"
-    ;;
+  ocelot)  geometry="175x89+1920+0";;
+  schtube) geometry="87x44+961+0";;
 esac
 
 exec tilix --geometry="$geometry" "$@"
