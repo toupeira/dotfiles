@@ -585,10 +585,10 @@ function run {
       status "Running tests..."
 
       [ "$DOTFILES" = "$( "$DOTFILES/bin/dotfiles" --path )" ] \
-        || abort "{{bin/dotfiles is broken!}}"
+        || abort "{{bin/dotfiles}} is broken!"
 
       sh -c ". $DOTFILES/etc/profile" \
-        || abort "{{/etc/profile is broken!}}"
+        || abort "{{etc/profile}} is broken!"
       ;;
     # }}}
 
