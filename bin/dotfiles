@@ -9,41 +9,41 @@ function usage {
   echo "Usage: $( basename "$0" ) [options] COMMAND [args]"
   echo
   echo "Options:"
-  echo "  -v, --verbose             Increase verbosity"
-  echo "  -d, --debug               Output debug information"
-  echo "      --path                Show path to the dotfiles repository and exit"
+  echo "  -v, --verbose               Increase verbosity"
+  echo "  -d, --debug                 Output debug information"
+  echo "      --path                  Show path to the dotfiles repository and exit"
   echo
   echo "Commands:"
-  echo "  init                      Install symlinks for all dotfiles interactively"
-  echo "  install PATH...           Install symlink for PATH"
-  echo "  add PATH...               Add file to repository and replace it with a symlink"
+  echo "  init                        Install symlinks for all dotfiles interactively"
+  echo "  install PATH...             Install symlink for PATH"
+  echo "  add PATH...                 Add file to repository and replace it with a symlink"
   echo
-  echo "  sync                      Commit, pull, and push changes"
-  echo "  commit-all, ca            Commit all changes"
-  echo "  pull, up                  Pull remote changes and checkout submodules"
-  echo "  push, pu                  Push local changes"
+  echo "  sync                        Commit, pull, and push changes"
+  echo "  commit-all, ca              Commit all changes"
+  echo "  pull, up                    Pull remote changes and checkout submodules"
+  echo "  push, pu                    Push local changes"
   echo
-  echo "  rules KEY...              Output rules for given keys"
-  echo "  lint [fix]                Report (and fix) configuration problems"
-  echo "  test                      Run tests"
+  echo "  rules KEY...                Output rules for given keys"
+  echo "  lint [fix]                  Report (and fix) configuration problems"
+  echo "  test                        Run tests"
   echo
-  echo "  list [NAME]               List submodules"
-  echo "  update [NAME]             Update submodule"
-  echo "  update-all, sup [NAME]    Update all submodules"
+  echo "  list [NAME]                 List submodules"
+  echo "  update [NAME]               Update submodule"
+  echo "  update-all, sup [NAME]      Update all submodules"
   echo
-  echo "  build PATH COMMAND...     Run build command in path"
-  echo "  build-all                 Run default builds"
+  echo "  build PATH COMMAND...       Run build command in path"
+  echo "  build-all                   Run default builds"
   echo
-  echo "  packages, pkg [:TYPE]     Install packages"
-  echo "  pkg LIST[:TYPE]           Install packages from list"
-  echo "  pkg up, pkg TYPE          Update packages"
+  echo "  packages, pkg               Install packages"
+  echo "  pkg LIST[:TYPE]             Install packages from list"
+  echo "  update-packages, pup [TYPE] Update packages"
   echo
-  echo "  dconf sync                Load dconf settings if no local changes are found"
-  echo "  dconf load [KEY]          Load dconf settings"
-  echo "  dconf dump [KEY]          Dump dconf settings"
+  echo "  dconf sync                  Load dconf settings if no local changes are found"
+  echo "  dconf load [KEY]            Load dconf settings"
+  echo "  dconf dump [KEY]            Dump dconf settings"
   echo
   echo "Other arguments:"
-  echo "  COMMAND [ARGS]...         Excecute a Git command inside the dotfiles repository"
+  echo "  COMMAND [ARGS]...           Excecute a Git command inside the dotfiles repository"
   echo
 
   exit 255
@@ -138,21 +138,21 @@ function system {
 
   # Check for commands that require sudo
   if [ "$command" = "chown" ] || [ "$command" = "chgrp" ]; then
-    sudo="sudo"
+    sudo="sudo "
   else
     # Check for paths that require sudo
     for arg in "$@"; do
       local dir=$( dirname -- "$arg" )
       if [ "$dir" != "." ] && [ -d "$dir" ] && [ ! -w "$dir" ]; then
-        sudo="sudo"
+        sudo="sudo "
         break
       fi
     done
   fi
 
-  debug exec "$command $*"
+  debug exec "$sudo$command $*"
 
-  command $sudo "$command" "$@" || ask-abort "{{Error:}} $command $*"
+  command $sudo "$command" "$@" || ask-abort "{{Error:}} $sudo$command $*"
 }
 
 # Run a Git command
@@ -235,12 +235,12 @@ function validate {
     INSTALL_PATHS=$( read-paths ".*\.install" )
   fi
 
-  local path=$( target "$1" )
-  path=${path:${#DOTFILES}+1}
+  local target=$( target "$1" )
+  target=${target:${#DOTFILES}+1}
 
-  if [[ $path =~ $SKIP_PATHS ]] || \
-   { [[ $path =~ $INSTALL_PATHS ]] && ! [[ $path =~ $HOST_PATHS ]]; }; then
-    debug skipping "$path"
+  if [[ $target =~ $SKIP_PATHS ]] || \
+   { [[ $target =~ $INSTALL_PATHS ]] && ! [[ $target =~ $HOST_PATHS ]]; }; then
+    debug skipping "$target"
     return 1
   fi
 
@@ -264,7 +264,7 @@ function target {
 
 # Transform a repository path into a filesystem path
 function origin {
-  local target="${1:${#DOTFILES}+1}"
+  local target="$1"
   local topdir="${target%%/*}"
 
   if [ "$topdir" = "etc" ]; then
@@ -298,7 +298,7 @@ function run {
         for path in "$@"; do
           path=${path%/}
 
-          if [ ! -e "$path" ]; then
+          if [ ! -e "$path" ] || ! validate "$( origin "$path" )"; then
             continue
           elif [ -f "$path" ] || [ -L "$path" ] || [ -e "$path/.install" ] || [ -e "$path/.git" ]; then
             run install "$path"
@@ -311,7 +311,7 @@ function run {
       }
 
       if [ $# -gt 0 ]; then
-        install-paths "$@"
+        (cd "$DOTFILES" && install-paths "$@")
       else
         status "Installing symlinks..."
         (cd "$DOTFILES" && install-paths -- *)
@@ -330,7 +330,7 @@ function run {
 
         if [[ "$origin" =~ ^$DOTFILES/ ]]; then
           target="$origin"
-          origin=$( origin "$target" )
+          origin=$( origin "${target:${#DOTFILES}+1}" )
         fi
 
         if [ -L "$target" ]; then
@@ -571,7 +571,7 @@ function run {
 
       for path in config/nvim config/rg zsh zshrc; do
         local target=$( target "$path" )
-        local origin=$( origin "$DOTFILES/$path" )
+        local origin=$( origin "$path" )
         origin=${origin/#$HOME/\/root}
 
         sudo test -L "$origin" && continue
@@ -711,27 +711,21 @@ function run {
         return
       fi
 
-      local name=$1
+      local list=$1
       local filter_apt='^(apt:)?[^:#]+$'
 
-      if [ "$name" = "update" ] || [ "$name" = "up" ]; then
-        shift
-        run update-packages "$@"
-        return
-      elif [[ "$name" =~ ^(apt|asdf|gem|yarn|flatpak|firmware)$ ]]; then
-        run update-packages "$name"
-        return
-      elif [[ "$name" =~ : ]]; then
-        local filter="^${name##*:}:"
-        local name="${name%%:*}"
+      if [[ "$list" = *:* ]]; then
+        local filter="^${list##*:}:"
+        local list="${list%%:*}"
         [ "$filter" = "^apt:" ] && filter="$filter_apt"
       else
         local filter="."
       fi
 
-      local list="$DOTFILES/packages/$name"
+      status "Installing $list packages..."
+      list="$DOTFILES/packages/$list"
       if [ ! -f "$list" ]; then
-        abort "Can't find list '$list'"
+        abort "Can't find list {{$list}}"
       fi
 
       local packages=$( grep -E "$filter" "$list" )
@@ -742,51 +736,28 @@ function run {
         )
       fi
 
-      function get_packages {
-        echo "$packages" | grep -E "$1" | sed 's/.*: //' | sort
-      }
+      function get_packages { echo "$packages" | grep -E "$1" | sed 's/.*: //' | sort; }
 
-      local packages_apt=$( get_packages "$filter_apt" )
-      local packages_gem=$( get_packages '^gem:' )
+      local packages_apt=$(  get_packages "$filter_apt" )
+      local packages_gem=$(  get_packages '^gem:' )
       local packages_yarn=$( get_packages '^yarn:' )
-      local packages_pip=$( get_packages '^pip:' )
       local packages_flat=$( get_packages '^flatpak:' )
 
-      function get_missing {
-        if [ -n "$1" ]; then
-          comm -23 <( echo "$1" ) <( echo "$2" | sort )
-        fi
-      }
+      [ "$packages_apt" ]  && [ ! "$INSTALLED_APT" ]  && INSTALLED_APT=$(  dpkg --get-selections | cut -f1 | cut -d: -f1 )
+      [ "$packages_gem" ]  && [ ! "$INSTALLED_GEM" ]  && INSTALLED_GEM=$(  gem list --no-versions )
+      [ "$packages_yarn" ] && [ ! "$INSTALLED_YARN" ] && INSTALLED_YARN=$( ls ~/.config/yarn/global/node_modules 2>/dev/null)
+      [ "$packages_flat" ] && [ ! "$INSTALLED_FLAT" ] && INSTALLED_FLAT=$( flatpak list --columns=application | tail -n +1 )
 
-      [ -n "$packages_apt" ] && local missing_apt=$(
-        get_missing "$packages_apt" \
-        "$( dpkg --get-selections | cut -f1 | cut -d: -f1 )"
-      )
+      function get_missing { [ "$1" ] && comm -23 <( echo "$1" ) <( echo "$2" | sort ); }
 
-      [ -n "$packages_gem" ] && local missing_gem=$(
-        get_missing "$packages_gem" \
-        "$( gem list | awk '/\(/ { print $1 }' )"
-      )
-
-      [ -n "$packages_yarn" ] && local missing_yarn=$(
-        get_missing "$packages_yarn" \
-        "$( ls ~/.config/yarn/global/node_modules 2>/dev/null)"
-      )
-
-      [ -n "$packages_pip" ] && local missing_pip=$(
-        get_missing "$packages_pip" \
-        "$( python3 -m pip -- freeze --system | cut -d= -f1 )"
-      )
-
-      [ -n "$packages_flat" ] && local missing_flat=$(
-        get_missing "$packages_flat" \
-        "$( flatpak list --columns=application | tail -n +1 )"
-      )
+      [ -n "$packages_apt" ]  && local missing_apt=$(  get_missing "$packages_apt"  "$INSTALLED_APT" )
+      [ -n "$packages_gem" ]  && local missing_gem=$(  get_missing "$packages_gem"  "$INSTALLED_GEM" )
+      [ -n "$packages_yarn" ] && local missing_yarn=$( get_missing "$packages_yarn" "$INSTALLED_YARN" )
+      [ -n "$packages_flat" ] && local missing_flat=$( get_missing "$packages_flat" "$INSTALLED_FLAT" )
 
       if [ -z "$missing_apt"  ] &&
          [ -z "$missing_gem"  ] && \
          [ -z "$missing_yarn" ] && \
-         [ -z "$missing_pip"  ] && \
          [ -z "$missing_flat" ]; then
         return
       fi
@@ -804,7 +775,6 @@ function run {
       list_packages apt     "$missing_apt"
       list_packages gem     "$missing_gem"
       list_packages yarn    "$missing_yarn"
-      list_packages pip     "$missing_pip"
       list_packages flatpak "$missing_flat"
 
       echo
@@ -821,13 +791,12 @@ function run {
         install_packages "$missing_apt"  sudo aptitude install
         install_packages "$missing_gem"  gem install
         install_packages "$missing_yarn" yarn global add
-        install_packages "$missing_pip"  sudo python3 -m pip install --system --upgrade
         install_packages "$missing_flat" flatpak install
       fi
       echo
       ;;
     # }}}
-    update-packages) # {{{
+    update-packages|pup) # {{{
       local filter="$1"
 
       function update {

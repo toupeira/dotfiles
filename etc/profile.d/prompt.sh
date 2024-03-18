@@ -16,11 +16,8 @@ PS2=" \[\e[1;35m\]»\[\e[0m\] "
 
 # Set current directory and update title on changes
 PROMPT_COMMAND=( '
-  if [ "$PWD" != "$_last_pwd" ]; then
-    _prompt_dir=$( _prompt_dir);
-    [ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir";
-  fi;
-
+  [ "$PWD" != "$_last_pwd" ] && _prompt_dir=$( _prompt_dir);
+  [ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir";
   _last_pwd="$PWD"
 ' )
 
