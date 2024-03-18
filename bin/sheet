@@ -1,10 +1,7 @@
 #!/bin/bash
 
-cd ~/documents/sheets || exit 1
-
-if [ $# -eq 0 ]; then
-  exec xdg-open .
-fi
+cd /slack/documents/Noten || exit 1
+[ $# -eq 0 ] && exec xdg-open .
 
 sheet=$( find . -name '*.pdf' | fzf -f "$*" | head -1 )
 

@@ -1,17 +1,11 @@
 #!/bin/bash
 
 cd /slack/sound/manuals || exit 1
-
-if [ $# -eq 0 ]; then
-  exec xdg-open .
-fi
+[ $# -eq 0 ] && exec xdg-open .
 
 files=$( find . -name '*.pdf' | fzf -f "$*" )
-manual=$( echo "$files" | grep -im1 manual )
-
-if [ ! -f "$manual" ]; then
-  manual=$( echo "$files" | head -1 )
-fi
+manual=$( echo "$files" | grep -Fim1 manual )
+[ "$manual" ] || manual=$( echo "$files" | head -1 )
 
 if [ -f "$manual" ]; then
   xdg-open "$manual"
