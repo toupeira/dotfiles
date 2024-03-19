@@ -4,6 +4,7 @@ build-essential
 ed
 gettext
 git-delta
+hyperfine
 ipython3
 libffi-dev
 libreadline-dev

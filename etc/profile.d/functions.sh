@@ -33,7 +33,7 @@ function login_banner {
       fortune -acs -n $((LINES*15)) \
         | fold -sw $((COLUMNS-3)) \
         | awk '
-          NR == 1 && match($0, /^\((.+)\)$/, a) { print "🍪 \033[0;32m❰\033[1;32m" a[1] "\033[0;32m❱\033[0m"; next }
+          NR == 1 && match($0, /^\(.+\)$/) { print "🍪 \033[0;32m❰\033[1;32m" substr($0, RSTART+1, RLENGTH-2) "\033[0;32m❱\033[0m"; next }
           NR == 2 { next }
           { print "  \033[0;32m" $0 "\033[0m" }
         '

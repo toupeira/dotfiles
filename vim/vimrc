@@ -475,11 +475,13 @@ endfunction " }}}
   " ,d - open file in new split
   nmap <silent> ,d <C-w>f
 
-  " ,s - split horizontally
-  nnoremap <silent> ,s :split<CR>
+  " ,s / ,S - split horizontally
+  nnoremap <silent> ,s :botright split<CR>
+  nnoremap <silent> ,S :split<CR>
 
-  " ,v - split vertically
-  nnoremap <silent> ,v :vsplit<CR>
+  " ,v / ,V - split vertically
+  nnoremap <silent> ,v :botright vsplit<CR>
+  nnoremap <silent> ,V :vsplit<CR>
 
   " ,w - write current buffer
   nnoremap <silent> ,w :write<CR>:redraw<CR>
@@ -493,6 +495,9 @@ endfunction " }}}
       set number norelativenumber
     endif
   endfunction " }}}
+
+  " ,A - align windows
+  nnoremap <silent> ,A <C-w>=
 
 " }}}
 
@@ -799,8 +804,8 @@ endfunction " }}}
     nnoremap <silent> ,F :Files <C-r>=expand('%:h')<CR>/<CR>
     nnoremap <silent> ,h :History<CR>
     nnoremap <silent> ,b :Buffers<CR>
-    nnoremap <silent> ,l :BLines<CR>
-    nnoremap <silent> ,L :Lines<CR>
+    nnoremap <expr>   ,l ':BLines '.expand('<cword>')
+    nnoremap <expr>   ,L ':Lines '.expand('<cword>')
 
     nnoremap <expr>   ,r ':Rg '.expand('<cword>')
     nnoremap <silent> ,R :RG<CR>

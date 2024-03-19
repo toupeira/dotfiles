@@ -36,6 +36,7 @@ lsof
 ltrace
 mailutils
 make
+mawk
 moreutils
 mutt
 ncurses-term
