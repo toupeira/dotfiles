@@ -3,6 +3,23 @@
 case "$HOSTNAME" in
   ocelot)  geometry="175x89+1920+0";;
   schtube) geometry="87x44+961+0";;
+  meerkat)
+    read -r _screens x _y xoff _yoff < <(xmonitorinfo)
+
+    if [ "$xoff" = "0" ]; then
+      scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
+
+      if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then
+        geometry="117x58+1280+0"
+      else
+        geometry="107x58+1280+0"
+      fi
+    elif [ "$x" = "3840" ]; then
+      geometry="160x85+$((xoff+1920))+0"
+    elif [ "$x" = "2560" ]; then
+      geometry="142x70+$((xoff+1920))+0"
+    fi
+    ;;
 esac
 
 exec tilix --geometry="$geometry" "$@"

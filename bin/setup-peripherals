@@ -32,10 +32,12 @@ case "$HOSTNAME" in
 
   meerkat)
     # Setup display
-    displays=$( xrandr | grep -wc connected )
+    read -r screens x _y _xoff _yoff < <(xmonitorinfo)
 
-    if [ "$displays" = 1 ]; then
+    if [ "$screens" = "1" ]; then
       dconf write /org/gnome/desktop/interface/text-scaling-factor 1.4
+    elif [ "$x" = "2560" ]; then
+      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.15
     else
       dconf write /org/gnome/desktop/interface/text-scaling-factor 1.5
     fi
