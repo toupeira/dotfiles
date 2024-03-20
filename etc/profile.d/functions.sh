@@ -282,3 +282,19 @@ function dusort {
     fi
   ) | sort -h
 }
+
+function sman  {
+  if [ $# -eq 0 ]; then
+    cd /slack/sound/manuals || return
+  else
+    command sman "$@"
+  fi
+}
+
+function sheet {
+  if [ $# -eq 0 ]; then
+    cd /slack/documents/Noten || return
+  else
+    command sheet "$@"
+  fi
+}

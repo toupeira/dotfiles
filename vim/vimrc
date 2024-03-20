@@ -496,8 +496,8 @@ endfunction " }}}
     endif
   endfunction " }}}
 
-  " ,A - align windows
-  nnoremap <silent> ,A <C-w>=
+  " <C-minus> - align windows
+  nnoremap <silent>  <C-w>=
 
 " }}}
 
