@@ -1,3 +1,4 @@
+7zip
 apt-file
 apt-listchanges
 bash-completion
@@ -45,7 +46,6 @@ neovim
 netcat-openbsd
 net-tools
 nftables
-p7zip-full
 parted
 patch
 procmail

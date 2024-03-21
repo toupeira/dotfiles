@@ -496,6 +496,9 @@ endfunction " }}}
     endif
   endfunction " }}}
 
+  " ,C - create file in the same directory as current buffer
+  nnoremap <expr> ,C ':e '.expand('%:p:h') . '/'
+
   " <C-minus> - align windows
   nnoremap <silent>  <C-w>=
 
@@ -1060,6 +1063,7 @@ endfunction " }}}
     \ 'haml': 'ruby',
     \ 'rspec': 'ruby',
     \ 'rspec.ruby': 'ruby',
+    \ 'vue': 'javascript',
     \ 'zsh': 'sh',
   \ }
 

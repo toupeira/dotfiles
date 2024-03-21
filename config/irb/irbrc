@@ -16,5 +16,3 @@ IRB.conf[:COMMAND_ALIASES].merge!(
   cd: :pushws,
   '..': :popws,
 )
-
-load('.irbrc') if File.exist?('.irbrc')

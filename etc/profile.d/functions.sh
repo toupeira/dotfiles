@@ -54,8 +54,10 @@ function login_banner {
 
 # Clear the screen and show the prompt at the bottom
 function down {
-  clear
-  tput cup $LINES
+  local i
+  for (( i = 0; i < LINES; i++ )); do
+    echo
+  done
 }
 
 # Open files with xdg-open
