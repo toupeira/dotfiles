@@ -19,10 +19,10 @@ hi! CurSearch   guifg=#ecffd9 guibg=#5f875f gui=bold
 hi! PmenuSel    guifg=#000000 guibg=#939ede
 hi! PmenuThumb  guibg=#697098
 
-hi! DiffAdd     guifg=#d7ffaf guibg=#5f875f
-hi! DiffChange  guifg=#d7d7ff guibg=#5f5f87
-hi! DiffDelete  guifg=#ff8080 guibg=#cc6666 gui=bold
-hi! DiffText    guifg=#5f5f87 guibg=#81a2be gui=bold
+hi! DiffAdd     guifg=#ccffcc guibg=#476647 gui=bold
+hi! DiffDelete  guifg=#ff6666 guibg=#993d3d
+hi! DiffChange  guifg=#ccccff guibg=#595980
+hi! DiffText    guifg=#e6e6ff guibg=#8686bf gui=bold
 
 hi! link Delimiter Statement
 hi! link MatchParen Visual
