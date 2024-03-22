@@ -7,6 +7,20 @@ export GIT_COMPLETION_SHOW_ALL_COMMANDS=1
 
 . /usr/share/bash-completion/bash_completion
 
+# Improve default completions, fixed in 2.12
+# https://github.com/scop/bash-completion/issues/444
+if type -p _minimal; then
+  function _minimal {
+    local cur prev words cword split
+    _init_completion -s || return
+    $split && return
+    compopt -o bashdefault -o default
+  }
+else
+  echo "bash-completion was upgraded, you can remove the hack now!"
+  read
+fi
+
 function has_completion {
   local name="${2:-_$1}"
 

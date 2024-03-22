@@ -179,7 +179,6 @@
   autocmd vimrc FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd vimrc FileType help nnoremap <buffer><silent> q :bd<CR>
   autocmd vimrc FileType make setlocal noexpandtab
-  autocmd vimrc FileType org setlocal foldmethod=expr
   autocmd vimrc FileType qf setlocal nobuflisted
   autocmd vimrc FileType ruby setlocal iskeyword+=?,!
   autocmd vimrc FileType text,markdown,mail setlocal linebreak suffixesadd+=.md

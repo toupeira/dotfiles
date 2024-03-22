@@ -12,7 +12,7 @@ PS1_HOST=" "
 [ "$UID" = "0" ] && PS1_USER="\[\e[0m\e[1;31m\]$PS1_USER"
 
 PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\$_prompt_dir\[\e[0;36m\]]\[\e[0m\] "
-PS2=" \[\e[1;35m\]»\[\e[0m\] "
+PS2=" \[\e[1;36m\]»\[\e[0m\] "
 
 # Set current directory and update title on changes
 PROMPT_COMMAND=( '

@@ -11,10 +11,20 @@ has() {
 }
 
 # Shell options
+shopt -s autocd
 shopt -s extglob
 shopt -s globstar
+shopt -s histappend
+shopt -s histverify
 shopt -s nocaseglob
-shopt -s checkwinsize
+
+# History settings
+mkdir -p ~/.local/state/history
+HISTFILE=~/.local/state/history/bash
+HISTSIZE=10000
+HISTFILESIZE=10000
+HISTCONTROL="ignoredups"
+HISTTIMEFORMAT="[0;35m[%Y-%m-%d [1;35m%T[0;35m][0m "
 
 # Disable flow control (Ctrl-S/Q)
 stty -ixon
@@ -22,7 +32,7 @@ stty -ixon
 # Start tmux or attach to existing session
 if [ "$BASH_LOGIN" ] && [ -z "$TMUX" ] && [ "$UID" -ne 0 ] && [ -z "$SUDO_USER" ] && has tmux; then
   session=$( tmux list-sessions 2>/dev/null | grep -Fvm1 attached | cut -d: -f1 )
-  if [ "$session" ] && [ $# -eq 0 ]; then
+  if [ "$session" ]; then
     exec tmux attach-session -t "$session"
   else
     exec tmux new-session "$@"
