@@ -9,7 +9,16 @@ export FZF_DEFAULT_OPTS="
   --history-size 10000
   --prompt '» '
   --preview-window 'right,50%,hidden,<60(up,70%,hidden)'
-  --bind 'ctrl-a:toggle-all,ctrl-n:down,ctrl-p:up,down:next-history,up:previous-history,ctrl-/:toggle-preview,ctrl-e:preview-down,ctrl-y:preview-up,ctrl-f:preview-half-page-down,ctrl-b:preview-half-page-up'
+  --bind ctrl-a:toggle-all
+  --bind ctrl-n:down
+  --bind ctrl-p:up
+  --bind down:next-history
+  --bind up:previous-history
+  --bind ctrl-/:toggle-preview
+  --bind ctrl-e:preview-down
+  --bind ctrl-y:preview-up
+  --bind ctrl-f:preview-half-page-down
+  --bind ctrl-b:preview-half-page-up
 "
 
 [ "$BASH_INTERACTIVE" ] || return
@@ -21,7 +30,7 @@ FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d --unrestricted --exclude .git"
 
 FZF_CTRL_R_OPTS="
   --prompt 'History» '
-  --history '$HOME/.local/state/history/fzf-shell-history'
+  --history '$HOME/.local/state/history/fzf-history'
   --preview 'echo {} | sed -r \"s/^[0-9]*\\t*//\"'
   --preview-window 'default,up,5,hidden,wrap'
 "
@@ -34,9 +43,6 @@ FZF_ALT_C_OPTS="
   --preview 'tree -C {}'
 "
 
-_fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }
-_fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
-
 if [ "$BASH_VERSION" ]; then
   eval "$( fzf --bash )"
 
@@ -44,3 +50,20 @@ if [ "$BASH_VERSION" ]; then
 elif [ "$ZSH_VERSION" ]; then
   eval "$( fzf --zsh )"
 fi
+
+_fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }
+_fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
+
+# Show timestamps for history
+# https://github.com/junegunn/fzf/issues/1049
+__fzf_history__() {
+  local output opts
+  opts="--height ${FZF_TMUX_HEIGHT:-40%} --bind=ctrl-z:ignore ${FZF_DEFAULT_OPTS-} --scheme=history ${FZF_CTRL_R_OPTS-} -n4.. +m +s --tac --ansi"
+  output=$( builtin history | FZF_DEFAULT_OPTS="$opts" $(__fzfcmd) --query "$READLINE_LINE" ) || return
+  READLINE_LINE=${output#*\[*\] }
+  if [[ -z "$READLINE_POINT" ]]; then
+    echo "$READLINE_LINE"
+  else
+    READLINE_POINT=0x7fffffff
+  fi
+}

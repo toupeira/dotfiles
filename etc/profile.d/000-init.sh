@@ -24,7 +24,7 @@ HISTFILE=~/.local/state/history/bash
 HISTSIZE=10000
 HISTFILESIZE=10000
 HISTCONTROL="ignoredups"
-HISTTIMEFORMAT="[0;35m[%Y-%m-%d [1;35m%T[0;35m][0m "
+HISTTIMEFORMAT=$( echo -ne "\e[0;35m[%Y-%m-%d \e[1;35m%T\e[0;35m]\e[0m " )
 
 # Disable flow control (Ctrl-S/Q)
 stty -ixon
