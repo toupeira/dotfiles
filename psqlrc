@@ -1,6 +1,7 @@
 \timing on
 \x auto
 \pset null '[NULL]'
+\set HISTFILE ~/.local/state/history/psql
 \set HISTSIZE 10000
-\set HISTCONTROL ignorespace
+\set HISTCONTROL ignoredups
 \set COMP_KEYWORD_CASE upper

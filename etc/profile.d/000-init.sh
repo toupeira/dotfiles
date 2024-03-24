@@ -18,14 +18,6 @@ shopt -s histappend
 shopt -s histverify
 shopt -s nocaseglob
 
-# History settings
-mkdir -p ~/.local/state/history
-HISTFILE=~/.local/state/history/bash
-HISTSIZE=10000
-HISTFILESIZE=10000
-HISTCONTROL="ignoredups"
-HISTTIMEFORMAT=$( echo -ne "\e[0;35m[%Y-%m-%d \e[1;35m%T\e[0;35m]\e[0m " )
-
 # Disable flow control (Ctrl-S/Q)
 stty -ixon
 

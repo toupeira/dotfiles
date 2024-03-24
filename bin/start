@@ -1,18 +1,15 @@
 #!/bin/bash
 [ "$1" ] || exit 1
 
-if [ "$1" = "-" ]; then
+if [ "$1" = "--" ]; then
   shift
-  for app in $@; do
-    if ! command -v "$app" &>/dev/null; then
-      echo " [1;34m$app[0m not found"
-      continue
-    fi
-    echo " started [1;34m$app[0m"
-    $app &>/dev/null &
+  for app in "$@"; do
+    $0 "$app"
   done
-else
-  command -v "$1" &>/dev/null || exec echo " [1;34m$1[0m not found"
-  echo " started [1;34m$1[0m"
+elif command -v "$1" >/dev/null; then
+  echo -e " \e[1;32m»\e[22m started \e[1m$1\e[0m"
   exec "$@" &>/dev/null &
+else
+  echo -e " \e[1;33m» $1\e[22m not found\e[0m"
+  exit 1
 fi

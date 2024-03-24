@@ -21,9 +21,11 @@ lambda {
   puts
   Kernel.at_exit { puts }
 
-  # prompt configuration
-  break if Pry::VERSION < '0.13'
+  # history configuration
+  Pry.config.memory_size = 10_000
+  Pry.config.history_file = File.expand_path('~/.local/state/history/pry')
 
+  # prompt configuration
   prompt = lambda { |object, _level, pry|
     object_name = Pry.view_clip(object)
     object_name =

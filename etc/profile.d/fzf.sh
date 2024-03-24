@@ -6,7 +6,6 @@ export FZF_DEFAULT_OPTS="
   --color=dark,gutter:-1
   --ansi --multi --cycle --filepath-word --inline-info --layout default --no-height --no-separator
   --history '$HOME/.local/state/history/fzf'
-  --history-size 10000
   --prompt '» '
   --preview-window 'right,50%,hidden,<60(up,70%,hidden)'
   --bind ctrl-a:toggle-all

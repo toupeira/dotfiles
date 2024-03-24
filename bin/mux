@@ -168,15 +168,15 @@ case "$1" in
     while true; do
       clear
       trap 'kill -9 %1' INT
-      (eval "${command[@]}")
+      "${command[@]}"
       wait
       trap - INT
 
       >&2 echo -ne "
- \\e[0;34m[\\e[1;34m ${command[*]} \\e[0;34m]•••\\e[0m
-   \\e[0;36m• \\e[1;36mR\\e[0;36mestart command\\e[0m
-   \\e[0;36m• \\e[1;36mE\\e[0;36mxecute another command\\e[0m
-   \\e[0;33m• \\e[1;33mQ\\e[0;33muit\\e[0m
+ \\e[0;34m[ \\e[1m${command[*]}\\e[22m ]•••
+   \\e[0;36m● \\e[1mR\\e[22mestart command
+   \\e[0;36m● \\e[1mE\\e[22mxecute another command
+   \\e[0;33m● \\e[1mQ\\e[22muit
  \\e[0;32m•••\\e[0m "
 
       read -rn 1 2>/dev/null || exit
@@ -260,7 +260,7 @@ case "$1" in
     fi
 
     if [ "$wait" ]; then
-      wait="echo -ne '\n\e[0;32m[\e[1;37mDone: \e[1;32m$*\e[0;32m]\e[0m '; read -n 1"
+      wait="echo -ne '\n\e[1;32m ● \e[22mDone: [ \e[1m$*\e[22m ]\e[0m '; read -n 1"
     fi
 
     tmux $action $args -- "

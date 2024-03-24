@@ -5,14 +5,11 @@ merged_branches=$(
     | grep -Evx "$( git default-branch )|$( git rev-parse --abbrev-ref HEAD )|develop|development"
 )
 
-function ask_yes {
-  echo -ne "$1 [Y/n]\e[0m "
-  read
-  [ "$REPLY" != "N" -a "$REPLY" != "n" ]
-}
-
 for branch in $merged_branches; do
-  ask_yes " \e[1;36m>\e[0m Remove branch \e[1;33m$branch\e[0m?" || continue
+  echo -ne " \e[1;33m» \e[22mRemove branch \e[1m$branch\e[22m? [\e[1mY\e[22m/n]\e[0m "
+  read -r
 
-  git branch -d "$branch"
+  if [ "$REPLY" != "N" ] && [ "$REPLY" != "n" ]; then
+    git branch -d "$branch"
+  fi
 done

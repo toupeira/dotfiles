@@ -11,8 +11,8 @@ if [ "$count" = 0 ]; then
   files=$( $FZF_CTRL_T_COMMAND | fzf )
 elif [ "$1" = "." ]; then
   shift
+  echo -e " \e[1;32m● \e[22mEditing \e[1m$count modified files\e[22m:\e[0m"
   echo "$files"
-  echo -e " \e[1;32m>\e[0m \e[1;37mEditing $count modified files...\e[0m"
 elif [ "$count" -gt 1 ]; then
   files=$( echo "$files" | fzf --tac )
 fi

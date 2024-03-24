@@ -27,6 +27,7 @@ ZSH_DISABLE_COMPFIX=true
 CASE_SENSITIVE="false"
 HYPHEN_INSENSITIVE="true"
 COMPLETION_WAITING_DOTS="false"
+HISTFILE=~/.local/state/history/zsh
 HIST_STAMPS="yyyy-mm-dd"
 
 zstyle ':omz:update' mode disabled

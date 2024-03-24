@@ -41,7 +41,7 @@ case "$ACTION" in
       unmerged=$( echo "$status" | grep -E "^#.*(behind|ahead)" )
 
       if [ "$changes" = 0 ] && [ -z "$unmerged" ]; then
-        echo -e " \e[0;32m>\e[0m \e[0;36m[$project]\e[0m No changes" | truncate
+        echo -e " \e[0;32m●\e[0m \e[0;36m[$project]\e[0m No changes" | truncate
         clear=1
         continue
       fi
@@ -57,7 +57,7 @@ case "$ACTION" in
       fi
 
       [ "$clear" = 1 ] && echo
-      echo -e " \e[1;32m>\e[1;37m \e[1;36m[$project] \e[1;33m$label\e[0m" | truncate
+      echo -e " \e[1;32m●\e[1;37m \e[1;36m[$project] \e[1;33m$label\e[0m" | truncate
       echo "$status" | sed -r 's/^/    /'
       echo
       clear=0
@@ -98,7 +98,7 @@ case "$ACTION" in
     [ $# -lt 1 ] && usage
     echo
     for project in $( src list $all --path ); do
-      echo -e " \e[1;32m>\e[1;37m \e[1;36m[$( realpath "$project" )] \e[1;33m$*\e[0m" | truncate
+      echo -e " \e[1;32m●\e[1;37m \e[1;36m[$( realpath "$project" )] \e[1;33m$*\e[0m" | truncate
       (cd "$project" || exit 1; "$@")
 
       status=$?

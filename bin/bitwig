@@ -4,17 +4,19 @@ if pgrep -x bitwig-studio >/dev/null; then
   exec wmctrl -xa com.bitwig.BitwigStudio
 fi
 
-workspace=~/.var/app/com.bitwig.BitwigStudio/"Bitwig Studio"
-if [ ! -L "$workspace" ] && [ -d /slack/sound/bitwig/workspace ]; then
-  rm -rf "$workspace"
-  ln -s /slack/sound/bitwig/workspace "$workspace"
+workspace=/slack/sound/bitwig/workspace
+link=~/.var/app/com.bitwig.BitwigStudio/"Bitwig Studio"
+if [ ! -L "$link" ] && [ -d "$workspace" ]; then
+  rm -rf "$link"
+  mkdir -p "$( dirname "$link")"
+  ln -s "$workspace" "$link"
 fi
 
 wmctrl -s 1
 
 export PIPEWIRE_QUANTUM=192/48000
 
-pw-jack overwitch &>/dev/null &
+command -v overwitch >/dev/null && pw-jack overwitch &>/dev/null &
 flatpak run com.bitwig.BitwigStudio "$@"
 killall overwitch 2>/dev/null
 
