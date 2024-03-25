@@ -179,7 +179,7 @@ function has-changes {
 
 # Check for remote Git changes
 function has-news {
-  git diff --stat ORIG_HEAD "$@" | grep -q .
+  git diff --stat ORIG_HEAD.. "$@" | grep -q .
 }
 
 # Run a command in a tmux pane if possible
@@ -626,10 +626,9 @@ function run {
         echo
       elif [ "$new_commit" != "$old_commit" ]; then
         local url=$( system git remote -v | grep -Eom1 'https?://[^ ]+' )
-        [ -n "$url" ] && url=" [{{$url}}]"
 
         [ ! "$batch" ] && echo
-        info "Changes in {{$submodule}}$url:" 6
+        warning "Changes in \e]8;;$url\e\\{{$submodule}}\e]8;;\e\\:"
         system git -c color.ui=always log --oneline --no-merges '@{1}..' \
           | sed -r 's/^/    /'
         echo
@@ -671,8 +670,8 @@ function run {
 
       if grep -q . "$tmpdir"/* 2>/dev/null; then
         system cat "$tmpdir"/*
-        echo
         run build-all
+        echo
       fi
 
       system rm -rf "$tmpdir"
