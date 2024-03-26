@@ -228,7 +228,7 @@ case "$1" in
           ;;
         -b)
           action="split-window"
-          args="$args -v -l 15"
+          args="$args -v -l 10"
           ;;
         -v)
           action="split-window"

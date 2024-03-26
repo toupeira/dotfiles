@@ -109,9 +109,12 @@ function mvln {
 
 # rg wrapper to edit files matching a pattern
 function rg.edit {
-  local files=$( rg -l -- "$@" )
-  if [ "$files" ]; then
-    sensible-vim "+silent /\\v$1" "+normal ggn" $files
+  [ "$1" = "-l" ] && shift
+
+  local files
+  mapfile -t files < <( rg -l -- "$@" )
+  if [ "${#files[@]}" ]; then
+    sensible-vim "+silent /\\v$1" "+normal ggn" "${files[@]}"
   else
     echo "No files found."
   fi

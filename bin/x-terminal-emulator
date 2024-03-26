@@ -6,7 +6,7 @@ case "$HOSTNAME" in
   meerkat)
     read -r _screens x _y xoff _yoff < <(xmonitorinfo)
 
-    if [ "$xoff" = "0" ]; then
+    if [ "${xoff}" = "0" ]; then
       scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
 
       if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then

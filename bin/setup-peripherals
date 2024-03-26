@@ -32,20 +32,20 @@ case "$HOSTNAME" in
 
   meerkat)
     # Setup display
-    read -r screens x _y _xoff _yoff < <(xmonitorinfo)
+    screens=$( xrandr --current | grep -w connected )
 
-    if [ "$screens" = "1" ]; then
+    if [ "$( echo "$screens" | wc -l )" = "1" ]; then
       dconf write /org/gnome/desktop/interface/text-scaling-factor 1.4
-    elif [ "$x" = "2560" ]; then
-      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.15
-    else
+    elif [[ $screens = *3840x2160* ]]; then
       dconf write /org/gnome/desktop/interface/text-scaling-factor 1.5
+    elif [[ $screens = *2560x1440* ]]; then
+      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.15
     fi
 
     # Setup audio
     pactl set-card-profile   "$( get card )" output:analog-stereo+input:analog-stereo
     pactl set-default-source "$( get source )"
-    pactl set-source-volume  "$( get source )" 40%
+    pactl set-source-volume  "$( get source )" 30%
     ;;
 
   schtube)
