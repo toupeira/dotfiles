@@ -187,3 +187,9 @@
 [submodule "fzf"]
 	path = fzf
 	url = https://github.com/junegunn/fzf.git
+[submodule "vim/bundle/fzf-lua"]
+	path = vim/bundle/fzf-lua
+	url = https://github.com/ibhagwan/fzf-lua.git
+[submodule "vim/bundle/nvim-web-devicons"]
+	path = vim/bundle/nvim-web-devicons
+	url = https://github.com/nvim-tree/nvim-web-devicons.git

@@ -23,14 +23,12 @@
     call add(g:pathogen_disabled, 'tmux-complete')
   endif
 
-  " disable plugins that are broken in vscode-neovim
+  " disable plugins that don't work in vscode-neovim
   if exists('g:vscode') " {{{
     call add(g:pathogen_disabled, 'airline')
     call add(g:pathogen_disabled, 'ale')
     call add(g:pathogen_disabled, 'bbye')
-    call add(g:pathogen_disabled, 'context')
     call add(g:pathogen_disabled, 'deoplete')
-    call add(g:pathogen_disabled, 'deoplete-spell')
     call add(g:pathogen_disabled, 'didyoumean')
     call add(g:pathogen_disabled, 'dirvish')
     call add(g:pathogen_disabled, 'dispatch')
@@ -400,6 +398,9 @@ endfunction " }}}
   exe 'inoremap <script> <C-v>' paste#paste_cmd['i']
   exe 'vnoremap <script> <C-v>' paste#paste_cmd['v']
 
+  " zS - use :Inspect instead of scriptease.vim
+  nmap <silent> zS :Inspect<CR>
+
   " Ctrl-g - copy current filename to clipboard
   nnoremap <silent> <C-g> :let @+ = expand('%:.') . ':' . line('.')<CR><C-g>
 
@@ -496,7 +497,7 @@ endfunction " }}}
   endfunction " }}}
 
   " ,C - create file in the same directory as current buffer
-  nnoremap <expr> ,C ':e '.expand('%:p:h') . '/'
+  nnoremap <expr> ,C ':e ' . expand('%:p:h') . '/'
 
   " <C-minus> - align windows
   nnoremap <silent>  <C-w>=
@@ -516,7 +517,7 @@ endfunction " }}}
   noremap  <silent> ,gu :.GBrowse!<CR>
   noremap  <silent> ,gU :.GBrowse<CR>
 
-  autocmd vimrc User FugitiveIndex setlocal nobuflisted|nmap <buffer><silent> q gq|nmap <buffer><silent> <space> =
+  autocmd vimrc User FugitiveIndex setlocal nobuflisted|nmap <buffer><silent> q gq|nmap <buffer><silent> <space> =|nmap <buffer><silent> <Tab> =
   autocmd vimrc User FugitiveObject nmap <buffer><silent> q :cclose<CR>:bd<CR>
   autocmd vimrc User FugitivePager if maparg('gq', 'n')!=''|nmap <buffer><silent> q gq|endif
 
@@ -802,14 +803,16 @@ endfunction " }}}
     let g:fzf_layout = { 'window': 'enew' }
     let g:fzf_action = { 'ctrl-s': 'split', 'ctrl-v': 'vsplit' }
 
+    let $FZF_DEFAULT_COMMAND .= ' --type f --type l --exclude .git'
+
     nnoremap <silent> ,f :Files<CR>
-    nnoremap <silent> ,F :Files <C-r>=expand('%:h')<CR>/<CR>
+    nnoremap <silent><expr> ,F ':Files ' . expand('%:h') . '<CR>'
     nnoremap <silent> ,h :History<CR>
     nnoremap <silent> ,b :Buffers<CR>
-    nnoremap <expr>   ,l ':BLines '.expand('<cword>')
-    nnoremap <expr>   ,L ':Lines '.expand('<cword>')
+    nnoremap <expr>   ,l ':BLines ' . expand('<cword>')
+    nnoremap <expr>   ,L ':Lines ' . expand('<cword>')
 
-    nnoremap <expr>   ,r ':Rg '.expand('<cword>')
+    nnoremap <expr>   ,r ':Rg ' . expand('<cword>')
     nnoremap <silent> ,R :RG<CR>
 
     nnoremap <silent> ,gm :GFiles?<CR>
@@ -1076,17 +1079,20 @@ endfunction " }}}
     lua <<EOF
       require'nvim-treesitter.configs'.setup {
         ensure_installed = {
-          -- "bash",
-          "css",
-          "go",
-          -- "html",
-          "javascript",
-          "json",
-          -- "markdown",
-          "ruby",
-          "typescript",
-          "vue",
-          "yaml",
+          'bash',
+          'css',
+          'go',
+          'html',
+          'javascript',
+          'json',
+          'lua',
+          'markdown',
+          'ruby',
+          'typescript',
+          'vim',
+          'vimdoc',
+          'vue',
+          'yaml',
         },
         highlight = { enable = true },
         indent = { enable = true },
@@ -1124,6 +1130,7 @@ endfunction " }}}
           navigation = { enable = true },
           smart_rename = { enable = true },
         },
+        matchup = { enable = true },
       }
 EOF
   endif

@@ -4,9 +4,12 @@
 export FZF_DEFAULT_COMMAND="fdfind --hidden --color always"
 export FZF_DEFAULT_OPTS="
   --color=dark,gutter:-1
-  --ansi --multi --cycle --filepath-word --inline-info --layout default --no-height --no-separator
+  --ansi --multi --cycle --filepath-word --layout default --no-height --no-separator
   --history '$HOME/.local/state/history/fzf'
   --prompt '» '
+  --pointer '»'
+  --marker '●'
+  --info inline-right
   --preview-window 'right,50%,hidden,<60(up,70%,hidden)'
   --bind ctrl-a:toggle-all
   --bind ctrl-n:down

@@ -145,7 +145,9 @@ function dotfiles {
   if [ $# -eq 0 ]; then
     cd "$dotfiles" || return 1
   elif [ "$1" = "cd" ]; then
-    if [ -d "$dotfiles/$2" ]; then
+    if [ ! "$2" ]; then
+      local path="."
+    elif [ -d "$dotfiles/$2" ]; then
       local path="$2"
     else
       local path=$( dt list "$2" | head -1 )
