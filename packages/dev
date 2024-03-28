@@ -13,6 +13,7 @@ libxml2-utils
 libyaml-dev
 manpages-dev
 pkg-config
+python3-openpyxl
 python3-pip
 python3-venv
 python-dev-is-python3
