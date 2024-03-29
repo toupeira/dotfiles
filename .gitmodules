@@ -160,9 +160,6 @@
 [submodule "vim/bundle/treesitter-refactor"]
 	path = vim/bundle/treesitter-refactor
 	url = https://github.com/nvim-treesitter/nvim-treesitter-refactor.git
-[submodule "asdf"]
-	path = asdf
-	url = https://github.com/asdf-vm/asdf.git
 [submodule "vim/bundle/godot"]
 	path = vim/bundle/godot
 	url = https://github.com/habamax/vim-godot.git
@@ -184,9 +181,6 @@
 [submodule "config/tmux/open"]
 	path = config/tmux/open
 	url = https://github.com/tmux-plugins/tmux-open.git
-[submodule "fzf"]
-	path = fzf
-	url = https://github.com/junegunn/fzf.git
 [submodule "vim/bundle/fzf-lua"]
 	path = vim/bundle/fzf-lua
 	url = https://github.com/ibhagwan/fzf-lua.git

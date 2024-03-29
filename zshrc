@@ -33,12 +33,12 @@ HIST_STAMPS="yyyy-mm-dd"
 zstyle ':omz:update' mode disabled
 
 plugins=(
-  asdf
+  mise
   fzf
   sudo
 )
 
-FZF_BASE=/etc/dotfiles/fzf
+FZF_BASE=~/.local/share/mise/installs/fzf/latest
 
 . $ZSH/oh-my-zsh.sh
 

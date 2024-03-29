@@ -15,11 +15,13 @@ PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_
 PS2=" \[\e[1;36m\]»\[\e[0m\] "
 
 # Set current directory and update title on changes
-PROMPT_COMMAND=( '
+
+PROMPT_COMMAND='
+  type -p _mise_hook && _mise_hook;
   [ "$PWD" != "$_last_pwd" ] && _prompt_dir=$( _prompt_dir);
   [ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir";
   _last_pwd="$PWD"
-' )
+'
 
 # Prompt helpers
 function _prompt_dir {
@@ -28,15 +30,17 @@ function _prompt_dir {
 
   if [ "$root" ]; then
     dir="${dir#"${root%/*}"/}"
-    dir=${dir/#asdf\/installs\/ruby\/*\/lib\/ruby\/gems\//💎 }
-    dir=${dir/#asdf\/installs\/ruby\//💎 }
     dir=${dir/#dotfiles\//📦 }
     dir=${dir/#dotfiles/📦}
     dir=${dir/#dental\//🦷 }
     dir=${dir/#dental/🦷}
+  elif [ "$dir" = "" ]; then
+    dir="/"
   else
     dir=${dir/#\/slack\//🎱 }
     dir=${dir/#\/slack/🎱}
+    dir=${dir/#$HOME\/.local\/share\/mise\/installs\/ruby\/*\/lib\/ruby\/gems\//💎 }
+    dir=${dir/#$HOME\/.local\/share\/mise\/installs\//🗃️ }
   fi
 
   dir=${dir/#$HOME/\~}

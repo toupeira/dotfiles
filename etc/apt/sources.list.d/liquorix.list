@@ -1,1 +1,1 @@
-deb https://liquorix.net/debian sid main
+deb [signed-by=/etc/apt/trusted.gpg.d/liquorix.asc arch=amd64] https://liquorix.net/debian sid main

@@ -1,0 +1,9 @@
+[tools]
+ruby = 'latest'
+node = 'latest'
+
+fzf = 'latest'
+usage = 'latest'
+
+[settings]
+legacy_version_file = false

@@ -20,6 +20,7 @@ fortune-anarchism
 fortune-mod
 fortunes
 git
+git-delta
 git-extras
 gnupg
 gocryptfs
@@ -38,6 +39,7 @@ ltrace
 mailutils
 make
 mawk
+mise
 moreutils
 mutt
 ncurses-term

@@ -1,11 +1,7 @@
+# system
 autoconf
 automake
 build-essential
-ed
-gettext
-git-delta
-hyperfine
-ipython3
 libffi-dev
 libreadline-dev
 libssl-dev
@@ -13,22 +9,27 @@ libxml2-utils
 libyaml-dev
 manpages-dev
 pkg-config
-python3-openpyxl
-python3-pip
-python3-venv
-python-dev-is-python3
-python-is-python3
+zlib1g-dev
+
+# tooling
+ed
+gettext
+hyperfine
 shellcheck
 sqlite3
 universal-ctags
 visidata
 yamllint
-zlib1g-dev
 
+# python
+ipython3
+python3-openpyxl
+python3-pip
+python3-venv
+python-dev-is-python3
+python-is-python3
+
+# ruby
 gem: activesupport
-gem: bundler
 gem: pry
 gem: rubocop
-
-yarn: eslint
-yarn: jsonlint

@@ -46,11 +46,11 @@ FZF_ALT_C_OPTS="
 "
 
 if [ "$BASH_VERSION" ]; then
-  eval "$( fzf --bash )"
+  eval "$( mise exec -- fzf --bash )"
 
   bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
 elif [ "$ZSH_VERSION" ]; then
-  eval "$( fzf --zsh )"
+  eval "$( mise exec -- fzf --zsh )"
 fi
 
 _fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }

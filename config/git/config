@@ -193,7 +193,7 @@
   pick = cherry-pick
 
   pu = push
-  poof = pu --force-with-lease
+  poof = pu --force-with-lease --force-if-includes
   pusu = -c push.default=current pu --set-upstream
   puci = pusu -o ci.skip
 
