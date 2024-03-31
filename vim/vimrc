@@ -623,15 +623,7 @@ endfunction " }}}
   let g:rooter_change_directory_for_non_project_files = 'current'
   let g:rooter_cd_cmd = 'lcd'
   let g:rooter_silent_chdir = 1
-  let g:rooter_patterns = [
-    \ 'package.json',
-    \ 'go.mod',
-    \ 'mix.exs',
-    \ 'Gemfile',
-    \ 'Rakefile',
-    \ '.git',
-    \ '.git/',
-  \ ]
+  let g:rooter_patterns = ['.git']
   " }}}
 
   " tabular {{{
@@ -855,6 +847,64 @@ endfunction " }}}
       \     'options': ['--prompt', 'Projects» ']
       \    }, <bang>0)
   endif
+  " }}}
+
+  " fzf-lua {{{
+  lua << EOF
+    -- require('fzf-lua/profiles/fzf-vim').fn_load()
+
+    require('fzf-lua').setup {
+      winopts = {
+        width = 0.9,
+        height = 0.9,
+        preview = {
+          hidden = 'hidden',
+          vertical = 'up:60%',
+          horizontal = 'right:50%',
+          title = false,
+        },
+      },
+      hls = {
+        border = 'NonText',
+        preview_border = 'NonText',
+        help_border = 'NonText',
+      },
+      keymap = {
+        builtin = {
+          ['<F1>']  = 'toggle-help',
+          ['<C-_>'] = 'toggle-preview',
+          ['<C-e>'] = 'preview-page-down',
+          ['<C-y>'] = 'preview-page-up',
+          ['<C-f>'] = 'preview-page-down',
+          ['<C-b>'] = 'preview-page-up',
+        },
+        -- remove defaults, still uses $FZF_DEFAULT_OPTS
+        fzf = {},
+      },
+      fzf_opts = {
+        ['--info']   = 'inline-right',
+        ['--layout'] = 'default',
+      },
+      files = {
+        fzf_opts = {
+          ['--info'] = 'inline-right',
+        },
+        fd_opts = '--hidden --color always --type f --type l --exclude .git',
+        no_header = true,
+      },
+      buffers = {
+        winopts = {
+          height = 12,
+          row = 0.85,
+        },
+      },
+      git = {
+        status = {
+          winopts = { preview = { hidden = 'nohidden' }}
+        },
+      },
+    }
+EOF
   " }}}
 
   " signify {{{

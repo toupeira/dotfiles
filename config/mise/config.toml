@@ -6,4 +6,4 @@ fzf = 'latest'
 usage = 'latest'
 
 [settings]
-legacy_version_file = false
+not_found_auto_install = false
