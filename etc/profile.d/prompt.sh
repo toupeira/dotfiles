@@ -16,12 +16,12 @@ PS2=" \[\e[1;36m\]»\[\e[0m\] "
 
 # Set current directory and update title on changes
 
-PROMPT_COMMAND='
+PROMPT_COMMAND=( '
   type -p _mise_hook && _mise_hook;
   [ "$PWD" != "$_last_pwd" ] && _prompt_dir=$( _prompt_dir);
   [ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir";
   _last_pwd="$PWD"
-'
+' )
 
 # Prompt helpers
 function _prompt_dir {
