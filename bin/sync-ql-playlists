@@ -8,7 +8,7 @@ while ! ql running >/dev/null; do
   sleep 0.5
 done
 
-echo -e " \e[1;32m● Exporting playlists...\e[0m"
+echo -e " \e[1;32m● \e[1;37mExporting playlists...\e[0m"
 
 while read -r query; do
   read -r title

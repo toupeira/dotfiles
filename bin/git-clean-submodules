@@ -10,7 +10,7 @@ function modules {
 }
 
 function repos {
-  cd .git/modules && find . -type f -name config -printf '%h\n' \
+  cd .git/modules 2>/dev/null && find . -type f -name config -printf '%h\n' \
     | cut -d/ -f2- \
     | sort \
     | uniq
@@ -30,15 +30,15 @@ unused=$( comm -23 <( echo "$repos" ) <( echo "$modules" ) )
 
 echo
 echo " Submodules:"
-printf ' %4d submodules   in .git/config\n' "$( echo "$modules" | wc -l )"
-printf ' %4d repositories in .git/modules\n' "$( echo "$repos" | wc -l )"
+printf ' %4d submodules   in .git/config\n' "$( echo "$modules" | grep -c . )"
+printf ' %4d repositories in .git/modules\n' "$( echo "$repos" | grep -c . )"
 echo
 
 if [ -n "$unused" ]; then
   echo " Unused repositories:"
   echo "$unused" | sed -r 's/^/  - /'
   echo
-  read -rp " Delete $( echo "$unused" | wc -l) unused repositories? [Y/n] "
+  read -rp " Delete $( echo "$unused" | grep -c . ) unused repositories? [Y/n] "
 
   [ "$REPLY" != "" ] && [ "$REPLY" != "y" ] && exit
 

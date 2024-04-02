@@ -1,10 +1,10 @@
 #!/bin/bash
 # shellcheck disable=SC2034
 
-export FZF_DEFAULT_COMMAND="fdfind --hidden --color always"
+export FZF_DEFAULT_COMMAND="fdfind --color always --max-results 99999"
 export FZF_DEFAULT_OPTS="
   --color=dark,gutter:-1
-  --ansi --multi --cycle --filepath-word --layout default --no-height --no-separator
+  --ansi --cycle --filepath-word --layout default --no-height --no-separator
   --history '$HOME/.local/state/history/fzf'
   --prompt '» '
   --pointer '»'
@@ -28,7 +28,7 @@ export FZF_DEFAULT_OPTS="
 FZF_COMPLETION_TRIGGER='//'
 
 FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
-FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d --unrestricted --exclude .git"
+FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
 
 FZF_CTRL_R_OPTS="
   --prompt 'History» '
@@ -37,12 +37,15 @@ FZF_CTRL_R_OPTS="
   --preview-window 'default,up,5,hidden,wrap'
 "
 FZF_CTRL_T_OPTS="
-  --preview 'fzf-preview {}'
+  --preview 'fzf-preview.sh {}'
+  --bind 'start:transform-prompt(echo \${PWD/#\$HOME/\~}/)'
+  --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_CTRL_T_COMMAND --unrestricted --exclude .git)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
 FZF_ALT_C_OPTS="
-  --prompt 'Dir» '
   --history '$HOME/.local/state/history/fzf-cd'
   --preview 'tree -C {}'
+  --bind 'start:transform-prompt(echo \${PWD/#\$HOME/\~}/)'
+  --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_ALT_C_COMMAND --unrestricted --exclude .git)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
 
 if [ "$BASH_VERSION" ]; then

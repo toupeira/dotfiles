@@ -7,3 +7,6 @@ usage = 'latest'
 
 [settings]
 not_found_auto_install = false
+
+[env]
+RUBY_CONFIGURE_OPTS = '--disable-install-doc'

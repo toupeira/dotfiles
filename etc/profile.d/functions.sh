@@ -146,17 +146,20 @@ function dotfiles {
     cd "$dotfiles" || return 1
   elif [ "$1" = "cd" ]; then
     if [ ! "$2" ]; then
-      local path="."
+      local path="$dotfiles"
     elif [ -d "$dotfiles/$2" ]; then
-      local path="$2"
+      local path="$dotfiles/$2"
     else
-      local path=$( dt list "$2" | head -1 )
+      local plugin=$( dt list "$2" | head -1 )
+      if [ "$plugin" ]; then
+        local path="$dotfiles/packages/lazy/$plugin"
+      fi
     fi
 
-    if [ "$path" ]; then
-      cd "$dotfiles/$path" || return 1
+    if [ -d "$path" ]; then
+      cd "$path" || return 1
     else
-      echo "$2: No such directory or submodule"
+      echo "$2: No such directory or plugin"
       return 1
     fi
   else
@@ -308,8 +311,17 @@ function sheet {
 
 # Edit plan files
 function plan {
+  local plans="/slack/scrapbook/plans"
   local name=${1:-$( basename "$PWD" )}
-  mux -s -l 15 "$EDITOR" "/slack/scrapbook/plans/$name.md"
+
+  if [ -f "$plans/$name.md" ]; then
+    local plan="$plans/$name.md"
+  else
+    local plan="$( find "$plans" -type f -name '*.md' | fzf -d/ -n-1 -f "$name" | head -1 )"
+    plan=${plan:-${name}.md}
+  fi
+
+  mux -s -l 15 "$EDITOR" "$plan"
 }
 
 alias p=plan

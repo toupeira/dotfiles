@@ -40,10 +40,10 @@
   hyperlinks = true
   tabs = 2
 
-  plus-style = syntax "#003000"
-  plus-emph-style = bold normal auto
-  minus-style = syntax "#400000"
-  minus-emph-style = bold normal auto
+  plus-style = syntax "#15331d"
+  plus-emph-style = bold normal "#1d572d"
+  minus-style = syntax "#401a1b"
+  minus-emph-style = bold normal "#80302f"
 
   commit-decoration-style = yellow ul
   file-style = bold blue

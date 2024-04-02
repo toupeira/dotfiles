@@ -19,7 +19,7 @@ has() {
 
 # oh-my-zsh setup
 
-ZSH=~/.zsh/oh-my-zsh
+ZSH=~/.zsh/ohmyzsh
 ZSH_CUSTOM=~/.zsh
 ZSH_THEME="powerlevel10k/powerlevel10k"
 ZSH_DISABLE_COMPFIX=true
@@ -38,7 +38,7 @@ plugins=(
   sudo
 )
 
-FZF_BASE=~/.local/share/mise/installs/fzf/latest
+FZF_BASE=/etc/dotfiles/packages/mise/installs/fzf/latest
 
 . $ZSH/oh-my-zsh.sh
 

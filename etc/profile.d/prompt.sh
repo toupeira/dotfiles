@@ -30,6 +30,8 @@ function _prompt_dir {
 
   if [ "$root" ]; then
     dir="${dir#"${root%/*}"/}"
+    dir=${dir/#dotfiles\/packages\/mise\/installs\/ruby\/*\/lib\/ruby\/gems\//🗃️ }
+    dir=${dir/#dotfiles\/packages\/mise\/installs\//🗃️ }
     dir=${dir/#dotfiles\//📦 }
     dir=${dir/#dotfiles/📦}
     dir=${dir/#dental\//🦷 }
@@ -39,8 +41,6 @@ function _prompt_dir {
   else
     dir=${dir/#\/slack\//🎱 }
     dir=${dir/#\/slack/🎱}
-    dir=${dir/#$HOME\/.local\/share\/mise\/installs\/ruby\/*\/lib\/ruby\/gems\//💎 }
-    dir=${dir/#$HOME\/.local\/share\/mise\/installs\//🗃️ }
   fi
 
   dir=${dir/#$HOME/\~}
@@ -68,13 +68,12 @@ if type __git_ps1 &>/dev/null && [ -z "$VIM" ]; then
     s/%/‽/;
     s/\\\$/$/;
     s/ ?=//;
-    s/<>/ ⇵/;
-    s/>/ ↑/;
-    s/</ ↓/;
+    s/<>/⇵/;
+    s/>/↑/;
+    s/</↓/;
     s/\(/[/;
     s/\)/]/;
     s/\.\.\.//;
-    s/\\b(main|master)\\b /🔰/;
     s/\\b(main|master)\\b/🔰/;
     s/([-_[:alnum:]]{24})[-_[:alnum:]]+/\\1…/;
   "

@@ -20,20 +20,17 @@ function usage {
   echo
   echo "  sync                        Commit, pull, and push changes"
   echo "  commit-all, ca              Commit all changes"
-  echo "  pull, up                    Pull remote changes and checkout submodules"
+  echo "  pull, up                    Pull remote changes"
   echo "  push, pu                    Push local changes"
   echo
   echo "  rules KEY...                Output rules for given keys"
   echo "  lint [fix]                  Report (and fix) configuration problems"
   echo "  test                        Run tests"
   echo
-  echo "  list [NAME]                 List submodules"
-  echo "  update [NAME]               Update submodule"
-  echo "  update-all, sup [NAME]      Update all submodules"
-  echo
   echo "  packages, pkg               Install packages"
   echo "  pkg LIST[:TYPE]             Install packages from list"
   echo "  update-packages, pup [TYPE] Update packages"
+  echo "  list [NAME]                 List lazy plugins"
   echo
   echo "  dconf sync                  Load dconf settings if no local changes are found"
   echo "  dconf load [KEY]            Load dconf settings"
@@ -190,9 +187,10 @@ function mux-wrap {
 ### }}}
 ### dotfiles helpers {{{
 
-# Check if machine is a desktop
-function is-desktop {
-  [ -x /usr/bin/Xorg ]
+# Check if machine has a GUI
+function has-gui {
+  [ "$CHASSIS_TYPE" ] || CHASSIS_TYPE=$( hostnamectl chassis )
+  [ "$CHASSIS_TYPE" = "desktop" ] || [ "$CHASSIS_TYPE" = "laptop" ]
 }
 
 # Load rules for the given keys
@@ -312,7 +310,7 @@ function run {
         status "Linking {{dotfiles}}..."
         (cd "$DOTFILES" && link-paths -- *)
         run packages
-        is-desktop && run dconf sync
+        has-gui && run dconf sync
       fi
       ;;
     # }}}
@@ -464,18 +462,11 @@ function run {
         git --no-pager diff --stat ORIG_HEAD
       fi
 
-      mapfile -t modules < <( run list )
-      if has-news "${modules[@]}"; then
-        echo
-        status "Updating submodules..."
-        git checkout-submodules
-      fi
-
       if has-news packages; then
         run packages
       fi
 
-      if has-news dconf && is-desktop; then
+      if has-news dconf && has-gui; then
         echo
         run dconf sync
       fi
@@ -572,8 +563,7 @@ function run {
       done
 
       lint root "Dotfile symlinks"
-      for path in config/mise config/nvim config/rg local/share/mise local/share/nvim zsh zshrc; do
-        # local target=$( target "$path" )
+      for path in config/mise config/nvim config/rg local/share/mise zsh zshrc; do
         local target=$( origin "$path" )
         local origin=${target/#$HOME/\/root}
 
@@ -591,7 +581,7 @@ function run {
       function fail {
         if [ $status -ne 0 ] || [ "$output" ]; then
           [ "$output" ] && echo "$output"
-          abort "$1"
+          error "$1"
         fi
       }
 
@@ -600,6 +590,10 @@ function run {
       [ "$output" = "$DOTFILES" ] && output=
       fail "{{bin/dotfiles}} is broken!"
 
+      output=$( fdfind . "$DOTFILES" -t l -x readlink -f {} | grep ^/home/ )
+      status=0
+      fail "Symlinks to {{/home}} found!"
+
       output=$( sh -c ". $DOTFILES/etc/profile" 2>&1 )
       status=$?
       fail "{{etc/profile}} is broken with {{sh}}!"
@@ -607,86 +601,6 @@ function run {
       output=$( bash -ic "" 2>&1 )
       status=$?
       fail "{{etc/profile}} is broken with {{bash}}!"
-      ;;
-    # }}}
-
-    list) # {{{
-      git list-submodules "$@"
-      ;;
-    # }}}
-    update) # {{{
-      local batch
-      [ "$1" = '--batch' ] && local batch=1 && shift
-
-      local submodule="$1"
-      shift
-
-      if [ ! -d "$DOTFILES/$submodule" ]; then
-        submodule=$( run list "$submodule" | head -1 )
-        if [ -z "$submodule" ]; then
-          abort "Submodule not found: {{$submodule}}"
-        fi
-      fi
-
-      cd "$DOTFILES/$submodule" || abort
-      [ -e ".git" ] || abort "Not a git repository: .git"
-
-      local old_commit=$( system git rev-parse HEAD )
-      local git_output=$(
-        system git fetch -q origin 2>&1 &&
-        system git reset -q --hard origin/HEAD 2>&1
-      )
-      local new_commit=$( system git rev-parse HEAD )
-
-      if [ -n "$git_output" ]; then
-        error "Error while updating {{$submodule}}:"
-        echo -e "\e[1;31m$git_output\e[0m" | sed -r 's/^/    /'
-        echo
-      elif [ "$new_commit" != "$old_commit" ]; then
-        local url=$( system git remote -v | grep -Eom1 'https?://[^ ]+' )
-
-        [ ! "$batch" ] && echo
-        warning "Changes in \e]8;;$url\e\\{{$submodule}}\e]8;;\e\\:"
-        system git -c color.ui=always log --oneline --no-merges '@{1}..' \
-          | sed -r 's/^/    /'
-        echo
-      elif [ ! "$batch" ]; then
-        info "No changes in {{$submodule}}"
-      fi
-      ;;
-    # }}}
-    update-all|sup) # {{{
-      local submodules=$( run list "$1" )
-
-      echo
-      status "Updating submodules:"
-
-      local tmpdir=$( mktemp -d "${TMPDIR:-/tmp}/dotfiles.XXXXXX" )
-
-      echo -ne '     \e[1;36m['
-
-      for submodule in $submodules; do
-        while [ "$( jobs -r | wc -l )" -gt 10 ]; do
-          sleep 0.1
-        done
-
-        (
-          run update --batch "$submodule" > "$tmpdir/${submodule//\//-}" 2>&1
-          echo -ne '\e[0;36m='
-        ) &
-
-        sleep 0.1
-      done
-
-      wait
-      echo -e '\e[1;36m]\e[0m'
-      echo
-
-      if grep -q . "$tmpdir"/* 2>/dev/null; then
-        system cat "$tmpdir"/*
-      fi
-
-      system rm -rf "$tmpdir"
       ;;
     # }}}
 
@@ -717,10 +631,8 @@ function run {
 
       local packages=$( grep -E "$filter" "$list" )
 
-      if is-desktop; then
-        [ -f "$list.desktop" ] && packages=$(
-          echo "$packages"; grep -E "$filter" "$list.desktop"
-        )
+      if has-gui && [ -f "$list-gui" ]; then
+        packages=$( echo "$packages"; grep -E "$filter" "$list-gui" )
       fi
 
       function get-packages { echo "$packages" | grep -E "$1" | sed 's/.*: //' | sort; }
@@ -804,6 +716,10 @@ function run {
 
       update mise       'mise plugins update && mise upgrade --interactive && mise prune'
       update gem        'gem update && gem cleanup'
+      ;;
+    # }}}
+    list) # {{{
+      find "$DOTFILES/packages/lazy" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort | fzf -f "$1"
       ;;
     # }}}
 
