@@ -305,3 +305,11 @@ function sheet {
     command sheet "$@"
   fi
 }
+
+# Edit plan files
+function plan {
+  local name=${1:-$( basename "$PWD" )}
+  mux -s -l 15 "$EDITOR" "/slack/scrapbook/plans/$name.md"
+}
+
+alias p=plan
