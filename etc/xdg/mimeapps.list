@@ -5,12 +5,16 @@ x-scheme-handler/mailto=firefox.desktop
 
 application/json=nvim.desktop
 application/xml=nvim.desktop
+application/x-ruby=nvim.desktop
 application/x-shellscript=nvim.desktop
 text/calendar=nvim.desktop
+text/csv=nvim.desktop
 text/org=nvim.desktop;
 text/plain=nvim.desktop
 text/x-diff=nvim.desktop
+text/x-patch=nvim.desktop
 text/x-python3=nvim.desktop
+text/x-python=nvim.desktop
 text/x-ruby=nvim.desktop
 
 image/jpeg=org.gnome.eog.desktop

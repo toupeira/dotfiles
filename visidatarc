@@ -1,0 +1,4 @@
+# vim: ft=python
+
+options.disp_sidebar = False
+options.motd_url = ''

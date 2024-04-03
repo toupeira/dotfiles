@@ -142,7 +142,7 @@ function system {
   if [ "$command" = "chown" ] || [ "$command" = "chgrp" ]; then
     sudo="sudo "
   # Check for paths that require sudo
-  elif [[ ${!#} =~ ^/(etc|root)/ ]]; then
+  elif [[ ${!#} =~ ^/(etc|root)/ ]] && ! [[ ${!#} =~ ^$DOTFILES/ ]]; then
     sudo="sudo "
   fi
 
