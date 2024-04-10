@@ -7,8 +7,7 @@ local line = vim.fn.line
 local pathshorten = vim.fn.pathshorten
 local winnr = vim.fn.winnr
 
--- Lua helpers
--- =====================================================================
+-- Lua helpers ---------------------------------------------------------
 
 -- Merge the {opts} table into {defaults}.
 util.merge = function(defaults, opts)
@@ -20,8 +19,7 @@ util.clamp = function(value, min, max)
   return math.max(min, math.min(max, value))
 end
 
--- Configuration helpers
--- =====================================================================
+-- Configuration helpers -----------------------------------------------
 
 -- Map a key with sensible defaults.
 util.map = function(mode, lhs, rhs, opts, desc)
@@ -30,9 +28,13 @@ util.map = function(mode, lhs, rhs, opts, desc)
   if type(desc) == 'string' then opts = util.merge(opts, { desc = desc }) end
 
   -- run commands silently
-  if type(rhs) == 'string' and (rhs:sub(1, 1) == ':' or rhs:sub(1, 5) == '<Cmd>') then
-    opts = util.merge(opts, { silent = true })
-    rhs = rhs .. '<CR>'
+  if type(rhs) == 'string' then
+    if rhs:sub(1, 1) == ':' then rhs = '<Cmd>' .. rhs:sub(2) end
+
+    if rhs:sub(1, 5) == '<Cmd>' then
+      opts = util.merge(opts, { silent = true })
+      rhs = rhs .. '<CR>'
+    end
   end
 
   -- run multiple commands
@@ -65,11 +67,16 @@ end
 -- Create autocommand
 util.autocmd = vim.api.nvim_create_autocmd
 
+-- Create user command
+util.create_cmd = function(name, command, opts)
+  return vim.api.nvim_create_user_command(name, command, opts or {})
+end
+
 -- Abbreviate commands, only in command mode on first column
 -- http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
 util.alias_cmd = function(aliases)
   for alias, command in pairs(aliases) do
-    vim.cmd.cabbrev(
+    vim.cmd.cnoreabbrev(
       alias .. ' <C-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "'
       .. command .. '" : "' .. alias .. '"<CR>'
     )
@@ -97,8 +104,7 @@ util.get_color = function(name, key)
   end
 end
 
--- UI helpers
--- =====================================================================
+-- UI helpers ----------------------------------------------------------
 
 -- Echo a {message} with an optional {hl} group,
 -- and optionally add it to the {history}.

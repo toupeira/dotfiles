@@ -10,18 +10,18 @@ local nvomap = util.nvomap
 
 local expand = vim.fn.expand
 
--- Leader keys
+-- Leader keys ---------------------------------------------------------
 
 vim.g.mapleader = ','
 vim.g.maplocalleader = '\\'
 
--- Mode switching
+-- Mode switching ------------------------------------------------------
 
 imap('<C-c>', '<Esc>', 'Leave insert mode')
 nmap('<C-c>', { 'nohlsearch', 'echo', 'redraw!' }, 'Clear search and command line')
 tmap('<Esc>', '<C-\\><C-n>', 'Leave insert mode')
 
--- Window navigation
+-- Window navigation ---------------------------------------------------
 
 nmap('<Leader>s', ':split', 'Split horizontally')
 nmap('<Leader>S', ':botright split', 'Split horizontally (full width)')
@@ -48,7 +48,7 @@ nmap('<Leader>x', { 'lclose', 'BufDel' }, 'Close current buffer (keep window)')
 
 nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window')
 
--- Tab navigation
+-- Tab navigation ------------------------------------------------------
 
 nmap('H', ':tabprevious', 'Go to previous tab')
 nmap('L', ':tabnext', 'Go to next tab')
@@ -58,7 +58,7 @@ nmap('<Leader>P', ':tabnext', 'Go to next tab')
 nmap('<Leader>T', ':tabnew', 'Open new tab')
 nmap('<Leader>X', ':tabclose', 'Close current tab')
 
--- File editing
+-- File editing --------------------------------------------------------
 
 nmap('<Leader>w', ':write', 'Save current buffer')
 
@@ -67,7 +67,7 @@ nmap('<Leader>C', function() return ':e ' .. expand('%:p:h') .. '/' end, { expr 
 -- use <C-q> as replacement for <C-v>
 map({ 'n', 'v', 'o', 'i', 'c' }, '<C-q>', '<C-v>', 'Insert raw character')
 
-vmap('<C-c>', '"+y', 'Copy to clipboard')
+vmap('<C-c>', '"+y`]', 'Copy to clipboard')
 vmap('<C-x>', '"+d', 'Cut to clipboard')
 
 nmap('<C-v>', '"+gP', 'Paste from clipboard')
@@ -96,20 +96,40 @@ nvomap('g#', '#', 'Search backwards for current word (strict)')
 nmap('<Space>', 'za', 'Toggle fold')
 nmap('du', ':diffupdate', 'Update diffs')
 
--- Utilities
+-- Utilities -----------------------------------------------------------
 
-nmap('<F1>', ':tab help', 'Open help in a tab')
+util.create_cmd('Help', '$tab help <args>', {
+  nargs = '*',
+  complete = 'help',
+})
+
+nmap('<F1>', ':Help', 'Open help in a tab')
+
+-- override `:Man` to open in a tab
+-- see /usr/share/nvim/runtime/plugin/man.lua
+util.create_cmd('Manpage', '$tab Man <args>', {
+  bang = true,
+  bar = true,
+  range = true,
+  addr = 'other',
+  nargs = '*',
+  complete = function(...)
+    return require('man').man_complete(...)
+  end,
+})
 
 util.alias_cmd({
-  ['h'] = 'tab help',
-  ['H'] = 'tab help',
-  ['help'] = 'tab help',
+  help = 'Help',
+  h    = 'Help',
+  H    = 'Help',
+  man  = 'Manpage',
+  Man  = 'Manpage',
 
-  ['E']   = 'e', ['E!']  = 'e!',
-  ['Q']   = 'q', ['Q!']  = 'q!',
-  ['QA']  = 'qa', ['Qa']  = 'qa', ['qA']  = 'qa',
+  ['E']   = 'e',   ['E!']  = 'e!',
+  ['Q']   = 'q',   ['Q!']  = 'q!',
+  ['QA']  = 'qa',  ['Qa']  = 'qa',  ['qA']  = 'qa',
   ['QA!'] = 'qa!', ['Qa!'] = 'qa!', ['qA!'] = 'qa!',
-  ['WQ']  = 'wq', ['Wq']  = 'wq', ['wQ']  = 'wq',
+  ['WQ']  = 'wq',  ['Wq']  = 'wq',  ['wQ']  = 'wq',
   ['WQ!'] = 'wq!', ['Wq!'] = 'wq!', ['wQ!'] = 'wq!',
 
   ['DD']  = 'Delete', ['DD!'] = 'Delete!',
@@ -121,7 +141,12 @@ nmap('<Leader>!', function() require('lazy').home() end, 'Open Lazy plugin manag
 nmap('<C-g>', {
   "echomsg expand('%:.')",
   "let @+ = expand('%:.') . ':' . line('.')",
-}, 'Copy file path with number')
+}, 'Show and copy relative file path with number')
+
+nmap('<M-g>', {
+  "echomsg expand('%:p')",
+  "let @+ = expand('%:p') . ':' . line('.')",
+}, 'Show and copy absolute file path with number')
 
 -- TODO: convert to Lua
 vim.cmd([[
@@ -140,41 +165,5 @@ vim.cmd([[
   xnoremap <silent><expr> y "ygv" . mode()
 
   " switch to alternate buffer
-  nnoremap <silent><expr> ,<Tab> empty(getreg('#')) \|\| !buflisted(getreg('#')) ? ':bnext<CR>' : '<C-^>'
-
-  " navigate windows/tmux panes with Ctrl+jkhl
-  function! TmuxNavigate(cmd)
-    let nr = winnr()
-
-    if nvim_win_get_config(nvim_get_current_win()).relative == ''
-      execute('wincmd ' . a:cmd)
-    endif
-
-    if (empty($TMUX))
-      return
-    elseif (nr != winnr())
-      return
-    endif
-
-    let pane = str2nr(system('tmux display -p "#{pane_index}"'))
-    let panes = str2nr(system('tmux display -p "#{window_panes}"'))
-
-    if (((a:cmd == 'k' || a:cmd == 'h') && nr == 1 && pane == 1) ||
-          \ ((a:cmd == 'j' || a:cmd == 'l') && nr == winnr('$') && pane == panes))
-      " silent call system('tmux resize-pane -Z')
-    else
-      let arg = tr(a:cmd, 'hjkl', 'LDUR')
-      silent call system('tmux select-pane -' . arg)
-    endif
-  endfunction
-
-  nnoremap <silent> <c-h> :call TmuxNavigate('h')<CR>
-  nnoremap <silent> <c-j> :call TmuxNavigate('j')<CR>
-  nnoremap <silent> <c-k> :call TmuxNavigate('k')<CR>
-  nnoremap <silent> <c-l> :call TmuxNavigate('l')<CR>
-
-  tnoremap <silent> <c-h> <C-\><C-n>:call TmuxNavigate('h')<CR>
-  tnoremap <silent> <c-j> <C-\><C-n>:call TmuxNavigate('j')<CR>
-  tnoremap <silent> <c-k> <C-\><C-n>:call TmuxNavigate('k')<CR>
-  tnoremap <silent> <c-l> <C-\><C-n>:call TmuxNavigate('l')<CR>
+  nnoremap <silent><expr> <Leader><Tab> empty(getreg('#')) \|\| !buflisted(getreg('#')) ? ':bnext<CR>' : '<C-^>'
 ]])

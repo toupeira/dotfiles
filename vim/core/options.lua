@@ -1,4 +1,5 @@
--- custom filetypes
+-- Custom filetypes ----------------------------------------------------
+
 vim.filetype.add({
   extension = {
     axlsx = 'ruby',
@@ -14,7 +15,8 @@ vim.filetype.add({
   },
 })
 
--- language providers
+-- Language providers --------------------------------------------------
+
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
 vim.g.loaded_python_provider = 0
@@ -81,6 +83,7 @@ vim.cmd([[
   set smartcase
   set inccommand=nosplit
   set iskeyword+=-
+  set keywordprg=:Manpage
 
   if executable('rg')
     let &grepprg = "rg --vimgrep"
@@ -105,6 +108,9 @@ vim.cmd([[
   set shada+='500,\"100
   set shada-='100,<50
   set undofile
+
+  " set a default commentstring
+  set commentstring=#\ %s
 
   " window title
   set title

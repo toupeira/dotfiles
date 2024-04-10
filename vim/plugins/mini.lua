@@ -9,7 +9,6 @@ return {
 
   config = function()
     require('mini.ai').setup()
-    require('mini.misc').setup_auto_root()
     require('mini.surround').setup()
 
     require('mini.align').setup({
@@ -46,11 +45,15 @@ return {
     })
     nmap('-', ':lua MiniFiles.open()', 'Open file explorer')
 
+    require('mini.misc').setup_auto_root(
+      { '.git' }, vim.fs.dirname
+    )
+
     require('mini.move').setup()
-    imap('<M-H>', '<Cmd>lua MiniMove.move_line("left")', 'Move line left')
-    imap('<M-J>', '<Cmd>lua MiniMove.move_line("down")', 'Move line down')
-    imap('<M-K>', '<Cmd>lua MiniMove.move_line("up")', 'Move line up')
-    imap('<M-L>', '<Cmd>lua MiniMove.move_line("right")', 'Move line right')
+    imap('<M-H>', ':lua MiniMove.move_line("left")', 'Move line left')
+    imap('<M-J>', ':lua MiniMove.move_line("down")', 'Move line down')
+    imap('<M-K>', ':lua MiniMove.move_line("up")', 'Move line up')
+    imap('<M-L>', ':lua MiniMove.move_line("right")', 'Move line right')
 
     require('mini.operators').setup({
       sort = { prefix = '' },

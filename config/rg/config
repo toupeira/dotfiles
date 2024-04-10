@@ -7,10 +7,6 @@
 --colors
   path:style:bold
 --colors
-  match:fg:black
---colors
-  match:bg:yellow
---colors
   line:fg:magenta
 --colors
   column:fg:magenta

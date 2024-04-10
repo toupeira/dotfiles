@@ -95,14 +95,26 @@ return {
         fzf = {},
       },
 
-      fzf_opts = {
-        ['--layout'] = 'default',
-      },
-
       hls = {
         border = 'NonText',
         preview_border = 'NonText',
         help_border = 'NonText',
+        header_bind = 'WarningMsg',
+        header_text = 'Type',
+        buf_flag_cur = 'Title',
+        buf_flag_alt = 'WarningMsg',
+      },
+
+      fzf_opts = {
+        ['--layout'] = 'default',
+      },
+
+      fzf_colors = {
+        ['hl+'] = { 'bg', 'CurSearch' },
+      },
+
+      defaults = {
+        color_icons = false,
       },
 
       actions = {
@@ -111,16 +123,13 @@ return {
 
       files = {
         fd_opts = '--color always --max-results 99999 --type f --type l --hidden --exclude .git',
-        color_icons = false,
         git_icons = false,
         no_header = true,
       },
 
       buffers = {
-        winopts = {
-          height = 12,
-          row = 0.85,
-        },
+        winopts = { height = 12, row = 0.85 },
+        fzf_opts = { ['--header-lines'] = false },
       },
 
       colorschemes = {

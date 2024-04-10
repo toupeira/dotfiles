@@ -9,6 +9,9 @@ return {
     local magenta = util.get_color('Statement')
     local white = '#ffffff'
 
+    vim.opt.shortmess:append('S') -- searchcount
+    vim.o.showcmd = false         -- selectioncount
+
     return {
       options = {
         globalstatus = true,
@@ -20,7 +23,7 @@ return {
       extensions = {
         'aerial',
         'fugitive',
-        'fzf',
+        'fzf-custom',
         'lazy',
         'man',
         'quickfix',
@@ -103,6 +106,19 @@ return {
         },
 
         lualine_z = {
+          { 'searchcount',
+            icon = '',
+            separator = '',
+            padding = { left = 1, right = 0 },
+          },
+          { 'selectioncount',
+            icon = '󱄽',
+            separator = '',
+            padding = { left = 1, right = 0 },
+            fmt = function(string)
+              if string ~= '' then return '[' .. string .. ']' end
+            end
+          },
           { function()
               local line = vim.fn.line('.')
               return (line < 10 and ' ' or '') .. line

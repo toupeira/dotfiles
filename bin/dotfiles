@@ -19,6 +19,7 @@ function usage {
   echo "  add PATH...                 Add file to repository and replace it with a symlink"
   echo
   echo "  sync                        Commit, pull, and push changes"
+  echo "  commit, ci                  Commit staged changes with default message"
   echo "  commit-all, ca              Commit all changes"
   echo "  pull, up                    Pull remote changes"
   echo "  push, pu                    Push local changes"
@@ -160,7 +161,10 @@ function git {
   (cd "$DOTFILES" && command git "$@")
 
   local status=$?
-  [ $status -eq 0 ] || $onerror ask-abort "{{Error:}} git $*"
+  if [ $status -eq 0 ]; then
+    STATUS=$status
+    $onerror ask-abort "{{Error:}} git $*"
+  fi
 
   return $status
 }
@@ -436,19 +440,22 @@ function run {
       fi
       ;;
     # }}}
-    commit-all|ca) # {{{
+    commit|ci) # {{{
       if [ "$1" = "-m" ]; then
-        shift
-        local message="$1"
-        shift
+        local message="$2"
+        shift 2
       else
         local message="Sync dotfiles"
       fi
 
+      git ignore-errors commit -m "$message" "$@"
+      ;;
+    # }}}
+    commit-all|ca) # {{{
       if has-changes; then
         status "Committing changes..."
         git ignore-errors add -A .
-        git ignore-errors commit -a -m "$message" "$@"
+        run commit "$@"
       else
         status "No changes."
       fi

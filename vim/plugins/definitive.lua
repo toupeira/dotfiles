@@ -16,7 +16,7 @@ return {
     }
 
     vim.g.definitive_definitions = {
-      lua = [[\(\(\<local\s\+\|\.\)%1\s*=\|\<function\s\+\(\w\+\.\)\?%1\>\)]],
+      lua = [[\(\(\<\([^=]\+,\s*\)\?\|\.\)%1\(\s*,[^=]\+\)\?\s*=\|\<function\s\+\(\w\+\.\)\?%1\>\)]],
       ruby = vim.fn.join({
         [[\<\(]],
           [[\(def\|class\|module\|alias\)\s\+\(self\.\)\=%1\>\|]],

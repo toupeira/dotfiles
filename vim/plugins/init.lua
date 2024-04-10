@@ -4,7 +4,6 @@ local map = util.map
 local nmap = util.nmap
 
 return {
-  { 'AndrewRadev/bufferize.vim' },
   { 'AndrewRadev/splitjoin.vim' },
   { 'arp242/jumpy.vim' },
   { 'numToStr/Comment.nvim', config = true },
@@ -15,6 +14,30 @@ return {
   { 'tpope/vim-rails' },
   { 'tpope/vim-repeat' },
   { 'tpope/vim-scriptease' },
+
+  { 'alexghergh/nvim-tmux-navigation',
+    config = function()
+      local nvim_tmux_nav = require('nvim-tmux-navigation')
+
+      nvim_tmux_nav.setup({
+        disable_when_zoomed = true,
+        map_modes = { 'n', 't' },
+        keybindings = {
+          left = '<C-h>',
+          down = '<C-j>',
+          up = '<C-k>',
+          right = '<C-l>',
+        }
+      })
+    end
+  },
+
+  { 'AndrewRadev/bufferize.vim',
+    init = function()
+      vim.g.bufferize_focus_output = true
+      util.alias_cmd({ B = 'Bufferize' })
+    end
+  },
 
   { 'andymass/vim-matchup',
     init = function()

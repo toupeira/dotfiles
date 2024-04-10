@@ -3,21 +3,28 @@ local util = require('util')
 local autocmd = util.autocmd
 local augroup = util.augroup
 
+-- Filetype settings ---------------------------------------------------
+
 -- TODO: convert to Lua
 vim.cmd([[
-  " filetype settings
   autocmd FileType crontab setlocal nowritebackup
   autocmd FileType css,scss setlocal iskeyword+=%
   autocmd FileType dosini setlocal commentstring=#\ %s
   autocmd FileType gdscript setlocal expandtab
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
-  autocmd FileType lua setlocal path+=./lua keywordprg=:help
+  autocmd FileType help setlocal buflisted
+  autocmd FileType lua setlocal path+=./lua keywordprg=:Help
   autocmd FileType make setlocal noexpandtab
   autocmd FileType qf setlocal nobuflisted
   autocmd FileType ruby setlocal iskeyword+=?,!
   autocmd FileType text,markdown,mail setlocal linebreak suffixesadd+=.md
-  autocmd FileType vim setlocal foldmethod=marker foldlevel=0
+  autocmd FileType vim setlocal keywordprg=:Help foldmethod=marker foldlevel=0
+]])
 
+-- Helpers -------------------------------------------------------------
+
+-- TODO: convert to Lua
+vim.cmd([[
   " setup quickfix windows
   autocmd FileType qf setlocal nowrap
   autocmd FileType qf lua require('util').resize_window({ max = 5 })
@@ -41,13 +48,13 @@ autocmd('FileType', {
   end
 })
 
--- Adapted from
+-- Autocommands adapted from
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 
 -- Go to last loc when opening a buffer
 -- TODO: fix `mini.misc.setup_restore_cursor` to use `BufWinEnter`
 autocmd('BufWinEnter', {
-  group = augroup('last_loc'),
+  group = augroup('restore_cursor'),
   callback = function(event)
     local exclude = { 'gitcommit' }
     local buf = event.buf
@@ -68,17 +75,18 @@ autocmd('BufWinEnter', {
 autocmd('FileType', {
   group = augroup('close_with_q'),
   pattern = {
+    'bufferize',
     'checkhealth',
     'fugitive',
     'help',
     'lspinfo',
+    'man',
     'notify',
     'qf',
     'query',
     'startuptime',
   },
   callback = function(event)
-    vim.bo[event.buf].buflisted = false
     util.nmap('q', ':bdelete', { buffer = event.buf })
   end
 })
@@ -93,7 +101,8 @@ autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
   end
 })
 
--- Auto create dir when saving a file, in case some intermediate directory does not exist
+-- Auto create dir when saving a file, in case some
+-- intermediate directory does not exist
 autocmd('BufWritePre', {
   group = augroup('auto_create_dir'),
   callback = function(event)
