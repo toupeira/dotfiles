@@ -2,6 +2,21 @@ local util = require('util')
 
 local nmap = util.nmap
 
+-- return {
+--   'romgrk/barbar.nvim',
+--   opts = {
+--     auto_hide = 1,
+--     minimum_padding = 2,
+--     maximum_padding = 2,
+--     icons = {
+--       preset = 'slanted',
+--       separator = { left = '', right = '' },
+--       inactive = { separator = { left = '', right = '' } },
+--       button = '',
+--     }
+--   }
+-- }
+
 return {
   'akinsho/bufferline.nvim',
 
@@ -17,19 +32,6 @@ return {
 
       close_command = 'BufDel %d',
       right_mouse_command = nil,
-
-      diagnostics = 'nvim_lsp',
-      diagnostics_indicator = function(count, _level)
-        return '● ' .. count
-      end,
-    },
-
-    highlights = {
-      buffer_visible = { bold = true },
-      error_visible = { bold = true },
-      warning_visible = { bold = true },
-      info_visible = { bold = true },
-      hint_visible = { bold = true },
     },
   },
 

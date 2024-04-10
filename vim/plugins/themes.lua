@@ -77,7 +77,6 @@ return {
       groups = {
         all = {
           -- editor interface
-
           LineNr = { bg = 'bg0' },
           SignColumn = { link = 'LineNr' },
           CursorLineNr = { fg = 'palette.comment' },
@@ -86,7 +85,10 @@ return {
           NonText = { fg = 'palette.comment' },
           EndOfBuffer = { fg = 'bg4' },
           Folded = { fg = 'palette.comment', style = 'bold' },
-          Title = { fg = 'syntax.string' },
+
+          PmenuSel = { fg = 'black' },
+          TabLine = { fg = 'palette.comment', bg = 'bg0' },
+          TabLineSel = { fg = 'palette.white', bg = 'bg1', style = 'bold' },
           WinBar = { bg = 'bg0' },
           WinSeparator = { fg = 'bg4' },
 
@@ -94,18 +96,15 @@ return {
           CurSearch = { fg = '#ecffd9', bg = '#5f875f', style = 'bold' },
           IncSearch = { link = 'Search' },
 
-          PmenuSel = { fg = 'black' },
-
           DiffDelete = { fg = 'orange' },
           DiffText = { style = 'bold' },
 
-          MatchParen = { fg = 'none', bg = 'sel0', style = 'bold' },
-          MatchWord = { style = 'bold' },
-
           ErrorMsg = { style = 'bold' },
           WarningMsg = { style = 'bold' },
+          MoreMsg = { fg = 'diag.hint' },
 
-          -- TODO: fix upstream?
+          -- fix background color for diagnostic signs
+          -- TODO: submit upstream?
           DiagnosticSignError = { fg = 'diag.error', bg = 'bg0' },
           DiagnosticSignWarn  = { fg = 'diag.warn',  bg = 'bg0' },
           DiagnosticSignInfo  = { fg = 'diag.info',  bg = 'bg0' },
@@ -119,9 +118,9 @@ return {
           DiagnosticSignCursorOk    = { fg = 'diag.ok',    bg = 'bg1' },
 
           -- syntax highlighting
-
           Delimiter = { fg = 'syntax.statement' },
           Statement = { fg = 'syntax.statement' },
+          Title = { fg = 'syntax.string' },
           Todo = { fg = 'diag.warn', bg = 'none', style = 'bold' },
 
           ['@markup.heading'] = { link = 'Function' },
@@ -148,10 +147,12 @@ return {
           ['@variable.bash'] = { link = 'PreProc' },
 
           -- plugins
-
           LazyButtonActive = { link = 'LazyH1' },
           LazyDimmed = { link = 'Comment' },
           LazyProp = { link = 'Comment' },
+
+          MatchParen = { fg = 'none', bg = 'sel0', style = 'bold' },
+          MatchWord = { style = 'bold' },
         },
       },
     }

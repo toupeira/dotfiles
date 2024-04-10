@@ -1,4 +1,6 @@
-vim.cmd('hi! ErrorMsg guifg=#ff6b83 guibg=NONE gui=bold')
+-- set colors for startup errors
+vim.cmd('hi! ErrorMsg guifg=#ffcb6b gui=bold guibg=NONE')
+vim.cmd('hi! Question guifg=#C3E88D gui=bold')
 
 require('core.options')
 require('core.autocmds')

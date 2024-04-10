@@ -47,10 +47,6 @@ return {
       ['--layout'] = 'default',
     },
 
-    fzf_colors = {
-      ['hl+'] = { 'bg', 'CurSearch' },
-    },
-
     defaults = {
       color_icons = false,
     },
