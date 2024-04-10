@@ -42,7 +42,7 @@ vim.cmd([[
   set winminheight=3
   set splitbelow
   set splitright
-  set splitkeep=screen
+  " set splitkeep=screen
 
   " line numbers and signs
   set number
@@ -115,24 +115,4 @@ vim.cmd([[
   " window title
   set title
   let &titlestring = "  %t%{&modified ? ' ●' : ''}%{&readonly ? ' 󰌾 ' : ''} [%{v:lua.require('util').project_path()}]"
-
-  " terminal colors
-  " synced from `dconf/com.gexperts.Tilix.ini`
-  let g:terminal_color_0  = '#555753'
-  let g:terminal_color_1  = '#FF4040'
-  let g:terminal_color_2  = '#4D9A05'
-  let g:terminal_color_3  = '#C3A000'
-  let g:terminal_color_4  = '#417FCF'
-  let g:terminal_color_5  = '#8E6199'
-  let g:terminal_color_6  = '#05979A'
-  let g:terminal_color_7  = '#D3D6CF'
-
-  let g:terminal_color_8  = '#545652'
-  let g:terminal_color_9  = '#FF4040'
-  let g:terminal_color_10 = '#89E234'
-  let g:terminal_color_11 = '#FBE84F'
-  let g:terminal_color_12 = '#729ECF'
-  let g:terminal_color_13 = '#AC7EA8'
-  let g:terminal_color_14 = '#34E2E2'
-  let g:terminal_color_15 = '#EDEDEB'
 ]])

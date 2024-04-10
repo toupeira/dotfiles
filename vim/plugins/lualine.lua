@@ -57,7 +57,7 @@ return {
 
         lualine_c = {
           { 'filename',
-            icon = '',
+            icon = '',
             shorting_target = 0,
             newfile_status = true,
             symbols = {
@@ -76,10 +76,6 @@ return {
             sources = { 'nvim_diagnostic' },
             symbols = { error = '● ', warn = '● ', info = '● ', hint = '● ' },
             colored = true,
-          },
-          { 'aerial',
-            dense = true,
-            dense_sep = '  ',
           },
         },
 

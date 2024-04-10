@@ -30,7 +30,7 @@ vim.cmd([[
   autocmd FileType qf lua require('util').resize_window({ max = 5 })
 
   " terminals
-  autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no
+  autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no winhighlight=Normal:TermCursorNC
   autocmd TermClose * if !v:event.status && &ft != 'fzf' | bd | endif
   autocmd BufWinEnter,WinEnter term://* startinsert!
   autocmd BufWinLeave,WinLeave term://* stopinsert

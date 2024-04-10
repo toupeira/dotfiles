@@ -3,52 +3,49 @@
 [ "$BASH_INTERACTIVE" ] || return
 
 function login_banner {
-  if [ -z "$BASH_LOGIN" ]; then
-    return
-  elif [ "${PWD%/}" != "$HOME" ] || [ "$FLOATING_TERMINAL" ] || { [ $LINES -lt 25 ] && ! [ "$SSH_CONNECTION" ]; }; then
+  if [ -z "$BASH_LOGIN" ] || [ "${PWD%/}" != "$HOME" ] || [ "$FLOATING_TERMINAL" ] || { [ $LINES -lt 25 ] && ! [ "$SSH_CONNECTION" ]; }; then
     down
+    return
+  fi
+
+  clear
+
+  if [ -f /run/motd.dynamic ]; then
+    local motd=$( cat /run/motd.dynamic )
+  elif [ -f /etc/motd ]; then
+    local motd=$( cat /etc/motd )
   else
-    clear
-
-    if [ -f /run/motd.dynamic ]; then
-      local motd=$( cat /run/motd.dynamic )
-    elif [ -f /etc/motd ]; then
-      local motd=$( cat /etc/motd )
-    else
-      local motd=$( uname -a )
-    fi
-    echo -e "\e[1;37m$motd\e[0m"
-    if [ "$( echo "$motd" | wc -l )" != 1 ]; then
-      echo
-    fi
-
-    uptime
+    local motd=$( uname -a )
+  fi
+  echo -e "\e[1;37m$motd\e[0m"
+  if [ "$( echo "$motd" | wc -l )" != 1 ]; then
     echo
-    if [ "$SSH_CONNECTION" ] || [ -z "$DISPLAY" ]; then
-      echo -e "\\e[0;36mWelcome \\e[1;36m${USERNAME:-$USER}\\e[0;36m on \\e[1;33m$( hostname -f )\\e[0m"
-      echo
-    fi
+  fi
 
-    if has fortune && [ -z "$SSH_CONNECTION" ]; then
-      fortune -acs -n $((LINES*15)) \
-        | fold -sw $((COLUMNS-3)) \
-        | awk '
-          NR == 1 && match($0, /^\(.+\)$/) { print "🍪 \033[0;32m❰\033[1;32m" substr($0, RSTART+1, RLENGTH-2) "\033[0;32m❱\033[0m"; next }
-          NR == 2 { next }
-          { print "  \033[0;32m" $0 "\033[0m" }
-        '
-      echo
-    fi
-
-    ls -C
+  uptime
+  echo
+  if [ "$SSH_CONNECTION" ] || [ -z "$DISPLAY" ]; then
+    echo -e "\\e[0;36mWelcome \\e[1;36m${USERNAME:-$USER}\\e[0;36m on \\e[1;33m$( hostname -f )\\e[0m"
     echo
-    local mails=$( from -c 2>/dev/null | grep -v "There are 0 messages" )
-    if [ "$mails" ]; then
-      echo -e " 🎯 \\033[1;32m$mails\\033[0m"
-      echo
-    fi
+  fi
 
-    true # for _ps1_exit_status
+  if has fortune && [ -z "$SSH_CONNECTION" ]; then
+    fortune -acs -n $((LINES*15)) \
+      | fold -sw $((COLUMNS-3)) \
+      | awk '
+        NR == 1 && match($0, /^\(.+\)$/) { print "🍪 \033[0;32m❰\033[1;32m" substr($0, RSTART+1, RLENGTH-2) "\033[0;32m❱\033[0m"; next }
+        NR == 2 { next }
+        { print "  \033[0;32m" $0 "\033[0m" }
+      '
+    echo
+  fi
+
+  ls -C
+  echo
+  local mails=$( from -c 2>/dev/null | grep -v "There are 0 messages" )
+  if [ "$mails" ]; then
+    echo -e " 🎯 \\033[1;32m$mails\\033[0m"
+    echo
   fi
 }
 

@@ -19,7 +19,7 @@ shopt -s histverify
 shopt -s nocaseglob
 
 # Disable flow control (Ctrl-S/Q)
-stty -ixon
+[ -t 1 ] && stty -ixon
 
 # Start tmux or attach to existing session
 if [ "$BASH_LOGIN" ] && [ -z "$TMUX" ] && [ "$UID" -ne 0 ] && [ -z "$SUDO_USER" ] && has tmux; then

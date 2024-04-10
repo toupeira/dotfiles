@@ -16,20 +16,16 @@ return {
   { 'tpope/vim-scriptease' },
 
   { 'alexghergh/nvim-tmux-navigation',
-    config = function()
-      local nvim_tmux_nav = require('nvim-tmux-navigation')
-
-      nvim_tmux_nav.setup({
-        disable_when_zoomed = true,
-        map_modes = { 'n', 't' },
-        keybindings = {
-          left = '<C-h>',
-          down = '<C-j>',
-          up = '<C-k>',
-          right = '<C-l>',
-        }
-      })
-    end
+    opts = {
+      disable_when_zoomed = true,
+      map_modes = { 'n', 't' },
+      keybindings = {
+        left = '<C-h>',
+        down = '<C-j>',
+        up = '<C-k>',
+        right = '<C-l>',
+      }
+    }
   },
 
   { 'AndrewRadev/bufferize.vim',
@@ -42,10 +38,7 @@ return {
   { 'andymass/vim-matchup',
     init = function()
       vim.g.matchup_matchparen_deferred = 1
-      vim.g.matchup_matchparen_offscreen = {
-        method = 'popup',
-        border = 'shadow'
-      }
+      vim.g.matchup_matchparen_offscreen = {}
     end
   },
 

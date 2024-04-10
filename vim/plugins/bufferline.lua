@@ -5,9 +5,54 @@ local nmap = util.nmap
 return {
   'akinsho/bufferline.nvim',
 
-  config = function()
+  opts = {
+    options = {
+      always_show_bufferline = false,
+      indicator = { style = 'none' },
+      separator_style = 'slope',
+      show_buffer_close_icons = false,
+      show_close_icon = false,
+      sort_by = 'insert_after_current',
+      tab_size = 1,
+
+      close_command = 'BufDel %d',
+      right_mouse_command = nil,
+
+      diagnostics = 'nvim_lsp',
+      diagnostics_indicator = function(count, _level)
+        return '● ' .. count
+      end,
+    },
+
+    highlights = {
+      buffer_visible = { bold = true },
+      error_visible = { bold = true },
+      warning_visible = { bold = true },
+      info_visible = { bold = true },
+      hint_visible = { bold = true },
+    },
+  },
+
+  config = function(_, opts)
     local bufferline = require('bufferline')
     local orange = util.get_color('DiagnosticWarn')
+
+    opts = util.merge(opts, {
+      options = {
+        style_preset = bufferline.style_preset.no_italic,
+      },
+
+      highlights = {
+        modified = { fg = orange },
+        modified_visible = { fg = orange },
+        modified_selected = { fg = orange },
+      }
+    })
+
+    -- tweak slope separators
+    require('bufferline.constants').sep_chars.slope = { '', '' }
+
+    bufferline.setup(opts)
 
     nmap('<Leader>n', function() bufferline.cycle(1) end, 'Go to next buffer')
     nmap('<Leader>p', function() bufferline.cycle(-1) end, 'Go to previous buffer')
@@ -17,42 +62,6 @@ return {
     for i = 1, 9 do
       nmap('<Leader>' .. i, function() bufferline.go_to(i) end, 'Go to buffer ' .. i)
     end
-
-    -- tweak slope separators
-    require('bufferline.constants').sep_chars.slope = { '', '' }
-
-    bufferline.setup({
-      options = {
-        always_show_bufferline = false,
-        indicator = { style = 'none' },
-        separator_style = 'slope',
-        show_buffer_close_icons = false,
-        show_close_icon = false,
-        sort_by = 'insert_after_current',
-        style_preset = bufferline.style_preset.no_italic,
-        tab_size = 1,
-
-        close_command = 'BufDel %d',
-        right_mouse_command = nil,
-
-        diagnostics = 'nvim_lsp',
-        diagnostics_indicator = function(count, _level)
-          return '● ' .. count
-        end,
-      },
-
-      highlights = {
-        buffer_visible = { bold = true },
-        error_visible = { bold = true },
-        warning_visible = { bold = true },
-        info_visible = { bold = true },
-        hint_visible = { bold = true },
-
-        modified = { fg = orange },
-        modified_visible = { fg = orange },
-        modified_selected = { fg = orange },
-      },
-    })
 
     -- show bufferline when tabs are used
     -- TODO: fix upstream

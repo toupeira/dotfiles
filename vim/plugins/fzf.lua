@@ -2,16 +2,91 @@ local util = require('util')
 
 local nmap = util.nmap
 local merge = util.merge
-
 local expand = vim.fn.expand
 
 return {
   'ibhagwan/fzf-lua',
   lazy = false,
 
-  config = function()
+  opts = {
+    winopts = {
+      width = 0.9,
+      height = 0.9,
+      preview = {
+        hidden = 'hidden',
+        vertical = 'up:60%',
+        horizontal = 'right:50%',
+        title = false,
+      },
+    },
+
+    keymap = {
+      builtin = {
+        ['<F1>']  = 'toggle-help',
+        ['<C-_>'] = 'toggle-preview',
+        ['<C-e>'] = 'preview-page-down',
+        ['<C-y>'] = 'preview-page-up',
+        ['<C-f>'] = 'preview-page-down',
+        ['<C-b>'] = 'preview-page-up',
+      },
+      -- remove defaults, still uses $FZF_DEFAULT_OPTS
+      fzf = {},
+    },
+
+    hls = {
+      border = 'NonText',
+      preview_border = 'NonText',
+      help_border = 'NonText',
+      header_bind = 'WarningMsg',
+      header_text = 'Type',
+      buf_flag_cur = 'Title',
+      buf_flag_alt = 'WarningMsg',
+    },
+
+    fzf_opts = {
+      ['--layout'] = 'default',
+    },
+
+    fzf_colors = {
+      ['hl+'] = { 'bg', 'CurSearch' },
+    },
+
+    defaults = {
+      color_icons = false,
+    },
+
+    files = {
+      fd_opts = '--color always --max-results 99999 --type f --type l --hidden --exclude .git',
+      git_icons = false,
+      no_header = true,
+    },
+
+    buffers = {
+      winopts = { height = 12, row = 0.85 },
+      fzf_opts = { ['--header-lines'] = false },
+    },
+
+    colorschemes = {
+      colors = {
+        'nordfox',
+        'nightfox',
+        'duskfox',
+        'carbonfox',
+        'catppuccin-mocha',
+        'material-deep-ocean',
+        'tokyonight-night',
+
+        'dayfox',
+        'dawnfox',
+        'catppuccin-latte',
+        'material-lighter',
+        'tokyonight-day',
+      },
+    },
+  },
+
+  config = function(_, opts)
     local fzf = require('fzf-lua')
-    local actions = require('fzf-lua.actions')
 
     -- keymaps
     -- map each provider with ',<key>` and ',,<key>` for resuming
@@ -69,88 +144,7 @@ return {
     map_fzf('<Leader>gm', 'git_status')
     map_fzf('<Leader>gB', 'git_branches')
 
-    -- default settings
-    local opts = {
-      winopts = {
-        width = 0.9,
-        height = 0.9,
-        preview = {
-          hidden = 'hidden',
-          vertical = 'up:60%',
-          horizontal = 'right:50%',
-          title = false,
-        },
-      },
-
-      keymap = {
-        builtin = {
-          ['<F1>']  = 'toggle-help',
-          ['<C-_>'] = 'toggle-preview',
-          ['<C-e>'] = 'preview-page-down',
-          ['<C-y>'] = 'preview-page-up',
-          ['<C-f>'] = 'preview-page-down',
-          ['<C-b>'] = 'preview-page-up',
-        },
-        -- remove defaults, still uses $FZF_DEFAULT_OPTS
-        fzf = {},
-      },
-
-      hls = {
-        border = 'NonText',
-        preview_border = 'NonText',
-        help_border = 'NonText',
-        header_bind = 'WarningMsg',
-        header_text = 'Type',
-        buf_flag_cur = 'Title',
-        buf_flag_alt = 'WarningMsg',
-      },
-
-      fzf_opts = {
-        ['--layout'] = 'default',
-      },
-
-      fzf_colors = {
-        ['hl+'] = { 'bg', 'CurSearch' },
-      },
-
-      defaults = {
-        color_icons = false,
-      },
-
-      actions = {
-        files = { default = actions.file_edit },
-      },
-
-      files = {
-        fd_opts = '--color always --max-results 99999 --type f --type l --hidden --exclude .git',
-        git_icons = false,
-        no_header = true,
-      },
-
-      buffers = {
-        winopts = { height = 12, row = 0.85 },
-        fzf_opts = { ['--header-lines'] = false },
-      },
-
-      colorschemes = {
-        colors = {
-          'nordfox',
-          'nightfox',
-          'duskfox',
-          'carbonfox',
-          'catppuccin-mocha',
-          'material-deep-ocean',
-          'tokyonight-night',
-
-          'dayfox',
-          'dawnfox',
-          'catppuccin-latte',
-          'material-lighter',
-          'tokyonight-day',
-        },
-      },
-    }
-
+    -- add default settings
     local preview = { winopts = { preview = { hidden = 'nohidden' }}}
     local reverse = { fzf_opts = { ['--layout'] = 'reverse-list', ['--no-sort'] = true }}
 
