@@ -111,7 +111,7 @@ return {
     end
 
     -- resume last provider
-    nmap('<Leader>,,', fzf.resume, 'Resume last search')
+    nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume last search')
 
     -- files
     map_fzf('<Leader>f', 'files')
@@ -121,8 +121,8 @@ return {
     map_fzf('<Leader>b', 'buffers')
 
     -- file contents
-    map_fzf('<Leader>r', 'grep_cword')
-    map_fzf('<Leader>R', 'live_grep')
+    map_fzf('<Leader>r', 'live_grep')
+    map_fzf('<Leader>R', 'grep_cword')
     map_fzf('<Leader>l', 'blines', function() return { query = expand('<cword>') } end)
     map_fzf('<Leader>L', 'lines', function() return { query = expand('<cword>') } end)
 

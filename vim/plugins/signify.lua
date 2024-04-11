@@ -1,6 +1,5 @@
 return {
   'mhinz/vim-signify',
-  event = 'VeryLazy',
 
   config = function()
     vim.g.signify_vcs_list = { 'git' }

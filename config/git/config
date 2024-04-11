@@ -132,6 +132,8 @@
   st = status
   sta = -c diff.ignoreSubmodules=none st
   modified = !git --no-pager diff HEAD --name-only
+  staged = !git --no-pager diff --cached --name-only
+  unstaged = !git --no-pager diff --name-only
   untracked = ls-files --others --exclude-standard
   ss = !git --no-pager show --stat
 

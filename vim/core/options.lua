@@ -53,7 +53,7 @@ vim.cmd([[
   set noshowmode
   set noruler
   set report=0
-  set shortmess+=AcC
+  set shortmess+=aAcC
   set wildmode=longest:full,full
 
   " get rid of the command window
@@ -62,7 +62,7 @@ vim.cmd([[
   set cedit=
 
   " auto-completion
-  set completeopt=menuone,noinsert
+  set completeopt=menuone,noinsert,preview
   set pumblend=10
   set pumheight=15
 

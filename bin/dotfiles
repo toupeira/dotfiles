@@ -443,11 +443,17 @@ function run {
       ;;
     # }}}
     commit|ci) # {{{
+      local message
       if [ "$1" = "-m" ]; then
-        local message="$2"
+        message="$2"
         shift 2
       else
-        local message="Sync dotfiles"
+        message="Sync dotfiles"
+        msg "{{Message:}} \e[0;34m[$message] " 4 "" -n
+        read -r
+        if [ "$REPLY" ]; then
+          message="$REPLY"
+        fi
       fi
 
       git ignore-errors commit -m "$message" "$@"
@@ -455,7 +461,7 @@ function run {
     # }}}
     commit-all|ca) # {{{
       if has-changes; then
-        status "Committing changes..."
+        status "Committing all changes..."
         git ignore-errors add -A .
         run commit "$@"
       else

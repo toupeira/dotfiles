@@ -23,6 +23,10 @@ nmap('<Leader>S', ':botright split', 'Split horizontally (full width)')
 nmap('<Leader>v', ':vsplit', 'Split vertically')
 nmap('<Leader>V', ':botright vsplit', 'Split vertically (full height)')
 
+nmap('<Leader><Tab>', [[
+  empty(getreg('#')) || !buflisted(getreg('#')) ? '<Cmd>bnext<CR>' : '<C-^>'
+]], { expr = true, desc = 'Switch to alternate buffer' })
+
 nmap('', '<C-w>=', 'Align windows') -- <C-minus>
 
 nmap('<Leader>c', function()
@@ -54,11 +58,8 @@ nmap('<Leader>X', ':tabclose', 'Close current tab')
 -- File editing --------------------------------------------------------
 
 nmap('<Leader>w', ':write', 'Save current buffer')
-
+nmap('<Leader>N', ':enew', 'Create a new buffer')
 nmap('<Leader>C', function() return ':e ' .. expand('%:p:h') .. '/' end, { expr = true, desc = 'Create file in directory of current buffer' })
-
--- use <C-q> as replacement for <C-v>
-map({ 'n', 'v', 'o', 'i', 'c' }, '<C-q>', '<C-v>', 'Insert raw character')
 
 vmap('<C-c>', '"+y`]', 'Copy to clipboard')
 vmap('<C-x>', '"+d', 'Cut to clipboard')
@@ -156,7 +157,4 @@ vim.cmd([[
 
   " <y> - keep cursor position when yanking in visual mode
   xnoremap <silent><expr> y "ygv" . mode()
-
-  " switch to alternate buffer
-  nnoremap <silent><expr> <Leader><Tab> empty(getreg('#')) \|\| !buflisted(getreg('#')) ? ':bnext<CR>' : '<C-^>'
 ]])

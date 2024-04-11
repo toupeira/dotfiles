@@ -9,12 +9,16 @@ end
 
 require('lazy').setup('plugins', {
   root = LAZY_ROOT,
-  install = { missing = false },
+  install = { missing = true },
   change_detection = { notify = false },
 
   ui = {
     border = 'rounded',
     size = { width = 0.9, height = 0.8 },
+  },
+
+  readme = {
+    fles = { 'README.md', 'README.markdown', 'lua/**/README.md' },
   },
 
   performance = {
