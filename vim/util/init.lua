@@ -21,6 +21,12 @@ end
 
 -- Configuration helpers -----------------------------------------------
 
+-- Load a plugin after startup
+util.lazy = function(plugin)
+  plugin.event = 'VeryLazy'
+  return plugin
+end
+
 -- Map a key with sensible defaults.
 util.map = function(mode, lhs, rhs, opts, desc)
   -- use string arguments as description
@@ -120,11 +126,11 @@ end
 -- ('root/a/b/c/dir', 'root/a/…/dir', 'root/…').
 util.project_path = function(max)
   local path = expand('%:p:h'):gsub('^fugitive:.*', ''):gsub('^diffview:.*', '')
-  local git_dir = vim.fn.FugitiveGitDir()
+  local _, git_dir = pcall(vim.fn.FugitiveGitDir)
   local root, name
 
   -- determine root and name
-  if git_dir ~= '' then
+  if git_dir and git_dir ~= '' then
     root = fnamemodify(git_dir, ':p:h:h')
     name = fnamemodify(root, ':t')
   else

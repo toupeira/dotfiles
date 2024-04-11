@@ -10,11 +10,6 @@ local nvomap = util.nvomap
 
 local expand = vim.fn.expand
 
--- Leader keys ---------------------------------------------------------
-
-vim.g.mapleader = ','
-vim.g.maplocalleader = '\\'
-
 -- Mode switching ------------------------------------------------------
 
 imap('<C-c>', '<Esc>', 'Leave insert mode')
@@ -43,8 +38,6 @@ nmap('<Leader>c', function()
 
   pcall(vim.cmd.close)
 end, 'Close current window')
-
-nmap('<Leader>x', { 'lclose', 'BufDel' }, 'Close current buffer (keep window)')
 
 nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window')
 

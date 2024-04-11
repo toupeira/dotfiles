@@ -3,11 +3,14 @@ local nmap = util.nmap
 
 return {
   'misterbuckley/vim-definitive',
+  cmd = { 'FindDefinition', 'SFindDefinition' },
 
-  config = function()
+  init = function()
     nmap('gd', { 'FindDefinition', 'normal zvzz' }, 'Go to definition')
     nmap('gD', { 'SFindDefinition', 'normal zvzz' }, 'Go to definition in split')
+  end,
 
+  config = function()
     vim.g.definitive_associated_filetypes = {
       eruby = 'ruby',
       haml = 'ruby',

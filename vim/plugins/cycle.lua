@@ -1,5 +1,6 @@
 return {
   'bootleq/vim-cycle',
+  event = 'VeryLazy',
 
   init = function()
     vim.g.cycle_no_mappings = 1

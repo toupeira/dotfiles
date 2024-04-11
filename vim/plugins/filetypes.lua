@@ -1,9 +1,10 @@
 return {
-  { 'elixir-lang/vim-elixir' },
-  { 'habamax/vim-godot' },
-  { 'hail2u/vim-css3-syntax' },
+  { 'elixir-lang/vim-elixir', ft = { 'elixir', 'eelixir' } },
+  { 'habamax/vim-godot', ft = { 'gdscript', 'gsl' }},
+  { 'hail2u/vim-css3-syntax', ft = { 'css', 'scss' }},
 
   { 'preservim/vim-markdown',
+    ft = 'markdown',
     config = function()
       vim.g.vim_markdown_folding_disabled = 0
       vim.g.vim_markdown_folding_style_pythonic = 1
@@ -16,6 +17,7 @@ return {
   },
 
   { 'vim-ruby/vim-ruby',
+    ft = 'ruby',
     config = function()
       vim.g.ruby_operators = 1
       vim.g.ruby_pseudo_operators = 1

@@ -1,5 +1,6 @@
 return {
   'dense-analysis/ale',
+  event = 'VeryLazy',
 
   init = function()
     vim.cmd([[

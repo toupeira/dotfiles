@@ -1,5 +1,6 @@
 return {
   'Shougo/deoplete.nvim',
+  event = 'VeryLazy',
   dependencies = {
     { 'Shougo/neco-vim' },
     { 'Shougo/neco-syntax',

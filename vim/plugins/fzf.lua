@@ -6,7 +6,7 @@ local expand = vim.fn.expand
 
 return {
   'ibhagwan/fzf-lua',
-  lazy = false,
+  event = 'VeryLazy',
 
   opts = {
     winopts = {
@@ -83,6 +83,11 @@ return {
 
   config = function(_, opts)
     local fzf = require('fzf-lua')
+    local actions = require('fzf-lua.actions')
+
+    opts.actions = {
+      files = { default = actions.file_edit },
+    }
 
     -- keymaps
     -- map each provider with ',<key>` and ',,<key>` for resuming

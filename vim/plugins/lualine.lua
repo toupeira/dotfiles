@@ -2,12 +2,10 @@ local util = require('util')
 
 return {
   'nvim-lualine/lualine.nvim',
-  lazy = false,
 
   opts = function()
     local orange = util.get_color('DiagnosticWarn')
     local magenta = util.get_color('Statement')
-    local white = '#ffffff'
 
     vim.opt.shortmess:append('S') -- searchcount
     vim.o.showcmd = false         -- selectioncount
@@ -67,7 +65,7 @@ return {
             },
             color = function()
               return {
-                fg = vim.bo.modified and orange or white,
+                fg = vim.bo.modified and orange or 'white',
                 gui = 'bold'
               }
             end,

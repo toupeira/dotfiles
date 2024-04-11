@@ -33,6 +33,12 @@ return {
       close_command = 'BufDel %d',
       right_mouse_command = nil,
     },
+
+    highlights = {
+      buffer_selected = { fg = 'white' },
+      buffer_visible = { fg = 'white' },
+      tab_selected = { fg = 'white', bold = true },
+    },
   },
 
   config = function(_, opts)
