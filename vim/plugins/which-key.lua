@@ -6,6 +6,8 @@ return { 'folke/which-key.nvim',
   end,
 
   opts = {
+    show_help = false,
+
     plugins = {
       presets = {
         operators = false,
@@ -16,13 +18,19 @@ return { 'folke/which-key.nvim',
 
     window = {
       margin = { 0, 0, 1, 0 },
-      padding = { 1, 1, 1, 1 },
+      padding = { 1, 1, 1, 0 },
       winblend = 10,
     },
 
     layout = {
-      height = { min = 1, max = 5 },
-      width = { min = 20, max = 30 },
+      height = { min = 1, max = 10 },
+      width = { min = 35, max = 35 },
+      align = 'center',
+    },
+
+    icons = {
+      breadcrumb = '',
+      group = ' ',
     },
 
     popup_mappings = {

@@ -104,9 +104,13 @@ return {
     end,
     opts = {
       nav = {
-        max_width = 0.2,
-        win_opts = {winblend = 5 },
+        min_width = 0.29,
+        max_width = 0.29,
+        min_height = 0.6,
+        max_height = 0.9,
+        win_opts = { winblend = 5 },
         keymaps = { q = 'actions.close' },
+        preview = true,
       },
     }
   },

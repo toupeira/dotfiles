@@ -36,8 +36,13 @@ return {
 
     highlights = {
       buffer_selected = { fg = 'white' },
-      buffer_visible = { fg = 'white' },
       tab_selected = { fg = 'white', bold = true },
+
+      buffer_visible = {
+        fg = { highlight = 'Comment', attribute = 'fg' },
+        bg = { highlight = 'Normal', attribute = 'bg' },
+        bold = true
+      },
     },
   },
 

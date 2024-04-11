@@ -443,6 +443,17 @@ function run {
       ;;
     # }}}
     commit|ci) # {{{
+      staged=$( git staged )
+      if ! [ "$staged" ]; then
+        warning "{{Nothing to commit.}}"
+        return 1
+      fi
+
+      echo
+      status "Committing changes:"
+      echo "$staged" | sed -r 's/^/ \o033[0;32mM\o033[0m /'
+      echo
+
       local message
       if [ "$1" = "-m" ]; then
         message="$2"
@@ -460,13 +471,13 @@ function run {
       ;;
     # }}}
     commit-all|ca) # {{{
-      if has-changes; then
-        status "Committing all changes..."
-        git ignore-errors add -A .
-        run commit "$@"
-      else
-        status "No changes."
+      if ! has-changes; then
+        warning "No changes."
+        return 1
       fi
+
+      git ignore-errors add -A .
+      run commit "$@"
       ;;
     # }}}
     pull|up) # {{{

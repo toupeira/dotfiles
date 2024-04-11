@@ -125,7 +125,7 @@ end
 -- Optionally try to shorten the path to {max} characters
 -- ('root/a/b/c/dir', 'root/a/…/dir', 'root/…').
 util.project_path = function(max)
-  local path = expand('%:p:h'):gsub('^fugitive:.*', ''):gsub('^diffview:.*', '')
+  local path = expand('%:p:h'):gsub('^term://(.*)//[0-9]+.*', '%1'):gsub('^fugitive:.*', ''):gsub('^diffview:.*', '')
   local _, git_dir = pcall(vim.fn.FugitiveGitDir)
   local root, name
 

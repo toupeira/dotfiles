@@ -38,7 +38,7 @@ return {
 
             bg0 = '#11131a',  -- Dark bg (status line and float)
             bg1 = '#191c26',  -- Default bg
-            bg2 = '#2f3347',  -- Lighter bg (colorcolm folds)
+            bg2 = '#222633',  -- Lighter bg (colorcolm folds)
             bg3 = '#2f3347',  -- Lighter bg (cursor line)
             bg4 = '#3b4048',  -- Conceal, border fg
 
@@ -89,7 +89,7 @@ return {
 
             NonText = { fg = 'palette.comment' },
             EndOfBuffer = { fg = 'bg4' },
-            Folded = { fg = 'palette.comment', style = 'bold' },
+            Folded = { fg = 'palette.comment', bg = 'bg3', style = 'bold' },
 
             PmenuSel = { fg = 'black' },
             TabLine = { fg = 'palette.comment', bg = 'bg0' },

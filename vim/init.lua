@@ -10,8 +10,10 @@ vim.cmd('hi! ErrorMsg guifg=#ffcb6b gui=bold guibg=NONE')
 vim.cmd('hi! Question guifg=#C3E88D gui=bold')
 
 -- load configuration
-require('core.lazy')
 require('core.options')
-require('core.autocmds')
 require('core.keymaps')
+require('core.autocmds')
 require('core.diagnostics')
+
+-- load plugins
+require('core.lazy')
