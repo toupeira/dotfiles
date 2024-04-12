@@ -25,7 +25,14 @@ vim.g.loaded_ruby_provider = 0
 -- TODO: convert to Lua
 vim.cmd([[
   " interface
-  set termguicolors
+  if getenv('XDG_SESSION_TYPE') == 'tty'
+    set notermguicolors
+    colorscheme ron
+  else
+    set termguicolors
+    set pumblend=10
+  endif
+
   set updatetime=250
   set mouse=ar
   set mousemodel=extend
@@ -63,8 +70,7 @@ vim.cmd([[
 
   " auto-completion
   set completeopt=menuone,noinsert,preview
-  set pumblend=10
-  set pumheight=15
+  set pumheight=25
 
   " indenting
   set ts=2 sts=2 sw=2

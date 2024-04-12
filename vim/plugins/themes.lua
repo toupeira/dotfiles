@@ -7,7 +7,9 @@ return {
     priority = 1000,
 
     init = function()
-      vim.cmd.colorscheme('nordfox')
+      if vim.o.termguicolors then
+        vim.cmd.colorscheme('nordfox')
+      end
     end,
 
     opts = function()
@@ -60,7 +62,7 @@ return {
         },
 
         specs = {
-          all = {
+          nordfox = {
             syntax = {
               const = 'cyan',
               ident = 'red',

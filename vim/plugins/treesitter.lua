@@ -28,6 +28,7 @@ return {
       'vimdoc',
       'vue',
       'yaml',
+      'xml',
     },
     highlight = {
       enable = true,

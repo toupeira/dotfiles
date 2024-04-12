@@ -85,12 +85,29 @@ return {
     local fzf = require('fzf-lua')
     local actions = require('fzf-lua.actions')
 
+    -- override actions
     opts.actions = {
       files = { default = actions.file_edit },
+      helptags = { default = actions.help_tab },
     }
 
-    -- keymaps
-    -- map each provider with ',<key>` and ',,<key>` for resuming
+    -- add default settings
+    local preview = { winopts = { preview = { hidden = 'nohidden' }}}
+    local reverse = { fzf_opts = { ['--layout'] = 'reverse-list', ['--no-sort'] = true }}
+
+    opts.lines = merge(opts.lines, reverse)
+    opts.blines = merge(opts.lines, reverse)
+
+    opts.helptags = merge(opts.helptags, preview)
+    opts.highlights = merge(opts.highlights, preview)
+
+    opts.git = merge(opts.git, {})
+    opts.git.status = merge(opts.git.status, preview)
+
+    fzf.setup(opts)
+
+    -- map each provider with '<Leader><key>`,
+    -- and '<Leader><Leader><key>` for resuming
     local function get_args(args)
       if type(args) == 'function' then return args() end
       if args then return merge({}, args) end
@@ -144,20 +161,5 @@ return {
     -- git
     map_fzf('<Leader>gm', 'git_status')
     map_fzf('<Leader>gB', 'git_branches')
-
-    -- add default settings
-    local preview = { winopts = { preview = { hidden = 'nohidden' }}}
-    local reverse = { fzf_opts = { ['--layout'] = 'reverse-list', ['--no-sort'] = true }}
-
-    opts.lines = merge(opts.lines, reverse)
-    opts.blines = merge(opts.lines, reverse)
-
-    opts.helptags = merge(opts.helptags, preview)
-    opts.highlights = merge(opts.highlights, preview)
-
-    opts.git = merge(opts.git, {})
-    opts.git.status = merge(opts.git.status, preview)
-
-    fzf.setup(opts)
   end
 }

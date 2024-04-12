@@ -65,6 +65,7 @@ return {
 
   { 'nvim-tree/nvim-web-devicons',
     lazy = true,
+    cond = vim.o.termguicolors,
     opts = {
       color_icons = false,
     },

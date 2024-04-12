@@ -13,8 +13,9 @@ return {
     return {
       options = {
         globalstatus = true,
-        section_separators = { left = '', right = '' },
-        component_separators = { left = '', right = '' },
+        section_separators   = vim.o.termguicolors and { left = '', right = '' } or { left = '', right = '' },
+        component_separators = vim.o.termguicolors and { left = '', right = '' } or { left = '\\', right = '/' },
+        icons_enabled = vim.o.termguicolors,
         colored = false,
       },
 
@@ -39,7 +40,7 @@ return {
         lualine_b = {
           { 'branch',
             fmt = function(branch)
-              if branch == 'main' or branch == 'master' then
+              if vim.o.termguicolors and (branch == 'main' or branch == 'master') then
                 return ''
               end
 
@@ -79,7 +80,7 @@ return {
 
         lualine_x = {
           { function()
-              local max = math.max(10, vim.fn.winwidth(0) - 60 - #vim.fn.expand('%:t'))
+              local max = math.max(10, vim.fn.winwidth(0) - 50 - #vim.fn.expand('%:t'))
               return util.project_path(max)
             end,
             icon = '',

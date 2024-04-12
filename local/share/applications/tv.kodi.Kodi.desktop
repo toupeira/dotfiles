@@ -1,0 +1,13 @@
+[Desktop Entry]
+Version=1.0
+Name=Kodi
+GenericName=Media Center
+Comment=Manage and view your media
+Exec=sh -c "sed -ri 's/(<fvolumelevel>)[^<]*/\11/' ~/.kodi/userdata/guisettings.xml 2>/dev/null; flatpak run --branch=stable --arch=x86_64 --command=kodi tv.kodi.Kodi"
+Icon=tv.kodi.Kodi
+Terminal=false
+Type=Application
+Categories=AudioVideo;Video;Player;TV;
+Actions=Fullscreen;Standalone;
+X-Flatpak-RenamedFrom=kodi.desktop;
+X-Flatpak=tv.kodi.Kodi
