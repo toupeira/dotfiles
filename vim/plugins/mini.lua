@@ -67,8 +67,15 @@ return {
       },
 
       mappings = {
+        ['('] = { neigh_pattern = '[^\\][ \n]' },
+        ['['] = { neigh_pattern = '[^\\][ \n]' },
+        ['{'] = { neigh_pattern = '[^\\][ \n]' },
+        ['"'] = { neigh_pattern = '[^\\][ \n]' },
+        ["'"] = { neigh_pattern = '[^%a\\][ \n]' },
+        ['`'] = { neigh_pattern = '[^\\][ \n]' },
+
         [' '] = {
-          action = 'open',
+          action = 'closeopen',
           pair = '  ',
           neigh_pattern = '[%(%[{][%)%]}]',
         },

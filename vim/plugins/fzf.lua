@@ -115,16 +115,18 @@ return {
     end
 
     local function map_fzf(key, provider, args)
+      local name = provider:gsub('_', ' ')
+
       nmap(key, function()
         fzf[provider](get_args(args))
-      end, 'Search ' .. provider)
+      end, 'Search ' .. name)
 
       nmap('<Leader>' .. key, function()
         local resume_args = get_args(args)
         resume_args.resume = true
         resume_args.query = nil
         fzf[provider](resume_args)
-      end, 'Resume last ' .. provider .. ' search')
+      end, 'Resume last ' .. name .. ' search')
     end
 
     -- resume last provider
@@ -148,12 +150,12 @@ return {
     map_fzf('<Leader>/', 'search_history')
 
     -- vim internals
-    map_fzf('<Leader>??', 'help_tags')
-    map_fzf('<Leader>?m', 'man_pages')
-    map_fzf('<Leader>?k', 'keymaps')
-    map_fzf('<Leader>?c', 'commands')
-    map_fzf('<Leader>?h', 'highlights')
-    map_fzf('<Leader>?C', 'colorschemes')
+    map_fzf('<F1><F1>', 'help_tags')
+    map_fzf('<F1>m', 'man_pages')
+    map_fzf('<F1>k', 'keymaps')
+    map_fzf('<F1>c', 'commands')
+    map_fzf('<F1>h', 'highlights')
+    map_fzf('<F1>C', 'colorschemes')
 
     -- spellcheck
     map_fzf('<Leader>z', 'spell_suggest')

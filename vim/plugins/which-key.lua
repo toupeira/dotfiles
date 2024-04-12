@@ -1,8 +1,13 @@
+local util = require('util')
+
 return { 'folke/which-key.nvim',
   event = 'VeryLazy',
+  priority = 0,
 
   init = function()
-    vim.o.timeoutlen = 1000
+    vim.o.timeoutlen = 500
+    util.nmap('<F1>', ':WhichKey <F1>')
+    util.nmap('<F1><Enter>', ':Help', 'Open help in a new tab')
   end,
 
   opts = {
@@ -15,6 +20,8 @@ return { 'folke/which-key.nvim',
         text_objects = false,
       }
     },
+
+    triggers = 'auto',
 
     window = {
       margin = { 0, 0, 1, 0 },

@@ -97,7 +97,7 @@ util.create_cmd('Help', '$tab help <args>', {
   complete = 'help',
 })
 
-nmap('<F1>', ':Help', 'Open help in a tab')
+nmap('<F1>', ':Help', 'Open help in a new tab')
 
 -- override `:Man` to open in a tab
 -- see /usr/share/nvim/runtime/plugin/man.lua

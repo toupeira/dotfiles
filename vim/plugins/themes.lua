@@ -78,6 +78,12 @@ return {
               change = 'diff.change',
               text = 'diff.text',
             },
+
+            git = {
+              add = 'green',
+              removed = 'red',
+              changed = 'blue',
+            },
           },
         },
 
@@ -160,6 +166,10 @@ return {
 
             MatchParen = { fg = 'none', bg = 'sel0', style = 'bold' },
             MatchWord = { style = 'bold' },
+
+            SignifySignAdd    = { fg = 'git.add', bg = 'diff.add' },
+            SignifySignDelete = { fg = 'fg0', bg = 'diff.delete' },
+            SignifySignChange = { fg = 'git.changed', bg = 'diff.change' },
           },
         },
       }
