@@ -9,7 +9,7 @@ end
 
 require('lazy').setup('plugins', {
   root = LAZY_ROOT,
-  install = { missing = true },
+  install = { missing = true, colorscheme = { 'nordfox', 'habamax' }},
   change_detection = { notify = false },
 
   ui = {

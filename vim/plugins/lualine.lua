@@ -4,6 +4,7 @@ return {
   'nvim-lualine/lualine.nvim',
 
   opts = function()
+    local green = util.get_color('DiagnosticOk')
     local orange = util.get_color('DiagnosticWarn')
     local magenta = util.get_color('Statement')
 
@@ -31,9 +32,17 @@ return {
       sections = {
         lualine_a = {
           { 'mode',
+            separator = '',
             fmt = function(str)
+              if str == 'V-LINE'  then return 'V' end
+              if str == 'V-BLOCK' then return '^V' end
               return str:sub(1,1):lower()
             end
+          },
+          { 'selectioncount',
+            icon = '󱄽',
+            separator = '',
+            padding = { left = 0, right = 1 },
           },
         },
 
@@ -55,14 +64,24 @@ return {
         },
 
         lualine_c = {
+          {
+            'filetype',
+            icon_only = true,
+            separator = '',
+            padding = { left = 1, right = 0 },
+            fmt = function(str)
+              return #str > 0 and str or ''
+            end,
+          },
           { 'filename',
-            icon = '',
+            separator = '',
+            padding = { left = 0 },
             shorting_target = 0,
             newfile_status = true,
             symbols = {
               modified = '●',
               readonly = '󰌾',
-              newfile = '',
+              newfile = '[New]',
             },
             color = function()
               return {
@@ -71,14 +90,19 @@ return {
               }
             end,
           },
+          { 'searchcount',
+            icon = '',
+            separator = '',
+            color = { fg = green, gui = 'bold' },
+          },
+        },
+
+        lualine_x = {
           { 'diagnostics',
             sources = { 'nvim_diagnostic' },
             symbols = { error = '● ', warn = '● ', info = '● ', hint = '● ' },
             colored = true,
           },
-        },
-
-        lualine_x = {
           { function()
               local max = math.max(10, vim.fn.winwidth(0) - 50 - #vim.fn.expand('%:t'))
               return util.project_path(max)
@@ -101,19 +125,6 @@ return {
         },
 
         lualine_z = {
-          { 'searchcount',
-            icon = '',
-            separator = '',
-            padding = { left = 1, right = 0 },
-          },
-          { 'selectioncount',
-            icon = '󱄽',
-            separator = '',
-            padding = { left = 1, right = 0 },
-            fmt = function(string)
-              if string ~= '' then return '[' .. string .. ']' end
-            end
-          },
           { function()
               local line = vim.fn.line('.')
               return (line < 10 and ' ' or '') .. line
