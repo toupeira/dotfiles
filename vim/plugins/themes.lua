@@ -58,6 +58,13 @@ return {
             sel0 = '#2f3347', -- Popup bg, visual selection bg
             sel1 = '#939ede', -- Popup sel bg, search bg
 
+            search = {
+              bg0 = '#2d402d',
+              bg1 = '#5f875f',
+              fg0 = '#d7ffaf',
+              fg1 = '#ecffd9',
+            },
+
             diff = {
               add = '#1c4428',
               delete = '#993d3d',
@@ -112,8 +119,8 @@ return {
             WinBar = { bg = 'bg0' },
             WinSeparator = { fg = 'bg4' },
 
-            Search = { fg = '#d7ffaf', bg = '#2d402d', style = 'bold' },
-            CurSearch = { fg = '#ecffd9', bg = '#5f875f', style = 'bold' },
+            Search = { fg = 'palette.search.fg0', bg = 'palette.search.bg0', style = 'bold' },
+            CurSearch = { fg = 'palette.search.fg1', bg = 'palette.search.bg1', style = 'bold' },
             IncSearch = { link = 'Search' },
 
             DiffDelete = { fg = 'orange' },

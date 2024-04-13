@@ -3,7 +3,7 @@
 
 export FZF_DEFAULT_COMMAND="fdfind --color always --max-results 99999"
 export FZF_DEFAULT_OPTS="
-  --color=dark,prompt:#82b1ff,header:#82b1ff,info:240,hl:bold,gutter:-1
+  --color=dark,prompt:#82b1ff,header:#82b1ff,info:240,hl:#d7ffaf:bold,hl+:#ecffd9,gutter:-1
   --ansi --cycle --filepath-word --layout default --no-height --no-separator
   --history '$HOME/.local/state/history/fzf'
   --prompt '» '
