@@ -3,6 +3,12 @@ return {
   { 'folke/tokyonight.nvim', lazy = true },
   { 'marko-cerovac/material.nvim', lazy = true },
 
+  { 'sainnhe/gruvbox-material', lazy = true,
+    init = function()
+      vim.g.gruvbox_material_background = 'hard'
+    end
+  },
+
   { 'EdenEast/nightfox.nvim',
     priority = 1000,
 
@@ -99,7 +105,8 @@ return {
             EndOfBuffer = { fg = 'bg4' },
             Folded = { fg = 'palette.comment', bg = 'bg3', style = 'bold' },
 
-            PmenuSel = { fg = 'black' },
+            PmenuSel = { bg = 'bg1', style = 'bold' },
+            PmenuThumb = { bg = 'bg1' },
             TabLine = { fg = 'palette.comment', bg = 'bg0' },
             TabLineSel = { fg = 'palette.white', bg = 'bg1', style = 'bold' },
             WinBar = { bg = 'bg0' },
@@ -158,6 +165,18 @@ return {
             ['@punctuation.bracket.bash'] = { link = 'Operator' },
             ['@punctuation.special.bash'] = { link = 'PreProc' },
             ['@variable.bash'] = { link = 'PreProc' },
+
+            shFunctionKey = { link = 'Statement' },
+            shSet = { link = 'Operator' },
+            shStatement = { link = 'Operator' },
+
+            rubyCapitalizedMethod = { link = 'Type' },
+            rubyInclude = { link = 'Operator' },
+            rubyInterpolation = { link = 'Operator' },
+            rubyInterpolationDelimiter = { link = 'Identifier' },
+            rubyPseudoVariable = { link = 'Special' },
+            rubyStringDelimiter = { link = 'String' },
+            rubySymbol = { link = 'Special' },
 
             -- plugins
             LazyButtonActive = { link = 'LazyH1' },

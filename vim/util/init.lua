@@ -67,14 +67,37 @@ util.unmap = vim.keymap.del
 
 -- Create autocommand group
 util.augroup = function(name)
-  return vim.api.nvim_create_augroup('dotfiles_' .. name, { clear = true })
+  return vim.api.nvim_create_augroup(name, { clear = true })
 end
 
 -- Create autocommand
-util.autocmd = vim.api.nvim_create_autocmd
+local augroup_default
+util.autocmd = function(event, pattern, command)
+  augroup_default = augroup_default or util.augroup('dotfiles')
+  local opts = { group = augroup_default }
+
+  if pattern and not command then
+    command = pattern
+  else
+    opts.pattern = pattern
+  end
+
+  if type(command) == 'function' then
+    opts.callback = command
+  elseif type(command) == 'string' then
+    opts.command = command
+  elseif type(command) == 'table' then
+    opts = util.merge(opts, command)
+  end
+
+  return vim.api.nvim_create_autocmd(event, opts)
+end
 
 -- Create user command
-util.create_cmd = function(name, command, opts)
+util.command = function(name, command, opts, desc)
+  if type(opts) == 'string' then opts = { desc = opts } end
+  if type(desc) == 'string' then opts = util.merge(opts, { desc = desc }) end
+
   return vim.api.nvim_create_user_command(name, command, opts or {})
 end
 

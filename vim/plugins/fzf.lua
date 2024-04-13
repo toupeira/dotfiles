@@ -68,6 +68,7 @@ return {
         'nightfox',
         'duskfox',
         'carbonfox',
+        'gruvbox-material',
         'catppuccin-mocha',
         'material-deep-ocean',
         'tokyonight-night',
@@ -100,6 +101,7 @@ return {
 
     opts.helptags = merge(opts.helptags, preview)
     opts.highlights = merge(opts.highlights, preview)
+    opts.jumps = merge(opts.jumps, preview)
 
     opts.git = merge(opts.git, {})
     opts.git.status = merge(opts.git.status, preview)
@@ -138,6 +140,7 @@ return {
     map_fzf('<Leader>h', 'oldfiles')
     map_fzf('<Leader>H', 'oldfiles', function() return expand('%') ~= '' and { cwd_only = true } end)
     map_fzf('<Leader>b', 'buffers')
+    map_fzf('<Leader>j', 'jumps')
 
     -- file contents
     map_fzf('<Leader>r', 'live_grep')

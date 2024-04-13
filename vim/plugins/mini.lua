@@ -62,8 +62,8 @@ return {
 
     require('mini.pairs').setup({
       modes = {
-        command = true,
-        terminal = true
+        command = false,
+        terminal = false,
       },
 
       mappings = {
@@ -81,7 +81,37 @@ return {
         },
       }
     })
-    util.unmap('c', '<Space>') -- clashes with cabbrev
+    -- util.unmap('c', '<Space>') -- clashes with cabbrev
+
+    local starter = require('mini.starter')
+    local is_home = vim.fn.getcwd() == os.getenv('HOME')
+
+    util.command('MiniStarter', 'lua MiniStarter.open()', 'Open start screen')
+
+    starter.setup({
+      evaluate_single = true,
+
+      items = {
+        { section = 'Builtin actions', name = 'Edit new file', action = 'enew' },
+        { section = 'Builtin actions', name = 'Insert mode', action = function () vim.cmd.enew(); vim.cmd.startinsert() end },
+        { section = 'Builtin actions', name = 'Quit', action = 'quitall' },
+
+        not is_home and starter.sections.recent_files(9, true, true),
+
+        { section = 'Bookmarks', name = 'vimrc', action = 'edit ~/.config/nvim/init.lua' },
+        { section = 'Bookmarks', name = 'gitconfig', action = 'edit ~/.config/git/config' },
+        { section = 'Bookmarks', name = 'tmux.conf', action = 'edit ~/.config/tmux/tmux.conf' },
+      },
+
+      footer = '',
+
+      content_hooks = {
+        starter.gen_hook.adding_bullet(),
+        starter.gen_hook.indexing('all', { 'Builtin actions', 'Bookmarks' }),
+        starter.gen_hook.aligning('center', 'top'),
+        starter.gen_hook.padding(0, vim.o.lines / (is_home and 3 or 5)),
+      },
+    })
 
     require('mini.trailspace').setup()
     nmap('<Leader>$', ':lua MiniTrailspace.trim()', 'Trim trailing whitespace')

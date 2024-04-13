@@ -92,7 +92,7 @@ nmap('du', ':diffupdate', 'Update diffs')
 
 -- Utilities -----------------------------------------------------------
 
-util.create_cmd('Help', '$tab help <args>', {
+util.command('Help', '$tab help <args>', {
   nargs = '*',
   complete = 'help',
 })
@@ -101,7 +101,7 @@ nmap('<F1>', ':Help', 'Open help in a new tab')
 
 -- override `:Man` to open in a tab
 -- see /usr/share/nvim/runtime/plugin/man.lua
-util.create_cmd('Manpage', '$tab Man <args>', {
+util.command('Manpage', '$tab Man <args>', {
   bang = true,
   bar = true,
   range = true,

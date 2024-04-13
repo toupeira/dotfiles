@@ -18,6 +18,9 @@ return {
   lazy { 'tpope/vim-scriptease' },
 
   lazy { 'alexghergh/nvim-tmux-navigation',
+    cond = function()
+      return os.getenv('TMUX')
+    end,
     opts = {
       disable_when_zoomed = true,
       map_modes = { 'n', 't' },

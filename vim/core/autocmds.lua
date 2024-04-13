@@ -1,7 +1,6 @@
 local util = require('util')
 
 local autocmd = util.autocmd
-local augroup = util.augroup
 
 -- Filetype settings ---------------------------------------------------
 
@@ -37,79 +36,64 @@ vim.cmd([[
 ]])
 
 -- Start insert mode when committing
-autocmd('FileType', {
-  group = augroup('commit_insert'),
-  pattern = 'gitcommit',
-  callback = function()
-    if vim.fn.getline(1) == '' then
-      vim.cmd.normal('O')
-      vim.cmd.startinsert()
-    end
+autocmd('FileType', 'gitcommit', function()
+  if vim.fn.getline(1) == '' then
+    vim.cmd.normal('O')
+    vim.cmd.startinsert()
   end
-})
+end)
 
 -- Autocommands adapted from
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 
 -- Go to last loc when opening a buffer
 -- TODO: fix `mini.misc.setup_restore_cursor` to use `BufWinEnter`
-autocmd('BufWinEnter', {
-  group = augroup('restore_cursor'),
-  callback = function(event)
-    local exclude = { 'gitcommit' }
-    local buf = event.buf
-    if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].last_loc then
-      return
-    end
-    vim.b[buf].last_loc = true
-    local mark = vim.api.nvim_buf_get_mark(buf, '"')
-    local lcount = vim.api.nvim_buf_line_count(buf)
-    if mark[1] > 0 and mark[1] <= lcount then
-      pcall(vim.api.nvim_win_set_cursor, 0, mark)
-      vim.cmd('normal! zvzz')
-    end
+autocmd('BufWinEnter', function(event)
+  local exclude = { 'gitcommit' }
+  local buf = event.buf
+  if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].last_loc then
+    return
   end
-})
+  vim.b[buf].last_loc = true
+  local mark = vim.api.nvim_buf_get_mark(buf, '"')
+  local lcount = vim.api.nvim_buf_line_count(buf)
+  if mark[1] > 0 and mark[1] <= lcount then
+    pcall(vim.api.nvim_win_set_cursor, 0, mark)
+    vim.cmd('normal! zvzz')
+  end
+end)
 
 -- Close some filetypes with <q>
 autocmd('FileType', {
-  group = augroup('close_with_q'),
-  pattern = {
-    'bufferize',
-    'checkhealth',
-    'fugitive',
-    'help',
-    'lspinfo',
-    'man',
-    'notify',
-    'qf',
-    'query',
-    'startuptime',
-  },
-  callback = function(event)
+  'bufferize',
+  'checkhealth',
+  'fugitive',
+  'help',
+  'lspinfo',
+  'man',
+  'notify',
+  'qf',
+  'query',
+  'startuptime',
+},
+  function(event)
     util.nmap('q', ':bdelete', { buffer = event.buf })
   end
-})
+)
 
 -- Check if we need to reload the file when it changed
-autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, {
-  group = augroup('checktime'),
-  callback = function()
-    if vim.o.buftype ~= 'nofile' then
-      vim.cmd('checktime')
-    end
+autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, function()
+  if vim.o.buftype ~= 'nofile' then
+    vim.cmd('checktime')
   end
-})
+end)
 
 -- Auto create dir when saving a file, in case some
 -- intermediate directory does not exist
-autocmd('BufWritePre', {
-  group = augroup('auto_create_dir'),
-  callback = function(event)
-    if event.match:match('^%w%w+:[\\/][\\/]') then
-      return
-    end
-    local file = vim.uv.fs_realpath(event.match) or event.match
-    vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
+autocmd('BufWritePre', function(event)
+  if event.match:match('^%w%w+:[\\/][\\/]') then
+    return
   end
-})
+  local file = vim.uv.fs_realpath(event.match) or event.match
+  vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
+end)
