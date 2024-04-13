@@ -122,6 +122,7 @@ return {
             Search = { fg = 'palette.search.fg0', bg = 'palette.search.bg0', style = 'bold' },
             CurSearch = { fg = 'palette.search.fg1', bg = 'palette.search.bg1', style = 'bold' },
             IncSearch = { link = 'Search' },
+            Substitute = { link = 'Search' },
 
             DiffDelete = { fg = 'orange' },
             DiffText = { style = 'bold' },

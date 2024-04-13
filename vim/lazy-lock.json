@@ -38,6 +38,7 @@
   "tmux-open": { "branch": "master", "commit": "763d0a852e6703ce0f5090a508330012a7e6788e" },
   "tmux-yank": { "branch": "master", "commit": "acfd36e4fcba99f8310a7dfb432111c242fe7392" },
   "tokyonight.nvim": { "branch": "main", "commit": "9bf9ec53d5e87b025e2404069b71e7ebdc3a13e5" },
+  "trouble.nvim": { "branch": "dev", "commit": "10eff94809ecd6ee6cc59f42e9521b9b8a14e9ce" },
   "vim-abolish": { "branch": "master", "commit": "dcbfe065297d31823561ba787f51056c147aa682" },
   "vim-characterize": { "branch": "master", "commit": "7fc5b75e7a9e46676cf736b56d99dd32004ff3d6" },
   "vim-css3-syntax": { "branch": "main", "commit": "44dd2e6bada1a48f6697ec1596cfe5a1386418b3" },

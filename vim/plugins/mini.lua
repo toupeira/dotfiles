@@ -25,9 +25,11 @@ return {
     })
 
     require('mini.bracketed').setup({
-      comment    = { suffix = '' },
       diagnostic = { suffix = 'e' },
+
+      comment    = { suffix = '' },
       file       = { suffix = '' },
+      treesitter = { suffix = '' },
     })
 
     require('mini.files').setup({

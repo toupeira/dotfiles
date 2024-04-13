@@ -98,27 +98,6 @@ return {
     end
   },
 
-  { 'stevearc/aerial.nvim',
-    cmd = { 'AerialToggle', 'AerialNavToggle' },
-    init = function()
-      -- TODO: implement
-      -- nmap('<Leader>t', require('util/fzf-aerial'))
-      nmap('<Leader>t', ':AerialNavToggle', 'Toggle symbols in popup')
-      nmap('<Leader>T', ':AerialToggle', 'Toggle symbols in sidebar')
-    end,
-    opts = {
-      nav = {
-        min_width = 0.29,
-        max_width = 0.29,
-        min_height = 0.6,
-        max_height = 0.9,
-        win_opts = { winblend = 5 },
-        keymaps = { q = 'actions.close' },
-        preview = true,
-      },
-    }
-  },
-
   { 'tpope/vim-dispatch',
     cmd = { 'Dispatch', 'Make' },
     init = function()

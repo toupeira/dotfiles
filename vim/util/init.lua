@@ -224,7 +224,7 @@ util.toggle_list = function(id)
   end
 
   local win = winnr()
-  vim.cmd(id .. 'open')
+  pcall(vim.cmd[id .. 'open'])
 
   if win ~= winnr() then
     vim.cmd.wincmd('p')
