@@ -112,7 +112,7 @@ vim.cmd([[
 
   " history
   set history=1000
-  set shada+='500,\"100
+  set shada+='1000,\"100
   set shada-='100,<50
   set undofile
 

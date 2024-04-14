@@ -151,6 +151,11 @@ return {
             Title = { fg = 'syntax.string' },
             Todo = { fg = 'diag.warn', bg = 'none', style = 'bold' },
 
+            ['@comment.error'] = { fg = 'diag.error', bg = 'none', style = 'bold' },
+            ['@comment.warning'] = { fg = 'diag.warn', bg = 'none', style = 'bold' },
+            ['@comment.todo'] = { fg = 'diag.warn', bg = 'none', style = 'bold' },
+            ['@comment.note'] = { fg = 'diag.hint', bg = 'none', style = 'bold' },
+
             ['@markup.heading'] = { link = 'Function' },
             ['@markup.italic'] = { style = 'italic' },
             ['@markup.list'] = { link = 'PreProc' },

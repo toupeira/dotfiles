@@ -130,7 +130,6 @@ util.alias_cmd({
 })
 
 nmap('zS', ':Inspect', 'Inspect highlighting groups')
-nmap('<Leader>!', function() require('lazy').home() end, 'Open Lazy plugin manager')
 
 nmap('<C-g>', {
   "echomsg expand('%:.')",

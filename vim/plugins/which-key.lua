@@ -2,7 +2,6 @@ local util = require('util')
 
 return { 'folke/which-key.nvim',
   event = 'VeryLazy',
-  priority = 0,
 
   init = function()
     vim.o.timeoutlen = 500
@@ -12,6 +11,29 @@ return { 'folke/which-key.nvim',
 
   opts = {
     show_help = false,
+    triggers = 'auto',
+
+    labels = {
+      ['<Leader>'] = {
+        name = '+leader',
+        ['<F1>'] = ' +help',
+        ['d'] = '+lsp',
+        ['g'] = '+git',
+        ['<Leader>'] = '+resume',
+      },
+      ['<C-w>'] = '+windows',
+      ['<F1>'] = ' +help',
+      ['['] = '+backward',
+      [']'] = '+forward',
+      ['\\'] = '+toggle',
+      c = '+coerce',
+      d = '+diff',
+      g = '+go',
+      s = '+surround',
+      v = '+selection',
+      y = '+yank',
+      z = '+spelling',
+    },
 
     plugins = {
       presets = {
@@ -20,8 +42,6 @@ return { 'folke/which-key.nvim',
         text_objects = false,
       }
     },
-
-    triggers = 'auto',
 
     window = {
       margin = { 0, 0, 1, 0 },
@@ -44,5 +64,11 @@ return { 'folke/which-key.nvim',
       scroll_down = '<c-e>',
       scroll_up = '<c-y>',
     },
-  }
+  },
+
+  config = function(_, opts)
+    local whichkey = require('which-key')
+    whichkey.setup(opts)
+    whichkey.register(opts.labels)
+  end,
 }

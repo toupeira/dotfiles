@@ -1,11 +1,18 @@
 return {
   'nvim-treesitter/nvim-treesitter',
-  event = 'VeryLazy',
+  event = 'LazyFile',
   build = ':TSUpdate',
   dependencies = {
-    { 'nvim-treesitter/nvim-treesitter-textobjects' },
     { 'nvim-treesitter/nvim-treesitter-refactor' },
-    { 'andymass/vim-matchup' },
+    { 'nvim-treesitter/nvim-treesitter-textobjects' },
+    { 'RRethy/nvim-treesitter-endwise' },
+
+    { 'nvim-treesitter/nvim-treesitter-context',
+      opts = {
+        max_lines = 3,
+        min_window_height = 10,
+      }
+    },
   },
 
   config = function(_, opts)
@@ -15,6 +22,7 @@ return {
   opts = {
     ensure_installed = {
       'bash',
+      'comment',
       'css',
       'html',
       'javascript',
@@ -22,6 +30,7 @@ return {
       'lua',
       'markdown',
       'markdown_inline',
+      'python',
       'ruby',
       'typescript',
       'vim',
@@ -30,12 +39,29 @@ return {
       'yaml',
       'xml',
     },
-    highlight = {
-      enable = true,
-      disable = { 'bash', 'ruby' },
-    },
+
+    highlight = { enable = true, disable = { 'ruby' }},
+
+    endwise = { enable = true },
     indent = { enable = true },
     matchup = { enable = true },
+
+    refactor = {
+      navigation = {
+        enable = false,
+        keymaps = {
+          goto_definition = 'gd',
+          goto_next_usage = '<M-*>',
+          goto_previous_usage = '<M-#>',
+        },
+      },
+
+      smart_rename = {
+        enable = true,
+        keymaps = { smart_rename = '<Leader>dR' },
+      },
+    },
+
     textobjects = {
       select = {
         enable = true,
@@ -46,6 +72,7 @@ return {
           ['im'] = '@class.inner',
         },
       },
+
       move = {
         enable = true,
         goto_next_start = {
@@ -65,10 +92,6 @@ return {
           ['[M'] = '@class.outer',
         },
       },
-    },
-    refactor = {
-      navigation = { enable = true },
-      smart_rename = { enable = true },
     },
   }
 }

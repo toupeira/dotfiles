@@ -93,8 +93,14 @@ return {
     }
 
     -- add default settings
-    local preview = { winopts = { preview = { hidden = 'nohidden' }}}
-    local reverse = { fzf_opts = { ['--layout'] = 'reverse-list', ['--no-sort'] = true }}
+    local reverse = {
+      fzf_opts = { ['--layout'] = 'reverse-list', ['--no-sort'] = true },
+    }
+
+    local preview = {
+      winopts = { preview = { hidden = 'nohidden' }},
+      fzf_opts = { ['--layout'] = 'reverse' },
+    }
 
     opts.lines = merge(opts.lines, reverse)
     opts.blines = merge(opts.lines, reverse)
@@ -103,10 +109,15 @@ return {
     opts.highlights = merge(opts.highlights, preview)
     opts.jumps = merge(opts.jumps, preview)
 
-    opts.git = merge(opts.git, {})
+    opts.git = merge(opts.git)
     opts.git.status = merge(opts.git.status, preview)
 
+    opts.lsp = merge(opts.lsp)
+    opts.lsp.finder = merge(opts.lsp.finder, preview)
+    opts.lsp.code_actions = merge(opts.lsp.code_actions, preview)
+
     fzf.setup(opts)
+    fzf.register_ui_select()
 
     -- map each provider with '<Leader><key>`,
     -- and '<Leader><Leader><key>` for resuming
@@ -162,6 +173,20 @@ return {
 
     -- spellcheck
     map_fzf('<Leader>z', 'spell_suggest')
+
+    -- LSP
+    map_fzf('<Leader>da', 'lsp_code_actions')
+    map_fzf('<Leader>dd', 'lsp_definitions')
+    map_fzf('<Leader>dD', 'lsp_declarations')
+    map_fzf('<Leader>de', 'lsp_document_diagnostics')
+    map_fzf('<Leader>dE', 'lsp_workspace_diagnostics')
+    map_fzf('<Leader>di', 'lsp_implementations')
+    map_fzf('<Leader>dI', 'lsp_incoming_calls')
+    map_fzf('<Leader>dO', 'lsp_outgoing_calls')
+    map_fzf('<Leader>dr', 'lsp_references')
+    map_fzf('<Leader>ds', 'lsp_document_symbols')
+    map_fzf('<Leader>dS', 'lsp_workspace_symbols')
+    map_fzf('<Leader>dt', 'lsp_typedefs')
 
     -- git
     map_fzf('<Leader>gm', 'git_status')

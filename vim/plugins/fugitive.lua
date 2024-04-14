@@ -1,9 +1,9 @@
 return {
   'tpope/vim-fugitive',
   dependencies = {
-    { 'tpope/vim-rhubarb', event = 'VeryLazy' },
+    { 'tpope/vim-rhubarb', event = 'LazyFile' },
     { 'shumphrey/fugitive-gitlab.vim',
-      event = 'VeryLazy',
+      event = 'LazyFile',
       config = function()
         vim.g.fugitive_gitlab_domains = { 'https://git.panter.ch' }
       end

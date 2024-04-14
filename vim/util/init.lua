@@ -10,8 +10,8 @@ local winnr = vim.fn.winnr
 -- Lua helpers ---------------------------------------------------------
 
 -- Merge the {opts} table into {defaults}.
-util.merge = function(defaults, opts)
-  return vim.tbl_deep_extend('force', defaults or {}, opts or {})
+util.merge = function(defaults, opts, ...)
+  return vim.tbl_deep_extend('force', defaults or {}, opts or {}, ...)
 end
 
 -- Clamp a value to {min} and {max}
@@ -21,9 +21,14 @@ end
 
 -- Configuration helpers -----------------------------------------------
 
--- Load a plugin after startup
+-- Load plugins after startup
 util.lazy = function(plugin)
   plugin.event = 'VeryLazy'
+  return plugin
+end
+
+util.lazy_file = function(plugin)
+  plugin.event = 'LazyFile'
   return plugin
 end
 
