@@ -76,7 +76,8 @@ return {
     cond = vim.o.termguicolors,
     opts = {
       color_icons = false,
-    },
+      default = true,
+    }
   },
 
   { 'ojroques/nvim-bufdel',
