@@ -151,6 +151,7 @@ return {
     map_fzf('<Leader>h', 'oldfiles')
     map_fzf('<Leader>H', 'oldfiles', function() return expand('%') ~= '' and { cwd_only = true } end)
     map_fzf('<Leader>b', 'buffers')
+    map_fzf('<Leader>B', 'buffers', { show_unlisted = true })
     map_fzf('<Leader>j', 'jumps')
 
     -- file contents

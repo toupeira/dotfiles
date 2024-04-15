@@ -22,9 +22,15 @@ return {
       lua_ls = {},
       vimls = {},
     },
+
+    ui = {
+      border = 'rounded',
+    },
   },
 
   config = function(_, opts)
+    require('lspconfig.ui.windows').default_options = opts.ui
+
     util.autocmd('LspDetach', function(event)
       nmap('<Leader>d#', ':LspStart', { buffer = event.buf }, 'Start LSP server')
     end)

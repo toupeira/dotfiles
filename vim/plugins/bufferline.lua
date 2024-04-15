@@ -78,16 +78,9 @@ return {
     end
 
     -- show bufferline when tabs are used
-    -- TODO: fix upstream
-    -- vim.api.nvim_create_autocmd('TabEnter', {
-    --   pattern = '*',
-    --   group = 'BufferlineCmds',
-    --   callback = function()
-    --     local utils = require('bufferline.utils')
-    --     local count = math.max(utils.get_tab_count(), utils.get_buf_count())
-    --     local status = count > 1 and 2 or 0
-    --     if vim.o.showtabline ~= status then vim.o.showtabline = status end
-    --   end
-    -- })
+    local config = require('bufferline.config')
+    util.autocmd({ 'TabNew', 'TabClosed' }, function()
+      config.options.always_show_bufferline = #vim.fn.gettabinfo() > 1
+    end)
   end
 }

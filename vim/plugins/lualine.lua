@@ -26,7 +26,9 @@ return {
         'fzf-custom',
         'lazy',
         'man',
+        'mason',
         'quickfix',
+        'trouble',
       },
 
       sections = {

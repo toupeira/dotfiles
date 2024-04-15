@@ -15,6 +15,7 @@ return {
   lazy_file { 'AndrewRadev/splitjoin.vim' },
   lazy_file { 'arp242/jumpy.vim' },
   lazy_file { 'numToStr/Comment.nvim', config = true },
+  lazy_file { 'tiagovla/scope.nvim', config = true },
   lazy_file { 'tpope/vim-abolish' },
 
   { 'alexghergh/nvim-tmux-navigation',

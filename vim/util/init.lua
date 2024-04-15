@@ -140,6 +140,31 @@ end
 
 -- UI helpers ----------------------------------------------------------
 
+-- Return the number of tabs.
+util.tab_count = function()
+  return #vim.fn.gettabinfo()
+end
+
+-- Return the number of non-floating windows in the current tab.
+util.window_count = function()
+  local windows = vim.api.nvim_tabpage_list_wins(0)
+  return #vim.tbl_filter(function(win)
+    return vim.api.nvim_win_get_config(win).relative == ''
+  end, windows)
+end
+
+-- Return the number of listed buffers.
+util.buffer_count = function()
+  return #vim.fn.getbufinfo({ buflisted = true })
+end
+
+-- Close tab if there's only one unnamed buffer.
+util.close_tab = function()
+  if util.buffer_count() <= 1 and util.tab_count() > 1 and expand('%') == '' then
+    vim.cmd.tabclose()
+  end
+end
+
 -- Echo a {message} with an optional {hl} group,
 -- and optionally add it to the {history}.
 util.echo = function(message, hl, history)

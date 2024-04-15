@@ -17,13 +17,6 @@ return {
     local comment = util.get_color('Comment')
     local separator = {  '  ', group = 'Comment' }
 
-    local function get_window_count()
-      local windows = vim.api.nvim_tabpage_list_wins(0)
-      return #vim.tbl_filter(function(win)
-        return vim.api.nvim_win_get_config(win).relative == ''
-      end, windows)
-    end
-
     local function get_filename(props)
       if props.windows <= 1 or props.buffers <= 1 then
         return
@@ -76,8 +69,8 @@ return {
     end
 
     opts.render = function(props)
-      props.windows = get_window_count()
-      props.buffers = #vim.fn.getbufinfo({ buflisted = true })
+      props.windows = util.window_count()
+      props.buffers = util.buffer_count()
 
       local sections = {
         get_filename(props),

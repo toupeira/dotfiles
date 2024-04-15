@@ -6,8 +6,8 @@ return {
   cmd = { 'FindDefinition', 'SFindDefinition' },
 
   init = function()
-    nmap('gd', { 'FindDefinition', 'normal zvzz' }, 'Go to definition')
-    nmap('gD', { 'SFindDefinition', 'normal zvzz' }, 'Go to definition in split')
+    nmap('gd', { 'FindDefinition', 'normal! zvzz' }, 'Go to definition')
+    nmap('gD', { 'SFindDefinition', 'normal! zvzz' }, 'Go to definition in split')
   end,
 
   config = function()

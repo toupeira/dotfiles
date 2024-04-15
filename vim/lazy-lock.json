@@ -41,6 +41,7 @@
   "nvim-web-devicons": { "branch": "master", "commit": "6e355632387a085f15a66ad68cf681c1d7374a04" },
   "ohmyzsh": { "branch": "master", "commit": "31f2025e0fa963788655fe197e0179c47588b175" },
   "powerlevel10k": { "branch": "master", "commit": "178fcda3487afb3bd540d784cf472c60ec0de94a" },
+  "scope.nvim": { "branch": "main", "commit": "86a0f5b594b08b2ad65f470ffdee81654942b6ac" },
   "splitjoin.vim": { "branch": "main", "commit": "9b0c30f61f13ba4800a11107648bdd748ad511ba" },
   "tmux-open": { "branch": "master", "commit": "763d0a852e6703ce0f5090a508330012a7e6788e" },
   "tmux-yank": { "branch": "master", "commit": "acfd36e4fcba99f8310a7dfb432111c242fe7392" },

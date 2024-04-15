@@ -311,7 +311,9 @@ function plan {
   local plans="/slack/scrapbook/plans"
   local name=${1:-$( basename "$PWD" )}
 
-  if [ -f "$plans/$name.md" ]; then
+  if [ "$name" = "-a" ]; then
+    local plan="$plans"
+  elif [ -f "$plans/$name.md" ]; then
     local plan="$plans/$name.md"
   else
     local plan="$( find "$plans" -type f -name '*.md' | fzf -d/ -n-1 -f "$name" | head -1 )"

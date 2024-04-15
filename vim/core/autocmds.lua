@@ -69,7 +69,6 @@ autocmd('FileType', {
   'checkhealth',
   'fugitive',
   'help',
-  'lspinfo',
   'man',
   'notify',
   'qf',
@@ -77,7 +76,10 @@ autocmd('FileType', {
   'startuptime',
 },
   function(event)
-    util.nmap('q', ':bdelete', { buffer = event.buf })
+    util.nmap('q', {
+      'bdelete',
+      'lua require("util").close_tab()'
+    }, { buffer = event.buf })
   end
 )
 

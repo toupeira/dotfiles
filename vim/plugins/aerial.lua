@@ -18,9 +18,11 @@ return {
 
   opts = {
     attach_mode = 'global',
+    post_jump_cmd = "normal! zvzz",
 
     layout = {
       min_width = 12,
+      max_width = { 40, 0.3 },
       default_direction = 'right',
       placement = 'edge',
     },
@@ -30,7 +32,7 @@ return {
       max_width = 0.29,
       min_height = 0.6,
       max_height = 0.9,
-      win_opts = { winblend = 5 },
+      win_opts = { winblend = 0 },
       keymaps = { q = 'actions.close' },
       preview = true,
     },
