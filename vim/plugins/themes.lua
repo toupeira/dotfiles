@@ -162,6 +162,8 @@ return {
             ['@markup.raw'] = { fg = 'syntax.string', style = 'NONE' },
             ['@markup.strong'] = { fg = 'palette.yellow', style = 'bold' },
 
+            ['@string.special.url'] = { style = 'underline' },
+
             ['@keyword.ruby'] = { link = 'Statement' },
             ['@keyword.function.ruby'] = { link = 'Statement' },
 
