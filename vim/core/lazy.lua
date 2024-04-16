@@ -10,7 +10,7 @@ end
 vim.opt.rtp:prepend(LAZY_PATH)
 
 require('lazy.core.handler.event').mappings.LazyFile = {
-  id = 'LazyFile', event = { 'BufReadPost', 'BufNewFile', 'BufWritePre' }
+  id = 'LazyFile', event = { 'BufReadPre', 'BufNewFile', 'BufWritePre' }
 }
 
 util.nmap('<Leader>!', function() require('lazy').home() end, 'Open Lazy')
