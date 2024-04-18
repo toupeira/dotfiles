@@ -99,6 +99,7 @@ util.autocmd = function(event, pattern, command)
 end
 
 -- Create user command
+-- https://github.com/neovim/neovim/issues/26867
 util.command = function(name, command, opts, desc)
   if type(opts) == 'string' then opts = { desc = opts } end
   if type(desc) == 'string' then opts = util.merge(opts, { desc = desc }) end
@@ -107,12 +108,13 @@ util.command = function(name, command, opts, desc)
 end
 
 -- Abbreviate commands, only in command mode on first column
--- http://vim.wikia.com/wiki/Replace_a_builtin_command_using_cabbrev
+-- TODO: Use `vim.keymap.set` in Neovim 0.10
+-- https://github.com/neovim/neovim/issues/19198
 util.alias_cmd = function(aliases)
   for alias, command in pairs(aliases) do
     vim.cmd.cnoreabbrev(
-      alias .. ' <C-r>=getcmdpos() == 1 && getcmdtype() == ":" ? "'
-      .. command .. '" : "' .. alias .. '"<CR>'
+      '<expr> ' .. alias .. ' getcmdtype() == ":" && stridx(getcmdline(), " ") == -1 ? "'
+      .. command .. '" : "' .. alias .. '"'
     )
   end
 end

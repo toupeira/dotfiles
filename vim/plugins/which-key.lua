@@ -4,7 +4,7 @@ return { 'folke/which-key.nvim',
   event = 'VeryLazy',
 
   init = function()
-    vim.o.timeoutlen = 500
+    vim.o.timeoutlen = 1000
     util.nmap('<F1>', ':WhichKey <F1>')
     util.nmap('<F1><Enter>', ':Help', 'Open help in a new tab')
   end,
@@ -16,13 +16,13 @@ return { 'folke/which-key.nvim',
     labels = {
       ['<Leader>'] = {
         name = '+leader',
-        ['<F1>'] = ' +help',
+        ['<F1>'] = '+help',
         ['d'] = '+lsp',
         ['g'] = '+git',
         ['<Leader>'] = '+resume',
       },
       ['<C-w>'] = '+windows',
-      ['<F1>'] = ' +help',
+      ['<F1>'] = ' help',
       ['['] = '+backward',
       [']'] = '+forward',
       ['\\'] = '+toggle',

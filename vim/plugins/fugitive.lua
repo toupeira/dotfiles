@@ -22,8 +22,7 @@ return {
       noremap  <silent> ,gU :.GBrowse<CR>
 
       autocmd User FugitiveIndex setlocal nobuflisted|nmap <buffer><silent> q gq|nmap <buffer><silent> <space> =|nmap <buffer><silent> <Tab> =
-      autocmd User FugitiveObject nmap <buffer><silent> q :cclose<CR>:bd<CR>
-      autocmd User FugitivePager if maparg('gq', 'n')!=''|nmap <buffer><silent> q gq|endif
+      autocmd User FugitiveObject,FugitivePager nmap <buffer><silent> q :cclose<CR>:bd<CR>
     ]])
   end
 }
