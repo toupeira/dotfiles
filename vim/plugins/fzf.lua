@@ -86,6 +86,9 @@ return {
     local fzf = require('fzf-lua')
     local actions = require('fzf-lua.actions')
 
+    -- use history per provider
+    vim.g.fzf_history_dir = vim.fn.stdpath('state') .. '/fzf'
+
     -- override actions
     opts.actions = {
       files = { default = actions.file_edit },

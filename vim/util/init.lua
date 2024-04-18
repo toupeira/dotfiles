@@ -113,7 +113,7 @@ end
 util.alias_cmd = function(aliases)
   for alias, command in pairs(aliases) do
     vim.cmd.cnoreabbrev(
-      '<expr> ' .. alias .. ' getcmdtype() == ":" && stridx(getcmdline(), " ") == -1 ? "'
+      '<expr> ' .. alias .. ' getcmdtype() == ":" && (stridx(getcmdline(), " ") == -1 || getcmdpos() < stridx(getcmdline(), " ")) ? "'
       .. command .. '" : "' .. alias .. '"'
     )
   end

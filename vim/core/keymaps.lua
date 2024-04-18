@@ -1,6 +1,5 @@
 local util = require('util')
 
-local map = util.map
 local nmap = util.nmap
 local vmap = util.vmap
 local imap = util.imap
@@ -13,7 +12,7 @@ local expand = vim.fn.expand
 -- Mode switching ------------------------------------------------------
 
 imap('<C-c>', '<Esc>', 'Leave insert mode')
-nmap('<C-c>', { 'nohlsearch', 'echo', 'redraw!' }, 'Clear search and command line')
+nmap('<C-c>', { 'nohlsearch', 'echo', 'lua= require("lualine").refresh()' }, 'Clear search and command line')
 tmap('<Esc>', '<C-\\><C-n>', 'Leave insert mode')
 
 -- Window navigation ---------------------------------------------------

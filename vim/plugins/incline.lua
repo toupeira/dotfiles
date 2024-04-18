@@ -91,5 +91,11 @@ return {
     end
 
     require('incline').setup(opts)
+
+    -- reduce updates to avoid cursor lag
+    vim.api.nvim_clear_autocmds({
+      event = { 'CursorMoved', 'CursorMovedI', 'WinScrolled' },
+      group = 'incline',
+    })
   end
 }

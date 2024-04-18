@@ -98,7 +98,20 @@ return {
         { section = 'Builtin actions', name = 'Insert mode', action = function () vim.cmd.enew(); vim.cmd.startinsert() end },
         { section = 'Builtin actions', name = 'Quit', action = 'quitall' },
 
-        not is_home and starter.sections.recent_files(9, true, true),
+        not is_home and starter.sections.recent_files(9, true, function(path)
+          local dir = vim.fn.fnamemodify(path, ':.:h')
+          if dir == '.' then
+            return ''
+          end
+
+          local basename = vim.fn.fnamemodify(path, ':t')
+          local max = vim.api.nvim_win_get_width(0) - #basename - 40
+          if #dir > max then
+            dir = '…' .. dir:sub(-max)
+          end
+
+          return string.format(' (%s)', dir)
+        end),
 
         { section = 'Bookmarks', name = 'vimrc', action = 'edit ~/.config/nvim/init.lua' },
         { section = 'Bookmarks', name = 'gitconfig', action = 'edit ~/.config/git/config' },

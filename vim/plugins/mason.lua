@@ -9,6 +9,7 @@ return {
   opts = {
     ensure_installed = {
       'jsonlint',
+      'luacheck',
       'stylua',
       'shfmt',
       'shellcheck',
