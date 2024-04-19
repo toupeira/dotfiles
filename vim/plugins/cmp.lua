@@ -89,11 +89,15 @@ return {
   config = function(_, opts)
     local cmp = require('cmp')
 
-    local path = { name = 'path', option = { trailing_slash = true }}
-    local tmux
+    local path = {
+      name = 'path',
+      option = { trailing_slash = true }
+    }
 
+    local tmux
     if os.getenv('TMUX') then
-      tmux = { name = 'tmux',
+      tmux = {
+        name = 'tmux',
         option = { all_panes = true },
         keyword_length = 3,
       }
@@ -111,7 +115,7 @@ return {
       { name = 'emoji' },
     })
 
-    opts.mapping = cmp.mapping.preset.insert({
+    local tab = {
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.confirm({ select = true })
@@ -121,16 +125,14 @@ return {
           fallback()
         end
       end, { 'i', 's', 'c' }),
-    })
+    }
+
+    opts.mapping = cmp.mapping.preset.insert(tab)
 
     cmp.setup(opts)
 
-    cmp.setup.filetype('lua', {
-      sources = util.merge(opts.sources, {{ name = 'nvim_lua' }})
-    })
-
     cmp.setup.cmdline({ '/', '?' }, {
-      mapping = cmp.mapping.preset.cmdline(opts.mapping),
+      mapping = cmp.mapping.preset.cmdline(tab),
       sources = {
         { name = 'buffer' },
         tmux,
@@ -138,12 +140,17 @@ return {
     })
 
     cmp.setup.cmdline(':', {
-      mapping = cmp.mapping.preset.cmdline(opts.mapping),
+      mapping = cmp.mapping.preset.cmdline(tab),
+      matching = { disallow_symbol_nonprefix_matching = false },
+      completion = { autocomplete = false },
       sources = {
         { name = 'cmdline' },
         path,
-      },
-      matching = { disallow_symbol_nonprefix_matching = false }
+      }
+    })
+
+    cmp.setup.filetype('lua', {
+      sources = util.merge(opts.sources, {{ name = 'nvim_lua' }})
     })
   end
 }
