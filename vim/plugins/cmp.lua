@@ -4,7 +4,7 @@ local icons = {
   kinds = {
     Array         = " ",
     Boolean       = "󰨙 ",
-    Class         = " ",
+    Class         = "󰆧 ",
     Codeium       = "󰘦 ",
     Color         = " ",
     Control       = " ",
@@ -19,7 +19,7 @@ local icons = {
     File          = " ",
     Folder        = " ",
     Function      = "󰊕 ",
-    Interface     = " ",
+    Interface     = " ",
     Key           = " ",
     Keyword       = " ",
     Method        = "󰊕 ",
@@ -28,7 +28,7 @@ local icons = {
     Null          = " ",
     Number        = "󰎠 ",
     Object        = " ",
-    Operator      = " ",
+    Operator      = "󰆕 ",
     Package       = " ",
     Property      = " ",
     Reference     = " ",
@@ -119,8 +119,12 @@ return {
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.confirm({ select = true })
-        elseif has_words_before() then
+        elseif has_words_before() or vim.api.nvim_get_mode().mode == 'c' then
           cmp.complete()
+
+          if #cmp.get_entries() == 1 then
+            cmp.confirm({ select = true })
+          end
         else
           fallback()
         end

@@ -62,6 +62,10 @@ return {
       fzf_opts = { ['--header-lines'] = false },
     },
 
+    keymaps = {
+      formatter = '%s | %-10s | %-30s | %s',
+    },
+
     colorschemes = {
       colors = {
         'nordfox',

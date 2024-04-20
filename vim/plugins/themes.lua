@@ -27,6 +27,10 @@ return {
         options = {
           module_default = false,
           terminal_colors = false,
+
+          modules = {
+            neogit = true,
+          }
         },
 
         palettes = {
@@ -68,8 +72,8 @@ return {
             diff = {
               add = '#1c4428',
               delete = '#993d3d',
-              change = '#2f3347',
-              text = '#4b5263',
+              change = '#293f66',
+              text = '#3e5f99',
             }
           },
         },
@@ -124,7 +128,7 @@ return {
             IncSearch = { link = 'Search' },
             Substitute = { link = 'Search' },
 
-            DiffDelete = { fg = 'orange' },
+            DiffDelete = { fg = 'palette.red' },
             DiffText = { style = 'bold' },
 
             ErrorMsg = { style = 'bold' },

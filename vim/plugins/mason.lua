@@ -2,6 +2,7 @@ return {
   'williamboman/mason.nvim',
   event = 'VeryLazy',
   build = ':MasonUpdate',
+
   keys = {
     { '<leader>@', '<Cmd>Mason<CR>', desc = 'Open Mason' }
   },

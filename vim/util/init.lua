@@ -40,9 +40,14 @@ util.map = function(mode, lhs, rhs, opts, desc)
 
   -- run commands silently
   if type(rhs) == 'string' then
-    if rhs:sub(1, 1) == ':' then rhs = '<Cmd>' .. rhs:sub(2) end
+    if rhs:sub(1, 1) == ':' then
+      if mode ~= 'v' and not vim.deep_equal(mode, { 'n', 'v', 'o' }) then
+        rhs = '<Cmd>' .. rhs:sub(2)
+      end
 
-    if rhs:sub(1, 5) == '<Cmd>' then
+      opts = util.merge(opts, { silent = true })
+      rhs = rhs .. '<CR>'
+    elseif rhs:sub(1, 5) == '<Cmd>' then
       opts = util.merge(opts, { silent = true })
       rhs = rhs .. '<CR>'
     end
