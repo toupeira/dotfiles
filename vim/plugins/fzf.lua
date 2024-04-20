@@ -62,6 +62,10 @@ return {
       fzf_opts = { ['--header-lines'] = false },
     },
 
+    oldfiles = {
+      include_current_session = true,
+    },
+
     keymaps = {
       formatter = '%s | %-10s | %-30s | %s',
     },
@@ -153,12 +157,12 @@ return {
     nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume last search')
 
     -- files
+    map_fzf('<Leader>b', 'buffers')
+    map_fzf('<Leader>B', 'buffers', { show_unlisted = true })
     map_fzf('<Leader>f', 'files')
     map_fzf('<Leader>F', 'files', function() return expand('%') ~= '' and { cwd = expand('%:h') } end)
     map_fzf('<Leader>h', 'oldfiles')
     map_fzf('<Leader>H', 'oldfiles', function() return expand('%') ~= '' and { cwd_only = true } end)
-    map_fzf('<Leader>b', 'buffers')
-    map_fzf('<Leader>B', 'buffers', { show_unlisted = true })
     map_fzf('<Leader>j', 'jumps')
 
     -- file contents
