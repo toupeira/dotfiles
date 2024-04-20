@@ -45,15 +45,19 @@ return {
   config = function(_, opts)
     require('aerial').setup(opts)
 
-    -- remove spaces after icons
-    -- https://github.com/stevearc/aerial.nvim/pull/360
     local config = require('aerial.config')
     local setup = config.setup
     config.setup = function(pending_opts)
       setup(pending_opts)
+
+      -- remove spaces after icons
+      -- https://github.com/stevearc/aerial.nvim/pull/360
       for type, icon in pairs(config.default_icons) do
         config.default_icons[type] = icon:gsub(' ', '')
       end
+
+      -- replace some icons
+      config.default_icons.Interface = ''
     end
   end
 }

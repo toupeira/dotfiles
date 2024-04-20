@@ -26,7 +26,7 @@ vim.g.loaded_ruby_provider = 0
 -- TODO: convert to Lua
 vim.cmd([[
   " interface
-  if getenv('XDG_SESSION_TYPE') == 'tty'
+  if getenv('XDG_SESSION_TYPE') == 'tty' && empty($SSH_CONNECTION)
     set notermguicolors
     colorscheme ron
   else
