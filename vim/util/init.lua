@@ -34,6 +34,15 @@ end
 
 -- Map a key with sensible defaults.
 util.map = function(mode, lhs, rhs, opts, desc)
+  -- map multiple keys
+  if type(lhs) == 'table' then
+    for _, map in ipairs(lhs) do
+      util.map(mode, map, rhs, opts, desc)
+    end
+
+    return
+  end
+
   -- use string arguments as description
   if type(opts) == 'string' then opts = { desc = opts } end
   if type(desc) == 'string' then opts = util.merge(opts, { desc = desc }) end

@@ -443,7 +443,7 @@ function run {
       ;;
     # }}}
     commit|ci) # {{{
-      staged=$( git staged )
+      local staged=$( git staged )
       if ! [ "$staged" ]; then
         warning "{{Nothing to commit.}}"
         return 1
@@ -454,20 +454,26 @@ function run {
       echo "$staged" | sed -r 's/^/ \o033[0;32mM\o033[0m /'
       echo
 
-      local message
+      local args=( "$@" )
+      local message="Sync dotfiles"
+
       if [ "$1" = "-m" ]; then
         message="$2"
         shift 2
       else
         message="Sync dotfiles"
-        msg "{{Message:}} \e[0;34m[$message] " 4 "" -n
+        msg "{{Message:}} " 4 "" -n
         read -r
         if [ "$REPLY" ]; then
           message="$REPLY"
         fi
       fi
 
-      git ignore-errors commit -m "$message" "$@"
+      if [ "$message" ]; then
+        args=( "${args[@]}" -m "$message" )
+      fi
+
+      git ignore-errors commit "${args[@]}"
       ;;
     # }}}
     commit-all|ca) # {{{

@@ -5,11 +5,12 @@ local nvomap = util.nvomap
 
 return {
   'tpope/vim-fugitive',
-  event = 'VeryLazy',
+  event = 'LazyFile',
   dependencies = {
-    { 'tpope/vim-rhubarb', event = 'LazyFile' },
+    { 'tpope/vim-rhubarb',
+      dependencies = { 'fugitive-gitlab.vim' },
+    },
     { 'shumphrey/fugitive-gitlab.vim',
-      event = 'LazyFile',
       config = function()
         vim.g.fugitive_browse_handlers = {
           function(...)

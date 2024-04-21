@@ -5,7 +5,8 @@ return {
 
   { 'preservim/vim-markdown',
     ft = 'markdown',
-    config = function()
+    init = function()
+      vim.g.vim_markdown_no_default_key_mappings = 1
       vim.g.vim_markdown_folding_disabled = 0
       vim.g.vim_markdown_folding_style_pythonic = 1
       vim.g.vim_markdown_frontmatter = 1
@@ -20,7 +21,7 @@ return {
     ft = 'ruby',
     dependencies = { 'tpope/vim-rails' },
 
-    config = function()
+    init = function()
       vim.g.ruby_operators = 1
       vim.g.ruby_pseudo_operators = 1
       vim.g.ruby_no_expensive = 1

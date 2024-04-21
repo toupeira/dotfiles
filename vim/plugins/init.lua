@@ -6,6 +6,8 @@ local map = util.map
 local nmap = util.nmap
 
 return {
+  { 'nvim-lua/plenary.nvim', lazy = true },
+
   lazy { 'j-hui/fidget.nvim', config = true },
   lazy { 'tpope/vim-characterize' },
   lazy { 'tpope/vim-eunuch' },
@@ -13,7 +15,6 @@ return {
   lazy { 'tpope/vim-scriptease' },
 
   lazy_file { 'AndrewRadev/splitjoin.vim' },
-  lazy_file { 'arp242/jumpy.vim' },
   lazy_file { 'numToStr/Comment.nvim', config = true },
   lazy_file { 'tiagovla/scope.nvim', config = true },
   lazy_file { 'tpope/vim-abolish' },
@@ -49,6 +50,15 @@ return {
       vim.g.matchup_matchparen_deferred = 1
       vim.g.matchup_matchparen_offscreen = {}
     end
+  },
+
+  {
+    'chrishrb/gx.nvim',
+    config = true,
+    cmd = { 'Browse' },
+    keys = {
+      { 'gx', '<Cmd>Browse<CR>', mode = { 'n', 'x' } },
+    },
   },
 
   { 'kopischke/vim-fetch',

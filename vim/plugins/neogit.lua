@@ -1,19 +1,7 @@
 return {
   'NeogitOrg/neogit',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-    'ibhagwan/fzf-lua',
 
-    { 'sindrets/diffview.nvim',
-      lazy = false,
-      opts = {
-        view = {
-          default = { layout = 'diff2_vertical' },
-        },
-      },
-    },
-  },
-
+  cmd = 'Neogit',
   keys = {
     { '<Leader>gs', '<Cmd>Neogit<CR>', desc = 'Open Neogit' },
   },

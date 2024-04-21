@@ -9,7 +9,6 @@ return {
 
   config = function()
     require('mini.ai').setup()
-    require('mini.surround').setup()
 
     require('mini.align').setup({
       mappings = {
@@ -59,6 +58,7 @@ return {
 
     require('mini.operators').setup({
       sort = { prefix = '' },
+      exchange = { prefix = 'ge' },
     })
     vmap('D', 'gm', { remap = true }, 'Duplicate selection')
 
@@ -125,6 +125,18 @@ return {
         starter.gen_hook.indexing('all', { 'Builtin actions', 'Bookmarks' }),
         starter.gen_hook.aligning('center', 'top'),
         starter.gen_hook.padding(0, vim.o.lines / (is_home and 3 or 5)),
+      },
+    })
+
+    require('mini.surround').setup({
+      mappings = {
+        add = 'Sa',
+        delete = 'Sd',
+        find = 'Sf',
+        find_left = 'SF',
+        highlight = 'Sh',
+        replace = 'Sr',
+        update_n_lines = 'Sn',
       },
     })
 

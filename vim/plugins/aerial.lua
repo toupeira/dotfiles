@@ -14,10 +14,8 @@ return {
     util.nmap('<Leader>t', ':AerialNavToggle', 'Toggle symbols in popup')
     util.nmap('<Leader>T', ':AerialToggle', 'Toggle symbols in sidebar')
 
-    util.nmap(']t', ':AerialNext', 'Go to next symbol')
-    util.nmap(']T', ':9999AerialNext', 'Go to last symbol')
-    util.nmap('[t', ':AerialPrev', 'Go to previous symbol')
-    util.nmap('[T', ':AerialGo 1', 'Go to first symbol')
+    util.nmap(']]', ':AerialNext', 'Go to next symbol')
+    util.nmap('[[', ':AerialPrev', 'Go to previous symbol')
   end,
 
   opts = {
