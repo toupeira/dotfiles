@@ -4,32 +4,30 @@ local autocmd = util.autocmd
 
 -- Filetype settings ---------------------------------------------------
 
--- TODO: convert to Lua
 vim.cmd([[
-  autocmd FileType crontab setlocal nowritebackup
-  autocmd FileType css,scss setlocal iskeyword+=%
-  autocmd FileType dosini setlocal commentstring=#\ %s
-  autocmd FileType gdscript setlocal expandtab
+  autocmd FileType crontab             setlocal nowritebackup
+  autocmd FileType css,scss            setlocal iskeyword+=%
+  autocmd FileType dosini              setlocal commentstring=#\ %s
+  autocmd FileType gdscript            setlocal expandtab
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
-  autocmd FileType help setlocal buflisted
-  autocmd FileType lua setlocal path+=./lua keywordprg=:Help
-  autocmd FileType make setlocal noexpandtab
-  autocmd FileType qf setlocal nobuflisted
-  autocmd FileType ruby setlocal iskeyword+=?,!
-  autocmd FileType text,markdown,mail setlocal linebreak suffixesadd+=.md
-  autocmd FileType vim setlocal keywordprg=:Help foldmethod=marker foldlevel=0
+  autocmd FileType help                setlocal buflisted
+  autocmd FileType lua                 setlocal path+=./lua keywordprg=:Help
+  autocmd FileType make                setlocal noexpandtab
+  autocmd FileType qf                  setlocal nobuflisted
+  autocmd FileType ruby                setlocal iskeyword+=?,!
+  autocmd FileType text,markdown,mail  setlocal linebreak suffixesadd+=.md
+  autocmd FileType vim                 setlocal keywordprg=:Help foldmethod=marker foldlevel=0
 ]])
 
 -- Helpers -------------------------------------------------------------
 
--- TODO: convert to Lua
 vim.cmd([[
   " setup quickfix windows
   autocmd FileType qf setlocal nowrap
   autocmd FileType qf lua require('util').resize_window({ max = 5 })
 
   " terminals
-  autocmd TermOpen * setlocal nonumber norelativenumber signcolumn=no winhighlight=Normal:TermCursorNC
+  autocmd TermOpen  * setlocal nonumber norelativenumber signcolumn=no winhighlight=Normal:TermCursorNC
   autocmd TermClose * if !v:event.status && &ft != 'fzf' | bd | endif
   autocmd BufWinEnter,WinEnter term://* startinsert!
   autocmd BufWinLeave,WinLeave term://* stopinsert
@@ -79,7 +77,7 @@ autocmd('FileType', {
     util.nmap('q', {
       'bdelete',
       'lua require("util").close_tab()'
-    }, { buffer = event.buf })
+    }, { force = true, buffer = event.buf })
   end
 )
 

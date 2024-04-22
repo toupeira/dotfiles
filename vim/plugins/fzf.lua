@@ -138,8 +138,8 @@ return {
       return {}
     end
 
-    local function map_fzf(key, provider, args)
-      local name = provider:gsub('_', ' ')
+    local function map_fzf(key, provider, args, name)
+      name = name or provider:gsub('_', ' ')
 
       nmap(key, function()
         fzf[provider](get_args(args))
@@ -158,18 +158,18 @@ return {
 
     -- files
     map_fzf('<Leader>b', 'buffers')
-    map_fzf('<Leader>B', 'buffers', { show_unlisted = true })
+    map_fzf('<Leader>B', 'buffers', { show_unlisted = true }, 'all buffers')
     map_fzf('<Leader>f', 'files')
-    map_fzf('<Leader>F', 'files', function() return expand('%') ~= '' and { cwd = expand('%:h') } end)
+    map_fzf('<Leader>F', 'files', function() return expand('%') ~= '' and { cwd = expand('%:h') } end, 'files in current directory')
     map_fzf('<Leader>h', 'oldfiles')
-    map_fzf('<Leader>H', 'oldfiles', function() return expand('%') ~= '' and { cwd_only = true } end)
+    map_fzf('<Leader>H', 'oldfiles', function() return expand('%') ~= '' and { cwd_only = true } end, 'oldfiles in current directory')
     map_fzf('<Leader>j', 'jumps')
 
     -- file contents
     map_fzf('<Leader>r', 'live_grep')
     map_fzf('<Leader>R', 'grep_cword')
-    map_fzf('<Leader>l', 'blines', function() return { query = expand('<cword>') } end)
-    map_fzf('<Leader>L', 'lines', function() return { query = expand('<cword>') } end)
+    map_fzf('<Leader>l', 'blines', function() return { query = expand('<cword>') } end, 'lines in current buffer')
+    map_fzf('<Leader>L', 'lines', function() return { query = expand('<cword>') } end, 'lines in all buffers')
 
     -- vim history
     map_fzf('<Leader>:', 'command_history')
@@ -202,6 +202,6 @@ return {
 
     -- git
     map_fzf('<Leader>gm', 'git_status')
-    map_fzf('<Leader>gB', 'git_branches')
+    map_fzf('<Leader>gC', 'git_branches')
   end
 }

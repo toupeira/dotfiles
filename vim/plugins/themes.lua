@@ -30,6 +30,7 @@ return {
 
           modules = {
             neogit = true,
+            neotree = true,
           }
         },
 
@@ -204,6 +205,21 @@ return {
 
             MatchParen = { fg = 'none', bg = 'sel0', style = 'bold' },
             MatchWord = { style = 'bold' },
+
+            NeogitCursorLine = { link = 'MsgArea' },
+            NeogitChangeModified = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },
+            NeogitRecentcommits = { fg = 'diag.info', bg ='diag_bg.info', style = 'bold' },
+            NeogitStagedchanges = { fg = 'diag.ok', bg = 'diag_bg.ok', style = 'bold' },
+            NeogitUnstagedchanges = { fg = 'diag.error', bg = 'diag_bg.error', style = 'bold' },
+            NeogitUntrackedfiles = { link = 'NeogitChangeModified' },
+            NeogitUnpulledFrom = { link = 'NeogitChangeModified' },
+            NeogitUnmergedInto = { link = 'NeogitChangeModified' },
+
+            NeoTreeGitConflict = { link = 'ErrorMsg' },
+            NeoTreeGitModified = { link = 'WarningMsg' },
+            NeoTreeGitStaged = { link = 'MoreMsg' },
+            NeoTreeGitUnstaged = { link = 'WarningMsg' },
+            NeoTreeGitUntracked = { link = 'ErrorMsg' },
 
             SignifySignAdd    = { fg = 'git.add', bg = 'diff.add' },
             SignifySignDelete = { fg = 'fg0', bg = 'diff.delete' },

@@ -27,6 +27,7 @@ return {
         'lazy',
         'man',
         'mason',
+        'neo-tree',
         'quickfix',
         'trouble',
       },

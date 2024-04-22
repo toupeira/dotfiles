@@ -4,6 +4,7 @@ local lazy = util.lazy
 local lazy_file = util.lazy_file
 local map = util.map
 local nmap = util.nmap
+local imap = util.imap
 
 return {
   { 'nvim-lua/plenary.nvim', lazy = true },
@@ -64,21 +65,24 @@ return {
   { 'kopischke/vim-fetch',
     event = 'LazyFile',
     config = function()
-      map({ 'n', 'x' }, 'gF', '<C-w><C-f>', 'Go to file in split')
+      map({ 'n', 'x' }, 'gF', '<C-w><C-f>', { force = true }, 'Go to file in split')
     end
   },
 
   { 'NvChad/nvim-colorizer.lua',
-    event = 'LazyFile',
+    ft = { 'css', 'scss', 'lua' },
+    cmd = 'ColorizerToggle',
     init = function()
       util.alias_cmd({ CT = 'ColorizerToggle' })
     end,
-    opts = {
-      filetypes = { 'css', 'lua', 'scss' },
-      user_default_options = {
-        names = false,
-      },
-    },
+    opts = function(plugin)
+      return {
+        filetypes = plugin.ft,
+        user_default_options = {
+          names = false,
+        },
+      }
+    end
   },
 
   { 'nvim-tree/nvim-web-devicons',
@@ -144,22 +148,19 @@ return {
   { 'tpope/vim-ragtag',
     event = 'LazyFile',
     config = function()
-      vim.cmd([[
-        imap <C-]> </<Plug>ragtagHtmlComplete
-        autocmd User Ragtag iunmap <buffer> <C-v>%
-        autocmd User Ragtag iunmap <buffer> <C-v>&
-      ]])
+      imap('<C-]>', '</<Plug>ragtagHtmlComplete')
+      util.autocmd('User', 'Ragtag', function()
+        util.unmap('i', '<C-v>%', { buffer = true })
+        util.unmap('i', '<C-v>&', { buffer = true })
+      end)
     end
   },
 
   { 'tpope/vim-rsi',
     event = 'VeryLazy',
     config = function()
-      vim.cmd([[
-        " restore default mapping for <C-d>
-        iunmap <C-d>
-        cunmap <C-d>
-      ]])
+      -- restore default mapping for <C-d>
+      util.unmap({ 'i', 'c' }, '<C-d>')
     end
   },
 }

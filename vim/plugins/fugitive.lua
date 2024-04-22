@@ -37,16 +37,21 @@ return {
     nmap('<Leader>gd', ':Git -p log -p %', 'Open Git diff for current file')
     nvomap('<Leader>gb', ':Git blame --date human-local', 'Open Git blame for current file')
 
-    nvomap('<Leader>gu', "':' . (mode() == 'n' ? '.' : '') . 'GBrowse!<CR>'", { expr = true, silent = true },
+    nvomap('<Leader>gx', "':' . (mode() == 'n' ? '.' : '') . 'GBrowse!<CR>'", { expr = true, silent = true },
       'Copy Git URL to current location')
-    nvomap('<Leader>gU', "':' . (mode() == 'n' ? '.' : '') . 'GBrowse<CR>'", { expr = true, silent = true },
+    nvomap('<Leader>gX', "':' . (mode() == 'n' ? '.' : '') . 'GBrowse<CR>'", { expr = true, silent = true },
       'Browse Git URL to current location')
   end,
 
   config = function()
-    vim.cmd([[
-      autocmd User FugitiveIndex setlocal nobuflisted|nmap <buffer><silent> q gq|nmap <buffer><silent> <space> =|nmap <buffer><silent> <Tab> =
-      autocmd User FugitiveObject,FugitivePager nmap <buffer><silent> q :cclose<CR>:bd<CR>
-    ]])
+    util.autocmd('User', 'FugitiveIndex', function()
+      vim.bo.buflisted = false
+      nmap('<Space>', '=', { remap = true, buffer = true, force = true })
+      nmap('<Tab>', '=', { remap = true, buffer = true, force = true })
+    end)
+
+    util.autocmd('User', { 'FugitiveObject', 'FugitivePager' }, function()
+      nmap('q', { 'cclose', 'bd' }, { buffer = true })
+    end)
   end
 }

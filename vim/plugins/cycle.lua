@@ -1,3 +1,5 @@
+local util = require('util')
+
 return {
   'bootleq/vim-cycle',
   event = 'LazyFile',
@@ -7,12 +9,10 @@ return {
   end,
 
   config = function()
-    vim.cmd([[
-      map <C-a> <Plug>CycleNext
-      map <C-x> <Plug>CyclePrev
-      noremap <Plug>CycleFallbackNext <C-a>
-      noremap <Plug>CycleFallbackPrev <C-x>
-    ]])
+    util.nvomap('<C-a>', '<Plug>CycleNext')
+    util.nvomap('<C-x>', '<Plug>CyclePrev')
+    util.nmap('<Plug>CycleFallbackNext', '<C-a>')
+    util.nmap('<Plug>CycleFallbackPrev', '<C-x>')
 
     vim.g.cycle_default_groups = {
       {{ '&&', '||' }},
@@ -56,6 +56,7 @@ return {
       {{ 'up', 'down' }},
       {{ 'without', 'with' }},
       {{ 'yes', 'no' }},
+      {{ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten' }},
       {{ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' }},
       {{ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' }},
     }

@@ -5,7 +5,7 @@ return { 'folke/which-key.nvim',
 
   init = function()
     vim.o.timeoutlen = 1000
-    util.nmap('<F1>', ':WhichKey <F1>')
+    util.nmap('<F1>', ':WhichKey <F1>', { force = true })
     util.nmap('<F1><Enter>', ':Help', 'Open help in a new tab')
   end,
 

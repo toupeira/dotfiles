@@ -32,7 +32,7 @@ return {
     require('lspconfig.ui.windows').default_options = opts.ui
 
     util.autocmd('LspDetach', function(event)
-      nmap('<Leader>d#', ':LspStart', { buffer = event.buf }, 'Start LSP server')
+      nmap('<Leader>d#', ':LspStart', { force = true, buffer = event.buf }, 'Start LSP server')
     end)
 
     util.autocmd('LspAttach', function(event)
@@ -40,30 +40,30 @@ return {
       vim.bo[event.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
 
       -- Buffer local mappings
-      local buffer = { buffer = event.buf }
+      local args = { force = true, buffer = event.buf }
 
-      nmap('<Leader>d#', ':LspStop', buffer, 'Stop LSP server')
+      nmap('<Leader>d#', ':LspStop', args, 'Stop LSP server')
 
-      nmap('gd', vim.lsp.buf.definition, buffer, 'Go to definition')
-      nmap('gD', vim.lsp.buf.declaration, buffer, 'Go to declaration')
-      nmap('gi', vim.lsp.buf.implementation, buffer, 'Go to implementation')
-      nmap('gr', vim.lsp.buf.references, buffer, 'Go to references')
-      nmap('gt', vim.lsp.buf.type_definition, buffer, 'Go to type definition')
+      nmap('gd', vim.lsp.buf.definition, args, 'Go to definition')
+      nmap('gD', vim.lsp.buf.declaration, args, 'Go to declaration')
+      nmap('gi', vim.lsp.buf.implementation, args, 'Go to implementation')
+      nmap('gr', vim.lsp.buf.references, args, 'Go to references')
+      nmap('gt', vim.lsp.buf.type_definition, args, 'Go to type definition')
 
-      nmap('K', vim.lsp.buf.hover, buffer, 'Show context help')
-      -- nmap('<C-k>', vim.lsp.buf.signature_help, buffer, 'Show signature help')
+      nmap('K', vim.lsp.buf.hover, args, 'Show context help')
+      -- nmap('<C-k>', vim.lsp.buf.signature_help, args, 'Show signature help')
 
-      nmap('<Leader>dR', vim.lsp.buf.rename, buffer, 'Rename symbol')
-      map({ 'n', 'v' }, '<Leader>da', vim.lsp.buf.code_action, buffer, 'Run code action')
+      nmap('<Leader>dR', vim.lsp.buf.rename, args, 'Rename symbol')
+      map({ 'n', 'v' }, '<Leader>da', vim.lsp.buf.code_action, args, 'Run code action')
       nmap('<Leader>dF', function()
         vim.lsp.buf.format { async = true }
-      end, buffer, 'Format current file')
+      end, args, 'Format current file')
 
-      nmap('<Leader>dwa', vim.lsp.buf.add_workspace_folder, buffer, 'Add workspace folder')
-      nmap('<Leader>dwr', vim.lsp.buf.remove_workspace_folder, buffer, 'Remove workspace folder')
+      nmap('<Leader>dwa', vim.lsp.buf.add_workspace_folder, args, 'Add workspace folder')
+      nmap('<Leader>dwr', vim.lsp.buf.remove_workspace_folder, args, 'Remove workspace folder')
       nmap('<Leader>dwl', function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-      end, buffer, 'Show workspace folders')
+      end, args, 'Show workspace folders')
     end)
 
     local servers = opts.servers

@@ -48,25 +48,21 @@ nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window'
 
 nmap('H', ':tabprevious', 'Go to previous tab')
 nmap('L', ':tabnext', 'Go to next tab')
-nmap('<Leader>N', ':tabprevious', 'Go to previous tab')
-nmap('<Leader>P', ':tabnext', 'Go to next tab')
 
-nmap('<Leader>T', ':tabnew', 'Open new tab')
+nmap('<Leader>N', ':tabnew', 'Open new tab')
 nmap('<Leader>X', ':tabclose', 'Close current tab')
 
 -- File editing --------------------------------------------------------
 
 nmap('<Leader>w', ':write', 'Save current buffer')
-nmap('<Leader>N', ':enew', 'Create a new buffer')
 nmap('<Leader>C', function() return ':e ' .. expand('%:p:h') .. '/' end, { expr = true, desc = 'Create file in directory of current buffer' })
 
 vmap('<C-c>', '"+y`]', 'Copy to clipboard')
-vmap('<C-x>', '"+d', 'Cut to clipboard')
-
 nmap('<C-v>', '"+gP', 'Paste from clipboard')
 vmap('<C-v>', '"+P', 'Paste from clipboard')
 imap('<C-v>', '<C-r><C-o>+', 'Paste from clipboard')
 cmap('<C-v>', '<C-r><C-o>+', 'Paste from clipboard')
+vmap('y', function() return 'ygv' .. vim.fn.mode() end, { expr = true }, 'Yank (keep selection)')
 
 nvomap('+', '"+', 'Clipboard register')
 nvomap('X', '"_d', 'Delete to blackhole register')
@@ -78,16 +74,23 @@ nmap('vp', '`[v`]', 'Select pasted text')
 vmap('gs', ':!sort -h', 'Sort selection')
 vmap('.', ':normal .', 'Repeat for each line in selection')
 
+imap('<CR>', '<C-g>u<CR>', 'Break undo chain and insert new line')
 imap('<M-o>', '<C-o>o', 'Insert line below')
 imap('<M-O>', '<C-o>O', 'Insert line above')
 
-nvomap('*', 'g*', 'Search for current word (loose)')
-nvomap('#', 'g#', 'Search backwards for current word (loose)')
+nvomap('*', 'g*', { force = true }, 'Search for current word (loose)')
+nvomap('#', 'g#', { force = true }, 'Search backwards for current word (loose)')
 nvomap('g*', '*', 'Search for current word (strict)')
 nvomap('g#', '#', 'Search backwards for current word (strict)')
 
 nmap('<Space>', 'za', 'Toggle fold')
 nmap('du', ':diffupdate', 'Update diffs')
+
+-- don't map Y to y$
+util.unmap('n', 'Y')
+
+-- don't open tags with Ctrl-LeftClick
+nmap('<C-LeftMouse>', '<nop>')
 
 -- Utilities -----------------------------------------------------------
 
@@ -139,20 +142,3 @@ nmap('<M-g>', {
   "echomsg expand('%:p')",
   "let @+ = expand('%:p') . ':' . line('.')",
 }, 'Show and copy absolute file path with number')
-
--- TODO: convert to Lua
-vim.cmd([[
-  " don't map Y to y$
-  if maparg('Y', 'n') != ''
-    nunmap Y
-  endif
-
-  " don't open tags with Ctrl-LeftClick
-  noremap <C-LeftMouse> <nop>
-
-  " break undo chain on new lines
-  inoremap <CR> <C-g>u<CR>
-
-  " <y> - keep cursor position when yanking in visual mode
-  xnoremap <silent><expr> y "ygv" . mode()
-]])

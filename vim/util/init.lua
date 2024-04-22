@@ -34,6 +34,8 @@ end
 
 -- Map a key with sensible defaults.
 util.map = function(mode, lhs, rhs, opts, desc)
+  opts = opts or {}
+
   -- map multiple keys
   if type(lhs) == 'table' then
     for _, map in ipairs(lhs) do
@@ -67,6 +69,19 @@ util.map = function(mode, lhs, rhs, opts, desc)
     opts = util.merge(opts, { silent = true })
     local cmd = join(rhs, '\n')
     rhs = function () vim.cmd(cmd) end
+  end
+
+  -- check for existing maps
+  if opts.force then
+    opts.force = nil
+  else
+    local modes = type(mode) == 'table' and mode or { mode }
+    for _, m in ipairs(modes) do
+      local mapping = vim.fn.maparg(lhs, m)
+      assert(mapping == '',
+        '\nMapping already exists: { ' .. m .. ', ' .. lhs .. ', ' .. mapping .. ' }\n'
+      )
+    end
   end
 
   vim.keymap.set(mode, lhs, rhs, opts)
@@ -131,6 +146,12 @@ util.alias_cmd = function(aliases)
       .. command .. '" : "' .. alias .. '"'
     )
   end
+end
+
+-- Set a {hl} group
+util.hl_set = function(hl, opts)
+  opts = opts or {}
+  vim.api.nvim_set_hl(0, hl, opts)
 end
 
 -- Clear a {hl} group

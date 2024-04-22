@@ -31,21 +31,6 @@ return {
       treesitter = { suffix = '' },
     })
 
-    require('mini.files').setup({
-      mappings = {
-        go_in = 'L',
-        go_in_plus = 'l',
-        go_out = 'H',
-        go_out_plus = 'h',
-        synchronize = '!',
-      },
-
-      windows = {
-        width_focus = 30,
-      },
-    })
-    nmap('-', ':lua MiniFiles.open()', 'Open file explorer')
-
     require('mini.misc').setup_auto_root(
       { '.git' }, vim.fs.dirname
     )
@@ -92,6 +77,7 @@ return {
 
     starter.setup({
       evaluate_single = true,
+      query_updaters = 'abcdefghijklmnopqrstuvwxyz0123456789',
 
       items = {
         { section = 'Builtin actions', name = 'Edit new file', action = 'enew' },
