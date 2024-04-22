@@ -21,6 +21,9 @@ end
 
 -- Configuration helpers -----------------------------------------------
 
+util.is_sudo = not not os.getenv('SUDO_COMMAND')
+util.is_ssh = not not os.getenv('SSH_CONNECTION')
+
 -- Load plugins after startup
 util.lazy = function(plugin)
   plugin.event = 'VeryLazy'
@@ -236,6 +239,10 @@ util.project_path = function(max)
 
   -- shorten relative path
   if max then
+    if max < #name then
+      return name
+    end
+
     local original = path
     if #(name .. path) > max then
       path = pathshorten(path)

@@ -8,6 +8,8 @@ local imap = util.imap
 
 return {
   { 'nvim-lua/plenary.nvim', lazy = true },
+  { 'nvim-tree/nvim-web-devicons', lazy = true,
+    opts = { color_icons = false, default = true }},
 
   lazy { 'j-hui/fidget.nvim', config = true },
   lazy { 'tpope/vim-characterize' },
@@ -20,8 +22,7 @@ return {
   lazy_file { 'tiagovla/scope.nvim', config = true },
   lazy_file { 'tpope/vim-abolish' },
 
-  { 'alexghergh/nvim-tmux-navigation',
-    event = 'VeryLazy',
+  lazy { 'alexghergh/nvim-tmux-navigation',
     cond = function()
       return os.getenv('TMUX')
     end,
@@ -45,8 +46,7 @@ return {
     end
   },
 
-  { 'andymass/vim-matchup',
-    event = 'LazyFile',
+  lazy_file { 'andymass/vim-matchup',
     init = function()
       vim.g.matchup_matchparen_deferred = 1
       vim.g.matchup_matchparen_offscreen = {}
@@ -62,8 +62,7 @@ return {
     },
   },
 
-  { 'kopischke/vim-fetch',
-    event = 'LazyFile',
+  lazy_file { 'kopischke/vim-fetch',
     config = function()
       map({ 'n', 'x' }, 'gF', '<C-w><C-f>', { force = true }, 'Go to file in split')
     end
@@ -85,14 +84,6 @@ return {
     end
   },
 
-  { 'nvim-tree/nvim-web-devicons',
-    lazy = true,
-    opts = {
-      color_icons = false,
-      default = true,
-    }
-  },
-
   { 'ojroques/nvim-bufdel',
     cmd = 'BufDel',
     opts = {
@@ -104,16 +95,14 @@ return {
     end
   },
 
-  { 'psliwka/vim-smoothie',
-    event = 'VeryLazy',
+  lazy { 'psliwka/vim-smoothie',
     init = function()
       vim.g.smoothie_speed_constant_factor = 20
       vim.g.smoothie_speed_linear_factor = 20
     end
   },
 
-  { 'sickill/vim-pasta',
-    event = 'VeryLazy',
+  lazy { 'sickill/vim-pasta',
     init = function()
       vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
     end
@@ -127,8 +116,7 @@ return {
     end
   },
 
-  { 'tpope/vim-projectionist',
-    event = 'LazyFile',
+  lazy_file { 'tpope/vim-projectionist',
     config = function()
       local function alternate_create()
         local confirm = vim.o.confirm
@@ -145,8 +133,7 @@ return {
     end
   },
 
-  { 'tpope/vim-ragtag',
-    event = 'LazyFile',
+  lazy_file { 'tpope/vim-ragtag',
     config = function()
       imap('<C-]>', '</<Plug>ragtagHtmlComplete')
       util.autocmd('User', 'Ragtag', function()
@@ -156,8 +143,7 @@ return {
     end
   },
 
-  { 'tpope/vim-rsi',
-    event = 'VeryLazy',
+  lazy { 'tpope/vim-rsi',
     config = function()
       -- restore default mapping for <C-d>
       util.unmap({ 'i', 'c' }, '<C-d>')

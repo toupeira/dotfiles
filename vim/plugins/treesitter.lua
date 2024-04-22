@@ -1,3 +1,5 @@
+local util = require('util')
+
 return {
   'nvim-treesitter/nvim-treesitter',
   event = 'LazyFile',
@@ -20,7 +22,7 @@ return {
   end,
 
   opts = {
-    ensure_installed = {
+    ensure_installed = util.is_sudo and {} or {
       'bash',
       'comment',
       'css',

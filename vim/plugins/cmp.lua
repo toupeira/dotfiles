@@ -67,6 +67,16 @@ return {
         return os.getenv('TMUX')
       end
     },
+
+    { 'L3MON4D3/LuaSnip',
+      dependencies = {
+        'rafamadriz/friendly-snippets',
+        'saadparwaiz1/cmp_luasnip',
+      },
+      config = function()
+        require('luasnip.loaders.from_vscode').lazy_load()
+      end
+    },
   },
 
   opts = {
@@ -88,15 +98,21 @@ return {
 
   config = function(_, opts)
     local cmp = require('cmp')
+    local luasnip = require('luasnip')
 
-    local path = {
-      name = 'path',
-      option = { trailing_slash = true }
+    opts.snippet = function(args)
+      luasnip.lsp_expand(args.body)
+    end
+
+    local sources = {
+      path = {
+        name = 'path',
+        option = { trailing_slash = true }
+      }
     }
 
-    local tmux
     if os.getenv('TMUX') then
-      tmux = {
+      sources.tmux = {
         name = 'tmux',
         option = { all_panes = true },
         keyword_length = 3,
@@ -107,18 +123,25 @@ return {
       { name = 'nvim_lsp_signature_help' },
       { name = 'nvim_lsp' },
     }, {
+      { name = 'luasnip' },
       { name = 'buffer' },
-      path,
-      tmux,
+      sources.path,
+      sources.tmux,
     }, {
       { name = 'calc' },
       { name = 'emoji' },
     })
 
-    local tab = {
+    local tabs = {
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
-          cmp.confirm({ select = true })
+          if luasnip.expandable() then
+            luasnip.expand()
+          else
+            cmp.confirm({ select = true })
+          end
+        elseif luasnip.locally_jumpable(1) then
+          luasnip.jump(1)
         elseif has_words_before() or vim.api.nvim_get_mode().mode == 'c' then
           cmp.complete()
 
@@ -129,27 +152,37 @@ return {
           fallback()
         end
       end, { 'i', 's', 'c' }),
+
+      ['<S-Tab>'] = cmp.mapping(function(fallback)
+        if cmp.visible() then
+          cmp.select_prev_item()
+        elseif luasnip.locally_jumpable(-1) then
+          luasnip.jump(-1)
+        else
+          fallback()
+        end
+      end),
     }
 
-    opts.mapping = cmp.mapping.preset.insert(tab)
+    opts.mapping = cmp.mapping.preset.insert(tabs)
 
     cmp.setup(opts)
 
     cmp.setup.cmdline({ '/', '?' }, {
-      mapping = cmp.mapping.preset.cmdline(tab),
+      mapping = cmp.mapping.preset.cmdline(tabs),
       sources = {
         { name = 'buffer' },
-        tmux,
+        sources.tmux,
       }
     })
 
     cmp.setup.cmdline(':', {
-      mapping = cmp.mapping.preset.cmdline(tab),
+      mapping = cmp.mapping.preset.cmdline(tabs),
       matching = { disallow_symbol_nonprefix_matching = false },
       completion = { autocomplete = false },
       sources = {
         { name = 'cmdline' },
-        path,
+        sources.path,
       }
     })
 

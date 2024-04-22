@@ -2,6 +2,54 @@
 
 [ "$BASH_INTERACTIVE" ] || return
 
+# Add fuzzy matching to cd
+function cd {
+  if [ $# -le 1 ] && { [ -d "$1" ] || [[ $1 =~ ^(|-)$ ]]; }; then
+    builtin cd "$@" || return 1
+    return
+  fi
+
+  local match=$( fd . --type d | fzf -f "$*" | head -1 )
+  if [ -n "$match" ]; then
+    echo -e " \e[0;35m● cd \e[1m$*\e[22m → \e[1m${match%/}\e[0m"
+    builtin cd "$match" || return 1
+  else
+    builtin cd "$*" || return 1
+  fi
+}
+
+# Go to project root
+function up {
+  local root=$( git rev-parse --show-superproject-working-tree 2>/dev/null )
+  [ "$root" ] || root=$( git rev-parse --show-toplevel 2>/dev/null )
+
+  if [ "$root" ]; then
+    cd "$root" || return 1
+  else
+    cd ..
+  fi
+}
+
+# Open files with xdg-open
+function open {
+  for file in "$@"; do
+    if [ -f "$file" ]; then
+      xdg-open "$file" &>/dev/null
+    else
+      xdg-open "$file"
+    fi
+  done
+}
+
+# Clear the screen and show the prompt at the bottom
+function down {
+  local i
+  for (( i = 0; i < LINES; i++ )); do
+    echo
+  done
+}
+
+# Display login banner
 function login_banner {
   if [ -z "$BASH_LOGIN" ] || [ "${PWD%/}" != "$HOME" ] || [ "$FLOATING_TERMINAL" ] || { [ $LINES -lt 25 ] && ! [ "$SSH_CONNECTION" ]; }; then
     down
@@ -47,25 +95,6 @@ function login_banner {
     echo -e " 🎯 \\033[1;32m$mails\\033[0m"
     echo
   fi
-}
-
-# Clear the screen and show the prompt at the bottom
-function down {
-  local i
-  for (( i = 0; i < LINES; i++ )); do
-    echo
-  done
-}
-
-# Open files with xdg-open
-function open {
-  for file in "$@"; do
-    if [ -f "$file" ]; then
-      xdg-open "$file" &>/dev/null
-    else
-      xdg-open "$file"
-    fi
-  done
 }
 
 # Move a file or directory and replace it by a symlink to the new location
@@ -242,18 +271,6 @@ function ssh.mux {
 
   tmux select-layout even-vertical
   ssh "$first_host"
-}
-
-# Go to project root
-function up {
-  local root=$( git rev-parse --show-superproject-working-tree 2>/dev/null )
-  [ "$root" ] || root=$( git rev-parse --show-toplevel 2>/dev/null )
-
-  if [ "$root" ]; then
-    cd "$root" || return 1
-  else
-    cd ..
-  fi
 }
 
 # Browse a JSON file
