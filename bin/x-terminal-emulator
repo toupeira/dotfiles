@@ -16,6 +16,8 @@ case "$HOSTNAME" in
       fi
     elif [ "$x" = "3840" ]; then
       geometry="160x85+$((xoff+1920))+0"
+    elif [ "$x" = "3440" ]; then
+      geometry="214x78+$((xoff+1920))+0"
     elif [ "$x" = "2560" ]; then
       geometry="142x70+$((xoff+1920))+0"
     fi

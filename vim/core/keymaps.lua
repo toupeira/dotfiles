@@ -116,6 +116,8 @@ util.command('Manpage', '$tab Man <args>', {
 
 util.alias_cmd({
   help = 'Help',
+  hel  = 'Help',
+  he   = 'Help',
   h    = 'Help',
   H    = 'Help',
   man  = 'Manpage',

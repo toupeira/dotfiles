@@ -38,6 +38,8 @@ case "$HOSTNAME" in
       dconf write /org/gnome/desktop/interface/text-scaling-factor 1.4
     elif [[ $screens = *3840x2160* ]]; then
       dconf write /org/gnome/desktop/interface/text-scaling-factor 1.5
+    elif [[ $screens = *3440x1440* ]]; then
+      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.0
     elif [[ $screens = *2560x1440* ]]; then
       dconf write /org/gnome/desktop/interface/text-scaling-factor 1.15
     fi
