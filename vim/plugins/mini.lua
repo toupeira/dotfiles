@@ -26,9 +26,10 @@ return {
     require('mini.bracketed').setup({
       diagnostic = { suffix = 'e' },
 
-      comment    = { suffix = '' },
-      file       = { suffix = '' },
-      treesitter = { suffix = '' },
+      comment    = { suffix = '' }, -- ']c' used by treesitter-textobjects
+      file       = { suffix = '' }, -- ']f' not useful
+      oldfile    = { suffix = '' }, -- ']o' not useful
+      treesitter = { suffix = '' }, -- ']t' doesn't work well
     })
 
     require('mini.misc').setup_auto_root(

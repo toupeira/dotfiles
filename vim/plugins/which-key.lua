@@ -35,6 +35,8 @@ return { 'folke/which-key.nvim',
       z = '+spelling',
     },
 
+    triggers_nowait = {},
+
     plugins = {
       presets = {
         operators = false,

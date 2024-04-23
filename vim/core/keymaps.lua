@@ -84,7 +84,10 @@ nvomap('g*', '*', 'Search for current word (strict)')
 nvomap('g#', '#', 'Search backwards for current word (strict)')
 
 nmap('<Space>', 'za', 'Toggle fold')
+
 nmap('du', ':diffupdate', 'Update diffs')
+nmap(']d', ']c', 'Go to next change')
+nmap('[d', '[c', 'Go to previous change')
 
 -- don't map Y to y$
 util.unmap('n', 'Y')
@@ -134,6 +137,7 @@ util.alias_cmd({
 })
 
 nmap('zS', ':Inspect', 'Inspect highlighting groups')
+nmap('zT', ':InspectTree', 'Inspect syntax tree')
 
 nmap('<C-g>', {
   "echomsg expand('%:.')",

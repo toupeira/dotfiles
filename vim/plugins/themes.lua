@@ -82,12 +82,10 @@ return {
         specs = {
           nordfox = {
             syntax = {
-              const = 'cyan',
-              ident = 'red',
-              keyword = 'red',
-              operator = 'cyan',
-              preproc = 'yellow',
-              -- statement = 'cyan',
+              const = 'red',      -- orange
+              keyword = 'red',    -- magenta
+              operator = 'cyan',  -- fg2
+              preproc = 'yellow', -- pink
             },
 
             diff = {
@@ -177,7 +175,6 @@ return {
             ['@keyword.function.vim'] = { link = 'Statement' },
             ['@variable.builtin.vim'] = { link = 'PreProc' },
 
-            ['@constant.bash'] = { link = 'Identifier' },
             ['@function.builtin.bash'] = { link = 'Operator' },
             ['@keyword.bash'] = { link = 'Operator' },
             ['@keyword.directive.bash'] = { link = 'Comment' },
@@ -192,8 +189,9 @@ return {
 
             rubyCapitalizedMethod = { link = 'Type' },
             rubyInclude = { link = 'Operator' },
+            rubyInstanceVariable = { link = 'Keyword' },
             rubyInterpolation = { link = 'Operator' },
-            rubyInterpolationDelimiter = { link = 'Identifier' },
+            rubyInterpolationDelimiter = { link = 'Keyword' },
             rubyPseudoVariable = { link = 'Special' },
             rubyStringDelimiter = { link = 'String' },
             rubySymbol = { link = 'Special' },
@@ -224,6 +222,10 @@ return {
             SignifySignAdd    = { fg = 'git.add', bg = 'diff.add' },
             SignifySignDelete = { fg = 'fg0', bg = 'diff.delete' },
             SignifySignChange = { fg = 'git.changed', bg = 'diff.change' },
+
+            WhichKey = { fg = 'palette.yellow', style = 'bold' },
+            WhichKeyDesc = { fg = 'palette.green' },
+            WhichKeyGroup = { fg = 'palette.blue', style = 'bold' },
           },
         },
       }

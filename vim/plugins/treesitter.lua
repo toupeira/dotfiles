@@ -66,31 +66,39 @@ return {
     textobjects = {
       select = {
         enable = true,
+        lookahead = true,
+
         keymaps = {
-          ['af'] = '@function.outer',
-          ['if'] = '@function.inner',
-          ['am'] = '@class.outer',
-          ['im'] = '@class.inner',
+          ['ac'] = { query = '@class.outer', desc = 'Select current class' },
+          ['ic'] = { query = '@class.inner', desc = 'Select current class body' },
+          ['af'] = { query = '@function.outer', desc = 'Select current function' },
+          ['if'] = { query = '@function.inner', desc = 'Select current function body' },
+          ['aa'] = { query = '@parameter.outer', desc = 'Select all arguments' },
+          ['ia'] = { query = '@parameter.inner', desc = 'Select current argument' },
         },
       },
 
       move = {
         enable = true,
         goto_next_start = {
-          [']f'] = '@function.outer',
-          [']m'] = '@class.outer',
+          [']a'] = { query = '@parameter.inner', desc = 'Go to next argument' },
+          [']c'] = { query = '@class.outer', desc = 'Go to next class' },
+          [']f'] = { query = '@function.outer', desc = 'Go to next function' },
         },
         goto_next_end = {
-          [']F'] = '@function.outer',
-          [']M'] = '@class.outer',
+          [']A'] = { query = '@parameter.inner', desc = 'Go to end of argument' },
+          [']C'] = { query = '@class.outer', desc = 'Go to end of class' },
+          [']F'] = { query = '@function.outer', desc = 'Go to end of function' },
         },
         goto_previous_start = {
-          ['[f'] = '@function.outer',
-          ['[m'] = '@class.outer',
+          ['[a'] = { query = '@parameter.inner', desc = 'Go to previous argument' },
+          ['[c'] = { query = '@class.outer', desc = 'Go to previous class' },
+          ['[f'] = { query = '@function.outer', desc = 'Go to previous function' },
         },
         goto_previous_end = {
-          ['[F'] = '@function.outer',
-          ['[M'] = '@class.outer',
+          ['[A'] = { query = '@parameter.inner', desc = 'Go to end of previous argument' },
+          ['[C'] = { query = '@class.outer', desc = 'Go to end of previous class' },
+          ['[F'] = { query = '@function.outer', desc = 'Go to end of previous function' },
         },
       },
     },

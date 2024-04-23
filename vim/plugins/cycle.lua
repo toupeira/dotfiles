@@ -24,6 +24,7 @@ return {
       {{ 'above', 'below' }},
       {{ 'active', 'inactive' }},
       {{ 'add', 'remove' }},
+      {{ 'ahead', 'behind' }},
       {{ 'and', 'or' }},
       {{ 'asc', 'desc' }},
       {{ 'assert', 'refute' }},

@@ -13,7 +13,7 @@ return {
       local gitsigns = require('gitsigns')
       local args = { buffer = bufnr }
 
-      util.nmap(']c', function()
+      util.nmap(']d', function()
         if vim.wo.diff then
           vim.cmd.normal({']c', bang = true})
         else
@@ -21,7 +21,7 @@ return {
         end
       end, util.merge(args, { force = true }), 'Go to next hunk')
 
-      util.nmap('[c', function()
+      util.nmap('[d', function()
         if vim.wo.diff then
           vim.cmd.normal({'[c', bang = true})
         else
