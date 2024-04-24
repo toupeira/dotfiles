@@ -115,8 +115,8 @@ return {
             EndOfBuffer = { fg = 'bg4' },
             Folded = { fg = 'palette.comment', bg = 'bg3', style = 'bold' },
 
-            PmenuSel = { bg = 'bg1', style = 'bold' },
-            PmenuThumb = { bg = 'bg1' },
+            PmenuSel = { bg = 'bg0', style = 'bold' },
+            PmenuThumb = { bg = 'bg0' },
             TabLine = { fg = 'palette.comment', bg = 'bg0' },
             TabLineSel = { fg = 'palette.white', bg = 'bg1', style = 'bold' },
             WinBar = { bg = 'bg0' },
@@ -154,6 +154,8 @@ return {
             Title = { fg = 'syntax.string' },
             Todo = { fg = 'diag.warn', bg = 'none', style = 'bold' },
 
+            ['@keyword.function'] = { link = 'Statement' },
+
             ['@comment.error'] = { fg = 'diag.error', bg = 'none', style = 'bold' },
             ['@comment.warning'] = { fg = 'diag.warn', bg = 'none', style = 'bold' },
             ['@comment.todo'] = { fg = 'diag.warn', bg = 'none', style = 'bold' },
@@ -167,21 +169,18 @@ return {
 
             ['@string.special.url'] = { style = 'underline' },
 
-            ['@keyword.ruby'] = { link = 'Statement' },
-            ['@keyword.function.ruby'] = { link = 'Statement' },
-
-            ['@function.macro.vim'] = { link = 'Macro' },
-            ['@keyword.vim'] = { link = 'Statement' },
-            ['@keyword.function.vim'] = { link = 'Statement' },
-            ['@variable.builtin.vim'] = { link = 'PreProc' },
-
             ['@function.builtin.bash'] = { link = 'Operator' },
             ['@keyword.bash'] = { link = 'Operator' },
             ['@keyword.directive.bash'] = { link = 'Comment' },
-            ['@keyword.function.bash'] = { link = 'Statement' },
             ['@punctuation.bracket.bash'] = { link = 'Operator' },
             ['@punctuation.special.bash'] = { link = 'PreProc' },
             ['@variable.bash'] = { link = 'PreProc' },
+
+            ['@keyword.ruby'] = { link = 'Statement' },
+
+            ['@function.macro.vim'] = { link = 'Macro' },
+            ['@keyword.vim'] = { link = 'Statement' },
+            ['@variable.builtin.vim'] = { link = 'PreProc' },
 
             shFunctionKey = { link = 'Statement' },
             shSet = { link = 'Operator' },
@@ -197,6 +196,9 @@ return {
             rubySymbol = { link = 'Special' },
 
             -- plugins
+            CmpItemMenu = { link = 'Comment' },
+            CmpItemKindSnippet = { link = 'Function' },
+
             LazyButtonActive = { link = 'LazyH1' },
             LazyDimmed = { link = 'Comment' },
             LazyProp = { link = 'Comment' },

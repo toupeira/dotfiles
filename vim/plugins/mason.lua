@@ -2,7 +2,6 @@ local util = require('util')
 
 return {
   'williamboman/mason.nvim',
-  event = 'VeryLazy',
   build = ':MasonUpdate',
   dependencies = {
     { 'WhoIsSethDaniel/mason-tool-installer.nvim',

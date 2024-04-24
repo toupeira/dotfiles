@@ -96,8 +96,8 @@ util.imap = function(...) util.map('i', ...) end
 util.cmap = function(...) util.map('c', ...) end
 util.tmap = function(...) util.map('t', ...) end
 
-util.nvomap = function(lhs, rhs, opts)
-  util.map({ 'n', 'v', 'o' }, lhs, rhs, opts)
+util.nvomap = function(...)
+  util.map({ 'n', 'v', 'o' }, ...)
 end
 
 util.unmap = vim.keymap.del

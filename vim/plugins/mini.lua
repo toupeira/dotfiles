@@ -8,69 +8,12 @@ return {
   'echasnovski/mini.nvim',
 
   config = function()
-    require('mini.ai').setup()
-
-    require('mini.align').setup({
-      mappings = {
-        start = '<Leader>a',
-        start_with_preview = '<Leader>A',
-      },
-    })
-
-    require('mini.basics').setup({
-      options      = { basic = false, win_borders = 'bold' },
-      mappings     = { basic = false, move_with_alt = true },
-      autocommands = { basic = true },
-    })
-
-    require('mini.bracketed').setup({
-      diagnostic = { suffix = 'e' },
-
-      comment    = { suffix = '' }, -- ']c' used by treesitter-textobjects
-      file       = { suffix = '' }, -- ']f' not useful
-      oldfile    = { suffix = '' }, -- ']o' not useful
-      treesitter = { suffix = '' }, -- ']t' doesn't work well
-    })
-
+    -- mini.misc -------------------------------------------------------
     require('mini.misc').setup_auto_root(
       { '.git' }, vim.fs.dirname
     )
 
-    require('mini.move').setup()
-    imap('<M-H>', ':lua MiniMove.move_line("left")', 'Move line left')
-    imap('<M-J>', ':lua MiniMove.move_line("down")', 'Move line down')
-    imap('<M-K>', ':lua MiniMove.move_line("up")', 'Move line up')
-    imap('<M-L>', ':lua MiniMove.move_line("right")', 'Move line right')
-
-    require('mini.operators').setup({
-      sort = { prefix = '' },
-      exchange = { prefix = 'ge' },
-    })
-    vmap('D', 'gm', { remap = true }, 'Duplicate selection')
-
-    require('mini.pairs').setup({
-      modes = {
-        command = false,
-        terminal = false,
-      },
-
-      mappings = {
-        ['('] = { neigh_pattern = '[^\\][ \n]' },
-        ['['] = { neigh_pattern = '[^\\][ \n]' },
-        ['{'] = { neigh_pattern = '[^\\][ \n]' },
-        ['"'] = { neigh_pattern = '[^\\][ \n]' },
-        ["'"] = { neigh_pattern = '[^%a\\][ \n]' },
-        ['`'] = { neigh_pattern = '[^\\][ \n]' },
-
-        [' '] = {
-          action = 'closeopen',
-          pair = '  ',
-          neigh_pattern = '[%(%[{][%)%]}]',
-        },
-      }
-    })
-    -- util.unmap('c', '<Space>') -- clashes with cabbrev
-
+    -- mini.starter ----------------------------------------------------
     local starter = require('mini.starter')
     local is_home = vim.fn.getcwd() == os.getenv('HOME')
 
@@ -115,20 +58,165 @@ return {
       },
     })
 
-    require('mini.surround').setup({
-      mappings = {
-        add = 'Sa',
-        delete = 'Sd',
-        find = 'Sf',
-        find_left = 'SF',
-        highlight = 'Sh',
-        replace = 'Sr',
-        update_n_lines = 'Sn',
-      },
-    })
+    util.autocmd('User', 'VeryLazy', function()
+      -- mini.basics ---------------------------------------------------
+      require('mini.basics').setup({
+        options      = { basic = false, win_borders = 'bold' },
+        mappings     = { basic = false, move_with_alt = true },
+        autocommands = { basic = true },
+      })
 
-    require('mini.trailspace').setup()
-    nmap('<Leader>$', ':lua MiniTrailspace.trim()', 'Trim trailing whitespace')
-    util.hl_link('MiniTrailspace', 'Visual')
+      -- mini.clue -----------------------------------------------------
+      local clue = require('mini.clue')
+      clue.setup({
+        triggers = {
+          -- Leader triggers
+          { mode = 'n', keys = '<Leader>' },
+          { mode = 'v', keys = '<Leader>' },
+          { mode = 'n', keys = '<LocalLeader>' },
+          { mode = 'v', keys = '<LocalLeader>' },
+          { mode = 'n', keys = '<F1>' },
+
+          -- Built-in completion
+          { mode = 'i', keys = '<C-x>' },
+
+          -- `g` key
+          { mode = 'n', keys = 'g' },
+          { mode = 'v', keys = 'g' },
+
+          -- Marks
+          { mode = 'n', keys = "'" },
+          { mode = 'n', keys = '`' },
+          { mode = 'v', keys = "'" },
+          { mode = 'v', keys = '`' },
+
+          -- Registers
+          { mode = 'n', keys = '"' },
+          { mode = 'v', keys = '"' },
+          { mode = 'i', keys = '<C-r>' },
+          { mode = 'c', keys = '<C-r>' },
+
+          -- Window commands
+          { mode = 'n', keys = '<C-w>' },
+
+          -- `z` key
+          { mode = 'n', keys = 'z' },
+          { mode = 'v', keys = 'z' },
+
+          -- mini.bracketed and others
+          { mode = 'n', keys = ']' },
+          { mode = 'n', keys = '[' },
+
+          -- mini.surround
+          { mode = 'n', keys = 'S' },
+          { mode = 'v', keys = 'S' },
+        },
+
+        clues = {
+          clue.gen_clues.builtin_completion(),
+          clue.gen_clues.g(),
+          clue.gen_clues.marks(),
+          clue.gen_clues.registers(),
+          clue.gen_clues.windows(),
+          clue.gen_clues.z(),
+
+          { mode = 'n', keys = '<Leader><F1>', desc = '➜ help' },
+          { mode = 'n', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
+          { mode = 'n', keys = '<Leader><Leader>d', desc = '➜ lsp/treesitter' },
+          { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
+          { mode = 'n', keys = '<Leader>d', desc = '➜ lsp/treesitter' },
+          { mode = 'n', keys = '<Leader>dR', desc = 'Smart rename' },
+          { mode = 'n', keys = '<Leader>g', desc = '➜ git' },
+          { mode = 'v', keys = '<Leader>g', desc = '➜ git' },
+        },
+
+        window = {
+          config = { width = 40, border = 'rounded' },
+          delay = 500,
+        },
+      })
+
+      return true
+    end)
+
+    util.autocmd('User', 'LazyFile', function()
+      -- mini.ai -------------------------------------------------------
+      require('mini.ai').setup()
+
+      -- mini.align ----------------------------------------------------
+      require('mini.align').setup({
+        mappings = {
+          start = '<Leader>a',
+          start_with_preview = '<Leader>A',
+        },
+      })
+
+      -- mini.bracketed ------------------------------------------------
+      require('mini.bracketed').setup({
+        diagnostic = { suffix = 'e' },
+
+        comment    = { suffix = '' }, -- ']c' used by treesitter-textobjects
+        file       = { suffix = '' }, -- ']f' not useful
+        oldfile    = { suffix = '' }, -- ']o' not useful
+        treesitter = { suffix = '' }, -- ']t' doesn't work well
+      })
+
+      -- mini.move -----------------------------------------------------
+      require('mini.move').setup()
+      imap('<M-H>', ':lua MiniMove.move_line("left")', 'Move line left')
+      imap('<M-J>', ':lua MiniMove.move_line("down")', 'Move line down')
+      imap('<M-K>', ':lua MiniMove.move_line("up")', 'Move line up')
+      imap('<M-L>', ':lua MiniMove.move_line("right")', 'Move line right')
+
+      -- mini.operators ------------------------------------------------
+      require('mini.operators').setup({
+        sort = { prefix = '' },
+        exchange = { prefix = 'ge' },
+      })
+      vmap('D', 'gm', { remap = true }, 'Duplicate selection')
+
+      -- mini.pairs ----------------------------------------------------
+      require('mini.pairs').setup({
+        modes = {
+          command = false,
+          terminal = false,
+        },
+
+        mappings = {
+          ['('] = { neigh_pattern = '[^\\][ \n]' },
+          ['['] = { neigh_pattern = '[^\\][ \n]' },
+          ['{'] = { neigh_pattern = '[^\\][ \n]' },
+          ['"'] = { neigh_pattern = '[^\\][ \n]' },
+          ["'"] = { neigh_pattern = '[^%a\\][ \n]' },
+          ['`'] = { neigh_pattern = '[^\\][ \n]' },
+
+          [' '] = {
+            action = 'closeopen',
+            pair = '  ',
+            neigh_pattern = '[%(%[{][%)%]}]',
+          },
+        }
+      })
+
+      -- mini.surround -------------------------------------------------
+      require('mini.surround').setup({
+        mappings = {
+          add = 'Sa',
+          delete = 'Sd',
+          find = 'Sf',
+          find_left = 'SF',
+          highlight = 'Sh',
+          replace = 'Sr',
+          update_n_lines = 'Sn',
+        },
+      })
+
+      -- mini.trailspace -----------------------------------------------
+      require('mini.trailspace').setup()
+      nmap('<Leader>$', ':lua MiniTrailspace.trim()', 'Trim trailing whitespace')
+      util.hl_link('MiniTrailspace', 'Visual')
+
+      return true
+    end)
   end
 }

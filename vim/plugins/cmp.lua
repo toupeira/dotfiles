@@ -2,45 +2,45 @@ local util = require('util')
 
 local icons = {
   kinds = {
-    Array         = " ",
-    Boolean       = "󰨙 ",
-    Class         = "󰆧 ",
-    Codeium       = "󰘦 ",
-    Color         = " ",
-    Control       = " ",
-    Collapsed     = " ",
-    Constant      = "󰏿 ",
-    Constructor   = " ",
-    Copilot       = " ",
-    Enum          = " ",
-    EnumMember    = " ",
-    Event         = " ",
-    Field         = " ",
-    File          = " ",
-    Folder        = " ",
-    Function      = "󰊕 ",
-    Interface     = " ",
-    Key           = " ",
-    Keyword       = " ",
-    Method        = "󰊕 ",
-    Module        = " ",
-    Namespace     = "󰦮 ",
-    Null          = " ",
-    Number        = "󰎠 ",
-    Object        = " ",
-    Operator      = "󰆕 ",
-    Package       = " ",
-    Property      = " ",
-    Reference     = " ",
-    Snippet       = " ",
-    String        = " ",
-    Struct        = "󰆼 ",
-    TabNine       = "󰏚 ",
-    Text          = " ",
-    TypeParameter = " ",
-    Unit          = " ",
-    Value         = " ",
-    Variable      = "󰀫 ",
+    Array         = '',
+    Boolean       = '󰨙',
+    Class         = '󰆧',
+    Codeium       = '󰘦',
+    Color         = '',
+    Control       = '',
+    Collapsed     = '',
+    Constant      = '󰏿',
+    Constructor   = '',
+    Copilot       = '',
+    Enum          = '',
+    EnumMember    = '',
+    Event         = '',
+    Field         = '',
+    File          = '',
+    Folder        = '',
+    Function      = '󰊕',
+    Interface     = '',
+    Key           = '󰌋',
+    Keyword       = '',
+    Method        = '󰊕',
+    Module        = '',
+    Namespace     = '󰦮',
+    Null          = '󰟢',
+    Number        = '󰎠',
+    Object        = '',
+    Operator      = '󰆕',
+    Package       = '',
+    Property      = '',
+    Reference     = '',
+    Snippet       = '',
+    String        = '',
+    Struct        = '󰆼',
+    TabNine       = '󰏚',
+    Text          = '',
+    TypeParameter = '󰗴',
+    Unit          = '',
+    Value         = '',
+    Variable      = '󰀫',
   },
 }
 
@@ -86,10 +86,10 @@ return {
     },
 
     formatting = {
+      fields = { 'kind', 'abbr', 'menu' },
       format = function(_, item)
-        if icons.kinds[item.kind] then
-          item.kind = ' ' .. icons.kinds[item.kind] .. item.kind
-        end
+        item.menu = '   ' .. item.kind
+        item.kind = icons.kinds[item.kind]
 
         return item
       end,
@@ -103,6 +103,11 @@ return {
     opts.snippet = function(args)
       luasnip.lsp_expand(args.body)
     end
+
+    opts.window = {
+      completion = { col_offset = -2 },
+      documentation = cmp.config.window.bordered(),
+    }
 
     local sources = {
       path = {

@@ -139,36 +139,39 @@ return {
     end
 
     local function map_fzf(key, provider, args, name)
-      name = name or provider:gsub('_', ' ')
+      name = name or provider
+        :gsub('_', ' ')
+        :gsub('git', 'Git')
+        :gsub('lsp', 'LSP')
 
       nmap(key, function()
         fzf[provider](get_args(args))
-      end, 'Search ' .. name)
+      end, 'Find ' .. name)
 
       nmap('<Leader>' .. key, function()
         local resume_args = get_args(args)
         resume_args.resume = true
         resume_args.query = nil
         fzf[provider](resume_args)
-      end, 'Resume last ' .. name .. ' search')
+      end, 'Resume ' .. name .. ' fuzzy search')
     end
 
     -- resume last provider
-    nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume last search')
+    nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume fuzzy search')
 
     -- files
     map_fzf('<Leader>b', 'buffers')
     map_fzf('<Leader>B', 'buffers', { show_unlisted = true }, 'all buffers')
     map_fzf('<Leader>f', 'files')
     map_fzf('<Leader>F', 'files', function() return expand('%') ~= '' and { cwd = expand('%:h') } end, 'files in current directory')
-    map_fzf('<Leader>h', 'oldfiles')
-    map_fzf('<Leader>H', 'oldfiles', function() return expand('%') ~= '' and { cwd_only = true } end, 'oldfiles in current directory')
+    map_fzf('<Leader>h', 'oldfiles', nil, 'recent files')
+    map_fzf('<Leader>H', 'oldfiles', function() return expand('%') ~= '' and { cwd_only = true } end, 'recent files in current directory')
     map_fzf('<Leader>j', 'jumps')
 
     -- file contents
-    map_fzf('<Leader>r', 'live_grep')
-    map_fzf('<Leader>R', 'grep_cword')
-    map_fzf('<Leader>l', 'blines', function() return { query = expand('<cword>') } end, 'lines in current buffer')
+    map_fzf('<Leader>r', 'live_grep', nil, 'in project')
+    map_fzf('<Leader>R', 'grep_cword', nil, 'current word in project')
+    map_fzf('<Leader>l', 'blines', function() return { query = expand('<cword>') } end, 'lines in buffer')
     map_fzf('<Leader>L', 'lines', function() return { query = expand('<cword>') } end, 'lines in all buffers')
 
     -- vim history
@@ -184,7 +187,7 @@ return {
     map_fzf('<F1>C', 'colorschemes')
 
     -- spellcheck
-    map_fzf('<Leader>z', 'spell_suggest')
+    map_fzf('<Leader>z', 'spell_suggest', nil, 'spelling suggestions')
 
     -- LSP
     map_fzf('<Leader>da', 'lsp_code_actions')

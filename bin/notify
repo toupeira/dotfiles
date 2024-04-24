@@ -6,4 +6,4 @@ if [ "$1" = "-i" ]; then
   shift 2
 fi
 
-exec notify-send -i "$icon" -h int:transient:1 "$@"
+exec notify-send -a "notify" -i "$icon" -h int:transient:1 "$@"

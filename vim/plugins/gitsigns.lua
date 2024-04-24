@@ -36,7 +36,7 @@ return {
       util.vmap('<Leader>gs', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Stage selected hunk')
       util.vmap('<Leader>gr', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Reset selected hunk')
 
-      util.nmap('<Leader>gB', gitsigns.toggle_current_line_blame, args)
+      util.nmap('<Leader>gB', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
 
       util.map({'o', 'x'}, 'ih', ':Gitsigns select_hunk', args)
     end
