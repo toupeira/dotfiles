@@ -41,7 +41,7 @@ return {
       'yaml',
     },
 
-    highlight = { enable = true, disable = { 'ruby' }},
+    highlight = { enable = true },
 
     endwise = { enable = true },
     indent = { enable = true },

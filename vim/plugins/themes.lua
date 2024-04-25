@@ -206,6 +206,8 @@ return {
             MatchParen = { fg = 'none', bg = 'sel0', style = 'bold' },
             MatchWord = { style = 'bold' },
 
+            MiniStarterFooter = { link = 'DiagnosticInfo' },
+
             NeogitCursorLine = { link = 'MsgArea' },
             NeogitChangeModified = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },
             NeogitRecentcommits = { fg = 'diag.info', bg ='diag_bg.info', style = 'bold' },

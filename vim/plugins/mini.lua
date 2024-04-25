@@ -18,9 +18,11 @@ return {
     local is_home = vim.fn.getcwd() == os.getenv('HOME')
 
     util.command('MiniStarter', 'lua MiniStarter.open()', 'Open start screen')
+    util.autocmd('User', 'VeryLazy', 'lua MiniStarter.refresh()')
 
     starter.setup({
       evaluate_single = true,
+      silent = true,
       query_updaters = 'abcdefghijklmnopqrstuvwxyz0123456789',
 
       items = {
@@ -48,7 +50,16 @@ return {
         { section = 'Bookmarks', name = 'tmux.conf', action = 'edit ~/.config/tmux/tmux.conf' },
       },
 
-      footer = '',
+      footer = function()
+        local stats = require('lazy').stats()
+        return string.format(
+          'Started in %dms, loaded %d/%d plugins.',
+          stats.times.LazyDone,
+          stats.loaded,
+          stats.count
+        )
+      end,
+
 
       content_hooks = {
         starter.gen_hook.adding_bullet(),
