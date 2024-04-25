@@ -68,6 +68,7 @@ return {
 
       -- mini.clue -----------------------------------------------------
       local clue = require('mini.clue')
+      vim.o.timeoutlen = 500
       clue.setup({
         triggers = {
           -- Leader triggers
@@ -132,7 +133,7 @@ return {
 
         window = {
           config = { width = 40, border = 'rounded' },
-          delay = 500,
+          delay = vim.o.timeoutlen,
         },
       })
 

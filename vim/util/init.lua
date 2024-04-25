@@ -25,7 +25,7 @@ util.is_sudo = not not os.getenv('SUDO_COMMAND')
 util.is_ssh = not not os.getenv('SSH_CONNECTION')
 
 -- Load plugins after startup
-util.lazy = function(plugin)
+util.very_lazy = function(plugin)
   plugin.event = 'VeryLazy'
   return plugin
 end

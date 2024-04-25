@@ -11,7 +11,7 @@ return {
 
     on_attach = function(bufnr)
       local gitsigns = require('gitsigns')
-      local args = { buffer = bufnr }
+      local args = { buffer = bufnr, force = true }
 
       util.nmap(']d', function()
         if vim.wo.diff then
@@ -19,7 +19,7 @@ return {
         else
           gitsigns.nav_hunk('next')
         end
-      end, util.merge(args, { force = true }), 'Go to next hunk')
+      end, args, 'Go to next hunk')
 
       util.nmap('[d', function()
         if vim.wo.diff then
@@ -27,7 +27,7 @@ return {
         else
           gitsigns.nav_hunk('prev')
         end
-      end, util.merge(args, { force = true }), 'Go to previous hunk')
+      end, args, 'Go to previous hunk')
 
       util.nmap('<Leader>gS', gitsigns.stage_hunk, args, 'Stage current hunk')
       util.nmap('<Leader>gR', gitsigns.reset_hunk, args, 'Reset current hunk')

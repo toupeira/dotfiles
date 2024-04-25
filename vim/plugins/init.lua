@@ -1,6 +1,6 @@
 local util = require('util')
 
-local lazy = util.lazy
+local very_lazy = util.very_lazy
 local lazy_file = util.lazy_file
 local map = util.map
 local nmap = util.nmap
@@ -11,18 +11,18 @@ return {
   { 'nvim-tree/nvim-web-devicons', lazy = true,
     opts = { color_icons = false, default = true }},
 
-  lazy { 'j-hui/fidget.nvim', config = true },
-  lazy { 'tpope/vim-characterize' },
-  lazy { 'tpope/vim-eunuch' },
-  lazy { 'tpope/vim-repeat' },
-  lazy { 'tpope/vim-scriptease' },
+  very_lazy { 'j-hui/fidget.nvim', config = true },
+  very_lazy { 'tpope/vim-characterize' },
+  very_lazy { 'tpope/vim-eunuch' },
+  very_lazy { 'tpope/vim-repeat' },
+  very_lazy { 'tpope/vim-scriptease' },
 
   lazy_file { 'AndrewRadev/splitjoin.vim' },
   lazy_file { 'numToStr/Comment.nvim', config = true },
   lazy_file { 'tiagovla/scope.nvim', config = true },
   lazy_file { 'tpope/vim-abolish' },
 
-  lazy { 'alexghergh/nvim-tmux-navigation',
+  very_lazy { 'alexghergh/nvim-tmux-navigation',
     cond = function()
       return os.getenv('TMUX')
     end,
@@ -91,18 +91,30 @@ return {
       quit = false,
     },
     init = function ()
-      nmap('<Leader>x', { 'lclose', 'BufDel' }, 'Close current buffer (keep window)')
+      nmap('<Leader>x', { 'lclose', 'BufDel', 'lua require("util").close_tab()' }, 'Close current buffer (keep window)')
     end
   },
 
-  lazy { 'psliwka/vim-smoothie',
+  { 'pechorin/any-jump.vim',
+    keys = {
+      { 'gd', '<Cmd>AnyJump<CR>', desc = 'Jump to definition' },
+      { 'gd', '<Cmd>AnyJumpVisual<CR>', mode = { 'v' }, desc = 'Jump to definition' },
+      { 'gD', '<Cmd>AnyJumpLastResults<CR>', desc = 'Resume jump to definition' },
+    },
+    init = function()
+      vim.g.any_jump_disable_default_keybindings = 1
+      vim.g.any_jump_center_screen_after_jump = true
+    end
+  },
+
+  very_lazy { 'psliwka/vim-smoothie',
     init = function()
       vim.g.smoothie_speed_constant_factor = 20
       vim.g.smoothie_speed_linear_factor = 20
     end
   },
 
-  lazy { 'sickill/vim-pasta',
+  very_lazy { 'sickill/vim-pasta',
     init = function()
       vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
     end
@@ -143,7 +155,7 @@ return {
     end
   },
 
-  lazy { 'tpope/vim-rsi',
+  very_lazy { 'tpope/vim-rsi',
     config = function()
       -- restore default mapping for <C-d>
       util.unmap({ 'i', 'c' }, '<C-d>')
