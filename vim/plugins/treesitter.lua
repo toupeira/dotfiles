@@ -24,6 +24,7 @@ return {
   opts = {
     ensure_installed = util.is_sudo and {} or {
       'bash',
+      'c',
       'comment',
       'css',
       'html',

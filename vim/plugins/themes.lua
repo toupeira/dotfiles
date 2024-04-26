@@ -110,6 +110,7 @@ return {
             SignColumn = { link = 'LineNr' },
             CursorLineNr = { fg = 'palette.comment' },
             CursorLineSign = { link = 'CursorLineNr' },
+            Visual = { style = 'bold' },
 
             NonText = { fg = 'palette.comment' },
             EndOfBuffer = { fg = 'bg4' },
@@ -167,7 +168,7 @@ return {
             ['@markup.raw'] = { fg = 'syntax.string', style = 'NONE' },
             ['@markup.strong'] = { fg = 'palette.yellow', style = 'bold' },
 
-            ['@string.special.url'] = { style = 'underline' },
+            ['@string.special.url'] = { fg = 'palette.blue', style = 'underline' },
 
             ['@function.builtin.bash'] = { link = 'Operator' },
             ['@keyword.bash'] = { link = 'Operator' },

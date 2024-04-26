@@ -104,13 +104,13 @@ function _mux {
 }
 complete -F _mux mux
 
-# plan completion
-function _plan {
+# notes completion
+function _notes {
   local cword="${COMP_WORDS[COMP_CWORD]}"
 
   mapfile -t COMPREPLY < <(
-    compgen -W "$( fd . /slack/scrapbook/plans -t f -x echo '{/.}' )" "$cword"
+    compgen -W "$( fd . /slack/scrapbook/notes -t f -x echo '{/.}' )" "$cword"
   )
 }
 
-complete -F _plan plan p
+complete -F _notes notes n

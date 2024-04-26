@@ -6,8 +6,8 @@ vim.g.mapleader = ','
 vim.g.maplocalleader = '\\'
 
 -- set colors for startup errors
-vim.cmd('hi! ErrorMsg guifg=#ffcb6b gui=bold guibg=NONE')
-vim.cmd('hi! Question guifg=#C3E88D gui=bold')
+vim.api.nvim_set_hl(0, 'ErrorMsg', { fg = '#ffcb6b', bold = true })
+vim.api.nvim_set_hl(0, 'Question', { fg = '#c3e88d', bold = true })
 
 -- load configuration
 require('core.options')

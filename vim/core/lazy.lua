@@ -10,7 +10,7 @@ end
 vim.opt.rtp:prepend(LAZY_PATH)
 
 require('lazy.core.handler.event').mappings.LazyFile = {
-  id = 'LazyFile', event = { 'BufReadPre', 'BufNewFile', 'BufWritePre' }
+  id = 'LazyFile', event = { 'BufReadPre', 'BufNewFile' }
 }
 
 util.nmap('<Leader>!', function() require('lazy').home() end, 'Open Lazy')
@@ -19,6 +19,7 @@ require('lazy').setup('plugins', {
   root = LAZY_ROOT,
   install = { missing = true, colorscheme = { 'nordfox', 'habamax' }},
   change_detection = { notify = false },
+  concurrency = vim.uv.available_parallelism() * 2,
 
   ui = {
     border = 'rounded',

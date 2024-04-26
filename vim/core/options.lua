@@ -1,3 +1,13 @@
+local util = require('util')
+
+-- Disable language providers ------------------------------------------
+
+vim.g.loaded_node_provider = 0
+vim.g.loaded_perl_provider = 0
+vim.g.loaded_python_provider = 0
+vim.g.loaded_python3_provider = 0
+vim.g.loaded_ruby_provider = 0
+
 -- Custom filetypes ----------------------------------------------------
 
 vim.filetype.add({
@@ -10,119 +20,115 @@ vim.filetype.add({
 
     pac = 'javascript',
   },
+
   filename = {
     Dangerfile = 'ruby',
   },
 })
 
--- Language providers --------------------------------------------------
-
-vim.g.loaded_node_provider = 0
-vim.g.loaded_perl_provider = 0
-vim.g.loaded_python_provider = 0
-vim.g.loaded_python3_provider = 0
-vim.g.loaded_ruby_provider = 0
-
 -- Disable maps from filetype plugins
 vim.g.no_plugin_maps = 1
 
--- TODO: convert to Lua
-vim.cmd([[
-  " interface
-  if getenv('XDG_SESSION_TYPE') == 'tty' && empty($SSH_CONNECTION)
-    set notermguicolors
-    colorscheme ron
-  else
-    set termguicolors
-    set pumblend=10
-  endif
+-- Set a default commentstring
+vim.o.commentstring = '# %s'
 
-  set updatetime=250
-  set mouse=ar
-  set mousemodel=extend
-  set cursorline
-  set cursorlineopt=number
+-- Interface -----------------------------------------------------------
 
-  " buffers
-  set scrolloff=5
-  set sidescrolloff=8
-  set virtualedit+=block
+if os.getenv('XDG_SESSION_TYPE') ~= 'tty' or os.getenv('SSH_CONNECTION') then
+  vim.o.termguicolors = true
+  vim.o.pumblend = 10
 
-  " windows
-  set winheight=3
-  set winminheight=3
-  set splitbelow
-  set splitright
-  " set splitkeep=screen
+  vim.o.title = true
+  vim.o.titlestring = "  %t%{&modified ? ' ●' : ''}%{&readonly ? ' 󰌾 ' : ''} [%{v:lua.require('util').project_path()}]"
+else
+  vim.o.termguicolors = false
+  vim.cmd.colorscheme('ron')
+end
 
-  " line numbers and signs
-  set number
-  set numberwidth=6
-  set signcolumn=yes
+vim.o.updatetime = 250
+vim.opt.shortmess:append { a = true, A = true, c = true, C = true }
 
-  " command prompt and status line
-  set noshowmode
-  set noruler
-  set report=0
-  set shortmess+=aAcC
-  set wildmode=longest:full,full
+vim.o.cursorline = true
+vim.o.cursorlineopt = 'number'
 
-  " get rid of the command window
-  autocmd CmdWinEnter * quit
-  set cmdwinheight=1
-  set cedit=
+vim.o.winheight = 3
+vim.o.winminheight = 3
+vim.o.splitbelow = true
+vim.o.splitright = true
+-- vim.o.splitkeep = 'screen'
 
-  " auto-completion
-  set completeopt=menuone,noinsert,preview
-  set pumheight=20
+vim.o.scrolloff = 5
+vim.o.sidescrolloff = 8
+vim.opt.virtualedit:append { 'block' }
 
-  " indenting
-  set ts=2 sts=2 sw=2
-  set expandtab
-  set shiftround
+vim.o.number = true
+vim.o.numberwidth = 6
+vim.o.signcolumn = 'yes'
 
-  " line endings
-  set fileformats+=mac
+vim.opt.completeopt = { 'menuone', 'noinsert', 'preview' }
+vim.o.pumheight = 20
 
-  " line wrapping
-  set breakindent
-  let &showbreak = ' •• '
+vim.o.showmode = false
+vim.o.ruler = false
+vim.o.report = 0
+vim.o.wildmode = 'longest:full,full'
 
-  " searching
-  set ignorecase
-  set smartcase
-  set inccommand=nosplit
-  set iskeyword+=-
-  set keywordprg=:Manpage
+vim.o.mouse = 'ar'
+vim.o.mousemodel = 'extend'
 
-  if executable('rg')
-    let &grepprg = "rg --vimgrep"
-  endif
+-- Get rid of the command window
+util.autocmd('CmdWinEnter', 'quit')
+vim.o.cmdwinheight = 1
+vim.o.cedit = ''
 
-  " concealing
-  set concealcursor=nvc
-  set conceallevel=0
+-- History -------------------------------------------------------------
 
-  " diffing
-  set diffopt+=algorithm:histogram,indent-heuristic
+vim.o.undofile = true
+vim.o.history = 1000
 
-  " folding
-  set foldmethod=indent
-  set foldlevel=99999
+vim.opt.shada:append { "'1000", '\"100' }
+vim.opt.shada:remove { "'100", '<50' }
 
-  " matching
-  set showmatch
+-- Line wrapping and endings -------------------------------------------
 
-  " history
-  set history=1000
-  set shada+='1000,\"100
-  set shada-='100,<50
-  set undofile
+vim.opt.fileformats:append { 'mac' }
 
-  " set a default commentstring
-  set commentstring=#\ %s
+vim.o.breakindent = true
+vim.o.showbreak = ' •• '
 
-  " window title
-  set title
-  let &titlestring = "  %t%{&modified ? ' ●' : ''}%{&readonly ? ' 󰌾 ' : ''} [%{v:lua.require('util').project_path()}]"
-]])
+-- Indents -------------------------------------------------------------
+
+vim.o.tabstop = 2
+vim.o.softtabstop = 2
+vim.o.shiftwidth = 2
+
+vim.o.expandtab = true
+vim.o.shiftround = true
+
+-- Searching -----------------------------------------------------------
+
+vim.o.ignorecase = true
+vim.o.smartcase = true
+vim.o.inccommand = 'nosplit'
+vim.o.keywordprg = ':Manpage'
+vim.o.showmatch = true
+
+vim.opt.iskeyword:append { '-' }
+
+if vim.fn.executable('rg') then
+  vim.o.grepprg = 'rg --vimgrep'
+end
+
+-- Concealing ----------------------------------------------------------
+
+vim.o.concealcursor = 'nvc'
+vim.o.conceallevel = 0
+
+-- Diffs ---------------------------------------------------------------
+
+vim.opt.diffopt:append { 'algorithm:histogram', 'indent-heuristic' }
+
+-- Folds ---------------------------------------------------------------
+
+vim.o.foldmethod = 'indent'
+vim.o.foldlevel = 99999

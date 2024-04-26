@@ -107,7 +107,7 @@ return {
             colored = true,
           },
           { function()
-              local max = math.max(10, vim.fn.winwidth(0) - 50 - #vim.fn.expand('%:t'))
+              local max = math.max(10, vim.fn.winwidth(0) - 60 - #vim.fn.expand('%:t'))
               return util.project_path(max)
             end,
             icon = '',

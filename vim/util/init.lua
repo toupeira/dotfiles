@@ -2,12 +2,14 @@ local util = {}
 
 local expand = vim.fn.expand
 local fnamemodify = vim.fn.fnamemodify
-local join = vim.fn.join
 local line = vim.fn.line
 local pathshorten = vim.fn.pathshorten
 local winnr = vim.fn.winnr
 
 -- Lua helpers ---------------------------------------------------------
+
+util.split = vim.fn.split
+util.join = table.concat
 
 -- Merge the {opts} table into {defaults}.
 util.merge = function(defaults, opts, ...)
@@ -21,8 +23,8 @@ end
 
 -- Configuration helpers -----------------------------------------------
 
-util.is_sudo = not not os.getenv('SUDO_COMMAND')
-util.is_ssh = not not os.getenv('SSH_CONNECTION')
+util.is_sudo = os.getenv('SUDO_COMMAND')
+util.is_ssh = os.getenv('SSH_CONNECTION')
 
 -- Load plugins after startup
 util.very_lazy = function(plugin)
@@ -70,7 +72,7 @@ util.map = function(mode, lhs, rhs, opts, desc)
   -- run multiple commands
   if type(rhs) == 'table' then
     opts = util.merge(opts, { silent = true })
-    local cmd = join(rhs, '\n')
+    local cmd = util.join(rhs, '\n')
     rhs = function () vim.cmd(cmd) end
   end
 
@@ -215,9 +217,10 @@ end
 -- the basename of a Git repository, or the absolute path for
 -- other directories ('repository/dir', '/etc/dir', '~/dir').
 --
--- Optionally try to shorten the path to {max} characters
--- ('root/a/b/c/dir', 'root/a/…/dir', 'root/…').
-util.project_path = function(max)
+-- Optionally try to shorten the path to {max_length} characters
+-- ('root/a/b/c/dir', 'root/a/…/dir', 'root/…'), and {max_depth}
+-- levels of directories (defaults to 3).
+util.project_path = function(max_length, max_depth)
   local path = expand('%:p:h'):gsub('^term://(.*)//[0-9]+.*', '%1'):gsub('^fugitive:.*', ''):gsub('^diffview:.*', '')
   local _, git_dir = pcall(vim.fn.FugitiveGitDir)
   local root, name
@@ -238,19 +241,25 @@ util.project_path = function(max)
   end
 
   -- shorten relative path
-  if max then
-    if max < #name then
+  max_depth = max_depth == nil and 3 or max_depth
+  local parts = util.split(path, '/')
+  if #parts > max_depth then
+    path = '/…/' .. util.join({ unpack(parts, #parts - max_depth + 1) }, '/')
+  end
+
+  if max_length then
+    if max_length < #name then
       return name
     end
 
     local original = path
-    if #(name .. path) > max then
+    if #(name .. path) > max_length then
       path = pathshorten(path)
     end
 
-    if #(name .. path) > max and path:sub(1, 1) == '/' then
+    if #(name .. path) > max_length and path:sub(1, 1) == '/' then
       path = original
-      while #(name .. path) > max and path ~= '/' do
+      while #(name .. path) > max_length and path ~= '/' do
         path = fnamemodify(path, ':h')
       end
 

@@ -1,15 +1,23 @@
 #!/bin/bash
 
-if [ -n "$1" ] && [ "$1" != . ] && [ "${1:0:1}" != "-" ]; then
-  exec sensible-editor "$@"
-fi
+# if [ -n "$1" ] && [ "$1" != . ] && [ "${1:0:1}" != "-" ]; then
+#   echo exec sensible-editor "$@"
+#   exit
+# fi
+
+mapfile -t modified < <( git modified )
+mapfile -t staged   < <( git staged   )
+mapfile -t unstaged < <( git unstaged )
 
 case "$1" in
-  -m|.)  state=modified; files=$( git modified );;
-  -s)    state=staged;   files=$( git staged );;
-  -u)    state=unstaged; files=$( git unstaged );;
-  *)
-    files=$(
+  -m|.|-) state=modified; files=( "${modified[@]}" );;
+  -s)     state=staged;   files=( "${staged[@]}"   );;
+  -u)     state=unstaged; files=( "${unstaged[@]}" );;
+  '')
+    [ "${#unstaged[@]}" ] && exec $0 -u
+    [ "${#staged[@]}" ]   && exec $0 -s
+
+    mapfile -t files < <(
       git -c color.ui=always status -s \
         | sort -k2 \
         | grep -vE "\[[0-9]+mD[^\w]+ " \
@@ -17,21 +25,30 @@ case "$1" in
         | sed -r 's/.* //'
     )
     ;;
+  *)
+    if [ -f "$1" ]; then
+      files=( "$@" )
+    else
+      mapfile -t files < <( fdfind . -t f | fzf -f "$*" )
+      if [ "${#files[@]}" -eq 0 ]; then
+        files=( "$@" )
+      else
+        echo -e " \e[1;32m● \e[22mEditing \e[1m${#files[@]} files\e[22m matching \e[1m\"$*\"\e[0m"
+      fi
+    fi
+    ;;
 esac
-
-count=$( echo "$files" | grep -c . )
 
 if [ "$state" ]; then
   shift
-  if [ "$count" = 0 ]; then
+  if [ "${#files[@]}" = 0 ]; then
     echo -e " \e[1;33m● \e[22mNo \e[1m$state\e[22m files\e[0m"
     exit 1
   else
-    echo -e " \e[1;32m● \e[22mEditing \e[1m$count $state\e[22m files\e[0m"
+    echo -e " \e[1;32m● \e[22mEditing \e[1m${#files[@]} $state\e[22m files\e[0m"
   fi
 fi
 
-if [ -n "$files" ]; then
-  mapfile -t files < <(echo "$files")
-  sensible-editor "$@" "${files[@]}"
+if [ "${#files[@]}" -gt 0 ]; then
+  sensible-editor "${files[@]}"
 fi

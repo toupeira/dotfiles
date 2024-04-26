@@ -84,7 +84,7 @@ autocmd('FileType', {
 -- Check if we need to reload the file when it changed
 autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, function()
   if vim.o.buftype ~= 'nofile' then
-    vim.cmd('checktime')
+    vim.cmd.checktime()
   end
 end)
 

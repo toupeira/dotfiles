@@ -323,21 +323,21 @@ function sheet {
   fi
 }
 
-# Edit plan files
-function plan {
-  local plans="/slack/scrapbook/plans"
+# Edit notes for current or given project
+function notes {
+  local notes="/slack/scrapbook/notes"
   local name=${1:-$( basename "$PWD" )}
 
   if [ "$name" = "-a" ]; then
-    local plan="$plans"
-  elif [ -f "$plans/$name.md" ]; then
-    local plan="$plans/$name.md"
+    local note="$notes"
+  elif [ -f "$notes/$name.md" ]; then
+    local note="$notes/$name.md"
   else
-    local plan="$( find "$plans" -type f -name '*.md' | fzf -d/ -n-1 -f "$name" | head -1 )"
-    plan=${plan:-${name}.md}
+    local note="$( find "$notes" -type f -name '*.md' | fzf -d/ -n-1 -f "$name" | head -1 )"
+    note=${note:-${name}.md}
   fi
 
-  mux -s -l 15 "$EDITOR" "$plan"
+  mux -s -l 15 "$EDITOR" "$note"
 }
 
-alias p=plan
+alias n=notes

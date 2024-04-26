@@ -93,15 +93,13 @@ return {
   config = function(_, opts)
     local fzf = require('fzf-lua')
     local actions = require('fzf-lua.actions')
+    local defaults = require('fzf-lua.defaults').defaults
 
     -- use history per provider
     vim.g.fzf_history_dir = vim.fn.stdpath('state') .. '/fzf'
 
     -- override actions
-    opts.actions = {
-      files = { default = actions.file_edit },
-      helptags = { default = actions.help_tab },
-    }
+    defaults.helptags.actions.default = actions.help_tab
 
     -- add default settings
     local reverse = {

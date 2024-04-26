@@ -151,7 +151,7 @@ return {
       return true
     end)
 
-    util.autocmd('User', 'LazyFile', function()
+    util.autocmd({ 'BufReadPre', 'BufNewfile' }, function()
       -- mini.ai -------------------------------------------------------
       require('mini.ai').setup()
 
@@ -175,9 +175,9 @@ return {
 
       -- mini.move -----------------------------------------------------
       require('mini.move').setup()
-      imap('<M-H>', ':lua MiniMove.move_line("left")', 'Move line left')
-      imap('<M-J>', ':lua MiniMove.move_line("down")', 'Move line down')
-      imap('<M-K>', ':lua MiniMove.move_line("up")', 'Move line up')
+      imap('<M-H>', ':lua MiniMove.move_line("left")',  'Move line left')
+      imap('<M-J>', ':lua MiniMove.move_line("down")',  'Move line down')
+      imap('<M-K>', ':lua MiniMove.move_line("up")',    'Move line up')
       imap('<M-L>', ':lua MiniMove.move_line("right")', 'Move line right')
 
       -- mini.operators ------------------------------------------------
