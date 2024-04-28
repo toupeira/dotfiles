@@ -1,3 +1,5 @@
+local util = require('util')
+
 return {
   'folke/trouble.nvim',
   event = 'LazyFile',
@@ -6,7 +8,16 @@ return {
   keys = {
     {
       '<Leader>E',
-      '<Cmd>Trouble diagnostics toggle filter.buf=0<CR>',
+      function()
+        local trouble = require('trouble')
+        if trouble.is_open() then
+          trouble.close()
+        elseif #vim.diagnostic.get(0) > 0 then
+          trouble.toggle({ mode = 'diagnostics', filter = { buf = 0 }})
+        else
+          util.echo('No diagnostics in current buffer.', 'ModeMsg')
+        end
+      end,
       desc = 'Toggle diagnostics',
     },
   },

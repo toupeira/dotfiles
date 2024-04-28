@@ -1,9 +1,8 @@
 [tools]
-ruby = 'latest'
-node = 'latest'
-
-fzf = 'latest'
-usage = 'latest'
+ruby = "3.3.1"
+node = "22.0.0"
+fzf = "0.50.0"
+usage = "0.1.18"
 
 [settings]
 not_found_auto_install = false

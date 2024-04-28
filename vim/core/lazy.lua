@@ -19,7 +19,7 @@ require('lazy').setup('plugins', {
   root = LAZY_ROOT,
   install = { missing = true, colorscheme = { 'nordfox', 'habamax' }},
   change_detection = { notify = false },
-  concurrency = vim.uv.available_parallelism() * 2,
+  concurrency = math.max(2, vim.uv.available_parallelism()) * 8,
 
   ui = {
     border = 'rounded',

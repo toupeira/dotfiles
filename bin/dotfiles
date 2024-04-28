@@ -462,7 +462,7 @@ function run {
         shift 2
       else
         message="Sync dotfiles"
-        msg "{{Message:}} " 4 "" -n
+        msg "{{Message:}} \e[0;34m[default] " 4 "" -n
         read -r
         if [ "$REPLY" ]; then
           message="$REPLY"
@@ -728,28 +728,48 @@ function run {
 
       function update {
         local type="$1"
+        local command="$( basename "$0" ) update-$type"
         shift
 
         if [ -n "$filter" ] && [ "$filter" != "$type" ]; then
           return
         elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
-          if [ "$1" = "xdg-open" ]; then
-            "$@"
-          else
-            mux-wrap -w "$@"
-            system tmux select-layout even-vertical
-          fi
+          mux-wrap -w "$command"
+          system tmux select-layout even-vertical
         fi
       }
 
-      update apt        'sudo aptitude update && sudo aptitude upgrade'
-      update flatpak    'flatpak update && flatpak uninstall --unused'
-      update firmware   fwupdmgr update
+      update apt
+      update flatpak
+      update firmware
+      update mise
+      update gem
+      ;;
 
-      update mise       'mise plugins update && mise upgrade --interactive && mise prune'
-      update gem        'gem update && gem cleanup'
+    update-apt)      sudo aptitude update && sudo aptitude upgrade;;
+    update-flatpak)  flatpak update && flatpak uninstall --unused;;
+    update-firmware) fwupdmgr update;;
+    update-gem)      gem update && gem cleanup;;
+
+    update-mise)
+      local plugins=$( mise ls -g --no-header | cut -d\  -f1 )
+
+      mise plugins update || exit 1
+
+      for plugin in $plugins; do
+        mise use -g "$plugin@latest" >/dev/null
+      done
+
+      mise upgrade --interactive || exit 1
+
+      for plugin in $plugins; do
+        mise use -g --pin "$plugin@latest"
+      done
+
+      mise prune
       ;;
     # }}}
+
     list) # {{{
       find "$DOTFILES/packages/lazy" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort | fzf -f "$1"
       ;;

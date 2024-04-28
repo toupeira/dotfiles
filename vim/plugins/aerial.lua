@@ -11,11 +11,6 @@ return {
   },
 
   init = function()
-    util.nmap('<Leader>t', ':AerialNavToggle', 'Toggle symbols in popup')
-    util.nmap('<Leader>T', ':AerialToggle', 'Toggle symbols in sidebar')
-
-    util.nmap(']]', ':AerialNext', 'Go to next symbol')
-    util.nmap('[[', ':AerialPrev', 'Go to previous symbol')
   end,
 
   opts = {
@@ -41,7 +36,17 @@ return {
   },
 
   config = function(_, opts)
-    require('aerial').setup(opts)
+    local aerial = require('aerial')
+    aerial.setup(opts)
+
+    local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+    local next_symbol, previous_symbol = repeat_move.make_repeatable_move_pair(aerial.next, aerial.prev)
+
+    util.nmap(']]', next_symbol, 'Go to next symbol')
+    util.nmap('[[', previous_symbol, 'Go to previous symbol')
+
+    util.nmap('<Leader>t', aerial.nav_toggle, 'Toggle symbols in popup')
+    util.nmap('<Leader>T', aerial.toggle, 'Toggle symbols in sidebar')
 
     local config = require('aerial.config')
     local setup = config.setup
