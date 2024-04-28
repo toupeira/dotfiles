@@ -24,10 +24,11 @@ return {
       builtin = {
         ['<F1>']  = 'toggle-help',
         ['<C-_>'] = 'toggle-preview',
-        ['<C-e>'] = 'preview-page-down',
-        ['<C-y>'] = 'preview-page-up',
-        ['<C-f>'] = 'preview-page-down',
-        ['<C-b>'] = 'preview-page-up',
+        ['<C-e>'] = 'preview-down',
+        ['<C-y>'] = 'preview-up',
+        ['<C-f>'] = 'preview-half-page-down',
+        ['<C-b>'] = 'preview-half-page-up',
+        ['<C-r>'] = 'preview-page-reset',
       },
       -- remove defaults, still uses $FZF_DEFAULT_OPTS
       fzf = {},

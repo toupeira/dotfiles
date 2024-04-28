@@ -28,12 +28,12 @@ return {
     end,
     opts = {
       disable_when_zoomed = true,
-      map_modes = { 'n', 't' },
       keybindings = {
         left = '<C-h>',
         down = '<C-j>',
         up = '<C-k>',
         right = '<C-l>',
+        modes = { 'normal', 'command', 'visual', 'terminal' },
       }
     }
   },

@@ -1,54 +1,83 @@
 #!/bin/bash
 
-# if [ -n "$1" ] && [ "$1" != . ] && [ "${1:0:1}" != "-" ]; then
-#   echo exec sensible-editor "$@"
-#   exit
-# fi
+files=()
+dry_run=
 
 mapfile -t modified < <( git modified )
 mapfile -t staged   < <( git staged   )
 mapfile -t unstaged < <( git unstaged )
+mapfile -t last     < <( git diff HEAD^ --name-only )
 
-case "$1" in
-  -m|.|-) state=modified; files=( "${modified[@]}" );;
-  -s)     state=staged;   files=( "${staged[@]}"   );;
-  -u)     state=unstaged; files=( "${unstaged[@]}" );;
-  '')
-    [ "${#unstaged[@]}" ] && exec $0 -u
-    [ "${#staged[@]}" ]   && exec $0 -s
+while [ "${1:0:1}" = "-" ]; do
+  case "$1" in
+    -h|--h*)
+      echo "Usage: git-edit [OPTIONS] [PATH/PATTERN..]"
+      echo
+      echo "  -m  Edit all modified files"
+      echo "  -s  Edit staged files"
+      echo "  -u  Edit unstaged files"
+      echo "  -l  Edit modified files from last commit"
+      echo
+      echo "  -f  Fuzzy-find files"
+      echo "  -n  Only show files, don't edit"
+      echo
+      exit 255
+      ;;
 
-    mapfile -t files < <(
-      git -c color.ui=always status -s \
-        | sort -k2 \
-        | grep -vE "\[[0-9]+mD[^\w]+ " \
-        | fzf --multi --tac \
-        | sed -r 's/.* //'
-    )
-    ;;
-  *)
+    -m|.) state='modified';       files=( "${modified[@]}" );;
+    -l)   state='last committed'; files=( "${last[@]}"     );;
+    -s)   state='staged';         files=( "${staged[@]}"   );;
+    -u)   state='unstaged';       files=( "${unstaged[@]}" );;
+    -n)   dry_run=1;;
+
+    -f|-)
+      mapfile -t files < <(
+        git -c color.ui=always status -s \
+          | sort -k2 \
+          | grep -vE "\[[0-9]+mD[^\w]+ " \
+          | fzf --multi --tac \
+          | sed -r 's/.* //'
+      )
+
+      [ "${#files[@]}" = 0 ] && exit 1
+      ;;
+  esac
+
+  shift
+done
+
+if [ "$state" ]; then
+  if [ "${#files[@]}" = 0 ]; then
+    echo -e " \e[1;33m● \e[22mNo \e[1m$state\e[22m files\e[0m"
+    exit 1
+  elif [ ! "$dry_run" ]; then
+    echo -e " \e[1;32m● \e[22mEditing \e[1m${#files[@]} $state\e[22m files\e[0m"
+  fi
+elif [ "${#files[@]}" = 0 ]; then
+  if [ $# = 0 ]; then
+    if [ "${#unstaged[@]}" -gt 0 ]; then
+      files=( "${unstaged[@]}" )
+    elif [ "${#staged[@]}" -gt 0 ]; then
+      files=( "${staged[@]}" )
+    else
+      files=( "${last[@]}" )
+    fi
+  else
     if [ -f "$1" ]; then
       files=( "$@" )
     else
       mapfile -t files < <( fdfind . -t f | fzf -f "$*" )
-      if [ "${#files[@]}" -eq 0 ]; then
+      if [ "${#files[@]}" = 0 ]; then
         files=( "$@" )
-      else
+      elif [ ! "$dry_run" ]; then
         echo -e " \e[1;32m● \e[22mEditing \e[1m${#files[@]} files\e[22m matching \e[1m\"$*\"\e[0m"
       fi
     fi
-    ;;
-esac
-
-if [ "$state" ]; then
-  shift
-  if [ "${#files[@]}" = 0 ]; then
-    echo -e " \e[1;33m● \e[22mNo \e[1m$state\e[22m files\e[0m"
-    exit 1
-  else
-    echo -e " \e[1;32m● \e[22mEditing \e[1m${#files[@]} $state\e[22m files\e[0m"
   fi
 fi
 
-if [ "${#files[@]}" -gt 0 ]; then
+if [ "$dry_run" ]; then
+  echo "${files[@]}"
+elif [ "${#files[@]}" -gt 0 ]; then
   sensible-editor "${files[@]}"
 fi
