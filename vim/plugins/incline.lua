@@ -94,7 +94,7 @@ return {
 
     -- reduce updates to avoid cursor lag
     vim.api.nvim_clear_autocmds({
-      event = { 'CursorMoved', 'CursorMovedI', 'WinScrolled' },
+      event = { 'CursorMoved', 'CursorMovedI' },
       group = 'incline',
     })
   end

@@ -326,7 +326,11 @@ function sheet {
 # Edit notes for current or given project
 function notes {
   local notes="/slack/scrapbook/notes"
-  local name=${1:-$( basename "$PWD" )}
+
+  local root=$( git rev-parse --show-toplevel )
+  [ "$root" ] || root="$PWD"
+
+  local name=${1:-$( basename "$root" )}
 
   if [ "$name" = "-a" ]; then
     local note="$notes"
@@ -334,7 +338,7 @@ function notes {
     local note="$notes/$name.md"
   else
     local note="$( find "$notes" -type f -name '*.md' | fzf -d/ -n-1 -f "$name" | head -1 )"
-    note=${note:-${name}.md}
+    note="$notes/${note:-${name}.md}"
   fi
 
   mux -s -l 15 "$EDITOR" "$note"
