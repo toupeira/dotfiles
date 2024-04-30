@@ -198,9 +198,9 @@ return {
           ['('] = { neigh_pattern = '[^\\][ \n]' },
           ['['] = { neigh_pattern = '[^\\][ \n]' },
           ['{'] = { neigh_pattern = '[^\\][ \n]' },
-          ['"'] = { neigh_pattern = '[^\\][ \n]' },
-          ["'"] = { neigh_pattern = '[^%a\\][ \n]' },
-          ['`'] = { neigh_pattern = '[^\\][ \n]' },
+          ['"'] = { neigh_pattern = '[^%a)}%]\\][ \n]' },
+          ["'"] = { neigh_pattern = '[^%a)}%]\\][ \n]' },
+          ['`'] = { neigh_pattern = '[^%a)}%]\\][ \n]' },
 
           [' '] = {
             action = 'closeopen',

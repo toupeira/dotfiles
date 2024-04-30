@@ -22,22 +22,6 @@ return {
   lazy_file { 'tiagovla/scope.nvim', config = true },
   lazy_file { 'tpope/vim-abolish' },
 
-  very_lazy { 'alexghergh/nvim-tmux-navigation',
-    cond = function()
-      return os.getenv('TMUX')
-    end,
-    opts = {
-      disable_when_zoomed = true,
-      keybindings = {
-        left = '<C-h>',
-        down = '<C-j>',
-        up = '<C-k>',
-        right = '<C-l>',
-        modes = { 'normal', 'command', 'visual', 'terminal' },
-      }
-    }
-  },
-
   { 'AndrewRadev/bufferize.vim',
     cmd = 'Bufferize',
     init = function()

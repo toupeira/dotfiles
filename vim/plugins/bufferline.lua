@@ -44,6 +44,11 @@ return {
         bg = { highlight = 'Normal', attribute = 'bg' },
         bold = true
       },
+
+      duplicate_selected = {
+        fg = { highlight = 'DiagnosticInfo', attribute = 'fg' },
+        bold = true
+      }
     },
   },
 
