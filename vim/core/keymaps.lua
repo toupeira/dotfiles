@@ -1,5 +1,4 @@
 local util = require('util')
-
 local nmap = util.nmap
 local vmap = util.vmap
 local imap = util.imap
@@ -28,19 +27,12 @@ nmap('<Leader><Tab>', [[
 
 nmap('', '<C-w>=', 'Align windows') -- <C-minus>
 
-nmap('<Leader>c', function()
-  -- don't close window if it's the last normal one
-  if vim.bo.buftype ~= 'quickfix' then
-    local windows = #vim.tbl_filter(
-      function(win) return vim.fn.win_gettype(win) == '' end,
-      vim.fn.range(1, vim.fn.winnr('$'))
-    )
+nmap('<Leader>c', util.close_window, 'Close current window')
 
-    if windows <= 1 then return end
-  end
-
-  pcall(vim.cmd.close)
-end, 'Close current window')
+nmap('<Leader>x', function()
+  util.close_buffer()
+  util.close_tab()
+end, 'Close current buffer (keep window)')
 
 nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window')
 

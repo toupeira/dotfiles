@@ -327,7 +327,7 @@ function sheet {
 function notes {
   local notes="/slack/scrapbook/notes"
 
-  local root=$( git rev-parse --show-toplevel )
+  local root=$( git rev-parse --show-toplevel 2>/dev/null )
   [ "$root" ] || root="$PWD"
 
   local name=${1:-$( basename "$root" )}

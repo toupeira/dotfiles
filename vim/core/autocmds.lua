@@ -1,5 +1,4 @@
 local util = require('util')
-
 local autocmd = util.autocmd
 
 -- Filetype settings ---------------------------------------------------

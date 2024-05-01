@@ -1,5 +1,4 @@
 local util = require('util')
-
 local nmap = util.nmap
 local vmap = util.vmap
 local imap = util.imap
@@ -69,7 +68,7 @@ return {
       },
     })
 
-    util.autocmd('User', 'VeryLazy', function()
+    util.autocmd_once('User', 'VeryLazy', function()
       -- mini.basics ---------------------------------------------------
       require('mini.basics').setup({
         options      = { basic = false, win_borders = 'bold' },
@@ -147,11 +146,11 @@ return {
           delay = vim.o.timeoutlen,
         },
       })
-
-      return true
     end)
 
-    util.autocmd({ 'BufReadPre', 'BufNewfile' }, function()
+    util.autocmd_once({ 'BufReadPre', 'BufNewfile' }, function(event)
+      vim.print('init')
+
       -- mini.ai -------------------------------------------------------
       require('mini.ai').setup()
 
@@ -233,8 +232,6 @@ return {
       require('mini.trailspace').setup()
       nmap('<Leader>$', ':lua MiniTrailspace.trim()', 'Trim trailing whitespace')
       util.hl_set('MiniTrailspace', { bg = util.get_color('Pmenu', 'bg') })
-
-      return true
     end)
   end
 }

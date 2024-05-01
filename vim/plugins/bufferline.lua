@@ -2,21 +2,6 @@ local util = require('util')
 
 local nmap = util.nmap
 
--- return {
---   'romgrk/barbar.nvim',
---   opts = {
---     auto_hide = 1,
---     minimum_padding = 2,
---     maximum_padding = 2,
---     icons = {
---       preset = 'slanted',
---       separator = { left = '', right = '' },
---       inactive = { separator = { left = '', right = '' } },
---       button = '',
---     }
---   }
--- }
-
 return {
   'akinsho/bufferline.nvim',
   event = 'LazyFile',
@@ -31,7 +16,7 @@ return {
       sort_by = 'insert_after_current',
       tab_size = 1,
 
-      close_command = 'BufDel %d',
+      close_command = util.close_buffer,
       right_mouse_command = nil,
     },
 

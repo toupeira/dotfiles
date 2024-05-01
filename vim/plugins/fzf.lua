@@ -1,7 +1,7 @@
 local util = require('util')
-
 local nmap = util.nmap
 local merge = util.merge
+
 local expand = vim.fn.expand
 
 return {

@@ -1,4 +1,5 @@
 local util = require('util')
+local nvomap = util.nvomap
 
 return {
   'nvim-treesitter/nvim-treesitter',
@@ -22,14 +23,9 @@ return {
 
     local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
 
-    util.nvomap(';',       repeat_move.repeat_last_move_next)
-    util.nvomap('<Tab>',   repeat_move.repeat_last_move_next)
-    util.nvomap('<S-Tab>', repeat_move.repeat_last_move_previous)
-
-    util.nvomap('f', repeat_move.builtin_f)
-    util.nvomap('F', repeat_move.builtin_F)
-    util.nvomap('t', repeat_move.builtin_t)
-    util.nvomap('T', repeat_move.builtin_T)
+    nvomap(';',       repeat_move.repeat_last_move_next)
+    nvomap('<Tab>',   repeat_move.repeat_last_move_next)
+    nvomap('<S-Tab>', repeat_move.repeat_last_move_previous)
   end,
 
   opts = {
@@ -54,7 +50,6 @@ return {
     },
 
     highlight = { enable = true },
-
     endwise = { enable = true },
     indent = { enable = true },
     matchup = { enable = true },

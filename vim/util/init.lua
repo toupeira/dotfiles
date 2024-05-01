@@ -132,6 +132,26 @@ util.autocmd = function(event, pattern, command)
   return vim.api.nvim_create_autocmd(event, opts)
 end
 
+-- Create autocmd that only runs once.
+--
+-- Returning true doesn't work with multiple patterns
+-- https://github.com/neovim/neovim/issues/26493
+util.autocmd_once = function(event, pattern, command)
+  if pattern and not command then
+    command = pattern
+    pattern = nil
+  end
+
+  local autocmd_id
+  local handler = function()
+    vim.api.nvim_del_autocmd(autocmd_id)
+    command()
+  end
+
+  autocmd_id = util.autocmd(event, pattern, handler)
+  return autocmd_id
+end
+
 -- Create user command
 -- https://github.com/neovim/neovim/issues/26867
 util.command = function(name, command, opts, desc)
@@ -198,6 +218,44 @@ end
 -- Return the number of listed buffers.
 util.buffer_count = function()
   return #vim.fn.getbufinfo({ buflisted = true })
+end
+
+-- Close buffer, while keeping its window.
+util.close_buffer = function(buffer)
+  buffer = buffer or vim.fn.bufnr()
+  local window = vim.fn.bufwinid(buffer)
+
+  if window > -1 then
+    vim.api.nvim_win_call(window, function()
+      local state = require('bufferline.state')
+      local commands = require('bufferline.commands')
+      local _, item = commands.get_current_element_index(state)
+
+      if item.ordinal == #state.components then
+        require('bufferline').cycle(-1)
+      else
+        require('bufferline').cycle(1)
+      end
+    end)
+  end
+
+  if buffer then
+    vim.api.nvim_buf_delete(buffer, {})
+  end
+end
+
+-- Close window, except if it's the last normal one.
+util.close_window = function()
+  if vim.bo.buftype ~= 'quickfix' then
+    local windows = #vim.tbl_filter(
+      function(win) return vim.fn.win_gettype(win) == '' end,
+      vim.fn.range(1, winnr('$'))
+    )
+
+    if windows <= 1 then return end
+  end
+
+  vim.api.nvim_win_close(0, false)
 end
 
 -- Close tab if there's only one unnamed buffer.

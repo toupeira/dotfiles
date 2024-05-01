@@ -1,4 +1,5 @@
 local util = require('util')
+local nmap = util.nmap
 
 return {
   'stevearc/aerial.nvim',
@@ -42,11 +43,11 @@ return {
     local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
     local next_symbol, previous_symbol = repeat_move.make_repeatable_move_pair(aerial.next, aerial.prev)
 
-    util.nmap(']]', next_symbol, 'Go to next symbol')
-    util.nmap('[[', previous_symbol, 'Go to previous symbol')
+    nmap(']]', next_symbol, 'Go to next symbol')
+    nmap('[[', previous_symbol, 'Go to previous symbol')
 
-    util.nmap('<Leader>t', aerial.nav_toggle, 'Toggle symbols in popup')
-    util.nmap('<Leader>T', aerial.toggle, 'Toggle symbols in sidebar')
+    nmap('<Leader>t', aerial.nav_toggle, 'Toggle symbols in popup')
+    nmap('<Leader>T', aerial.toggle, 'Toggle symbols in sidebar')
 
     local config = require('aerial.config')
     local setup = config.setup

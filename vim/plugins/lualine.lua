@@ -3,6 +3,10 @@ local util = require('util')
 return {
   'nvim-lualine/lualine.nvim',
 
+  init = function()
+    vim.o.statusline = ' '
+  end,
+
   opts = function()
     local green = util.get_color('DiagnosticOk')
     local orange = util.get_color('DiagnosticWarn')

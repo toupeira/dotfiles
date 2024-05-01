@@ -1,10 +1,17 @@
 local util = require('util')
+local nmap = util.nmap
+local vmap = util.vmap
 
 return {
   'lewis6991/gitsigns.nvim',
   event = 'LazyFile',
 
   opts = {
+    signs = {
+      delete = { text = '' },
+      topdelete = { text = '' },
+    },
+
     current_line_blame_opts = {
       delay = 500,
     },
@@ -13,7 +20,7 @@ return {
       local gitsigns = require('gitsigns')
       local args = { buffer = bufnr, force = true }
 
-      util.nmap(']d', function()
+      nmap(']d', function()
         if vim.wo.diff then
           vim.cmd.normal({']c', bang = true})
         else
@@ -21,7 +28,7 @@ return {
         end
       end, args, 'Go to next hunk')
 
-      util.nmap('[d', function()
+      nmap('[d', function()
         if vim.wo.diff then
           vim.cmd.normal({'[c', bang = true})
         else
@@ -29,14 +36,14 @@ return {
         end
       end, args, 'Go to previous hunk')
 
-      util.nmap('<Leader>gS', gitsigns.stage_hunk, args, 'Stage current hunk')
-      util.nmap('<Leader>gR', gitsigns.reset_hunk, args, 'Reset current hunk')
-      util.nmap('<Leader>gU', gitsigns.undo_stage_hunk, args, 'Undo last staged hunk')
+      nmap('<Leader>gS', gitsigns.stage_hunk, args, 'Stage current hunk')
+      nmap('<Leader>gR', gitsigns.reset_hunk, args, 'Reset current hunk')
+      nmap('<Leader>gU', gitsigns.undo_stage_hunk, args, 'Undo last staged hunk')
 
-      util.vmap('<Leader>gs', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Stage selected hunk')
-      util.vmap('<Leader>gr', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Reset selected hunk')
+      vmap('<Leader>gs', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Stage selected hunk')
+      vmap('<Leader>gr', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Reset selected hunk')
 
-      util.nmap('<Leader>gB', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
+      nmap('<Leader>gB', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
 
       util.map({'o', 'x'}, 'ih', ':Gitsigns select_hunk', args)
     end

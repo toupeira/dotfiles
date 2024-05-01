@@ -1,9 +1,7 @@
 local util = require('util')
-
 local very_lazy = util.very_lazy
 local lazy_file = util.lazy_file
 local map = util.map
-local nmap = util.nmap
 local imap = util.imap
 
 return {
@@ -65,17 +63,6 @@ return {
           names = false,
         },
       }
-    end
-  },
-
-  { 'ojroques/nvim-bufdel',
-    cmd = 'BufDel',
-    opts = {
-      next = 'tabs',
-      quit = false,
-    },
-    init = function ()
-      nmap('<Leader>x', { 'lclose', 'BufDel', 'lua require("util").close_tab()' }, 'Close current buffer (keep window)')
     end
   },
 
