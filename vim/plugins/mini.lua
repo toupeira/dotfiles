@@ -188,7 +188,8 @@ return {
       vmap('D', 'gm', { remap = true }, 'Duplicate selection')
 
       -- mini.pairs ----------------------------------------------------
-      require('mini.pairs').setup({
+      local pairs = require('mini.pairs')
+      pairs.setup({
         modes = {
           command = false,
           terminal = false,
@@ -210,6 +211,11 @@ return {
         }
       })
 
+      local cr = pairs.cr
+      pairs.cr = function(...)
+        return "u" .. cr(...)
+      end
+
       -- mini.surround -------------------------------------------------
       require('mini.surround').setup({
         mappings = {
@@ -226,7 +232,7 @@ return {
       -- mini.trailspace -----------------------------------------------
       require('mini.trailspace').setup()
       nmap('<Leader>$', ':lua MiniTrailspace.trim()', 'Trim trailing whitespace')
-      util.hl_link('MiniTrailspace', 'Visual')
+      util.hl_set('MiniTrailspace', { bg = util.get_color('Pmenu', 'bg') })
 
       return true
     end)

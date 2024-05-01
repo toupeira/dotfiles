@@ -110,7 +110,7 @@ return {
             SignColumn = { link = 'LineNr' },
             CursorLineNr = { fg = 'palette.comment' },
             CursorLineSign = { link = 'CursorLineNr' },
-            Visual = { style = 'bold' },
+            Visual = { bg = 'palette.bg4', style = 'bold' },
 
             NonText = { fg = 'palette.comment' },
             EndOfBuffer = { fg = 'bg4' },

@@ -54,6 +54,9 @@ nmap('<Leader>X', ':tabclose', 'Close current tab')
 
 -- File editing --------------------------------------------------------
 
+nmap('<Leader>Q', ':quitall', 'Quit')
+
+nmap('<C-s>', ':write', 'Save current buffer')
 nmap('<Leader>w', ':write', 'Save current buffer')
 nmap('<Leader>C', function() return ':e ' .. expand('%:p:h') .. '/' end, { expr = true, desc = 'Create file in directory of current buffer' })
 
@@ -74,7 +77,6 @@ nmap('vp', '`[v`]', 'Select pasted text')
 vmap('gs', ':!sort -h', 'Sort selection')
 vmap('.', ':normal .', 'Repeat for each line in selection')
 
-imap('<CR>', '<C-g>u<CR>', 'Break undo chain and insert new line')
 imap('<M-o>', '<C-o>o', 'Insert line below')
 imap('<M-O>', '<C-o>O', 'Insert line above')
 
@@ -88,6 +90,22 @@ nmap('<Space>', 'za', 'Toggle fold')
 nmap('du', ':diffupdate', 'Update diffs')
 nmap(']d', ']c', 'Go to next change')
 nmap('[d', '[c', 'Go to previous change')
+
+local undo_chains = {
+  ['<CR>'] = 'new line',
+  ['.']    = 'period',
+  [',']    = 'comma',
+  [':']    = 'colon',
+  [';']    = 'semicolon',
+  ['/']    = 'slash',
+  ['|']    = 'pipe',
+  ['=']    = 'equals sign',
+  ['?']    = 'question mark',
+  ['!']    = 'exclamation mark',
+}
+for key, desc in pairs(undo_chains) do
+  imap(key, '<C-g>u' .. key, 'Insert ' .. desc .. ' with new undo chain')
+end
 
 -- don't map Y to y$
 util.unmap('n', 'Y')
