@@ -13,11 +13,10 @@ return {
     opts = {
       disable_when_zoomed = true,
       keybindings = {
-        left = '<C-h>',
-        down = '<C-j>',
-        up = '<C-k>',
-        right = '<C-l>',
-        modes = { 'normal', 'command', 'visual', 'terminal' },
+        left  = { { 'n', 'c', 'v', 't' }, '<C-h>' },
+        down  = { { 'n', 'c', 'v', 't' }, '<C-j>' },
+        up    = { { 'n', 'c', 'v', 't' }, '<C-k>' },
+        right = { { 'n', 'c', 'v', 't' }, '<C-l>' },
       }
     },
 

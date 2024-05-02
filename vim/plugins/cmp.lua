@@ -156,7 +156,7 @@ return {
         else
           fallback()
         end
-      end, { 'i', 's', 'c' }),
+      end, { 'i', 'c' }),
 
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -166,7 +166,7 @@ return {
         else
           fallback()
         end
-      end),
+      end, { 'i', 'c' }),
     }
 
     opts.mapping = cmp.mapping.preset.insert(tabs)
