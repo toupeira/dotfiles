@@ -148,9 +148,7 @@ return {
       })
     end)
 
-    util.autocmd_once({ 'BufReadPre', 'BufNewfile' }, function(event)
-      vim.print('init')
-
+    util.autocmd_once({ 'BufReadPre', 'BufNewfile' }, function()
       -- mini.ai -------------------------------------------------------
       require('mini.ai').setup()
 

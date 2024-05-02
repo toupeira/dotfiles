@@ -17,10 +17,8 @@ return {
     vim.g.cycle_default_groups = {
       {{ '&&', '||' }},
       {{ '+', '-' }},
-      {{ '+=', '-=' }},
       {{ '==', '!=' }},
       {{ '>', '<' }},
-      {{ '>=', '<=' }},
       {{ 'above', 'below' }},
       {{ 'active', 'inactive' }},
       {{ 'add', 'remove' }},
@@ -30,7 +28,6 @@ return {
       {{ 'assert', 'refute' }},
       {{ 'before', 'after' }},
       {{ 'credit', 'debit' }},
-      {{ 'debug', 'info', 'warn', 'error', 'fatal' }},
       {{ 'enable', 'disable' }},
       {{ 'even', 'odd' }},
       {{ 'exclude', 'include' }},
@@ -39,8 +36,9 @@ return {
       {{ 'get', 'set' }},
       {{ 'height', 'width' }},
       {{ 'horizontal', 'vertical' }},
-      {{ 'in', 'out' }},
+      {{ 'inclu', 'exclu' }},
       {{ 'internal', 'external' }},
+      {{ 'in', 'out' }},
       {{ 'left', 'right' }},
       {{ 'max', 'min' }},
       {{ 'next', 'previous' }},
@@ -57,9 +55,11 @@ return {
       {{ 'up', 'down' }},
       {{ 'without', 'with' }},
       {{ 'yes', 'no' }},
+
       {{ 'zero', 'one', 'two', 'three', 'four', 'five', 'six', 'seven', 'eight', 'nine', 'ten' }},
       {{ 'monday', 'tuesday', 'wednesday', 'thursday', 'friday', 'saturday', 'sunday' }},
       {{ 'january', 'february', 'march', 'april', 'may', 'june', 'july', 'august', 'september', 'october', 'november', 'december' }},
+      {{ 'debug', 'info', 'warn', 'error', 'fatal' }},
     }
 
     vim.g.cycle_default_groups_for_ruby = {

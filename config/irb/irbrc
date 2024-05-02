@@ -2,6 +2,7 @@
 
 %w[
   active_support/all
+  csv
 ].each do |lib|
   require lib
 rescue LoadError
