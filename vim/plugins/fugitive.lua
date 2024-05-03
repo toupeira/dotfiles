@@ -5,7 +5,7 @@ local nvomap = util.nvomap
 
 return {
   'tpope/vim-fugitive',
-  event = 'LazyFile',
+  event = 'VeryLazy',
   dependencies = {
     { 'tpope/vim-rhubarb',
       dependencies = { 'fugitive-gitlab.vim' },

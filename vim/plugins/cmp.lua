@@ -67,16 +67,6 @@ return {
         return os.getenv('TMUX')
       end
     },
-
-    { 'L3MON4D3/LuaSnip',
-      dependencies = {
-        'rafamadriz/friendly-snippets',
-        'saadparwaiz1/cmp_luasnip',
-      },
-      config = function()
-        require('luasnip.loaders.from_vscode').lazy_load()
-      end
-    },
   },
 
   opts = {
@@ -98,11 +88,6 @@ return {
 
   config = function(_, opts)
     local cmp = require('cmp')
-    local luasnip = require('luasnip')
-
-    opts.snippet = function(args)
-      luasnip.lsp_expand(args.body)
-    end
 
     opts.window = {
       completion = { col_offset = -2 },
@@ -128,7 +113,6 @@ return {
       { name = 'nvim_lsp_signature_help' },
       { name = 'nvim_lsp' },
     }, {
-      { name = 'luasnip' },
       { name = 'buffer' },
       sources.path,
       sources.tmux,
@@ -140,13 +124,7 @@ return {
     local tabs = {
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
-          if luasnip.expandable() then
-            luasnip.expand()
-          else
-            cmp.confirm({ select = true })
-          end
-        elseif luasnip.locally_jumpable(1) then
-          luasnip.jump(1)
+          cmp.confirm({ select = true })
         elseif has_words_before() or vim.api.nvim_get_mode().mode == 'c' then
           cmp.complete()
 
@@ -161,8 +139,6 @@ return {
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.select_prev_item()
-        elseif luasnip.locally_jumpable(-1) then
-          luasnip.jump(-1)
         else
           fallback()
         end

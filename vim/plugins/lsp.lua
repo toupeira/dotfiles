@@ -4,7 +4,7 @@ local nvomap = util.nvomap
 
 return {
   'neovim/nvim-lspconfig',
-  event = 'LazyFile',
+  event = 'VeryLazy',
   dependencies = {
     { 'folke/neodev.nvim', config = true },
     { 'williamboman/mason-lspconfig.nvim',

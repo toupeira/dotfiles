@@ -10,15 +10,15 @@ return {
     opts = { color_icons = false, default = true }},
 
   very_lazy { 'j-hui/fidget.nvim', config = true },
+  very_lazy { 'numToStr/Comment.nvim', config = true },
+  very_lazy { 'tiagovla/scope.nvim', config = true },
+  very_lazy { 'tpope/vim-abolish' },
   very_lazy { 'tpope/vim-characterize' },
   very_lazy { 'tpope/vim-eunuch' },
   very_lazy { 'tpope/vim-repeat' },
   very_lazy { 'tpope/vim-scriptease' },
 
-  lazy_file { 'AndrewRadev/splitjoin.vim' },
-  lazy_file { 'numToStr/Comment.nvim', config = true },
-  lazy_file { 'tiagovla/scope.nvim', config = true },
-  lazy_file { 'tpope/vim-abolish' },
+  { 'AndrewRadev/splitjoin.vim' },
 
   { 'AndrewRadev/bufferize.vim',
     cmd = 'Bufferize',
@@ -99,7 +99,7 @@ return {
     end
   },
 
-  lazy_file { 'tpope/vim-projectionist',
+  very_lazy { 'tpope/vim-projectionist',
     config = function()
       local function alternate_create()
         local confirm = vim.o.confirm
@@ -116,7 +116,7 @@ return {
     end
   },
 
-  lazy_file { 'tpope/vim-ragtag',
+  very_lazy { 'tpope/vim-ragtag',
     config = function()
       imap('<C-]>', '</<Plug>ragtagHtmlComplete')
       util.autocmd('User', 'Ragtag', function()
