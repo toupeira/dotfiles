@@ -24,7 +24,7 @@ return {
     local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
 
     nvomap(';',       repeat_move.repeat_last_move_next)
-    nvomap('<Tab>',   repeat_move.repeat_last_move_next)
+    nvomap('<Tab>',   repeat_move.repeat_last_move_next, { force = false })
     nvomap('<S-Tab>', repeat_move.repeat_last_move_previous)
   end,
 

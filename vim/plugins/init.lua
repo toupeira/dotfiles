@@ -75,6 +75,11 @@ return {
     init = function()
       vim.g.any_jump_disable_default_keybindings = 1
       vim.g.any_jump_center_screen_after_jump = true
+      vim.g.any_jump_window_border = 'rounded'
+
+      util.autocmd('FileType', 'any-jump', function()
+        vim.bo.buflisted = false
+      end)
     end
   },
 

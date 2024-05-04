@@ -77,15 +77,21 @@ util.map = function(mode, lhs, rhs, opts, desc)
   end
 
   -- check for existing maps
-  if opts.force then
-    opts.force = nil
-  else
+  local force = opts.force
+  opts.force = nil
+
+  if force ~= true then
     local modes = type(mode) == 'table' and mode or { mode }
     for _, m in ipairs(modes) do
       local mapping = vim.fn.maparg(lhs, m)
-      assert(mapping == '',
-        '\nMapping already exists: { ' .. m .. ', ' .. lhs .. ', ' .. mapping .. ' }\n'
-      )
+
+      if force == false and mapping ~= '' then
+        return
+      else
+        assert(mapping == '',
+          '\nMapping already exists: { ' .. m .. ', ' .. lhs .. ', ' .. mapping .. ' }\n'
+        )
+      end
     end
   end
 
