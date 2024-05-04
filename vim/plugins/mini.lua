@@ -69,11 +69,32 @@ return {
     })
 
     util.autocmd_once('User', 'VeryLazy', function()
+      -- mini.ai -------------------------------------------------------
+      require('mini.ai').setup()
+
+      -- mini.align ----------------------------------------------------
+      require('mini.align').setup({
+        mappings = {
+          start = '<Leader>a',
+          start_with_preview = '<Leader>A',
+        },
+      })
+
       -- mini.basics ---------------------------------------------------
       require('mini.basics').setup({
         options      = { basic = false, win_borders = 'bold' },
         mappings     = { basic = false, move_with_alt = true },
         autocommands = { basic = true },
+      })
+
+      -- mini.bracketed ------------------------------------------------
+      require('mini.bracketed').setup({
+        diagnostic = { suffix = 'e' },
+
+        comment    = { suffix = '' }, -- ']c' used by treesitter-textobjects
+        file       = { suffix = '' }, -- ']f' not useful
+        oldfile    = { suffix = '' }, -- ']o' not useful
+        treesitter = { suffix = '' }, -- ']t' doesn't work well
       })
 
       -- mini.clue -----------------------------------------------------
@@ -146,29 +167,6 @@ return {
           delay = vim.o.timeoutlen,
         },
       })
-    end)
-
-    util.autocmd_once({ 'BufReadPre', 'BufNewfile' }, function()
-      -- mini.ai -------------------------------------------------------
-      require('mini.ai').setup()
-
-      -- mini.align ----------------------------------------------------
-      require('mini.align').setup({
-        mappings = {
-          start = '<Leader>a',
-          start_with_preview = '<Leader>A',
-        },
-      })
-
-      -- mini.bracketed ------------------------------------------------
-      require('mini.bracketed').setup({
-        diagnostic = { suffix = 'e' },
-
-        comment    = { suffix = '' }, -- ']c' used by treesitter-textobjects
-        file       = { suffix = '' }, -- ']f' not useful
-        oldfile    = { suffix = '' }, -- ']o' not useful
-        treesitter = { suffix = '' }, -- ']t' doesn't work well
-      })
 
       -- mini.move -----------------------------------------------------
       require('mini.move').setup()
@@ -208,6 +206,7 @@ return {
         }
       })
 
+      -- re-add undo chain to <CR> from core/keymaps.lua
       local cr = pairs.cr
       pairs.cr = function(...)
         return "u" .. cr(...)
