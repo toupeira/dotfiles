@@ -2,6 +2,7 @@ local util = require('util')
 
 return {
   'nvim-lualine/lualine.nvim',
+  event = 'VeryLazy',
 
   init = function()
     vim.o.statusline = ' '
