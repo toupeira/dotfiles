@@ -5,7 +5,7 @@ dry_run=
 
 mapfile -t modified < <( git modified )
 mapfile -t staged   < <( git staged   )
-mapfile -t unstaged < <( git unstaged )
+mapfile -t unstaged < <( git unstaged; git untracked )
 mapfile -t last     < <( git diff HEAD^ --name-only )
 
 while [ "${1:0:1}" = "-" ]; do
@@ -24,11 +24,11 @@ while [ "${1:0:1}" = "-" ]; do
       exit 255
       ;;
 
-    -m|.) state='modified';       files=( "${modified[@]}" );;
-    -l)   state='last committed'; files=( "${last[@]}"     );;
-    -s)   state='staged';         files=( "${staged[@]}"   );;
-    -u)   state='unstaged';       files=( "${unstaged[@]}" );;
-    -n)   dry_run=1;;
+    -m) state='modified';       files=( "${modified[@]}" );;
+    -l) state='last committed'; files=( "${last[@]}"     );;
+    -s) state='staged';         files=( "${staged[@]}"   );;
+    -u) state='unstaged';       files=( "${unstaged[@]}" );;
+    -n) dry_run=1;;
 
     -f|-)
       mapfile -t files < <(
