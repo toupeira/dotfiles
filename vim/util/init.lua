@@ -285,7 +285,12 @@ end
 -- ('root/a/b/c/dir', 'root/a/…/dir', 'root/…'), and {max_depth}
 -- levels of directories (defaults to 3).
 util.project_path = function(max_length, max_depth)
-  local path = expand('%:p:h'):gsub('^term://(.*)//[0-9]+.*', '%1'):gsub('^fugitive:.*', ''):gsub('^diffview:.*', '')
+  local path = expand('%:p:h')
+    :gsub('/%.git$', '')
+    :gsub('^term://(.*)//[0-9]+.*', '%1')
+    :gsub('^fugitive:.*', '')
+    :gsub('^diffview:.*', '')
+
   local _, git_dir = pcall(vim.fn.FugitiveGitDir)
   local root, name
 

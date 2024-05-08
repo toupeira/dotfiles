@@ -338,7 +338,7 @@ function notes {
     local note="$notes/$name.md"
   else
     local note="$( find "$notes" -type f -name '*.md' | fzf -d/ -n-1 -f "$name" | head -1 )"
-    note="$notes/${note:-${name}.md}"
+    note=${note:-$notes/$name.md}
   fi
 
   mux -s -l 15 "$EDITOR" "$note"
