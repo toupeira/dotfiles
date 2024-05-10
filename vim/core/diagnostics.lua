@@ -3,12 +3,12 @@ local nmap = util.nmap
 
 local diag = vim.diagnostic
 
-nmap('<Leader>E', function()
+nmap('<Leader>e', function()
   diag.setloclist({ open = false })
   util.toggle_list('l')
 end, 'Toggle diagnostics list')
 
-nmap('<Leader>e', diag.open_float, 'Toggle diagnostics popup')
+nmap('<Leader>E', diag.open_float, 'Toggle diagnostics popup')
 
 local severity = {
   [diag.severity.ERROR] = 'Error',

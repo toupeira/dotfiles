@@ -132,9 +132,17 @@ return {
     -- map each provider with '<Leader><key>`,
     -- and '<Leader><Leader><key>` for resuming
     local function get_args(args)
-      if type(args) == 'function' then return args() end
-      if args then return merge({}, args) end
-      return {}
+      if type(args) == 'function' then
+        args = args()
+      else
+        args = merge({}, args)
+      end
+
+      if args.cwd == '' then
+        args.cwd = nil
+      end
+
+      return args
     end
 
     local function map_fzf(key, provider, args, name)
@@ -162,14 +170,14 @@ return {
     map_fzf('<Leader>b', 'buffers')
     map_fzf('<Leader>B', 'buffers', { show_unlisted = true }, 'all buffers')
     map_fzf('<Leader>f', 'files')
-    map_fzf('<Leader>F', 'files', function() return expand('%') ~= '' and { cwd = expand('%:h') } end, 'files in current directory')
+    map_fzf('<Leader>F', 'files', function() return { cwd = expand('%:h') } end, 'files in current directory')
     map_fzf('<Leader>h', 'oldfiles', nil, 'recent files')
-    map_fzf('<Leader>H', 'oldfiles', function() return expand('%') ~= '' and { cwd_only = true } end, 'recent files in current directory')
+    map_fzf('<Leader>H', 'oldfiles', { cwd_only = true }, 'recent files in current directory')
     map_fzf('<Leader>j', 'jumps')
 
     -- file contents
-    map_fzf('<Leader>r', 'live_grep', nil, 'in project')
-    map_fzf('<Leader>R', 'grep_cword', nil, 'current word in project')
+    map_fzf('<Leader>r', 'live_grep', function() return { query = expand('<cword>') } end, 'by regex in project')
+    map_fzf('<Leader>R', 'live_grep', function() return { query = expand('<cword>'), cwd = expand('%:h') } end, 'by regex in current directory')
     map_fzf('<Leader>l', 'blines', function() return { query = expand('<cword>') } end, 'lines in buffer')
     map_fzf('<Leader>L', 'lines', function() return { query = expand('<cword>') } end, 'lines in all buffers')
 

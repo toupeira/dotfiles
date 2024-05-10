@@ -64,7 +64,7 @@ return {
       -- nmap('<C-k>', vim.lsp.buf.signature_help, args, 'Show signature help')
 
       nmap('<Leader>dR', vim.lsp.buf.rename, args, 'Rename symbol')
-      nvomap({ 'n', 'v' }, '<Leader>da', vim.lsp.buf.code_action, args, 'Run code action')
+      nvomap('<Leader>da', vim.lsp.buf.code_action, args, 'Run code action')
       nmap('<Leader>dF', function()
         vim.lsp.buf.format { async = true }
       end, args, 'Format current file')
