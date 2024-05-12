@@ -5,6 +5,8 @@ return {
   { 'tmux-plugins/tmux-yank', lazy = true },
 
   { 'alexghergh/nvim-tmux-navigation',
+    url = 'https://github.com/toupeira/nvim-tmux-navigation',
+    branch = 'fix/floating-windows',
     event = 'VeryLazy',
     cond = function()
       return os.getenv('TMUX')

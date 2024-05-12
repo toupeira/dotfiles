@@ -67,6 +67,8 @@ return {
   },
 
   { 'pechorin/any-jump.vim',
+    url = 'https://github.com/toupeira/any-jump.vim',
+    branch = 'feat/window-borders',
     keys = {
       { 'gd', '<Cmd>AnyJump<CR>', desc = 'Jump to definition' },
       { 'gd', '<Cmd>AnyJumpVisual<CR>', mode = { 'v' }, desc = 'Jump to definition' },
