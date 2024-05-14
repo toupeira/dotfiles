@@ -46,7 +46,7 @@ end)
 -- Go to last loc when opening a buffer
 -- TODO: fix `mini.misc.setup_restore_cursor` to use `BufWinEnter`
 autocmd('BufWinEnter', function(event)
-  local exclude = { 'gitcommit' }
+  local exclude = { 'gitcommit', 'gitrebase' }
   local buf = event.buf
   if vim.tbl_contains(exclude, vim.bo[buf].filetype) or vim.b[buf].last_loc then
     return

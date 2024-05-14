@@ -42,6 +42,10 @@ return {
 
     local aerial
     local function get_symbols(props)
+      if not props.focused then
+        return
+      end
+
       if not aerial then
         aerial = require('lualine/components/aerial')({
           self = { section = 'c' },

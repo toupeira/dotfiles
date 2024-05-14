@@ -54,7 +54,6 @@ return {
   event = 'VeryLazy',
   dependencies = {
     'hrsh7th/cmp-buffer',
-    'hrsh7th/cmp-emoji',
     'hrsh7th/cmp-calc',
     'hrsh7th/cmp-cmdline',
     'hrsh7th/cmp-nvim-lua',
@@ -118,7 +117,6 @@ return {
       sources.tmux,
     }, {
       { name = 'calc' },
-      { name = 'emoji' },
     })
 
     local tabs = {

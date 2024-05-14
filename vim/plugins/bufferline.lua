@@ -25,7 +25,7 @@ return {
       tab_selected = { fg = 'white', bold = true },
 
       buffer_visible = {
-        fg = { highlight = 'Comment', attribute = 'fg' },
+        fg = { highlight = 'Normal', attribute = 'fg' },
         bg = { highlight = 'Normal', attribute = 'bg' },
         bold = true
       },

@@ -106,7 +106,7 @@ return {
     end
   },
 
-  very_lazy { 'tpope/vim-projectionist',
+  lazy_file { 'tpope/vim-projectionist',
     config = function()
       local function alternate_create()
         local confirm = vim.o.confirm
