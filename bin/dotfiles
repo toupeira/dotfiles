@@ -784,12 +784,12 @@ function run {
 
         if has-changes dconf; then
           echo
-          warning "{{Found dconf changes:}}"
+          warning "{{Found local dconf changes:}}"
           git status -s dconf
           echo
           mux-wrap git diff dconf
 
-          ask "{{Ignore and load defaults?}}" || abort
+          ask "{{Ignore and load committed settings?}}" || abort
           git checkout dconf
         fi
 

@@ -1,8 +1,7 @@
 #!/bin/bash
 
 if [ "$VIMCMD" = 'vip' ] || [[ "$PWD" =~ /\.secrets ]]; then
-  exec vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" -c "set shada=" \
-    --cmd "let g:pathogen_disabled = [ 'ale', 'startify', 'vista' ]" "$@"
+  exec vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" -c "set shada=" "$@"
 elif [ -n "$VIMCMD" ]; then
   vim="$VIMCMD"
 elif [ -z "$TERM" ] || [ "$TERM" = "dumb" ]; then
