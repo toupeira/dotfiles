@@ -33,6 +33,10 @@ return {
   },
 
   opts = {
+    servers = {
+      ruby_lsp = {},
+    },
+
     ui = {
       border = 'rounded',
     },
@@ -40,6 +44,11 @@ return {
 
   config = function(_, opts)
     require('lspconfig.ui.windows').default_options = opts.ui
+
+    for server, server_opts in pairs(opts.servers) do
+      server_opts.autostart = false
+      require('lspconfig')[server].setup(server_opts)
+    end
 
     util.autocmd('LspDetach', function(event)
       nmap('<Leader>d#', ':LspStart', { force = true, buffer = event.buf }, 'Start LSP server')

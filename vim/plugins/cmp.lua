@@ -77,7 +77,12 @@ return {
     formatting = {
       fields = { 'kind', 'abbr', 'menu' },
       format = function(_, item)
-        item.menu = '   ' .. item.kind
+        local info = util.join({
+          item.kind ~= 'Text' and item.kind or '',
+          item.menu,
+        }, ' ')
+
+        item.menu = info ~= '' and '   ' .. info
         item.kind = icons.kinds[item.kind]
 
         return item

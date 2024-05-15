@@ -237,7 +237,7 @@ util.close_buffer = function(buffer)
       local commands = require('bufferline.commands')
       local _, item = commands.get_current_element_index(state)
 
-      if item.ordinal == #state.components then
+      if item and item.ordinal == #state.components then
         require('bufferline').cycle(-1)
       else
         require('bufferline').cycle(1)
