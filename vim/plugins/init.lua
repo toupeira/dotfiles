@@ -92,7 +92,7 @@ return {
     end
   },
 
-  very_lazy { 'sickill/vim-pasta',
+  lazy_file { 'sickill/vim-pasta',
     init = function()
       vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
     end

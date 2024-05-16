@@ -55,7 +55,12 @@ case "$1" in
     case "$proc" in
       bundle)
         [ -f Gemfile ] && mux -b -d -w bundle
-        [ -f package.json ] && mux -b -d -w yarn
+
+        if [ -f yarn.lock ]; then
+          mux -b -d -w yarn
+        elif [ -f package.json ]; then
+          mux -b -d -w npm install
+        fi
 
         exit 0
         ;;

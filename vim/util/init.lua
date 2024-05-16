@@ -233,20 +233,25 @@ util.close_buffer = function(buffer)
 
   if window > -1 then
     vim.api.nvim_win_call(window, function()
-      local state = require('bufferline.state')
-      local commands = require('bufferline.commands')
-      local _, item = commands.get_current_element_index(state)
-
-      if item and item.ordinal == #state.components then
-        require('bufferline').cycle(-1)
+      local alternate = vim.fn.bufnr('#')
+      if vim.fn.buflisted(alternate) == 1 then
+        vim.api.nvim_win_set_buf(0, alternate)
       else
-        require('bufferline').cycle(1)
+        local state = require('bufferline.state')
+        local commands = require('bufferline.commands')
+        local _, item = commands.get_current_element_index(state)
+
+        if item and item.ordinal == #state.components then
+          require('bufferline').cycle(-1)
+        else
+          require('bufferline').cycle(1)
+        end
       end
     end)
   end
 
   if buffer then
-    vim.api.nvim_buf_delete(buffer, {})
+    vim.cmd.bdelete(buffer)
   end
 end
 

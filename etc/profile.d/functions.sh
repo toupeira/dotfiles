@@ -341,7 +341,7 @@ function notes {
     note=${note:-$notes/$name.md}
   fi
 
-  mux -s -l 15 "$EDITOR" "$note"
+  "$EDITOR" "$note"
 }
 
 alias n=notes
