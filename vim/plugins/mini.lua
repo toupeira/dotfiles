@@ -227,7 +227,11 @@ return {
 
       -- mini.trailspace -----------------------------------------------
       require('mini.trailspace').setup()
-      nmap('<Leader>$', ':lua MiniTrailspace.trim()', 'Trim trailing whitespace')
+      nmap('<Leader>$', function()
+        if vim.bo.modifiable then
+          MiniTrailspace.trim()
+        end
+      end, 'Trim trailing whitespace')
       util.hl_set('MiniTrailspace', { bg = util.get_color('Pmenu', 'bg') })
     end)
   end

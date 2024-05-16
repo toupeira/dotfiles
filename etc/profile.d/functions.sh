@@ -309,7 +309,7 @@ function dusort {
 
 function sman  {
   if [ $# -eq 0 ]; then
-    cd /slack/sound/manuals || return
+    cd /slack/documents/Manuals || return
   else
     command sman "$@"
   fi

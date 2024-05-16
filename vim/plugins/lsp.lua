@@ -28,8 +28,8 @@ return {
   },
 
   keys = {
-    { '<Leader>#', '<Cmd>LspInfo<CR>', desc = 'Show LSP status' },
-    { '<Leader>d#', '<Cmd>LspStart<CR>', desc = 'Start LSP server' },
+    { '<Leader>%', '<Cmd>LspInfo<CR>', desc = 'Show LSP status' },
+    { '<Leader>d%', '<Cmd>LspStart<CR>', desc = 'Start LSP server' },
   },
 
   opts = {
@@ -61,28 +61,28 @@ return {
       -- Buffer local mappings
       local args = { force = true, buffer = event.buf }
 
-      nmap('<Leader>d#', ':LspStop', args, 'Stop LSP server')
+      nmap('<Leader>d%', ':LspStop', args, 'Stop LSP server')
 
-      nmap('gd', vim.lsp.buf.definition, args, 'Go to definition')
-      nmap('gD', vim.lsp.buf.declaration, args, 'Go to declaration')
-      nmap('gi', vim.lsp.buf.implementation, args, 'Go to implementation')
-      nmap('gr', vim.lsp.buf.references, args, 'Go to references')
-      nmap('gt', vim.lsp.buf.type_definition, args, 'Go to type definition')
+      nmap('gd', vim.lsp.buf.definition, args, 'Go to LSP definition')
+      nmap('gD', vim.lsp.buf.declaration, args, 'Go to LSP declaration')
+      nmap('gi', vim.lsp.buf.implementation, args, 'Go to LSP implementation')
+      nmap('gr', vim.lsp.buf.references, args, 'Go to LSP references')
+      nmap('gt', vim.lsp.buf.type_definition, args, 'Go to LSP type definition')
 
-      nmap('K', vim.lsp.buf.hover, args, 'Show context help')
+      nmap('K', vim.lsp.buf.hover, args, 'Show LSP context help')
       -- nmap('<C-k>', vim.lsp.buf.signature_help, args, 'Show signature help')
 
-      nmap('<Leader>dR', vim.lsp.buf.rename, args, 'Rename symbol')
-      nvomap('<Leader>da', vim.lsp.buf.code_action, args, 'Run code action')
+      nmap('<Leader>dR', vim.lsp.buf.rename, args, 'Rename LSP symbol')
+      nvomap('<Leader>da', vim.lsp.buf.code_action, args, 'Run LSP code action')
       nmap('<Leader>dF', function()
         vim.lsp.buf.format { async = true }
       end, args, 'Format current file')
 
-      nmap('<Leader>dwa', vim.lsp.buf.add_workspace_folder, args, 'Add workspace folder')
-      nmap('<Leader>dwr', vim.lsp.buf.remove_workspace_folder, args, 'Remove workspace folder')
+      nmap('<Leader>dwa', vim.lsp.buf.add_workspace_folder, args, 'Add LSP workspace folder')
+      nmap('<Leader>dwr', vim.lsp.buf.remove_workspace_folder, args, 'Remove LSP workspace folder')
       nmap('<Leader>dwl', function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
-      end, args, 'Show workspace folders')
+      end, args, 'Show LSP workspace folders')
     end)
   end
 }

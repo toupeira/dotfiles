@@ -13,7 +13,7 @@ require('lazy.core.handler.event').mappings.LazyFile = {
   id = 'LazyFile', event = { 'BufReadPre', 'BufNewFile' }
 }
 
-util.nmap('<Leader>!', function() require('lazy').home() end, 'Open Lazy')
+util.nmap('<Leader>@', function() require('lazy').home() end, 'Open Lazy')
 
 require('lazy').setup('plugins', {
   root = LAZY_ROOT,

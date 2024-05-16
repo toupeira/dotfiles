@@ -19,7 +19,7 @@ return {
   },
 
   keys = {
-    { '<leader>@', '<Cmd>Mason<CR>', desc = 'Open Mason' }
+    { '<leader>#', '<Cmd>Mason<CR>', desc = 'Open Mason' }
   },
 
   opts = {

@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /slack/sound/manuals || exit 1
+cd /slack/documents/Manuals || exit 1
 [ $# -eq 0 ] && exec xdg-open .
 
 files=$( find . -name '*.pdf' | fzf -f "$*" )

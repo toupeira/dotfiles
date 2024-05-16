@@ -20,19 +20,32 @@ vim.cmd([[
 
 -- Helpers -------------------------------------------------------------
 
-vim.cmd([[
-  " setup quickfix windows
-  autocmd FileType qf setlocal nowrap
-  autocmd FileType qf lua require('util').resize_window({ max = 5 })
+-- Setup quickfix windows
+autocmd('FileType', 'qf', function()
+  vim.wo.wrap = false
+  util.resize_window({ max = 5 })
+end)
 
-  " terminals
-  autocmd TermOpen  * setlocal nonumber norelativenumber signcolumn=no winhighlight=Normal:TermCursorNC
-  autocmd TermClose * if !v:event.status && &ft != 'fzf' | bd | endif
-  autocmd BufWinEnter,WinEnter term://* startinsert!
-  autocmd BufWinLeave,WinLeave term://* stopinsert
-]])
+-- Setup terminals
+autocmd('TermOpen', function()
+  vim.wo.number = false
+  vim.wo.relativenumber = false
+  vim.wo.signcolumn = 'no'
+  vim.wo.winhighlight = 'Normal:TermCursorNC'
+end)
 
--- Start insert mode when committing
+-- Close terminals on successful exit
+autocmd('TermClose', function()
+  if vim.v.event.status and vim.bo.filetype ~= 'fzf' then
+    vim.cmd.bdelete()
+  end
+end)
+
+-- Automatically enter/leave insert mode for terminals
+autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
+autocmd({ 'BufWinLeave', 'WinLeave' }, 'term://*', 'stopinsert')
+
+-- Enter insert mode when committing
 autocmd('FileType', 'gitcommit', function()
   if vim.fn.getline(1) == '' then
     vim.cmd.normal('O')
