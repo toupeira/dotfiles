@@ -35,15 +35,6 @@ return {
     end
   },
 
-  {
-    'chrishrb/gx.nvim',
-    config = true,
-    cmd = { 'Browse' },
-    keys = {
-      { 'gx', '<Cmd>Browse<CR>', mode = { 'n', 'x' } },
-    },
-  },
-
   lazy_file { 'kopischke/vim-fetch',
     config = function()
       map({ 'n', 'x' }, 'gF', '<C-w><C-f>', { force = true }, 'Go to file in split')

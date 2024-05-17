@@ -3,6 +3,7 @@ ruby = "3.3.1"
 node = "22.1.0"
 fzf = "0.52.0"
 usage = "0.1.18"
+neovim = "0.10.0"
 
 [settings]
 not_found_auto_install = false

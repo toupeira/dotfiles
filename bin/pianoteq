@@ -1,12 +1,6 @@
 #!/bin/bash
 
-cd ~/.config/Modartt || exit 1
-
-if jack_control status >/dev/null; then
-  cp Pianoteq81.prefs.jack Pianoteq81.prefs
-else
-  cp Pianoteq81.prefs.alsa Pianoteq81.prefs
-fi
+cd ~/src/upstream/pianoteq || exit 1
 
 wmctrl -s 1
-exec ~/src/upstream/pianoteq/x86-64bit/"Pianoteq 8" "$@"
+exec ./x86-64bit/"Pianoteq 8" "$@"

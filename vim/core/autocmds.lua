@@ -34,13 +34,6 @@ autocmd('TermOpen', function()
   vim.wo.winhighlight = 'Normal:TermCursorNC'
 end)
 
--- Close terminals on successful exit
-autocmd('TermClose', function()
-  if vim.v.event.status and vim.bo.filetype ~= 'fzf' then
-    vim.cmd.bdelete()
-  end
-end)
-
 -- Automatically enter/leave insert mode for terminals
 autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
 autocmd({ 'BufWinLeave', 'WinLeave' }, 'term://*', 'stopinsert')

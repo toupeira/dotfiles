@@ -207,7 +207,7 @@ return {
     map_fzf('<Leader>dO', 'lsp_outgoing_calls')
     map_fzf('<Leader>dr', 'lsp_references')
     map_fzf('<Leader>ds', 'lsp_document_symbols')
-    map_fzf('<Leader>dS', 'lsp_workspace_symbols')
+    map_fzf('<Leader>dS', 'lsp_live_workspace_symbols')
     map_fzf('<Leader>dt', 'lsp_typedefs')
 
     -- git

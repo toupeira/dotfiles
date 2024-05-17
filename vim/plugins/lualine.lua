@@ -77,8 +77,8 @@ return {
             icon_only = true,
             separator = '',
             padding = { left = 1, right = 0 },
-            fmt = function(str)
-              return #str > 0 and str or ''
+            fmt = function(icon)
+              return #icon > 0 and icon or ''
             end,
           },
           { 'filename',
@@ -129,7 +129,21 @@ return {
         },
 
         lualine_y = {
-          'filetype',
+          { 'filetype',
+            fmt = function(filetype)
+              local bufnr = vim.api.nvim_get_current_buf()
+              local lsp_clients = vim.lsp.buf_get_clients(bufnr)
+              if next(lsp_clients) == nil then
+                return filetype
+              end
+
+              local names = {}
+              for _, client in pairs(lsp_clients) do
+                table.insert(names, client.name)
+              end
+              return table.concat(names, '|')
+            end
+          },
         },
 
         lualine_z = {

@@ -6,7 +6,15 @@ return {
   'neovim/nvim-lspconfig',
   event = 'VeryLazy',
   dependencies = {
-    { 'folke/neodev.nvim', config = true },
+    { 'folke/neodev.nvim',
+      opts = {
+        library = {
+          runtime = false,
+          plugins = false,
+        },
+        setup_jsonls = false,
+      }
+    },
     { 'williamboman/mason-lspconfig.nvim',
       event = 'VeryLazy',
       opts = {
@@ -51,7 +59,7 @@ return {
     end
 
     util.autocmd('LspDetach', function(event)
-      nmap('<Leader>d#', ':LspStart', { force = true, buffer = event.buf }, 'Start LSP server')
+      nmap('<Leader>d%', ':LspStart', { force = true, buffer = event.buf }, 'Start LSP server')
     end)
 
     util.autocmd('LspAttach', function(event)
@@ -68,9 +76,6 @@ return {
       nmap('gi', vim.lsp.buf.implementation, args, 'Go to LSP implementation')
       nmap('gr', vim.lsp.buf.references, args, 'Go to LSP references')
       nmap('gt', vim.lsp.buf.type_definition, args, 'Go to LSP type definition')
-
-      nmap('K', vim.lsp.buf.hover, args, 'Show LSP context help')
-      -- nmap('<C-k>', vim.lsp.buf.signature_help, args, 'Show signature help')
 
       nmap('<Leader>dR', vim.lsp.buf.rename, args, 'Rename LSP symbol')
       nvomap('<Leader>da', vim.lsp.buf.code_action, args, 'Run LSP code action')

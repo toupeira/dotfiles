@@ -26,7 +26,7 @@ return {
         else
           gitsigns.nav_hunk('next')
         end
-      end, args, 'Go to next hunk')
+      end, args, 'Jump to next hunk')
 
       nmap('[d', function()
         if vim.wo.diff then
@@ -34,7 +34,7 @@ return {
         else
           gitsigns.nav_hunk('prev')
         end
-      end, args, 'Go to previous hunk')
+      end, args, 'Jump to previous hunk')
 
       nmap('<Leader>gS', gitsigns.stage_hunk, args, 'Stage current hunk')
       nmap('<Leader>gR', gitsigns.reset_hunk, args, 'Reset current hunk')

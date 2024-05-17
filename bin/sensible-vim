@@ -1,13 +1,13 @@
 #!/bin/bash
 
+vim='nvim'
+
 if [ "$VIMCMD" = 'vip' ] || [[ "$PWD" =~ /\.secrets ]]; then
-  exec vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" -c "set shada=" "$@"
+  exec $vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" -c "set shada=" "$@"
 elif [ -n "$VIMCMD" ]; then
   vim="$VIMCMD"
 elif [ -z "$TERM" ] || [ "$TERM" = "dumb" ]; then
-  vim="xdg-terminal-exec vim"
-else
-  vim="vim"
+  vim="xdg-terminal-exec $vim"
 fi
 
 if [ -z "$FZF_DEFAULT_OPTS" ]; then

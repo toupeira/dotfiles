@@ -35,14 +35,10 @@ vim.o.commentstring = '# %s'
 -- Interface -----------------------------------------------------------
 
 if os.getenv('XDG_SESSION_TYPE') ~= 'tty' or os.getenv('SSH_CONNECTION') then
-  vim.o.termguicolors = true
   vim.o.pumblend = 10
 
   vim.o.title = true
   vim.o.titlestring = "  %t%{&modified ? ' ●' : ''}%{&readonly ? ' 󰌾 ' : ''} [%{v:lua.require('util').project_path()}]"
-else
-  vim.o.termguicolors = false
-  vim.cmd.colorscheme('ron')
 end
 
 vim.o.updatetime = 250

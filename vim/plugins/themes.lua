@@ -1,3 +1,5 @@
+local util = require('util')
+
 return {
   { 'catppuccin/nvim', name = 'catppuccin', lazy = true },
   { 'folke/tokyonight.nvim', lazy = true },
@@ -13,9 +15,11 @@ return {
     priority = 1000,
 
     init = function()
-      if vim.o.termguicolors then
-        vim.cmd.colorscheme('nordfox')
-      end
+      util.autocmd('VimEnter', function()
+        if vim.o.termguicolors then
+          vim.cmd.colorscheme('nordfox')
+        end
+      end)
     end,
 
     opts = function()

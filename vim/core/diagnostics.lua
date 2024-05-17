@@ -1,20 +1,18 @@
 local util = require('util')
 local nmap = util.nmap
 
-local diag = vim.diagnostic
-
 nmap('<Leader>e', function()
-  diag.setloclist({ open = false })
+  vim.diagnostic.setloclist({ open = false })
   util.toggle_list('l')
 end, 'Toggle diagnostics list')
 
-nmap('<Leader>E', diag.open_float, 'Toggle diagnostics popup')
+nmap('<Leader>E', vim.diagnostic.open_float, 'Toggle diagnostics popup')
 
 local severity = {
-  [diag.severity.ERROR] = 'Error',
-  [diag.severity.WARN]  = 'Warn',
-  [diag.severity.INFO]  = 'Info',
-  [diag.severity.HINT]  = 'Hint',
+  [vim.diagnostic.severity.ERROR] = 'Error',
+  [vim.diagnostic.severity.WARN]  = 'Warn',
+  [vim.diagnostic.severity.INFO]  = 'Info',
+  [vim.diagnostic.severity.HINT]  = 'Hint',
   [0]                   = 'Ok',
 }
 
@@ -32,7 +30,7 @@ for id, name in ipairs(severity) do
   })
 end
 
-diag.config({
+vim.diagnostic.config({
   severity_sort = true,
   virtual_text = false,
   float = {
