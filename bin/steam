@@ -11,13 +11,16 @@ if [ "$1" = "--run" ]; then
   gamebin="$2"
 
   exec $steam --run sh -c "cd '$gamepath'; exec ./$gamebin"
+elif [ "$1" = "--link" ]; then
+  steam="flatpak run com.valvesoftware.SteamLink"
+  rm -f ~/.var/app/com.valvesoftware.SteamLink/data/Valve\ Corporation/SteamLink/controller*
 elif [ -n "$1" ]; then
   exec $steam -silent "$@"
 elif pgrep -x steam >/dev/null; then
   running=1;
 fi
 
-[ "$running" ] || bluetoothctl power on
+[ "$running" ] || rfkill unblock bluetooth
 
 if xrandr | grep -q '3840x2160.*\*'; then
   $steam -forcedesktopscaling=1.5
@@ -25,4 +28,4 @@ else
   $steam -forcedesktopscaling="$(gsettings get org.gnome.desktop.interface text-scaling-factor)"
 fi
 
-[ "$running" ] || bluetoothctl power off
+[ "$running" ] || rfkill block bluetooth
