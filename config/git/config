@@ -92,14 +92,11 @@
 [merge]
   conflictstyle = zdiff3
   stat = true
-  tool = vimdiff
+  tool = nvimdiff
 
 [mergetool]
   prompt = false
   keepBackup = false
-
-[mergetool.gvimdiff]
-  trustExitCode = false
 
 [pull]
   rebase = true

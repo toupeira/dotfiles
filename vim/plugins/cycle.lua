@@ -63,6 +63,7 @@ return {
     }
 
     vim.g.cycle_default_groups_for_ruby = {
+      {{ 'allow', 'expect' }},
       {{ 'build', 'create' }},
       {{ 'class', 'module' }},
       {{ 'else', 'elsif' }},
