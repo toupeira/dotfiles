@@ -20,7 +20,7 @@ elif pgrep -x steam >/dev/null; then
   running=1;
 fi
 
-[ "$running" ] || rfkill unblock bluetooth
+[ "$running" ] || bluetoothctl power on
 
 if xrandr | grep -q '3840x2160.*\*'; then
   $steam -forcedesktopscaling=1.5
@@ -28,4 +28,4 @@ else
   $steam -forcedesktopscaling="$(gsettings get org.gnome.desktop.interface text-scaling-factor)"
 fi
 
-[ "$running" ] || rfkill block bluetooth
+[ "$running" ] || bluetoothctl power off

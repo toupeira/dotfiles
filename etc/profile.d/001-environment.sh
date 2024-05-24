@@ -4,6 +4,7 @@ export PATH="/usr/sbin:/etc/dotfiles/bin:/usr/bin:/usr/local/sbin:/usr/local/bin
 [ -d ~/bin ] && export PATH="$PATH":~/bin
 
 # terminal apps
+export TERMINAL_EMULATOR="wezterm"
 export EDITOR="sensible-vim"
 export PAGER="less"
 export LESS="-iRMK --mouse"

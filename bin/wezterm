@@ -1,0 +1,10 @@
+#!/bin/sh
+
+font=$( dconf read /org/gnome/desktop/interface/monospace-font-name | tr -d "'" )
+font_size=${font##* }
+font=${font% [1-9]*}
+
+exec flatpak run org.wezfurlong.wezterm \
+  --config font="wezterm.font('$font')" \
+  --config font_size="$font_size" \
+  "$@"

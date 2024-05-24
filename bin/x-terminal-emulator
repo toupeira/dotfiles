@@ -1,8 +1,18 @@
 #!/bin/bash
 
+position="50%,0"
+cols=nil
+rows=nil
+
 case "$HOSTNAME" in
-  ocelot)  geometry="175x89+1920+0";;
-  schtube) geometry="87x42+961+0";;
+  ocelot)
+    cols=175
+    rows=89
+    ;;
+  schtube)
+    cols=87
+    rows=43
+    ;;
   meerkat)
     read -r _screens x _y xoff _yoff < <(xmonitorinfo)
 
@@ -24,4 +34,8 @@ case "$HOSTNAME" in
     ;;
 esac
 
-exec tilix --geometry="$geometry" "$@"
+exec wezterm \
+  --config initial_rows="$rows" \
+  --config initial_cols="$cols" \
+  start --position="$position" \
+  "$@"
