@@ -1,7 +1,7 @@
 --smart-case
 --hidden
 --ignore-file
-  /etc/dotfiles/config/rg/ignore
+  /slack/dotfiles/config/rg/ignore
 --colors
   path:fg:green
 --colors

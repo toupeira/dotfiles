@@ -1,6 +1,6 @@
 #!/bin/bash
 
-export PATH="/usr/sbin:/etc/dotfiles/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
+export PATH="/usr/sbin:/slack/dotfiles/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
 [ -d ~/bin ] && export PATH="$PATH":~/bin
 
 # terminal apps

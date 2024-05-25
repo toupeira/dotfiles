@@ -48,7 +48,7 @@ function _prompt_dir {
 }
 
 function _prompt_jobs {
-  local jobs=$( jobs | grep -Fvc 'mux title' )
+  local jobs=$( jobs | grep -Fvc ']   Done ' )
 
   if [ "$jobs" -gt 0 ]; then
     printf '[%d job%s] ' "$jobs" "$( [ "$jobs" -eq 1 ] || echo -n s )"

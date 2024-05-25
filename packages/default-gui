@@ -88,8 +88,8 @@ quodlibet
 scummvm
 syncthing-gtk
 tilix
+wezterm
 yt-dlp
 
 flatpak: com.github.tchx84.Flatseal
 flatpak: org.gtk.Gtk3theme.Numix
-flatpak: org.wezfurlong.wezterm

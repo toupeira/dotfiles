@@ -38,7 +38,7 @@ plugins=(
   sudo
 )
 
-FZF_BASE=/etc/dotfiles/packages/mise/installs/fzf/latest
+FZF_BASE=/slack/dotfiles/packages/mise/installs/fzf/latest
 
 . $ZSH/oh-my-zsh.sh
 

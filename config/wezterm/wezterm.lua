@@ -2,6 +2,7 @@ local wezterm = require 'wezterm'
 local config = wezterm.config_builder()
 local action = wezterm.action
 
+config.adjust_window_size_when_changing_font_size = false
 config.hide_tab_bar_if_only_one_tab = true
 config.scrollback_lines = 10000
 config.window_background_opacity = 0.85
@@ -53,7 +54,7 @@ config.visual_bell = {
 config.keys = {
   { key = 'Tab', mods = 'CTRL', action = action.DisableDefaultAssignment },
   { key = 'Tab', mods = 'SHIFT|CTRL', action = action.DisableDefaultAssignment },
-  { key = 'Enter', mods = 'ALT', action = action.ToggleFullScreen },
+  { key = 'Enter', mods = 'ALT', action = action.DisableDefaultAssignment },
   { key = '!', mods = 'CTRL', action = action.DisableDefaultAssignment },
   { key = '!', mods = 'SHIFT|CTRL', action = action.DisableDefaultAssignment },
   { key = '\"', mods = 'ALT|CTRL', action = action.DisableDefaultAssignment },
@@ -77,7 +78,7 @@ config.keys = {
   { key = '*', mods = 'SHIFT|CTRL', action = action.DisableDefaultAssignment },
   { key = '+', mods = 'CTRL', action = action.DisableDefaultAssignment },
   { key = '+', mods = 'SHIFT|CTRL', action = action.IncreaseFontSize },
-  { key = '-', mods = 'CTRL', action = action.DisableDefaultAssignment },
+  { key = '-', mods = 'CTRL', action = action.SendKey { key = '_', mods = 'CTRL' } },
   { key = '-', mods = 'SHIFT|CTRL', action = action.DisableDefaultAssignment },
   { key = '-', mods = 'SUPER', action = action.DisableDefaultAssignment },
   { key = '0', mods = 'CTRL', action = action.DisableDefaultAssignment },

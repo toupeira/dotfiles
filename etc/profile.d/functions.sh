@@ -166,7 +166,7 @@ function rg.app {
 
 # Switch to dotfiles repository if no arguments are passed
 function dotfiles {
-  local dotfiles="/etc/dotfiles"
+  local dotfiles="/slack/dotfiles"
 
   if [ $# -eq 0 ]; then
     cd "$dotfiles" || return 1

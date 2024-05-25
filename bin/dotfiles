@@ -1,7 +1,7 @@
 #!/bin/bash
 # vim: foldmethod=marker foldlevel=0
 
-DOTFILES="/etc/dotfiles"
+DOTFILES="/slack/dotfiles"
 
 ### usage {{{
 
@@ -346,7 +346,7 @@ function run {
 
         if [ -L "$origin" ]; then
           local link=$( readlink "$origin" 2>/dev/null )
-          if [ ! -e "$link" ]; then
+          if [ ! -e "$link" ] || [[ $link =~ ^/etc/dotfiles/ ]]; then
             warning "Broken symlink: {{$origin}} -> \e[1;36m$link"
             force=1
           elif [ "$link" = "$target" ]; then
@@ -573,9 +573,9 @@ function run {
 
       if [ -d /etc/plymouth ]; then
         local plymouth="/etc/plymouth/plymouthd.conf"
-        if [ "$( stat -c %i "$plymouth" )" != "$( stat -c %i "$DOTFILES/$plymouth" )" ]; then
+        if diff "$plymouth" "$DOTFILES/$plymouth" | grep -q .; then
           list "$plymouth"
-          fix system ln -fv "$DOTFILES$plymouth" "$plymouth"
+          fix system cp "$DOTFILES$plymouth" "$plymouth"
         fi
       fi
 

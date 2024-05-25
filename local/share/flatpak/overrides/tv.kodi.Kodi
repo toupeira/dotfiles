@@ -1,3 +1,3 @@
 [Context]
 features=!bluetooth
-filesystems=!/mnt;!/run/media;!/media;xdg-pictures:ro;xdg-music:ro;xdg-videos:ro;/slack/download;/slack/movies;/slack/series;/slack/sound/courses:ro;/slack/scrapbook/config/kodi:ro;home/.kodi;
+filesystems=!/mnt;!/run/media;!/media;xdg-pictures:ro;xdg-music:ro;xdg-videos:ro;/slack/download;/slack/movies;/slack/series;/slack/sound/courses:ro;/slack/dotfiles/kodi:ro;home/.kodi;

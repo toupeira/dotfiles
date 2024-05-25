@@ -1,8 +1,34 @@
+[bell]
+animation = "Ease"
+duration = 50
+color = "#545652"
+
 [colors]
 draw_bold_text_with_bright_colors = false
 
 [colors.primary]
 background = "#000000"
+foreground = "#ffffff"
+
+[keyboard]
+bindings = [
+  { key = "L", mods = "Control", action = "ReceiveChar" },
+
+  { key = "PageUp", mods = "Shift", mode = "~Alt", action = "ReceiveChar" },
+  { key = "PageDown", mods = "Shift", mode = "~Alt", action = "ReceiveChar" },
+  { key = "Home", mods = "Shift", mode = "~Alt", action = "ReceiveChar" },
+  { key = "End", mods = "Shift", mode = "~Alt", action = "ReceiveChar" },
+
+  { key = "0", mods = "Control", action = "ReceiveChar" },
+  { key = ")", mods = "Control|Shift", action = "ResetFontSize" },
+  { key = "=", mods = "Control", action = "ReceiveChar" },
+  { key = "+", mods = "Control|Shift", action = "IncreaseFontSize" },
+  { key = "-", mods = "Control", action = "ReceiveChar" },
+  { key = "_", mods = "Control|Shift", action = "DecreaseFontSize" },
+]
+
+[mouse]
+hide_when_typing = true
 
 [window]
-opacity = 0.9
+opacity = 0.85

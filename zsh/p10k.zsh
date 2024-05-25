@@ -314,7 +314,7 @@
   # back to POWERLEVEL9K_DIR_FOREGROUND.
   #
   typeset -g POWERLEVEL9K_DIR_CLASSES=(
-    '/etc/dotfiles(|/*)' DOTFILES ''
+    '/slack/dotfiles(|/*)' DOTFILES ''
   )
 
   typeset -g POWERLEVEL9K_DIR_DOTFILES_VISUAL_IDENTIFIER_EXPANSION='📦'

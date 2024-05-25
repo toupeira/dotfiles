@@ -23,7 +23,7 @@ return {
   },
 
   opts = {
-    install_root_dir = '/etc/dotfiles/packages/mason',
+    install_root_dir = '/slack/dotfiles/packages/mason',
 
     ui = {
       check_outdated_packages_on_open = false,

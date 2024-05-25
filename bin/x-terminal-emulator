@@ -1,5 +1,9 @@
 #!/bin/bash
 
+font=$( dconf read /org/gnome/desktop/interface/monospace-font-name | tr -d "'" )
+font_size=${font##* }
+font=${font% [1-9]*}
+
 position="50%,0"
 cols=nil
 rows=nil
@@ -35,6 +39,8 @@ case "$HOSTNAME" in
 esac
 
 exec wezterm \
+  --config font="wezterm.font('$font')" \
+  --config font_size="$font_size" \
   --config initial_rows="$rows" \
   --config initial_cols="$cols" \
   start --position="$position" \

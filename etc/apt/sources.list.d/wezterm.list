@@ -1,0 +1,1 @@
+deb [signed-by=/etc/apt/trusted.gpg.d/wezterm.asc arch=amd64] https://apt.fury.io/wez/ * *
