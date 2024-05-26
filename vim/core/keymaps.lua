@@ -46,6 +46,10 @@ nmap('<Leader>X', ':tabclose', 'Close current tab')
 
 -- File editing --------------------------------------------------------
 
+-- remove default mappings
+util.unmap('n', 'Y')
+util.unmap('n', '<C-l>')
+
 nmap('<Leader>Q', ':quitall', 'Quit')
 
 nmap('<C-s>', ':write', 'Save current buffer')
@@ -98,9 +102,6 @@ local undo_chains = {
 for key, desc in pairs(undo_chains) do
   imap(key, '<C-g>u' .. key, 'Insert ' .. desc .. ' with new undo chain')
 end
-
--- don't map Y to y$
-util.unmap('n', 'Y')
 
 -- don't open tags with Ctrl-LeftClick
 nmap('<C-LeftMouse>', '<nop>')

@@ -1,55 +1,30 @@
 local util = require('util')
+local map = util.map
 
 return {
   { 'tmux-plugins/tmux-open', lazy = true },
   { 'tmux-plugins/tmux-yank', lazy = true },
 
-  { 'alexghergh/nvim-tmux-navigation',
-    url = 'https://github.com/toupeira/nvim-tmux-navigation',
-    branch = 'fix/floating-windows',
+  { 'mrjones2014/smart-splits.nvim',
     event = 'VeryLazy',
     cond = function()
       return os.getenv('TMUX')
     end,
 
     opts = {
-      disable_when_zoomed = true,
-      keybindings = {
-        left  = { { 'n', 'c', 'v', 't' }, '<C-h>' },
-        down  = { { 'n', 'c', 'v', 't' }, '<C-j>' },
-        up    = { { 'n', 'c', 'v', 't' }, '<C-k>' },
-        right = { { 'n', 'c', 'v', 't' }, '<C-l>' },
-      }
+      at_edge = 'stop',
+      multiplexer_integration = 'tmux',
     },
 
-    config = function(_, opts)
-      local tmux_nav = require('nvim-tmux-navigation')
-      tmux_nav.setup(opts)
+    init = function()
+      local splits = require('smart-splits')
+      local modes = { 'n', 'c', 'v', 't' }
 
-      -- don't navigate to the tmux pane on the other side
-      -- of the window when reaching the edge
-      local tmux_util = require'nvim-tmux-navigation.tmux_util'
-      local tmux_change_pane = tmux_util.tmux_change_pane
-
-      tmux_util.tmux_change_pane = function(direction)
-        local win = vim.fn.winnr()
-        local last_win = util.window_count()
-        local pane, last_pane = unpack(
-          vim.tbl_map(tonumber, util.split(
-            vim.fn.system('tmux display -p "#{pane_index} #{window_panes}"')
-          ))
-        )
-
-        if (direction == 'k' or direction == 'h') and win == 1 and pane == 1 then
-          return
-        end
-
-        if (direction == 'j' or direction == 'l') and win == last_win and pane == last_pane then
-          return
-        end
-
-        return tmux_change_pane(direction)
-      end
+      map(modes, '<C-h>', splits.move_cursor_left, 'Go to window on the left')
+      map(modes, '<C-j>', splits.move_cursor_down, 'Go to window on the bottom')
+      map(modes, '<C-k>', splits.move_cursor_up, 'Go to window on the top')
+      map(modes, '<C-l>', splits.move_cursor_right, 'Go to window on the right')
+      map(modes, '<C-\\>', splits.move_cursor_previous, 'Go to previous window')
     end
   },
 }

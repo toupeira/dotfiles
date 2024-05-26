@@ -14,7 +14,7 @@ case "$HOSTNAME" in
     rows=89
     ;;
   schtube)
-    cols=87
+    cols=88
     rows=43
     ;;
   meerkat)

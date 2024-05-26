@@ -10,8 +10,9 @@ esac
 # Forward to vim or a nested tmux session
 command=$( tmux display -p '#{pane_current_command}' )
 title=$( tmux display -p '#{pane_title}' )
+vim=$( tmux display -p '#{@pane-is-vim}' )
 
-if [[ "$title" =~  ]] || { [ "$command" = "ssh" ] && [ "${title:0:1}" = "@" ]; }; then
+if [ "$vim" = 1 ] || [[ "$title" =~  ]] || { [ "$command" = "ssh" ] && [ "${title:0:1}" = "@" ]; }; then
   key=$( echo "${1#-}" | tr 'LDUR' 'hjkl' )
   tmux send-keys "C-$key"
 
