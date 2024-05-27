@@ -13,6 +13,7 @@ return {
 
     opts = {
       at_edge = 'stop',
+      float_win_behavior = 'mux',
       multiplexer_integration = 'tmux',
     },
 
