@@ -14,6 +14,7 @@ debconf-utils
 debian-archive-keyring
 debian-keyring
 dnsutils
+dos2unix
 ethtool
 fakeroot
 fd-find
