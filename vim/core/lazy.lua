@@ -3,7 +3,7 @@ local util = require('util')
 local LAZY_ROOT = '/slack/dotfiles/packages/lazy'
 local LAZY_PATH = LAZY_ROOT .. '/lazy.nvim'
 
-if not (vim.uv or vim.loop).fs_stat(LAZY_PATH) then
+if not vim.uv.fs_stat(LAZY_PATH) then
   vim.fn.system({ 'git', 'clone', '--filter=blob:none', 'https://github.com/folke/lazy.nvim.git', LAZY_PATH, })
 end
 

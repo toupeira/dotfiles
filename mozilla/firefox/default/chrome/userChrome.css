@@ -53,7 +53,7 @@ menu[label="Firefox Multi-Account Containers"]
 }
 
 #PlacesToolbarItems image[src*="web.whatsapp.com"] {
-  background-image: url(view-source:https://web.whatsapp.com/img/favicon/1x/favicon.png) !important;
+  background-image: url(view-source:https://web.whatsapp.com/favicon.ico) !important;
   background-size: contain !important;
   width: 0 !important;
   height: 0 !important;
