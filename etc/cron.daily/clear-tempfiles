@@ -1,13 +1,5 @@
 #!/bin/bash
 
-find /tmp \
-  -maxdepth 1 -mtime +1 \( \
-  -name 'karma-*' -o \
-  -name 'ruby-*' -o \
-  -name '.com.google.*' -o \
-  -name '.org.chromium.*' \
-  \) -exec rm -rf "{}" \;
-
 for path in {/home/*,/root}/{.cache/nvim,.local/{share,state}/nvim/{swap,undo}}; do
   if [ -d "$path" ]; then
     find "$path" -type f -mtime +90 -delete

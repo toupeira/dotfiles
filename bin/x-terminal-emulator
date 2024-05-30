@@ -5,6 +5,7 @@ font_size=${font##* }
 font=${font% [1-9]*}
 
 position="50%,0"
+screen="active"
 cols=nil
 rows=nil
 
@@ -18,20 +19,20 @@ case "$HOSTNAME" in
     rows=43
     ;;
   meerkat)
-    read -r _screens x _y xoff _yoff < <(xmonitorinfo)
+    read -r screen _screens x _y xoff _yoff < <(xmonitorinfo)
 
     if [ "${xoff}" = "0" ]; then
       scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
 
       if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then
-        geometry="117x58+1280+0"
-      else
-        geometry="107x58+1280+0"
+        cols=107
+        rows=58
       fi
     elif [ "$x" = "3840" ]; then
       geometry="160x85+$((xoff+1920))+0"
     elif [ "$x" = "3440" ]; then
-      geometry="214x78+$((xoff+1920))+0"
+      cols=216
+      rows=79
     elif [ "$x" = "2560" ]; then
       geometry="142x70+$((xoff+1920))+0"
     fi
@@ -43,5 +44,5 @@ exec wezterm \
   --config font_size="$font_size" \
   --config initial_rows="$rows" \
   --config initial_cols="$cols" \
-  start --position="$position" \
+  start --position="$screen:$position" \
   "$@"

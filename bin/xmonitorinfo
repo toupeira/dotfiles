@@ -13,18 +13,18 @@ screens=$( xrandr --current | grep -w connected )
 
 # Loop through each screen and compare the offset with the window
 # coordinates.
-while read -r width height xoff yoff
+while read -r screen width height xoff yoff
 do
   if [ "${X}" -ge "$xoff" ] && \
      [ "${Y}" -ge "$yoff" ] && \
      [ "${X}" -lt "$(( xoff + width ))" ] && \
      [ "${Y}" -lt "$(( yoff + height ))" ]
   then
-    echo "$( echo "$screens" | wc -l ) $width $height $xoff $yoff"
+    echo "$screen $( echo "$screens" | wc -l ) $width $height $xoff $yoff"
     exit
   fi
 done < <(
   echo "$screens" \
-    | sed -r 's/.*\b([0-9]+)x([0-9]+)\+([0-9]+)\+([0-9]+).*/\1 \2 \3 \4/' \
+    | sed -r 's/^([^ ]+).*\b([0-9]+)x([0-9]+)\+([0-9]+)\+([0-9]+).*/\1 \2 \3 \4 \5/' \
     | sort -nk3,5
 )
