@@ -15,11 +15,9 @@ return {
     priority = 1000,
 
     init = function()
-      util.autocmd('VimEnter', function()
-        if vim.o.termguicolors then
-          vim.cmd.colorscheme('nordfox')
-        end
-      end)
+      if vim.o.termguicolors then
+        vim.cmd.colorscheme('nordfox')
+      end
     end,
 
     opts = function()

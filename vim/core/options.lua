@@ -35,6 +35,7 @@ vim.o.commentstring = '# %s'
 -- Interface -----------------------------------------------------------
 
 if os.getenv('XDG_SESSION_TYPE') ~= 'tty' or os.getenv('SSH_CONNECTION') then
+  vim.o.termguicolors = true
   vim.o.pumblend = 10
 
   vim.o.title = true

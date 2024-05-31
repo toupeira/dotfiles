@@ -3,7 +3,6 @@ local util = require('util')
 return {
   'folke/trouble.nvim',
   event = 'VeryLazy',
-  branch = 'dev',
 
   keys = {
     {

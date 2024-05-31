@@ -25,14 +25,13 @@ return {
       tab_selected = { fg = 'white', bold = true },
 
       buffer_visible = {
-        fg = { highlight = 'Normal', attribute = 'fg' },
         bg = { highlight = 'Normal', attribute = 'bg' },
-        bold = true
+        bold = true,
       },
 
       duplicate_selected = {
         fg = { highlight = 'DiagnosticInfo', attribute = 'fg' },
-        bold = true
+        bold = true,
       }
     },
   },
