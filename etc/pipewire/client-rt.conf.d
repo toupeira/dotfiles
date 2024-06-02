@@ -1,1 +1,1 @@
-client.conf.d/
+client.conf.d

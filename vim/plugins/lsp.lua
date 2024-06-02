@@ -6,14 +6,8 @@ return {
   'neovim/nvim-lspconfig',
   event = 'VeryLazy',
   dependencies = {
-    { 'folke/neodev.nvim',
-      opts = {
-        library = {
-          runtime = false,
-          plugins = false,
-        },
-        setup_jsonls = false,
-      }
+    { 'folke/lazydev.nvim',
+      ft = 'lua',
     },
     { 'williamboman/mason-lspconfig.nvim',
       event = 'VeryLazy',
