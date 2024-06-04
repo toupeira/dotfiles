@@ -2,22 +2,6 @@
 
 [ "$BASH_INTERACTIVE" ] || return
 
-# Add fuzzy matching to cd
-function cd {
-  if [ $# -le 1 ] && { [ -d "$1" ] || [[ $1 =~ ^(|-)$ ]]; }; then
-    builtin cd "$@" || return 1
-    return
-  fi
-
-  local match=$( fd . --type d | fzf -f "$*" | head -1 )
-  if [ -n "$match" ]; then
-    echo -e " \e[0;35m● cd \e[1m$*\e[22m → \e[1m${match%/}\e[0m"
-    builtin cd "$match" || return 1
-  else
-    builtin cd "$*" || return 1
-  fi
-}
-
 # Go to project root
 function up {
   local root=$( git rev-parse --show-superproject-working-tree 2>/dev/null )

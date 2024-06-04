@@ -50,7 +50,7 @@ return {
 
     highlight = { enable = true },
     endwise = { enable = true },
-    indent = { enable = true, disable = { 'ruby' }},
+    indent = { enable = false },
     matchup = { enable = true },
 
     refactor = {

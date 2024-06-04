@@ -69,7 +69,7 @@ nmap('XX', '"_dd', 'Delete current line to blackhole register')
 
 vmap('>', '>gv', 'Indent right and reselect')
 vmap('<', '<gv', 'Indent left and reselect')
-nmap('vp', '`[v`]', 'Select pasted text')
+nmap('gp', '`[v`]', 'Select pasted text')
 vmap('gs', ':!sort -h', 'Sort selection')
 vmap('.', ':normal .', 'Repeat for each line in selection')
 
