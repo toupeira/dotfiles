@@ -102,7 +102,15 @@ return {
       path = {
         name = 'path',
         option = { trailing_slash = true }
-      }
+      },
+      buffer = {
+        name = 'buffer',
+        option = {
+          get_bufnrs = function()
+            return vim.api.nvim_list_bufs()
+          end
+        }
+      },
     }
 
     if os.getenv('TMUX') then
@@ -117,7 +125,7 @@ return {
       { name = 'nvim_lsp_signature_help' },
       { name = 'nvim_lsp' },
     }, {
-      { name = 'buffer' },
+      sources.buffer,
       sources.path,
       sources.tmux,
     }, {
@@ -155,7 +163,7 @@ return {
     cmp.setup.cmdline({ '/', '?' }, {
       mapping = cmp.mapping.preset.cmdline(tabs),
       sources = {
-        { name = 'buffer' },
+        sources.buffer,
         sources.tmux,
       }
     })

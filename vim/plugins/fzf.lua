@@ -101,6 +101,13 @@ return {
 
     -- override actions
     defaults.helptags.actions.default = actions.help_tab
+    defaults.actions.files.default = function(selected, opts)
+      actions.file_edit(selected, opts)
+
+      if #selected > 1 then
+        actions.file_sel_to_qf(selected, opts)
+      end
+    end
 
     -- add default settings
     local reverse = {

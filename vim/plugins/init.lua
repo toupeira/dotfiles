@@ -35,7 +35,7 @@ return {
     end
   },
 
-  lazy_file { 'kopischke/vim-fetch',
+  lazy_file { 'wsdjeg/vim-fetch',
     config = function()
       map({ 'n', 'x' }, 'gF', '<C-w><C-f>', { force = true }, 'Go to file in split')
     end
