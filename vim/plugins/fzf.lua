@@ -67,6 +67,10 @@ return {
       include_current_session = true,
     },
 
+    grep = {
+      multiline = 1,
+    },
+
     keymaps = {
       formatter = '%s | %-10s | %-30s | %s',
     },

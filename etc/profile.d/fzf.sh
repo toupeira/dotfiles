@@ -13,8 +13,6 @@ export FZF_DEFAULT_OPTS="
   --no-height
   --no-separator
   --prompt '» '
-  --pointer '»'
-  --marker '●'
   --preview-window 'right,50%,hidden,<60(up,70%,hidden)'
 
   --color dark
