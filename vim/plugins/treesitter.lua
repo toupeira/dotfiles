@@ -43,7 +43,7 @@ return {
       'yaml',
     },
 
-    highlight = { enable = true },
+    highlight = { enable = true, additional_vim_regex_highlighting = { 'ruby' } },
     endwise = { enable = true },
     indent = { enable = false },
     matchup = { enable = true },
