@@ -107,7 +107,13 @@ return {
         name = 'buffer',
         option = {
           get_bufnrs = function()
-            return vim.api.nvim_list_bufs()
+            return vim.tbl_filter(
+              function(buf)
+                return vim.fn.buflisted(buf) == 1 and
+                       vim.fn.bufloaded(buf) == 1
+              end,
+              vim.api.nvim_list_bufs()
+            )
           end
         }
       },

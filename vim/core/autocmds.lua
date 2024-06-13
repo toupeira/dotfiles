@@ -10,7 +10,7 @@ vim.cmd([[
   autocmd FileType gdscript            setlocal expandtab
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd FileType help                setlocal buflisted
-  autocmd FileType lua                 setlocal path+=./lua keywordprg=:Help
+  autocmd FileType lua                 setlocal path+=./lua iskeyword-=: keywordprg=:Help
   autocmd FileType make                setlocal noexpandtab
   autocmd FileType qf                  setlocal nobuflisted
   autocmd FileType ruby                setlocal iskeyword+=?,!
