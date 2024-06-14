@@ -17,9 +17,9 @@ util.nmap('<Leader>@', function() require('lazy').home() end, 'Open Lazy')
 
 require('lazy').setup('plugins', {
   root = LAZY_ROOT,
-  install = { missing = true, colorscheme = { 'nordfox', 'habamax' }},
+  install = { missing = not util.is_sudo, colorscheme = { 'nordfox', 'habamax' }},
   change_detection = { notify = false },
-  concurrency = math.max(2, vim.uv.available_parallelism()) * 8,
+  concurrency = math.max(4, vim.uv.available_parallelism()) * 8,
 
   ui = {
     border = 'rounded',

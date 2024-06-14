@@ -25,7 +25,7 @@ fi
 if xrandr | grep -q '3840x2160.*\*'; then
   $steam -forcedesktopscaling=1.5
 else
-  $steam -forcedesktopscaling="$(gsettings get org.gnome.desktop.interface text-scaling-factor)"
+  $steam
 fi
 
 [ "$running" ] || bluetoothctl power off
