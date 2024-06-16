@@ -151,7 +151,7 @@ return {
         else
           fallback()
         end
-      end, { 'i', 'c' }),
+      end),
 
       ['<S-Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
@@ -159,30 +159,12 @@ return {
         else
           fallback()
         end
-      end, { 'i', 'c' }),
+      end),
     }
 
     opts.mapping = cmp.mapping.preset.insert(tabs)
 
     cmp.setup(opts)
-
-    cmp.setup.cmdline({ '/', '?' }, {
-      mapping = cmp.mapping.preset.cmdline(tabs),
-      sources = {
-        sources.buffer,
-        sources.tmux,
-      }
-    })
-
-    cmp.setup.cmdline(':', {
-      mapping = cmp.mapping.preset.cmdline(tabs),
-      matching = { disallow_symbol_nonprefix_matching = false },
-      completion = { autocomplete = false },
-      sources = {
-        { name = 'cmdline' },
-        sources.path,
-      }
-    })
 
     cmp.setup.filetype('lua', {
       sources = util.merge(opts.sources, {{ name = 'nvim_lua' }})

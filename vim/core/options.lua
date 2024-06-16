@@ -62,7 +62,7 @@ vim.o.number = true
 vim.o.numberwidth = 6
 vim.o.signcolumn = 'yes'
 
-vim.opt.completeopt = { 'menuone', 'noinsert', 'preview' }
+vim.opt.completeopt = { 'menu', 'longest', 'preview' }
 vim.o.pumheight = 20
 
 vim.o.showmode = false

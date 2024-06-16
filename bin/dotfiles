@@ -595,7 +595,7 @@ function run {
       done
 
       lint root "Dotfile symlinks"
-      for path in config/mise config/nvim config/rg local/share/mise zsh zshrc; do
+      for path in config/mise config/nvim config/rg local/share/mise; do
         local target=$( origin "$path" )
         local origin=${target/#$HOME/\/root}
 

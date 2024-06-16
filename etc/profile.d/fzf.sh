@@ -60,13 +60,9 @@ FZF_ALT_C_OPTS="
   --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_ALT_C_COMMAND --unrestricted --exclude .git)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
 
-if [ "$BASH_VERSION" ]; then
-  eval "$( mise exec -- fzf --bash )"
+eval "$( mise exec -- fzf --bash )"
 
-  bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
-elif [ "$ZSH_VERSION" ]; then
-  eval "$( mise exec -- fzf --zsh )"
-fi
+bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
 
 _fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }
 _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }

@@ -14,7 +14,12 @@ return {
       opts = {
         max_lines = 3,
         min_window_height = 10,
-      }
+      },
+      init = function()
+        util.nmap('!', function()
+          require('treesitter-context').go_to_context(vim.v.count1)
+        end)
+      end
     },
   },
 
@@ -50,9 +55,8 @@ return {
 
     refactor = {
       navigation = {
-        enable = false,
+        enable = true,
         keymaps = {
-          goto_definition = 'gd',
           goto_next_usage = '<M-*>',
           goto_previous_usage = '<M-#>',
         },

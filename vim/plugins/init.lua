@@ -63,7 +63,7 @@ return {
     keys = {
       { 'gd', '<Cmd>AnyJump<CR>', desc = 'Jump to definition' },
       { 'gd', '<Cmd>AnyJumpVisual<CR>', mode = { 'v' }, desc = 'Jump to definition' },
-      { 'gD', '<Cmd>AnyJumpLastResults<CR>', desc = 'Resume jump to definition' },
+      { 'gD', 'gd', desc = 'Go to definition' },
     },
     init = function()
       vim.g.any_jump_disable_default_keybindings = 1
