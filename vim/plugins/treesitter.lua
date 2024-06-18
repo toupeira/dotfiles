@@ -16,7 +16,7 @@ return {
         min_window_height = 10,
       },
       init = function()
-        util.nmap('!', function()
+        util.nmap('<C-p>', function()
           require('treesitter-context').go_to_context(vim.v.count1)
         end)
       end

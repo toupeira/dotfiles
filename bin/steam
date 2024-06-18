@@ -22,10 +22,6 @@ fi
 
 [ "$running" ] || bluetoothctl power on
 
-if xrandr | grep -q '3840x2160.*\*'; then
-  $steam -forcedesktopscaling=1.5
-else
-  $steam
-fi
+$steam
 
 [ "$running" ] || bluetoothctl power off
