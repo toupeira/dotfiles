@@ -23,16 +23,16 @@ export FZF_DEFAULT_OPTS="
   --color hl+:#ecffd9
   --color gutter:-1
 
-  --bind ctrl-a:toggle-all
+  --bind alt-a:toggle-all
   --bind ctrl-n:down
   --bind ctrl-p:up
   --bind down:next-history
   --bind up:previous-history
   --bind ctrl-/:toggle-preview
-  --bind ctrl-e:preview-down
-  --bind ctrl-y:preview-up
-  --bind ctrl-f:preview-half-page-down
-  --bind ctrl-b:preview-half-page-up
+  --bind alt-e:preview-down
+  --bind alt-y:preview-up
+  --bind alt-f:preview-half-page-down
+  --bind alt-b:preview-half-page-up
 "
 
 [ "$BASH_INTERACTIVE" ] || return
