@@ -9,6 +9,7 @@ firewalld
 firmware-linux
 flatpak
 fwupd
+fwupd-amd64-signed
 intel-media-va-driver-non-free
 linux-cpupower
 lm-sensors
