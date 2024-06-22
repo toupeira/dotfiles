@@ -69,6 +69,7 @@ return {
 
     grep = {
       multiline = 1,
+      RIPGREP_CONFIG_PATH = vim.env.RIPGREP_CONFIG_PATH,
     },
 
     keymaps = {

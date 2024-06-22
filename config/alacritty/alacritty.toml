@@ -1,34 +1,59 @@
 [bell]
-animation = "Ease"
+animation = 'Ease'
 duration = 50
-color = "#545652"
+color = '#545652'
 
 [colors]
-draw_bold_text_with_bright_colors = false
+draw_bold_text_with_bright_colors = true
 
 [colors.primary]
-background = "#000000"
-foreground = "#ffffff"
+background = '#000000'
+foreground = '#ffffff'
+
+[colors.normal]
+black = '#000000'
+red = '#FF4040'
+green = '#4D9A05'
+yellow = '#C3A000'
+blue = '#417FCF'
+magenta = '#8E6199'
+cyan = '#05979A'
+white = '#D3D6CF'
+
+[colors.bright]
+black = '#545652'
+red = '#FF4040'
+green = '#89E234'
+yellow = '#FBE84F'
+blue = '#82B1FF'
+magenta = '#AC7EA8'
+cyan = '#34E2E2'
+white = '#EDEDEB'
 
 [keyboard]
 bindings = [
-  { key = "L", mods = "Control", action = "ReceiveChar" },
+  { key = 'L', mods = 'Control', action = 'ReceiveChar' },
 
-  { key = "PageUp", mods = "Shift", mode = "~Alt", action = "ReceiveChar" },
-  { key = "PageDown", mods = "Shift", mode = "~Alt", action = "ReceiveChar" },
-  { key = "Home", mods = "Shift", mode = "~Alt", action = "ReceiveChar" },
-  { key = "End", mods = "Shift", mode = "~Alt", action = "ReceiveChar" },
+  { key = 'PageUp', mods = 'Shift', mode = '~Alt', action = 'ReceiveChar' },
+  { key = 'PageDown', mods = 'Shift', mode = '~Alt', action = 'ReceiveChar' },
+  { key = 'Home', mods = 'Shift', mode = '~Alt', action = 'ReceiveChar' },
+  { key = 'End', mods = 'Shift', mode = '~Alt', action = 'ReceiveChar' },
 
-  { key = "0", mods = "Control", action = "ReceiveChar" },
-  { key = ")", mods = "Control|Shift", action = "ResetFontSize" },
-  { key = "=", mods = "Control", action = "ReceiveChar" },
-  { key = "+", mods = "Control|Shift", action = "IncreaseFontSize" },
-  { key = "-", mods = "Control", action = "ReceiveChar" },
-  { key = "_", mods = "Control|Shift", action = "DecreaseFontSize" },
+  { key = '0', mods = 'Control', action = 'ReceiveChar' },
+  { key = ')', mods = 'Control|Shift', action = 'ResetFontSize' },
+  { key = '=', mods = 'Control', action = 'ReceiveChar' },
+  { key = '+', mods = 'Control|Shift', action = 'IncreaseFontSize' },
+  { key = '-', mods = 'Control', action = 'ReceiveChar' },
+  { key = '_', mods = 'Control|Shift', action = 'DecreaseFontSize' },
 ]
 
 [mouse]
 hide_when_typing = true
 
+[shell]
+program = 'bash'
+args = ['-l']
+
 [window]
 opacity = 0.85
+resize_increments = true
