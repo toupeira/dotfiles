@@ -17,17 +17,25 @@ util.nmap('<Leader>@', function() require('lazy').home() end, 'Open Lazy')
 
 require('lazy').setup('plugins', {
   root = LAZY_ROOT,
-  install = { missing = not util.is_sudo, colorscheme = { 'nordfox', 'habamax' }},
   change_detection = { notify = false },
   concurrency = math.max(4, vim.uv.available_parallelism()) * 8,
 
-  ui = {
-    border = 'rounded',
-    size = { width = 0.9, height = 0.8 },
+  install = {
+    missing = not util.is_sudo,
+    colorscheme = { 'nordfox', 'habamax' },
+  },
+
+  pkg = {
+    enabled = false,
   },
 
   readme = {
     fles = { 'README.md', 'README.markdown', 'lua/**/README.md' },
+  },
+
+  ui = {
+    border = 'rounded',
+    size = { width = 0.9, height = 0.8 },
   },
 
   performance = {
