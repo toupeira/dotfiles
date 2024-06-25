@@ -5,7 +5,7 @@ QUERIES=~/.config/quodlibet/lists/queries.saved
 
 ql running >/dev/null || ql start-hidden "$@"
 while ! ql running >/dev/null; do
-  sleep 0.5
+  sleep 1
 done
 
 echo -e " \e[1;32m● \e[1;37mExporting playlists...\e[0m"
