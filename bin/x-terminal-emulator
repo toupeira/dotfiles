@@ -13,11 +13,11 @@ case "$HOSTNAME" in
         geometry="107x55+1280+0"
       fi
     elif [ "$x" = "3840" ]; then
-      geometry="160x85+$((xoff+1920))+0"
+      geometry="160x85+$((xoff + x / 2))+0"
     elif [ "$x" = "3440" ]; then
-      geometry="214x78+$((xoff+1920))+0"
+      geometry="214x78+$((xoff + x / 2))+0"
     elif [ "$x" = "2560" ]; then
-      geometry="142x70+$((xoff+1920))+0"
+      geometry="160x78+$((xoff + x / 2))+0"
     fi
     ;;
 esac
