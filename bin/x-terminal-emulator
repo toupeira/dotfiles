@@ -2,7 +2,7 @@
 
 case "$HOSTNAME" in
   ocelot)  geometry="175x89+1920+0";;
-  schtube) geometry="87x42+961+0";;
+  schtube) geometry="87x42+960+0";;
   meerkat)
     read -r _screen _screens x _y xoff _yoff < <(xmonitorinfo)
 
@@ -10,7 +10,7 @@ case "$HOSTNAME" in
       scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
 
       if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then
-        geometry="107x55+1280+0"
+        geometry="117x58+1280+0"
       fi
     elif [ "$x" = "3840" ]; then
       geometry="160x85+$((xoff + x / 2))+0"
