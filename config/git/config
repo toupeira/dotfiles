@@ -101,6 +101,9 @@
 [pull]
   rebase = true
 
+[push]
+  autoSetupRemote = true
+
 [rebase]
   autosquash = true
   stat = true
@@ -193,8 +196,7 @@
 
   pu = push
   poof = pu --force-with-lease --force-if-includes
-  pusu = -c push.default=current pu --set-upstream
-  puci = pusu -o ci.skip
+  puci = pu -o ci.skip
 
   sub = submodule
   checkout-submodules = submodule update -q --init
