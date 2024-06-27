@@ -59,6 +59,8 @@ esac
 flatpak run --cwd="$(realpath "$PWD")" net.filebot.FileBot \
   -r \
   -non-strict \
+  -no-history \
+  -no-index \
   -unixfs \
   -rename "$path" \
   --action "$action" \
@@ -72,7 +74,7 @@ status="$?"
 
 if [ $status -eq 0 ] && [ "$action" != "test" ]; then
   # update Kodi
-  curl -s --connect-timeout 1 --data-binary '{ "jsonrpc": "2.0", "method": "VideoLibrary.Scan", "id": "deluge.postprocess"}' -H 'content-type: application/json;' http://localhost:8080/jsonrpc >/dev/null
+  curl -s --connect-timeout 1 --data-binary '{ "jsonrpc": "2.0", "method": "VideoLibrary.Scan", "id": "v.rename" }' -H 'content-type: application/json;' http://localhost:8080/jsonrpc >/dev/null
 fi
 
 exit "$status"

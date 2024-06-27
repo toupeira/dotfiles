@@ -165,7 +165,7 @@ return {
 
       nmap(key, function()
         fzf[provider](get_args(args))
-      end, 'Find ' .. name)
+      end, 'Search ' .. name)
 
       nmap('<Leader>' .. key, function()
         local resume_args = get_args(args)
@@ -224,6 +224,6 @@ return {
 
     -- git
     map_fzf('<Leader>gm', 'git_status')
-    map_fzf('<Leader>gC', 'git_branches')
+    map_fzf('<Leader>gc', 'git_branches')
   end
 }

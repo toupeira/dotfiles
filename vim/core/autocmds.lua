@@ -80,7 +80,7 @@ autocmd('FileType', {
 },
   function(event)
     util.nmap('q', {
-      'bdelete',
+      'bwipeout',
       'lua require("util").close_tab()'
     }, { force = true, buffer = event.buf })
   end

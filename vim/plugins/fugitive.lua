@@ -35,7 +35,7 @@ return {
     nmap('<Leader>gL', ':Gclog', 'Open Git log for repository')
 
     nmap('<Leader>gd', ':Git -p log -p %', 'Open Git diff for current file')
-    nvomap('<Leader>gb', ':Git blame --date human-local', 'Open Git blame for current file')
+    nvomap('<Leader>gB', ':Git blame --date human-local', 'Open Git blame for current file')
 
     nvomap('<Leader>gx', "':' . (mode() == 'n' ? '.' : '') . 'GBrowse!<CR>'", { expr = true, silent = true },
       'Copy Git URL to current location')
@@ -51,7 +51,7 @@ return {
     end)
 
     util.autocmd('User', { 'FugitiveObject', 'FugitivePager' }, function()
-      nmap('q', { 'cclose', 'bd' }, { buffer = true })
+      nmap('q', { 'cclose', 'bwipeout' }, { buffer = true })
     end)
   end
 }
