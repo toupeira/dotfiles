@@ -49,6 +49,9 @@ bindings = [
 
 [mouse]
 hide_when_typing = true
+bindings = [
+  { mouse = 'Middle', action = 'PasteSelection' },
+]
 
 [shell]
 program = 'bash'
@@ -56,4 +59,4 @@ args = ['-l']
 
 [window]
 opacity = 0.85
-resize_increments = true
+resize_increments = false

@@ -165,7 +165,7 @@
   branches = "!git -c color.ui=always branch -a --sort=-committerdate | grep -Ev '(/HEAD|/(main|master))' | sed -r -e 's,^[\\* ]*,,' -e 's,remotes/[^/]+/,,'"
   default-branch = !(git symbolic-ref --short refs/remotes/origin/HEAD 2>/dev/null || git symbolic-ref --short refs/remotes/upstream/HEAD) | cut -d/ -f2-
 
-  ap = add -p
+  ap = !git add --intent-to-add . && git add -p
   all = add -A
   unstage = reset HEAD -p
   discard = checkout -p

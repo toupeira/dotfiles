@@ -20,8 +20,8 @@ elif pgrep -x steam >/dev/null; then
   running=1;
 fi
 
-[ "$running" ] || bluetoothctl power on
+[ "$running" ] || rfkill unblock bluetooth
 
 $steam
 
-[ "$running" ] || bluetoothctl power off
+[ "$running" ] || rfkill block bluetooth

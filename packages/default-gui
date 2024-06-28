@@ -76,6 +76,7 @@ xinput
 
 # apps
 adb
+alacritty
 calibre
 chromium
 firefox
@@ -89,7 +90,6 @@ quodlibet
 scummvm
 syncthing-gtk
 tilix
-wezterm
 yt-dlp
 
 flatpak: com.github.tchx84.Flatseal

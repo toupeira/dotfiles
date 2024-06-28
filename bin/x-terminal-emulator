@@ -1,72 +1,131 @@
 #!/bin/bash
 
-case "$HOSTNAME" in
-  ocelot)  geometry="175x89+1920+0";;
-  schtube) geometry="87x42+960+0";;
-  meerkat)
-    read -r _screen _screens x _y xoff _yoff < <(xmonitorinfo)
+terminal="alacritty"
 
-    if [ "${xoff}" = "0" ]; then
-      scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
+case "$terminal" in
+  alacritty)
+    font=$( dconf read /org/gnome/desktop/interface/monospace-font-name | tr -d "'" )
+    font_size=${font##* }
 
-      if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then
-        geometry="117x58+1280+0"
-      fi
-    elif [ "$x" = "3840" ]; then
-      geometry="160x85+$((xoff + x / 2))+0"
-    elif [ "$x" = "3440" ]; then
-      geometry="214x78+$((xoff + x / 2))+0"
-    elif [ "$x" = "2560" ]; then
-      geometry="160x78+$((xoff + x / 2))+0"
-    fi
+    cols=120
+    rows=48
+    posx=0
+    posy=0
+
+    case "$HOSTNAME" in
+      ocelot)
+        cols=175
+        rows=89
+        posx=1920
+        ;;
+      schtube)
+        cols=88
+        rows=42
+        posx=960
+        ;;
+      meerkat)
+        read -r screen _screens x _y xoff _yoff < <(xmonitorinfo)
+        posx=$((xoff + x / 2))
+
+        if [ "${xoff}" = "0" ]; then
+          scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
+
+          if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then
+            cols=107
+            rows=58
+          fi
+        elif [ "$x" = "3840" ]; then
+          : geometry="160x85+$((xoff+1920))+0"
+        elif [ "$x" = "3440" ]; then
+          cols=216
+          rows=79
+        elif [ "$x" = "2560" ]; then
+          : geometry="142x70+$((xoff+1920))+0"
+        fi
+        ;;
+    esac
+
+    exec alacritty \
+      -o font.size="$font_size" \
+      -o window.dimensions.columns="$cols" \
+      -o window.dimensions.lines="$rows" \
+      -o window.position.x="$posx" \
+      -o window.position.y="$posy" \
+      "$@"
+    ;;
+
+  tilix)
+    case "$HOSTNAME" in
+      ocelot)  geometry="175x89+1920+0";;
+      schtube) geometry="87x42+960+0";;
+      meerkat)
+        read -r _screen _screens x _y xoff _yoff < <(xmonitorinfo)
+
+        if [ "${xoff}" = "0" ]; then
+          scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
+
+          if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then
+            geometry="117x58+1280+0"
+          fi
+        elif [ "$x" = "3840" ]; then
+          geometry="160x85+$((xoff + x / 2))+0"
+        elif [ "$x" = "3440" ]; then
+          geometry="214x78+$((xoff + x / 2))+0"
+        elif [ "$x" = "2560" ]; then
+          geometry="160x78+$((xoff + x / 2))+0"
+        fi
+        ;;
+    esac
+
+    exec tilix --geometry="$geometry" "$@"
+    ;;
+
+  wezterm)
+    font=$( dconf read /org/gnome/desktop/interface/monospace-font-name | tr -d "'" )
+    font_size=${font##* }
+    font=${font% [1-9]*}
+
+    position="50%,0"
+    screen="active"
+    cols=nil
+    rows=nil
+
+    case "$HOSTNAME" in
+      ocelot)
+        cols=175
+        rows=89
+        ;;
+      schtube)
+        cols=88
+        rows=43
+        ;;
+      meerkat)
+        read -r screen _screens x _y xoff _yoff < <(xmonitorinfo)
+
+        if [ "${xoff}" = "0" ]; then
+          scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
+
+          if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then
+            cols=107
+            rows=58
+          fi
+        elif [ "$x" = "3840" ]; then
+          geometry="160x85+$((xoff+1920))+0"
+        elif [ "$x" = "3440" ]; then
+          cols=216
+          rows=79
+        elif [ "$x" = "2560" ]; then
+          geometry="142x70+$((xoff+1920))+0"
+        fi
+        ;;
+    esac
+
+    exec wezterm \
+      --config font="wezterm.font('$font')" \
+      --config font_size="$font_size" \
+      --config initial_rows="$rows" \
+      --config initial_cols="$cols" \
+      start --position="$screen:$position" \
+      "$@"
     ;;
 esac
-
-exec tilix --geometry="$geometry" "$@"
-
-# font=$( dconf read /org/gnome/desktop/interface/monospace-font-name | tr -d "'" )
-# font_size=${font##* }
-# font=${font% [1-9]*}
-#
-# position="50%,0"
-# screen="active"
-# cols=nil
-# rows=nil
-#
-# case "$HOSTNAME" in
-#   ocelot)
-#     cols=175
-#     rows=89
-#     ;;
-#   schtube)
-#     cols=88
-#     rows=43
-#     ;;
-#   meerkat)
-#     read -r screen _screens x _y xoff _yoff < <(xmonitorinfo)
-#
-#     if [ "${xoff}" = "0" ]; then
-#       scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
-#
-#       if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then
-#         cols=107
-#         rows=58
-#       fi
-#     elif [ "$x" = "3840" ]; then
-#       geometry="160x85+$((xoff+1920))+0"
-#     elif [ "$x" = "3440" ]; then
-#       cols=216
-#       rows=79
-#     elif [ "$x" = "2560" ]; then
-#       geometry="142x70+$((xoff+1920))+0"
-#     fi
-#     ;;
-# esac
-#
-# exec wezterm \
-#   --config font="wezterm.font('$font')" \
-#   --config font_size="$font_size" \
-#   --config initial_rows="$rows" \
-#   --config initial_cols="$cols" \
-#   start --position="$screen:$position" \
-#   "$@"
