@@ -172,11 +172,11 @@ return {
         resume_args.resume = true
         resume_args.query = nil
         fzf[provider](resume_args)
-      end, 'Resume ' .. name .. ' fuzzy search')
+      end, 'Resume ' .. name .. ' search')
     end
 
     -- resume last provider
-    nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume fuzzy search')
+    nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume last search')
 
     -- files
     map_fzf('<Leader>b', 'buffers')
