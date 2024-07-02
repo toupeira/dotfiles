@@ -43,8 +43,10 @@ bindings = [
   { key = ')', mods = 'Control|Shift', action = 'ResetFontSize' },
   { key = '=', mods = 'Control', action = 'ReceiveChar' },
   { key = '+', mods = 'Control|Shift', action = 'IncreaseFontSize' },
-  { key = '-', mods = 'Control', action = 'ReceiveChar' },
   { key = '_', mods = 'Control|Shift', action = 'DecreaseFontSize' },
+
+  # send Ctrl-_ for Ctrl-minus, so undo still works in Bash
+  { key = '-', mods = 'Control', chars = "\u001f" },
 ]
 
 [mouse]

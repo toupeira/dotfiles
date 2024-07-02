@@ -77,8 +77,8 @@ return {
       props.buffers = util.buffer_count()
 
       local sections = {
-        get_filename(props),
         get_symbols(props),
+        get_filename(props),
       }
 
       local result = {}
