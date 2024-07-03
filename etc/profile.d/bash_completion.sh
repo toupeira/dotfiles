@@ -40,7 +40,7 @@ fi
 function _packages_available {
   local cur="${COMP_WORDS[COMP_CWORD]}"
   mapfile -t COMPREPLY < <(
-    _xfunc apt-cache _apt_cache_packages
+    compgen -W "$( apt-cache --no-generate pkgnames -- "$cur" )"
   )
 }
 complete -F _packages_available pkget pkgshow

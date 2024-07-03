@@ -6,8 +6,8 @@ return {
   },
 
   keys = {
-    { '-', '<Cmd>Neotree toggle<CR>', desc = 'Toggle Neotree sidebar'},
-    { '_', '<Cmd>Neotree toggle current<CR>', desc = 'Toggle Neotree window'},
+    { '-', '<Cmd>Neotree toggle reveal<CR>', desc = 'Toggle Neotree sidebar'},
+    { '_', '<Cmd>Neotree toggle reveal current<CR>', desc = 'Toggle Neotree window'},
   },
 
   opts = {

@@ -226,9 +226,9 @@ return {
             NeoTreeGitUnstaged = { link = 'WarningMsg' },
             NeoTreeGitUntracked = { link = 'ErrorMsg' },
 
-            SignifySignAdd    = { fg = 'git.add', bg = 'diff.add' },
-            SignifySignDelete = { fg = 'fg0', bg = 'diff.delete' },
-            SignifySignChange = { fg = 'git.changed', bg = 'diff.change' },
+            GitSignsAdd    = { fg = 'git.add', bg = 'diff.add' },
+            GitSignsChange = { fg = 'git.changed', bg = 'diff.change' },
+            GitSignsDelete = { fg = 'fg0', bg = 'diff.delete' },
 
             WhichKey = { fg = 'palette.yellow', style = 'bold' },
             WhichKeyDesc = { fg = 'palette.green' },

@@ -31,7 +31,7 @@ case "$terminal" in
           scaling=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
 
           if [[ "$scaling" =~ ^1\.(4|39*)$ ]]; then
-            cols=107
+            cols=117
             rows=58
           fi
         elif [ "$x" = "3840" ]; then
