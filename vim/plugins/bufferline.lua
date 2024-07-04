@@ -18,6 +18,11 @@ return {
 
       close_command = util.close_buffer,
       right_mouse_command = nil,
+
+      get_element_icon = function(element)
+        local icon, _hl = MiniIcons.get('extension', element.extension)
+        return icon
+      end,
     },
 
     highlights = {

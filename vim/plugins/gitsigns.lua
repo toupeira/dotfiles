@@ -8,8 +8,18 @@ return {
 
   opts = {
     signs = {
-      delete = { text = '' },
-      topdelete = { text = '' },
+      add          = { text = '▌' },
+      change       = { text = '▌' },
+      untracked    = { text = '○' },
+      delete       = { text = '⨯' },
+      topdelete    = { text = '⨯' },
+    },
+    signs_staged = {
+      add          = { text = '▉' },
+      change       = { text = '▉' },
+      untracked    = { text = '▉' },
+      delete       = { text = '▉' },
+      topdelete    = { text = '▉' },
     },
 
     current_line_blame_opts = {

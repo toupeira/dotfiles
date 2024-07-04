@@ -7,6 +7,10 @@ return {
   'echasnovski/mini.nvim',
 
   config = function()
+    -- mini.icons ------------------------------------------------------
+    require('mini.icons').setup()
+    MiniIcons.mock_nvim_web_devicons()
+
     -- mini.misc -------------------------------------------------------
     require('mini.misc').setup_auto_root(
       { '.git' }, vim.fs.dirname

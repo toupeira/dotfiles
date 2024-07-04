@@ -1,6 +1,6 @@
 [tools]
 ruby = "3.3.3"
-node = "22.3.0"
+node = "22.4.0"
 fzf = "0.53.0"
 usage = "0.3.0"
 neovim = "0.10.0"

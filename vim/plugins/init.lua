@@ -6,8 +6,6 @@ local imap = util.imap
 
 return {
   { 'nvim-lua/plenary.nvim', lazy = true },
-  { 'nvim-tree/nvim-web-devicons', lazy = true,
-    opts = { color_icons = false, default = true }},
 
   very_lazy { 'j-hui/fidget.nvim', config = true },
   very_lazy { 'numToStr/Comment.nvim', config = true },

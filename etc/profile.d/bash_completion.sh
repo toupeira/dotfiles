@@ -38,17 +38,17 @@ fi
 
 # Debian completions
 function _packages_available {
-  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local cword="${COMP_WORDS[COMP_CWORD]}"
   mapfile -t COMPREPLY < <(
-    compgen -W "$( apt-cache --no-generate pkgnames -- "$cur" )"
+    compgen -W "$( apt-cache --no-generate pkgnames -- "$cword" )"
   )
 }
 complete -F _packages_available pkget pkgshow
 
 function _packages_installed {
-  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local cword="${COMP_WORDS[COMP_CWORD]}"
   mapfile -t COMPREPLY < <(
-    _xfunc dpkg _comp_dpkg_installed_packages "$cur"
+    _xfunc dpkg _comp_dpkg_installed_packages "$cword"
   )
 }
 complete -F _packages_installed pkglist pkgpurge pkgremove

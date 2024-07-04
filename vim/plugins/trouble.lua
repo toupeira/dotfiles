@@ -6,7 +6,7 @@ return {
 
   keys = {
     {
-      '<Leader>e',
+      '<Leader>E',
       function()
         local trouble = require('trouble')
         if trouble.is_open() then
