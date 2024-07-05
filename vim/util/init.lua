@@ -23,6 +23,7 @@ end
 
 -- Configuration helpers -----------------------------------------------
 
+util.is_headless = #vim.api.nvim_list_uis() == 0
 util.is_sudo = os.getenv('SUDO_COMMAND')
 util.is_ssh = os.getenv('SSH_CONNECTION')
 

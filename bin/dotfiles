@@ -744,12 +744,16 @@ function run {
       update firmware
       update mise
       update gem
+      update lazy
+      # update mason
       ;;
 
     update-apt)      sudo aptitude update && sudo aptitude upgrade;;
     update-flatpak)  flatpak update && flatpak uninstall --unused;;
     update-firmware) fwupdmgr update;;
     update-gem)      gem update && gem cleanup;;
+    update-lazy)     nvim --headless '+Lazy! sync' +qa;;
+    update-mason)    nvim --headless '+lua require("mason-tool-installer")' '+MasonToolsUpdateSync' +qa;;
 
     update-mise)
       local plugins=$( mise ls -g --no-header | cut -d\  -f1 )

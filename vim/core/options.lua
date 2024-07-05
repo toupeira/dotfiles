@@ -38,8 +38,10 @@ if os.getenv('XDG_SESSION_TYPE') ~= 'tty' or os.getenv('SSH_CONNECTION') then
   vim.o.termguicolors = true
   vim.o.pumblend = 10
 
-  vim.o.title = true
-  vim.o.titlestring = "  %t%{&modified ? ' ●' : ''}%{&readonly ? ' 󰌾 ' : ''} [%{v:lua.require('util').project_path()}]"
+  if not util.is_headless then
+    vim.o.title = true
+    vim.o.titlestring = "  %t%{&modified ? ' ●' : ''}%{&readonly ? ' 󰌾 ' : ''} [%{v:lua.require('util').project_path()}]"
+  end
 end
 
 vim.o.updatetime = 250

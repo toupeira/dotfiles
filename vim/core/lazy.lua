@@ -25,6 +25,12 @@ require('lazy').setup('plugins', {
     colorscheme = { 'nordfox', 'habamax' },
   },
 
+  headless = {
+    process = false,
+    log = true,
+    task = false,
+  },
+
   pkg = {
     enabled = false,
   },

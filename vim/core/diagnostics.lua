@@ -1,7 +1,15 @@
 local util = require('util')
 local nmap = util.nmap
 
-nmap('<Leader>e', vim.diagnostic.open_float, 'Toggle diagnostics popup')
+local last_win
+nmap('<Leader>e', function()
+  if last_win and vim.api.nvim_win_is_valid(last_win) then
+    vim.api.nvim_win_close(last_win, false)
+    last_win = nil
+  else
+    last_win = select(2, vim.diagnostic.open_float())
+  end
+end, 'Toggle diagnostics popup')
 
 nmap('<Leader>E', function()
   vim.diagnostic.setloclist({ open = false })

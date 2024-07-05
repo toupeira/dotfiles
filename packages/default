@@ -36,6 +36,7 @@ iw
 jq
 less
 libnss-systemd
+lnav
 locales-all
 lsof
 ltrace
@@ -44,9 +45,9 @@ make
 mawk
 mise
 moreutils
-mutt
 ncurses-term
 needrestart
+neomutt
 netcat-openbsd
 net-tools
 nftables

@@ -329,3 +329,11 @@ function notes {
 }
 
 alias n=notes
+
+function mise.search {
+  mise plugins ls-remote | grep "$1"
+}
+
+function mise.add {
+  mise use -g --pin "$1@latest"
+}
