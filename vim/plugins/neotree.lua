@@ -15,6 +15,21 @@ return {
       width = 30,
       mappings = {
         ['<Tab>'] = 'toggle_node',
+        ['q'] = {
+          function(state)
+            local buffers = vim.tbl_filter(
+              function(buf) return buf.name ~= '' end,
+              vim.fn.getbufinfo({ buflisted = true })
+            )
+
+            if #buffers == 0 then
+              vim.cmd.quit()
+            else
+              require('neo-tree/sources/common/commands').close_window(state)
+            end
+          end,
+          desc = 'Close Neotree',
+        },
       },
     },
 
