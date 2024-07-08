@@ -62,9 +62,7 @@ return {
     'hrsh7th/cmp-path',
 
     { 'andersevenrud/cmp-tmux',
-      cond = function()
-        return os.getenv('TMUX')
-      end
+      cond = util.is_tmux,
     },
   },
 
@@ -119,7 +117,7 @@ return {
       },
     }
 
-    if os.getenv('TMUX') then
+    if util.is_tmux then
       sources.tmux = {
         name = 'tmux',
         option = { all_panes = true },

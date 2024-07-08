@@ -46,8 +46,8 @@ return {
     nmap(']]', next_symbol, { force = true }, 'Go to next symbol')
     nmap('[[', previous_symbol, { force = true }, 'Go to previous symbol')
 
-    nmap('<Leader>t', aerial.nav_toggle, 'Toggle symbols in popup')
-    nmap('<Leader>T', aerial.toggle, 'Toggle symbols in sidebar')
+    nmap('<Leader>a', aerial.nav_toggle, 'Toggle symbols in popup')
+    nmap('<Leader>A', aerial.toggle, 'Toggle symbols in sidebar')
 
     local config = require('aerial.config')
     local setup = config.setup

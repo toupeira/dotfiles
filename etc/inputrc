@@ -83,3 +83,11 @@ set mark-directories on
 set mark-symlinked-directories on
 set match-hidden-files off
 set blink-matching-paren on
+
+set keymap vi
+"\C-a": beginning-of-line
+"\C-e": end-of-line
+
+set keymap vi-insert
+"\C-a": beginning-of-line
+"\C-e": end-of-line

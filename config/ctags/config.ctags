@@ -1,0 +1,11 @@
+--links=no
+--exclude=@.gitignore
+--exclude=*.css
+--exclude=*.ini
+--exclude=*.json
+--exclude=*.scss
+--exclude=*.sql
+--exclude=*.svg
+--exclude=*.xml
+--exclude=*.yml
+--exclude=public/*/assets

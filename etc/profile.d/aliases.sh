@@ -73,7 +73,7 @@ alias vim='sensible-vim'
 alias vi='vim'
 alias vip='VIMCMD=vip sensible-vim'
 alias vimdiff='vim -d'
-alias nt='vi .'
+alias nt='vi "+Neotree show current"'
 
 alias lazyvim='NVIM_APPNAME=lazyvim vim'
 alias lvi='lazyvim'

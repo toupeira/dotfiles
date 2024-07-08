@@ -28,7 +28,7 @@ return {
       return {
         options = {
           module_default = false,
-          terminal_colors = false,
+          terminal_colors = util.is_neovide,
 
           modules = {
             neogit = true,
@@ -180,6 +180,7 @@ return {
             ['@variable.bash'] = { link = 'PreProc' },
 
             ['@keyword.ruby'] = { link = 'Statement' },
+            ['@keyword.type.ruby'] = { link = 'Statement' },
 
             ['@function.macro.vim'] = { link = 'Macro' },
             ['@keyword.vim'] = { link = 'Statement' },

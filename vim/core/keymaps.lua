@@ -17,9 +17,9 @@ tmap('<Esc>', '<C-\\><C-n>', 'Leave insert mode')
 -- Window navigation ---------------------------------------------------
 
 nmap('<Leader>s', ':split', 'Split horizontally')
-nmap('<Leader>S', ':botright split', 'Split horizontally (full width)')
+nmap('<Leader><Leader>s', ':botright split', 'Split horizontally (full width)')
 nmap('<Leader>v', ':vsplit', 'Split vertically')
-nmap('<Leader>V', ':botright vsplit', 'Split vertically (full height)')
+nmap('<Leader><Leader>v', ':botright vsplit', 'Split vertically (full height)')
 
 nmap('<Leader><Tab>', [[
   empty(getreg('#')) || !buflisted(getreg('#')) ? '<Cmd>bnext<CR>' : '<C-^>'

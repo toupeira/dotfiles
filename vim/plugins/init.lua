@@ -16,15 +16,7 @@ return {
   very_lazy { 'tpope/vim-repeat' },
   very_lazy { 'tpope/vim-scriptease' },
 
-  { 'AndrewRadev/splitjoin.vim' },
-
-  { 'AndrewRadev/bufferize.vim',
-    cmd = 'Bufferize',
-    init = function()
-      vim.g.bufferize_focus_output = true
-      util.alias_cmd({ B = 'Bufferize' })
-    end
-  },
+  lazy_file { 'AndrewRadev/splitjoin.vim' },
 
   lazy_file { 'andymass/vim-matchup',
     init = function()
@@ -33,9 +25,42 @@ return {
     end
   },
 
+  lazy_file { 'ludovicchabant/vim-gutentags' },
+
+  lazy_file { 'sickill/vim-pasta',
+    init = function()
+      vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
+    end
+  },
+
+  lazy_file { 'tpope/vim-projectionist',
+    config = function()
+      local function alternate_create()
+        local confirm = vim.o.confirm
+        local ok, _ = pcall(function() vim.cmd.A() end)
+
+        if not ok then
+          util.echo('No alternate file', 'ErrorMsg')
+        end
+
+        vim.o.confirm = confirm
+      end
+
+      vim.api.nvim_create_user_command('AC', alternate_create, {})
+    end
+  },
+
   lazy_file { 'wsdjeg/vim-fetch',
     config = function()
       map({ 'n', 'x' }, 'gF', '<C-w><C-f>', { force = true }, 'Go to file in split')
+    end
+  },
+
+  { 'AndrewRadev/bufferize.vim',
+    cmd = 'Bufferize',
+    init = function()
+      vim.g.bufferize_focus_output = true
+      util.alias_cmd({ B = 'Bufferize' })
     end
   },
 
@@ -81,34 +106,11 @@ return {
     end
   },
 
-  lazy_file { 'sickill/vim-pasta',
-    init = function()
-      vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
-    end
-  },
-
   { 'tpope/vim-dispatch',
     cmd = { 'Dispatch', 'Make' },
     init = function()
       vim.g.dispatch_no_maps = 1
       vim.g.dispatch_handlers = { 'job' }
-    end
-  },
-
-  lazy_file { 'tpope/vim-projectionist',
-    config = function()
-      local function alternate_create()
-        local confirm = vim.o.confirm
-        local ok, _ = pcall(function() vim.cmd.A() end)
-
-        if not ok then
-          util.echo('No alternate file', 'ErrorMsg')
-        end
-
-        vim.o.confirm = confirm
-      end
-
-      vim.api.nvim_create_user_command('AC', alternate_create, {})
     end
   },
 

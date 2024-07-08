@@ -34,6 +34,10 @@ return {
       fzf = {},
     },
 
+    fzf_opts = {
+      ['--layout'] = 'default',
+    },
+
     hls = {
       border = 'NonText',
       preview_border = 'NonText',
@@ -42,10 +46,6 @@ return {
       header_text = 'Type',
       buf_flag_cur = 'Title',
       buf_flag_alt = 'WarningMsg',
-    },
-
-    fzf_opts = {
-      ['--layout'] = 'default',
     },
 
     defaults = {
@@ -178,26 +178,33 @@ return {
     -- resume last provider
     nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume last search')
 
-    -- files
-    map_fzf('<Leader>b', 'buffers')
-    map_fzf('<Leader>B', 'buffers', { show_unlisted = true }, 'all buffers')
+    -- search files
     map_fzf('<Leader>f', 'files')
     map_fzf('<Leader>F', 'files', function() return { cwd = expand('%:h') } end, 'files in current directory')
+
+    map_fzf('<Leader>b', 'buffers')
+    map_fzf('<Leader>B', 'buffers', { show_unlisted = true }, 'all buffers')
+
     map_fzf('<Leader>h', 'oldfiles', nil, 'recent files')
     map_fzf('<Leader>H', 'oldfiles', { cwd_only = true }, 'recent files in current directory')
+
     map_fzf('<Leader>j', 'jumps')
 
-    -- file contents
+    -- search file contents
     map_fzf('<Leader>r', 'live_grep', function() return { query = expand('<cword>') } end, 'by regex in project')
     map_fzf('<Leader>R', 'live_grep', function() return { query = expand('<cword>'), cwd = expand('%:h') } end, 'by regex in current directory')
+
     map_fzf('<Leader>l', 'blines', function() return { query = expand('<cword>') } end, 'lines in buffer')
     map_fzf('<Leader>L', 'lines', function() return { query = expand('<cword>') } end, 'lines in all buffers')
 
-    -- vim history
+    map_fzf('<Leader>t', 'btags', nil, 'buffer symbols')
+    map_fzf('<Leader>T', 'tags', nil, 'project symbols')
+
+    -- search vim history
     map_fzf('<Leader>:', 'command_history')
     map_fzf('<Leader>/', 'search_history')
 
-    -- vim internals
+    -- search vim internals
     map_fzf('<F1><F1>', 'help_tags')
     map_fzf('<F1>m', 'man_pages')
     map_fzf('<F1>k', 'keymaps')
@@ -205,10 +212,10 @@ return {
     map_fzf('<F1>h', 'highlights')
     map_fzf('<F1>C', 'colorschemes')
 
-    -- spellcheck
+    -- search spellcheck
     map_fzf('<Leader>z', 'spell_suggest', nil, 'spelling suggestions')
 
-    -- LSP
+    -- search LSP
     map_fzf('<Leader>da', 'lsp_code_actions')
     map_fzf('<Leader>dd', 'lsp_definitions')
     map_fzf('<Leader>dD', 'lsp_declarations')
@@ -222,7 +229,7 @@ return {
     map_fzf('<Leader>dS', 'lsp_live_workspace_symbols')
     map_fzf('<Leader>dt', 'lsp_typedefs')
 
-    -- git
+    -- search git
     map_fzf('<Leader>gm', 'git_status')
     map_fzf('<Leader>gc', 'git_branches')
   end
