@@ -130,7 +130,7 @@ util.command('Manpage', '$tab Man <args>', {
   end,
 })
 
-util.alias_cmd({
+util.alias_command({
   help = 'Help',
   hel  = 'Help',
   he   = 'Help',

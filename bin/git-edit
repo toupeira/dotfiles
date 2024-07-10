@@ -5,7 +5,7 @@ dry_run=
 
 mapfile -t modified < <( git modified )
 mapfile -t staged   < <( git staged   )
-mapfile -t unstaged < <( git unstaged; git untracked )
+mapfile -t unstaged < <( git unstaged )
 mapfile -t last     < <( git diff HEAD^ --name-only )
 
 while [ "${1:0:1}" = "-" ]; do

@@ -60,7 +60,7 @@ return {
     cmd = 'Bufferize',
     init = function()
       vim.g.bufferize_focus_output = true
-      util.alias_cmd({ B = 'Bufferize' })
+      util.alias_command({ B = 'Bufferize' })
     end
   },
 
@@ -68,7 +68,7 @@ return {
     ft = { 'css', 'scss', 'lua' },
     cmd = 'ColorizerToggle',
     init = function()
-      util.alias_cmd({ CT = 'ColorizerToggle' })
+      util.alias_command({ CT = 'ColorizerToggle' })
     end,
     opts = function(plugin)
       return {

@@ -40,20 +40,6 @@ return {
     nmap('<Leader>gF', ':Git pull -v', 'Pull current Git branch')
     nmap('<Leader>gP', ':Git push -v', 'Push current Git branch')
 
-    util.autocmd('TermClose', 'term://*:git *', function()
-      util.close_buffer()
-      util.close_window()
-    end)
-
-    util.command('Gadd', 'terminal git add -p', 'Stage changes interactively')
-    nmap('<Leader>gA', ':Gadd', 'Stage changes interactively')
-
-    util.command('Gunstage', 'terminal git reset HEAD -p', 'Unstage changes interactively')
-    nmap('<Leader>gU', ':Gunstage', 'Unstage changes interactively')
-
-    util.command('Gdiscard', 'terminal git checkout -p', 'Discard changes interactively')
-    nmap('<Leader>gD', ':Gdiscard', 'Discard changes interactively')
-
     nvomap('<Leader>gx', "':' . (mode() == 'n' ? '.' : '') . 'GBrowse!<CR>'", { expr = true, silent = true },
       'Copy Git URL to current location')
     nvomap('<Leader>gX', "':' . (mode() == 'n' ? '.' : '') . 'GBrowse<CR>'", { expr = true, silent = true },

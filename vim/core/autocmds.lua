@@ -38,6 +38,12 @@ end)
 autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
 autocmd({ 'BufWinLeave', 'WinLeave' }, 'term://*', 'stopinsert')
 
+-- Auto-close certain terminal commands
+util.autocmd('TermClose', 'term://*:{git,dotfiles} *', function()
+  util.close_buffer()
+  util.close_window()
+end)
+
 -- Enter insert mode when committing
 autocmd('FileType', 'gitcommit', function()
   if vim.fn.getline(1) == '' then
@@ -45,6 +51,28 @@ autocmd('FileType', 'gitcommit', function()
     vim.cmd.startinsert()
   end
 end)
+
+-- Git helpers
+local git_command = function(action, key, command, check)
+  local desc = action .. ' changes interactively'
+  util.command('G' .. action, function()
+    if vim.fn.system(check) ~= '' then
+      vim.cmd.terminal(command)
+    else
+      util.echo('No changes to ' .. action:lower() .. '.', 'ModeMsg')
+    end
+  end, desc)
+
+  util.nmap(key, ':G' .. action, desc)
+end
+
+git_command('Stage', '<Leader>gA', 'git add -p', 'git unstaged')
+git_command('Unstage', '<Leader>gU', 'git reset HEAD -p', 'git staged')
+git_command('Discard', '<Leader>gD', 'git checkout -p', 'git unstaged')
+
+-- Dotfiles helpers
+util.command('Dotfiles', 'terminal dotfiles <args>', { nargs = '*' })
+util.alias_command({ DT = 'Dotfiles' })
 
 -- Autocommands adapted from
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
