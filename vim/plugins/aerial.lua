@@ -40,8 +40,7 @@ return {
     local aerial = require('aerial')
     aerial.setup(opts)
 
-    local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-    local next_symbol, previous_symbol = repeat_move.make_repeatable_move_pair(aerial.next, aerial.prev)
+    local next_symbol, previous_symbol = util.make_repeatable(aerial.next, aerial.prev)
 
     nmap(']]', next_symbol, { force = true }, 'Go to next symbol')
     nmap('[[', previous_symbol, { force = true }, 'Go to previous symbol')

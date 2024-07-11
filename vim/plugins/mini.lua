@@ -99,7 +99,6 @@ return {
         oldfile    = { suffix = '' }, -- ']o' not useful
       })
 
-      local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
       for _, key in ipairs({ 'b', 'e', 'i', 'j', 'l', 'q', 't', 'u', 'w', 'x', 'y' }) do
         for _, mode in ipairs({ 'n', 'x', 'o' }) do
           local next = vim.fn.maparg(']' .. key, mode, false, true)
@@ -109,7 +108,7 @@ return {
             local next_rhs = next.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
             local prev_rhs = prev.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
 
-            local next_repeat, prev_repeat = repeat_move.make_repeatable_move_pair(
+            local next_repeat, prev_repeat = util.make_repeatable(
               function() pcall(vim.cmd, next_rhs) end,
               function() pcall(vim.cmd, prev_rhs) end
             )

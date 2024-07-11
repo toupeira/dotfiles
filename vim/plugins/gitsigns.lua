@@ -30,8 +30,7 @@ return {
       local gitsigns = require('gitsigns')
       local args = { buffer = bufnr, force = true }
 
-      local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-      local next_hunk, prev_hunk = repeat_move.make_repeatable_move_pair(
+      local next_hunk, prev_hunk = util.make_repeatable(
         function()
           if vim.wo.diff then
             vim.cmd.normal({']c', bang = true})
