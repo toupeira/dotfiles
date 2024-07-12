@@ -24,6 +24,8 @@ image/tiff=org.gnome.eog.desktop
 image/webp=org.gnome.eog.desktop
 
 application/pdf=org.gnome.Evince.desktop
+application/zip=org.gnome.FileRoller.desktop
+inode/directory=org.gnome.Nautilus.desktop
 
 application/epub+zip=com.github.johnfactotum.Foliate.desktop
 application/x-mobipocket-ebook=com.github.johnfactotum.Foliate.desktop
@@ -31,8 +33,6 @@ application/x-mobipocket-ebook=com.github.johnfactotum.Foliate.desktop
 audio/flac=audacity.desktop
 audio/mpeg=audacity.desktop
 audio/vnd.wave=audacity.desktop
-
-inode/directory=org.gnome.Nautilus.desktop
 
 [Added Associations]
 text/plain=libreoffice-calc.desktop
