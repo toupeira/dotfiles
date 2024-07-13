@@ -50,6 +50,7 @@ gnome-browser-connector
 gnome-clocks
 gnome-core-shim
 gnome-screenshot
+gnome-session-xsession
 gnome-shell-extension-prefs
 gnome-tweaks
 gparted
