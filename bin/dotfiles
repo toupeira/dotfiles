@@ -541,7 +541,7 @@ function run {
           --follow \
           --mount \
           --exclude dotfiles \
-          --exclude /.local/share/flatpak --exclude /.var/app \
+          --exclude /.local/share/flatpak/repo --exclude /.var/app \
           --exclude src --exclude tmp
       )
 

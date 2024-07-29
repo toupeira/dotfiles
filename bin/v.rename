@@ -56,7 +56,7 @@ case "$type" in
     ;;
 esac
 
-flatpak run --cwd="$(realpath "$PWD")" net.filebot.FileBot \
+filebot \
   -r \
   -non-strict \
   -no-history \

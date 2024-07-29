@@ -1,0 +1,1 @@
+deb [arch=all signed-by=/etc/apt/trusted.gpg.d/filebot.asc] https://get.filebot.net/deb/ universal main

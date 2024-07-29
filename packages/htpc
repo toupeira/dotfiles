@@ -1,4 +1,4 @@
+filebot
 qbittorrent
 
 flatpak: tv.kodi.Kodi
-flatpak: net.filebot.FileBot
