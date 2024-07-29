@@ -71,7 +71,7 @@ _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
 # https://github.com/junegunn/fzf/issues/1049
 __fzf_history__() {
   local output opts
-  opts="--height ${FZF_TMUX_HEIGHT:-40%} --bind=ctrl-z:ignore ${FZF_DEFAULT_OPTS-} --scheme=history ${FZF_CTRL_R_OPTS-} -n4.. +m +s --tac --ansi"
+  opts="--wrap --height ${FZF_TMUX_HEIGHT:-40%} --bind=ctrl-z:ignore --wrap-sign '                             ↳ ' ${FZF_DEFAULT_OPTS-} --scheme=history ${FZF_CTRL_R_OPTS-} -n4.. +m +s --tac --ansi"
   output=$( builtin history | FZF_DEFAULT_OPTS="$opts" $(__fzfcmd) --query "$READLINE_LINE" ) || return
   READLINE_LINE=${output#*\[*\] }
   if [[ -z "$READLINE_POINT" ]]; then

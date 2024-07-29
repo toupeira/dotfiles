@@ -55,6 +55,9 @@ bindings = [
   { mouse = 'Middle', action = 'PasteSelection' },
 ]
 
+[selection]
+semantic_escape_chars = ",│`|\"' ()[]{}<>\t"
+
 [shell]
 program = 'bash'
 args = ['-l']

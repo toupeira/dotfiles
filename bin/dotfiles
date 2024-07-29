@@ -764,7 +764,7 @@ function run {
         mise use -g "$plugin@latest" >/dev/null
       done
 
-      mise upgrade --interactive || exit 1
+      mise upgrade --interactive
 
       for plugin in $plugins; do
         mise use -g --pin "$plugin@latest"
