@@ -99,6 +99,7 @@ autocmd('FileType', {
   'bufferize',
   'checkhealth',
   'fugitive',
+  'gitsigns-blame',
   'help',
   'man',
   'notify',

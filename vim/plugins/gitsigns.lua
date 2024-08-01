@@ -59,6 +59,7 @@ return {
       vmap('<Leader>gR', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Reset selected hunk')
 
       nmap('<Leader>gb', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
+      nmap('<Leader>gB', gitsigns.blame, args, 'Open Git blame for current file')
 
       util.map({'o', 'x'}, 'ih', ':Gitsigns select_hunk', args)
     end

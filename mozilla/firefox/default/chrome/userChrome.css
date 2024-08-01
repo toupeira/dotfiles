@@ -26,36 +26,3 @@ menu[label="Firefox Multi-Account Containers"]
 {
   display: none !important;
 }
-
-/* Fix favicons */
-#PlacesToolbarItems image[src*="mail.proton.me"] {
-  background-image: url(https://mail.proton.me/assets/favicon.d47d3d0bef6d338e377a.svg) !important;
-  background-size: contain !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 0 16px 16px !important;
-}
-
-#PlacesToolbarItems image[src*="calendar.proton.me"] {
-  background-image: url(https://calendar.proton.me/assets/favicon.b4214437d532d78b0916.svg) !important;
-  background-size: contain !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 0 16px 16px !important;
-}
-
-#PlacesToolbarItems image[src*="drive.proton.me"] {
-  background-image: url(https://drive.proton.me/assets/favicon.24596a467a6707483736.svg) !important;
-  background-size: contain !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 0 16px 16px !important;
-}
-
-#PlacesToolbarItems image[src*="web.whatsapp.com"] {
-  background-image: url(view-source:https://web.whatsapp.com/favicon.ico) !important;
-  background-size: contain !important;
-  width: 0 !important;
-  height: 0 !important;
-  padding: 0 0 16px 16px !important;
-}
