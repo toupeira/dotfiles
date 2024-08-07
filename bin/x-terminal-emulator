@@ -40,7 +40,8 @@ case "$terminal" in
           cols=216
           rows=79
         elif [ "$x" = "2560" ]; then
-          : geometry="142x70+$((xoff+1920))+0"
+          cols=160
+          rows=79
         fi
         ;;
     esac
