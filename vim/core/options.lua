@@ -62,7 +62,7 @@ vim.opt.virtualedit:append { 'block' }
 
 vim.o.number = true
 vim.o.numberwidth = 6
-vim.o.signcolumn = 'yes'
+vim.o.signcolumn = 'auto:1-9'
 
 vim.opt.completeopt = { 'menu', 'longest', 'preview' }
 vim.o.pumheight = 20
