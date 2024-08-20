@@ -120,8 +120,10 @@ return {
     if util.is_tmux then
       sources.tmux = {
         name = 'tmux',
-        option = { all_panes = true },
-        keyword_length = 3,
+        option = {
+          all_panes = true,
+          trigger_characters_ft = { markdown = {} },
+        },
       }
     end
 
