@@ -1,3 +1,2 @@
 flatpak: com.valvesoftware.Steam
-flatpak: org.freedesktop.Platform.VulkanLayer.MangoHud
 flatpak: org.freedesktop.Platform.VulkanLayer.gamescope
