@@ -65,6 +65,7 @@ return {
 
     oldfiles = {
       include_current_session = true,
+      file_ignore_patterns = { '%.git/COMMIT_EDITMSG' },
     },
 
     grep = {
