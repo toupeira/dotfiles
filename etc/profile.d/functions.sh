@@ -309,7 +309,7 @@ function sheet {
 
 # Edit notes for current or given project
 function notes {
-  local notes="/slack/scrapbook/notes"
+  local notes="/slack/documents/Notes"
 
   local root=$( git rev-parse --show-toplevel 2>/dev/null )
   [ "$root" ] || root="$PWD"

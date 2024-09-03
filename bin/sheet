@@ -1,6 +1,6 @@
 #!/bin/bash
 
-cd /slack/documents/Noten || exit 1
+cd /slack/documents/Sheets || exit 1
 [ $# -eq 0 ] && exec xdg-open .
 
 sheet=$( find . -name '*.pdf' | fzf -f "$*" | head -1 )
