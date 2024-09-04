@@ -92,7 +92,6 @@ peek
 quodlibet
 scummvm
 syncthing-gtk
-tilix
 yt-dlp
 
 flatpak: com.github.tchx84.Flatseal

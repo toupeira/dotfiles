@@ -4,12 +4,14 @@ if pgrep -x bitwig-studio >/dev/null; then
   exec wmctrl -xa com.bitwig.BitwigStudio
 fi
 
-workspace=/slack/sound/bitwig/workspace
-link=~/.var/app/com.bitwig.BitwigStudio/"Bitwig Studio"
-if [ ! -L "$link" ] && [ -d "$workspace" ]; then
+extensions=/slack/sound/bitwig/extensions
+link=~/.var/app/com.bitwig.BitwigStudio/"Bitwig Studio"/Extensions
+[ -L "$( dirname "$link" )" ] && rm "$( dirname "$link" )" # TODO: remove
+
+if [ ! -L "$link" ] && [ -d "$extensions" ]; then
   rm -rf "$link"
   mkdir -p "$( dirname "$link")"
-  ln -s "$workspace" "$link"
+  ln -s "$extensions" "$link"
 fi
 
 wmctrl -s 1
