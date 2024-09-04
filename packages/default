@@ -36,6 +36,7 @@ iw
 jq
 less
 libnss-systemd
+linux-sysctl-defaults
 lnav
 locales-all
 lsof
