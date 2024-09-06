@@ -78,7 +78,6 @@ util.alias_command({ DT = 'Dotfiles' })
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua
 
 -- Go to last loc when opening a buffer
--- TODO: fix `mini.misc.setup_restore_cursor` to use `BufWinEnter`
 autocmd('BufWinEnter', function(event)
   local exclude = { 'gitcommit', 'gitrebase' }
   local buf = event.buf

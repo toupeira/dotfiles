@@ -53,6 +53,8 @@ user_pref("signon.firefoxRelay.feature", "disabled");
 user_pref("signon.rememberSignons", false);
 
 // Tabs
+user_pref("browser.tabs.hoverPreview.enabled", true);
+user_pref("browser.tabs.hoverPreview.showThumbnails", false);
 user_pref("browser.tabs.loadBookmarksInBackground", true);
 
 // Scrolling
