@@ -12,6 +12,7 @@ vim.cmd([[
   autocmd FileType help                setlocal buflisted
   autocmd FileType lua                 setlocal path+=./lua iskeyword-=: keywordprg=:Help
   autocmd FileType make                setlocal noexpandtab
+  autocmd FileType markdown            setlocal foldmethod=indent
   autocmd FileType qf                  setlocal nobuflisted
   autocmd FileType ruby                setlocal iskeyword+=?,!
   autocmd FileType text,markdown,mail  setlocal linebreak suffixesadd+=.md

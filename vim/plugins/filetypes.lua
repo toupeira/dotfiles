@@ -10,7 +10,7 @@ return {
       vim.g.vim_markdown_folding_disabled = 0
       vim.g.vim_markdown_folding_style_pythonic = 1
       vim.g.vim_markdown_frontmatter = 1
-      vim.g.vim_markdown_new_list_item_indent = 2
+      vim.g.vim_markdown_new_list_item_indent = 0
 
       -- https://github.com/tpope/vim-markdown
       vim.g.markdown_recommended_style = 0

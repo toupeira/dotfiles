@@ -3,7 +3,8 @@ AllCops:
   Exclude:
     - db/schema.rb
 
-### LAYOUT
+Bundler/OrderedGems:
+  Enabled: false
 
 Layout/LineLength:
   Max: 150
@@ -17,12 +18,11 @@ Layout/FirstArrayElementIndentation:
 Layout/FirstHashElementIndentation:
   EnforcedStyle: consistent
 
-### LINT
-
 Lint/AssignmentInCondition:
   Enabled: false
 
-### METRICS
+Metrics/AbcSize:
+  Enabled: false
 
 Metrics/BlockLength:
   Max: 50
@@ -35,8 +35,8 @@ Metrics/ClassLength:
 Metrics/MethodLength:
   Max: 40
 
-Metrics/AbcSize:
-  Max: 25
+Metrics/ParameterLists:
+  Max: 10
 
 Metrics/CyclomaticComplexity:
   Max: 20
@@ -44,17 +44,11 @@ Metrics/CyclomaticComplexity:
 Metrics/PerceivedComplexity:
   Max: 20
 
-### NAMING
-
 Naming/RescuedExceptionsVariableName:
   Enabled: false
 
-### SECURITY
-
 Security/Open:
   Enabled: false
-
-### STYLE
 
 Style/Alias:
   EnforcedStyle: prefer_alias_method

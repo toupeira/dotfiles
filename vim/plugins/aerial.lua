@@ -47,20 +47,5 @@ return {
 
     nmap('<Leader>a', aerial.nav_toggle, 'Toggle symbols in popup')
     nmap('<Leader>A', aerial.toggle, 'Toggle symbols in sidebar')
-
-    local config = require('aerial.config')
-    local setup = config.setup
-    config.setup = function(pending_opts)
-      setup(pending_opts)
-
-      -- remove spaces after icons
-      -- https://github.com/stevearc/aerial.nvim/pull/360
-      for type, icon in pairs(config.default_icons) do
-        config.default_icons[type] = icon:gsub(' ', '')
-      end
-
-      -- replace some icons
-      config.default_icons.Interface = ''
-    end
   end
 }

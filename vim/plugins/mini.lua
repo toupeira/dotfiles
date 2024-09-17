@@ -8,7 +8,11 @@ return {
 
   config = function()
     -- mini.icons ------------------------------------------------------
-    require('mini.icons').setup()
+    require('mini.icons').setup({
+      lsp = {
+        ['function'] = { glyph = '󰊕' },
+      }
+    })
     MiniIcons.mock_nvim_web_devicons()
 
     -- mini.misc -------------------------------------------------------
