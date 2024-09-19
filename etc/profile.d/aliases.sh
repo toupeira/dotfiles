@@ -6,7 +6,7 @@ eval "$( dircolors -b )"
 
 # dotfiles aliases
 alias dt='dotfiles'
-alias @='mux -s -d -w'
+alias @='start'
 
 # general shell aliases
 alias ls='ls --color --quoting-style=literal'
