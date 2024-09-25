@@ -17,7 +17,7 @@ return {
 
     -- mini.misc -------------------------------------------------------
     require('mini.misc').setup_auto_root(
-      { '.git' }, vim.fs.dirname
+      { '.git', '.obsidian' }, vim.fs.dirname
     )
 
     -- mini.starter ----------------------------------------------------

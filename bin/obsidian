@@ -1,0 +1,51 @@
+#!/bin/bash
+
+VAULT="/slack/documents/Notes"
+
+files=()
+mode='open'
+
+case "$1" in
+  -l|--list) mode='list'; shift;;
+  -e|--edit) mode='edit'; shift;;
+  -*)
+    echo "Usage: obsidian [-l|--list] [-e|--edit] [PATTERN..]"
+    exit 1
+    ;;
+esac
+
+if [ $# -eq 0 ] && [ "$PWD" != "$HOME" ]; then
+  root=$( git rev-parse --show-toplevel 2>/dev/null )
+  [ "$root" ] || root="$PWD"
+  set -- "$(basename "$root")"
+fi
+
+for name in "$@"; do
+  mapfile -t matches < <(
+    fdfind '\.md$' "$VAULT" -t f \
+      | fzf -d/ -n5.. -f "$name"
+  )
+  files=( "${files[@]}" "${matches[@]}" )
+done
+
+if [ "${#files[@]}" = 0 ]; then
+  [ "$mode" != "list" ] && echo "No notes found for '$*'"
+  exit 1
+fi
+
+case "$mode" in
+  open)
+    mapfile -t files < <(
+      printf '%s\n' "${files[@]}" | sed -r 's,^,obsidian://,'
+    )
+
+    flatpak run md.obsidian.Obsidian -- "${files[@]}" &>/dev/null &
+    wmctrl -xa obsidian
+    ;;
+  list)
+    printf '%s\n' "${files[@]}"
+    ;;
+  edit)
+    exec sensible-editor "${files[@]}"
+    ;;
+esac

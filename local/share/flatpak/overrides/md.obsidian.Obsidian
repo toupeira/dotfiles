@@ -1,0 +1,2 @@
+[Context]
+filesystems=!home;!/run/media;!/mnt;!xdg-run/gnupg;!/media;!xdg-run/app/com.discordapp.Discord;xdg-documents/Notes

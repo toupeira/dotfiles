@@ -307,29 +307,6 @@ function sheet {
   fi
 }
 
-# Edit notes for current or given project
-function notes {
-  local notes="/slack/documents/Notes"
-
-  local root=$( git rev-parse --show-toplevel 2>/dev/null )
-  [ "$root" ] || root="$PWD"
-
-  local name=${1:-$( basename "$root" )}
-
-  if [ "$name" = "-a" ]; then
-    local note="$notes"
-  elif [ -f "$notes/$name.md" ]; then
-    local note="$notes/$name.md"
-  else
-    local note="$( find "$notes" -type f -name '*.md' | fzf -d/ -n-1 -f "$name" | head -1 )"
-    note=${note:-$notes/$name.md}
-  fi
-
-  "$EDITOR" "$note"
-}
-
-alias n=notes
-
 function mise.search {
   mise plugins ls-remote | grep "$1"
 }

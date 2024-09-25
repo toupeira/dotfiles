@@ -82,6 +82,9 @@ alias g='git'
 alias lg='lazygit'
 alias e='git edit'
 
+alias o='obsidian'
+alias n='obsidian --edit'
+
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases

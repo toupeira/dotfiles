@@ -95,4 +95,5 @@ syncthing-gtk
 yt-dlp
 
 flatpak: com.github.tchx84.Flatseal
+flatpak: md.obsidian.Obsidian
 flatpak: org.gtk.Gtk3theme.Numix
