@@ -40,7 +40,7 @@ autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
 autocmd({ 'BufWinLeave', 'WinLeave' }, 'term://*', 'stopinsert')
 
 -- Auto-close certain terminal commands
-util.autocmd('TermClose', 'term://*:{git,dotfiles} *', function()
+util.autocmd('TermClose', 'term://*:{git,dotfiles,glow} *', function()
   util.close_buffer()
   util.close_window()
 end)
@@ -70,6 +70,8 @@ end
 git_command('Stage', '<Leader>gA', 'git add -p', 'git unstaged')
 git_command('Unstage', '<Leader>gU', 'git reset HEAD -p', 'git staged')
 git_command('Discard', '<Leader>gD', 'git checkout -p', 'git unstaged')
+
+util.command('Preview', 'vsplit | terminal glow %')
 
 -- Dotfiles helpers
 util.command('Dotfiles', 'terminal dotfiles <args>', { nargs = '*' })

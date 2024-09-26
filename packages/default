@@ -59,6 +59,7 @@ patch
 procmail
 psmisc
 pv
+pwgen
 rename
 ripgrep
 rlwrap

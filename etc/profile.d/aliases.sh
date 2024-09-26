@@ -80,7 +80,7 @@ alias lvi='lazyvim'
 
 alias g='git'
 alias lg='lazygit'
-alias e='git edit'
+alias e='git-edit'
 
 alias o='obsidian'
 alias n='obsidian --edit'

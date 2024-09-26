@@ -28,7 +28,7 @@ for name in "$@"; do
   files=( "${files[@]}" "${matches[@]}" )
 done
 
-if [ "${#files[@]}" = 0 ]; then
+if [ "${#files[@]}" = 0 ] && [ "$TERM" != "dumb" ]; then
   [ "$mode" != "list" ] && echo "No notes found for '$*'"
   exit 1
 fi
