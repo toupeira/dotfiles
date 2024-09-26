@@ -70,5 +70,6 @@
   "vim-rsi": { "branch": "master", "commit": "45540637ead22f011e8215f1c90142e49d946a54" },
   "vim-ruby": { "branch": "master", "commit": "f06f069ce67bdda6f2cd408f8859cdf031e5b6b4" },
   "vim-scriptease": { "branch": "master", "commit": "cdb5981d47ac98221a408ae2e7cae66524d9e872" },
-  "vim-smoothie": { "branch": "master", "commit": "df1e324e9f3395c630c1c523d0555a01d2eb1b7e" }
+  "vim-smoothie": { "branch": "master", "commit": "df1e324e9f3395c630c1c523d0555a01d2eb1b7e" },
+  "vim-terraform": { "branch": "master", "commit": "24de93afb05078bac6a2e966402cc1f672277708" }
 }
