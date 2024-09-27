@@ -5,7 +5,7 @@ lazygit = "0.44.1"
 neovim = "0.10.1"
 node = "22.9.0"
 ruby = "3.3.5"
-usage = "0.3.1"
+usage = "0.6.0"
 
 [settings]
 not_found_auto_install = false

@@ -1,2 +1,2 @@
 [Context]
-filesystems=xdg-data/icons;/slack/games/steam;/mnt/slack/games/steam
+filesystems=/slack/games/steam;/mnt/slack/games/steam
