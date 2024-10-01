@@ -15,7 +15,6 @@ while [ "${1:0:1}" = "-" ]; do
     -e|--edit)
       mode='edit'
       shift
-      [ $# -eq 0 ] && echo -e " \e[0;32m» Editing \e[1m$VAULT\e[0m" && exec sensible-editor "$VAULT"
       ;;
     -*)
       echo "Usage: obsidian [-l|--list] [-e|--edit] [PATTERN..]"
@@ -39,7 +38,7 @@ for name in "$@"; do
 done
 
 if [ "${#files[@]}" = 0 ] && [ "$TERM" != "dumb" ]; then
-  [ "$mode" != "list" ] && echo -e " \e[0;33m» No notes found for \e[1m'$*'\e[0m"
+  [ "$mode" != "list" ] && echo -e " \e[0;33m● No notes found for \e[1m'$*'\e[0m"
   exit 1
 fi
 
@@ -51,7 +50,7 @@ case "$mode" in
       printf '%s\n' "${files[@]}" | sed -r 's,^,obsidian://,'
     )
 
-    echo -e " \e[0;32m» Opening: $filenames"
+    echo -e " \e[0;32m● Opening: $filenames"
     flatpak run md.obsidian.Obsidian -- "${files[@]}" &>/dev/null &
     wmctrl -xa obsidian
     ;;
@@ -59,7 +58,7 @@ case "$mode" in
     printf '%s\n' "${files[@]}"
     ;;
   edit)
-    echo -e " \e[0;32m» Editing: $filenames"
-    exec sensible-editor "${files[@]}"
+    echo -e " \e[0;32m● Editing: $filenames"
+    exec sensible-vim "${files[@]}"
     ;;
 esac

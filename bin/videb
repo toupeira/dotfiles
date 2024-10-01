@@ -28,7 +28,7 @@ fi
 
 MOD=$( stat -c "%y" "$CONTROL" )
 
-sensible-editor "$CONTROL"
+sensible-vim "$CONTROL"
 
 if [ "$MOD" = "$( stat -c "%y" "$CONTROL" )" ]; then
   echo "Not modified."

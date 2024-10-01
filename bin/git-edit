@@ -80,5 +80,5 @@ fi
 if [ "$dry_run" ]; then
   echo "${files[@]}" | tr " " "\n"
 elif [ "${#files[@]}" -gt 0 ]; then
-  sensible-editor "${files[@]}"
+  exec sensible-vim "${files[@]}"
 fi
