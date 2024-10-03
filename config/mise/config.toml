@@ -1,11 +1,11 @@
 [tools]
 fzf = "0.55.0"
 lazygit = "0.44.1"
-neovim = "0.10.1"
 node = "22.9.0"
 ruby = "3.3.5"
-usage = "0.8.0"
 glow = "2.0.0"
+neovim = "0.10.2"
+usage = "0.8.4"
 
 [settings]
 not_found_auto_install = false

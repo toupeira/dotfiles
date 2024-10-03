@@ -7,18 +7,20 @@ if [ "$1" = "--run" ]; then
   gamepath="/slack/games/steam/steamapps/common/$1"
   gamebin="$2"
 
-  exec $steam --run sh -c "cd '$gamepath'; exec ./$gamebin"
+  set -- -- --run sh -c "cd '$gamepath'; exec ./$gamebin"
 elif [ "$1" = "--link" ]; then
-  steam="flatpak run com.valvesoftware.SteamLink"
+  shift
+  flatpak run com.valvesoftware.SteamLink "$@"
   rm -f ~/.var/app/com.valvesoftware.SteamLink/data/Valve\ Corporation/SteamLink/controller*
-elif [ -n "$1" ]; then
-  exec $steam -silent "$@"
-elif pgrep -x steam >/dev/null; then
-  running=1;
+  exit 1
 fi
 
-[ "$running" ] || bluetoothctl power on
+if rfkill list bluetooth | grep -q 'Soft blocked: yes'; then
+  enable_bluetooth=1
+fi
 
-$steam
+[ "$enable_bluetooth" ] && rfkill unblock bluetooth
 
-[ "$running" ] || bluetoothctl power off
+$steam "$@"
+
+[ "$enable_bluetooth" ] && rfkill block bluetooth
