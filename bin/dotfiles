@@ -660,7 +660,6 @@ function run {
         local filter="."
       fi
 
-      status "Installing {{$list}} packages..."
       local path="$DOTFILES/packages/$list"
       if [ ! -f "$path" ]; then
         abort "Can't find list {{$path}}"
@@ -671,6 +670,10 @@ function run {
 
       if has-gui && [ -f "$path-gui" ]; then
         packages=$( echo "$packages"; grep -E "$filter" "$path-gui" )
+      fi
+
+      if [ -n "$packages" ]; then
+        status "Installing {{$list}} packages..."
       fi
 
       function get-packages { echo "$packages" | grep -E "$1" | sed 's/.*: //' | sort; }
@@ -717,10 +720,9 @@ function run {
       list-packages gem     "$missing_gem"
       list-packages flatpak "$missing_flat"
       list-packages mise    "$missing_mise"
-      echo
 
       # Install the packages
-      if ask-yes "{{Install?}}"; then
+      if [ "$force" ] || (echo; ask-yes "{{Install?}}"); then
         function install-packages {
           [ -n "$1" ] || return
           mapfile -t packages <<< "$1"

@@ -15,12 +15,12 @@ elif [ "$1" = "--link" ]; then
   exit 1
 fi
 
-if rfkill list bluetooth | grep -q 'Soft blocked: yes'; then
+if bluetoothctl  show | grep 'Powered: no'; then
   enable_bluetooth=1
 fi
 
-[ "$enable_bluetooth" ] && rfkill unblock bluetooth
+[ "$enable_bluetooth" ] && (bluetoothctl power on; rfkill unblock bluetooth)
 
 $steam "$@"
 
-[ "$enable_bluetooth" ] && rfkill block bluetooth
+[ "$enable_bluetooth" ] && bluetoothctl power off

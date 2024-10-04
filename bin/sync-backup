@@ -3,11 +3,11 @@
 case "$HOSTNAME" in
   ocelot)
     BACKUP="/mnt/slack"
-    DIRS="books documents images music photos scrapbook sound"
+    DIRS=( books documents images music photos scrapbook sound )
     ;;
   schtube)
     BACKUP="/media/$USER/SLACK-BACKUP"
-    DIRS="movies series"
+    DIRS=( movies series )
     ;;
   *)
     echo "Unsupported host $HOSTNAME"
@@ -23,4 +23,4 @@ fi
 cd /slack || exit 1
 
 rsync -av --update --delete \
-  $DIRS "$BACKUP" "$@"
+  "${DIRS[@]}" "$BACKUP" "$@"

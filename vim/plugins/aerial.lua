@@ -45,7 +45,7 @@ return {
     nmap(']]', next_symbol, { force = true }, 'Go to next symbol')
     nmap('[[', previous_symbol, { force = true }, 'Go to previous symbol')
 
-    nmap('<Leader>a', aerial.nav_toggle, 'Toggle symbols in popup')
-    nmap('<Leader>A', aerial.toggle, 'Toggle symbols in sidebar')
+    nmap('<Leader>i', aerial.nav_toggle, 'Toggle symbols in popup')
+    nmap('<Leader>I', aerial.toggle, 'Toggle symbols in sidebar')
   end
 }

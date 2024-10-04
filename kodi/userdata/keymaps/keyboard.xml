@@ -459,8 +459,10 @@
     <keyboard>
       <f>FastForward</f>
       <r>Rewind</r>
-      <period>SkipNext</period>
-      <comma>SkipPrevious</comma>
+      <period>noop</period><!-- disabled -->
+      <comma>noop</comma><!-- disabled -->
+      <greaterthan>SkipNext</greaterthan><!-- added -->
+      <lessthan>SkipPrevious</lessthan><!-- added -->
       <pageup>IncreaseRating</pageup>
       <pagedown>DecreaseRating</pagedown>
       <backspace>Fullscreen</backspace>

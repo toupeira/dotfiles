@@ -79,7 +79,6 @@ alias lazyvim='NVIM_APPNAME=lazyvim vim'
 alias lvi='lazyvim'
 
 alias g='git'
-alias lg='lazygit'
 alias e='git-edit'
 
 alias o='obsidian'
