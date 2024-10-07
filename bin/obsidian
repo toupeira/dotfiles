@@ -46,9 +46,11 @@ filenames=$( echo -e "\e[1m${files[*]}\e[0m" | sed -r "s,$VAULT/,,g" )
 
 case "$mode" in
   open)
-    mapfile -t files < <(
-      printf '%s\n' "${files[@]}" | sed -r 's,^,obsidian://,'
-    )
+    if [ "${#files[@]}" -gt 0 ]; then
+      mapfile -t files < <(
+        printf '%s\n' "${files[@]}" | sed -r 's,^,obsidian://,'
+      )
+    fi
 
     echo -e " \e[0;32m● Opening: $filenames"
     flatpak run md.obsidian.Obsidian -- "${files[@]}" &>/dev/null &
