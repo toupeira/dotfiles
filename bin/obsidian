@@ -23,17 +23,26 @@ while [ "${1:0:1}" = "-" ]; do
   esac
 done
 
+# When running interactively without arguments,
+# use the current project/folder name as pattern.
 if [ $# -eq 0 ] && [ "$TERM" != "dumb" ]; then
   root=$( git rev-parse --show-toplevel 2>/dev/null )
   [ "$root" ] || root="$PWD"
   set -- "$(basename "$root")"
 fi
 
-for name in "$@"; do
-  mapfile -t matches < <(
-    fdfind '\.md$' "$VAULT" -t f \
-      | fzf -d/ -n5.. -f "$name"
-  )
+for pattern in "$@"; do
+  # First look for filenames starting with the pattern
+  mapfile -t matches < <( fdfind "$pattern.*\.md$" "$VAULT" -t f )
+
+  # Otherwise try a fuzzy search
+  if [ "${#matches[@]}" = 0 ]; then
+    mapfile -t matches < <(
+      fdfind '\.md$' "$VAULT" -t f \
+        | fzf -d/ -n5.. -f "$pattern"
+    )
+  fi
+
   files=( "${files[@]}" "${matches[@]}" )
 done
 
@@ -48,7 +57,9 @@ case "$mode" in
   open)
     if [ "${#files[@]}" -gt 0 ]; then
       mapfile -t files < <(
-        printf '%s\n' "${files[@]}" | sed -r 's,^,obsidian://,'
+        for file in "${files[@]}"; do
+          echo "obsidian://open?path=$( echo -n "$file" | jq -rR @uri )"
+        done
       )
     fi
 

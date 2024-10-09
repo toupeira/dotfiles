@@ -1,6 +1,5 @@
 return {
   'epwalsh/obsidian.nvim',
-  version = '*',
   keys = {
     { '<Leader>o', '<Cmd>ObsidianQuickSwitch<CR>', desc = 'Open Obsidian note' },
   },
@@ -20,6 +19,9 @@ return {
     },
     disable_frontmatter = true,
     picker = { name = 'fzf-lua' },
+    follow_url_func = function(url)
+      vim.fn.jobstart({"xdg-open", url})
+    end,
     ui = {
       checkboxes = {
         [' '] = { char = '󰄱', hl_group = 'ObsidianTodo' },
