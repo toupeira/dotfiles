@@ -528,9 +528,7 @@ function run {
       function fix  { [ "$fix" ] && indent 6 && "$@"; }
 
       lint dotfiles "Empty directories"
-      paths=$( fdfind . "$DOTFILES" --type d --type e )
-
-      for path in $paths; do
+      for path in $( fdfind . "$DOTFILES" --type d --type e ); do
         list "$path"
         fix system rmdir -v "$path"
       done
@@ -556,9 +554,7 @@ function run {
       done
 
       lint home "Incorrect owners"
-      paths=$( fdfind . ~ -o root --mount )
-
-      for path in $paths; do
+      for path in $( fdfind . ~ -o root --mount ); do
         list "$path"
         fix system chown "$USER:$USER" -v "$path"
       done
@@ -580,16 +576,13 @@ function run {
       fi
 
       lint etc "Configuration file clutter"
-      paths=$( sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --type f -u )
-
-      for path in $paths; do
+      for path in $( sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --type f -u ); do
         list "$path"
         fix system rm -v "$path"
       done
 
       lint root "Skeleton files"
-      paths=$( sudo fdfind '^(\.bashrc|\.profile)$' /root --type f -u )
-      for path in $paths; do
+      for path in $( sudo fdfind '^(\.bashrc|\.profile)$' /root --type f -u ); do
         list "$path"
         fix system rm -v "$path"
       done
@@ -603,6 +596,12 @@ function run {
 
         list "$origin"
         fix sudo ln -snfv "$target" "$origin"
+      done
+
+      lint slack "Syncthing conflicts"
+      for path in $( fdfind '\.sync-conflict-.*' /slack/*/.stversions 2>/dev/null ); do
+        list "$path"
+        fix system rm -v "$path"
       done
       ;;
     # }}}
