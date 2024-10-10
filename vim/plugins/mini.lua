@@ -20,6 +20,14 @@ return {
       { '.git', '.obsidian' }, vim.fs.dirname
     )
 
+    -- mini.sessions -------------------------------------------------
+    require('mini.sessions').setup({
+      autoread = true,
+      file = '.session.vim',
+      verbose = { read = true },
+    })
+    nmap('<Leader>W', ':lua MiniSessions.write(".session.vim")')
+
     -- mini.starter ----------------------------------------------------
     local starter = require('mini.starter')
     local is_home = vim.fn.getcwd() == os.getenv('HOME')

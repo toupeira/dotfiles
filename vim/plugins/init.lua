@@ -25,7 +25,11 @@ return {
     end
   },
 
-  lazy_file { 'ludovicchabant/vim-gutentags' },
+  lazy_file { 'ludovicchabant/vim-gutentags',
+    init = function()
+      vim.g.gutentags_ctags_tagfile = '.tags'
+    end
+  },
 
   lazy_file { 'sickill/vim-pasta',
     init = function()
