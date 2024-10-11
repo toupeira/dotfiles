@@ -81,6 +81,7 @@ xinput
 adb
 alacritty
 calibre
+celluloid
 chromium
 firefox
 foliate
@@ -91,6 +92,7 @@ mpv
 peek
 quodlibet
 scummvm
+shotwell
 syncthing-gtk
 yt-dlp
 

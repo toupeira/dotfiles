@@ -1,0 +1,6 @@
+*/*; xdg-open %s
+application/*; xdg-open %s
+audio/*; xdg-open %s
+image/*; xdg-open %s
+text/*; xdg-open %s
+video/*; xdg-open %s

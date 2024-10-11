@@ -149,6 +149,9 @@
   ds = -c core.pager='less -FX' diff --stat
   news = ds ORIG_HEAD..
 
+  diffnav = "!f() { [ $# -eq 0 ] && set -- diff; git "$@" | ~/src/upstream/diffnav/diffnav; }; f"
+  dnav = diffnav
+
   b = rev-parse --abbrev-ref HEAD
   br = branch -vv
   bra = branch -vva

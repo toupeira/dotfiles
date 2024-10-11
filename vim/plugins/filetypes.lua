@@ -4,6 +4,16 @@ return {
   { 'hail2u/vim-css3-syntax', ft = { 'css', 'scss' } },
   { 'hashivim/vim-terraform', ft = { 'terraform', 'hcl' } },
 
+  { 'iamcco/markdown-preview.nvim',
+    ft = { 'markdown' },
+    cmd = {
+      'MarkdownPreviewToggle',
+      'MarkdownPreview',
+      'MarkdownPreviewStop',
+    },
+    build = function() vim.fn['mkdp#util#install']() end,
+  },
+
   { 'preservim/vim-markdown',
     ft = 'markdown',
     init = function()

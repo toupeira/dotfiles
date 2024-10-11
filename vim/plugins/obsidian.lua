@@ -20,7 +20,7 @@ return {
     disable_frontmatter = true,
     picker = { name = 'fzf-lua' },
     follow_url_func = function(url)
-      vim.fn.jobstart({"xdg-open", url})
+      vim.fn.jobstart({ 'xdg-open', url })
     end,
     ui = {
       checkboxes = {

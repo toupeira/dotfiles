@@ -75,15 +75,15 @@ alias vip='VIMCMD=vip sensible-vim'
 alias vimdiff='vim -d'
 alias nt='vi "+Neotree show current"'
 
-alias lazyvim='NVIM_APPNAME=lazyvim vim'
-alias lvi='lazyvim'
-
 alias g='git'
 alias e='git-edit'
 
 alias o='obsidian'
 alias n='obsidian --edit'
-alias notes='cd ~/documents/Notes'
+alias notes='cd ~/notes'
+
+alias diffnav='~/src/upstream/diffnav/diffnav'
+alias dnav='diffnav'
 
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 

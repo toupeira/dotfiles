@@ -294,96 +294,121 @@ function run {
       echo -e "#!/bin/sh\nbin/dotfiles test" > "$hook"
       chmod +x "$hook"
 
-      function link-paths {
-        for path in "$@"; do
-          path=${path%/}
-
-          if [ ! -e "$path" ] || ! validate "$( origin "$path" )"; then
-            continue
-          elif [ -f "$path" ] || [ -L "$path" ] || [ -e "$path/.link" ] || [ -e "$path/.git" ]; then
-            run link "$path"
-          elif [ -d "$path" ]; then
-            link-paths "$path"/*
-          else
-            abort "Unknown filetype: $path"
-          fi
-        done
-      }
-
-      if [ $# -gt 0 ]; then
-        (cd "$DOTFILES" && link-paths "$@")
-      else
+      run link-dotfiles "$@"
+      run link-slack
+      run packages
+      has-gui && run dconf sync
+      ;;
+    # }}}
+    link-dotfiles) # {{{
+      if [ $# -eq 0 ]; then
         status "Linking {{dotfiles}}..."
-        (cd "$DOTFILES" && link-paths -- *)
-        run packages
-        has-gui && run dconf sync
+        set -- $( fdfind . "$DOTFILES" --exact-depth 1 )
       fi
+
+      for path in "$@"; do
+        path=${path%/}
+        path=${path:${#DOTFILES}+1}
+
+        if [ ! -e "$path" ] || ! validate "$( origin "$path" )"; then
+          continue
+        elif [ -f "$path" ] || [ -L "$path" ] || [ -e "$path/.link" ] || [ -e "$path/.git" ]; then
+          run link "$path"
+        elif [ -d "$path" ]; then
+          run link-dotfiles "$path"/*
+        else
+          abort "Unknown filetype: $path"
+        fi
+      done
+      ;;
+    # }}}
+    link-slack) # {{{
+      status "Linking {{slack}}..."
+      for dir in /slack/*; do
+        local name=$( basename "$dir" )
+        if [ -d "$dir" ] && ! [[ "$name" =~ ^(backups|dotfiles|lost\+found|scrapbook)$ ]]; then
+          run link "$dir" ~/"$name"
+        fi
+      done
+
+      run link /slack/documents/Notes ~/notes
+
+      for dir in /slack/scrapbook/src/upstream/*; do
+        local name=$( basename "$dir" )
+        run link "$dir" ~/src/upstream/"$name"
+      done
       ;;
     # }}}
     link) # {{{
       [ $# -eq 0 ] && usage
 
-      for path in "$@"; do
+      local path="$1"
+
+      if [ "$2" ]; then
+        local origin="$2"
+        local target="$1"
+      else
         local origin=$( realpath -s -- "${path%/}" )
         local target=$( target "$origin" )
-        local force=0
+      fi
 
-        if [[ "$origin" =~ ^$DOTFILES/ ]]; then
-          target="$origin"
-          origin=$( origin "${target:${#DOTFILES}+1}" )
-        fi
+      local force=0
 
-        if [ -L "$target" ]; then
-          target=$( readlink -f "$target" )
-        fi
+      if [[ "$origin" =~ ^$DOTFILES/ ]]; then
+        target="$origin"
+        origin=$( origin "${target:${#DOTFILES}+1}" )
+      fi
 
-        if [ ! -e "$target" ]; then
-          error "Path not found: {{$target}}"
-          continue
-        elif ! validate "$origin"; then
-          continue
-        fi
+      if [ -L "$target" ]; then
+        target=$( readlink -f "$target" )
+      fi
 
-        if [ -L "$origin" ]; then
-          local link=$( readlink "$origin" 2>/dev/null )
-          if [ ! -e "$link" ] || [[ $link =~ ^/etc/dotfiles/ ]]; then
-            warning "Broken symlink: {{$origin}} -> \e[1;36m$link"
-            force=1
-          elif [ "$link" = "$target" ]; then
-            verbose "Already symlinked: {{$origin}}"
-            continue
-          else
-            warning "Symlinked to different path: {{$origin}} -> \e[1;36m$link"
-          fi
-        fi
+      if [ ! -e "$target" ]; then
+        error "Path not found: {{$target}}"
+        return
+      elif ! validate "$origin"; then
+        return
+      fi
 
-        if [ -e "$origin" ] || [ -L "$origin" ]; then
-          local ask="ask"
-          local question="Delete {{$origin}} and create symlink?"
-          local color=3
+      if [ -L "$origin" ]; then
+        local link=$( readlink "$origin" 2>/dev/null )
+        if [ ! -e "$link" ] || [[ $link =~ ^/etc/dotfiles/ ]]; then
+          warning "Broken symlink: {{$origin}} -> \e[1;36m$link"
+          force=1
+        elif [ "$link" = "$target" ]; then
+          verbose "Already symlinked: {{$origin}}"
+          return
         else
-          local ask="ask-yes"
-          local question="Link {{$origin}}?"
+          warning "Symlinked to different path: {{$origin}} -> \e[1;36m$link"
+        fi
+      fi
+
+      if [ -e "$origin" ] || [ -L "$origin" ]; then
+        local ask="ask"
+        local question="Delete {{$origin}} and create symlink?"
+        local color=3
+      else
+        local ask="ask-yes"
+        local question="Link {{$origin}}?"
+      fi
+
+      if [ $force -eq 1 ] || $ask "$question" "$color"; then
+        if [ -e "$origin" ] || [ -L "$origin" ]; then
+          system rm -r "$origin"
         fi
 
-        if [ $force -eq 1 ] || $ask "$question" "$color"; then
-          if [ -e "$origin" ] || [ -L "$origin" ]; then
-            system rm -r "$origin"
-          fi
-
-          local parent=$( dirname "$origin" )
-          if [ ! -d "$parent" ]; then
-            system mkdir -p "$parent"
-          fi
-
-          if [ ! -e "$origin" ] && system ln -s "$target" "$origin"; then
-            info "Successfully linked {{$origin}}"
-          else
-            error "Error while linking {{$origin}}"
-            continue
-          fi
+        local parent=$( dirname "$origin" )
+        if [ ! -d "$parent" ]; then
+          system mkdir -p "$parent"
         fi
-      done
+
+        if [ ! -e "$origin" ] && system ln -s "$target" "$origin"; then
+          info "Successfully linked {{$origin}}"
+        else
+          error "Error while linking {{$origin}}"
+          return
+        fi
+      fi
       ;;
     # }}}
     add) # {{{

@@ -35,5 +35,13 @@ audio/flac=audacity.desktop
 audio/mpeg=audacity.desktop
 audio/vnd.wave=audacity.desktop
 
+video/mp4=io.github.celluloid_player.Celluloid.desktop
+video/mpeg=io.github.celluloid_player.Celluloid.desktop
+video/quicktime=io.github.celluloid_player.Celluloid.desktop
+video/webm=io.github.celluloid_player.Celluloid.desktop
+video/x-avi=io.github.celluloid_player.Celluloid.desktop
+video/x-matroska=io.github.celluloid_player.Celluloid.desktop
+video/x-msvideo=io.github.celluloid_player.Celluloid.desktop
+
 [Added Associations]
 text/plain=libreoffice-calc.desktop
