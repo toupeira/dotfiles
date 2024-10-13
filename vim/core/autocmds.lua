@@ -6,7 +6,7 @@ local autocmd = util.autocmd
 vim.cmd([[
   autocmd FileType crontab             setlocal nowritebackup
   autocmd FileType css,scss            setlocal iskeyword+=%
-  autocmd FileType dosini              setlocal commentstring=#\ %s
+  autocmd FileType dosini              setlocal commentstring=#\ %s foldmethod=syntax
   autocmd FileType gdscript            setlocal expandtab
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd FileType help                setlocal buflisted

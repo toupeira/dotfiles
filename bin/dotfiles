@@ -202,7 +202,11 @@ function has-gui {
 # Load rules for the given keys
 function read-rules {
   if ! [[ $* = *.* ]]; then
-    local prefix="(global\.|$HOSTNAME\.)"
+    if [ "$1" != "role" ]; then
+      local roles=$( read-rules role )
+      [ "$roles" ] && roles=$( printf '|role\.%s' $roles )
+    fi
+    local prefix="(global|host\.$HOSTNAME$roles)\."
   fi
 
   local pattern=$( printf '|%s' "$@" )
@@ -307,8 +311,7 @@ function run {
       fi
 
       for path in "$@"; do
-        path=${path%/}
-        path=${path:${#DOTFILES}+1}
+        path=$( echo "${path%/}" | sed -r "s,^$DOTFILES/,," )
 
         if [ ! -e "$path" ] || ! validate "$( origin "$path" )"; then
           continue

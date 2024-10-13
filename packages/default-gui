@@ -35,6 +35,7 @@ libavformat-extra
 pavucontrol
 pipewire-audio
 pulseaudio-utils
+rtkit
 vainfo
 
 # desktop
@@ -80,6 +81,7 @@ xinput
 # apps
 adb
 alacritty
+audacity
 calibre
 celluloid
 chromium
