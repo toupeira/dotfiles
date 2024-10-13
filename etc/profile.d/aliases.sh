@@ -82,9 +82,6 @@ alias o='obsidian'
 alias n='obsidian --edit'
 alias notes='cd ~/notes'
 
-alias diffnav='~/src/upstream/diffnav/diffnav'
-alias dnav='diffnav'
-
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases
