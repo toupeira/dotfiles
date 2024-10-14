@@ -14,12 +14,11 @@ if [ ! -L "$link" ] && [ -d "$extensions" ]; then
   ln -s "$extensions" "$link"
 fi
 
-wmctrl -s 1
+current_desktop=$( wmctrl -d | grep -F '*' | cut -d\  -f1 )
+[ "$current_desktop" = "0" ] && wmctrl -s 1
 
 export PIPEWIRE_QUANTUM=192/48000
 
-command -v overwitch >/dev/null && pw-jack overwitch &>/dev/null &
 flatpak run com.bitwig.BitwigStudio "$@"
-killall overwitch 2>/dev/null
 
-wmctrl -s 0
+[ "$current_desktop" = "0" ] && wmctrl -s 0

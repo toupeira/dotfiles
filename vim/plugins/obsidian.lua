@@ -1,11 +1,8 @@
 return {
   'epwalsh/obsidian.nvim',
+  ft = 'markdown',
   keys = {
     { '<Leader>o', '<Cmd>ObsidianQuickSwitch<CR>', desc = 'Open Obsidian note' },
-  },
-  event = {
-    'BufReadPre /slack/documents/Notes/*.md',
-    'BufNewFile /slack/documents/Notes/*.md',
   },
   dependencies = {
     'nvim-lua/plenary.nvim',
