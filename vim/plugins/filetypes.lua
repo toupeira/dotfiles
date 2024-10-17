@@ -14,22 +14,6 @@ return {
     build = function() vim.fn['mkdp#util#install']() end,
   },
 
-  { 'preservim/vim-markdown',
-    ft = 'markdown',
-    init = function()
-      vim.g.vim_markdown_conceal_code_blocks = 0
-      vim.g.vim_markdown_folding_disabled = 0
-      vim.g.vim_markdown_folding_level = 2
-      vim.g.vim_markdown_folding_style_pythonic = 1
-      vim.g.vim_markdown_frontmatter = 1
-      vim.g.vim_markdown_new_list_item_indent = 0
-      vim.g.vim_markdown_no_default_key_mappings = 1
-
-      -- https://github.com/tpope/vim-markdown
-      vim.g.markdown_recommended_style = 0
-    end
-  },
-
   { 'vim-ruby/vim-ruby',
     ft = 'ruby',
     dependencies = { 'tpope/vim-rails' },

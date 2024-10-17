@@ -133,3 +133,8 @@ vim.opt.diffopt:append { 'algorithm:histogram', 'indent-heuristic' }
 
 vim.o.foldmethod = 'indent'
 vim.o.foldlevel = 99999
+
+-- Runtime plugin settings ---------------------------------------------
+
+vim.g.markdown_folding = 1
+vim.g.markdown_recommended_style = 0

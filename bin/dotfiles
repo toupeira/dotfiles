@@ -31,7 +31,7 @@ function usage {
   echo "  packages, pkg               Install packages"
   echo "  pkg LIST[:TYPE]             Install packages from list"
   echo "  update-packages, pup [TYPE] Update packages"
-  echo "  list [NAME]                 List lazy plugins"
+  echo "  list TYPE [NAME]            List installed packages"
   echo
   echo "  dconf sync                  Load dconf settings if no local changes are found"
   echo "  dconf load [KEY]            Load dconf settings"
@@ -709,11 +709,6 @@ function run {
       local packages_gem=$(  get-packages '^gem:' )
       local packages_flat=$( get-packages '^flatpak:' )
 
-      # Find installed packages, cache them in global variables
-      [ "$packages_apt" ]  && [ ! "$INSTALLED_APT" ]  && INSTALLED_APT=$(  dpkg --get-selections | cut -f1 | cut -d: -f1 )
-      [ "$packages_gem" ]  && [ ! "$INSTALLED_GEM" ]  && INSTALLED_GEM=$(  gem list --no-versions )
-      [ "$packages_flat" ] && [ ! "$INSTALLED_FLAT" ] && INSTALLED_FLAT=$( flatpak list --columns=application | tail -n +1 )
-
       # Find the missing packages for this list
       function get-missing {
         if [ "$force" ]; then
@@ -723,10 +718,18 @@ function run {
         fi
       }
 
-      [ -n "$packages_apt" ]  && local missing_apt=$(  get-missing "$packages_apt"  "$INSTALLED_APT" )
-      [ -n "$packages_gem" ]  && local missing_gem=$(  get-missing "$packages_gem"  "$INSTALLED_GEM" )
-      [ -n "$packages_flat" ] && local missing_flat=$( get-missing "$packages_flat" "$INSTALLED_FLAT" )
-      [ "$name" = "default" ] && local missing_mise=$( mise ls --missing --no-header | awk '{ print $1 }' )
+      [ -n "$packages_apt" ]  && local missing_apt=$(
+        get-missing "$packages_apt" "$( run list apt )"
+      )
+      [ -n "$packages_gem" ]  && local missing_gem=$(
+        get-missing "$packages_gem" "$( run list gem )"
+      )
+      [ -n "$packages_flat" ] && local missing_flat=$(
+        get-missing "$packages_flat" "$( run list flatpak )"
+      )
+      [ "$name" = "default" ] && local missing_mise=$(
+        mise ls --missing --no-header | awk '{ print $1 }'
+      )
 
       if [ -z "$missing_apt"  ] &&
          [ -z "$missing_gem"  ] && \
@@ -747,9 +750,10 @@ function run {
       list-packages gem     "$missing_gem"
       list-packages flatpak "$missing_flat"
       list-packages mise    "$missing_mise"
+      echo
 
       # Install the packages
-      if [ "$force" ] || (echo; ask-yes "{{Install?}}"); then
+      if ask-yes "{{Install?}}"; then
         function install-packages {
           [ -n "$1" ] || return
           mapfile -t packages <<< "$1"
@@ -797,8 +801,39 @@ function run {
     update-gems)     gem update --system; run packages -f :gem;;
     # }}}
 
-    list) # {{{
-      find "$DOTFILES/packages/lazy" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort | fzf -f "$1"
+    list|ls) # {{{
+      [ $# -eq 0 ] && usage
+
+      declare -gA INSTALLED_PACKAGES
+      if ! [ "${INSTALLED_PACKAGES[$1]}" ]; then
+        case "$1" in
+          apt)
+            INSTALLED_PACKAGES[apt]=$(
+              dpkg --get-selections | cut -f1 | cut -d: -f1
+            );;
+          gem)
+            INSTALLED_PACKAGES[gem]=$(
+              gem list --no-versions
+            );;
+          flatpak)
+            INSTALLED_PACKAGES[flatpak]=$(
+              flatpak list --columns=application | tail -n +1
+            );;
+          lazy)
+            INSTALLED_PACKAGES[lazy]=$(
+              find "$DOTFILES/packages/lazy" -mindepth 1 -maxdepth 1 -type d -printf '%P\n'
+            );;
+          mise)
+            INSTALLED_PACKAGES[mise]=$(
+              mise ls --no-header | awk '{ print $1 }'
+            );;
+          *)
+            usage
+            ;;
+        esac
+      fi
+
+      echo "${INSTALLED_PACKAGES[$1]}" | sort | fzf -f "$2"
       ;;
     # }}}
 

@@ -150,20 +150,20 @@ function rg.app {
 
 # Switch to dotfiles repository if no arguments are passed
 function dotfiles {
+  local path
   local dotfiles="/slack/dotfiles"
 
   if [ $# -eq 0 ]; then
     cd "$dotfiles" || return 1
   elif [ "$1" = "cd" ]; then
     if [ ! "$2" ]; then
-      local path="$dotfiles"
+      path="$dotfiles"
     elif [ -d "$dotfiles/$2" ]; then
-      local path="$dotfiles/$2"
-    else
-      local plugin=$( dt list "$2" | head -1 )
-      if [ "$plugin" ]; then
-        local path="$dotfiles/packages/lazy/$plugin"
-      fi
+      path="$dotfiles/$2"
+    elif path=$( dt list mise "$2" | head -1 ) && [ "$path" ]; then
+      path="$dotfiles/packages/mise/installs/$path/latest"
+    elif path=$( dt list lazy "$2" | head -1 ) && [ "$path" ]; then
+      path="$dotfiles/packages/lazy/$path"
     fi
 
     if [ -d "$path" ]; then

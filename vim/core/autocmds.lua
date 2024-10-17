@@ -12,11 +12,13 @@ vim.cmd([[
   autocmd FileType help                setlocal buflisted
   autocmd FileType lua                 setlocal path+=./lua iskeyword-=: keywordprg=:Help
   autocmd FileType make                setlocal noexpandtab
-  autocmd FileType markdown            setlocal foldmethod=indent
+  autocmd FileType markdown            setlocal foldlevel=2 suffixesadd+=.md comments=b:*,b:-,b:+,n:> formatoptions+=r
   autocmd FileType qf                  setlocal nobuflisted
   autocmd FileType ruby                setlocal iskeyword+=?,!
-  autocmd FileType text,markdown,mail  setlocal linebreak suffixesadd+=.md
+  autocmd FileType text,mail,markdown  setlocal linebreak
   autocmd FileType vim                 setlocal keywordprg=:Help foldmethod=marker foldlevel=0
+
+  autocmd BufRead,BufNewFile .env let b:ale_sh_shellcheck_exclusions = 'SC2034'
 ]])
 
 -- Helpers -------------------------------------------------------------
