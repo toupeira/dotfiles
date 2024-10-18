@@ -335,11 +335,6 @@ function run {
       done
 
       run link /slack/documents/Notes ~/notes
-
-      for dir in /slack/scrapbook/src/upstream/*; do
-        local name=$( basename "$dir" )
-        run link "$dir" ~/src/upstream/"$name"
-      done
       ;;
     # }}}
     link) # {{{
@@ -627,7 +622,7 @@ function run {
       done
 
       lint slack "Syncthing conflicts"
-      for path in $( fdfind '\.sync-conflict-.*' /slack/*/.stversions 2>/dev/null ); do
+      for path in $( fdfind -u '\.sync-conflict-.*' $( realpath /slack/*/.stfolder/.. ) ); do
         list "$path"
         fix system rm -v "$path"
       done
