@@ -134,4 +134,11 @@ return {
       map({ 'n', 'x' }, 'gF', '<C-w><C-f>', { force = true }, 'Go to file in split')
     end
   },
+
+  very_lazy { 'ziontee113/icon-picker.nvim',
+    keys = {
+      { '<M-.>', '<Cmd>IconPickerInsert<CR>', mode = { 'i' }, desc = 'Insert emoji' },
+    },
+    opts = { disable_legacy_commands = true },
+  },
 }

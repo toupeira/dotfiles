@@ -517,7 +517,7 @@ function run {
         git --no-pager diff --stat ORIG_HEAD
       fi
 
-      if has-news packages; then
+      if has-news packages || has-news config/mise/config.toml; then
         run packages
       fi
 
@@ -722,7 +722,7 @@ function run {
       [ -n "$packages_flat" ] && local missing_flat=$(
         get-missing "$packages_flat" "$( run list flatpak )"
       )
-      [ "$name" = "default" ] && local missing_mise=$(
+      [ "$list" = "default" ] && local missing_mise=$(
         mise ls --missing --no-header | awk '{ print $1 }'
       )
 
@@ -792,7 +792,7 @@ function run {
     update-apt)      sudo aptitude update && sudo aptitude upgrade;;
     update-flatpak)  flatpak update && flatpak uninstall --unused;;
     update-firmware) fwupdmgr update;;
-    update-mise)     mise plugins update && mise upgrade --interactive --bump && mise prune;;
+    update-mise)     mise plugins update && mise upgrade --bump --interactive && mise prune;;
     update-gems)     gem update --system; run packages -f :gem;;
     # }}}
 

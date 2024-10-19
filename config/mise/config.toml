@@ -10,6 +10,7 @@ usage = "0.11.0"
 [settings]
 env_file = '.env'
 not_found_auto_install = false
+disable_hints = ["outdated_bump"]
 
 [env]
 RUBY_CONFIGURE_OPTS = '--disable-install-doc'

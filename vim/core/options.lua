@@ -123,7 +123,7 @@ end
 -- Concealing ----------------------------------------------------------
 
 vim.o.concealcursor = 'n'
-vim.o.conceallevel = 2
+vim.o.conceallevel = 0
 
 -- Diffs ---------------------------------------------------------------
 
