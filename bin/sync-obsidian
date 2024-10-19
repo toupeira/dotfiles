@@ -1,0 +1,146 @@
+#!/usr/bin/env ruby
+# rubocop:disable Style/MutableConstant
+# frozen_string_literal: true
+
+require 'csv'
+require 'fileutils'
+require 'shellwords'
+
+FOLDER = '/slack/documents/Notes/Sammlungen'
+FILES = {}
+RECORDS = []
+
+def usage
+  puts 'Usage: sync-obsidian [-r ratings.csv] [-w watchlist.csv] [-g goodreads.csv]'
+  exit 255
+end
+
+while ARGV.first&.start_with?('-')
+  case ARGV.shift
+  when '-r' then FILES[:ratings] = ARGV.shift
+  when '-w' then FILES[:watchlist] = ARGV.shift
+  when '-g' then FILES[:goodreads] = ARGV.shift
+  else
+    usage
+  end
+end
+
+usage if FILES.empty?
+
+def count_csv(path)
+  `grep -c . #{Shellwords.escape path}`.to_i - 1
+end
+
+def parse_csv(path)
+  CSV.parse(open(path), headers: true)
+end
+
+def write_markdown(path, header, lines)
+  puts "  - #{path}"
+
+  realpath = "#{FOLDER}/#{path}.md"
+  FileUtils.mkdir_p(File.dirname(realpath))
+  File.open(realpath, 'w') do |file|
+    file.puts(header.strip)
+    file.puts(lines.join("\n"))
+  end
+end
+
+def format_table(*fields)
+  format('| %s |', fields.map { _1&.gsub(/  +/, ' ')&.gsub(/([#\|])/, '\\\\\1') }.join(' | '))
+end
+
+MOVIES_HEADER = %(
+| Title | Year | Type | Genre | Director | Runtime | IMDb Rating | My Rating | Added |
+|-------|------|------|-------|----------|---------|-------------|-----------|-------|
+)
+
+def format_movie(movie)
+  format_table(
+    "[#{movie['Title']}](#{movie['URL']})",
+    movie['Release Date'],
+    movie['Title Type'],
+    movie['Genres'],
+    movie['Directors'],
+    movie['Runtime (mins)']&.gsub(/$/, 'm'),
+    movie['IMDb Rating']&.gsub(/$/, '/10'),
+    movie['Your Rating']&.gsub(/$/, '/10'),
+    movie['Date Rated'] || movie['Created'],
+  )
+end
+
+if FILES[:ratings]
+  puts "\e[0;32m● Importing IMDb ratings \e[1m(#{count_csv(FILES[:ratings])})\e[0m"
+  FileUtils.rm_f(Dir.glob("#{FOLDER}/Filme & TV/[1-9]*.md"))
+
+  all_movies = parse_csv(FILES[:ratings])
+  movies_by_decade = all_movies.group_by { _1['Year'].sub(/^(\d{3}).*/, '\10s') }
+
+  movies_by_decade.sort.each do |decade, movies|
+    write_markdown(
+      "Filme & TV/#{decade} (#{movies.size})",
+      MOVIES_HEADER,
+      movies.sort_by { [_1['Year'], _1['Title']] }.map do |movie|
+        format_movie(movie)
+      end,
+    )
+  end
+end
+
+if FILES[:watchlist]
+  puts "\e[0;32m● Importing IMDb watchlist \e[1m(#{count_csv(FILES[:watchlist])})\e[0m"
+  FileUtils.rm_f(Dir.glob("#{FOLDER}/Filme & TV/Watchlist*.md"))
+
+  movies = parse_csv(FILES[:watchlist])
+  write_markdown(
+    "Filme & TV/Watchlist (#{movies.size})",
+    MOVIES_HEADER,
+    movies.sort_by { _1['Release Date'] || _1['Created'] }.reverse.map do |movie|
+      format_movie(movie)
+    end,
+  )
+end
+
+BOOKS_HEADER = %(
+| Title | Year | Author | Added | Read | My Rating |
+|-------|------|--------|-------|------|-----------|
+)
+
+def format_book(book)
+  authors =
+    if book['Additional Authors']
+      [book['Author'], book['Additional Authors']].join(', ')
+    else
+      book['Author']
+    end
+
+  format_table(
+    "[#{book['Title']}](https://www.goodreads.com/book/show/#{book['Book Id']})",
+    book['Year Published'],
+    authors,
+    book['Date Added'],
+    book['Date Read'],
+    book['My Rating']&.gsub(/$/, '/5'),
+  )
+end
+
+if FILES[:goodreads]
+  puts "\e[0;32m● Importing Goodreads library \e[1m(#{count_csv(FILES[:goodreads])})\e[0m"
+  FileUtils.rm_f(Dir.glob("#{FOLDER}/Bücher/*.md"))
+
+  all_books = parse_csv(FILES[:goodreads])
+  books_by_shelf = all_books.group_by { _1['Exclusive Shelf'] }
+
+  books_by_shelf.sort.each do |shelf, books|
+    shelf = shelf.gsub('-', ' ').capitalize
+    write_markdown(
+      "Bücher/#{shelf} (#{books.size})",
+      BOOKS_HEADER,
+      books.sort_by { _1['Date Read'] || _1['Date Added'] }.reverse.map do |book|
+        format_book(book)
+      end,
+    )
+  end
+end
+
+# rubocop:enable Style/MutableConstant

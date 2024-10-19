@@ -6,6 +6,7 @@ neovim = "0.10.2"
 node = "23.0.0"
 usage = "0.11.0"
 "ubi:dlvhdr/diffnav" = "v0.2.8"
+"ubi:BurntSushi/xsv" = "0.13.0"
 
 [settings]
 env_file = '.env'

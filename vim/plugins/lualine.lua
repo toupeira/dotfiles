@@ -47,11 +47,6 @@ return {
               return str:sub(1,1):lower()
             end
           },
-          { 'selectioncount',
-            icon = '󱄽',
-            separator = '',
-            padding = { left = 0, right = 1 },
-          },
         },
 
         lualine_b = {
@@ -164,6 +159,11 @@ return {
               local col = vim.fn.virtcol('.')
               return ':' .. col .. (col < 10 and ' ' or '')
             end,
+            separator = '',
+            padding = { left = 0, right = 1 },
+          },
+          { 'selectioncount',
+            icon = '󱄽',
             separator = '',
             padding = { left = 0, right = 1 },
           },
