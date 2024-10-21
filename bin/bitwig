@@ -14,11 +14,6 @@ if [ ! -L "$link" ] && [ -d "$extensions" ]; then
   ln -s "$extensions" "$link"
 fi
 
-current_desktop=$( wmctrl -d | grep -F '*' | cut -d\  -f1 )
-[ "$current_desktop" = "0" ] && wmctrl -s 1
-
 export PIPEWIRE_QUANTUM=192/48000
 
-flatpak run com.bitwig.BitwigStudio "$@"
-
-[ "$current_desktop" = "0" ] && wmctrl -s 0
+exec nice -n -10 -- flatpak run com.bitwig.BitwigStudio "$@"

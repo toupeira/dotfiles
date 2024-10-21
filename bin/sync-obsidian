@@ -95,7 +95,7 @@ if FILES[:watchlist]
   write_markdown(
     "Filme & TV/Watchlist (#{movies.size})",
     MOVIES_HEADER,
-    movies.sort_by { _1['Release Date'] || _1['Created'] }.reverse.map do |movie|
+    movies.sort_by { [_1['Release Date']&.to_i || 9999, _1['Created']] }.reverse.map do |movie|
       format_movie(movie)
     end,
   )
