@@ -280,6 +280,11 @@ function origin {
   fi
 }
 
+# Return all Syncthing folders
+function syncthing-folders {
+  syncthing cli config dump-json | jq -r '.folders[].path'
+}
+
 ### }}}
 
 function run {
@@ -335,6 +340,11 @@ function run {
       done
 
       run link /slack/documents/Notes ~/notes
+
+      for path in $( syncthing-folders ); do
+        local stignore="$path/.stignore.template"
+        [ -f "$stignore" ] && run link "$( basename "$stignore" )" "$path/.stignore"
+      done
       ;;
     # }}}
     link) # {{{
@@ -348,6 +358,13 @@ function run {
       else
         local origin=$( realpath -s -- "${path%/}" )
         local target=$( target "$origin" )
+
+        if [ ! -e "$target" ]; then
+          error "Path not found: {{$target}}"
+          return
+        elif ! validate "$origin"; then
+          return
+        fi
       fi
 
       local force=0
@@ -359,13 +376,6 @@ function run {
 
       if [ -L "$target" ]; then
         target=$( readlink -f "$target" )
-      fi
-
-      if [ ! -e "$target" ]; then
-        error "Path not found: {{$target}}"
-        return
-      elif ! validate "$origin"; then
-        return
       fi
 
       if [ -L "$origin" ]; then
@@ -622,7 +632,7 @@ function run {
       done
 
       lint slack "Syncthing conflicts"
-      for path in $( fdfind -u '\.sync-conflict-.*' $( realpath /slack/*/.stfolder/.. ) ); do
+      for path in $( fdfind -u '\.sync-conflict-.*' $( syncthing-folders )); do
         list "$path"
         fix system rm -v "$path"
       done
