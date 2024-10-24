@@ -256,9 +256,11 @@ function target {
   local origin="$1"
 
   if [[ "$origin" =~ ^$HOME/ ]]; then
-    local target="${1:${#HOME}+1}"
+    local target="${origin:${#HOME}+1}"
   elif [[ "$origin" =~ ^/etc/ ]]; then
-    local target="${1:1}"
+    local target="${origin:1}"
+  elif [[ "$origin" =~ ^$DOTFILES/ ]]; then
+    local target="${origin:${#DOTFILES}+1}"
   else
     local target="$origin"
   fi
@@ -269,6 +271,7 @@ function target {
 # Transform a repository path into a filesystem path
 function origin {
   local target="$1"
+  [[ "$target" =~ ^$DOTFILES/ ]] && target="${target:${#DOTFILES}+1}"
   local topdir="${target%%/*}"
 
   if [ "$topdir" = "etc" ]; then
@@ -312,7 +315,8 @@ function run {
     link-dotfiles) # {{{
       if [ $# -eq 0 ]; then
         status "Linking {{dotfiles}}..."
-        set -- $( fdfind . "$DOTFILES" --exact-depth 1 )
+        mapfile -t dotfiles < <( fdfind . "$DOTFILES" --exact-depth 1 )
+        set -- "${dotfiles[@]}"
       fi
 
       for path in "$@"; do
@@ -359,6 +363,11 @@ function run {
         local origin=$( realpath -s -- "${path%/}" )
         local target=$( target "$origin" )
 
+        if [[ "$origin" =~ ^$DOTFILES/ ]]; then
+          target="$origin"
+          origin=$( origin "$target" )
+        fi
+
         if [ ! -e "$target" ]; then
           error "Path not found: {{$target}}"
           return
@@ -369,18 +378,13 @@ function run {
 
       local force=0
 
-      if [[ "$origin" =~ ^$DOTFILES/ ]]; then
-        target="$origin"
-        origin=$( origin "${target:${#DOTFILES}+1}" )
-      fi
-
       if [ -L "$target" ]; then
         target=$( readlink -f "$target" )
       fi
 
       if [ -L "$origin" ]; then
         local link=$( readlink "$origin" 2>/dev/null )
-        if [ ! -e "$link" ] || [[ $link =~ ^/etc/dotfiles/ ]]; then
+        if [ ! -e "$origin" ] || [[ $link =~ ^/etc/dotfiles/ ]]; then
           warning "Broken symlink: {{$origin}} -> \e[1;36m$link"
           force=1
         elif [ "$link" = "$target" ]; then

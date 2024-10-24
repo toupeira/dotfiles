@@ -2,5 +2,4 @@
 
 cd ~/src/upstream/pianoteq || exit 1
 
-wmctrl -s 1
 exec ./x86-64bit/"Pianoteq 8" "$@"

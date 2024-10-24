@@ -31,9 +31,10 @@ inode/directory=org.gnome.Nautilus.desktop
 application/epub+zip=com.github.johnfactotum.Foliate.desktop
 application/x-mobipocket-ebook=com.github.johnfactotum.Foliate.desktop
 
+audio/ogg=audacity.desktop
 audio/flac=audacity.desktop
-audio/mpeg=audacity.desktop
 audio/vnd.wave=audacity.desktop
+audio/mpeg=io.github.celluloid_player.Celluloid.desktop
 
 video/mp4=io.github.celluloid_player.Celluloid.desktop
 video/mpeg=io.github.celluloid_player.Celluloid.desktop

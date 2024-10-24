@@ -14,6 +14,12 @@ if [ ! -L "$link" ] && [ -d "$extensions" ]; then
   ln -s "$extensions" "$link"
 fi
 
+webcam=$( pactl list short cards | awk '/Logitech_BRIO/ { print $2 }' | head -1 )
+[ "$webcam" ] && pactl set-card-profile "$webcam" off
+
 export PIPEWIRE_QUANTUM=192/48000
 
-exec nice -n -10 -- flatpak run com.bitwig.BitwigStudio "$@"
+chrt -f 50 -- \
+  flatpak run com.bitwig.BitwigStudio "$@"
+
+[ "$webcam" ] && pactl set-card-profile "$webcam" input:analog-stereo

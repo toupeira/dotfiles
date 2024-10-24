@@ -1,6 +1,6 @@
 #!/bin/bash
 
-VAULT="/slack/documents/Notes"
+NOTES="/slack/documents/Notes"
 
 files=()
 mode='open'
@@ -33,12 +33,12 @@ fi
 
 for pattern in "$@"; do
   # First look for filenames starting with the pattern
-  mapfile -t matches < <( fdfind "$pattern.*\.md$" "$VAULT" -t f )
+  mapfile -t matches < <( fdfind "$pattern.*\.md$" "$NOTES" -t f )
 
   # Otherwise try a fuzzy search
   if [ "${#matches[@]}" = 0 ]; then
     mapfile -t matches < <(
-      fdfind '\.md$' "$VAULT" -t f \
+      fdfind '\.md$' "$NOTES" -t f \
         | fzf -d/ -n5.. -f "$pattern"
     )
   fi
@@ -51,7 +51,7 @@ if [ "${#files[@]}" = 0 ] && [ "$TERM" != "dumb" ]; then
   exit 1
 fi
 
-filenames=$( echo -e "\e[1m${files[*]}\e[0m" | sed -r "s,$VAULT/,,g" )
+filenames=$( echo -e "\e[1m${files[*]}\e[0m" | sed -r "s,$NOTES/,,g" )
 
 case "$mode" in
   open)
@@ -61,6 +61,10 @@ case "$mode" in
           echo "obsidian://open?path=$( echo -n "$file" | jq -rR @uri )"
         done
       )
+    elif pgrep -f /app/obsidian >/dev/null; then
+      exec wmctrl -xa obsidian
+    elif pgrep -f 'firefox -P Denteo' &>/dev/null; then
+      files=( "obsidian://open?path=$( echo "$NOTES/Projekte/Denteo/Inbox" | jq -rR @uri )" )
     fi
 
     echo -e " \e[0;32m● Opening: $filenames"

@@ -3,7 +3,7 @@
 case "$HOSTNAME" in
   ocelot)
     BACKUP="/mnt/slack"
-    DIRS=( books documents images music photos scrapbook sound )
+    DIRS=( backups books documents images music photos scrapbook sound )
     ;;
   schtube)
     BACKUP="/media/$USER/SLACK-BACKUP"
