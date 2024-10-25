@@ -1,4 +1,4 @@
 sqlitebrowser
-zeal
 
 flatpak: org.godotengine.Godot
+flatpak: org.zealdocs.Zeal

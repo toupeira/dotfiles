@@ -3,5 +3,5 @@ id=$( xprop -root _NET_ACTIVE_WINDOW | cut -d\  -f5 )
 if xprop -id "$id" | grep -q 'WM_CLASS.*"zeal"'; then
   wmctrl -i -c "$id"
 else
-  zeal "$@" &>/dev/null &
+  flatpak run org.zealdocs.Zeal "$@" &>/dev/null &
 fi

@@ -1,5 +1,8 @@
+bitwig-studio
+jackd2
+jack-example-tools
 pipewire-jack
+qjackctl
 qpwgraph
 
-flatpak: com.bitwig.BitwigStudio
 flatpak: org.musescore.MuseScore

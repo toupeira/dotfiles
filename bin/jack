@@ -8,11 +8,13 @@ case "$1" in
       jack_control start
       kill %1
     else
-      pasuspender -- jack_control start
+      jack_control start
     fi
+    setup-peripherals
     ;;
   stop)
     jack_control stop
+    setup-peripherals
     ;;
   status)
     jack_control status
@@ -20,9 +22,7 @@ case "$1" in
   run)
     shift
 
-    if pgrep -x pipewire >/dev/null; then
-      exec pw-jack "$@"
-    elif ! command -v jack_control >/dev/null || jack_control status >/dev/null; then
+    if ! command -v jack_control >/dev/null || jack_control status >/dev/null; then
       exec "$@"
     else
       qjackctl &>/dev/null &

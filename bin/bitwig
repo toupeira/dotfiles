@@ -1,25 +1,46 @@
 #!/bin/bash
 
+if [ "$1"  = "-f" ] || ! which bitwig-studio &>/dev/null; then
+  shift
+  flatpak=1
+  bitwig="flatpak run com.bitwig.BitwigStudio"
+else
+  bitwig="bitwig-studio"
+fi
+
+if [ "$1" = "-p" ]; then
+  shift
+  pipewire=1
+fi
+
 if pgrep -x bitwig-studio >/dev/null; then
-  exec wmctrl -xa com.bitwig.BitwigStudio
+  if [ "$1" ]; then
+    exec $bitwig "$@"
+  else
+    exec wmctrl -xa com.bitwig.BitwigStudio
+  fi
 fi
 
-extensions=/slack/sound/bitwig/extensions
-link=~/.var/app/com.bitwig.BitwigStudio/"Bitwig Studio"/Extensions
-[ -L "$( dirname "$link" )" ] && rm "$( dirname "$link" )" # TODO: remove
+workspace=/slack/sound/bitwig/workspace
+link=~/"Bitwig Studio"
+[ "$flatpak" ] && link=~/.var/app/com.bitwig.BitwigStudio/"Bitwig Studio"
 
-if [ ! -L "$link" ] && [ -d "$extensions" ]; then
+if [ ! -L "$link" ] && [ -d "$workspace" ]; then
   rm -rf "$link"
-  mkdir -p "$( dirname "$link")"
-  ln -s "$extensions" "$link"
+  ln -s "$workspace" "$link"
 fi
 
-webcam=$( pactl list short cards | awk '/Logitech_BRIO/ { print $2 }' | head -1 )
-[ "$webcam" ] && pactl set-card-profile "$webcam" off
+if [ "$flatpak" ] || [ "$pipewire" ]; then
+  PIPEWIRE_QUANTUM=192/48000 $bitwig "$@"
+else
+  jack run $bitwig "$@"
+fi
 
-export PIPEWIRE_QUANTUM=192/48000
+if [ -L "$link" ]; then
+  rm -f "$link"
+fi
 
-chrt -f 50 -- \
-  flatpak run com.bitwig.BitwigStudio "$@"
-
-[ "$webcam" ] && pactl set-card-profile "$webcam" input:analog-stereo
+if [ -d ~/Downloads ]; then
+  rm -f ~/Downloads/*.bwtemplate
+  rmdir --ignore-fail-on-non-empty ~/Downloads
+fi

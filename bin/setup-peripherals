@@ -15,18 +15,22 @@ case "$HOSTNAME" in
     if jack_control status >/dev/null; then
       pactl set-default-sink "$( get sink jack )"
       pactl set-sink-volume  "$( get sink jack )" 41350 # -12dB
-    elif [[ "$cards" =~ "TASCAM_Model_12" ]]; then
-      sink="TASCAM_Model_12"
-      pgrep -x pipewire >/dev/null && sink="model12-volume-pad"
+    elif [[ "$cards" =~ 'TASCAM_Model_12' ]]; then
+      sink=$( get sink 'model12-volume-pad' )
 
-      pactl set-default-sink "$( get sink "$sink" )"
-      pactl set-sink-volume  "$( get sink "$sink" )" 41350 # -12dB
+      pactl set-card-profile "$( get card 'TASCAM_Model_12' )" pro-audio
+      pactl set-default-sink "$sink"
+      pactl set-sink-volume  "$sink" 41350 # -12dB
     fi
 
-    if [[ "$cards" =~ "Logitech_BRIO" ]]; then
-      pactl set-card-profile   "$( get card Logitech_BRIO )" input:analog-stereo
-      pactl set-default-source "$( get source Logitech_BRIO )"
-      pactl set-source-volume  "$( get source Logitech_BRIO )" 100%
+    if [[ "$cards" =~ 'Logitech_BRIO' ]]; then
+      pactl set-card-profile   "$( get card 'Logitech_BRIO' )" input:analog-stereo
+      pactl set-default-source "$( get source 'Logitech_BRIO' )"
+      pactl set-source-volume  "$( get source 'Logitech_BRIO' )" 100%
+    fi
+
+    if [[ "$cards" =~ 'pci-0000_03_00' ]]; then
+      pactl set-card-profile "$( get card 'pci-0000_03_00' )" off
     fi
     ;;
 
@@ -34,7 +38,7 @@ case "$HOSTNAME" in
     # Setup display
     screens=$( xrandr --current | grep -w connected )
 
-    if [ "$( echo "$screens" | wc -l )" = "1" ]; then
+    if [ "$( echo "$screens" | wc -l )" = 1 ]; then
       dconf write /org/gnome/desktop/interface/text-scaling-factor 1.4
       dconf write /org/gnome/desktop/interface/cursor-size 48
     elif [[ $screens = *3840x2160* ]]; then

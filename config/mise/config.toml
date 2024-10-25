@@ -3,10 +3,10 @@ fzf = "0.55.0"
 ruby = "3.3.5"
 glow = "2.0.0"
 neovim = "0.10.2"
-node = "23.0.0"
-usage = "0.11.0"
 "ubi:dlvhdr/diffnav" = "v0.2.8"
 "ubi:BurntSushi/xsv" = "0.13.0"
+node = "23.1.0"
+usage = "0.11.1"
 
 [settings]
 env_file = '.env'
