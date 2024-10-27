@@ -146,7 +146,7 @@ util.alias_command({
   ['WQ']  = 'wq',  ['Wq']  = 'wq',  ['wQ']  = 'wq',
   ['WQ!'] = 'wq!', ['Wq!'] = 'wq!', ['wQ!'] = 'wq!',
 
-  ['DD']  = 'Delete', ['DD!'] = 'Delete!',
+  ['D']  = 'Delete', ['D!'] = 'Delete!',
 })
 
 nmap('zS', ':Inspect', 'Inspect highlighting groups')

@@ -35,6 +35,17 @@ return {
       }
     },
 
+    mappings = {
+      ['<CR>'] = {
+        action = function() return require('obsidian').util.smart_action() end,
+        opts = { buffer = true, expr = true },
+      },
+      ['<M-space>'] = {
+        action = function() return require('obsidian').util.smart_action() end,
+        opts = { buffer = true, expr = true },
+      },
+    },
+
     disable_frontmatter = true,
     open_app_foreground = true,
     picker = { name = 'fzf-lua' },
