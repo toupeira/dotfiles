@@ -636,7 +636,7 @@ function run {
       done
 
       lint slack "Syncthing conflicts"
-      for path in $( fdfind -u '\.sync-conflict-.*' $( syncthing-folders )); do
+      for path in $( fdfind -u '\.sync-conflict-.*' $( syncthing-folders ) | fgrep -v /.stversions/ ); do
         list "$path"
         fix system rm -v "$path"
       done
