@@ -119,3 +119,6 @@ user_pref("middlemouse.paste", false);
 
 // Disable builtin emoji font
 user_pref("font.name-list.emoji", "Noto Color Emoji");
+
+// Disable translations
+user_pref("browser.translations.enable", false);
