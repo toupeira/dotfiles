@@ -64,7 +64,7 @@ case "$mode" in
     elif pgrep -f /app/obsidian >/dev/null; then
       exec wmctrl -xa obsidian
     elif pgrep -f 'firefox -P Denteo' &>/dev/null; then
-      files=( "obsidian://open?path=$( echo "$NOTES/Projekte/Denteo/Inbox" | jq -rR @uri )" )
+      files=( "obsidian://open?path=$( echo -n "$NOTES/Projekte/Denteo/Inbox.md" | jq -rR @uri )" )
     fi
 
     echo -e " \e[0;32m● Opening: $filenames"
