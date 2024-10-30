@@ -72,6 +72,12 @@ Style/IfUnlessModifier:
 Style/NumericPredicate:
   Enabled: false
 
+Style/ParallelAssignment:
+  Enabled: false
+
+Style/PerlBackrefs:
+  Enabled: false
+
 Style/TernaryParentheses:
   EnforcedStyle: require_no_parentheses
 
@@ -86,3 +92,6 @@ Style/TrailingCommaInArrayLiteral:
 
 Style/TrailingCommaInHashLiteral:
   EnforcedStyleForMultiline: comma
+
+Style/WhileUntilModifier:
+  Enabled: false

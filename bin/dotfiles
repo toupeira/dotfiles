@@ -809,7 +809,6 @@ function run {
     update-mise)     mise plugins update && mise upgrade --bump --interactive && mise prune;;
     update-gems)     gem update --system; run packages -f :gem;;
     # }}}
-
     list|ls) # {{{
       [ $# -eq 0 ] && usage
 
@@ -928,15 +927,19 @@ function run {
       done
       ;;
     # }}}
-
-    vim|v)  git edit config/nvim/init.vim;;
-    git|g)  git edit config/git/config;;
-    tmux|t) git edit config/tmux/tmux.conf;;
+    e|edit) # {{{
+      case "$1" in
+        vim|v)  git edit vim/init.lua;;
+        git|g)  git edit config/git/config;;
+        tmux|t) git edit config/tmux/tmux.conf;;
+        *)      git edit "$@";
+      esac
+      ;;
+    # }}}
 
     *)
       git ignore-errors "$command" "$@"
       ;;
-    # }}}
   esac
 }
 

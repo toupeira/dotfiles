@@ -47,7 +47,11 @@ return {
       end
 
       if not aerial then
-        aerial = require('lualine/components/aerial')({
+        local ok
+        ok, aerial = pcall(require, 'lualine/components/aerial')
+        if not ok then aerial = nil; return end
+
+        aerial = aerial({
           self = { section = 'c' },
           icons_enabled = true,
           sep = separator[1],

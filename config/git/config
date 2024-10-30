@@ -213,18 +213,18 @@
 
   skip-lint = !LEFTHOOK=0 OVERCOMMIT_DISABLE=1 git
 
-  # shell wrappers for src_alias
+  # run commands inside the repository
   sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
   bash = "!f() { [ $# -gt 0 ] && bash -ic \"$@\"; }; f"
   rg = !rg
+  fd = !fdfind --hidden
   rake  = !rake
   rails = !rails
   guard = !guard
-  cap = !cap
   mux = !mux
   vi = !vi
   vim = !vim
   e = edit
 
-  # try to run a GUI, or tig on terminals
-  g = "!f() { if [ \"`uname -s`\" = 'Darwin' ]; then (gitx $@ &>/dev/null &); elif [ -n \"$DISPLAY\" ]; then (gitg $@ &>/dev/null &); else tig $@; fi; }; f"
+  gui = !sensible-vim +Neogit
+  g = gui

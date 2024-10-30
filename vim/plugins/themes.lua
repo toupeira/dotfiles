@@ -151,6 +151,12 @@ return {
             DiagnosticSignCursorHint  = { fg = 'diag.hint',  bg = 'bg1' },
             DiagnosticSignCursorOk    = { fg = 'diag.ok',    bg = 'bg1' },
 
+            DiagnosticUnderlineError   = { style = 'NONE' },
+            DiagnosticUnderlineWarn    = { style = 'NONE' },
+            DiagnosticUnderlineInfo    = { style = 'NONE' },
+            DiagnosticUnderlineHint    = { style = 'NONE' },
+            DiagnosticUnderlineOk      = { style = 'NONE' },
+
             -- syntax highlighting
             Delimiter = { fg = 'syntax.statement' },
             Statement = { fg = 'syntax.statement' },

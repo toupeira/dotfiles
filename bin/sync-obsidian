@@ -5,55 +5,131 @@
 require 'csv'
 require 'fileutils'
 require 'shellwords'
+require 'open-uri'
+require 'tzinfo'
 
 FOLDER = '/slack/documents/Notes/Sammlungen'
-FILES = {}
+ARGS = {}
 RECORDS = []
 
+# Helpers
+# ----------------------------------------------------------------------
+
 def usage
-  puts 'Usage: sync-obsidian [-r ratings.csv] [-w watchlist.csv] [-g goodreads.csv]'
+  warn 'Usage: sync-obsidian [ARGS]'
+  warn ''
+  warn 'Arguments:'
+  warn '  -r <PATH|URL>.csv                   Import IMDb ratings export'
+  warn '  -w <PATH|URL>.csv                   Import IMDb watchlist export'
+  warn '  -g <PATH|URL>.csv                   Import Goodreads library export'
+  warn '  -c TITLE ICON <PATH|URL>.ics        Import iCalendar file'
+  warn ''
   exit 255
+end
+
+def next_arg
+  arg = ARGV.shift
+  usage if arg.nil?
+  arg
 end
 
 while ARGV.first&.start_with?('-')
   case ARGV.shift
-  when '-r' then FILES[:ratings] = ARGV.shift
-  when '-w' then FILES[:watchlist] = ARGV.shift
-  when '-g' then FILES[:goodreads] = ARGV.shift
+  when '-r' then ARGS[:ratings] = next_arg
+  when '-w' then ARGS[:watchlist] = next_arg
+  when '-g' then ARGS[:goodreads] = next_arg
+  when '-c'
+    ARGS[:calendar] = next_arg
+    ARGS[:icon] = next_arg
+    ARGS[:path] = next_arg
   else
     usage
   end
 end
 
-usage if FILES.empty?
+usage if ARGS.empty?
 
 def count_csv(path)
   `grep -c . #{Shellwords.escape path}`.to_i - 1
 end
 
 def parse_csv(path)
-  CSV.parse(open(path), headers: true)
+  CSV.parse(URI.open(path), headers: true)
 end
 
-def write_markdown(path, header, lines)
-  puts "  - #{path}"
+def write_markdown(path, lines)
+  puts "  \e[0;33m- #{path}\e[0m"
 
   realpath = "#{FOLDER}/#{path}.md"
   FileUtils.mkdir_p(File.dirname(realpath))
-  File.open(realpath, 'w') do |file|
-    file.puts(header.strip)
+  open(realpath, 'w') do |file|
     file.puts(lines.join("\n"))
   end
 end
 
 def format_table(*fields)
-  format('| %s |', fields.map { _1&.gsub(/  +/, ' ')&.gsub(/([#\|])/, '\\\\\1') }.join(' | '))
+  format('| %s |', fields.map do |field|
+    # Remove repeated whitespace, add space after commas, escape special characters
+    field
+      &.gsub(/  +/, ' ')
+      &.gsub(/,([^ ])/, ', \1')
+      &.gsub(/([#\|])/, '\\\\\1')
+  end.join(' | '))
 end
+
+TZ = TZInfo::Timezone.get('Europe/Zurich')
+
+def parse_time(time, options = nil)
+  time = DateTime.parse(time)
+  options ||= ''
+  all_day = false
+
+  if options.include?('VALUE=DATE')
+    all_day = true
+  elsif !options.include?("TZID=#{TZ.name}")
+    time = TZ.to_local(time)
+  end
+
+  [time, all_day]
+end
+
+def next_event(time, rule)
+  time =
+    case rule[:freq]
+    when :yearly
+      time.next_year(rule[:interval])
+    when :monthly
+      if rule[:byday]
+        time = time.next_month(rule[:interval] - 1)
+        month = time.month
+        count = 0
+        until time.month != month
+          time = time.next_day(7)
+          count += 1
+          break if rule[:count] && count >= rule[:count]
+        end
+        time
+      else
+        time.next_month(rule[:interval])
+      end
+    when :weekly
+      time.next_day(rule[:interval] * 7)
+    when :daily
+      time.next_day(rule[:interval])
+    end
+
+  return if rule[:until] && time > rule[:until]
+
+  time
+end
+
+# IMDb
+# ----------------------------------------------------------------------
 
 MOVIES_HEADER = %(
 | Title | Year | Type | Genre | Director | Runtime | IMDb Rating | My Rating | Added |
 |-------|------|------|-------|----------|---------|-------------|-----------|-------|
-)
+).strip
 
 def format_movie(movie)
   format_table(
@@ -69,17 +145,17 @@ def format_movie(movie)
   )
 end
 
-if FILES[:ratings]
-  puts "\e[0;32m● Importing IMDb ratings \e[1m(#{count_csv(FILES[:ratings])})\e[0m"
+if ARGS[:ratings]
+  puts "\e[0;32m● Importing IMDb ratings... \e[1m(#{count_csv(ARGS[:ratings])})\e[0m"
   FileUtils.rm_f(Dir.glob("#{FOLDER}/Filme & TV/[1-9]*.md"))
 
-  all_movies = parse_csv(FILES[:ratings])
+  all_movies = parse_csv(ARGS[:ratings])
   movies_by_decade = all_movies.group_by { _1['Year'].sub(/^(\d{3}).*/, '\10s') }
 
   movies_by_decade.sort.each do |decade, movies|
     write_markdown(
       "Filme & TV/#{decade} (#{movies.size})",
-      MOVIES_HEADER,
+      [MOVIES_HEADER] +
       movies.sort_by { [_1['Year'], _1['Title']] }.map do |movie|
         format_movie(movie)
       end,
@@ -87,14 +163,14 @@ if FILES[:ratings]
   end
 end
 
-if FILES[:watchlist]
-  puts "\e[0;32m● Importing IMDb watchlist \e[1m(#{count_csv(FILES[:watchlist])})\e[0m"
+if ARGS[:watchlist]
+  puts "\e[0;32m● Importing IMDb watchlist... \e[1m(#{count_csv(ARGS[:watchlist])})\e[0m"
   FileUtils.rm_f(Dir.glob("#{FOLDER}/Filme & TV/Watchlist*.md"))
 
-  movies = parse_csv(FILES[:watchlist])
+  movies = parse_csv(ARGS[:watchlist])
   write_markdown(
     "Filme & TV/Watchlist (#{movies.size})",
-    MOVIES_HEADER,
+    [MOVIES_HEADER] +
     movies.sort_by { [_1['Release Date']&.to_i || 9999, _1['Created']] }.reverse.map do |movie|
       format_movie(movie)
     end,
@@ -104,7 +180,7 @@ end
 BOOKS_HEADER = %(
 | Title | Year | Author | Added | Read | My Rating |
 |-------|------|--------|-------|------|-----------|
-)
+).strip
 
 def format_book(book)
   authors =
@@ -124,23 +200,102 @@ def format_book(book)
   )
 end
 
-if FILES[:goodreads]
-  puts "\e[0;32m● Importing Goodreads library \e[1m(#{count_csv(FILES[:goodreads])})\e[0m"
+# Goodreads
+# ----------------------------------------------------------------------
+
+if ARGS[:goodreads]
+  puts "\e[0;32m● Importing Goodreads library... \e[1m(#{count_csv(ARGS[:goodreads])})\e[0m"
   FileUtils.rm_f(Dir.glob("#{FOLDER}/Bücher/*.md"))
 
-  all_books = parse_csv(FILES[:goodreads])
+  all_books = parse_csv(ARGS[:goodreads])
   books_by_shelf = all_books.group_by { _1['Exclusive Shelf'] }
 
   books_by_shelf.sort.each do |shelf, books|
     shelf = shelf.gsub('-', ' ').capitalize
     write_markdown(
       "Bücher/#{shelf} (#{books.size})",
-      BOOKS_HEADER,
+      [BOOKS_HEADER] +
       books.sort_by { _1['Date Read'] || _1['Date Added'] }.reverse.map do |book|
         format_book(book)
       end,
     )
   end
+end
+
+# Calendars
+# ----------------------------------------------------------------------
+
+if ARGS[:calendar]
+  puts "\e[0;32m● Importing calendar...\e[0m"
+
+  time_range = Range.new(DateTime.now - 100, DateTime.now + 400)
+  entries = []
+  current = nil
+  skip = true
+
+  URI.open(ARGS[:path]).each_line do |line|
+    case line.strip
+    when 'BEGIN:VEVENT'
+      entries << current = {}
+      skip = false
+    when 'BEGIN:VALARM'
+      skip = true
+    end
+
+    next if skip
+
+    case line
+    when /^SUMMARY:(.*)/
+      current[:summary] = $1.strip
+    when /^DTSTART(;[^:]+)?:(.*)/
+      current[:start], current[:all_day] = parse_time($2, $1)
+    when /^DTEND(;[^:]+)?:(.*)/
+      current[:end], = parse_time($2, $1)
+    when /^RRULE:(.*)/
+      rule = Regexp.last_match(1).strip.split(';').to_h do |option|
+        option.split('=').map(&:downcase).map(&:to_sym)
+      end
+
+      rule[:count] = rule[:count]&.to_s&.to_i
+      rule[:interval] = rule[:interval]&.to_s&.to_i || 1
+      rule[:until], = parse_time(rule[:until].to_s) if rule[:until]
+
+      current[:rule] = rule
+    end
+  end
+
+  # Handle recurring events, advance forward until we're in the future
+  today = Date.today
+  entries.each do |entry|
+    next unless entry[:rule] && entry[:start] < today
+    next if entry[:rule][:until] && entry[:rule][:until] < today
+
+    time = entry[:start]
+    count = 0
+    while time && time < today && time < time_range.end
+      time = next_event(time, entry[:rule])
+      count += 1
+      break if entry[:rule][:count] && count >= entry[:rule][:count]
+
+      if count > 1000
+        warn "Can't find recurring event for '#{entry[:summary]}' at #{entry[:start]} with rule: #{entry[:rule]}"
+      end
+    end
+    entry[:start] = time
+  end
+
+  entries.select! { time_range.cover?(_1[:start]&.to_date) }
+  entries.sort_by! { _1[:start] }
+  entries.reverse!
+
+  write_markdown("Kalender/#{ARGS[:calendar]}", entries.map do |entry|
+    summary = entry[:summary].force_encoding('utf-8')
+    summary.concat(" <small>`#{entry[:start].strftime('%H:%M')}`</small>") unless entry[:all_day]
+
+    "- [ ] #{ARGS[:icon]&.sub(/$/, ' ')}#{summary} " \
+      "%%(start:: #{entry[:start].iso8601})%%" \
+      "%%(end:: #{entry[:end]&.iso8601})%%"
+  end)
 end
 
 # rubocop:enable Style/MutableConstant

@@ -9,6 +9,7 @@ vim.cmd([[
   autocmd FileType dosini              setlocal commentstring=#\ %s foldmethod=syntax
   autocmd FileType gdscript            setlocal expandtab
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
+  autocmd FileType NeogitCommitMessage setlocal colorcolumn=50,72
   autocmd FileType help                setlocal buflisted
   autocmd FileType lua                 setlocal path+=./lua iskeyword-=: keywordprg=:Help
   autocmd FileType make                setlocal noexpandtab

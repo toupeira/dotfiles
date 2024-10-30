@@ -235,7 +235,7 @@ return {
           [' '] = {
             action = 'closeopen',
             pair = '  ',
-            neigh_pattern = '[%(%[{][%)%]}]',
+            neigh_pattern = '[%(%{][%)%}]',
           },
         }
       })
