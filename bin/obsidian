@@ -38,7 +38,7 @@ for pattern in "$@"; do
   # Otherwise try a fuzzy search
   if [ "${#matches[@]}" = 0 ]; then
     mapfile -t matches < <(
-      fdfind '\.md$' "$NOTES" -t f \
+      fdfind '\.md$' "$NOTES" -t f --exclude '/Sammlungen' \
         | fzf -d/ -n5.. -f "$pattern"
     )
   fi
