@@ -62,10 +62,13 @@ function login_banner {
   fi
 
   if [ -z "$SSH_CONNECTION" ]; then
-    local event=$( calendar | grep '^\w' | sort -R | head -1 )
+    local event=$( calendar -l 0 | grep '^\w' | sort -R | head -1 )
     if [ "$event" ]; then
-      echo -e "📅 \e[0;37m$event\e[0m" | sed -r -e 's/ \s+/: /'
-      echo
+      echo -ne "📅 \e[1;33m"
+      echo -n "$event" | sed -r \
+        -e 's/\s+/ /g' \
+        -e 's/^(\w+ [0-9]+)\*?/\1:\o033[22m/'
+      echo -ne "\e[0m\n\n"
     fi
 
     fortune -acs -n $((LINES*15)) \
