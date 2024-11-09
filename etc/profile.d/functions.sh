@@ -144,17 +144,9 @@ function rg.less {
   rg --pretty "$@" | less
 }
 
-# rg wrapper to search application directories
-function rg.app {
-  local dirs=()
-  for dir in app lib ee/app ee/lib; do
-    if [ -d "$dir" ]; then
-      dirs=( "${dirs[@]}" "$dir" )
-    fi
-
-  done
-
-  rg "$@" "${dirs[@]}"
+# rg wrapper to view results in delta
+function rg.delta {
+  rg --json "$@" | delta
 }
 
 # Switch to dotfiles repository if no arguments are passed

@@ -6,7 +6,7 @@ neovim = "0.10.2"
 "ubi:BurntSushi/xsv" = "0.13.0"
 node = "23.1.0"
 fzf = "0.56.0"
-usage = "1.0.1"
+usage = "1.2.0"
 
 [settings]
 env_file = '.env'

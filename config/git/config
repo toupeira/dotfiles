@@ -56,6 +56,9 @@
 
   blame-format = " {commit:<8}  {author:<15.14} {timestamp:>15} "
 
+  grep-file-style = bold green
+  grep-line-number-style = magenta
+
 [advice]
   pushUpdateRejected = false
   statusHints = false
