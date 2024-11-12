@@ -1,2 +1,4 @@
+steam-devices
+
 flatpak: com.valvesoftware.Steam
 flatpak: org.freedesktop.Platform.VulkanLayer.gamescope
