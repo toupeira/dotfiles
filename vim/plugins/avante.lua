@@ -13,8 +13,5 @@ return {
 
   opts = {
     hints = { enabled = false },
-    behaviour = {
-      auto_apply_diff_after_generation = true,
-    }
   },
 }

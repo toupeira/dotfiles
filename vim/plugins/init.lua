@@ -39,6 +39,10 @@ return {
     end
   },
 
+  lazy_file { 'mong8se/actually.nvim',
+    dependencies = { 'dressing.nvim' },
+  },
+
   { 'NvChad/nvim-colorizer.lua',
     ft = { 'css', 'scss', 'lua' },
     cmd = 'ColorizerToggle',
@@ -85,6 +89,14 @@ return {
     init = function()
       vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
     end
+  },
+
+  lazy_file { 'stevearc/dressing.nvim',
+    dependencies = { 'fzf-lua' },
+    opts = {
+      input = { enabled = true },
+      select = { enabled = true, backend = 'fzf_lua' },
+    },
   },
 
   { 'tpope/vim-dispatch',

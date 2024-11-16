@@ -140,7 +140,6 @@ return {
     opts.lsp.code_actions = merge(opts.lsp.code_actions, preview)
 
     fzf.setup(opts)
-    fzf.register_ui_select()
 
     -- map each provider with '<Leader><key>`,
     -- and '<Leader><Leader><key>` for resuming

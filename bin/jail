@@ -1,0 +1,15 @@
+#!/bin/bash
+
+exec bwrap \
+  --ro-bind /etc /etc \
+  --ro-bind /bin /bin \
+  --ro-bind /usr /usr \
+  --symlink usr/lib64 /lib64 \
+  --proc /proc \
+  --dev /dev \
+  --tmpfs /run \
+  --tmpfs /tmp \
+  --unshare-pid \
+  --new-session \
+  --die-with-parent \
+  "$@"
