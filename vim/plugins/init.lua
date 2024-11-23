@@ -17,6 +17,7 @@ return {
   very_lazy { 'tpope/vim-scriptease' },
 
   lazy_file { 'AndrewRadev/splitjoin.vim' },
+  lazy_file { 'tpope/vim-rails' },
 
   lazy_file { 'andymass/vim-matchup',
     init = function()
