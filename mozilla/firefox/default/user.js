@@ -95,6 +95,7 @@ user_pref("devtools.toolbox.zoomValue", 1.2);
 // Keyboard shortcuts
 user_pref("ui.key.menuAccessKeyFocuses", false);
 user_pref("ui.key.textcontrol.prefer_native_key_bindings_over_builtin_shortcut_key_definitions", false);
+user_pref("browser.chrome.toolbar_tips.hide_on_keydown", 1);
 
 // Enable support for userChrome.css
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
