@@ -35,7 +35,6 @@ case "$terminal" in
             rows=58
           fi
         elif [ "$x" = "3840" ]; then
-          : geometry="160x85+$((xoff+1920))+0"
           cols=160
           rows=87
         elif [ "$x" = "3440" ]; then
