@@ -1,2 +1,2 @@
 [Context]
-filesystems=!home;xdg-documents/Sheets/MuseScore;/slack/sound:ro;
+filesystems=!home;xdg-documents/Sheets;/slack/sound:ro;

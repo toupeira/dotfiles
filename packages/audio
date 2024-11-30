@@ -4,5 +4,3 @@ jack-example-tools
 pipewire-jack
 qjackctl
 qpwgraph
-
-flatpak: org.musescore.MuseScore
