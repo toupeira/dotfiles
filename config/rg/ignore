@@ -1,1 +1,2 @@
 /.git
+/app/**/i18n/*.json
