@@ -60,10 +60,28 @@ FZF_ALT_C_OPTS="
   --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_ALT_C_COMMAND --unrestricted --exclude .git)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
 
-eval "$( mise exec -- fzf --bash )"
+# Setup FZF keybindings and completions.
+# Use Ctrl-F instead of Ctrl-T to complete files
+eval "$( mise exec -- fzf --bash | sed -r 's/\C-t/\C-f/g' )"
 
+# Switch branches with Ctrl-s
 bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
 
+# Complete from tmux panes with Ctrl-t
+[ "$TMUX" ] && bind -x '"\C-t":__tmux_complete'
+function __tmux_complete {
+  words=()
+  for pane in $( tmux list-panes -a -F '#D' ); do
+    words=( "${words[@]}"
+      $( tmux capture-pane -p -t "$pane" | grep -Eio '\w[-_.:/@[:alnum:]]{1,}\w' )
+    )
+  done
+
+  result=$( printf '%s\n' "${words[@]}" | sort | uniq | fzf )
+  [ "$result" ] && tmux send-keys "$result"
+}
+
+# Use settings from keybindings for default path and dir completions too
 _fzf_compgen_path() { $FZF_CTRL_T_COMMAND; }
 _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
 
