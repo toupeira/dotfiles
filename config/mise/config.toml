@@ -1,10 +1,10 @@
 [tools]
 ruby = "3.3.6"
-node = "23.3.0"
+node = "23.4.0"
 
 neovim = "0.10.2"
 fzf = "0.56.3"
-usage = "1.4.1"
+usage = "1.5.1"
 glow = "2.0.0"
 
 "ubi:dlvhdr/diffnav" = "0.2.8"
