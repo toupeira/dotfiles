@@ -11,6 +11,7 @@ glow = "2.0.0"
 "ubi:BurntSushi/xsv" = "0.13.0"
 
 [settings]
+auto_install = false
 env_file = '.env'
 not_found_auto_install = false
 disable_hints = ["outdated_bump"]
