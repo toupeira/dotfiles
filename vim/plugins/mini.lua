@@ -27,6 +27,9 @@ return {
       verbose = { read = true },
     })
     nmap('<Leader>W', ':lua MiniSessions.write(".session.vim")')
+    if not vim.uv.fs_stat('.session.vim') then
+      vim.g.minisessions_disable = true
+    end
 
     -- mini.starter ----------------------------------------------------
     local starter = require('mini.starter')

@@ -80,7 +80,7 @@ alias e='git-edit'
 
 alias o='obsidian'
 alias n='obsidian --edit'
-alias notes='cd ~/notes'
+function notes { [ $# -gt 0 ] && n "$@" || cd ~/notes; }
 
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
