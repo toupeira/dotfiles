@@ -12,11 +12,11 @@ return {
   very_lazy { 'tiagovla/scope.nvim', config = true },
   very_lazy { 'tpope/vim-abolish' },
   very_lazy { 'tpope/vim-characterize' },
-  very_lazy { 'tpope/vim-eunuch' },
   very_lazy { 'tpope/vim-repeat' },
   very_lazy { 'tpope/vim-scriptease' },
 
   lazy_file { 'AndrewRadev/splitjoin.vim' },
+  lazy_file { 'tpope/vim-eunuch' },
   lazy_file { 'tpope/vim-rails' },
 
   lazy_file { 'andymass/vim-matchup',
