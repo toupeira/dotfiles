@@ -3,8 +3,8 @@ ruby = "3.3.6"
 node = "23.4.0"
 
 neovim = "0.10.2"
-fzf = "0.56.3"
-usage = "1.5.1"
+fzf = "0.57.0"
+usage = "1.6.0"
 glow = "2.0.0"
 
 "ubi:dlvhdr/diffnav" = "0.2.8"
