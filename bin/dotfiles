@@ -817,7 +817,9 @@ function run {
         local command
         shift
 
-        if [ -x ~/.local/share/mise/shims/"$tool" ]; then
+        if which "$tool" >/dev/null; then
+          command=( "$tool" )
+        elif [ -x ~/.local/share/mise/shims/"$tool" ]; then
           command=( mise exec "$tool" -- "$tool" )
         else
           warning "Skipping {{$tool}}..."
