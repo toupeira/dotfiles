@@ -77,9 +77,10 @@ function _mux {
   local cword="${COMP_WORDS[COMP_CWORD]}"
 
   if [ "${cword:0:1}" = "@" ]; then
+    local commands=( bundle console dev log migrate server watcher )
     mapfile -t COMPREPLY < <(
       compgen -W "$(
-        (echo -e "bundle:\nconsole:\ndev:\nlog:\nmigrate:\nserver:\nwatcher:"; cat Procfile 2>/dev/null) \
+        (printf '%s:\n' "${commands[@]}"; cat Procfile 2>/dev/null) \
           | grep -Eo "^${cword:1}[-[:alnum:]]*" \
           | sed -r 's/^/@/'
       )"

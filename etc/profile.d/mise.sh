@@ -2,7 +2,6 @@
 
 if [ "$BASH_INTERACTIVE" ]; then
   eval "$( mise activate bash )"
-  eval "$( mise completion bash )"
 else
   eval "$( mise activate --shims )"
 fi

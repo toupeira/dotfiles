@@ -801,6 +801,7 @@ function run {
       update firmware
       update mise
       update gems
+      update completions
       ;;
 
     update-apt)      sudo aptitude update && sudo aptitude upgrade;;
@@ -808,6 +809,30 @@ function run {
     update-firmware) fwupdmgr update;;
     update-mise)     mise plugins update && mise upgrade --bump --interactive && mise prune;;
     update-gems)     gem update --system; run packages -f :gem;;
+    update-completions)
+      local completions="$DOTFILES/local/share/bash-completion/completions"
+
+      info "Updating {{mise}} completions..."
+      mise completion bash > "$completions/_mise"
+
+      if which kubectl >/dev/null; then
+        info "Updating {{kubectl}} completions..."
+        kubectl completion bash > "$completions/_kubectl"
+      fi
+
+      if which rclone >/dev/null; then
+        info "Updating {{rclone}} completions..."
+        rclone completion bash > "$completions/_rclone"
+      fi
+
+      if which exo >/dev/null; then
+        info "Updating {{exo}} completions..."
+        exo completion bash > "$completions/_exo"
+      fi
+
+      echo
+      git status "$completions"
+      ;;
     # }}}
     list|ls) # {{{
       [ $# -eq 0 ] && usage
