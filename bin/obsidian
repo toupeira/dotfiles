@@ -5,6 +5,10 @@ NOTES="/slack/documents/Notes"
 files=()
 mode='open'
 
+function find {
+  fdfind "$1\.md$" "$NOTES" -t f --exclude '/Sammlungen'
+}
+
 while [ "${1:0:1}" = "-" ]; do
   case "$1" in
     -l|--list)
@@ -33,14 +37,11 @@ fi
 
 for pattern in "$@"; do
   # First look for filenames starting with the pattern
-  mapfile -t matches < <( fdfind "$pattern.*\.md$" "$NOTES" -t f )
+  mapfile -t matches < <( find "$pattern" )
 
   # Otherwise try a fuzzy search
   if [ "${#matches[@]}" = 0 ]; then
-    mapfile -t matches < <(
-      fdfind '\.md$' "$NOTES" -t f --exclude '/Sammlungen' \
-        | fzf -d/ -n5.. -f "$pattern"
-    )
+    mapfile -t matches < <( find | fzf -d/ -n5.. -f "$pattern" )
   fi
 
   files=( "${files[@]}" "${matches[@]}" )
