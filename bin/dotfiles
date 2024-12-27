@@ -804,11 +804,22 @@ function run {
       update completions
       ;;
 
-    update-apt)      sudo aptitude update && sudo aptitude upgrade;;
-    update-flatpak)  flatpak update && flatpak uninstall --unused;;
-    update-firmware) fwupdmgr update;;
-    update-mise)     mise plugins update && mise upgrade --bump --interactive && mise prune;;
-    update-gems)     gem update --system; run packages -f :gem;;
+    update-apt)
+      sudo aptitude update && sudo aptitude upgrade
+      ;;
+    update-flatpak)
+      flatpak update && flatpak uninstall --unused
+      ;;
+    update-firmware)
+      fwupdmgr update
+      ;;
+    update-mise)
+      mise plugins update && mise upgrade --bump --interactive && mise prune
+      ;;
+    update-gems)
+      gem update --system
+      run packages -f :gem
+      ;;
     update-completions)
       local completions="$DOTFILES/local/share/bash-completion/completions"
 

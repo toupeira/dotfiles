@@ -81,6 +81,9 @@ Style/PerlBackrefs:
 Style/TernaryParentheses:
   EnforcedStyle: require_no_parentheses
 
+Style/SafeNavigationChainLength:
+  Max: 5
+
 Style/SpecialGlobalVars:
   Enabled: false
 

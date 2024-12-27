@@ -77,7 +77,11 @@ function __tmux_complete {
     )
   done
 
-  result=$( printf '%s\n' "${words[@]}" | sort | uniq | fzf )
+  result=$(
+    printf '%s\n' "${words[@]}" \ | sort | uniq | \
+      fzf --bind "ctrl-f:unbind(ctrl-f)+reload($FZF_CTRL_T_COMMAND)"
+  )
+
   [ "$result" ] && tmux send-keys "$result"
 }
 

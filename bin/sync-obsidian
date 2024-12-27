@@ -232,21 +232,30 @@ if ARGS[:calendar]
   entries = []
   current = nil
   skip = true
+  add_to_description = false
 
   URI.open(ARGS[:path]).each_line do |line|
     case line.strip
     when 'BEGIN:VEVENT'
       entries << current = {}
       skip = false
+      add_to_description = false
     when 'BEGIN:VALARM'
       skip = true
     end
 
     next if skip
 
+    add_to_description = false if line.start_with?(/\w/)
+
     case line
     when /^SUMMARY:(.*)/
-      current[:summary] = $1.strip
+      current[:summary] = $1.chomp
+    when /^DESCRIPTION:(.*)/
+      current[:description] = $1.chomp.gsub(/\\[rn]/, "\n")
+      add_to_description = true
+    when /^ (.*)/
+      current[:description] << $1.chomp.gsub(/\\[rn]/, "\n") if add_to_description
     when /^DTSTART(;[^:]+)?:(.*)/
       current[:start], current[:all_day] = parse_time($2, $1)
     when /^DTEND(;[^:]+)?:(.*)/
@@ -291,6 +300,9 @@ if ARGS[:calendar]
   write_markdown("Kalender/#{ARGS[:calendar]}", entries.map do |entry|
     summary = entry[:summary].force_encoding('utf-8')
     summary.concat(" <small>`#{entry[:start].strftime('%H:%M')}`</small>") unless entry[:all_day]
+
+    description = entry[:description]&.force_encoding('utf-8')
+    description = "\n#{description.gsub(/^/, '  ')}" if description
 
     "- [ ] #{ARGS[:icon]&.sub(/$/, ' ')}#{summary} " \
       "%%(start:: #{entry[:start].iso8601})%%" \

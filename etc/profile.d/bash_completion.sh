@@ -20,7 +20,7 @@ complete -F _command start @
 complete -F _command spring
 complete -F _command pw-jack
 
-has_completion pgrep && complete -F _pgrep psgrep pskill
+has_completion pgrep _comp_cmd_pgrep && complete -F _comp_cmd_pgrep psgrep pskill
 has_completion systemctl && complete -F _systemctl sctl
 has_completion journalctl && complete -F _journalctl jctl
 
