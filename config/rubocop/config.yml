@@ -1,6 +1,6 @@
 AllCops:
   NewCops: enable
-  TargetRubyVersion: 3.3.5
+  TargetRubyVersion: 3.4.1
   Exclude:
     - db/schema.rb
 

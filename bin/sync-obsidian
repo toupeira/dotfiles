@@ -150,13 +150,13 @@ if ARGS[:ratings]
   FileUtils.rm_f(Dir.glob("#{FOLDER}/Filme & TV/[1-9]*.md"))
 
   all_movies = parse_csv(ARGS[:ratings])
-  movies_by_decade = all_movies.group_by { _1['Year'].sub(/^(\d{3}).*/, '\10s') }
+  movies_by_decade = all_movies.group_by { it['Year'].sub(/^(\d{3}).*/, '\10s') }
 
   movies_by_decade.sort.each do |decade, movies|
     write_markdown(
       "Filme & TV/#{decade} (#{movies.size})",
       [MOVIES_HEADER] +
-      movies.sort_by { [_1['Year'], _1['Title']] }.map do |movie|
+      movies.sort_by { [it['Year'], it['Title']] }.map do |movie|
         format_movie(movie)
       end,
     )
@@ -171,7 +171,7 @@ if ARGS[:watchlist]
   write_markdown(
     "Filme & TV/Watchlist (#{movies.size})",
     [MOVIES_HEADER] +
-    movies.sort_by { [_1['Release Date']&.to_i || 9999, _1['Created']] }.reverse.map do |movie|
+    movies.sort_by { [it['Release Date']&.to_i || 9999, it['Created']] }.reverse.map do |movie|
       format_movie(movie)
     end,
   )
@@ -208,14 +208,14 @@ if ARGS[:goodreads]
   FileUtils.rm_f(Dir.glob("#{FOLDER}/Bücher/*.md"))
 
   all_books = parse_csv(ARGS[:goodreads])
-  books_by_shelf = all_books.group_by { _1['Exclusive Shelf'] }
+  books_by_shelf = all_books.group_by { it['Exclusive Shelf'] }
 
   books_by_shelf.sort.each do |shelf, books|
     shelf = shelf.gsub('-', ' ').capitalize
     write_markdown(
       "Bücher/#{shelf} (#{books.size})",
       [BOOKS_HEADER] +
-      books.sort_by { _1['Date Read'] || _1['Date Added'] }.reverse.map do |book|
+      books.sort_by { it['Date Read'] || it['Date Added'] }.reverse.map do |book|
         format_book(book)
       end,
     )
@@ -293,8 +293,8 @@ if ARGS[:calendar]
     entry[:start] = time
   end
 
-  entries.select! { time_range.cover?(_1[:start]&.to_date) }
-  entries.sort_by! { _1[:start] }
+  entries.select! { time_range.cover?(it[:start]&.to_date) }
+  entries.sort_by! { it[:start] }
   entries.reverse!
 
   write_markdown("Kalender/#{ARGS[:calendar]}", entries.map do |entry|
