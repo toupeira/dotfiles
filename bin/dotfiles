@@ -320,9 +320,9 @@ function run {
       fi
 
       for path in "$@"; do
-        path=$( echo "${path%/}" | sed -r "s,^$DOTFILES/,," )
+        subpath=$( echo "${path%/}" | sed -r "s,^$DOTFILES/,," )
 
-        if [ ! -e "$path" ] || ! validate "$( origin "$path" )"; then
+        if [ ! -e "$path" ] || ! validate "$( origin "$subpath" )"; then
           continue
         elif [ -f "$path" ] || [ -L "$path" ] || [ -e "$path/.link" ] || [ -e "$path/.git" ]; then
           run link "$path"
@@ -775,7 +775,7 @@ function run {
         install-packages "$missing_apt"  sudo aptitude install
         install-packages "$missing_gem"  gem install
         install-packages "$missing_flat" flatpak install
-        install-packages "$missing_mise" mise install
+        install-packages "$missing_mise" 'mise install && mise prune'
       fi
       echo
       ;;
