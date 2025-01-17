@@ -1,13 +1,13 @@
 [tools]
 ruby = "3.4.1"
-node = "23.5.0"
+node = "23.6.0"
 
 neovim = "0.10.3"
 fzf = "0.57.0"
-usage = "1.7.4"
+usage = "2.0.3"
 glow = "2.0.0"
 
-"ubi:dlvhdr/diffnav" = "0.2.8"
+"ubi:dlvhdr/diffnav" = "0.3.0"
 "ubi:BurntSushi/xsv" = "0.13.0"
 
 [settings]
