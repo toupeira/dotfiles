@@ -1,9 +1,9 @@
 [tools]
 ruby = "3.4.1"
-node = "23.6.0"
+node = "23.6.1"
 
 neovim = "0.10.3"
-fzf = "0.57.0"
+fzf = "0.58.0"
 usage = "2.0.3"
 glow = "2.0.0"
 

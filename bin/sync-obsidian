@@ -10,7 +10,6 @@ require 'tzinfo'
 
 FOLDER = '/slack/documents/Notes/Sammlungen'
 ARGS = {}
-RECORDS = []
 
 # Helpers
 # ----------------------------------------------------------------------
