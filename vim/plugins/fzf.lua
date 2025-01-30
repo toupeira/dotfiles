@@ -106,6 +106,7 @@ return {
     vim.g.fzf_history_dir = vim.fn.stdpath('state') .. '/fzf'
 
     -- override actions
+    defaults.files.actions = { ['ctrl-g'] = { actions.toggle_ignore } }
     defaults.helptags.actions.default = actions.help_tab
     defaults.actions.files.default = function(selected, opts)
       actions.file_edit(selected, opts)

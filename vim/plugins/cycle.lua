@@ -66,6 +66,7 @@ return {
       {{ 'allow', 'expect' }},
       {{ 'build', 'create' }},
       {{ 'class', 'module' }},
+      {{ 'delete', 'destroy' }},
       {{ 'else', 'elsif' }},
       {{ 'get', 'post', 'put', 'patch' }},
       {{ 'if', 'unless' }},
