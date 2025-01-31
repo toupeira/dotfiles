@@ -1,19 +1,19 @@
 [tools]
 ruby = "3.4.1"
-node = "23.6.1"
+node = "23.7.0"
 
-neovim = "0.10.3"
-fzf = "0.58.0"
-usage = "2.0.3"
-glow = "2.0.0"
-
-"ubi:dlvhdr/diffnav" = "0.3.0"
 "ubi:BurntSushi/xsv" = "0.13.0"
+"ubi:charmbracelet/glow" = "2.0.0"
+"ubi:dlvhdr/diffnav" = "0.3.0"
+"ubi:jdx/usage" = "2.0.3"
+"ubi:junegunn/fzf" = "0.58.0"
+"ubi:neovim/neovim" = { version = "0.10.4", bin_path = "bin", extract_all = "true" }
 
 [settings]
 auto_install = false
 not_found_auto_install = false
 env_file = '.env'
+disable_backends = ["aqua"]
 disable_hints = ["outdated_bump"]
 
 [env]

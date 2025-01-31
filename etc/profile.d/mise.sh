@@ -7,5 +7,5 @@ else
 fi
 
 if [ "$HOSTNAME" = "snafu" ]; then
-  export MISE_DISABLE_TOOLS='ruby,nodejs'
+  export MISE_DISABLE_TOOLS='ruby,node'
 fi

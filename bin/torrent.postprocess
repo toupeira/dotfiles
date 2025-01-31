@@ -31,14 +31,11 @@ if [ $status -ne 0 ] || echo "$output" | grep -q '^Failed ' || ! find "$path" -t
   notify -i dialog-no "Couldn't auto-detect $name" "$output"
   exit 1
 elif [ "$type" = "tv" ]; then
-  size=$( du -smD "$path" | cut -f1 )
-  unlinked=$( du -sm "$path" | cut -f1 )
+  size=$( du -sm "$path" | cut -f1 )
 
-  if [ "$size" -lt 2048 ]; then
-    if [ "$unlinked" -lt 2 ]; then
-      curl http://localhost:9090/api/v2/torrents/delete --data "hashes=$hash&deleteFiles=true"
-    else
-      curl http://localhost:9090/api/v2/torrents/pause --data "hashes=$hash"
-    fi
+  if [ "$size" -lt 2 ]; then
+    curl http://localhost:9090/api/v2/torrents/delete --data "hashes=$hash&deleteFiles=true"
+  else
+    curl http://localhost:9090/api/v2/torrents/pause --data "hashes=$hash"
   fi
 fi
