@@ -62,7 +62,7 @@ FZF_ALT_C_OPTS="
 
 # Setup FZF keybindings and completions.
 # Use Ctrl-F instead of Ctrl-T to complete files
-eval "$( mise exec -- fzf --bash | sed -r 's/\C-t/\C-f/g' )"
+eval "$( fzf --bash | sed -r 's/\C-t/\C-f/g' )"
 
 # Switch branches with Ctrl-s
 bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'

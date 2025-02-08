@@ -31,3 +31,14 @@ export LESS_TERMCAP_me=$'\e[0m'
 export LESS_TERMCAP_se=$'\e[0m'
 export LESS_TERMCAP_ue=$'\e[0m'
 export GROFF_NO_SGR=1
+
+# initialize mise
+if [ "$HOSTNAME" = "snafu" ]; then
+  export MISE_DISABLE_TOOLS='ruby,node'
+fi
+
+if [ "$BASH_INTERACTIVE" ]; then
+  eval "$( mise activate bash )"
+else
+  eval "$( mise activate --shims )"
+fi
