@@ -57,6 +57,8 @@ alias watch='watch -cd -n 1 '
 alias cpufreq='sudo watch "cpupower -c all frequency-info | grep assert"'
 alias sleep-log='journalctl -u sleep.target --no-pager | grep ".*Stopped.*\|$"'
 alias sleep-inhibit='systemd-inhibit sleep 999d'
+alias btop='btop -p 1'
+alias top='btop'
 
 # package management
 alias pkget='aptitude -Z install'
