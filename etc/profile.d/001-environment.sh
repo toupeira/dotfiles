@@ -35,6 +35,7 @@ export GROFF_NO_SGR=1
 # initialize mise
 if [ "$HOSTNAME" = "snafu" ]; then
   export MISE_DISABLE_TOOLS='ruby,node'
+  tmux set-environment MISE_DISABLE_TOOLS "$MISE_DISABLE_TOOLS"
 fi
 
 if [ "$BASH_INTERACTIVE" ]; then
