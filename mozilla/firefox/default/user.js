@@ -20,7 +20,6 @@ user_pref("browser.search.suggest.enabled", false);
 user_pref("browser.selfsupport.url", "");
 user_pref("browser.send_pings", false);
 user_pref("browser.startup.homepage_override.mstone", "ignore");
-user_pref("browser.tabs.firefox-view", false);
 user_pref("datareporting.healthreport.uploadEnabled", false);
 user_pref("dom.battery.enabled", false);
 user_pref("dom.private-attribution.submission.enabled", false);
@@ -53,6 +52,7 @@ user_pref("signon.firefoxRelay.feature", "disabled");
 user_pref("signon.rememberSignons", false);
 
 // Tabs
+user_pref("browser.tabs.firefox-view", false);
 user_pref("browser.tabs.hoverPreview.enabled", true);
 user_pref("browser.tabs.hoverPreview.showThumbnails", false);
 user_pref("browser.tabs.loadBookmarksInBackground", true);
@@ -81,6 +81,7 @@ user_pref("browser.search.suggest.enabled.private", false);
 
 // Downloads
 user_pref("browser.download.alwaysOpenPanel", false);
+user_pref("browser.download.always_ask_before_handling_new_types", true);
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
 
 // Devtools
@@ -90,7 +91,7 @@ user_pref("devtools.debugger.remote-enabled", true);
 user_pref("devtools.screenshot.audio.enabled", false);
 user_pref("devtools.screenshot.clipboard.enabled", true);
 user_pref("devtools.toolbox.tabsOrder", "webconsole,inspector,netmonitor,jsdebugger,styleeditor,storage,performance,memory,accessibility");
-user_pref("devtools.toolbox.zoomValue", 1.2);
+user_pref("devtools.toolbox.zoomValue", "1.2");
 
 // Keyboard shortcuts
 user_pref("ui.key.menuAccessKeyFocuses", false);
