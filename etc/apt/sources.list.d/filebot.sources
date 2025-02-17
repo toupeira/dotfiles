@@ -1,0 +1,6 @@
+Types: deb
+URIs: https://get.filebot.net/deb/
+Suites: universal
+Components: main
+Architectures: all
+Signed-By: /etc/apt/trusted.gpg.d/filebot.asc

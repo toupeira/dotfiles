@@ -1,1 +1,0 @@
-deb [signed-by=/etc/apt/trusted.gpg.d/mise.asc arch=amd64] https://mise.jdx.dev/deb stable main
