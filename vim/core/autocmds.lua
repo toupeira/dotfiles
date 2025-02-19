@@ -11,6 +11,7 @@ vim.cmd([[
   autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
   autocmd FileType NeogitCommitMessage setlocal colorcolumn=50,72
   autocmd FileType help                setlocal buflisted
+  autocmd FileType iss                 setlocal commentstring=;\ %s
   autocmd FileType lua                 setlocal path+=./lua iskeyword-=: keywordprg=:Help
   autocmd FileType make                setlocal noexpandtab
   autocmd FileType markdown            setlocal conceallevel=2 foldlevel=2 suffixesadd+=.md comments=b:*,b:-,b:+,n:> formatoptions+=r
