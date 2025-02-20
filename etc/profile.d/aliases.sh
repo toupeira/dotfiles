@@ -90,6 +90,7 @@ alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 for i in bundle console dev log migrate server watcher; do
   eval "alias @$i='mux @$i'"
 done
+unset i
 
 # sudo aliases
 

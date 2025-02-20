@@ -70,7 +70,8 @@ bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
 # Complete from tmux panes with Ctrl-t
 [ "$TMUX" ] && bind -x '"\C-t":__tmux_complete'
 function __tmux_complete {
-  words=()
+  local words=()
+  local pane
   for pane in $( tmux list-panes -a -F '#D' ); do
     words=( "${words[@]}"
       $( tmux capture-pane -p -t "$pane" | grep -Eio '\w[-_.:/@[:alnum:]]{1,}\w' )

@@ -16,6 +16,7 @@ function up {
 
 # Open files with xdg-open
 function open {
+  local file
   for file in "$@"; do
     if [ -f "$file" ]; then
       xdg-open "$file" &>/dev/null
@@ -250,6 +251,7 @@ function ssh.mux {
   local first_host="$1"
   shift
 
+  local host
   for host in $( echo "$@" | tr " " "\\n" | tac ); do
     tmux split-window -vd ssh "$host"
   done
