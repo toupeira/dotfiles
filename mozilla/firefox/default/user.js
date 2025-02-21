@@ -83,6 +83,7 @@ user_pref("browser.search.suggest.enabled.private", false);
 user_pref("browser.download.alwaysOpenPanel", false);
 user_pref("browser.download.always_ask_before_handling_new_types", true);
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
+user_pref("browser.download.clearHistoryOnDelete", 2);
 
 // Devtools
 user_pref("devtools.accessibility.enabled", false);
@@ -124,3 +125,6 @@ user_pref("font.name-list.emoji", "Noto Color Emoji");
 
 // Disable translations
 user_pref("browser.translations.enable", false);
+
+// Disable containers
+user_pref("privacy.userContext.enabled", false);

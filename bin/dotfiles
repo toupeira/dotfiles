@@ -848,7 +848,8 @@ function run {
       update rclone
 
       echo
-      git status "$completions"
+      git add "$completions"
+      git status -s "$completions"
       ;;
     # }}}
     list|ls) # {{{

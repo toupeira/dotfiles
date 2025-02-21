@@ -9,6 +9,12 @@ rescue LoadError
   puts "Couldn't load #{lib}"
 end
 
+class Array
+  def avg
+    sum / size.to_f
+  end
+end
+
 lambda {
   gray     = ->(text) { "\001\e[1;30m\002#{text}\001\e[0m\002" }
   darkcyan = ->(text) { "\001\e[0;36m\002#{text}\001\e[0m\002" }

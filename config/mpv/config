@@ -12,6 +12,7 @@ sub=auto
 sub-auto=fuzzy
 sub-font=Roboto Slab
 sub-font-size=38
+sub-bold=yes
 sub-border-size=3
 sub-border-color=0/0/0/0.6
 sub-color=1/1/1/0.6

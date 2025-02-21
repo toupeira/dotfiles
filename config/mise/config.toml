@@ -2,10 +2,10 @@
 ruby = "3.4.2"
 node = "23.8.0"
 
-fzf = "0.60.0"
+fzf = "0.60.1"
 glow = "2.0.0"
 neovim = "0.10.4"
-usage = "2.0.4"
+usage = "2.0.5"
 
 "ubi:BurntSushi/xsv" = "0.13.0"
 "ubi:dlvhdr/diffnav" = "0.3.0"
