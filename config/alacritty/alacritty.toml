@@ -58,7 +58,7 @@ bindings = [
 [selection]
 semantic_escape_chars = ",│`|\"' (){}<>\t"
 
-[shell]
+[terminal.shell]
 program = 'bash'
 args = ['-l']
 
