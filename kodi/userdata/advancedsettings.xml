@@ -15,5 +15,5 @@
   </audio>
 
   <videolibrary><cleanonupdate>true</cleanonupdate></videolibrary>
-  <audiolibrary><cleanonupdate>true</cleanonupdate></audiolibrary>
+  <musiclibrary><cleanonupdate>true</cleanonupdate></musiclibrary>
 </advancedsettings>
