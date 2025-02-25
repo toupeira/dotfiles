@@ -65,6 +65,9 @@
   commitBeforeMerge = false
   resolveConflict = false
 
+[branch]
+  sort = -committerdate
+
 [checkout]
   defaultRemote = origin
 
@@ -84,6 +87,7 @@
 
 [fetch]
   prune = true
+  pruneTags = true
 
 [init]
   defaultBranch = main
@@ -106,9 +110,11 @@
 
 [push]
   autoSetupRemote = true
+  followTags = true
 
 [rebase]
-  autosquash = true
+  autoSquash = true
+  updateRefs = true
   stat = true
 
 [stash]
@@ -120,6 +126,7 @@
 
 [tag]
   gpgSign = true
+  sort = version:refname
 
 [filter "lfs"]
   clean = git-lfs clean -- %f
