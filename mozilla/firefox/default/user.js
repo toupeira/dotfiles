@@ -92,7 +92,7 @@ user_pref("devtools.debugger.remote-enabled", true);
 user_pref("devtools.screenshot.audio.enabled", false);
 user_pref("devtools.screenshot.clipboard.enabled", true);
 user_pref("devtools.toolbox.tabsOrder", "webconsole,inspector,netmonitor,jsdebugger,styleeditor,storage,performance,memory,accessibility");
-user_pref("devtools.toolbox.zoomValue", "1.2");
+user_pref("devtools.toolbox.zoomValue", "1.1");
 
 // Keyboard shortcuts
 user_pref("ui.key.menuAccessKeyFocuses", false);
