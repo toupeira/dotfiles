@@ -791,7 +791,7 @@ function run {
         if [ -n "$filter" ] && [ "$filter" != "$type" ]; then
           return
         elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
-          mux-wrap -w "$command"
+          mux-wrap -w -t "update-$type" "$command"
           system tmux select-layout even-vertical
         fi
       }

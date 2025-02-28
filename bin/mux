@@ -204,16 +204,12 @@ case "$1" in
     done
     ;;
 
-  # Set the current tmux window title
+  # Set the current terminal / tmux pane title
   title)
     [ $# -eq 2 ] || usage
     title="$2"
 
-    if [[ "$TERM" =~ ^(tmux|screen) ]]; then
-      echo -ne "\e]0;$title\ek$title\e" >&2
-    else
-      echo -ne "\e]1;$title\\007\e]2;$title\\007" >&2
-    fi
+    echo -ne "\e]2;$title\e" >&2
     ;;
 
   # Create a new window
