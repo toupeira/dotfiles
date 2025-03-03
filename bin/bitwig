@@ -8,9 +8,9 @@ else
   bitwig="bitwig-studio"
 fi
 
-if [ "$1" = "-p" ]; then
+if [ "$1" = "-j" ]; then
   shift
-  pipewire=1
+  jack=1
 fi
 
 if pgrep -x bitwig-studio >/dev/null; then
@@ -30,10 +30,15 @@ if [ ! -L "$link" ] && [ -d "$workspace" ]; then
   ln -s "$workspace" "$link"
 fi
 
-if [ "$flatpak" ] || [ "$pipewire" ]; then
-  PIPEWIRE_QUANTUM=192/48000 $bitwig "$@"
-else
+if [ "$jack" ] && ! [ "$flatpak" ]; then
   jack run $bitwig "$@"
+else
+  pw-metadata -n settings 0 clock.force-quantum 192
+
+  pw-jack $bitwig "$@"
+
+  pw-metadata -n settings 0 clock.force-quantum 1024
+  pw-metadata -n settings 0 clock.force-quantum 0
 fi
 
 if [ -L "$link" ]; then

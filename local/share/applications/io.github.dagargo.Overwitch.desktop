@@ -1,0 +1,10 @@
+[Desktop Entry]
+Version=1.1
+Type=Application
+Name=Overwitch
+Comment=Overbridge 2 device client for JACK
+Icon=io.github.dagargo.Overwitch
+Exec=pw-jack overwitch
+Actions=
+Categories=Audio;AudioVideo;Music;X-Alsa;X-Sound;
+Keywords=music;alsa;realtime;standalone;

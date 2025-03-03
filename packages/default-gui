@@ -1,4 +1,5 @@
 # system
+apparmor
 dnsmasq-base
 dosfstools
 eject

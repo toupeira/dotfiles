@@ -13,6 +13,7 @@ case "$1" in
     setup-peripherals
     ;;
   stop)
+    killall overwitch overwitch-service 2>/dev/null
     jack_control stop
     setup-peripherals
     ;;

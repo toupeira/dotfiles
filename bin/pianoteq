@@ -2,4 +2,4 @@
 
 cd ~/src/upstream/pianoteq || exit 1
 
-exec jack run ./x86-64bit/"Pianoteq 8" "$@"
+exec pw-jack ./x86-64bit/"Pianoteq 8" "$@"

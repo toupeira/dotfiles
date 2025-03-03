@@ -80,7 +80,7 @@ if os.path.exists(METADATA_IMPORT):
         rating = round(float(rating), 1)
         if rating >= 0 and rating != old_rating:
             log(filename, '\033[0;32mrating:', '%.1f → %.1f' % (old_rating, rating))
-            if old_rating == -1 or ask('%s rating from %.1f to %.1f?' % ('Raise' if rating > old_rating else 'Lower', old_rating, rating), default=(HOSTNAME == 'ocelot')):
+            if old_rating == -1 or ask('%s rating from %.1f to %.1f?' % ('Raise' if rating > old_rating else 'Lower', old_rating, rating), default=(HOSTNAME != 'schtube')):
                 song['~#rating'] = rating
                 changes = True
 
