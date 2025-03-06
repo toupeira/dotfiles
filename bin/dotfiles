@@ -808,7 +808,7 @@ function run {
       sudo aptitude update && sudo aptitude upgrade
       ;;
     update-flatpak)
-      flatpak update && flatpak uninstall --unused
+      flatpak update && flatpak uninstall --unused && flatpak uninstall --delete-data
       ;;
     update-firmware)
       fwupdmgr update
