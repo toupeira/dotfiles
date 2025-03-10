@@ -23,6 +23,7 @@ mesa-vulkan-drivers
 nvtop
 plymouth
 plymouth-label
+smartmontools
 thermald
 tlp
 wireless-regdb
