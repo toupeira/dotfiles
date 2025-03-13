@@ -13,7 +13,6 @@ return {
       event = 'VeryLazy',
       opts = {
         ensure_installed = (util.is_sudo or util.is_ssh) and {} or {
-          'eslint',
           'lua_ls',
           'vimls',
         },
