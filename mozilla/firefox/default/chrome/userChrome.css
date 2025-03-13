@@ -26,3 +26,12 @@ menu[label="Firefox Multi-Account Containers"]
 {
   display: none !important;
 }
+
+/* Remove play buttons in tabs */
+.tab-audio-button[activemedia-blocked] {
+  display: none !important;
+}
+
+.tab-icon-stack[activemedia-blocked] {
+  --tab-icon-end-margin: 5.5px !important;
+}

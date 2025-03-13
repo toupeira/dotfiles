@@ -1,3 +1,1 @@
-/.git
-/app/**/i18n/*.json
-/app/**/generated/*.ts
+.git/

@@ -1,4 +1,4 @@
-#!/bin/sh
+#!/bin/bash
 
 steam="flatpak run com.valvesoftware.Steam"
 
@@ -15,4 +15,12 @@ elif [ "$1" = "--link" ]; then
   exit 1
 fi
 
+if [ "$HOSTNAME" = "schtube" ] && bluetoothctl show | grep -q 'Powered: no'; then
+  enable_bluetooth=1
+fi
+
+[ "$enable_bluetooth" ] && (bluetoothctl power on; rfkill unblock bluetooth)
+
 $steam "$@"
+
+[ "$enable_bluetooth" ] && bluetoothctl power off

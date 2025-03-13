@@ -2,17 +2,21 @@ local util = require('util')
 
 return {
   'williamboman/mason.nvim',
+  event = 'VeryLazy',
   build = ':MasonUpdate',
   dependencies = {
     { 'WhoIsSethDaniel/mason-tool-installer.nvim',
-      event = 'VeryLazy',
       opts = {
         ensure_installed = (util.is_sudo or util.is_ssh) and {} or {
           'jsonlint',
           'luacheck',
           'shellcheck',
-          'stylelint',
           'yamllint',
+        },
+        integrations = {
+          ['mason-lspconfig'] = false,
+          ['mason-null-ls'] = false,
+          ['mason-nvim-dap'] = false,
         },
       },
     },

@@ -1,10 +1,14 @@
 // Security & privacy
+// https://github.com/arkenfox/user.js
 user_pref("app.normandy.api_url", "");
 user_pref("app.normandy.enabled", false);
 user_pref("app.shield.optoutstudies.enabled", false);
 user_pref("beacon.enabled", false);
 user_pref("browser.aboutConfig.showWarning", false);
+user_pref("browser.contentblocking.category", "strict");
 user_pref("browser.disableResetPrompt", true);
+user_pref("browser.newtabpage.activity-stream.showSponsored", false);
+user_pref("browser.newtabpage.activity-stream.showSponsoredTopSites", false);
 user_pref("browser.newtabpage.enhanced", false);
 user_pref("browser.newtabpage.introShown", true);
 user_pref("browser.newtab.preload", false);
@@ -20,7 +24,6 @@ user_pref("browser.search.suggest.enabled", false);
 user_pref("browser.selfsupport.url", "");
 user_pref("browser.send_pings", false);
 user_pref("browser.startup.homepage_override.mstone", "ignore");
-user_pref("datareporting.healthreport.uploadEnabled", false);
 user_pref("dom.battery.enabled", false);
 user_pref("dom.private-attribution.submission.enabled", false);
 user_pref("dom.push.enabled", false);
@@ -51,6 +54,16 @@ user_pref("privacy.trackingprotection.enabled", true);
 user_pref("signon.firefoxRelay.feature", "disabled");
 user_pref("signon.rememberSignons", false);
 
+// Enable telemetry
+user_pref("browser.crashReports.unsubmittedCheck.autoSubmit2", true);
+user_pref("browser.tabs.crashReporting.sendReport", true);
+user_pref("datareporting.healthreport.uploadEnabled", true);
+user_pref("datareporting.usage.uploadEnabled", true);
+user_pref("datareporting.policy.dataSubmissionEnabled", true);
+
+// Tracking Protection whitelist
+user_pref("urlclassifier.trackingSkipURLs", "disqus.com, c.disquscdn.com, cdmu.disqus.com");
+
 // Tabs
 user_pref("browser.tabs.firefox-view", false);
 user_pref("browser.tabs.hoverPreview.enabled", true);
@@ -79,52 +92,42 @@ user_pref("browser.search.separatePrivateDefault.ui.enabled", true);
 user_pref("browser.search.suggest.enabled", false);
 user_pref("browser.search.suggest.enabled.private", false);
 
+// Keyboard and mouse
+user_pref("ui.key.menuAccessKeyFocuses", false);
+user_pref("ui.key.textcontrol.prefer_native_key_bindings_over_builtin_shortcut_key_definitions", false);
+user_pref("browser.chrome.toolbar_tips.hide_on_keydown", 1);
+user_pref("middlemouse.paste", false);
+
 // Downloads
 user_pref("browser.download.alwaysOpenPanel", false);
 user_pref("browser.download.always_ask_before_handling_new_types", true);
-user_pref("browser.download.start_downloads_in_tmp_dir", true);
 user_pref("browser.download.clearHistoryOnDelete", 2);
+user_pref("browser.download.manager.addToRecentDocs", false);
+user_pref("browser.download.start_downloads_in_tmp_dir", true);
+
+// Media
+user_pref("media.ffmpeg.vaapi.enabled", true);
+user_pref("media.hardwaremediakeys.enabled", false);
+user_pref("pdfjs.ignoreDestinationZoom", true);
+
+// Content
+user_pref("browser.translations.enable", false);
+user_pref("layout.spellcheckDefault", "disabled");
+user_pref("font.name-list.emoji", "Noto Color Emoji");
+
+// Disable containers
+user_pref("privacy.userContext.enabled", false);
 
 // Devtools
 user_pref("devtools.accessibility.enabled", false);
 user_pref("devtools.application.enabled", false);
+user_pref("devtools.chrome.enabled", true);
 user_pref("devtools.debugger.remote-enabled", true);
 user_pref("devtools.screenshot.audio.enabled", false);
 user_pref("devtools.screenshot.clipboard.enabled", true);
 user_pref("devtools.toolbox.tabsOrder", "webconsole,inspector,netmonitor,jsdebugger,styleeditor,storage,performance,memory,accessibility");
 user_pref("devtools.toolbox.zoomValue", "1.1");
-
-// Keyboard shortcuts
-user_pref("ui.key.menuAccessKeyFocuses", false);
-user_pref("ui.key.textcontrol.prefer_native_key_bindings_over_builtin_shortcut_key_definitions", false);
-user_pref("browser.chrome.toolbar_tips.hide_on_keydown", 1);
+user_pref("view_source.wrap_long_lines", true);
 
 // Enable support for userChrome.css
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
-
-// Enable hardware video acceleration
-user_pref("media.ffmpeg.vaapi.enabled", true);
-
-// Disable MPRIS integration
-user_pref("media.hardwaremediakeys.enabled", false);
-
-// Ignore zoom changes on PDF links
-user_pref("pdfjs.ignoreDestinationZoom", true);
-
-// Wrap lines when viewing source
-user_pref("view_source.wrap_long_lines", true);
-
-// Disable spellcheck
-user_pref("layout.spellcheckDefault", "disabled");
-
-// Disable middle-click paste
-user_pref("middlemouse.paste", false);
-
-// Disable builtin emoji font
-user_pref("font.name-list.emoji", "Noto Color Emoji");
-
-// Disable translations
-user_pref("browser.translations.enable", false);
-
-// Disable containers
-user_pref("privacy.userContext.enabled", false);

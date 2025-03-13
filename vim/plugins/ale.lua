@@ -1,6 +1,7 @@
 return {
   'dense-analysis/ale',
   event = 'LazyFile',
+  dependencies = { 'mason.nvim' },
 
   init = function()
     vim.g.ale_use_neovim_diagnostics_api = 1
@@ -21,8 +22,9 @@ return {
 
     vim.g.ale_linters = {
       ruby = { 'ruby', 'rubocop' },
+      json = { 'jsonlint' },
       javascript = { 'eslint' },
-      typescript = { 'tslint' },
+      typescript = { 'eslint' },
     }
 
     vim.g.ale_fixers = {
