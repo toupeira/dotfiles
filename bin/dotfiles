@@ -354,13 +354,11 @@ function run {
     link) # {{{
       [ $# -eq 0 ] && usage
 
-      local path="$1"
-
       if [ "$2" ]; then
         local origin="$2"
         local target="$1"
       else
-        local origin=$( realpath -s -- "${path%/}" )
+        local origin=$( realpath -s -- "${1%/}" )
         local target=$( target "$origin" )
 
         if [[ "$origin" =~ ^$DOTFILES/ ]]; then
@@ -377,10 +375,6 @@ function run {
       fi
 
       local force=0
-
-      if [ -L "$target" ]; then
-        target=$( readlink -f "$target" )
-      fi
 
       if [ -L "$origin" ]; then
         local link=$( readlink "$origin" 2>/dev/null )

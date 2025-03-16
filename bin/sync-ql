@@ -2,13 +2,14 @@
 
 import os, sys, socket, subprocess
 
-MUSIC = '/slack/music'
 HOSTNAME = socket.gethostname()
 METADATA_EXPORT = '/slack/scrapbook/config/quodlibet/metadata.' + HOSTNAME + '.tsv'
 
 if HOSTNAME == 'schtube':
+    MUSIC = '/mnt/slack/music'
     METADATA_IMPORT = METADATA_EXPORT.replace(HOSTNAME, 'ocelot')
 else:
+    MUSIC = '/slack/music'
     METADATA_IMPORT = METADATA_EXPORT.replace(HOSTNAME, 'schtube')
 
 def status(message):
