@@ -26,8 +26,6 @@ if [ -d "/home/$USER/.config/dconf" ]; then
   user "dconf dump / > dconf.ini"
 fi
 
-for file in /etc/backup.d/*; do
-  if [ -x "$file" ]; then
-    . "$file"
-  fi
+for dir in movies series; do
+  [ -d "/slack/$dir" ] && user "find /slack/$dir/ -type f | sort > $dir.txt"
 done

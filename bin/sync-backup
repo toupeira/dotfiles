@@ -5,10 +5,6 @@ case "$HOSTNAME" in
     BACKUP="/mnt/slack"
     DIRS=( backups books documents images music photos scrapbook sound )
     ;;
-  schtube)
-    BACKUP="/media/$USER/SLACK-BACKUP"
-    DIRS=( movies series )
-    ;;
   *)
     echo "Unsupported host $HOSTNAME"
     exit 1
