@@ -1,11 +1,11 @@
 [tools]
 ruby = "3.4.2"
-node = "23.9.0"
+node = "23.10.0"
 
 fzf = "0.60.3"
 glow = "2.1.0"
 neovim = "0.10.4"
-usage = "2.0.5"
+usage = "2.0.6"
 
 "ubi:BurntSushi/xsv" = "0.13.0"
 "ubi:dlvhdr/diffnav" = "0.3.0"
