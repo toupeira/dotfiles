@@ -10,9 +10,7 @@ if [ "$1" = "--run" ]; then
   set -- -- --run sh -c "cd '$gamepath'; exec ./$gamebin"
 elif [ "$1" = "--link" ]; then
   shift
-  flatpak run com.valvesoftware.SteamLink "$@"
-  rm -f ~/.var/app/com.valvesoftware.SteamLink/data/Valve\ Corporation/SteamLink/controller*
-  exit 1
+  steam="flatpak run com.valvesoftware.SteamLink"
 fi
 
 if [ "$HOSTNAME" = "schtube" ] && bluetoothctl show | grep -q 'Powered: no'; then
@@ -23,4 +21,4 @@ fi
 
 $steam "$@"
 
-[ "$enable_bluetooth" ] && bluetoothctl power off
+[ "$enable_bluetooth" ] && (bluetoothctl power off; rfkill block bluetooth)

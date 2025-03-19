@@ -21,10 +21,11 @@ return {
     vim.g.ale_fix_on_save_ignore = { 'rubocop' }
 
     vim.g.ale_linters = {
-      ruby = { 'ruby', 'rubocop' },
-      json = { 'jsonlint' },
       javascript = { 'eslint' },
+      json = { 'jsonlint' },
+      ruby = { 'ruby', 'rubocop' },
       typescript = { 'eslint' },
+      yaml = { 'yamllint' },
     }
 
     vim.g.ale_fixers = {

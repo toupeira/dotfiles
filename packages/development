@@ -14,6 +14,7 @@ zlib1g-dev
 # tooling
 ed
 gettext
+hexyl
 hyperfine
 sqlite3
 universal-ctags
