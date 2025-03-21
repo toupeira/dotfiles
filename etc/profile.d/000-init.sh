@@ -1,7 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC2034
 
-[ "$BASH_VERSION" ] && [ "$PS1" ] && BASH_INTERACTIVE=1
+[ "$BASH_VERSION" ] && [[ "$-" == *i* ]] && BASH_INTERACTIVE=1
 [ "$BASH_INTERACTIVE" ] && shopt -q login_shell && BASH_LOGIN=1
 [ "$BASH_INTERACTIVE" ] || return
 

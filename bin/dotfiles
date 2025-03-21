@@ -137,12 +137,12 @@ function system {
   shift
 
   # Check for commands that require sudo
+  local root_paths='^/(etc|root|var)/'
   if [ "$command" = "chown" ] || [ "$command" = "chgrp" ]; then
     sudo="sudo "
-  # Check for paths that require sudo
-  elif [[ ${!#} =~ ^/(etc|root)/ ]] && ! [[ ${!#} =~ ^$DOTFILES/ ]]; then
+  elif [[ ${!#} =~ $root_paths ]]; then
     sudo="sudo "
-  elif [ "$command" = "mv" ] && [[ $1 =~ ^/(etc|root)/ ]]; then
+  elif [ "$command" = "mv" ] && [[ $1 =~ $root_paths ]]; then
     sudo="sudo "
   fi
 
@@ -551,7 +551,7 @@ function run {
       [ "$1" = "fix" ] && local fix=1 && shift
       [ $# -eq 0 ] || usage
 
-      local paths count
+      local paths count origin target
       local total=$( grep -c '^ *lint .* ".*"$' "$0" )
 
       function lint { info "[{{$(( ++count ))/$total}}] $( printf '%8s' "$1" ): {{$2}}"; }
@@ -620,8 +620,8 @@ function run {
 
       lint root "Dotfile symlinks"
       for path in config/mise config/nvim config/rg local/share/mise; do
-        local target=$( origin "$path" )
-        local origin=${target/#$HOME/\/root}
+        target=$( origin "$path" )
+        origin=${target/#$HOME/\/root}
 
         [ "$( sudo readlink "$origin" )" = "$target" ] && continue
 
@@ -634,6 +634,17 @@ function run {
         list "$path"
         fix system rm -v "$path"
       done
+
+      origin=~/.config/monitors.xml
+      local gdm=/var/lib/gdm3
+      if [ -f "$origin" ] && [ -d "$gdm" ]; then
+        lint gdm "Monitor configuration"
+        target="$gdm/.config/monitors.xml"
+        if ! sudo diff -q "$origin" "$target" &>/dev/null; then
+          list "$target"
+          fix system cp -v "$origin" "$target"
+        fi
+      fi
       ;;
     # }}}
     test) # {{{
