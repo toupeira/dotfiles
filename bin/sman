@@ -3,7 +3,7 @@
 cd /slack/documents/Manuals || exit 1
 [ $# -eq 0 ] && exec xdg-open .
 
-files=$( find . -name '*.pdf' | fzf -f "$*" )
+files=$( find . -type f -name '*.pdf' | fzf -f "$*" )
 manual=$( echo "$files" | grep -Fim1 manual )
 [ "$manual" ] || manual=$( echo "$files" | head -1 )
 

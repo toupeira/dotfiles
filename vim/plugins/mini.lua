@@ -33,7 +33,6 @@ return {
 
     -- mini.starter ----------------------------------------------------
     local starter = require('mini.starter')
-    local is_home = vim.fn.getcwd() == os.getenv('HOME')
 
     util.command('MiniStarter', 'lua MiniStarter.open()', 'Open start screen')
     util.autocmd('User', 'VeryLazy', 'lua MiniStarter.refresh()')
@@ -48,7 +47,7 @@ return {
         { section = 'Builtin actions', name = 'Insert mode', action = function () vim.cmd.enew(); vim.cmd.startinsert() end },
         { section = 'Builtin actions', name = 'Quit', action = 'quitall' },
 
-        not is_home and starter.sections.recent_files(9, true, function(path)
+        starter.sections.recent_files(9, true, function(path)
           local dir = vim.fn.fnamemodify(path, ':.:h')
           if dir == '.' then
             return ''
@@ -82,7 +81,7 @@ return {
         starter.gen_hook.adding_bullet(),
         starter.gen_hook.indexing('all', { 'Builtin actions', 'Bookmarks' }),
         starter.gen_hook.aligning('center', 'top'),
-        starter.gen_hook.padding(0, vim.o.lines / (is_home and 3 or 5)),
+        starter.gen_hook.padding(0, vim.o.lines / 5),
       },
     })
 

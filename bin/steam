@@ -2,13 +2,7 @@
 
 steam="flatpak run com.valvesoftware.Steam"
 
-if [ "$1" = "--run" ]; then
-  shift
-  gamepath="/slack/games/steam/steamapps/common/$1"
-  gamebin="$2"
-
-  set -- -- --run sh -c "cd '$gamepath'; exec ./$gamebin"
-elif [ "$1" = "--link" ]; then
+if [ "$1" = "--link" ]; then
   shift
   steam="flatpak run com.valvesoftware.SteamLink"
 fi
