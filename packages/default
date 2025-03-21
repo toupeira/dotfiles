@@ -4,8 +4,10 @@ apt-listchanges
 bash-completion
 bat
 bc
+bind9-dnsutils
 bsd-mailx
 btop
+busybox-static
 calendar
 chafa
 colortest-python
@@ -14,7 +16,6 @@ ddate
 debconf-utils
 debian-archive-keyring
 debian-keyring
-dnsutils
 dos2unix
 ethtool
 fakeroot

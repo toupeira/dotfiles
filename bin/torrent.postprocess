@@ -33,7 +33,7 @@ if [ $status -ne 0 ] || echo "$output" | grep -q '^Failed ' || ! find "$path" -t
 elif [ "$type" = "tv" ]; then
   size=$( du -sm "$path" | cut -f1 )
 
-  if [ "$size" -lt 20 ]; then
+  if [ "$size" -lt 30 ]; then
     curl http://localhost:9090/api/v2/torrents/delete --data "hashes=$hash&deleteFiles=true"
   else
     curl http://localhost:9090/api/v2/torrents/stop --data "hashes=$hash"

@@ -6,7 +6,7 @@ function usage {
 }
 
 args=()
-action="keeplink"
+action="hardlink"
 
 if [ "$1" = "-n" ]; then
   action="test"
