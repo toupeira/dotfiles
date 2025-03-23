@@ -125,8 +125,12 @@ return {
             WinBar = { bg = 'bg0' },
             WinSeparator = { fg = 'bg4' },
 
-            Search = { fg = 'palette.search.fg0', bg = 'palette.search.bg0', style = 'bold' },
-            CurSearch = { fg = 'palette.search.fg1', bg = 'palette.search.bg1', style = 'bold' },
+            -- Reenable in 0.11
+            -- https://github.com/neovim/neovim/pull/29404
+            -- Search = { fg = 'palette.search.fg0', bg = 'palette.search.bg0', style = 'bold' },
+            -- CurSearch = { fg = 'palette.search.fg1', bg = 'palette.search.bg1', style = 'bold' },
+            Search = { fg = 'palette.search.fg1', bg = 'palette.search.bg1', style = 'bold' },
+            CurSearch = { link = 'Search' },
             IncSearch = { link = 'Search' },
             Substitute = { link = 'Search' },
 
