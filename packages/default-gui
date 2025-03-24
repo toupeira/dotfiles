@@ -12,6 +12,7 @@ firmware-amd-graphics
 firmware-intel-graphics
 firmware-mediatek
 flatpak
+flatseal
 fwupd
 fwupd-amd64-signed
 intel-media-va-driver-non-free
@@ -101,6 +102,5 @@ shotwell
 syncthing-gtk
 yt-dlp
 
-flatpak: com.github.tchx84.Flatseal
 flatpak: md.obsidian.Obsidian
 flatpak: org.gtk.Gtk3theme.Numix
