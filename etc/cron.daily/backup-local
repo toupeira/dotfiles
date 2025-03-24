@@ -27,5 +27,7 @@ if [ -d "/home/$USER/.config/dconf" ]; then
 fi
 
 for dir in movies series; do
-  [ -d "/slack/$dir" ] && user "find /slack/$dir/ -type f | sort > $dir.txt"
+  if [ -d "/slack/$dir" ]; then
+    user "find /slack/$dir/ -type f | sort > $dir.txt"
+  fi
 done
