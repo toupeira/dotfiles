@@ -8,6 +8,13 @@ return {
     'nvim-lua/plenary.nvim',
   },
   opts = {
+    disable_frontmatter = true,
+    open_app_foreground = true,
+    picker = { name = 'fzf-lua' },
+    follow_url_func = function(url)
+      vim.fn.jobstart({ 'xdg-open', url })
+    end,
+
     workspaces = {
       {
         name = 'notes',
@@ -36,21 +43,24 @@ return {
     },
 
     mappings = {
+      ['gf'] = {
+        action = function() return require('obsidian').util.gf_passthrough() end,
+        opts = { buffer = true, expr = true },
+      },
       ['<CR>'] = {
         action = function() return require('obsidian').util.smart_action() end,
         opts = { buffer = true, expr = true },
       },
       ['<M-space>'] = {
-        action = function() return require('obsidian').util.smart_action() end,
-        opts = { buffer = true, expr = true },
+        action = function() return require('obsidian').util.toggle_checkbox() end,
+        opts = { buffer = true },
       },
     },
 
-    disable_frontmatter = true,
-    open_app_foreground = true,
-    picker = { name = 'fzf-lua' },
-    follow_url_func = function(url)
-      vim.fn.jobstart({ 'xdg-open', url })
-    end,
+    daily_notes = {
+      folder = 'Journal',
+      date_format = '%Y/%Y-%m-%d %A',
+      default_tags = {},
+    },
   },
 }
