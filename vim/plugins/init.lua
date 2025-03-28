@@ -40,6 +40,20 @@ return {
     end
   },
 
+  very_lazy { 'mbbill/undotree',
+    cmd = 'UndotreeToggle',
+    keys = {
+      { '<Leader>u', '<Cmd>UndotreeToggle<CR>', desc = 'Toggle undo tree' },
+    },
+    init = function()
+      vim.g.undotree_DiffpanelHeight = 6
+      vim.g.undotree_SetFocusWhenToggle = true
+      vim.g.undotree_SplitWidth = 35
+      vim.g.undotree_WindowLayout = 4
+      vim.g.undotree_UndoDir = vim.fn.stdpath('state') .. '/undo'
+    end
+  },
+
   lazy_file { 'mong8se/actually.nvim',
     dependencies = { 'dressing.nvim' },
   },

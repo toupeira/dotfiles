@@ -108,6 +108,7 @@ autocmd('FileType', {
   'gitsigns-blame',
   'help',
   'man',
+  'neo-tree-popup',
   'notify',
   'qf',
   'query',
