@@ -207,6 +207,7 @@ case "$1" in
   # Set the current terminal / tmux pane title
   title)
     [ $# -eq 2 ] || usage
+    [ "$NVIM" ] && exit
     title="$2"
 
     echo -ne "\e]2;$title\e" >&2

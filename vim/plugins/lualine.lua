@@ -127,7 +127,7 @@ return {
           { 'filetype',
             fmt = function(filetype)
               local bufnr = vim.api.nvim_get_current_buf()
-              local lsp_clients = vim.lsp.buf_get_clients(bufnr)
+              local lsp_clients = vim.lsp.get_clients({ bufnr = bufnr })
               if next(lsp_clients) == nil then
                 return filetype
               end
