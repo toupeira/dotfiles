@@ -151,13 +151,14 @@
   lg = l --graph
   rl = reflog --date=format:'%F %T' --pretty=format:'%C(yellow)%h%Creset %C(037)%gD:%Creset %C(white)%gs%Creset%C(auto)%d%Creset'
   ls = "!cd ${GIT_PREFIX:-.} && git l --stat"
-  ld = log -p
+  ld = log -p --ext-diff
   ldf = ld --follow
   msg = show -s --pretty=%b
 
   di = diff
   dc = diff --cached
   ds = -c core.pager='less -FX' diff --stat
+  dt = !git -c diff.external=difft
   news = ds ORIG_HEAD..
 
   diffnav = "!f() { [ $# -eq 0 ] && set -- diff; git "$@" | diffnav; }; f"

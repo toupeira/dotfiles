@@ -52,9 +52,11 @@ vim.o.cursorlineopt = 'number'
 
 vim.o.winheight = 3
 vim.o.winminheight = 3
+vim.o.winborder = 'rounded'
 vim.o.splitbelow = true
 vim.o.splitright = true
 -- vim.o.splitkeep = 'screen'
+vim.opt.tabclose:append { 'left', 'uselast' }
 
 vim.o.scrolloff = 5
 vim.o.sidescrolloff = 8
@@ -64,7 +66,7 @@ vim.o.number = true
 vim.o.numberwidth = 6
 vim.o.signcolumn = 'yes'
 
-vim.opt.completeopt = { 'menu', 'longest', 'preview' }
+vim.opt.completeopt = { 'menu', 'longest', 'preview', 'fuzzy', 'preinsert' }
 vim.o.pumheight = 20
 
 vim.o.showmode = false
