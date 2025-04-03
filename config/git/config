@@ -1,4 +1,21 @@
-# vim: ft=gitconfig
+# vim: ft=gitconfig foldmethod=marker foldlevel=0
+
+# Core settings {{{
+
+[core]
+  pager = delta
+
+[pager]
+  branch = less -FX
+
+[interactive]
+  diffFilter = delta --color-only
+
+[advice]
+  pushUpdateRejected = false
+  statusHints = false
+  commitBeforeMerge = false
+  resolveConflict = false
 
 [user]
   name = Markus Koller
@@ -14,14 +31,14 @@
 [includeIf "gitdir:~/src/denteo/"]
   path = config.denteo
 
-[core]
-  pager = delta
+[git-extras]
+  default-branch = main
 
-[pager]
-  branch = less -FX
-
-[interactive]
-  diffFilter = delta --color-only
+[filter "lfs"]
+  clean = git-lfs clean -- %f
+  smudge = git-lfs smudge -- %f
+  process = git-lfs filter-process
+  required = true
 
 [color]
   ui = auto
@@ -59,11 +76,8 @@
   grep-file-style = bold green
   grep-line-number-style = magenta
 
-[advice]
-  pushUpdateRejected = false
-  statusHints = false
-  commitBeforeMerge = false
-  resolveConflict = false
+# }}}
+# Command settings {{{
 
 [branch]
   sort = -committerdate
@@ -128,14 +142,8 @@
   gpgSign = true
   sort = version:refname
 
-[filter "lfs"]
-  clean = git-lfs clean -- %f
-  smudge = git-lfs smudge -- %f
-  process = git-lfs filter-process
-  required = true
-
-[git-extras]
-  default-branch = main
+# }}}
+# Aliases {{{
 
 [alias]
   s = status -sb
@@ -172,8 +180,8 @@
   bcontains = branch -a --contains
 
   co = checkout
-  cm = !git checkout $( git default-branch )
-  cd = checkout development
+  cm = !git switch $( git default-branch )
+  cd = switch development
   switch-branch = "!f() { [ $# -gt 0 ] && exec git switch "$@"; branch=$( git branches 2>/dev/null | fzf +s --no-multi --prompt 'Branches» ' ) && git switch "$branch"; }; f"
   sb = switch-branch
   branches = "!git -c color.ui=always branch -a --sort=-committerdate | grep -Ev '(/HEAD|/(main|master))' | sed -r -e 's,^[\\* ]*,,' -e 's,remotes/[^/]+/,,'"
@@ -182,7 +190,7 @@
   ap = !git add --intent-to-add . && git add -p
   all = add -A
   unstage = reset HEAD -p
-  discard = checkout -p
+  discard = restore -p
 
   ci = commit
   ca = ci -a
@@ -240,3 +248,5 @@
 
   gui = !sensible-vim +Neogit
   g = gui
+
+# }}}

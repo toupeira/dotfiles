@@ -92,6 +92,39 @@ def parse_time(time, options = nil)
   [time, all_day]
 end
 
+def generate_events(entry, time_range)
+  events = []
+  time = entry[:start]
+  count = 0
+
+  while time && time <= time_range.end
+    if time_range.cover?(time.to_date)
+      # Create a new event instance with the same properties but updated dates
+      event = entry.dup
+      event[:start] = time
+
+      # Calculate end time based on duration of original event
+      if entry[:end]
+        duration = entry[:end] - entry[:start]
+        event[:end] = time + duration
+      end
+
+      events << event
+    end
+
+    break unless entry[:rule]
+
+    time = next_event(time, entry[:rule])
+    count += 1
+
+    # Stop if we've reached the count limit or created too many events
+    break if entry[:rule][:count] && count >= entry[:rule][:count]
+    break if count > 1000
+  end
+
+  events
+end
+
 def next_event(time, rule)
   time =
     case rule[:freq]
@@ -227,7 +260,7 @@ end
 if ARGS[:calendar]
   puts "\e[0;32m● Importing calendar...\e[0m"
 
-  time_range = Range.new(DateTime.now - 100, DateTime.now + 400)
+  time_range = Range.new(DateTime.now - 30, DateTime.now + 180)
   entries = []
   current = nil
   skip = true
@@ -272,27 +305,7 @@ if ARGS[:calendar]
     end
   end
 
-  # Handle recurring events, advance forward until we're in the future
-  today = Date.today
-  entries.each do |entry|
-    next unless entry[:rule] && entry[:start] < today
-    next if entry[:rule][:until] && entry[:rule][:until] < today
-
-    time = entry[:start]
-    count = 0
-    while time && time < today && time < time_range.end
-      time = next_event(time, entry[:rule])
-      count += 1
-      break if entry[:rule][:count] && count >= entry[:rule][:count]
-
-      if count > 1000
-        warn "Can't find recurring event for '#{entry[:summary]}' at #{entry[:start]} with rule: #{entry[:rule]}"
-      end
-    end
-    entry[:start] = time
-  end
-
-  entries.select! { time_range.cover?(_1[:start]&.to_date) }
+  entries = entries.flat_map { generate_events(_1, time_range) }
   entries.sort_by! { _1[:start] }
   entries.reverse!
 

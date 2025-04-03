@@ -1,0 +1,13 @@
+[tools]
+ruby = "3.4.2"
+node = "23.11.0"
+
+uv = "0.6.12"
+"pipx:aider-chat" = { version = "0.81.1", uvx_args = "--python python3.12" }
+
+"ubi:block/goose" = "1.0.17"
+"ubi:BurntSushi/xsv" = "0.13.0"
+"ubi:dlvhdr/diffnav" = "0.3.0"
+
+[settings.ruby]
+ruby_build_opts = "RUBY_CONFIGURE_OPTS='--disable-install-doc'"

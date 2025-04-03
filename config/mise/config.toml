@@ -1,21 +1,12 @@
 [tools]
-ruby = "3.4.2"
-node = "23.10.0"
-
 difftastic = "0.63.0"
-fzf = "0.60.3"
+fzf = "0.61.1"
 glow = "2.1.0"
 neovim = "0.11.0"
 usage = "2.0.7"
 
-"ubi:BurntSushi/xsv" = "0.13.0"
-"ubi:dlvhdr/diffnav" = "0.3.0"
-
 [settings]
 auto_install = false
 not_found_auto_install = false
-env_file = '.env'
+env_file = ".env"
 disable_hints = ["outdated_bump"]
-
-[env]
-RUBY_CONFIGURE_OPTS = '--disable-install-doc'

@@ -33,9 +33,9 @@ export LESS_TERMCAP_ue=$'\e[0m'
 export GROFF_NO_SGR=1
 
 # initialize mise
-if [ "$HOSTNAME" = "snafu" ]; then
-  export MISE_DISABLE_TOOLS='ruby,node'
-  tmux set-environment MISE_DISABLE_TOOLS "$MISE_DISABLE_TOOLS"
+if [ "$HOSTNAME" != "snafu" ]; then
+  export MISE_ENV='development'
+  [ "$TMUX" ] && tmux set-environment MISE_ENV "$MISE_ENV"
 fi
 
 if [ "$BASH_INTERACTIVE" ]; then

@@ -1,2 +1,3 @@
+/.aider.*.cache*
+/.aider.*.history*
 /.session.vim
-/.tags*

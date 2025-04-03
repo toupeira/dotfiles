@@ -1,9 +1,6 @@
 return {
   'epwalsh/obsidian.nvim',
   ft = 'markdown',
-  keys = {
-    { '<Leader>o', '<Cmd>ObsidianQuickSwitch<CR>', desc = 'Open Obsidian note' },
-  },
   dependencies = {
     'nvim-lua/plenary.nvim',
   },
@@ -27,10 +24,11 @@ return {
           return assert(vim.fn.getcwd())
         end,
         overrides = {
+          disable_frontmatter = true,
           notes_subdir = vim.NIL,
           new_notes_location = 'current_dir',
+          daily_notes = { folder = vim.NIL, },
           templates = { folder = vim.NIL },
-          disable_frontmatter = true,
         },
       },
     },

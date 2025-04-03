@@ -81,7 +81,17 @@ alias e='git-edit'
 
 alias o='obsidian'
 alias n='obsidian --edit'
-function notes { [ $# -gt 0 ] && n "$@" || cd ~/notes; }
+function notes {
+  [ $# -gt 0 ] && n "$@" || cd ~/notes || return
+}
+
+alias ai='aider'
+function aider {
+  (
+    [ -d .git ] || cd /slack/dotfiles || return
+    command aider "$@"
+  )
+}
 
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
