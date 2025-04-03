@@ -3,3 +3,7 @@ zeal
 
 flatpak: dev.neovide.neovide
 flatpak: org.godotengine.Godot
+
+# dependencies for aider-chat
+gfortran
+libopenblas-dev

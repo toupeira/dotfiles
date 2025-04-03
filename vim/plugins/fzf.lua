@@ -182,6 +182,7 @@ return {
     -- search files
     map_fzf('<Leader>f', 'files')
     map_fzf('<Leader>F', 'files', function() return { cwd = expand('%:h') } end, 'files in current directory')
+    map_fzf('<Leader>o', 'files', { cwd = '/slack/documents/Notes', fd_opts = '-e md' }, 'Obsidian notes')
 
     map_fzf('<Leader>b', 'buffers')
     map_fzf('<Leader>B', 'buffers', { show_unlisted = true }, 'all buffers')

@@ -1,0 +1,12 @@
+GOOSE_CLI_MIN_PRIORITY: 0.2
+GOOSE_MODEL: claude-3-7-sonnet-latest
+GOOSE_MODE: smart_approve
+GOOSE_PROVIDER: anthropic
+
+extensions:
+  developer:
+    display_name: Developer
+    enabled: true
+    name: developer
+    timeout: 300
+    type: builtin

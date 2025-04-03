@@ -4,3 +4,12 @@ jack-example-tools
 pipewire-jack
 qjackctl
 qpwgraph
+
+# dependencies for overwitch
+libusb-1.0-0-dev
+libjack-jackd2-dev
+libsamplerate0-dev
+libsndfile1-dev
+libjson-glib-dev
+libgtk-4-dev
+systemd-dev
