@@ -137,20 +137,6 @@ return {
             WarningMsg = { style = 'bold' },
             MoreMsg = { fg = 'diag.hint' },
 
-            -- fix background color for diagnostic signs
-            -- TODO: submit upstream?
-            DiagnosticSignError = { fg = 'diag.error', bg = 'bg0' },
-            DiagnosticSignWarn  = { fg = 'diag.warn',  bg = 'bg0' },
-            DiagnosticSignInfo  = { fg = 'diag.info',  bg = 'bg0' },
-            DiagnosticSignHint  = { fg = 'diag.hint',  bg = 'bg0' },
-            DiagnosticSignOk    = { fg = 'diag.ok',    bg = 'bg0' },
-
-            DiagnosticSignCursorError = { fg = 'diag.error', bg = 'bg1' },
-            DiagnosticSignCursorWarn  = { fg = 'diag.warn',  bg = 'bg1' },
-            DiagnosticSignCursorInfo  = { fg = 'diag.info',  bg = 'bg1' },
-            DiagnosticSignCursorHint  = { fg = 'diag.hint',  bg = 'bg1' },
-            DiagnosticSignCursorOk    = { fg = 'diag.ok',    bg = 'bg1' },
-
             DiagnosticUnderlineError   = { style = 'NONE' },
             DiagnosticUnderlineWarn    = { style = 'NONE' },
             DiagnosticUnderlineInfo    = { style = 'NONE' },

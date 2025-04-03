@@ -16,37 +16,29 @@ nmap('<Leader>E', function()
   util.toggle_list('l')
 end, 'Toggle diagnostics list')
 
-local severity = {
-  [vim.diagnostic.severity.ERROR] = 'Error',
-  [vim.diagnostic.severity.WARN]  = 'Warn',
-  [vim.diagnostic.severity.INFO]  = 'Info',
-  [vim.diagnostic.severity.HINT]  = 'Hint',
-  [0]                   = 'Ok',
-}
-
-local floating_highlights = {}
-local sign_highlights = {}
-
-for id, name in ipairs(severity) do
-  floating_highlights[id] = 'DiagnosticFloating' .. name
-
-  table.insert(sign_highlights, {
-    name   = 'DiagnosticSign' .. name,
-    text   = '●',
-    texthl = 'DiagnosticSign' .. name,
-    culhl  = 'DiagnosticSignCursor' .. name,
-  })
-end
-
 vim.diagnostic.config({
   severity_sort = true,
   virtual_text = false,
   float = {
+    border = 'rounded',
     prefix = function(diagnostic, _, total)
       if total == 1 then return '' end
-      return '● ', floating_highlights[diagnostic.severity]
+      return '● ', ({
+        [vim.diagnostic.severity.ERROR] = 'DiagnosticFloatingError',
+        [vim.diagnostic.severity.WARN]  = 'DiagnosticFloatingWarn',
+        [vim.diagnostic.severity.INFO]  = 'DiagnosticFloatingInfo',
+        [vim.diagnostic.severity.HINT]  = 'DiagnosticFloatingHint',
+        [0]                             = 'DiagnosticFloatingOk',
+      })[diagnostic.severity]
     end
   },
+  signs = {
+    text = {
+      [vim.diagnostic.severity.ERROR] = '●',
+      [vim.diagnostic.severity.WARN]  = '●',
+      [vim.diagnostic.severity.INFO]  = '●',
+      [vim.diagnostic.severity.HINT]  = '●',
+      [0] = '●',
+    },
+  },
 })
-
-vim.fn.sign_define(sign_highlights)

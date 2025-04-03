@@ -52,7 +52,6 @@ vim.o.cursorlineopt = 'number'
 
 vim.o.winheight = 3
 vim.o.winminheight = 3
-vim.o.winborder = 'rounded'
 vim.o.splitbelow = true
 vim.o.splitright = true
 -- vim.o.splitkeep = 'screen'
