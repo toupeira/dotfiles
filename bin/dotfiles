@@ -171,6 +171,11 @@ function git {
   return $status
 }
 
+# Check for existing commands
+function has {
+  which "$1" >/dev/null
+}
+
 # Check for local Git changes
 function has-changes {
   git status -s "$@" | grep -q .
@@ -525,7 +530,7 @@ function run {
         git --no-pager diff --stat ORIG_HEAD
       fi
 
-      if has-news packages || has-news config/mise/config.toml; then
+      if has-news packages || has-news config/mise; then
         run packages
       fi
 
@@ -619,7 +624,7 @@ function run {
       done
 
       lint root "Dotfile symlinks"
-      for path in config/mise config/nvim config/rg local/share/mise; do
+      for path in config/nvim config/fd config/rg config/mise local/share/mise; do
         target=$( origin "$path" )
         origin=${target/#$HOME/\/root}
 
@@ -732,16 +737,16 @@ function run {
         fi
       }
 
-      [ -n "$packages_apt" ]  && local missing_apt=$(
+      [ -n "$packages_apt" ] && local missing_apt=$(
         get-missing "$packages_apt" "$( run list apt )"
       )
-      [ -n "$packages_gem" ]  && local missing_gem=$(
-        get-missing "$packages_gem" "$( run list gem )"
-      )
-      [ -n "$packages_flat" ] && local missing_flat=$(
+      [ -n "$packages_flat" ] && has flatpak && local missing_flat=$(
         get-missing "$packages_flat" "$( run list flatpak )"
       )
-      [ "$list" = "default" ] && local missing_mise=$(
+      [ -n "$packages_gem" ] && has ruby && local missing_gem=$(
+        get-missing "$packages_gem" "$( run list gem )"
+      )
+      [ "$list" = "default" ] && has mise && local missing_mise=$(
         mise ls --missing --no-header | awk '{ print $1 }'
       )
 
@@ -802,10 +807,10 @@ function run {
       }
 
       update apt
-      update flatpak
-      update firmware
-      update mise
-      update gems
+      has flatpak && update flatpak
+      has fwupdmgr && update firmware
+      has mise && update mise
+      has ruby && update gems
       update completions
       ;;
 
@@ -833,7 +838,7 @@ function run {
         local command
         shift
 
-        if which "$tool" >/dev/null; then
+        if has "$tool"; then
           command=( "$tool" )
         elif [ -x ~/.local/share/mise/shims/"$tool" ]; then
           command=( mise exec "$tool" -- "$tool" )
