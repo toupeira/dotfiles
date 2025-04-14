@@ -65,7 +65,7 @@ filebot \
   -rename "$path" \
   --action "$action" \
   --db "$db" \
-  --output "$( realpath "$output" )" \
+  --output "$output" \
   --format "$format" \
   --file-filter "$filter" \
   --conflict skip \

@@ -30,3 +30,10 @@ if [ "$BASH_LOGIN" ] && [ -z "$TMUX" ] && [ "$UID" -ne 0 ] && [ -z "$SUDO_USER" 
     exec tmux new-session "$@"
   fi
 fi
+
+# Change to original directory when opening new panes in symlinked paths
+if [ "$BASH_LOGIN" ] && [ "$TMUX" ]; then
+  path=${PWD#/mnt}
+  [ "$(realpath "$path" )" = "$PWD" ] && cd "$path"
+  unset path
+fi

@@ -1,9 +1,9 @@
 [tools]
-ruby = "3.4.2"
+ruby = "3.4.3"
 node = "23.11.0"
 
 uv = "0.6.14"
-"pipx:aider-chat" = { version = "0.81.1", uvx_args = "--python python3.12" }
+"pipx:aider-chat" = { version = "0.82.0", uvx_args = "--python python3.12" }
 
 "ubi:block/goose" = "1.0.17"
 "ubi:BurntSushi/xsv" = "0.13.0"
