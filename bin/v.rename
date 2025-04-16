@@ -29,7 +29,10 @@ if [ "$1" = "-q" ] || [ "$1" = "--query" ]; then
   args+=( --q "$2" )
   shift 2
 fi
-args+=( "$@" )
+
+for arg in "$@"; do
+  args+=( "$( realpath "$arg" )" )
+done
 
 case "$type" in
   movie)
@@ -65,7 +68,7 @@ filebot \
   -rename "$path" \
   --action "$action" \
   --db "$db" \
-  --output "$output" \
+  --output "$( realpath "$output" )" \
   --format "$format" \
   --file-filter "$filter" \
   --conflict skip \

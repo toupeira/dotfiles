@@ -774,18 +774,21 @@ function run {
       # Install the packages
       if ask-yes "{{Install?}}"; then
         function install-packages {
+          local type=$1
+          shift
+
           [ -n "$1" ] || return
           mapfile -t packages <<< "$1"
           shift
 
-          mux-wrap -w "$@" "${packages[@]}"
+          mux-wrap -w -t "install-packages [$type]" "$@" "${packages[@]}"
           system tmux select-layout even-vertical
         }
 
-        install-packages "$missing_apt"  sudo aptitude install
-        install-packages "$missing_gem"  gem install
-        install-packages "$missing_flat" flatpak install
-        install-packages "$missing_mise" 'mise install && mise prune'
+        install-packages apt     "$missing_apt"  sudo aptitude install
+        install-packages flatpak "$missing_flat" flatpak install
+        install-packages mise    "$missing_mise" 'mise install && mise prune'
+        install-packages gems    "$missing_gem"  gem install
       fi
       echo
       ;;
@@ -793,7 +796,7 @@ function run {
     update-packages|pup) # {{{
       local filter="$1"
 
-      function update {
+      function update-packages {
         local type="$1"
         local command="$( basename "$0" ) update-$type"
         shift
@@ -801,17 +804,17 @@ function run {
         if [ -n "$filter" ] && [ "$filter" != "$type" ]; then
           return
         elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
-          mux-wrap -w -t "update-$type" "$command"
+          mux-wrap -w -t "update-packages [$type]" "$command"
           system tmux select-layout even-vertical
         fi
       }
 
-      update apt
-      has flatpak && update flatpak
-      has fwupdmgr && update firmware
-      has mise && update mise
-      has ruby && update gems
-      update completions
+      has aptitude && update-packages apt
+      has flatpak  && update-packages flatpak
+      has fwupdmgr && update-packages firmware
+      has mise     && update-packages mise
+      has ruby     && update-packages gems
+      has mise     && update-packages completions
       ;;
 
     update-apt)
@@ -833,7 +836,7 @@ function run {
     update-completions)
       local completions="$DOTFILES/local/share/bash-completion/completions"
 
-      function update {
+      function update-completions {
         local tool="$1"
         local command
         shift
@@ -853,9 +856,9 @@ function run {
         "${command[@]}" completion bash > "$completions/_$tool" "$@"
       }
 
-      update mise
-      update kubectl
-      update rclone
+      update-completions mise
+      update-completions kubectl
+      update-completions rclone
 
       echo
       git add "$completions"

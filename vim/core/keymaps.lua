@@ -111,8 +111,6 @@ nmap('<C-LeftMouse>', '<nop>')
 
 -- Utilities -----------------------------------------------------------
 
-nmap('<Leader>!', { ':15split', ':terminal' }, 'Open terminal')
-
 util.command('Help', '$tab help <args>', {
   nargs = '*',
   complete = 'help',
