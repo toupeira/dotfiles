@@ -17,22 +17,20 @@ elif [ "$1" = "-i" ]; then
 fi
 
 type="$1"
-path="$2"
+path=$( realpath "$2" )
 shift 2
 if [ -z "$type" ] || [ ! -e "$path" ]; then
   usage
 fi
-
-subtitles="{if (subt == '.eng') '.en'}{if (subt == '.ger') '.de'}"
 
 if [ "$1" = "-q" ] || [ "$1" = "--query" ]; then
   args+=( --q "$2" )
   shift 2
 fi
 
-for arg in "$@"; do
-  args+=( "$( realpath "$arg" )" )
-done
+args+=( "$@" )
+
+subtitles="{if (subt == '.eng') '.en'}{if (subt == '.ger') '.de'}"
 
 case "$type" in
   movie)

@@ -781,7 +781,7 @@ function run {
           mapfile -t packages <<< "$1"
           shift
 
-          mux-wrap -w -t "install-packages [$type]" "$@" "${packages[@]}"
+          mux-wrap -w -t "install-packages [$list:$type]" "$@" "${packages[@]}"
           system tmux select-layout even-vertical
         }
 

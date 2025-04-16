@@ -2,30 +2,28 @@ local util = require('util')
 local nmap = util.nmap
 local nvomap = util.nvomap
 
+local servers = {
+  bashls = { install = true },
+  lua_ls = { install = true },
+  ruby_lsp = {},
+}
+
+local install_servers = (util.is_sudo or util.is_ssh) and {} or vim.tbl_filter(
+  function(key) return servers[key]['install'] end,
+  vim.tbl_keys(servers)
+)
+
 return {
   'neovim/nvim-lspconfig',
-  event = 'VeryLazy',
+  event = 'LazyFile',
   dependencies = {
+    { 'williamboman/mason-lspconfig.nvim',
+      dependencies = { 'mason.nvim' },
+      opts = { ensure_installed = install_servers },
+    },
     { 'folke/lazydev.nvim',
       ft = 'lua',
       config = true,
-    },
-    { 'williamboman/mason-lspconfig.nvim',
-      dependencies = { 'mason.nvim' },
-      opts = {
-        ensure_installed = (util.is_sudo or util.is_ssh) and {} or {
-          'lua_ls',
-          'vimls',
-        },
-
-        handlers = {
-          function (server_name)
-            require('lspconfig')[server_name].setup({
-              autostart = false,
-            })
-          end,
-        },
-      },
     },
   },
 
@@ -35,10 +33,6 @@ return {
   },
 
   opts = {
-    servers = {
-      ruby_lsp = {},
-    },
-
     ui = {
       border = 'rounded',
     },
@@ -47,9 +41,15 @@ return {
   config = function(_, opts)
     require('lspconfig.ui.windows').default_options = opts.ui
 
-    for server, server_opts in pairs(opts.servers) do
-      server_opts.autostart = false
-      require('lspconfig')[server].setup(server_opts)
+    for server, settings in pairs(servers) do
+      settings.autostart = false
+      settings.install = nil
+      require('lspconfig')[server].setup(settings)
+
+      -- TODO: use `vim.lsp.config()`
+      -- https://github.com/neovim/nvim-lspconfig/pull/3734
+      -- vim.lsp.config(server, settings)
+      -- vim.lsp.enable(server)
     end
 
     util.autocmd('LspDetach', function(event)

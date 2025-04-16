@@ -36,7 +36,7 @@ autocmd('TermOpen', function()
   vim.wo.number = false
   vim.wo.relativenumber = false
   vim.wo.signcolumn = 'no'
-  vim.wo.winhighlight = 'Normal:TermCursorNC'
+  vim.wo.winhighlight = 'Normal:NormalFloat'
 end)
 
 -- Automatically enter/leave insert mode for terminals

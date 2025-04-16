@@ -93,7 +93,7 @@ return {
 
     opts.window = {
       completion = { col_offset = -2 },
-      documentation = cmp.config.window.bordered(),
+      documentation = util.merge(cmp.config.window.bordered(), { max_width = 80 }),
     }
 
     local sources = {
@@ -138,7 +138,12 @@ return {
       { name = 'calc' },
     })
 
-    local tabs = {
+    local insert_mappings = {
+      ['<M-e>'] = cmp.mapping.scroll_docs(1),
+      ['<M-y>'] = cmp.mapping.scroll_docs(-1),
+      ['<M-f>'] = cmp.mapping.scroll_docs(8),
+      ['<M-b>'] = cmp.mapping.scroll_docs(-8),
+
       ['<Tab>'] = cmp.mapping(function(fallback)
         if cmp.visible() then
           cmp.confirm({ select = true })
@@ -162,7 +167,7 @@ return {
       end),
     }
 
-    opts.mapping = cmp.mapping.preset.insert(tabs)
+    opts.mapping = cmp.mapping.preset.insert(insert_mappings)
 
     cmp.setup(opts)
 
