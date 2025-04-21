@@ -311,7 +311,7 @@ if ARGS[:calendar]
 
   write_markdown("Kalender/#{ARGS[:calendar]}", entries.map do |entry|
     summary = entry[:summary].force_encoding('utf-8')
-    summary.concat(" <small>`#{entry[:start].strftime('%H:%M')}`</small>") unless entry[:all_day]
+    summary += " <small>`#{entry[:start].strftime('%H:%M')}`</small>" unless entry[:all_day]
 
     description = entry[:description]&.force_encoding('utf-8')
     description = "\n#{description.gsub(/^/, '  ')}" if description

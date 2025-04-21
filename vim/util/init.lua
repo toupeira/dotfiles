@@ -169,14 +169,17 @@ util.command = function(name, command, opts, desc)
 end
 
 -- Abbreviate commands, only in command mode on first column
--- TODO: Use `vim.keymap.set` in Neovim 0.10
 -- https://github.com/neovim/neovim/issues/19198
 util.alias_command = function(aliases)
   for alias, command in pairs(aliases) do
-    vim.cmd.cnoreabbrev(
-      '<expr> ' .. alias .. ' getcmdtype() == ":" && (stridx(getcmdline(), " ") == -1 || getcmdpos() < stridx(getcmdline(), " ")) ? "'
-      .. command .. '" : "' .. alias .. '"'
-    )
+    util.map('ca', alias, function()
+      local space = vim.fn.stridx(vim.fn.getcmdline(), ' ')
+      if vim.fn.getcmdtype() == ':' and (space == -1 or vim.fn.getcmdpos() < space) then
+        return command
+      else
+        return alias
+      end
+    end, { expr = true })
   end
 end
 
