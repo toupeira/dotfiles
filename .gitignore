@@ -2,7 +2,7 @@
 /packages/mason
 /packages/mise
 
-# avoid loops in lua_ls:
+# avoid symlink loops in lua_ls:
 /vim/lua/
 /config/nvim/lua/
 /local/share/mise/
