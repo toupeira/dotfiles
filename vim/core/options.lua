@@ -115,7 +115,7 @@ vim.o.inccommand = 'nosplit'
 vim.o.keywordprg = ':Manpage'
 vim.o.showmatch = true
 
-vim.opt.iskeyword:append { '-', ':' }
+vim.opt.iskeyword:append { '-' }
 
 if vim.fn.executable('rg') then
   vim.o.grepprg = 'rg --vimgrep'
