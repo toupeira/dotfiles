@@ -70,7 +70,6 @@ smem
 socat
 ssh
 strace
-s-tui
 sudo
 syncthing
 systemd
