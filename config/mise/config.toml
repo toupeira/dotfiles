@@ -1,9 +1,9 @@
 [tools]
 difftastic = "0.63.0"
-fzf = "0.61.2"
+fzf = "0.61.3"
 glow = "2.1.0"
 neovim = "0.11.0"
-usage = "2.0.7"
+usage = "2.1.1"
 
 [settings]
 auto_install = false
