@@ -2,7 +2,7 @@
 ruby = "3.4.3"
 node = "23.11.0"
 
-uv = "0.6.16"
+uv = "0.7.2"
 "pipx:aider-chat" = { version = "0.82.2", uvx_args = "--python python3.12" }
 
 "ubi:BurntSushi/xsv" = "0.13.0"

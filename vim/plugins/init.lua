@@ -7,6 +7,9 @@ local imap = util.imap
 return {
   { 'nvim-lua/plenary.nvim', lazy = true },
 
+  lazy_file { 'AndrewRadev/splitjoin.vim' },
+  lazy_file { 'tpope/vim-rails' },
+
   very_lazy { 'j-hui/fidget.nvim', config = true },
   very_lazy { 'numToStr/Comment.nvim', config = true },
   very_lazy { 'tiagovla/scope.nvim', config = true },
@@ -14,17 +17,6 @@ return {
   very_lazy { 'tpope/vim-characterize' },
   very_lazy { 'tpope/vim-repeat' },
   very_lazy { 'tpope/vim-scriptease' },
-
-  lazy_file { 'AndrewRadev/splitjoin.vim' },
-  lazy_file { 'tpope/vim-eunuch' },
-  lazy_file { 'tpope/vim-rails' },
-
-  lazy_file { 'andymass/vim-matchup',
-    init = function()
-      vim.g.matchup_matchparen_deferred = 1
-      vim.g.matchup_matchparen_offscreen = {}
-    end
-  },
 
   { 'AndrewRadev/bufferize.vim',
     cmd = 'Bufferize',
@@ -34,18 +26,20 @@ return {
     end
   },
 
-  very_lazy { 'mbbill/undotree',
-    cmd = 'UndotreeToggle',
-    keys = {
-      { '<Leader>u', '<Cmd>UndotreeToggle<CR>', desc = 'Toggle undo tree' },
-    },
+  lazy_file { 'andymass/vim-matchup',
     init = function()
-      vim.g.undotree_DiffpanelHeight = 6
-      vim.g.undotree_SetFocusWhenToggle = true
-      vim.g.undotree_SplitWidth = 35
-      vim.g.undotree_WindowLayout = 4
-      vim.g.undotree_UndoDir = vim.fn.stdpath('state') .. '/undo'
+      vim.g.matchup_matchparen_deferred = 1
+      vim.g.matchup_matchparen_offscreen = {}
     end
+  },
+
+  { 'chrisgrieser/nvim-spider',
+    keys = {
+      { 'w', '<Cmd>lua require("spider").motion("w")<CR>', mode = { 'n', 'o', 'x' }},
+      { 'cw', 'ce', mode = 'n', { remap = true }},
+      { 'e', '<Cmd>lua require("spider").motion("e")<CR>', mode = { 'n', 'o', 'x' }},
+      { 'b', '<Cmd>lua require("spider").motion("b")<CR>', mode = { 'n', 'o', 'x' }},
+    },
   },
 
   lazy_file { 'mong8se/actually.nvim',
@@ -100,6 +94,14 @@ return {
     end
   },
 
+  lazy_file { 'sphamba/smear-cursor.nvim',
+    opts = {
+      smear_insert_mode = false,
+      min_horizontal_distance_smear = 10,
+      min_vertical_distance_smear = 2,
+    },
+  },
+
   lazy_file { 'stevearc/dressing.nvim',
     dependencies = { 'fzf-lua' },
     opts = {
@@ -113,6 +115,15 @@ return {
     init = function()
       vim.g.dispatch_no_maps = 1
       vim.g.dispatch_handlers = { 'job' }
+    end
+  },
+
+  lazy_file { 'tpope/vim-eunuch',
+    init = function()
+      util.alias_command({
+        ['D'] = 'Delete',
+        ['D!'] = 'Delete!'
+      })
     end
   },
 
@@ -147,6 +158,10 @@ return {
     config = function()
       -- restore default mapping for <C-d>
       util.unmap({ 'i', 'c' }, '<C-d>')
+
+      -- use nvim-spider for word movements
+      imap('<M-f>', '<Esc>l<Cmd>lua require("spider").motion("w")<CR>i', { force = true })
+      imap('<M-b>', '<Esc><Cmd>lua require("spider").motion("b")<CR>i', { force = true })
     end
   },
 
@@ -154,6 +169,20 @@ return {
     config = function()
       map({ 'n', 'x' }, 'gF', '<C-w><C-f>', { force = true }, 'Go to file in split')
     end
+  },
+
+  {
+    'y3owk1n/time-machine.nvim',
+    cmd = 'TimeMachineToggle',
+    keys = {
+      { '<Leader>u', '<Cmd>TimeMachineToggle<CR>', desc = 'Toggle time machine' },
+    },
+    opts = {
+      split_opts = {
+        split = 'right',
+        width = 35,
+      },
+    }
   },
 
   very_lazy { 'ziontee113/icon-picker.nvim',

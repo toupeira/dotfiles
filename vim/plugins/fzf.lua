@@ -68,6 +68,11 @@ return {
       file_ignore_patterns = { '%.git/COMMIT_EDITMSG' },
     },
 
+    tags = {
+      ctags_autogen = true,
+      cmd = 'ctags -f - $( git ls-files ) 2>/dev/null',
+    },
+
     grep = {
       multiline = 1,
       RIPGREP_CONFIG_PATH = vim.env.RIPGREP_CONFIG_PATH,
@@ -99,22 +104,38 @@ return {
 
   config = function(_, opts)
     local fzf = require('fzf-lua')
-    local actions = require('fzf-lua.actions')
-    local defaults = require('fzf-lua.defaults').defaults
+    local actions = fzf.actions
+    local defaults = fzf.defaults
 
     -- use history per provider
     vim.g.fzf_history_dir = vim.fn.stdpath('state') .. '/fzf'
 
     -- override actions
-    defaults.files.actions = { ['ctrl-g'] = { actions.toggle_ignore } }
+    defaults.files.actions = {
+      ['ctrl-g'] = actions.toggle_ignore,
+      ['alt-i'] = false,
+      ['alt-h'] = false,
+      ['alt-f'] = false,
+    }
+
     defaults.helptags.actions.default = actions.help_tab
-    defaults.actions.files.default = function(selected, opts)
-      actions.file_edit(selected, opts)
+    defaults.actions.files.default = function(selected, settings)
+      actions.file_edit(selected, settings)
 
       if #selected > 1 then
-        actions.file_sel_to_qf(selected, opts)
+        actions.file_sel_to_qf(selected, settings)
+        vim.cmd.wincmd('p')
       end
     end
+
+    -- add directory previewer
+    opts.previewers = {
+      tree = {
+        cmd = 'tree',
+        args = '-dxC --gitignore --prune --noreport',
+        _ctor = require('fzf-lua.previewer').fzf.cmd,
+      },
+    }
 
     -- add default settings
     local reverse = {
@@ -164,9 +185,14 @@ return {
         :gsub('git', 'Git')
         :gsub('lsp', 'LSP')
 
-      nmap(key, function()
-        fzf[provider](get_args(args))
-      end, 'Search ' .. name)
+      local handler = provider
+      if type(handler) ~= 'function' then
+        handler = function()
+          fzf[provider](get_args(args))
+        end
+      end
+
+      nmap(key, handler, 'Search ' .. name)
 
       nmap('<Leader>' .. key, function()
         local resume_args = get_args(args)
@@ -234,5 +260,49 @@ return {
     -- search git
     map_fzf('<Leader>gm', 'git_status')
     map_fzf('<Leader>gc', 'git_branches')
+
+    -- search projects
+    local projects = function(settings)
+      settings = merge(settings, {
+        fd_opts = '-u --glob --type d ".{git,obsidian}" ~/src /slack',
+        toggle_hidden_flag = '--exclude "{archive,packages}"',
+        fzf_opts = { ['--multi'] = false },
+        previewer = 'tree',
+        cwd_prompt = false,
+
+        winopts = {
+          title = ' Projects ',
+          height = 12,
+          row = 0.85,
+          preview = { layout = 'horizontal' },
+        },
+
+        fn_transform = function(path)
+          path = path:gsub('/%.[^/]*/$', '')
+          return string.format('%-32s%s%s',
+            fzf.utils.ansi_codes.cyan('󰂿 ' .. vim.fn.fnamemodify(path, ':t')),
+            fzf.utils.nbsp,
+            fzf.utils.ansi_codes.blue(vim.fn.fnamemodify(path, ':~'))
+          ), path
+        end,
+
+        actions = {
+          ['ctrl-g'] = actions.toggle_hidden,
+          ['default'] = function(selected)
+            if util.buffer_count() > 0 then
+              vim.cmd.tabnew()
+            end
+
+            local file = fzf.path.entry_to_file(selected[1])
+            vim.cmd.lcd(file.path)
+            fzf.files({ cwd = file.path })
+          end
+        }
+      })
+
+      fzf.files(settings)
+    end
+
+    map_fzf('<Leader>gp', projects, nil, 'projects')
   end
 }

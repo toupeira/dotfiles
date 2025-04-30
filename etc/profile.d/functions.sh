@@ -319,17 +319,5 @@ function mise.add {
 }
 
 function mise.remove {
-  local tool=$1
-  local versions=$(
-    mise ls --installed --json "$tool" | grep -F '"version":' | cut -d\" -f4
-  )
-
-  if [ ! "$versions" ]; then
-    echo "No versions found for tool '$tool'."
-    return 1
-  fi
-
-  for version in $versions; do
-    mise unuse -g "$tool@$version"
-  done
+  mise unuse "$1"
 }

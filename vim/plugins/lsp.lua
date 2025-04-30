@@ -46,8 +46,7 @@ return {
       settings.install = nil
       require('lspconfig')[server].setup(settings)
 
-      -- TODO: use `vim.lsp.config()`
-      -- https://github.com/neovim/nvim-lspconfig/pull/3734
+      -- TODO: use `vim.lsp.config()`, it doesn't support autostart yet
       -- vim.lsp.config(server, settings)
       -- vim.lsp.enable(server)
     end

@@ -54,7 +54,6 @@
 [delta]
   paging = always
   navigate = true
-  hyperlinks = true
   tabs = 2
 
   plus-style = syntax "#15331d"
@@ -197,6 +196,7 @@
   amend = ci --amend
   reword = amend --only
   extend = amend --no-edit
+  pick = cherry-pick
   fixup = !sha=$( git -c color.ui=always l -n 1000 | fzf +s --no-multi --prompt 'Fixup» ' ) && git commit --fixup "${sha%% *}"
   wip = "!git commit -m \"WIP: Changes in $( echo $( git diff --cached --name-only ) )\""
   initial = commit --allow-empty -m 'Initial commit'
@@ -205,6 +205,7 @@
   shallow = clone --depth 1
 
   up = pull
+  pom = !git pull origin $( git default-branch )
   ff = merge --ff-only HEAD@{u}
   re = rebase
   ri = rebase -i
@@ -212,9 +213,9 @@
   rim = !git rebase -i $( git default-branch )
   rcontinue = rebase --continue
   rabort = rebase --abort
+  abs = absorb
+  rabs = absorb --and-rebase
   solve = mergetool
-  pom = !git pull origin $( git default-branch )
-  pick = cherry-pick
 
   pu = push
   poof = pu --force-with-lease --force-if-includes

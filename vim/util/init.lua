@@ -56,6 +56,7 @@ util.map = function(mode, lhs, rhs, opts, desc)
   -- use string arguments as description
   if type(opts) == 'string' then opts = { desc = opts } end
   if type(desc) == 'string' then opts = util.merge(opts, { desc = desc }) end
+  if type(desc) == 'table'  then opts = util.merge(opts, desc) end
 
   -- run commands silently
   if type(rhs) == 'string' then

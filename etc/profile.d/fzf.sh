@@ -26,6 +26,8 @@ export FZF_DEFAULT_OPTS="
   --bind alt-a:toggle-all
   --bind ctrl-n:down
   --bind ctrl-p:up
+  --bind ctrl-f:page-down
+  --bind ctrl-b:page-up
   --bind down:next-history
   --bind up:previous-history
   --bind ctrl-/:toggle-preview
@@ -94,7 +96,7 @@ _fzf_compgen_dir() { $FZF_ALT_C_COMMAND; }
 # https://github.com/junegunn/fzf/issues/1049
 __fzf_history__() {
   local output opts
-  opts="--wrap --height ${FZF_TMUX_HEIGHT:-40%} --bind=ctrl-z:ignore --wrap-sign '                             ↳ ' ${FZF_DEFAULT_OPTS-} --scheme=history ${FZF_CTRL_R_OPTS-} -n4.. +m +s --tac --ansi"
+  opts="--wrap --height ${FZF_TMUX_HEIGHT:-40%} --bind=ctrl-r:toggle-sort --wrap-sign '                             ↳ ' ${FZF_DEFAULT_OPTS-} --scheme=history ${FZF_CTRL_R_OPTS-} -n4.. +m +s --tac --ansi"
   output=$( builtin history | FZF_DEFAULT_OPTS="$opts" $(__fzfcmd) --query "$READLINE_LINE" ) || return
   READLINE_LINE=${output#*\[*\] }
   if [[ -z "$READLINE_POINT" ]]; then

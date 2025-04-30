@@ -1,4 +1,6 @@
 local util = require('util')
+local map = util.map
+local nmap = util.nmap
 
 return {
   'milanglacier/yarepl.nvim',
@@ -69,7 +71,9 @@ return {
 
       if repl then
         vim.cmd.REPLHideOrFocus(name)
-        vim.cmd.startinsert()
+        if vim.bo.filetype == 'REPL' then
+          vim.cmd.startinsert()
+        end
       else
         vim.cmd.REPLStart(name)
       end
@@ -81,23 +85,19 @@ return {
 
     util.autocmd({ 'BufWinEnter', 'WinEnter' }, '#*#*', 'startinsert!')
 
-    util.autocmd('FileType', 'REPL', function()
-      util.tmap('<M-z>', ':REPLHide bash', { buffer = true }, 'Hide shell terminal')
-      util.tmap('<M-a>', ':REPLHide aider', { buffer = true }, 'Aider: Hide terminal')
-    end)
+    map({ 'n', 't' }, '<M-z>', function() toggle('bash') end, { desc = 'Toggle shell terminal' })
+    map({ 'n', 't' }, '<M-a>', function() toggle('aider') end, { desc = 'Aider: Toggle terminal' })
+    nmap('<Leader>!', '<M-z>', { remap = true })
 
-    util.nmap('<M-z>', function() toggle('bash') end, { desc = 'Toggle shell terminal' })
-    util.nmap('<M-a>', function() toggle('aider') end, { desc = 'Aider: Toggle terminal' })
+    nmap('<Leader>aa', function() vim.cmd.AiderExec('/add', vim.fn.expand('%:p')) end, { desc = 'Aider: Add current file' })
+    nmap('<Leader>ad', function() vim.cmd.AiderExec('/drop', vim.fn.expand('%:p')) end, { desc = 'Aider: Drop current file' })
+    nmap('<Leader>al', ':AiderSendLs', { desc = 'Aider: List files' })
+    nmap('<Leader>aD', ':AiderSendDrop', { desc = 'Aider: Drop all files' })
 
-    util.nmap('<Leader>aa', function() vim.cmd.AiderExec('/add', vim.fn.expand('%:p')) end, { desc = 'Aider: Add current file' })
-    util.nmap('<Leader>ad', function() vim.cmd.AiderExec('/drop', vim.fn.expand('%:p')) end, { desc = 'Aider: Drop current file' })
-    util.nmap('<Leader>al', ':AiderSendLs', { desc = 'Aider: List files' })
-    util.nmap('<Leader>aD', ':AiderSendDrop', { desc = 'Aider: Drop all files' })
+    nmap('<Leader>ay', ':AiderSendYes', { desc = 'Aider: Confirm prompt' })
+    nmap('<Leader>an', ':AiderSendNo', { desc = 'Aider: Reject prompt' })
+    nmap('<Leader>aR', ':AiderSendReset', { desc = 'Aider: Reset history' })
 
-    util.nmap('<Leader>ay', ':AiderSendYes', { desc = 'Aider: Confirm prompt' })
-    util.nmap('<Leader>an', ':AiderSendNo', { desc = 'Aider: Reject prompt' })
-    util.nmap('<Leader>aR', ':AiderSendReset', { desc = 'Aider: Reset history' })
-
-    util.nmap('<Leader>ap', ':AiderSetPrefix', { desc = 'Aider: Set prefix' })
+    nmap('<Leader>ap', ':AiderSetPrefix', { desc = 'Aider: Set prefix' })
   end,
 }

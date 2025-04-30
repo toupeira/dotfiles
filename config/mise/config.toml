@@ -1,8 +1,8 @@
 [tools]
 difftastic = "0.63.0"
-fzf = "0.61.3"
+fzf = "0.62.0"
 glow = "2.1.0"
-neovim = "0.11.0"
+neovim = "0.11.1"
 usage = "2.1.1"
 
 [settings]

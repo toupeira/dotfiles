@@ -1,11 +1,11 @@
 Types: deb
-URIs: http://ftp.ch.debian.org/debian/
+URIs: http://deb.debian.org/debian/
 Suites: sid
 Components: main non-free non-free-firmware contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg
 
 Types: deb
-URIs: http://ftp.ch.debian.org/debian/
+URIs: http://deb.debian.org/debian/
 Suites: rc-buggy
 Components: main non-free non-free-firmware contrib
 Signed-By: /usr/share/keyrings/debian-archive-keyring.gpg

@@ -14,4 +14,5 @@ Provides: at-spi2-core (= 1:99),
           gnome-software (= 1:99),
           gnome-user-share (= 1:99),
           gstreamer1.0-packagekit (= 1:99),
-          orca (= 1:99)
+          orca (= 1:99),
+          simple-scan (= 1:99)

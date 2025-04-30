@@ -102,4 +102,5 @@ syncthing-gtk
 yt-dlp
 
 flatpak: md.obsidian.Obsidian
+flatpak: org.gnome.Decibels
 flatpak: org.gtk.Gtk3theme.Numix

@@ -103,7 +103,13 @@ local undo_chains = {
   ['!']    = 'exclamation mark',
 }
 for key, desc in pairs(undo_chains) do
-  imap(key, '<C-g>u' .. key, 'Insert ' .. desc .. ' with new undo chain')
+  local command
+  if key == '<CR>' then
+    command = '<C-g>u<C-r>=v:lua.MiniPairs.cr()<CR>'
+  else
+    command = '<C-g>u' .. key
+  end
+  imap(key, command, 'Insert ' .. desc .. ' with new undo chain', { silent = true })
 end
 
 -- don't open tags with Ctrl-LeftClick
@@ -146,8 +152,6 @@ util.alias_command({
   ['QA!'] = 'qa!', ['Qa!'] = 'qa!', ['qA!'] = 'qa!',
   ['WQ']  = 'wq',  ['Wq']  = 'wq',  ['wQ']  = 'wq',
   ['WQ!'] = 'wq!', ['Wq!'] = 'wq!', ['wQ!'] = 'wq!',
-
-  ['D']  = 'Delete', ['D!'] = 'Delete!',
 })
 
 nmap('zS', ':Inspect', 'Inspect highlighting groups')
