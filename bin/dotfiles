@@ -208,8 +208,8 @@ function has-gui {
 function read-rules {
   if ! [[ $* = *.* ]]; then
     if [ "$1" != "role" ]; then
-      local roles=$( read-rules role )
-      [ "$roles" ] && roles=$( printf '|role\.%s' $roles )
+      mapfile -t roles < <( read-rules role )
+      [ ${#roles[@]} ] && roles=$( printf '|role\.%s' "${roles[@]}" )
     fi
     local prefix="(global|host\.$HOSTNAME$roles)\."
   fi
@@ -230,10 +230,19 @@ function validate {
 
   if ! [ "$SKIP_PATHS" ]; then
     function read-paths {
-      mapfile -t paths < <( read-rules "$@" | sed -r 's/\./\\./g' )
+      mapfile -t paths < <( read-rules "$@" )
       if [ ${#paths[@]} ]; then
-        paths=$( printf '|%s($|/)' "${paths[@]}" )
-        echo "^(${paths:1})"
+        local patterns=()
+        for path in "${paths[@]}"; do
+          if [[ "$path" =~ ^/(.*)/$  ]]; then
+            patterns+=( "${path:1:-1}" )
+          else
+            patterns+=( "^${path//./\\.}($|/)" )
+          fi
+        done
+
+        local pattern=$( printf '|%s' "${patterns[@]}" )
+        echo "(${pattern:1})"
       else
         echo "^$"
       fi
@@ -635,7 +644,8 @@ function run {
       done
 
       lint slack "Syncthing conflicts"
-      for path in $( fdfind -u '\.sync-conflict-.*' $( syncthing-folders ) | fgrep -v /.stversions/ ); do
+      mapfile -t folders < <( syncthing-folders )
+      for path in $( fdfind -u '\.sync-conflict-.*' "${folders[@]}" | grep -Fv /.stversions/ ); do
         list "$path"
         fix system rm -v "$path"
       done
@@ -994,7 +1004,7 @@ function run {
     # }}}
 
     *)
-      git ignore-errors "$command" "$@"
+      git ignore-errors "${command[@]}" "$@"
       ;;
   esac
 }
