@@ -1,7 +1,7 @@
 local util = require('util')
 
 return {
-  'williamboman/mason.nvim',
+  'mason-org/mason.nvim',
   event = 'VeryLazy',
   build = ':MasonUpdate',
   dependencies = {

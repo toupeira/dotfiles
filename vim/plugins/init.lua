@@ -5,9 +5,7 @@ local map = util.map
 local imap = util.imap
 
 return {
-  { 'nvim-lua/plenary.nvim', lazy = true },
-
-  lazy_file { 'AndrewRadev/splitjoin.vim' },
+  lazy_file { 'AndrewRadev/splitjoin.vim', submodules = false },
   lazy_file { 'tpope/vim-rails' },
 
   very_lazy { 'j-hui/fidget.nvim', config = true },

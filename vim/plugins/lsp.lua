@@ -17,9 +17,12 @@ return {
   'neovim/nvim-lspconfig',
   event = 'LazyFile',
   dependencies = {
-    { 'williamboman/mason-lspconfig.nvim',
+    { 'mason-org/mason-lspconfig.nvim',
       dependencies = { 'mason.nvim' },
-      opts = { ensure_installed = install_servers },
+      opts = {
+        ensure_installed = install_servers,
+        automatic_enable = false,
+      },
     },
     { 'folke/lazydev.nvim',
       ft = 'lua',

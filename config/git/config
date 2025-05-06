@@ -213,9 +213,9 @@
   rim = !git rebase -i $( git default-branch )
   rcontinue = rebase --continue
   rabort = rebase --abort
-  abs = absorb
-  rabs = absorb --and-rebase
   solve = mergetool
+  absorb = absorb
+  absorb-and-rebase = absorb --and-rebase
 
   pu = push
   poof = pu --force-with-lease --force-if-includes

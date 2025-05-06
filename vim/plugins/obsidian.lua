@@ -1,9 +1,9 @@
 return {
   'obsidian-nvim/obsidian.nvim',
+  cmd = 'Obsidian',
   ft = 'markdown',
-  dependencies = {
-    'nvim-lua/plenary.nvim',
-  },
+  dependencies = { 'nvim-lua/plenary.nvim' },
+
   opts = {
     disable_frontmatter = true,
     open_app_foreground = true,

@@ -543,6 +543,10 @@ function run {
         run packages
       fi
 
+      if has-news vim/lazy-lock.json; then
+        run update-lazy
+      fi
+
       if has-news dconf && has-gui; then
         echo
         run dconf sync
@@ -873,6 +877,10 @@ function run {
       echo
       git add "$completions"
       git status -s "$completions"
+      ;;
+    update-lazy)
+      status "Updating {{lazy}} plugins..."
+      system nvim --headless '+Lazy! restore' +qa >/dev/null
       ;;
     # }}}
     list|ls) # {{{
