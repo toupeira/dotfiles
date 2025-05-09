@@ -195,6 +195,10 @@ return {
             CmpItemMenu = { link = 'Comment' },
             CmpItemKindSnippet = { link = 'Function' },
 
+            GitSignsAdd    = { fg = 'git.add', bg = 'diff.add' },
+            GitSignsChange = { fg = 'git.changed', bg = 'diff.change' },
+            GitSignsDelete = { fg = 'fg0', bg = 'diff.delete' },
+
             LazyButtonActive = { link = 'LazyH1' },
             LazyDimmed = { link = 'Comment' },
             LazyProp = { link = 'Comment' },
@@ -219,9 +223,7 @@ return {
             NeoTreeGitUnstaged = { link = 'WarningMsg' },
             NeoTreeGitUntracked = { link = 'ErrorMsg' },
 
-            GitSignsAdd    = { fg = 'git.add', bg = 'diff.add' },
-            GitSignsChange = { fg = 'git.changed', bg = 'diff.change' },
-            GitSignsDelete = { fg = 'fg0', bg = 'diff.delete' },
+            TreesitterContextBottom = { style = 'underline', sp = 'bg3' },
 
             WhichKey = { fg = 'palette.yellow', style = 'bold' },
             WhichKeyDesc = { fg = 'palette.green' },

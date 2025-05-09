@@ -3,21 +3,25 @@
 NOTES="/slack/documents/Notes"
 
 files=()
-mode='open'
+action='open'
 
 function find {
   fdfind "$1\.md$" "$NOTES" -t f --exclude '/Sammlungen'
 }
 
+function obsidian_url {
+  echo "obsidian://open?path=$( echo -n "$1" | jq -rR @uri )"
+}
+
 while [ "${1:0:1}" = "-" ]; do
   case "$1" in
     -l|--list)
-      mode='list'
+      action='list'
       shift
       [ $# -eq 0 ] && set -- ''
       ;;
     -e|--edit)
-      mode='edit'
+      action='edit'
       shift
       ;;
     -*)
@@ -48,27 +52,28 @@ for pattern in "$@"; do
 done
 
 if [ "${#files[@]}" = 0 ] && [ "$TERM" != "dumb" ]; then
-  [ "$mode" != "list" ] && echo -e " \e[0;33m● No notes found for \e[1m'$*'\e[0m"
+  [ "$action" != "list" ] && echo -e " \e[0;33m● No notes found for \e[1m'$*'\e[0m"
   exit 1
 fi
 
 filenames=$( echo -e "\e[1m${files[*]}\e[0m" | sed -r "s,$NOTES/,,g" )
-
-case "$mode" in
+case "$action" in
   open)
     if [ "${#files[@]}" -gt 0 ]; then
+      echo -e " \e[0;32m● Opening: $filenames"
       mapfile -t files < <(
         for file in "${files[@]}"; do
-          echo "obsidian://open?path=$( echo -n "$file" | jq -rR @uri )"
+          obsidian_url "$file"
         done
       )
     elif pgrep -f /app/obsidian >/dev/null; then
       exec wmctrl -xa obsidian
     elif pgrep -f 'firefox -P Denteo' &>/dev/null; then
-      files=( "obsidian://open?path=$( echo -n "$NOTES/Projekte/Denteo/Inbox.md" | jq -rR @uri )" )
+      files=( "$( obsidian_url "$NOTES/Projekte/Denteo/Inbox.md" )" )
+    else
+      files=( "$( obsidian_url "$NOTES/Home/Dashboard.md" )" )
     fi
 
-    echo -e " \e[0;32m● Opening: $filenames"
     flatpak run md.obsidian.Obsidian -- "${files[@]}" &>/dev/null &
     wmctrl -xa obsidian
     ;;
