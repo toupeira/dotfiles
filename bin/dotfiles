@@ -235,14 +235,14 @@ function validate {
         local patterns=()
         for path in "${paths[@]}"; do
           if [[ "$path" =~ ^/(.*)/$  ]]; then
-            patterns+=( "${path:1:-1}" )
+            patterns+=( ".*${path:1:-1}.*" )
           else
-            patterns+=( "^${path//./\\.}($|/)" )
+            patterns+=( "${path//./\\.}($|/)" )
           fi
         done
 
         local pattern=$( printf '|%s' "${patterns[@]}" )
-        echo "(${pattern:1})"
+        echo "^(${pattern:1})$"
       else
         echo "^$"
       fi
@@ -334,7 +334,8 @@ function run {
       fi
 
       for path in "$@"; do
-        subpath=$( echo "${path%/}" | sed -r "s,^$DOTFILES/,," )
+        path=${path%/}
+        subpath=$( echo "$path" | sed -r "s,^$DOTFILES/,," )
 
         if [ ! -e "$path" ] || ! validate "$( origin "$subpath" )"; then
           continue
