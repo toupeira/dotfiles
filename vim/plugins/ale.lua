@@ -1,3 +1,5 @@
+local util = require('util')
+
 return {
   'dense-analysis/ale',
   event = 'LazyFile',
@@ -35,6 +37,10 @@ return {
     }
 
     vim.g.ale_ruby_rubocop_auto_correct_all = 1
-    vim.g.ale_lua_luacheck_options = '--globals vim --max-line-length 150'
+    vim.g.ale_lua_luacheck_options = '--globals vim --max-line-length 160'
+
+    util.autocmd({ 'BufRead', 'BufNewFile' }, '.env', function()
+      vim.b.ale_sh_shellcheck_exclusions = 'SC2034'
+    end)
   end
 }

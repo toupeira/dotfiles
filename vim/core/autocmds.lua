@@ -3,25 +3,47 @@ local autocmd = util.autocmd
 
 -- Filetype settings ---------------------------------------------------
 
-vim.cmd([[
-  autocmd FileType crontab             setlocal nowritebackup
-  autocmd FileType css,scss            setlocal iskeyword+=%
-  autocmd FileType dosini              setlocal commentstring=#\ %s foldmethod=syntax
-  autocmd FileType gdscript            setlocal expandtab
-  autocmd FileType gitcommit,gitrebase setlocal colorcolumn=50,72
-  autocmd FileType NeogitCommitMessage setlocal colorcolumn=50,72
-  autocmd FileType help                setlocal buflisted
-  autocmd FileType iss                 setlocal commentstring=;\ %s
-  autocmd FileType lua                 setlocal path+=./lua keywordprg=:Help
-  autocmd FileType make                setlocal noexpandtab
-  autocmd FileType markdown            setlocal conceallevel=2 foldlevel=2 suffixesadd+=.md comments=b:*,b:-,b:+,n:> formatoptions+=r
-  autocmd FileType qf                  setlocal nobuflisted
-  autocmd FileType ruby                setlocal iskeyword+=?,!
-  autocmd FileType text,mail,markdown  setlocal linebreak
-  autocmd FileType vim                 setlocal keywordprg=:Help foldmethod=marker foldlevel=0
+local filetypes = {
+  ['crontab']  = { 'nowritebackup' },
+  ['css,scss'] = { 'iskeyword+=%' },
+  ['dosini']   = { 'commentstring=#\\ %s', 'foldmethod=syntax' },
+  ['gdscript'] = { 'expandtab' },
+  ['help']     = { 'buflisted' },
+  ['iss']      = { 'commentstring=;\\ %s' },
+  ['lua']      = { 'path+=./lua', 'keywordprg=:Help' },
+  ['make']     = { 'noexpandtab' },
+  ['qf']       = { 'nobuflisted' },
+  ['ruby']     = { 'iskeyword+=?,!' },
 
-  autocmd BufRead,BufNewFile .env let b:ale_sh_shellcheck_exclusions = 'SC2034'
-]])
+  ['gitcommit,gitrebase,NeogitCommitMessage'] = {
+    'colorcolumn=50,72',
+  },
+
+  ['text,mail,markdown'] = {
+    'linebreak',
+  },
+
+  ['markdown'] = {
+    'conceallevel=2',
+    'suffixesadd+=.md',
+    'foldlevel=2',
+    -- reset after obsidian.nvim
+    'foldexpr=MarkdownFold()',
+    -- automatically continue lists and blockquotes
+    'comments=b:*,b:-,b:+,n:>',
+    'formatoptions+=r',
+  },
+
+  ['vim'] = {
+    'keywordprg=:Help',
+    'foldmethod=marker',
+    'foldlevel=0'
+  },
+}
+
+for filetype, settings in pairs(filetypes) do
+  autocmd('FileType', filetype, 'setlocal ' .. table.concat(settings, ' '))
+end
 
 -- Helpers -------------------------------------------------------------
 

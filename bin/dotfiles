@@ -833,20 +833,26 @@ function run {
       ;;
 
     update-apt)
-      sudo aptitude update && sudo aptitude upgrade
+      system sudo aptitude update \
+        && system sudo aptitude upgrade
       ;;
     update-flatpak)
-      flatpak update && flatpak uninstall --unused && flatpak uninstall --delete-data
+      system flatpak update \
+        && system flatpak uninstall --unused \
+        && system flatpak uninstall --delete-data
       ;;
     update-firmware)
-      fwupdmgr update
+      system fwupdmgr update
       ;;
     update-mise)
-      mise plugins update && mise upgrade --bump --interactive && mise prune
+      system mise plugins update \
+        && system mise upgrade --bump --interactive \
+        && system mise prune \
+        && git add config/mise
       ;;
     update-gems)
-      gem update --system
-      run packages -f :gem
+      system gem update --system \
+        && run packages -f :gem
       ;;
     update-completions)
       local completions="$DOTFILES/local/share/bash-completion/completions"

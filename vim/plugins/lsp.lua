@@ -35,12 +35,6 @@ return {
     { '<Leader>d%', '<Cmd>LspStart<CR>', desc = 'Start LSP server' },
   },
 
-  opts = {
-    ui = {
-      border = 'rounded',
-    },
-  },
-
   config = function(_, opts)
     require('lspconfig.ui.windows').default_options = opts.ui
 
