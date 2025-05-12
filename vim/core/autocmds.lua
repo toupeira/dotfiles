@@ -10,7 +10,7 @@ local filetypes = {
   ['gdscript'] = { 'expandtab' },
   ['help']     = { 'buflisted' },
   ['iss']      = { 'commentstring=;\\ %s' },
-  ['lua']      = { 'path+=./lua', 'keywordprg=:Help' },
+  ['lua']      = { 'path+=./lua', 'keywordprg=:help' },
   ['make']     = { 'noexpandtab' },
   ['qf']       = { 'nobuflisted' },
   ['ruby']     = { 'iskeyword+=?,!' },
@@ -35,7 +35,6 @@ local filetypes = {
   },
 
   ['vim'] = {
-    'keywordprg=:Help',
     'foldmethod=marker',
     'foldlevel=0'
   },

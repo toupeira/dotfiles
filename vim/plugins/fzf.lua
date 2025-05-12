@@ -118,7 +118,6 @@ return {
       ['alt-f'] = false,
     }
 
-    defaults.helptags.actions.default = actions.help_tab
     defaults.actions.files.default = function(selected, settings)
       actions.file_edit(selected, settings)
 

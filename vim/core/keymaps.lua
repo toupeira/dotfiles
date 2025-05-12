@@ -11,8 +11,18 @@ local expand = vim.fn.expand
 -- Mode switching ------------------------------------------------------
 
 imap('<C-c>', '<Esc>', 'Leave insert mode')
-nmap('<C-c>', { 'nohlsearch', 'echo', 'lua= require("lualine").refresh()' }, 'Clear search and command line')
 tmap('<Esc>', '<C-\\><C-n>', 'Leave insert mode')
+
+nmap('<C-c>', function()
+  vim.cmd.nohlsearch()
+  vim.cmd.echo()
+
+  local _, lualine = pcall(require, 'lualine')
+  if lualine then lualine.refresh() end
+
+  local _, jump = pcall(require, 'mini.jump')
+  if jump then jump.stop_jumping() end
+end, 'Clear search and command line')
 
 -- Window navigation ---------------------------------------------------
 
@@ -69,6 +79,7 @@ nmap('XX', '"_dd', 'Delete current line to blackhole register')
 
 vmap('>', '>gv', 'Indent right and reselect')
 vmap('<', '<gv', 'Indent left and reselect')
+
 nmap('gp', '`[v`]', 'Select pasted text')
 vmap('gs', ':!sort -h', 'Sort selection')
 vmap('.', ':normal .', 'Repeat for each line in selection')
@@ -117,35 +128,7 @@ nmap('<C-LeftMouse>', '<nop>')
 
 -- Utilities -----------------------------------------------------------
 
-util.command('Help', '$tab help <args>', {
-  nargs = '*',
-  complete = 'help',
-})
-
-nmap('<F1>', ':Help', 'Open help in a new tab')
-
--- override `:Man` to open in a tab
--- see /usr/share/nvim/runtime/plugin/man.lua
-util.command('Manpage', '$tab Man <args>', {
-  bang = true,
-  bar = true,
-  range = true,
-  addr = 'other',
-  nargs = '*',
-  complete = function(...)
-    return require('man').man_complete(...)
-  end,
-})
-
 util.alias_command({
-  help = 'Help',
-  hel  = 'Help',
-  he   = 'Help',
-  h    = 'Help',
-  H    = 'Help',
-  man  = 'Manpage',
-  Man  = 'Manpage',
-
   ['E']   = 'e',   ['E!']  = 'e!',
   ['Q']   = 'q',   ['Q!']  = 'q!',
   ['QA']  = 'qa',  ['Qa']  = 'qa',  ['qA']  = 'qa',

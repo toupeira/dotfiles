@@ -27,7 +27,6 @@ util.is_sudo = os.getenv('SUDO_COMMAND') ~= nil
 util.is_ssh = os.getenv('SSH_CONNECTION') ~= nil
 util.is_tmux = os.getenv('TMUX') ~= nil
 util.is_headless = #vim.api.nvim_list_uis() == 0
-util.is_neovide = vim.g.neovide ~= nil
 
 -- Load plugins after startup
 util.very_lazy = function(plugin)
@@ -298,6 +297,7 @@ util.project_path = function(max_length, max_depth)
   local path = expand('%:p:h')
     :gsub('/%.git$', '')
     :gsub('^term://(.*)//[0-9]+.*', '%1')
+    :gsub('^ministarter:.*', '')
     :gsub('^fugitive:.*', '')
     :gsub('^diffview:.*', '')
 

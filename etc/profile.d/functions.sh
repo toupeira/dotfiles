@@ -145,6 +145,10 @@ function rg.less {
   rg --pretty "$@" | less
 }
 
+function rg.list {
+  rg -l --sort=path "$@"
+}
+
 # rg wrapper to view results in delta
 function rg.delta {
   rg --json "$@" | delta

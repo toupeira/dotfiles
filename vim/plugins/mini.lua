@@ -204,6 +204,11 @@ return {
         },
       })
 
+      -- mini.jump -----------------------------------------------------
+      require('mini.jump').setup({
+        mappings = { repeat_jump = '' },
+      })
+
       -- mini.move -----------------------------------------------------
       require('mini.move').setup()
       imap('<M-H>', ':lua MiniMove.move_line("left")',  'Move line left')

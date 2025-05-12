@@ -8,7 +8,7 @@ return {
   { 'mrjones2014/smart-splits.nvim',
     event = 'VeryLazy',
     cond = function()
-      return (util.is_tmux and not util.is_headless) or util.is_neovide
+      return (util.is_tmux and not util.is_headless)
     end,
 
     opts = {

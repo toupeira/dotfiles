@@ -8,7 +8,6 @@ return {
   lazy_file { 'AndrewRadev/splitjoin.vim', submodules = false },
   lazy_file { 'tpope/vim-rails' },
 
-  very_lazy { 'j-hui/fidget.nvim', config = true },
   very_lazy { 'numToStr/Comment.nvim', config = true },
   very_lazy { 'tiagovla/scope.nvim', config = true },
   very_lazy { 'tpope/vim-abolish' },
@@ -37,6 +36,63 @@ return {
       { 'cw', 'ce', mode = 'n', { remap = true }},
       { 'e', '<Cmd>lua require("spider").motion("e")<CR>', mode = { 'n', 'o', 'x' }},
       { 'b', '<Cmd>lua require("spider").motion("b")<CR>', mode = { 'n', 'o', 'x' }},
+    },
+    opts = {
+      skipInsignificantPunctuation = false,
+    }
+  },
+
+  very_lazy {
+    'folke/flash.nvim',
+    keys = {
+      { '<CR>', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Jump to position' },
+      { '<BS>', mode = { 'n', 'x', 'o' }, function() require('flash').treesitter() end, desc = 'Select Treesitter node' },
+      { 'r', mode = 'o', function() require('flash').remote() end, desc = 'Remote jump to position' },
+      { 'R', mode = { 'o', 'x' }, function() require('flash').treesitter_search() end, desc = 'Remote select Treesitter node' },
+    },
+    opts = {
+      modes = {
+        search = { enabled = false },
+        char = { enabled = false },
+      },
+    },
+  },
+
+  very_lazy {
+    'folke/trouble.nvim',
+    keys = {
+      {
+        '<Leader>E',
+        function()
+          local trouble = require('trouble')
+          if trouble.is_open() then
+            trouble.close()
+          elseif #vim.diagnostic.get(0) > 0 then
+            trouble.toggle({ mode = 'diagnostics', focus = true, filter = { buf = 0 }})
+          else
+            util.echo('No diagnostics in current buffer.', 'ModeMsg')
+          end
+        end,
+        desc = 'Toggle diagnostics',
+      },
+    },
+
+    opts = {
+      auto_close = true,
+      win = { size = 5 },
+    }
+  },
+
+  very_lazy { 'j-hui/fidget.nvim',
+    opts = {
+      notification = {
+        override_vim_notify = true,
+        window = {
+          border = 'rounded',
+          winblend = 10,
+          x_padding = 0,
+        },
+      },
     },
   },
 
@@ -93,7 +149,15 @@ return {
   },
 
   lazy_file { 'sphamba/smear-cursor.nvim',
+    keys = {
+      { '<LocalLeader>t', function()
+        local cursor = require('smear_cursor')
+        cursor.toggle()
+        util.echo('Cursor trail is ' .. (cursor.enabled and 'enabled' or 'disabled'), 'MoreMsg')
+      end, mode = { 'n' }, desc = 'Toggle cursor trail' },
+    },
     opts = {
+      enabled = false,
       smear_insert_mode = false,
       min_horizontal_distance_smear = 10,
       min_vertical_distance_smear = 2,

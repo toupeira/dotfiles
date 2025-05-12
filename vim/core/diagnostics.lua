@@ -1,44 +1,47 @@
 local util = require('util')
 local nmap = util.nmap
 
-local last_win
-nmap('<Leader>e', function()
-  if last_win and vim.api.nvim_win_is_valid(last_win) then
-    vim.api.nvim_win_close(last_win, false)
-    last_win = nil
-  else
-    last_win = select(2, vim.diagnostic.open_float())
+local severity = vim.diagnostic.severity
+
+local virtual_lines = {
+  current_line = true,
+  format = function(diagnostic)
+    return '● ' .. diagnostic.message, ({
+      [severity.ERROR] = 'DiagnosticError',
+      [severity.WARN]  = 'DiagnosticWarn',
+      [severity.INFO]  = 'DiagnosticInfo',
+      [severity.HINT]  = 'DiagnosticHint',
+      [0]              = 'DiagnosticOk',
+    })[diagnostic.severity]
   end
-end, 'Toggle diagnostics popup')
+}
+
+nmap('<Leader>e', function()
+  local config = vim.diagnostic.config()
+  if config.virtual_lines then
+    vim.diagnostic.config({ virtual_lines = false })
+  else
+    vim.diagnostic.config({ virtual_lines = virtual_lines })
+  end
+end, 'Toggle inline diagnostics')
 
 nmap('<Leader>E', function()
-  vim.diagnostic.setloclist({ open = false })
-  util.toggle_list('l')
+  vim.diagnostic.setloclist({ open = true })
 end, 'Toggle diagnostics list')
 
 vim.diagnostic.config({
   severity_sort = true,
+  float = false,
+  underline = { severity = severity.ERROR },
   virtual_text = false,
-  float = {
-    border = 'rounded',
-    prefix = function(diagnostic, _, total)
-      if total == 1 then return '' end
-      return '● ', ({
-        [vim.diagnostic.severity.ERROR] = 'DiagnosticFloatingError',
-        [vim.diagnostic.severity.WARN]  = 'DiagnosticFloatingWarn',
-        [vim.diagnostic.severity.INFO]  = 'DiagnosticFloatingInfo',
-        [vim.diagnostic.severity.HINT]  = 'DiagnosticFloatingHint',
-        [0]                             = 'DiagnosticFloatingOk',
-      })[diagnostic.severity]
-    end
-  },
+
   signs = {
     text = {
-      [vim.diagnostic.severity.ERROR] = '●',
-      [vim.diagnostic.severity.WARN]  = '●',
-      [vim.diagnostic.severity.INFO]  = '●',
-      [vim.diagnostic.severity.HINT]  = '●',
-      [0] = '●',
+      [severity.ERROR] = '●',
+      [severity.WARN]  = '●',
+      [severity.INFO]  = '●',
+      [severity.HINT]  = '●',
+      [0]              = '●',
     },
   },
 })

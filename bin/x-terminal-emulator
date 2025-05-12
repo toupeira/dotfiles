@@ -42,7 +42,7 @@ case "$terminal" in
           rows=79
         elif [ "$x" = "2560" ]; then
           cols=160
-          rows=79
+          rows=80
         fi
         ;;
     esac

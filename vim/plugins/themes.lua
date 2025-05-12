@@ -28,7 +28,7 @@ return {
       return {
         options = {
           module_default = false,
-          terminal_colors = util.is_neovide,
+          terminal_colors = false,
 
           modules = {
             neogit = true,
@@ -110,6 +110,7 @@ return {
             -- editor interface
             LineNr = { bg = 'bg0' },
             SignColumn = { link = 'LineNr' },
+            CursorLine = { bg = 'palette.bg2' },
             CursorLineNr = { fg = 'palette.comment' },
             CursorLineSign = { link = 'CursorLineNr' },
             Visual = { bg = 'palette.bg4', style = 'bold' },
@@ -136,12 +137,6 @@ return {
             ErrorMsg = { style = 'bold' },
             WarningMsg = { style = 'bold' },
             MoreMsg = { fg = 'diag.hint' },
-
-            DiagnosticUnderlineError   = { style = 'NONE' },
-            DiagnosticUnderlineWarn    = { style = 'NONE' },
-            DiagnosticUnderlineInfo    = { style = 'NONE' },
-            DiagnosticUnderlineHint    = { style = 'NONE' },
-            DiagnosticUnderlineOk      = { style = 'NONE' },
 
             -- syntax highlighting
             Delimiter = { fg = 'syntax.statement' },
@@ -195,6 +190,9 @@ return {
             CmpItemMenu = { link = 'Comment' },
             CmpItemKindSnippet = { link = 'Function' },
 
+            -- FlashCurrent = { link = 'CurSearch' },
+            FlashLabel = { fg = 'palette.search.bg0', bg = 'palette.search.fg0', style = 'bold' },
+
             GitSignsAdd    = { fg = 'git.add', bg = 'diff.add' },
             GitSignsChange = { fg = 'git.changed', bg = 'diff.change' },
             GitSignsDelete = { fg = 'fg0', bg = 'diff.delete' },
@@ -206,6 +204,7 @@ return {
             MatchParen = { fg = 'none', bg = 'sel0', style = 'bold' },
             MatchWord = { style = 'bold' },
 
+            MiniJump = { link = 'Visual' },
             MiniStarterFooter = { link = 'DiagnosticInfo' },
 
             NeogitCursorLine = { link = 'MsgArea' },

@@ -31,9 +31,9 @@ return {
       local split, width, height
       width = 1
       height = 1
-      if vim.o.columns >= 100 then
+      if vim.o.columns >= vim.o.lines * 3 then
         split = 'right'
-        width = 0.35
+        width = 0.4
       else
         split = 'below'
         height = 0.4

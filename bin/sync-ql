@@ -50,7 +50,7 @@ if os.system('ql running >/dev/null') == 0:
 
     os.system('ql quit')
 
-os.system('quodlibet --refresh --quit')
+os.system('quodlibet --run --start-hidden --refresh --quit 2>/dev/null')
 
 from quodlibet._init import init
 init()

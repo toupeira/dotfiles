@@ -38,7 +38,7 @@ function usage {
   echo "  dconf dump [KEY]            Dump dconf settings"
   echo
   echo "Other arguments:"
-  echo "  COMMAND [ARGS]...           Excecute a Git command inside the dotfiles repository"
+  echo "  COMMAND [ARGS]...           Execute a Git command inside the dotfiles repository"
   echo
 
   exit 255

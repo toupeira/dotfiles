@@ -1,4 +1,3 @@
 zeal
 
-flatpak: dev.neovide.neovide
 flatpak: org.godotengine.Godot

@@ -12,6 +12,11 @@ return {
       vim.fn.jobstart({ 'xdg-open', url })
     end,
 
+    completion = {
+      nvim_cmp = false,
+      blink = true,
+    },
+
     workspaces = {
       {
         name = 'notes',
