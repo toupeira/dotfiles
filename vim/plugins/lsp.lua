@@ -3,7 +3,7 @@ local nmap = util.nmap
 local nvomap = util.nvomap
 
 local servers = {
-  bashls = { install = true },
+  bashls = { install = true, autostart = true },
   lua_ls = { install = true },
   ruby_lsp = {},
 }
@@ -39,7 +39,7 @@ return {
     require('lspconfig.ui.windows').default_options = opts.ui
 
     for server, settings in pairs(servers) do
-      settings.autostart = false
+      settings.autostart = settings.autostart or false
       settings.install = nil
       require('lspconfig')[server].setup(settings)
 

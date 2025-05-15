@@ -8,6 +8,7 @@ return {
   lazy_file { 'AndrewRadev/splitjoin.vim', submodules = false },
   lazy_file { 'tpope/vim-rails' },
 
+  very_lazy { 'chaoren/vim-wordmotion' },
   very_lazy { 'numToStr/Comment.nvim', config = true },
   very_lazy { 'tiagovla/scope.nvim', config = true },
   very_lazy { 'tpope/vim-abolish' },
@@ -28,18 +29,6 @@ return {
       vim.g.matchup_matchparen_deferred = 1
       vim.g.matchup_matchparen_offscreen = {}
     end
-  },
-
-  { 'chrisgrieser/nvim-spider',
-    keys = {
-      { 'w', '<Cmd>lua require("spider").motion("w")<CR>', mode = { 'n', 'o', 'x' }},
-      { 'cw', 'ce', mode = 'n', { remap = true }},
-      { 'e', '<Cmd>lua require("spider").motion("e")<CR>', mode = { 'n', 'o', 'x' }},
-      { 'b', '<Cmd>lua require("spider").motion("b")<CR>', mode = { 'n', 'o', 'x' }},
-    },
-    opts = {
-      skipInsignificantPunctuation = false,
-    }
   },
 
   very_lazy {

@@ -28,6 +28,11 @@ util.is_ssh = os.getenv('SSH_CONNECTION') ~= nil
 util.is_tmux = os.getenv('TMUX') ~= nil
 util.is_headless = #vim.api.nvim_list_uis() == 0
 
+-- Return active LSP clients for the current buffer
+util.lsp_clients = function()
+  return vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
+end
+
 -- Load plugins after startup
 util.very_lazy = function(plugin)
   plugin.event = 'VeryLazy'

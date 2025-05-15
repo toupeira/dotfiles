@@ -35,6 +35,10 @@ require('lazy').setup('plugins', {
     enabled = false,
   },
 
+  rocks = {
+    hererocks = false,
+  },
+
   readme = {
     fles = { 'README.md', 'README.markdown', 'lua/**/README.md' },
   },

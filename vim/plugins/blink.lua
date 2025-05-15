@@ -36,13 +36,15 @@ return {
 
     sources = {
       min_keyword_length = 2,
-      default = {
-        'lsp',
-        'path',
-        'snippets',
-        'buffer',
-        'omni',
-      },
+
+      default = function()
+        return {
+          'path',
+          'buffer',
+          'snippets',
+          #util.lsp_clients() > 0 and 'lsp' or 'omni'
+        }
+      end,
 
       providers = {
         path = {
@@ -81,6 +83,8 @@ return {
 
     completion = {
       keyword = { range = 'full' },
+      trigger = { show_in_snippet = false },
+
       menu = {
         max_height = 20,
         winblend = vim.o.pumblend,

@@ -1,8 +1,9 @@
 return {
-  { 'elixir-lang/vim-elixir', ft = { 'elixir', 'eelixir' } },
-  { 'habamax/vim-godot',      ft = { 'gdscript', 'gsl' } },
-  { 'hail2u/vim-css3-syntax', ft = { 'css', 'scss' } },
-  { 'hashivim/vim-terraform', ft = { 'terraform', 'hcl' } },
+  { 'antonk52/markdowny.nvim', ft = { 'markdown' }, config = true },
+  { 'elixir-lang/vim-elixir',  ft = { 'elixir', 'eelixir' } },
+  { 'habamax/vim-godot',       ft = { 'gdscript', 'gsl' } },
+  { 'hail2u/vim-css3-syntax',  ft = { 'css', 'scss' } },
+  { 'hashivim/vim-terraform',  ft = { 'terraform', 'hcl' } },
 
   { 'iamcco/markdown-preview.nvim',
     ft = { 'markdown' },

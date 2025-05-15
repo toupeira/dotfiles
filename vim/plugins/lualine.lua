@@ -126,14 +126,13 @@ return {
         lualine_y = {
           { 'filetype',
             fmt = function(filetype)
-              local bufnr = vim.api.nvim_get_current_buf()
-              local lsp_clients = vim.lsp.get_clients({ bufnr = bufnr })
-              if next(lsp_clients) == nil then
+              local clients = util.lsp_clients()
+              if #clients == 0 then
                 return filetype
               end
 
               local names = {}
-              for _, client in pairs(lsp_clients) do
+              for _, client in pairs(clients) do
                 table.insert(names, client.name)
               end
               return table.concat(names, '|')
