@@ -13,7 +13,7 @@
   "fidget.nvim": { "branch": "main", "commit": "d9ba6b7bfe29b3119a610892af67602641da778e" },
   "flash.nvim": { "branch": "main", "commit": "3c942666f115e2811e959eabbdd361a025db8b63" },
   "fugitive-gitlab.vim": { "branch": "master", "commit": "3584cf7e607ba7822f991d407a8d780e05aae287" },
-  "fzf-lua": { "branch": "main", "commit": "5af306b30f699513669efdf51cf50a6deab53968" },
+  "fzf-lua": { "branch": "main", "commit": "57f393bb1859be3c0a4f6e45252b57a910df8be2" },
   "gitsigns.nvim": { "branch": "main", "commit": "e399f9748d7cfd8859747c8d6c4e9c8b4d50a1bd" },
   "gruvbox-material": { "branch": "master", "commit": "f5f912fbc7cf2d45da6928b792d554f85c7aa89a" },
   "icon-picker.nvim": { "branch": "master", "commit": "3ee9a0ea9feeef08ae35e40c8be6a2fa2c20f2d3" },
