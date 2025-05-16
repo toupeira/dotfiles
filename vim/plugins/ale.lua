@@ -32,12 +32,14 @@ return {
 
     vim.g.ale_fixers = {
       javascript = { 'prettier' },
+      -- lua = { 'stylua' },
       ruby = { 'rubocop' },
       vue = { 'prettier' },
     }
 
     vim.g.ale_ruby_rubocop_auto_correct_all = 1
     vim.g.ale_lua_luacheck_options = '--globals vim --max-line-length 160'
+    vim.g.ale_lua_stylua_options = '--verify'
 
     util.autocmd({ 'BufRead', 'BufNewFile' }, '.env', function()
       vim.b.ale_sh_shellcheck_exclusions = 'SC2034'

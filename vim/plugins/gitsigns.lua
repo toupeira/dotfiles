@@ -7,6 +7,8 @@ return {
   event = 'VeryLazy',
 
   opts = {
+    sign_priority = 100,
+
     signs = {
       add          = { text = '▉' },
       change       = { text = '▉' },
@@ -48,8 +50,8 @@ return {
         end
       )
 
-      nmap(']d', next_hunk, args, 'Jump to next hunk')
-      nmap('[d', prev_hunk, args, 'Jump to previous hunk')
+      nmap(']c', next_hunk, args, 'Jump to next hunk')
+      nmap('[c', prev_hunk, args, 'Jump to previous hunk')
 
       nmap('<Leader>ga', gitsigns.stage_hunk, args, 'Stage current hunk')
       nmap('<Leader>gR', gitsigns.reset_hunk, args, 'Reset current hunk')
@@ -58,8 +60,8 @@ return {
       vmap('<Leader>ga', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Stage selected hunk')
       vmap('<Leader>gR', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Reset selected hunk')
 
-      nmap('<Leader>gb', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
-      nmap('<Leader>gB', gitsigns.blame, args, 'Open Git blame for current file')
+      nmap('<Leader>gb', gitsigns.blame, args, 'Open Git blame for current file')
+      nmap('<Leader>gB', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
 
       util.map({'o', 'x'}, 'ih', ':Gitsigns select_hunk', args)
     end

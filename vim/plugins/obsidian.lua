@@ -1,7 +1,7 @@
 return {
   'obsidian-nvim/obsidian.nvim',
-  cmd = 'Obsidian',
   ft = 'markdown',
+  cmd = 'Obsidian',
   dependencies = { 'nvim-lua/plenary.nvim' },
 
   opts = {
@@ -11,6 +11,14 @@ return {
     follow_url_func = function(url)
       vim.fn.jobstart({ 'xdg-open', url })
     end,
+
+    ui = {
+      enable = false,
+      checkboxes = {
+        ['x'] = { char = '󰄲', hl_group = 'Keyword' },
+        [' '] = { char = '󰄱', hl_group = 'Keyword' },
+      },
+    },
 
     completion = {
       nvim_cmp = false,
@@ -36,13 +44,6 @@ return {
           templates = { folder = vim.NIL },
         },
       },
-    },
-
-    ui = {
-      checkboxes = {
-        [' '] = { char = '󰄱', hl_group = 'ObsidianTodo' },
-        ['x'] = { char = '', hl_group = 'ObsidianTodo' },
-      }
     },
 
     mappings = {

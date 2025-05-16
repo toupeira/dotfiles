@@ -7,6 +7,86 @@ return {
   'echasnovski/mini.nvim',
 
   config = function()
+    -- mini.clue -----------------------------------------------------
+    local clue = require('mini.clue')
+
+    util.autocmd('User', 'MiniStarterOpened', function(event)
+      MiniClue.enable_buf_triggers(event.buf)
+      util.nmap('g', function()
+        MiniStarter.add_to_query('g', event.buf)
+      end, { buffer = event.buf, nowait = true, force = true })
+    end)
+
+    vim.o.timeoutlen = 500
+
+    clue.setup({
+      triggers = {
+        -- Leader triggers
+        { mode = 'n', keys = '<Leader>' },
+        { mode = 'v', keys = '<Leader>' },
+        { mode = 'n', keys = '<LocalLeader>' },
+        { mode = 'v', keys = '<LocalLeader>' },
+        { mode = 'n', keys = '<F1>' },
+
+        -- Built-in completion
+        { mode = 'i', keys = '<C-x>' },
+
+        -- `g` key
+        { mode = 'n', keys = 'g' },
+        { mode = 'v', keys = 'g' },
+
+        -- Marks
+        { mode = 'n', keys = "'" },
+        { mode = 'n', keys = '`' },
+        { mode = 'v', keys = "'" },
+        { mode = 'v', keys = '`' },
+
+        -- Registers
+        { mode = 'n', keys = '"' },
+        { mode = 'v', keys = '"' },
+        { mode = 'i', keys = '<C-r>' },
+        { mode = 'c', keys = '<C-r>' },
+
+        -- Window commands
+        { mode = 'n', keys = '<C-w>' },
+
+        -- `z` key
+        { mode = 'n', keys = 'z' },
+        { mode = 'v', keys = 'z' },
+
+        -- mini.bracketed and others
+        { mode = 'n', keys = ']' },
+        { mode = 'n', keys = '[' },
+
+        -- mini.surround
+        { mode = 'n', keys = 'S' },
+        { mode = 'v', keys = 'S' },
+      },
+
+      clues = {
+        clue.gen_clues.builtin_completion(),
+        clue.gen_clues.g(),
+        clue.gen_clues.marks(),
+        clue.gen_clues.registers(),
+        clue.gen_clues.windows(),
+        clue.gen_clues.z(),
+
+        { mode = 'n', keys = '<Leader><F1>', desc = '➜ help' },
+        { mode = 'n', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
+        { mode = 'n', keys = '<Leader><Leader>S', desc = '➜ lsp' },
+        { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
+        { mode = 'n', keys = '<Leader>S', desc = '➜ lsp' },
+        -- { mode = 'n', keys = '<Leader>dR', desc = 'Smart rename' },
+        { mode = 'n', keys = '<Leader>g', desc = '➜ git' },
+        { mode = 'v', keys = '<Leader>g', desc = '➜ git' },
+      },
+
+      window = {
+        config = { width = 40, border = 'rounded' },
+        delay = vim.o.timeoutlen,
+      },
+    })
+
     -- mini.icons ------------------------------------------------------
     require('mini.icons').setup({
       lsp = {
@@ -24,10 +104,25 @@ return {
     require('mini.sessions').setup({
       autoread = true,
       file = '.session.vim',
-      verbose = { read = true },
+      directory = '',
+      verbose = { read = false, write = false, delete = false },
+
+      hooks = {
+        post = {
+          read   = function() util.notify('Session:', { annote = 'Restored', level = 'WARN' }) end,
+          write  = function() util.notify('Session:', { annote = 'Saved' }) end,
+          delete = function() util.notify('Session:', { annote = 'Deleted', level = 'WARN' }) end,
+        }
+      }
     })
-    nmap('<Leader>W', ':lua MiniSessions.write(".session.vim")')
-    if not vim.uv.fs_stat('.session.vim') then
+    nmap('<Leader>W', function()
+      vim.g.minisessions_disable = false
+
+      local name = util.project_path(0)
+      MiniSessions.write('.session.vim', { force = true })
+    end, 'Save current session')
+
+    if not MiniSessions.get_latest() then
       vim.g.minisessions_disable = true
     end
 
@@ -106,12 +201,20 @@ return {
 
       -- mini.bracketed ------------------------------------------------
       require('mini.bracketed').setup({
-        diagnostic = { suffix = 'e' },
-
-        comment    = { suffix = '' }, -- ']c' used by treesitter-textobjects
+        comment    = { suffix = '' }, -- ']c' used by vim/gitsigns
         file       = { suffix = '' }, -- ']f' not useful
         oldfile    = { suffix = '' }, -- ']o' not useful
       })
+
+      local original_diagnostic = MiniBracketed.diagnostic
+      MiniBracketed.diagnostic = function(...)
+        if vim.diagnostic.show_current_line_id then
+          vim.diagnostic.hide_current_line()
+        end
+
+        original_diagnostic(...)
+        vim.diagnostic.show_current_line()
+      end
 
       for _, key in ipairs({ 'b', 'e', 'i', 'j', 'l', 'q', 't', 'u', 'w', 'x', 'y' }) do
         for _, mode in ipairs({ 'n', 'x', 'o' }) do
@@ -133,81 +236,49 @@ return {
         end
       end
 
-      -- mini.clue -----------------------------------------------------
-      local clue = require('mini.clue')
-      vim.o.timeoutlen = 500
-      clue.setup({
-        triggers = {
-          -- Leader triggers
-          { mode = 'n', keys = '<Leader>' },
-          { mode = 'v', keys = '<Leader>' },
-          { mode = 'n', keys = '<LocalLeader>' },
-          { mode = 'v', keys = '<LocalLeader>' },
-          { mode = 'n', keys = '<F1>' },
+      -- mini.diff -----------------------------------------------------
+      require('mini.diff').setup()
 
-          -- Built-in completion
-          { mode = 'i', keys = '<C-x>' },
+      local original_enable = MiniDiff.enable
+      MiniDiff.enable = function(...)
+        vim.g.minidiff_disable = false
+        return original_enable(buf_id)
+      end
 
-          -- `g` key
-          { mode = 'n', keys = 'g' },
-          { mode = 'v', keys = 'g' },
+      local original_disable = MiniDiff.disable
+      MiniDiff.disable = function(...)
+        vim.g.minidiff_disable = true
+        return original_disable(...)
+      end
 
-          -- Marks
-          { mode = 'n', keys = "'" },
-          { mode = 'n', keys = '`' },
-          { mode = 'v', keys = "'" },
-          { mode = 'v', keys = '`' },
-
-          -- Registers
-          { mode = 'n', keys = '"' },
-          { mode = 'v', keys = '"' },
-          { mode = 'i', keys = '<C-r>' },
-          { mode = 'c', keys = '<C-r>' },
-
-          -- Window commands
-          { mode = 'n', keys = '<C-w>' },
-
-          -- `z` key
-          { mode = 'n', keys = 'z' },
-          { mode = 'v', keys = 'z' },
-
-          -- mini.bracketed and others
-          { mode = 'n', keys = ']' },
-          { mode = 'n', keys = '[' },
-
-          -- mini.surround
-          { mode = 'n', keys = 'S' },
-          { mode = 'v', keys = 'S' },
-        },
-
-        clues = {
-          clue.gen_clues.builtin_completion(),
-          clue.gen_clues.g(),
-          clue.gen_clues.marks(),
-          clue.gen_clues.registers(),
-          clue.gen_clues.windows(),
-          clue.gen_clues.z(),
-
-          { mode = 'n', keys = '<Leader><F1>', desc = '➜ help' },
-          { mode = 'n', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
-          { mode = 'n', keys = '<Leader><Leader>d', desc = '➜ lsp/treesitter' },
-          { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
-          { mode = 'n', keys = '<Leader>d', desc = '➜ lsp/treesitter' },
-          { mode = 'n', keys = '<Leader>dR', desc = 'Smart rename' },
-          { mode = 'n', keys = '<Leader>g', desc = '➜ git' },
-          { mode = 'v', keys = '<Leader>g', desc = '➜ git' },
-        },
-
-        window = {
-          config = { width = 40, border = 'rounded' },
-          delay = vim.o.timeoutlen,
-        },
-      })
+      MiniDiff.disable()
 
       -- mini.jump -----------------------------------------------------
-      require('mini.jump').setup({
-        mappings = { repeat_jump = '' },
-      })
+      require('mini.jump').setup()
+
+      local original_jump = MiniJump.jump
+      local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+
+      MiniJump.jump = function(...)
+        repeat_move.last_move = nil
+        return original_jump(...)
+      end
+
+      nmap(';', function ()
+        if repeat_move.last_move then
+          repeat_move.repeat_last_move_next()
+        else
+          MiniJump.smart_jump()
+        end
+      end, { force = true }, 'Repeat jump')
+
+      nmap('|', function ()
+        if repeat_move.last_move then
+          repeat_move.repeat_last_move_previous()
+        else
+          MiniJump.jump(nil, true)
+        end
+      end, { force = true }, 'Repeat jump backward')
 
       -- mini.move -----------------------------------------------------
       require('mini.move').setup()
@@ -224,8 +295,7 @@ return {
       vmap('D', 'gm', { remap = true }, 'Duplicate selection')
 
       -- mini.pairs ----------------------------------------------------
-      local pairs = require('mini.pairs')
-      pairs.setup({
+      require('mini.pairs').setup({
         modes = {
           command = false,
           terminal = false,
@@ -248,10 +318,16 @@ return {
       })
 
       -- re-add undo chain to <CR> from core/keymaps.lua
-      local cr = pairs.cr
-      pairs.cr = function(...)
-        return "u" .. cr(...)
+      local original_cr = MiniPairs.cr
+      MiniPairs.cr = function(...)
+        return "u" .. original_cr(...)
       end
+
+      -- mini.pick -----------------------------------------------------
+      require('mini.pick').setup({
+        options = { content_from_bottom = true },
+        window = { prompt_prefix = '» ' },
+      })
 
       -- mini.surround -------------------------------------------------
       require('mini.surround').setup({

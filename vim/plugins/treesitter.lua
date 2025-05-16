@@ -30,7 +30,7 @@ return {
     local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
     nvomap(';', repeat_move.repeat_last_move_next)
     nvomap('|', repeat_move.repeat_last_move_previous)
-    nvomap('<S-Tab>', repeat_move.repeat_last_move_previous, { force = true })
+    nvomap('<S-Tab>', '|', { force = true, remap = true })
 
     nvomap('f', repeat_move.builtin_f_expr, { expr = true, force = true })
     nvomap('F', repeat_move.builtin_F_expr, { expr = true, force = true })
@@ -44,14 +44,26 @@ return {
       'c',
       'comment',
       'css',
+      'diff',
+      'gdscript',
+      'gdshader',
+      'git_config',
+      'git_rebase',
+      'gitattributes',
+      'gitcommit',
+      'gitignore',
       'html',
+      'ini',
       'javascript',
       'json',
       'lua',
       'markdown',
       'markdown_inline',
+      'mermaid',
       'python',
+      'regex',
       'ruby',
+      'toml',
       'typescript',
       'vim',
       'vimdoc',
@@ -69,14 +81,14 @@ return {
       navigation = {
         enable = true,
         keymaps = {
-          goto_next_usage = '<M-*>',
-          goto_previous_usage = '<M-#>',
+          goto_next_usage = '<C-]>',
+          goto_previous_usage = '<C-[>',
         },
       },
 
       smart_rename = {
         enable = true,
-        keymaps = { smart_rename = '<Leader>dR' },
+        keymaps = { smart_rename = 'gR' },
       },
     },
 
@@ -86,8 +98,8 @@ return {
         lookahead = true,
 
         keymaps = {
-          ['ac'] = { query = '@class.outer', desc = 'Select current class' },
-          ['ic'] = { query = '@class.inner', desc = 'Select current class body' },
+          ['am'] = { query = '@class.outer', desc = 'Select current module' },
+          ['im'] = { query = '@class.inner', desc = 'Select current module body' },
           ['af'] = { query = '@function.outer', desc = 'Select current function' },
           ['if'] = { query = '@function.inner', desc = 'Select current function body' },
           ['aa'] = { query = '@parameter.outer', desc = 'Select all arguments' },
@@ -98,28 +110,28 @@ return {
       move = {
         enable = true,
         goto_next_start = {
-          [']a'] = { query = '@parameter.inner', desc = 'Go to next argument' },
-          [']c'] = { query = '@class.outer', desc = 'Go to next class' },
-          [']f'] = { query = '@function.outer', desc = 'Go to next function' },
-          [']s'] = { query = '@local.scope', query_group = 'locals', desc = 'Go to next scope' },
+          [']a'] = { query = '@parameter.inner', desc = 'Next argument' },
+          [']m'] = { query = '@class.outer', desc = 'Next module' },
+          [']f'] = { query = '@function.outer', desc = 'Next function' },
+          [']s'] = { query = '@local.scope', query_group = 'locals', desc = 'Next scope' },
         },
         goto_next_end = {
-          [']A'] = { query = '@parameter.inner', desc = 'Go to end of argument' },
-          [']C'] = { query = '@class.outer', desc = 'Go to end of class' },
-          [']F'] = { query = '@function.outer', desc = 'Go to end of function' },
-          [']S'] = { query = '@local.scope', query_group = 'locals', desc = 'Go to end of scope' },
+          [']A'] = { query = '@parameter.inner', desc = 'End of argument' },
+          [']M'] = { query = '@class.outer', desc = 'End of module' },
+          [']F'] = { query = '@function.outer', desc = 'End of function' },
+          [']S'] = { query = '@local.scope', query_group = 'locals', desc = 'End of scope' },
         },
         goto_previous_start = {
-          ['[a'] = { query = '@parameter.inner', desc = 'Go to previous argument' },
-          ['[c'] = { query = '@class.outer', desc = 'Go to previous class' },
-          ['[f'] = { query = '@function.outer', desc = 'Go to previous function' },
-          ['[s'] = { query = '@local.scope', query_group = 'locals', desc = 'Go to previous scope' },
+          ['[a'] = { query = '@parameter.inner', desc = 'Previous argument' },
+          ['[m'] = { query = '@class.outer', desc = 'Previous module' },
+          ['[f'] = { query = '@function.outer', desc = 'Previous function' },
+          ['[s'] = { query = '@local.scope', query_group = 'locals', desc = 'Previous scope' },
         },
         goto_previous_end = {
-          ['[A'] = { query = '@parameter.inner', desc = 'Go to end of previous argument' },
-          ['[C'] = { query = '@class.outer', desc = 'Go to end of previous class' },
-          ['[F'] = { query = '@function.outer', desc = 'Go to end of previous function' },
-          ['[S'] = { query = '@local.scope', query_group = 'locals', desc = 'Go to end of previous scope' },
+          ['[A'] = { query = '@parameter.inner', desc = 'End of previous argument' },
+          ['[M'] = { query = '@class.outer', desc = 'End of previous module' },
+          ['[F'] = { query = '@function.outer', desc = 'End of previous function' },
+          ['[S'] = { query = '@local.scope', query_group = 'locals', desc = 'End of previous scope' },
         },
       },
     },

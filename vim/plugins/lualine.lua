@@ -135,7 +135,7 @@ return {
               for _, client in pairs(clients) do
                 table.insert(names, client.name)
               end
-              return table.concat(names, '|')
+              return util.join(names, '|')
             end
           },
         },

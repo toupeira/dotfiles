@@ -110,21 +110,24 @@ return {
             -- editor interface
             LineNr = { bg = 'bg0' },
             SignColumn = { link = 'LineNr' },
-            CursorLine = { bg = 'palette.bg2' },
+            CursorLine = { bg = 'bg2' },
             CursorLineNr = { fg = 'palette.comment' },
             CursorLineSign = { link = 'CursorLineNr' },
-            Visual = { bg = 'palette.bg4', style = 'bold' },
+            Visual = { style = 'bold' },
 
             NonText = { fg = 'palette.comment' },
             EndOfBuffer = { fg = 'bg4' },
             Folded = { fg = 'palette.comment', bg = 'bg3', style = 'bold' },
 
-            PmenuSel = { bg = 'bg0', style = 'bold' },
-            PmenuThumb = { bg = 'bg0' },
+            Pmenu = { bg = 'bg0' },
+            PmenuSel = { fg = 'white', bg = 'black', style = 'bold' },
+            PmenuThumb = { bg = 'bg2' },
+
             TabLine = { fg = 'palette.comment', bg = 'bg0' },
             TabLineSel = { fg = 'palette.white', bg = 'bg1', style = 'bold' },
             WinBar = { bg = 'bg0' },
-            WinSeparator = { fg = 'bg4' },
+            WinSeparator = { bg = 'bg0', fg = 'bg3' },
+            FloatBorder = { link = 'WinSeparator' },
 
             Search = { fg = 'palette.search.fg0', bg = 'palette.search.bg0', style = 'bold' },
             CurSearch = { fg = 'palette.search.fg1', bg = 'palette.search.bg1', style = 'bold' },
@@ -151,20 +154,38 @@ return {
             ['@comment.todo'] = { fg = 'diag.warn', bg = 'none', style = 'bold' },
             ['@comment.note'] = { fg = 'diag.hint', bg = 'none', style = 'bold' },
 
-            ['@markup.heading'] = { link = 'Function' },
+            ['@markup.heading'] = { fg = 'palette.blue', style = 'bold' },
             ['@markup.italic'] = { style = 'italic' },
+            ['@markup.link.url'] = { fg = 'palette.magenta', style = 'underline' },
             ['@markup.list'] = { link = 'PreProc' },
             ['@markup.raw'] = { fg = 'syntax.string', style = 'NONE' },
             ['@markup.strong'] = { fg = 'palette.yellow', style = 'bold' },
 
             ['@string.special.url'] = { fg = 'palette.blue', style = 'underline' },
 
+            -- filetypes
             ['@function.builtin.bash'] = { link = 'Operator' },
             ['@keyword.bash'] = { link = 'Operator' },
             ['@keyword.directive.bash'] = { link = 'Comment' },
             ['@punctuation.bracket.bash'] = { link = 'Operator' },
             ['@punctuation.special.bash'] = { link = 'PreProc' },
             ['@variable.bash'] = { link = 'PreProc' },
+
+            ['@string.special.path.diff'] = { link = '@markup.strong' },
+
+            ['@keyword.gitcommit'] = { link = 'String' },
+            ['@markup.heading.gitcommit'] = { link = 'Bold' },
+            ['@markup.link.gitcommit'] = { fg = 'palette.green', style = 'bold' },
+            ['@string.special.path.gitcommit'] = { link = '@markup.strong' },
+            ['@variable.parameter.gitcommit'] = { link = 'Statement' },
+
+            ['@keyword.git_rebase'] = { link = '@markup.strong' },
+            ['@constant.git_rebase'] = { link = 'Statement' },
+            ['@spell.git_rebase'] = { link = 'Bold' },
+
+            ['@markup.heading.ini'] = { link = '@markup.strong' },
+
+            ['@markup.link.label.markdown_inline'] = { fg = 'palette.blue', style = 'underline' },
 
             ['@keyword.ruby'] = { link = 'Statement' },
             ['@keyword.type.ruby'] = { link = 'Statement' },
@@ -192,6 +213,11 @@ return {
 
             -- FlashCurrent = { link = 'CurSearch' },
             FlashLabel = { fg = 'palette.search.bg0', bg = 'palette.search.fg0', style = 'bold' },
+
+            FugitiveblameAnnotation = { link = 'StatusLine' },
+
+            FzfLuaBorder = { link = 'FloatBorder' },
+            FzfLuaTitle = { link = '@markup.heading' },
 
             GitSignsAdd    = { fg = 'git.add', bg = 'diff.add' },
             GitSignsChange = { fg = 'git.changed', bg = 'diff.change' },
@@ -223,6 +249,7 @@ return {
             NeoTreeGitUntracked = { link = 'ErrorMsg' },
 
             TreesitterContextBottom = { style = 'underline', sp = 'bg3' },
+            TSDefinition = { link = 'Visual' },
 
             WhichKey = { fg = 'palette.yellow', style = 'bold' },
             WhichKeyDesc = { fg = 'palette.green' },

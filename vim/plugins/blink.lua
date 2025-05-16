@@ -86,7 +86,7 @@ return {
       trigger = { show_in_snippet = false },
 
       menu = {
-        max_height = 20,
+        max_height = 10,
         winblend = vim.o.pumblend,
 
         draw = {
@@ -96,9 +96,10 @@ return {
             { 'source_name' },
           },
           treesitter = {
-            'lsp',
-            'snippets',
             'buffer',
+            'snippets',
+            'lsp',
+            'omni',
           },
         }
       }

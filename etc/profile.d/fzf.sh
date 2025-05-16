@@ -13,7 +13,7 @@ export FZF_DEFAULT_OPTS="
   --no-height
   --no-separator
   --prompt '» '
-  --preview-window 'right,50%,hidden,<60(up,70%,hidden)'
+  --preview-window 'right,50%,hidden,<60(up,60%,hidden)'
 
   --color dark
   --color prompt:#82b1ff
@@ -51,13 +51,14 @@ FZF_CTRL_R_OPTS="
   --preview-window 'default,up,5,hidden,wrap'
 "
 FZF_CTRL_T_OPTS="
-  --preview 'fzf-preview.sh {}'
+  --preview 'batcat -f --style numbers {}'
   --bind 'start:transform-prompt(echo \${PWD/#\$HOME/\~}/)'
   --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_CTRL_T_COMMAND --unrestricted --exclude .git)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
 FZF_ALT_C_OPTS="
   --history '$HOME/.local/state/history/fzf-cd'
-  --preview 'tree -C {}'
+  --preview 'tree -xC --gitignore --prune --noreport {}'
+  --preview-window 'default,right,50%'
   --bind 'start:transform-prompt(echo \${PWD/#\$HOME/\~}/)'
   --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_ALT_C_COMMAND --unrestricted --exclude .git)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
@@ -76,7 +77,7 @@ function __tmux_complete {
   local pane
   for pane in $( tmux list-panes -a -F '#D' ); do
     words=( "${words[@]}"
-      $( tmux capture-pane -p -t "$pane" | grep -Eio '\w[-_.:/@[:alnum:]]{1,}\w' )
+      $( tmux capture-pane -p -t "$pane" -S -1000 | grep -Eio '\w[-_.:/@[:alnum:]]{1,}\w' )
     )
   done
 

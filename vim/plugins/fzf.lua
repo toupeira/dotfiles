@@ -1,5 +1,4 @@
 local util = require('util')
-local nmap = util.nmap
 local merge = util.merge
 
 local expand = vim.fn.expand
@@ -12,6 +11,7 @@ return {
     winopts = {
       width = 0.9,
       height = 0.9,
+      row = 0.5,
       preview = {
         hidden = 'hidden',
         vertical = 'up:60%',
@@ -22,7 +22,7 @@ return {
 
     keymap = {
       builtin = {
-        ['<F1>']  = 'toggle-help',
+        true, -- inherit defaults
         ['<C-_>'] = 'toggle-preview',
         ['<M-e>'] = 'preview-down',
         ['<M-y>'] = 'preview-up',
@@ -39,9 +39,6 @@ return {
     },
 
     hls = {
-      border = 'NonText',
-      preview_border = 'NonText',
-      help_border = 'NonText',
       header_bind = 'WarningMsg',
       header_text = 'Type',
       buf_flag_cur = 'Title',
@@ -59,7 +56,7 @@ return {
     },
 
     buffers = {
-      winopts = { height = 12, row = 0.85 },
+      winopts = { height = 12, row = 0.9 },
       fzf_opts = { ['--header-lines'] = false },
     },
 
@@ -148,12 +145,18 @@ return {
 
     opts.lines = merge(opts.lines, reverse)
     opts.blines = merge(opts.lines, reverse)
+    opts.builtin = merge(opts.lines, reverse)
+    opts.colorschemes = merge(opts.lines, reverse)
 
-    opts.helptags = merge(opts.helptags, preview)
-    opts.highlights = merge(opts.highlights, preview)
+    opts.marks = merge(opts.marks, preview)
     opts.jumps = merge(opts.jumps, preview)
+    opts.helptags = merge(opts.helptags, preview)
+    opts.manpages = merge(opts.manpages, preview)
+    opts.highlights = merge(opts.highlights, preview)
 
     opts.git = merge(opts.git)
+    opts.git.branches = merge(opts.git.branches, preview)
+    opts.git.diff = merge(opts.git.diff, preview)
     opts.git.status = merge(opts.git.status, preview)
 
     opts.lsp = merge(opts.lsp)
@@ -161,75 +164,113 @@ return {
     opts.lsp.code_actions = merge(opts.lsp.code_actions, preview)
 
     fzf.setup(opts)
+    require('fzf-lua.providers.ui_select').register()
 
-    -- map each provider with '<Leader><key>`,
-    -- and '<Leader><Leader><key>` for resuming
-    local function get_args(args)
-      if type(args) == 'function' then
-        args = args()
+    -- add mapping to insert last <cword>
+    local last_cword
+    util.tmap('<M-.>', function()
+      if vim.bo.filetype == 'fzf' and last_cword then
+        vim.api.nvim_feedkeys(last_cword, 'n', true)
       else
-        args = merge({}, args)
+        return '<M-.>'
       end
+    end, { expr = true }, 'Insert last <cword>')
 
-      if args.cwd == '' then
-        args.cwd = nil
-      end
+    -- helper to generate action arguments
+    local function get_args(args)
+      args = type(args) == 'function' and args() or merge({}, args)
+      args.cwd = args.cwd == '' and nil or args.cwd
 
       return args
     end
 
-    local function map_fzf(key, provider, args, name)
-      name = name or provider
+    -- helper to build title options
+    local function title(value)
+      return { title = ' ' .. value .. ' ' }
+    end
+
+    -- helper to add mappings for a provider
+    local function map_fzf(key, provider, opts)
+      opts = opts or {}
+      opts.mode = opts.mode or 'n'
+      opts.desc = opts.desc or provider
         :gsub('_', ' ')
         :gsub('git', 'Git')
         :gsub('lsp', 'LSP')
 
-      local handler = provider
-      if type(handler) ~= 'function' then
-        handler = function()
-          fzf[provider](get_args(args))
+      -- start search with '<Leader><key>'
+      util.map(opts.mode, key, function()
+        last_cword = expand('<cword>')
+        if type(provider) == 'function' then
+          provider()
+        else
+          fzf[provider](get_args(opts.args))
         end
-      end
+      end, 'Search ' .. opts.desc)
 
-      nmap(key, handler, 'Search ' .. name)
-
-      nmap('<Leader>' .. key, function()
-        local resume_args = get_args(args)
+      -- resume last search with '<Leader><Leader><key>'
+      util.map(opts.mode, '<Leader>' .. key, function()
+        local resume_args = get_args(opts.args)
         resume_args.resume = true
         resume_args.query = nil
         fzf[provider](resume_args)
-      end, 'Resume ' .. name .. ' search')
+      end, 'Resume ' .. opts.desc .. ' search')
     end
 
     -- resume last provider
-    nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume last search')
+    util.nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume last search')
 
     -- search files
     map_fzf('<Leader>f', 'files')
-    map_fzf('<Leader>F', 'files', function() return { cwd = expand('%:h') } end, 'files in current directory')
-    map_fzf('<Leader>o', 'files', { cwd = '/slack/documents/Notes', fd_opts = '-e md' }, 'Obsidian notes')
+    map_fzf('<Leader>F', 'files', {
+      desc = 'files in current directory',
+      args = function() return {
+        cwd = expand('%:h'),
+        winopts = title('Files (current directory)'),
+      } end,
+    })
+    map_fzf('<Leader>o', 'files', {
+      desc = 'Obsidian notes',
+      args = { cwd = '/slack/documents/Notes', fd_opts = '-e md', winopts = title('Notes') },
+    })
 
     map_fzf('<Leader>b', 'buffers')
-    map_fzf('<Leader>B', 'buffers', { show_unlisted = true }, 'all buffers')
+    map_fzf('<Leader>B', 'buffers', {
+      desc = 'all buffers',
+      args = { show_unlisted = true, winopts = title('Buffers (all)') },
+    })
 
-    map_fzf('<Leader>h', 'oldfiles', nil, 'recent files')
-    map_fzf('<Leader>H', 'oldfiles', { cwd_only = true }, 'recent files in current directory')
-
-    map_fzf('<Leader>j', 'jumps')
+    map_fzf('<Leader>h', 'oldfiles', {
+      desc = 'recent files',
+      args = { winopts = title('Recent files') },
+    })
+    map_fzf('<Leader>H', 'oldfiles', {
+      desc = 'recent files in current directory',
+      args = { cwd_only = true, winopts = title('Recent files (current directory)') },
+    })
 
     -- search file contents
-    map_fzf('<Leader>r', 'live_grep', function() return { query = expand('<cword>') } end, 'by regex in project')
-    map_fzf('<Leader>R', 'live_grep', function() return { query = expand('<cword>'), cwd = expand('%:h') } end, 'by regex in current directory')
+    map_fzf('<Leader>r', 'live_grep', { desc = 'by regex in project' })
+    map_fzf('<Leader>R', 'live_grep', {
+      desc = 'by regex in current directory',
+      args = function() return {
+        cwd = expand('%:h'),
+        winopts = title('Grep (current directory)'),
+      } end,
+    })
 
-    map_fzf('<Leader>l', 'blines', function() return { query = expand('<cword>') } end, 'lines in buffer')
-    map_fzf('<Leader>L', 'lines', function() return { query = expand('<cword>') } end, 'lines in all buffers')
+    map_fzf('<Leader>l', 'blines', { desc = 'lines in buffer' })
+    map_fzf('<Leader>L', 'lines', { desc = 'lines in all buffers' })
 
-    map_fzf('<Leader>t', 'btags', nil, 'buffer symbols')
-    map_fzf('<Leader>T', 'tags', nil, 'project symbols')
+    map_fzf('<Leader>t', 'btags', { desc = 'buffer symbols' })
+    map_fzf('<Leader>T', 'tags', { desc = 'project symbols' })
 
     -- search vim history
-    map_fzf('<Leader>:', 'command_history')
+    map_fzf('<Leader>:', 'command_history', { mode = { 'n', 'v' }})
     map_fzf('<Leader>/', 'search_history')
+    map_fzf('<Leader>"', 'registers')
+    map_fzf('<Leader>\'', 'marks')
+    map_fzf('<Leader>j', 'jumps')
 
     -- search vim internals
     map_fzf('<F1><F1>', 'help_tags')
@@ -238,23 +279,24 @@ return {
     map_fzf('<F1>c', 'commands')
     map_fzf('<F1>h', 'highlights')
     map_fzf('<F1>C', 'colorschemes')
+    map_fzf('<F1>f', 'builtin', { desc = 'FZF providers' })
 
     -- search spellcheck
-    map_fzf('<Leader>z', 'spell_suggest', nil, 'spelling suggestions')
+    map_fzf('<Leader>z', 'spell_suggest', { desc = 'spelling suggestions' })
 
     -- search LSP
-    map_fzf('<Leader>da', 'lsp_code_actions')
-    map_fzf('<Leader>dd', 'lsp_definitions')
-    map_fzf('<Leader>dD', 'lsp_declarations')
-    map_fzf('<Leader>de', 'lsp_document_diagnostics')
-    map_fzf('<Leader>dE', 'lsp_workspace_diagnostics')
-    map_fzf('<Leader>di', 'lsp_implementations')
-    map_fzf('<Leader>dI', 'lsp_incoming_calls')
-    map_fzf('<Leader>dO', 'lsp_outgoing_calls')
-    map_fzf('<Leader>dr', 'lsp_references')
-    map_fzf('<Leader>ds', 'lsp_document_symbols')
-    map_fzf('<Leader>dS', 'lsp_live_workspace_symbols')
-    map_fzf('<Leader>dt', 'lsp_typedefs')
+    map_fzf('<Leader>Sa', 'lsp_code_actions')
+    map_fzf('<Leader>Sd', 'lsp_definitions')
+    -- map_fzf('<Leader>SD', 'lsp_declarations')
+    map_fzf('<Leader>Se', 'lsp_document_diagnostics')
+    map_fzf('<Leader>SE', 'lsp_workspace_diagnostics')
+    -- map_fzf('<Leader>Si', 'lsp_implementations')
+    map_fzf('<Leader>SI', 'lsp_incoming_calls')
+    map_fzf('<Leader>SO', 'lsp_outgoing_calls')
+    map_fzf('<Leader>Sr', 'lsp_references')
+    map_fzf('<Leader>St', 'lsp_document_symbols')
+    map_fzf('<Leader>ST', 'lsp_live_workspace_symbols')
+    -- map_fzf('<Leader>St', 'lsp_typedefs')
 
     -- search git
     map_fzf('<Leader>gm', 'git_status')
@@ -272,17 +314,18 @@ return {
         winopts = {
           title = ' Projects ',
           height = 12,
-          row = 0.85,
+          row = 0.9,
           preview = { layout = 'horizontal' },
         },
 
         fn_transform = function(path)
+          path = path:gsub('^󰉋' .. fzf.utils.nbsp, '')
           path = path:gsub('/%.[^/]*/$', '')
           return string.format('%-32s%s%s',
             fzf.utils.ansi_codes.cyan('󰂿 ' .. vim.fn.fnamemodify(path, ':t')),
             fzf.utils.nbsp,
-            fzf.utils.ansi_codes.blue(vim.fn.fnamemodify(path, ':~'))
-          ), path
+            fzf.utils.ansi_codes.blue('󰉋' .. fzf.utils.nbsp .. vim.fn.fnamemodify(path, ':~'))
+          )
         end,
 
         actions = {
@@ -293,7 +336,7 @@ return {
             end
 
             local file = fzf.path.entry_to_file(selected[1])
-            vim.cmd.lcd(file.path)
+            vim.cmd('silent lcd ' .. file.path)
             fzf.files({ cwd = file.path })
           end
         }
@@ -302,6 +345,6 @@ return {
       fzf.files(settings)
     end
 
-    map_fzf('<Leader>gp', projects, nil, 'projects')
+    map_fzf('<Leader>gp', projects, { desc = 'projects' })
   end
 }

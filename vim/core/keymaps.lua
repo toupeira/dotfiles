@@ -51,8 +51,9 @@ nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window'
 nmap('H', ':tabprevious', 'Go to previous tab')
 nmap('L', ':tabnext', 'Go to next tab')
 
-nmap('<Leader>N', ':tabnew', 'Open new tab')
+nmap('<Leader>N', ':tabnew | MiniStarter', 'Open new tab')
 nmap('<Leader>X', ':tabclose', 'Close current tab')
+nmap('<Leader>Z', ':tab split', 'Zoom current buffer to new tab')
 
 -- File editing --------------------------------------------------------
 
@@ -98,20 +99,9 @@ nvomap('g#', '#', 'Search backwards for current word (strict)')
 nmap('<Space>', 'za', 'Toggle fold')
 
 nmap('du', ':diffupdate', 'Update diffs')
-nmap(']d', ']c', { force = true }, 'Jump to next change')
-nmap('[d', '[c', { force = true }, 'Jump to previous change')
 
 local undo_chains = {
   ['<CR>'] = 'new line',
-  ['.']    = 'period',
-  [',']    = 'comma',
-  [':']    = 'colon',
-  [';']    = 'semicolon',
-  ['/']    = 'slash',
-  ['|']    = 'pipe',
-  ['=']    = 'equals sign',
-  ['?']    = 'question mark',
-  ['!']    = 'exclamation mark',
 }
 for key, desc in pairs(undo_chains) do
   local command

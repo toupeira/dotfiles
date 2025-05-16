@@ -31,8 +31,24 @@ return {
     end
   },
 
-  very_lazy {
-    'folke/flash.nvim',
+  { 'catgoose/nvim-colorizer.lua',
+    ft = { 'css', 'scss', 'lua' },
+    cmd = 'ColorizerToggle',
+    keys = {
+      { '<LocalLeader>C', '<Cmd>ColorizerToggle<CR>', desc = 'Toggle color highlighting' },
+    },
+    opts = function(plugin)
+      return {
+        lazy_load = true,
+        filetypes = plugin.ft,
+        user_default_options = {
+          names = false,
+        },
+      }
+    end
+  },
+
+  { 'folke/flash.nvim',
     keys = {
       { '<CR>', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Jump to position' },
       { '<BS>', mode = { 'n', 'x', 'o' }, function() require('flash').treesitter() end, desc = 'Select Treesitter node' },
@@ -47,11 +63,9 @@ return {
     },
   },
 
-  very_lazy {
-    'folke/trouble.nvim',
+  { 'folke/trouble.nvim',
     keys = {
-      {
-        '<Leader>E',
+      { '<Leader>D',
         function()
           local trouble = require('trouble')
           if trouble.is_open() then
@@ -59,7 +73,7 @@ return {
           elseif #vim.diagnostic.get(0) > 0 then
             trouble.toggle({ mode = 'diagnostics', focus = true, filter = { buf = 0 }})
           else
-            util.echo('No diagnostics in current buffer.', 'ModeMsg')
+            util.notify('Trouble:', { annote = 'No diagnostics', level = 'WARN' })
           end
         end,
         desc = 'Toggle diagnostics',
@@ -75,34 +89,28 @@ return {
   very_lazy { 'j-hui/fidget.nvim',
     opts = {
       notification = {
-        override_vim_notify = true,
-        window = {
-          border = 'rounded',
-          winblend = 10,
-          x_padding = 0,
-        },
+        view = { group_separator = '——' },
       },
     },
+
+    init = function()
+      local fidget = require('fidget')
+      fidget.notification.default_config.name = ' '
+      fidget.notification.default_config.ttl = 2
+
+      local notify = vim.notify
+      vim.notify = function(msg, level, opts)
+        if level >= vim.log.levels.ERROR then
+          return notify(msg, level, opts)
+        else
+          return fidget.notify(msg, level, opts)
+        end
+      end
+    end,
   },
 
   lazy_file { 'mong8se/actually.nvim',
-    dependencies = { 'dressing.nvim' },
-  },
-
-  { 'NvChad/nvim-colorizer.lua',
-    ft = { 'css', 'scss', 'lua' },
-    cmd = 'ColorizerToggle',
-    init = function()
-      util.alias_command({ CT = 'ColorizerToggle' })
-    end,
-    opts = function(plugin)
-      return {
-        filetypes = plugin.ft,
-        user_default_options = {
-          names = false,
-        },
-      }
-    end
+    dependencies = { 'fzf-lua' },
   },
 
   { 'pechorin/any-jump.vim',
@@ -117,6 +125,7 @@ return {
       vim.g.any_jump_disable_default_keybindings = 1
       vim.g.any_jump_center_screen_after_jump = true
       vim.g.any_jump_window_border = 'rounded'
+      vim.g.any_jump_window_width_ratio = 0.8
 
       util.autocmd('FileType', 'any-jump', function()
         vim.bo.buflisted = false
@@ -137,12 +146,12 @@ return {
     end
   },
 
-  lazy_file { 'sphamba/smear-cursor.nvim',
+  { 'sphamba/smear-cursor.nvim',
     keys = {
       { '<LocalLeader>t', function()
         local cursor = require('smear_cursor')
         cursor.toggle()
-        util.echo('Cursor trail is ' .. (cursor.enabled and 'enabled' or 'disabled'), 'MoreMsg')
+        util.notify_toggle('Cursor trail:', cursor.enabled)
       end, mode = { 'n' }, desc = 'Toggle cursor trail' },
     },
     opts = {
@@ -150,14 +159,6 @@ return {
       smear_insert_mode = false,
       min_horizontal_distance_smear = 10,
       min_vertical_distance_smear = 2,
-    },
-  },
-
-  lazy_file { 'stevearc/dressing.nvim',
-    dependencies = { 'fzf-lua' },
-    opts = {
-      input = { enabled = true },
-      select = { enabled = true, backend = 'fzf_lua' },
     },
   },
 
@@ -185,7 +186,7 @@ return {
         local ok, _ = pcall(function() vim.cmd.A() end)
 
         if not ok then
-          util.echo('No alternate file', 'ErrorMsg')
+          util.error('No alternate file')
         end
 
         vim.o.confirm = confirm
@@ -222,8 +223,7 @@ return {
     end
   },
 
-  {
-    'y3owk1n/time-machine.nvim',
+  { 'y3owk1n/time-machine.nvim',
     cmd = 'TimeMachineToggle',
     keys = {
       { '<Leader>u', '<Cmd>TimeMachineToggle<CR>', desc = 'Toggle time machine' },
@@ -236,7 +236,7 @@ return {
     }
   },
 
-  very_lazy { 'ziontee113/icon-picker.nvim',
+  { 'ziontee113/icon-picker.nvim',
     keys = {
       { '<M-.>', '<Cmd>IconPickerInsert<CR>', mode = { 'i' }, desc = 'Insert emoji' },
     },

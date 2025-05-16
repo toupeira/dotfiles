@@ -41,7 +41,7 @@ local filetypes = {
 }
 
 for filetype, settings in pairs(filetypes) do
-  autocmd('FileType', filetype, 'setlocal ' .. table.concat(settings, ' '))
+  autocmd('FileType', filetype, 'setlocal ' .. util.join(settings, ' '))
 end
 
 -- Helpers -------------------------------------------------------------
@@ -65,7 +65,7 @@ autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
 autocmd({ 'BufWinLeave', 'WinLeave' }, 'term://*', 'stopinsert')
 
 -- Auto-close certain terminal commands
-util.autocmd('TermClose', 'term://*:{git,dotfiles,glow} *', function()
+util.autocmd('TermClose', 'term://*:{git,glow} *', function()
   util.close_buffer()
   util.close_window()
 end)
@@ -85,7 +85,10 @@ local git_command = function(action, key, command, check)
     if vim.fn.system(check) ~= '' then
       vim.cmd.terminal(command)
     else
-      util.echo('No changes to ' .. action:lower() .. '.', 'ModeMsg')
+      util.notify('Git:', {
+        annote = 'No changes to ' .. action:lower() .. '.',
+        level = 'WARN'
+      })
     end
   end, desc)
 
@@ -95,12 +98,6 @@ end
 git_command('Stage', '<Leader>gA', 'git add -p', 'git unstaged')
 git_command('Unstage', '<Leader>gU', 'git reset HEAD -p', 'git staged')
 git_command('Discard', '<Leader>gD', 'git checkout -p', 'git unstaged')
-
-util.command('Preview', 'vsplit | terminal glow %')
-
--- Dotfiles helpers
-util.command('Dotfiles', 'terminal dotfiles <args>', { nargs = '*' })
-util.alias_command({ DT = 'Dotfiles' })
 
 -- Autocommands adapted from
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua

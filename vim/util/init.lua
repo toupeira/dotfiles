@@ -96,7 +96,10 @@ util.map = function(mode, lhs, rhs, opts, desc)
       if force == false and mapping ~= '' then
         return
       elseif mapping ~= '' then
-        error('\nMapping already exists: { ' .. m .. ', ' .. lhs .. ', ' .. mapping .. ' }\n')
+        error(util.join({"\n",
+          string.format("  Couldn't create mapping: { %s, %s, %s }", mode, lhs, rhs),
+          string.format("         Existing mapping: { %s, %s, %s }", mode, lhs, mapping),
+        "" }, "\n"))
       end
     end
   end
@@ -260,12 +263,20 @@ util.close_buffer = function(buffer)
   end
 
   if buffer then
-    vim.cmd.bdelete(buffer)
+    local ok, error = pcall(vim.cmd.bdelete, buffer)
+    if not ok then
+      util.error(error)
+    end
   end
 end
 
 -- Close window, except if it's the last normal one.
 util.close_window = function()
+  if util.tab_count() > 1 and util.window_count() <= 1 then
+    vim.cmd.tabclose()
+    return
+  end
+
   if vim.bo.buftype ~= 'quickfix' then
     local windows = #vim.tbl_filter(
       function(win) return vim.fn.win_gettype(win) == '' end,
@@ -285,10 +296,30 @@ util.close_tab = function()
   end
 end
 
--- Echo a {message} with an optional {hl} group,
--- and optionally add it to the {history}.
-util.echo = function(message, hl, history)
-  return vim.api.nvim_echo({{ message, hl }}, history, {})
+-- Show a {message} with an optional {hl} group.
+util.echo = function(message, hl)
+  return vim.api.nvim_echo({{ message, hl }}, false, {})
+end
+
+-- Show an error {message}.
+util.error = function(message)
+  message = message:gsub('^Vim:E[0-9]*: ', '')
+  return util.echo(message, 'ErrorMsg')
+end
+
+-- Show a notification {message} with optional {options}.
+util.notify = function(message, opts)
+  opts = util.merge({ key = message, level = 'INFO' }, opts)
+  local level = vim.log.levels[opts.level]
+  return vim.notify(message, level, opts)
+end
+
+-- Show a notification {message} for a toggle setting.
+util.notify_toggle = function(message, enabled)
+  return util.notify(message, {
+    annote = enabled and ' Enabled ' or ' Disabled',
+    level = enabled and 'INFO' or 'WARN',
+  })
 end
 
 -- Return the path of the current buffer, starting with either
@@ -383,10 +414,10 @@ util.toggle_list = function(id)
   end
 
   if id == 'c' and #vim.fn.getqflist() == 0 then
-    util.echo('Quickfix list is empty.', 'ModeMsg')
+    util.notify('Quickfix list:', { annote = 'Empty', level = 'WARN' })
     return
   elseif id == 'l' and #vim.fn.getloclist(0) == 0 then
-    util.echo('Location list is empty.', 'ModeMsg')
+    util.notify('Location list:', { annote = 'Empty', level = 'WARN' })
     return
   end
 

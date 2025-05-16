@@ -11,9 +11,6 @@ return {
     'AerialGo',
   },
 
-  init = function()
-  end,
-
   opts = {
     attach_mode = 'global',
     post_jump_cmd = "normal! zvzz",

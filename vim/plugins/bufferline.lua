@@ -4,7 +4,7 @@ local nmap = util.nmap
 
 return {
   'akinsho/bufferline.nvim',
-  event = 'LazyFile',
+  event = 'VeryLazy',
 
   opts = {
     options = {

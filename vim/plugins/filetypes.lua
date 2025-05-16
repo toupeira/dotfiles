@@ -1,18 +1,55 @@
 return {
   { 'antonk52/markdowny.nvim', ft = { 'markdown' }, config = true },
-  { 'elixir-lang/vim-elixir',  ft = { 'elixir', 'eelixir' } },
-  { 'habamax/vim-godot',       ft = { 'gdscript', 'gsl' } },
-  { 'hail2u/vim-css3-syntax',  ft = { 'css', 'scss' } },
-  { 'hashivim/vim-terraform',  ft = { 'terraform', 'hcl' } },
+  { 'elixir-lang/vim-elixir',  ft = { 'elixir', 'eelixir' }},
+  { 'habamax/vim-godot',       ft = { 'gdscript', 'gsl' }},
+  { 'hail2u/vim-css3-syntax',  ft = { 'css', 'scss' }},
+  { 'hashivim/vim-terraform',  ft = { 'terraform', 'hcl' }},
 
   { 'iamcco/markdown-preview.nvim',
+    build = function() vim.fn['mkdp#util#install']() end,
     ft = { 'markdown' },
     cmd = {
       'MarkdownPreviewToggle',
       'MarkdownPreview',
       'MarkdownPreviewStop',
     },
-    build = function() vim.fn['mkdp#util#install']() end,
+    keys = {
+      { '<LocalLeader>P', '<Cmd>MarkdownPreviewToggle<CR>', ft = 'markdown', desc = 'Toggle Markdown preview' },
+    },
+  },
+
+  { 'OXY2DEV/helpview.nvim',
+    ft = { 'help' },
+  },
+
+  { 'OXY2DEV/markview.nvim',
+    ft = { 'markdown', 'codecompanion' },
+    cmd = { 'Markview' },
+    opts = function(plugin)
+      return {
+        preview = {
+          filetypes = plugin.ft,
+          ignore_buftypes = {},
+          modes = { 'n', 'no', 'c', 'i' },
+          hybrid_modes = { 'i' },
+          linewise_hybrid_mode = true,
+        },
+
+        markdown = {
+          list_items = {
+            shift_width = 2,
+            marker_minus = { text = '-' },
+          },
+        },
+
+        markdown_inline = {
+          checkboxes = {
+            checked = { text = '󰄲', hl = 'Keyword', scope_hl = 'MarkviewCheckboxStriked' },
+            unchecked = { text = '󰄱', hl = 'Keyword', scope_hl = '' },
+          },
+        },
+      }
+    end
   },
 
   { 'vim-ruby/vim-ruby',
