@@ -11,6 +11,7 @@ return {
           'jsonlint',
           'luacheck',
           'shellcheck',
+          'stylua',
           'yamllint',
         },
         integrations = {

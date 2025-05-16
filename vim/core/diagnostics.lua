@@ -16,16 +16,17 @@ local virtual_lines = {
   end
 }
 
-nmap('<Leader>e', function()
+nmap('<LocalLeader>d', function()
   local config = vim.diagnostic.config()
   if config.virtual_lines then
     vim.diagnostic.config({ virtual_lines = false })
   else
     vim.diagnostic.config({ virtual_lines = virtual_lines })
   end
+  util.notify_toggle('Inline diagnostics:', virtual_lines)
 end, 'Toggle inline diagnostics')
 
-nmap('<Leader>E', function()
+nmap('<Leader>d', function()
   vim.diagnostic.setloclist({ open = true })
 end, 'Toggle diagnostics list')
 

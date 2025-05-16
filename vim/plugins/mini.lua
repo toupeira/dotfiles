@@ -106,9 +106,7 @@ return {
 
       -- mini.bracketed ------------------------------------------------
       require('mini.bracketed').setup({
-        diagnostic = { suffix = 'e' },
-
-        comment    = { suffix = '' }, -- ']c' used by treesitter-textobjects
+        comment    = { suffix = '' }, -- ']c' used by vim/mini.diff
         file       = { suffix = '' }, -- ']f' not useful
         oldfile    = { suffix = '' }, -- ']o' not useful
       })
@@ -190,10 +188,10 @@ return {
 
           { mode = 'n', keys = '<Leader><F1>', desc = '➜ help' },
           { mode = 'n', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
-          { mode = 'n', keys = '<Leader><Leader>d', desc = '➜ lsp/treesitter' },
+          { mode = 'n', keys = '<Leader><Leader>S', desc = '➜ lsp' },
           { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
-          { mode = 'n', keys = '<Leader>d', desc = '➜ lsp/treesitter' },
-          { mode = 'n', keys = '<Leader>dR', desc = 'Smart rename' },
+          { mode = 'n', keys = '<Leader>S', desc = '➜ lsp' },
+          -- { mode = 'n', keys = '<Leader>dR', desc = 'Smart rename' },
           { mode = 'n', keys = '<Leader>g', desc = '➜ git' },
           { mode = 'v', keys = '<Leader>g', desc = '➜ git' },
         },
@@ -204,10 +202,67 @@ return {
         },
       })
 
-      -- mini.jump -----------------------------------------------------
-      require('mini.jump').setup({
-        mappings = { repeat_jump = '' },
+      -- mini.diff -----------------------------------------------------
+      require('mini.diff').setup({
+        view = { style = 'sign' },
+
+        mappings = {
+          apply = '<Leader>ga',
+          reset = '<Leader>gR',
+          textobject = 'ih',
+          goto_first = '[c',
+          goto_prev = '',
+          goto_next = '',
+          goto_last = ']c',
+        }
       })
+
+      local next_hunk, prev_hunk = util.make_repeatable(
+        function()
+          if vim.wo.diff then
+            vim.cmd.normal({']c', bang = true})
+          else
+            MiniDiff.goto_hunk('next')
+          end
+        end,
+
+        function()
+          if vim.wo.diff then
+            vim.cmd.normal({'[c', bang = true})
+          else
+            MiniDiff.goto_hunk('next')
+          end
+        end
+      )
+
+      nmap(']c', next_hunk, { force = true }, 'Next hunk')
+      nmap('[c', prev_hunk, { force = true }, 'Previous hunk')
+
+      -- mini.jump -----------------------------------------------------
+      require('mini.jump').setup()
+
+      local original_jump = MiniJump.jump
+      local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+      MiniJump.jump = function(...)
+        repeat_move.last_move = nil
+        return original_jump(...)
+      end
+
+      nmap(';', function ()
+        if repeat_move.last_move then
+          repeat_move.repeat_last_move_next()
+        else
+          MiniJump.smart_jump()
+        end
+      end, { force = true }, 'Repeat jump')
+
+      nmap('|', function ()
+        if repeat_move.last_move then
+          repeat_move.repeat_last_move_previous()
+        else
+          MiniJump.jump(nil, true)
+        end
+      end, { force = true }, 'Repeat jump backward')
 
       -- mini.move -----------------------------------------------------
       require('mini.move').setup()
@@ -224,8 +279,7 @@ return {
       vmap('D', 'gm', { remap = true }, 'Duplicate selection')
 
       -- mini.pairs ----------------------------------------------------
-      local pairs = require('mini.pairs')
-      pairs.setup({
+      require('mini.pairs').setup({
         modes = {
           command = false,
           terminal = false,
@@ -248,10 +302,21 @@ return {
       })
 
       -- re-add undo chain to <CR> from core/keymaps.lua
-      local cr = pairs.cr
-      pairs.cr = function(...)
+      local cr = MiniPairs.cr
+      MiniPairs.cr = function(...)
         return "u" .. cr(...)
       end
+
+      -- mini.pick -----------------------------------------------------
+      require('mini.pick').setup({
+        options = {
+          content_from_bottom = true,
+          use_cache = true,
+        },
+        window = {
+          prompt_prefix = '» ',
+        },
+      })
 
       -- mini.surround -------------------------------------------------
       require('mini.surround').setup({

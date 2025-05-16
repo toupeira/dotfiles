@@ -31,12 +31,12 @@ return {
       local split, width, height
       width = 1
       height = 1
-      if vim.o.columns >= vim.o.lines * 3 then
+      if vim.o.columns > 100 and vim.o.columns >= vim.o.lines * 3 then
         split = 'right'
         width = 0.4
       else
         split = 'below'
-        height = 0.4
+        height = 0.3
       end
 
       vim.api.nvim_open_win(bufnr, true, {
@@ -89,15 +89,9 @@ return {
     map({ 'n', 't' }, '<M-a>', function() toggle('aider') end, { desc = 'Aider: Toggle terminal' })
     nmap('<Leader>!', '<M-z>', { remap = true })
 
-    nmap('<Leader>aa', function() vim.cmd.AiderExec('/add', vim.fn.expand('%:p')) end, { desc = 'Aider: Add current file' })
+    nmap('<Leader>ab', function() vim.cmd.AiderExec('/add', vim.fn.expand('%:p')) end, { desc = 'Aider: Add current file' })
     nmap('<Leader>ad', function() vim.cmd.AiderExec('/drop', vim.fn.expand('%:p')) end, { desc = 'Aider: Drop current file' })
     nmap('<Leader>al', ':AiderSendLs', { desc = 'Aider: List files' })
     nmap('<Leader>aD', ':AiderSendDrop', { desc = 'Aider: Drop all files' })
-
-    nmap('<Leader>ay', ':AiderSendYes', { desc = 'Aider: Confirm prompt' })
-    nmap('<Leader>an', ':AiderSendNo', { desc = 'Aider: Reject prompt' })
-    nmap('<Leader>aR', ':AiderSendReset', { desc = 'Aider: Reset history' })
-
-    nmap('<Leader>ap', ':AiderSetPrefix', { desc = 'Aider: Set prefix' })
   end,
 }

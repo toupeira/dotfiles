@@ -98,8 +98,6 @@ nvomap('g#', '#', 'Search backwards for current word (strict)')
 nmap('<Space>', 'za', 'Toggle fold')
 
 nmap('du', ':diffupdate', 'Update diffs')
-nmap(']d', ']c', { force = true }, 'Jump to next change')
-nmap('[d', '[c', { force = true }, 'Jump to previous change')
 
 local undo_chains = {
   ['<CR>'] = 'new line',

@@ -285,10 +285,24 @@ util.close_tab = function()
   end
 end
 
--- Echo a {message} with an optional {hl} group,
--- and optionally add it to the {history}.
-util.echo = function(message, hl, history)
-  return vim.api.nvim_echo({{ message, hl }}, history, {})
+-- Echo a {message} with an optional {hl} group.
+util.echo = function(message, hl)
+  return vim.api.nvim_echo({{ message, hl }}, false, {})
+end
+
+-- Show a notification {message} with optional {options}.
+util.notify = function(message, opts)
+  opts = util.merge({ key = message, level = 'INFO' }, opts)
+  local level = vim.log.levels[opts.level]
+  return vim.notify(message, level, opts)
+end
+
+-- Show a notification {message} for a toggle setting.
+util.notify_toggle = function(message, enabled)
+  return util.notify(message, {
+    annote = enabled and ' Enabled ' or ' Disabled',
+    level = enabled and 'INFO' or 'WARN',
+  })
 end
 
 -- Return the path of the current buffer, starting with either
@@ -383,10 +397,10 @@ util.toggle_list = function(id)
   end
 
   if id == 'c' and #vim.fn.getqflist() == 0 then
-    util.echo('Quickfix list is empty.', 'ModeMsg')
+    util.notify('Quickfix list:', { annote = 'Empty', level = 'WARN' })
     return
   elseif id == 'l' and #vim.fn.getloclist(0) == 0 then
-    util.echo('Location list is empty.', 'ModeMsg')
+    util.notify('Location list:', { annote = 'Empty', level = 'WARN' })
     return
   end
 

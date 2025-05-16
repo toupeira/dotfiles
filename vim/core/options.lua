@@ -62,8 +62,8 @@ vim.o.sidescrolloff = 8
 vim.opt.virtualedit:append { 'block' }
 
 vim.o.number = true
-vim.o.numberwidth = 6
-vim.o.signcolumn = 'yes'
+vim.o.numberwidth = 5
+vim.o.signcolumn = 'yes:2'
 
 vim.opt.completeopt = { 'menu', 'longest', 'preview', 'fuzzy', 'preinsert' }
 vim.o.pumheight = 20
@@ -116,6 +116,8 @@ vim.o.keywordprg = ':Manpage'
 vim.o.showmatch = true
 
 vim.opt.iskeyword:append { '-' }
+vim.opt.iskeyword:append { '^[' }
+vim.opt.iskeyword:append { '^]' }
 
 if vim.fn.executable('rg') then
   vim.o.grepprg = 'rg --vimgrep'

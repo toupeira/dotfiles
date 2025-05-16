@@ -34,6 +34,7 @@ return {
     vmap('<Leader>gl', ':Gclog', 'Open Git log for selection')
     nmap('<Leader>gL', ':Gclog', 'Open Git log for repository')
     nmap('<Leader>gd', ':Git log -p %', 'Open Git diff for current file')
+    nvomap('<Leader>gb', ':Git blame --date human-local', 'Open Git blame for current file')
 
     nmap('<Leader>gF', ':Git pull -v', 'Pull current Git branch')
     nmap('<Leader>gP', ':Git push -v', 'Push current Git branch')
