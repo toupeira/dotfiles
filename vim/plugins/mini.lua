@@ -109,9 +109,9 @@ return {
 
       hooks = {
         post = {
-          read   = function() util.notify('Session:', { annote = 'Restored from .session.vim', level = 'WARN' }) end,
-          write  = function() util.notify('Session:', { annote = 'Saved to .session.vim' }) end,
-          delete = function() util.notify('Session:', { annote = 'Deleted .session.vim', level = 'WARN' }) end,
+          read   = function() util.notify('Session:', { annote = 'Restored.', level = 'WARN' }) end,
+          write  = function() util.notify('Session:', { annote = 'Saved.' }) end,
+          delete = function() util.notify('Session:', { annote = 'Deleted.', level = 'WARN' }) end,
         }
       }
     })
@@ -145,6 +145,7 @@ return {
 
     -- mini.starter ----------------------------------------------------
     local starter = require('mini.starter')
+    local is_home = vim.fn.getcwd() == os.getenv('HOME')
 
     util.command('MiniStarter', 'lua MiniStarter.open()', 'Open start screen')
     util.autocmd('User', 'VeryLazy', 'lua MiniStarter.refresh()')
@@ -168,7 +169,7 @@ return {
         end,
 
         -- recent files
-        starter.sections.recent_files(9, true, function(path)
+        starter.sections.recent_files(9, not is_home, function(path)
           local dir = vim.fn.fnamemodify(path, ':.:h')
           if dir == '.' then
             return ''

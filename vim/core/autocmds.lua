@@ -49,7 +49,7 @@ end
 -- Setup quickfix windows
 autocmd('FileType', 'qf', function()
   vim.wo.wrap = false
-  util.resize_window({ max = 5 })
+  util.resize_window({ max = 10 })
 end)
 
 -- Setup terminals

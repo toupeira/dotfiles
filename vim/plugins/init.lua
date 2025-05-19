@@ -30,23 +30,6 @@ return {
     end
   },
 
-  { 'catgoose/nvim-colorizer.lua',
-    ft = { 'css', 'scss', 'lua' },
-    cmd = 'ColorizerToggle',
-    keys = {
-      { '<LocalLeader>C', '<Cmd>ColorizerToggle<CR>', desc = 'Toggle color highlighting' },
-    },
-    opts = function(plugin)
-      return {
-        lazy_load = true,
-        filetypes = plugin.ft,
-        user_default_options = {
-          names = false,
-        },
-      }
-    end
-  },
-
   { 'folke/flash.nvim',
     keys = {
       { '<Leader>j', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Jump to position' },

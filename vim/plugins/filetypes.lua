@@ -5,6 +5,23 @@ return {
   { 'hail2u/vim-css3-syntax',  ft = { 'css', 'scss' }},
   { 'hashivim/vim-terraform',  ft = { 'terraform', 'hcl' }},
 
+  { 'catgoose/nvim-colorizer.lua',
+    ft = { 'css', 'scss', 'lua' },
+    cmd = 'ColorizerToggle',
+    keys = {
+      { '<LocalLeader>C', '<Cmd>ColorizerToggle<CR>', desc = 'Toggle color highlighting' },
+    },
+    opts = function(plugin)
+      return {
+        lazy_load = true,
+        filetypes = plugin.ft,
+        user_default_options = {
+          names = false,
+        },
+      }
+    end
+  },
+
   { 'iamcco/markdown-preview.nvim',
     build = function() vim.fn['mkdp#util#install']() end,
     ft = { 'markdown' },
@@ -50,6 +67,17 @@ return {
         },
       }
     end
+  },
+
+  { 'stevearc/quicker.nvim',
+    ft = 'qf',
+
+    opts = {
+      keys = {
+        { '>', '<Cmd>lua require("quicker").expand({ before = 3, after = 3, add_to_existing = true })<CR>', desc = 'Expand quickfix context' },
+        { '<', '<Cmd>lua require("quicker").collapse()<CR>', desc = 'Reduce quickfix context' },
+      },
+    },
   },
 
   { 'vim-ruby/vim-ruby',

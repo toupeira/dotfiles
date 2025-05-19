@@ -134,7 +134,8 @@ function rg.edit {
   local files
   mapfile -t files < <( rg -l -- "$@" )
   if [ "${#files[@]}" ]; then
-    sensible-vim "+silent /\\v$1" "+normal ggn" "${files[@]}"
+    local pattern=${1//\\b/}
+    sensible-vim "+silent /\\v$pattern" "+normal ggn" "${files[@]}"
   else
     echo "No files found."
   fi

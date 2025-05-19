@@ -81,17 +81,24 @@ return {
       -- provider settings
 
       defaults = {
-        color_icons = false,
+        color_icons = true,
       },
 
+      blines = presets.reverse,
       builtin = presets.reverse,
-      diagnostics = merge(presets.preview, presets.reverse),
       helptags = presets.preview,
       highlights = presets.preview,
       jumps = presets.preview,
       lines = presets.reverse,
       manpages = presets.preview,
       marks = presets.preview,
+
+      diagnostics = merge(presets.preview, presets.reverse, {
+        color_icons = true,
+        diag_source = true,
+        sort = 1,
+        fzf_opts = { ['--wrap'] = true },
+      }),
 
       git = {
         branches = presets.preview,
@@ -150,14 +157,11 @@ return {
         file_ignore_patterns = { '%.git/COMMIT_EDITMSG' },
       }),
 
-      keymaps = {
-        formatter = '%s | %-10s | %-30s | %s',
-      },
-
-      tags = {
+      btags = presets.title('Tags (Buffer)'),
+      tags = merge(presets.title('Tags (Project)'), {
         ctags_autogen = true,
         cmd = 'ctags -f - $( git ls-files ) 2>/dev/null',
-      },
+      }),
     }
   end,
 
@@ -169,6 +173,10 @@ return {
 
     fzf.setup(opts)
     require('fzf-lua.providers.ui_select').register()
+
+    util.alias_command({
+      fzf = 'FzfLua', Fzf = 'FzfLua', FZF = 'FzfLua', FZf = 'FzfLua',
+    })
 
     -- when opening multiple files, open both the quickfix list and the first file
     fzf.defaults.actions.files.default = function(selected, settings)
@@ -233,7 +241,9 @@ return {
     map_fzf('<Leader>f', 'files')
     map_fzf('<Leader>F', 'files', {
       desc = 'files in current directory',
-      args = merge(presets.title('Files (current directory)'), { cwd = expand('%:h') }),
+      args = function()
+        return merge(presets.title('Files (current directory)'), { cwd = expand('%:h') })
+      end,
     })
     map_fzf('<Leader>o', 'files', {
       desc = 'Obsidian notes',
@@ -246,24 +256,37 @@ return {
       args = merge(presets.title('Buffers (all)'), { show_unlisted = true }),
     })
 
-    map_fzf('<Leader>h', 'oldfiles', { desc = 'history' })
-    map_fzf('<Leader>H', 'oldfiles', {
+    map_fzf('<Leader>h', 'oldfiles', {
       desc = 'history in current directory',
-      args = merge(presets.title('History (current directory)'), { cwd_only = true }),
+      args = merge(presets.title('History (Project)'), { cwd_only = true }),
     })
+    map_fzf('<Leader>H', 'oldfiles', { desc = 'history' })
 
     -- search file contents
-    map_fzf('<Leader>r', 'live_grep', { desc = 'by regex in project' })
+    map_fzf('<Leader>r', 'live_grep', {
+      desc = 'by regex in project',
+      args = function() return { query = expand('<cword>') } end,
+    })
     map_fzf('<Leader>R', 'live_grep', {
       desc = 'by regex in current directory',
-      args = merge(presets.title('Grep (current directory)'), { cwd = expand('%:h') }),
+      args = function()
+        return merge(presets.title('Grep (current directory)'), {
+          cwd = expand('%:h'),
+          query = expand('<cword>'),
+        })
+      end,
     })
 
     map_fzf('<Leader>l', 'blines', { desc = 'lines in buffer' })
     map_fzf('<Leader>t', 'btags', { desc = 'buffer symbols' })
     map_fzf('<Leader>T', 'tags', { desc = 'project symbols' })
-    map_fzf('<Leader>d', 'diagnostics_document')
-    map_fzf('<Leader>D', 'diagnostics_workspace')
+
+    local diagnostics = require('util.fzf-diagnostics')
+    map_fzf('<Leader>d', diagnostics.diagnostics, { desc = 'diagnostics in current file' })
+    map_fzf('<Leader>D', diagnostics.all, {
+      desc = 'diagnostics in project',
+      args = presets.title('Diagnostics (Workspace)'),
+    })
 
     -- search vim history
     map_fzf('<Leader>:', 'command_history', { mode = { 'n', 'v' }})
