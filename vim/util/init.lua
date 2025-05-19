@@ -239,7 +239,7 @@ util.buffer_count = function()
 end
 
 -- Close buffer, while keeping its window.
-util.close_buffer = function(bufnr_id)
+util.close_buffer = function(bufnr)
   bufnr = bufnr or vim.fn.bufnr()
   local window = vim.fn.bufwinid(bufnr)
 

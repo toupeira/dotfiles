@@ -96,9 +96,16 @@ nvomap('#', 'g#', { force = true }, 'Search backwards for current word (loose)')
 nvomap('g*', '*', 'Search for current word (strict)')
 nvomap('g#', '#', 'Search backwards for current word (strict)')
 
-nmap('<Space>', 'za', 'Toggle fold')
-
 nmap('du', ':diffupdate', 'Update diffs')
+
+nmap('<Space>', function()
+  local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
+  if #diagnostics > 0 then
+    vim.diagnostic.toggle_current_line()
+  else
+    return 'za'
+  end
+end, { expr = true }, 'Toggle fold or show inline diagnostics')
 
 local undo_chains = {
   ['<CR>'] = 'new line',

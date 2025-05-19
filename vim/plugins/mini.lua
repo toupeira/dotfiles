@@ -155,17 +155,19 @@ return {
       query_updaters = 'abcdefghijklmnopqrstuvwxyz0123456789',
 
       items = {
-        { section = 'Builtin actions', name = 'Edit new file', action = 'enew' },
-        { section = 'Builtin actions', name = 'Insert mode', action = 'enew | startinsert' },
+        -- default actions
+        { section = 'Actions', name = 'Edit new file', action = 'enew' },
+        { section = 'Actions', name = 'Insert mode', action = 'enew | startinsert' },
 
         function()
           if util.tab_count() > 1 then
-            return { section = 'Builtin actions', name = 'Close tab', action = 'tabclose' }
+            return { section = 'Actions', name = 'Close tab', action = 'tabclose' }
           else
-            return { section = 'Builtin actions', name = 'Quit', action = 'quitall' }
+            return { section = 'Actions', name = 'Quit', action = 'quitall' }
           end
         end,
 
+        -- recent files
         starter.sections.recent_files(9, true, function(path)
           local dir = vim.fn.fnamemodify(path, ':.:h')
           if dir == '.' then
@@ -181,9 +183,22 @@ return {
           return string.format(' (%s)', dir)
         end),
 
-        { section = 'Bookmarks', name = 'vimrc', action = 'edit ~/.config/nvim/init.lua' },
-        { section = 'Bookmarks', name = 'gitconfig', action = 'edit ~/.config/git/config' },
-        { section = 'Bookmarks', name = 'tmux.conf', action = 'edit ~/.config/tmux/tmux.conf' },
+        -- FZF shortcuts
+        vim.tbl_map(function(item)
+          return {
+            section = 'Search',
+            name = item.name,
+            action = function()
+              vim.fn.feedkeys(vim.g.mapleader .. item.key)
+            end,
+          }
+        end, {
+          { name = 'Files',   key = 'f' },
+          { name = 'History', key = 'h' },
+          { name = 'Grep',    key = 'r' },
+          { name = 'Notes',   key = 'o' },
+          { name = 'Tags',    key = 'T' },
+        })
       },
 
       footer = function()
@@ -203,9 +218,9 @@ return {
 
       content_hooks = {
         starter.gen_hook.adding_bullet(),
-        starter.gen_hook.indexing('all', { 'Builtin actions', 'Bookmarks' }),
+        starter.gen_hook.indexing('all', { 'Actions', 'Search' }),
         starter.gen_hook.aligning('center', 'top'),
-        starter.gen_hook.padding(0, vim.o.lines / 5),
+        starter.gen_hook.padding(0, vim.o.lines / 5.5),
       },
     })
 

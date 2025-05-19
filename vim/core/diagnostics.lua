@@ -59,13 +59,13 @@ vim.diagnostic.hide_current_line = function()
   end
 end
 
-nmap('<Leader>d', function()
+vim.diagnostic.toggle_current_line = function()
   if vim.diagnostic.show_current_line_id then
     vim.diagnostic.hide_current_line()
   else
     vim.diagnostic.show_current_line()
   end
-end, 'Show inline diagnostics for current line')
+end
 
 nmap('<LocalLeader>d', function()
   local config = vim.diagnostic.config()

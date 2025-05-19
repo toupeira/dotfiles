@@ -16,6 +16,12 @@ local presets = {
   small = {
     winopts = { height = 12, row = 0.9 },
   },
+
+  title = function(value)
+    return {
+      winopts = { title = ' ' .. value .. ' ' }
+    }
+  end,
 }
 
 return {
@@ -79,6 +85,7 @@ return {
       },
 
       builtin = presets.reverse,
+      diagnostics = merge(presets.preview, presets.reverse),
       helptags = presets.preview,
       highlights = presets.preview,
       jumps = presets.preview,
@@ -97,7 +104,7 @@ return {
         code_actions = presets.preview,
       },
 
-      colorschemes = util.merge(presets.reverse, {
+      colorschemes = merge(presets.reverse, {
         colors = {
           'nordfox',
           'nightfox',
@@ -116,20 +123,8 @@ return {
         },
       }),
 
-      buffers = util.merge(presets.small, {
+      buffers = merge(presets.small, {
         fzf_opts = { ['--header-lines'] = false },
-      }),
-
-      diagnostics = util.merge(presets.preview, presets.reverse, {
-        actions = {
-          ['ctrl-g'] = function(_selected, settings)
-            if settings.__INFO.cmd == 'diagnostics_document' then
-              fzf.diagnostics_workspace()
-            else
-              fzf.diagnostics_document()
-            end
-          end,
-        },
       }),
 
       files = {
@@ -150,10 +145,10 @@ return {
         RIPGREP_CONFIG_PATH = vim.env.RIPGREP_CONFIG_PATH,
       },
 
-      oldfiles = {
+      oldfiles = merge(presets.title('History'), {
         include_current_session = true,
         file_ignore_patterns = { '%.git/COMMIT_EDITMSG' },
-      },
+      }),
 
       keymaps = {
         formatter = '%s | %-10s | %-30s | %s',
@@ -203,11 +198,6 @@ return {
       return args
     end
 
-    -- helper to build title options
-    local function title(value)
-      return { title = ' ' .. value .. ' ' }
-    end
-
     -- helper to add mappings for a provider
     local function map_fzf(key, provider, opts)
       opts = opts or {}
@@ -243,45 +233,37 @@ return {
     map_fzf('<Leader>f', 'files')
     map_fzf('<Leader>F', 'files', {
       desc = 'files in current directory',
-      args = function() return {
-        cwd = expand('%:h'),
-        winopts = title('Files (current directory)'),
-      } end,
+      args = merge(presets.title('Files (current directory)'), { cwd = expand('%:h') }),
     })
     map_fzf('<Leader>o', 'files', {
       desc = 'Obsidian notes',
-      args = { cwd = '/slack/documents/Notes', fd_opts = '-e md', winopts = title('Notes') },
+      args = merge(presets.title('Notes'), { cwd = '/slack/documents/Notes', fd_opts = '-e md' }),
     })
 
     map_fzf('<Leader>b', 'buffers')
     map_fzf('<Leader>B', 'buffers', {
       desc = 'all buffers',
-      args = { show_unlisted = true, winopts = title('Buffers (all)') },
+      args = merge(presets.title('Buffers (all)'), { show_unlisted = true }),
     })
 
-    map_fzf('<Leader>h', 'oldfiles', {
-      desc = 'recent files',
-      args = { winopts = title('Recent files') },
-    })
+    map_fzf('<Leader>h', 'oldfiles', { desc = 'history' })
     map_fzf('<Leader>H', 'oldfiles', {
-      desc = 'recent files in current directory',
-      args = { cwd_only = true, winopts = title('Recent files (current directory)') },
+      desc = 'history in current directory',
+      args = merge(presets.title('History (current directory)'), { cwd_only = true }),
     })
 
     -- search file contents
     map_fzf('<Leader>r', 'live_grep', { desc = 'by regex in project' })
     map_fzf('<Leader>R', 'live_grep', {
       desc = 'by regex in current directory',
-      args = function() return {
-        cwd = expand('%:h'),
-        winopts = title('Grep (current directory)'),
-      } end,
+      args = merge(presets.title('Grep (current directory)'), { cwd = expand('%:h') }),
     })
 
     map_fzf('<Leader>l', 'blines', { desc = 'lines in buffer' })
     map_fzf('<Leader>t', 'btags', { desc = 'buffer symbols' })
     map_fzf('<Leader>T', 'tags', { desc = 'project symbols' })
-    map_fzf('<Leader>D', 'diagnostics_document')
+    map_fzf('<Leader>d', 'diagnostics_document')
+    map_fzf('<Leader>D', 'diagnostics_workspace')
 
     -- search vim history
     map_fzf('<Leader>:', 'command_history', { mode = { 'n', 'v' }})
