@@ -51,9 +51,9 @@ nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window'
 nmap('H', ':tabprevious', 'Go to previous tab')
 nmap('L', ':tabnext', 'Go to next tab')
 
-nmap('<Leader>N', ':tabnew | MiniStarter', 'Open new tab')
-nmap('<Leader>X', ':tabclose', 'Close current tab')
-nmap('<Leader>Z', ':tab split', 'Zoom current buffer to new tab')
+nmap('<Leader><C-t>', ':tabnew | MiniStarter', 'Open new tab')
+nmap('<Leader><C-w>', util.close_tab, 'Close current tab')
+nmap('<Leader><C-s>', ':tab split', 'Zoom current buffer to new tab')
 
 -- File editing --------------------------------------------------------
 

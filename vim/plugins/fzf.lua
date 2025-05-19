@@ -3,168 +3,187 @@ local merge = util.merge
 
 local expand = vim.fn.expand
 
+local presets = {
+  preview = {
+    winopts = { preview = { hidden = 'nohidden' }},
+    fzf_opts = { ['--layout'] = 'reverse' },
+  },
+
+  reverse = {
+    fzf_opts = { ['--layout'] = 'reverse-list', ['--no-sort'] = true },
+  },
+
+  small = {
+    winopts = { height = 12, row = 0.9 },
+  },
+}
+
 return {
   'ibhagwan/fzf-lua',
   event = 'VeryLazy',
 
-  opts = {
-    winopts = {
-      width = 0.9,
-      height = 0.9,
-      row = 0.5,
-      preview = {
-        hidden = 'hidden',
-        vertical = 'up:60%',
-        horizontal = 'right:50%',
-        title = false,
+  opts = function()
+    local fzf = require('fzf-lua')
+
+    return {
+      winopts = {
+        width = 0.9,
+        height = 0.9,
+        row = 0.5,
+        preview = {
+          hidden = 'hidden',
+          vertical = 'up:60%',
+          horizontal = 'right:50%',
+          title = false,
+        },
       },
-    },
 
-    keymap = {
-      builtin = {
-        true, -- inherit defaults
-        ['<C-_>'] = 'toggle-preview',
-        ['<M-e>'] = 'preview-down',
-        ['<M-y>'] = 'preview-up',
-        ['<M-f>'] = 'preview-half-page-down',
-        ['<M-b>'] = 'preview-half-page-up',
-        ['<M-r>'] = 'preview-page-reset',
+      keymap = {
+        builtin = {
+          true, -- inherit defaults
+          ['<C-_>'] = 'toggle-preview',
+          ['<M-e>'] = 'preview-down',
+          ['<M-y>'] = 'preview-up',
+          ['<M-f>'] = 'preview-half-page-down',
+          ['<M-b>'] = 'preview-half-page-up',
+          ['<M-r>'] = 'preview-page-reset',
+        },
+        -- remove defaults, still uses $FZF_DEFAULT_OPTS
+        fzf = {},
       },
-      -- remove defaults, still uses $FZF_DEFAULT_OPTS
-      fzf = {},
-    },
 
-    fzf_opts = {
-      ['--layout'] = 'default',
-    },
-
-    hls = {
-      header_bind = 'WarningMsg',
-      header_text = 'Type',
-      buf_flag_cur = 'Title',
-      buf_flag_alt = 'WarningMsg',
-    },
-
-    defaults = {
-      color_icons = false,
-    },
-
-    files = {
-      fd_opts = '--color always --max-results 99999 --type f --type l --hidden --exclude .git',
-      git_icons = false,
-      no_header = true,
-    },
-
-    buffers = {
-      winopts = { height = 12, row = 0.9 },
-      fzf_opts = { ['--header-lines'] = false },
-    },
-
-    oldfiles = {
-      include_current_session = true,
-      file_ignore_patterns = { '%.git/COMMIT_EDITMSG' },
-    },
-
-    tags = {
-      ctags_autogen = true,
-      cmd = 'ctags -f - $( git ls-files ) 2>/dev/null',
-    },
-
-    grep = {
-      multiline = 1,
-      RIPGREP_CONFIG_PATH = vim.env.RIPGREP_CONFIG_PATH,
-    },
-
-    keymaps = {
-      formatter = '%s | %-10s | %-30s | %s',
-    },
-
-    colorschemes = {
-      colors = {
-        'nordfox',
-        'nightfox',
-        'duskfox',
-        'carbonfox',
-        'gruvbox-material',
-        'catppuccin-mocha',
-        'material-deep-ocean',
-        'tokyonight-night',
-
-        'dayfox',
-        'dawnfox',
-        'catppuccin-latte',
-        'material-lighter',
-        'tokyonight-day',
+      fzf_opts = {
+        ['--layout'] = 'default',
       },
-    },
-  },
+
+      hls = {
+        header_bind = 'WarningMsg',
+        header_text = 'Type',
+        buf_flag_cur = 'Title',
+        buf_flag_alt = 'WarningMsg',
+      },
+
+      -- add directory previewer
+      previewers = {
+        tree = {
+          cmd = 'tree',
+          args = '-dxC --gitignore --prune --noreport',
+          _ctor = require('fzf-lua.previewer').fzf.cmd,
+        },
+      },
+
+      -- provider settings
+
+      defaults = {
+        color_icons = false,
+      },
+
+      builtin = presets.reverse,
+      helptags = presets.preview,
+      highlights = presets.preview,
+      jumps = presets.preview,
+      lines = presets.reverse,
+      manpages = presets.preview,
+      marks = presets.preview,
+
+      git = {
+        branches = presets.preview,
+        diff = presets.preview,
+        status = presets.preview,
+      },
+
+      lsp = {
+        finder = presets.preview,
+        code_actions = presets.preview,
+      },
+
+      colorschemes = util.merge(presets.reverse, {
+        colors = {
+          'nordfox',
+          'nightfox',
+          'duskfox',
+          'carbonfox',
+          'gruvbox-material',
+          'catppuccin-mocha',
+          'material-deep-ocean',
+          'tokyonight-night',
+
+          'dayfox',
+          'dawnfox',
+          'catppuccin-latte',
+          'material-lighter',
+          'tokyonight-day',
+        },
+      }),
+
+      buffers = util.merge(presets.small, {
+        fzf_opts = { ['--header-lines'] = false },
+      }),
+
+      diagnostics = util.merge(presets.preview, presets.reverse, {
+        actions = {
+          ['ctrl-g'] = function(_selected, settings)
+            if settings.__INFO.cmd == 'diagnostics_document' then
+              fzf.diagnostics_workspace()
+            else
+              fzf.diagnostics_document()
+            end
+          end,
+        },
+      }),
+
+      files = {
+        fd_opts = '--color always --max-results 99999 --type f --type l --hidden --exclude .git',
+        git_icons = false,
+        no_header = true,
+
+        actions = {
+          ['ctrl-g'] = fzf.actions.toggle_ignore,
+          ['alt-i'] = false,
+          ['alt-h'] = false,
+          ['alt-f'] = false,
+        },
+      },
+
+      grep = {
+        multiline = 1,
+        RIPGREP_CONFIG_PATH = vim.env.RIPGREP_CONFIG_PATH,
+      },
+
+      oldfiles = {
+        include_current_session = true,
+        file_ignore_patterns = { '%.git/COMMIT_EDITMSG' },
+      },
+
+      keymaps = {
+        formatter = '%s | %-10s | %-30s | %s',
+      },
+
+      tags = {
+        ctags_autogen = true,
+        cmd = 'ctags -f - $( git ls-files ) 2>/dev/null',
+      },
+    }
+  end,
 
   config = function(_, opts)
     local fzf = require('fzf-lua')
-    local actions = fzf.actions
-    local defaults = fzf.defaults
 
     -- use history per provider
     vim.g.fzf_history_dir = vim.fn.stdpath('state') .. '/fzf'
 
-    -- override actions
-    defaults.files.actions = {
-      ['ctrl-g'] = actions.toggle_ignore,
-      ['alt-i'] = false,
-      ['alt-h'] = false,
-      ['alt-f'] = false,
-    }
+    fzf.setup(opts)
+    require('fzf-lua.providers.ui_select').register()
 
-    defaults.actions.files.default = function(selected, settings)
-      actions.file_edit(selected, settings)
+    -- when opening multiple files, open both the quickfix list and the first file
+    fzf.defaults.actions.files.default = function(selected, settings)
+      fzf.actions.file_edit(selected, settings)
 
       if #selected > 1 then
-        actions.file_sel_to_qf(selected, settings)
+        fzf.actions.file_sel_to_qf(selected, settings)
         vim.cmd.wincmd('p')
       end
     end
-
-    -- add directory previewer
-    opts.previewers = {
-      tree = {
-        cmd = 'tree',
-        args = '-dxC --gitignore --prune --noreport',
-        _ctor = require('fzf-lua.previewer').fzf.cmd,
-      },
-    }
-
-    -- add default settings
-    local reverse = {
-      fzf_opts = { ['--layout'] = 'reverse-list', ['--no-sort'] = true },
-    }
-
-    local preview = {
-      winopts = { preview = { hidden = 'nohidden' }},
-      fzf_opts = { ['--layout'] = 'reverse' },
-    }
-
-    opts.lines = merge(opts.lines, reverse)
-    opts.blines = merge(opts.lines, reverse)
-    opts.builtin = merge(opts.lines, reverse)
-    opts.colorschemes = merge(opts.lines, reverse)
-
-    opts.marks = merge(opts.marks, preview)
-    opts.jumps = merge(opts.jumps, preview)
-    opts.helptags = merge(opts.helptags, preview)
-    opts.manpages = merge(opts.manpages, preview)
-    opts.highlights = merge(opts.highlights, preview)
-
-    opts.git = merge(opts.git)
-    opts.git.branches = merge(opts.git.branches, preview)
-    opts.git.diff = merge(opts.git.diff, preview)
-    opts.git.status = merge(opts.git.status, preview)
-
-    opts.lsp = merge(opts.lsp)
-    opts.lsp.finder = merge(opts.lsp.finder, preview)
-    opts.lsp.code_actions = merge(opts.lsp.code_actions, preview)
-
-    fzf.setup(opts)
-    require('fzf-lua.providers.ui_select').register()
 
     -- add mapping to insert last <cword>
     local last_cword
@@ -260,43 +279,41 @@ return {
     })
 
     map_fzf('<Leader>l', 'blines', { desc = 'lines in buffer' })
-    map_fzf('<Leader>L', 'lines', { desc = 'lines in all buffers' })
-
     map_fzf('<Leader>t', 'btags', { desc = 'buffer symbols' })
     map_fzf('<Leader>T', 'tags', { desc = 'project symbols' })
+    map_fzf('<Leader>D', 'diagnostics_document')
 
     -- search vim history
     map_fzf('<Leader>:', 'command_history', { mode = { 'n', 'v' }})
     map_fzf('<Leader>/', 'search_history')
-    map_fzf('<Leader>"', 'registers')
-    map_fzf('<Leader>\'', 'marks')
-    map_fzf('<Leader>j', 'jumps')
 
     -- search vim internals
     map_fzf('<F1><F1>', 'help_tags')
-    map_fzf('<F1>m', 'man_pages')
-    map_fzf('<F1>k', 'keymaps')
+    map_fzf('<F1>C', 'colorschemes')
     map_fzf('<F1>c', 'commands')
     map_fzf('<F1>h', 'highlights')
-    map_fzf('<F1>C', 'colorschemes')
+    map_fzf('<F1>j', 'jumps')
+    map_fzf('<F1>k', 'keymaps')
+    map_fzf('<F1>M', 'man_pages')
+    map_fzf('<F1>m', 'marks')
+    map_fzf('<F1>r', 'registers')
+
     map_fzf('<F1>f', 'builtin', { desc = 'FZF providers' })
 
     -- search spellcheck
     map_fzf('<Leader>z', 'spell_suggest', { desc = 'spelling suggestions' })
 
     -- search LSP
-    map_fzf('<Leader>Sa', 'lsp_code_actions')
-    map_fzf('<Leader>Sd', 'lsp_definitions')
-    -- map_fzf('<Leader>SD', 'lsp_declarations')
-    map_fzf('<Leader>Se', 'lsp_document_diagnostics')
-    map_fzf('<Leader>SE', 'lsp_workspace_diagnostics')
-    -- map_fzf('<Leader>Si', 'lsp_implementations')
-    map_fzf('<Leader>SI', 'lsp_incoming_calls')
-    map_fzf('<Leader>SO', 'lsp_outgoing_calls')
-    map_fzf('<Leader>Sr', 'lsp_references')
-    map_fzf('<Leader>St', 'lsp_document_symbols')
-    map_fzf('<Leader>ST', 'lsp_live_workspace_symbols')
-    -- map_fzf('<Leader>St', 'lsp_typedefs')
+    map_fzf('<Leader>La', 'lsp_code_actions')
+    map_fzf('<Leader>Ld', 'lsp_definitions')
+    -- map_fzf('<Leader>LD', 'lsp_declarations')
+    -- map_fzf('<Leader>Li', 'lsp_implementations')
+    map_fzf('<Leader>LI', 'lsp_incoming_calls')
+    map_fzf('<Leader>LO', 'lsp_outgoing_calls')
+    map_fzf('<Leader>Lr', 'lsp_references')
+    map_fzf('<Leader>Lt', 'lsp_document_symbols')
+    map_fzf('<Leader>LT', 'lsp_live_workspace_symbols')
+    -- map_fzf('<Leader>Lt', 'lsp_typedefs')
 
     -- search git
     map_fzf('<Leader>gm', 'git_status')
@@ -329,7 +346,7 @@ return {
         end,
 
         actions = {
-          ['ctrl-g'] = actions.toggle_hidden,
+          ['ctrl-g'] = fzf.actions.toggle_hidden,
           ['default'] = function(selected)
             if util.buffer_count() > 0 then
               vim.cmd.tabnew()

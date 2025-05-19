@@ -32,7 +32,7 @@ return {
 
   keys = {
     { '<Leader>%', '<Cmd>LspInfo<CR>', desc = 'Show LSP status' },
-    { '<Leader>SS', '<Cmd>LspStart<CR>', desc = 'Start LSP server' },
+    { '<Leader>LS', '<Cmd>LspStart<CR>', desc = 'Start LSP server' },
   },
 
   config = function(_, opts)
@@ -49,7 +49,7 @@ return {
     end
 
     util.autocmd('LspDetach', function(event)
-      nmap('<Leader>SS', ':LspStart', { force = true, buffer = event.buf }, 'Start LSP server')
+      nmap('<Leader>LS', ':LspStart', { force = true, buffer = event.buf }, 'Start LSP server')
     end)
 
     util.autocmd('LspAttach', function(event)
@@ -59,18 +59,18 @@ return {
       -- Buffer local mappings
       local args = { force = true, buffer = event.buf }
 
-      nmap('<Leader>SS', ':LspStop', args, 'Stop LSP server')
+      nmap('<Leader>LS', ':LspStop', args, 'Stop LSP server')
 
       nmap('gd', vim.lsp.buf.definition, args, 'Go to LSP definition')
       nmap('gD', vim.lsp.buf.declaration, args, 'Go to LSP declaration')
       nmap('gR', vim.lsp.buf.rename, args, 'Rename LSP symbol')
 
-      nvomap('<Leader>SA', vim.lsp.buf.code_action, args, 'Run LSP code action')
-      nmap('<Leader>SF', function() vim.lsp.buf.format { async = true } end, args, 'Format current file')
+      nvomap('<Leader>LA', vim.lsp.buf.code_action, args, 'Run LSP code action')
+      nmap('<Leader>LF', function() vim.lsp.buf.format { async = true } end, args, 'Format current file')
 
-      nmap('<Leader>SWa', vim.lsp.buf.add_workspace_folder, args, 'Add LSP workspace folder')
-      nmap('<Leader>SWr', vim.lsp.buf.remove_workspace_folder, args, 'Remove LSP workspace folder')
-      nmap('<Leader>SWl', function()
+      nmap('<Leader>LWa', vim.lsp.buf.add_workspace_folder, args, 'Add LSP workspace folder')
+      nmap('<Leader>LWr', vim.lsp.buf.remove_workspace_folder, args, 'Remove LSP workspace folder')
+      nmap('<Leader>LWl', function()
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
       end, args, 'Show LSP workspace folders')
     end)

@@ -73,9 +73,9 @@ return {
 
         { mode = 'n', keys = '<Leader><F1>', desc = '➜ help' },
         { mode = 'n', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
-        { mode = 'n', keys = '<Leader><Leader>S', desc = '➜ lsp' },
+        { mode = 'n', keys = '<Leader><Leader>L', desc = '➜ lsp' },
         { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
-        { mode = 'n', keys = '<Leader>S', desc = '➜ lsp' },
+        { mode = 'n', keys = '<Leader>L', desc = '➜ lsp' },
         -- { mode = 'n', keys = '<Leader>dR', desc = 'Smart rename' },
         { mode = 'n', keys = '<Leader>g', desc = '➜ git' },
         { mode = 'v', keys = '<Leader>g', desc = '➜ git' },
@@ -109,22 +109,39 @@ return {
 
       hooks = {
         post = {
-          read   = function() util.notify('Session:', { annote = 'Restored', level = 'WARN' }) end,
-          write  = function() util.notify('Session:', { annote = 'Saved' }) end,
-          delete = function() util.notify('Session:', { annote = 'Deleted', level = 'WARN' }) end,
+          read   = function() util.notify('Session:', { annote = 'Restored from .session.vim', level = 'WARN' }) end,
+          write  = function() util.notify('Session:', { annote = 'Saved to .session.vim' }) end,
+          delete = function() util.notify('Session:', { annote = 'Deleted .session.vim', level = 'WARN' }) end,
         }
       }
     })
-    nmap('<Leader>W', function()
+
+    if not MiniSessions.get_latest() then
+      vim.g.minisessions_disable = true
+    end
+
+    nmap('<Leader>SS', function()
       vim.g.minisessions_disable = false
 
       local name = util.project_path(0)
       MiniSessions.write('.session.vim', { force = true })
     end, 'Save current session')
 
-    if not MiniSessions.get_latest() then
-      vim.g.minisessions_disable = true
-    end
+    nmap('<Leader>SR', function()
+      vim.g.minisessions_disable = false
+      local original_write = MiniSessions.write
+      MiniSessions.write = function() end
+      MiniSessions.read()
+      MiniSessions.write = original_write
+    end, 'Restore saved session')
+
+    nmap('<Leader>SD', function()
+      vim.g.minisessions_disable = false
+      local ok, error = pcall(MiniSessions.delete, nil, { force = true })
+      if not ok then
+        util.error(error)
+      end
+    end, 'Delete saved session')
 
     -- mini.starter ----------------------------------------------------
     local starter = require('mini.starter')
@@ -139,8 +156,15 @@ return {
 
       items = {
         { section = 'Builtin actions', name = 'Edit new file', action = 'enew' },
-        { section = 'Builtin actions', name = 'Insert mode', action = function () vim.cmd.enew(); vim.cmd.startinsert() end },
-        { section = 'Builtin actions', name = 'Quit', action = 'quitall' },
+        { section = 'Builtin actions', name = 'Insert mode', action = 'enew | startinsert' },
+
+        function()
+          if util.tab_count() > 1 then
+            return { section = 'Builtin actions', name = 'Close tab', action = 'tabclose' }
+          else
+            return { section = 'Builtin actions', name = 'Quit', action = 'quitall' }
+          end
+        end,
 
         starter.sections.recent_files(9, true, function(path)
           local dir = vim.fn.fnamemodify(path, ':.:h')
@@ -163,6 +187,11 @@ return {
       },
 
       footer = function()
+        local tab_count = util.tab_count()
+        if tab_count > 1 then
+          return tab_count .. ' tabs open.'
+        end
+
         local stats = require('lazy').stats()
         return string.format(
           'Started in %dms, loaded %d/%d plugins.',

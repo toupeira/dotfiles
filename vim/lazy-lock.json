@@ -52,7 +52,6 @@
   "tmux-open": { "branch": "master", "commit": "763d0a852e6703ce0f5090a508330012a7e6788e" },
   "tmux-yank": { "branch": "master", "commit": "acfd36e4fcba99f8310a7dfb432111c242fe7392" },
   "tokyonight.nvim": { "branch": "main", "commit": "057ef5d260c1931f1dffd0f052c685dcd14100a3" },
-  "trouble.nvim": { "branch": "main", "commit": "85bedb7eb7fa331a2ccbecb9202d8abba64d37b3" },
   "vim-abolish": { "branch": "master", "commit": "dcbfe065297d31823561ba787f51056c147aa682" },
   "vim-characterize": { "branch": "master", "commit": "a8bffac6cead6b2869d939ecad06312b187a4c79" },
   "vim-css3-syntax": { "branch": "main", "commit": "adbc12f2ee0d7c5f9b049b40cb6b6858366584a5" },
@@ -75,6 +74,5 @@
   "vim-scriptease": { "branch": "master", "commit": "cdb5981d47ac98221a408ae2e7cae66524d9e872" },
   "vim-smoothie": { "branch": "master", "commit": "df1e324e9f3395c630c1c523d0555a01d2eb1b7e" },
   "vim-terraform": { "branch": "master", "commit": "8912ca1be3025a1c9fab193618f3b99517e01973" },
-  "vim-wordmotion": { "branch": "master", "commit": "81d9bd298376ab0dc465c85d55afa4cb8d5f47a1" },
   "yarepl.nvim": { "branch": "main", "commit": "ad82c1c38fc51d3ed88a487c3dfe6286d167ddfa" }
 }

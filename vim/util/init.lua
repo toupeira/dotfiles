@@ -239,9 +239,9 @@ util.buffer_count = function()
 end
 
 -- Close buffer, while keeping its window.
-util.close_buffer = function(buffer)
-  buffer = buffer or vim.fn.bufnr()
-  local window = vim.fn.bufwinid(buffer)
+util.close_buffer = function(bufnr_id)
+  bufnr = bufnr or vim.fn.bufnr()
+  local window = vim.fn.bufwinid(bufnr)
 
   if window > -1 then
     vim.api.nvim_win_call(window, function()
@@ -262,8 +262,8 @@ util.close_buffer = function(buffer)
     end)
   end
 
-  if buffer then
-    local ok, error = pcall(vim.cmd.bdelete, buffer)
+  if bufnr then
+    local ok, error = pcall(vim.cmd.bdelete, bufnr)
     if not ok then
       util.error(error)
     end
@@ -271,7 +271,9 @@ util.close_buffer = function(buffer)
 end
 
 -- Close window, except if it's the last normal one.
-util.close_window = function()
+util.close_window = function(winid)
+  winid = winid or 0
+
   if util.tab_count() > 1 and util.window_count() <= 1 then
     vim.cmd.tabclose()
     return
@@ -286,12 +288,13 @@ util.close_window = function()
     if windows <= 1 then return end
   end
 
-  vim.api.nvim_win_close(0, false)
+  vim.api.nvim_win_close(winid, false)
 end
 
 -- Close tab if there's only one unnamed buffer.
 util.close_tab = function()
-  if util.buffer_count() <= 1 and util.tab_count() > 1 and expand('%') == '' then
+  local name = expand('%')
+  if util.buffer_count() <= 1 and util.tab_count() > 1 and (name == '' or name:match('^ministarter:')) then
     vim.cmd.tabclose()
   end
 end

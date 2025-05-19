@@ -79,7 +79,3 @@ nmap('<LocalLeader>d', function()
 
   util.notify_toggle('Inline diagnostics:', not config.virtual_lines)
 end, 'Toggle inline diagnostics')
-
-nmap('<Leader>D', function() vim.diagnostic.setloclist({
-  open = true,
-}) end, 'Toggle diagnostics list')

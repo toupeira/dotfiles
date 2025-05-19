@@ -8,7 +8,6 @@ return {
   lazy_file { 'AndrewRadev/splitjoin.vim', submodules = false },
   lazy_file { 'tpope/vim-rails' },
 
-  very_lazy { 'chaoren/vim-wordmotion' },
   very_lazy { 'numToStr/Comment.nvim', config = true },
   very_lazy { 'tiagovla/scope.nvim', config = true },
   very_lazy { 'tpope/vim-abolish' },
@@ -50,8 +49,8 @@ return {
 
   { 'folke/flash.nvim',
     keys = {
-      { '<CR>', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Jump to position' },
-      { '<BS>', mode = { 'n', 'x', 'o' }, function() require('flash').treesitter() end, desc = 'Select Treesitter node' },
+      { '<Leader>j', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Jump to position' },
+      { '<Leader>J', mode = { 'n', 'x', 'o' }, function() require('flash').treesitter() end, desc = 'Select Treesitter node' },
       { 'r', mode = 'o', function() require('flash').remote() end, desc = 'Remote jump to position' },
       { 'R', mode = { 'o', 'x' }, function() require('flash').treesitter_search() end, desc = 'Remote select Treesitter node' },
     },
@@ -61,29 +60,6 @@ return {
         char = { enabled = false },
       },
     },
-  },
-
-  { 'folke/trouble.nvim',
-    keys = {
-      { '<Leader>D',
-        function()
-          local trouble = require('trouble')
-          if trouble.is_open() then
-            trouble.close()
-          elseif #vim.diagnostic.get(0) > 0 then
-            trouble.toggle({ mode = 'diagnostics', focus = true, filter = { buf = 0 }})
-          else
-            util.notify('Trouble:', { annote = 'No diagnostics', level = 'WARN' })
-          end
-        end,
-        desc = 'Toggle diagnostics',
-      },
-    },
-
-    opts = {
-      auto_close = true,
-      win = { size = 5 },
-    }
   },
 
   very_lazy { 'j-hui/fidget.nvim',
@@ -210,10 +186,6 @@ return {
     config = function()
       -- restore default mapping for <C-d>
       util.unmap({ 'i', 'c' }, '<C-d>')
-
-      -- use nvim-spider for word movements
-      imap('<M-f>', '<Esc>l<Cmd>lua require("spider").motion("w")<CR>i', { force = true })
-      imap('<M-b>', '<Esc><Cmd>lua require("spider").motion("b")<CR>i', { force = true })
     end
   },
 
