@@ -105,7 +105,7 @@ return {
     end
   },
 
-  { 'sphamba/smear-cursor.nvim',
+  very_lazy { 'sphamba/smear-cursor.nvim',
     keys = {
       { '<LocalLeader>t', function()
         local cursor = require('smear_cursor')
@@ -114,7 +114,7 @@ return {
       end, mode = { 'n' }, desc = 'Toggle cursor trail' },
     },
     opts = {
-      enabled = false,
+      enabled = true,
       smear_insert_mode = false,
       min_horizontal_distance_smear = 10,
       min_vertical_distance_smear = 2,

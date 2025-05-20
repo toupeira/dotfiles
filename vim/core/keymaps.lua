@@ -52,8 +52,8 @@ nmap('H', ':tabprevious', 'Go to previous tab')
 nmap('L', ':tabnext', 'Go to next tab')
 
 nmap('<Leader><C-t>', ':tabnew | MiniStarter', 'Open new tab')
-nmap('<Leader><C-w>', util.close_tab, 'Close current tab')
-nmap('<Leader><C-s>', ':tab split', 'Zoom current buffer to new tab')
+nmap('<Leader><C-n>', ':tab split', 'Open current window to new tab')
+nmap('<Leader><C-w>', ':tabclose', 'Close current tab')
 
 -- File editing --------------------------------------------------------
 

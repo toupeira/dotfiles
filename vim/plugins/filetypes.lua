@@ -9,7 +9,7 @@ return {
     ft = { 'css', 'scss', 'lua' },
     cmd = 'ColorizerToggle',
     keys = {
-      { '<LocalLeader>C', '<Cmd>ColorizerToggle<CR>', desc = 'Toggle color highlighting' },
+      { '<LocalLeader>c', '<Cmd>ColorizerToggle<CR>', desc = 'Toggle colorizer' },
     },
     opts = function(plugin)
       return {
@@ -73,10 +73,16 @@ return {
     ft = 'qf',
 
     opts = {
+      follow = { enabled = true },
+
       keys = {
         { '>', '<Cmd>lua require("quicker").expand({ before = 3, after = 3, add_to_existing = true })<CR>', desc = 'Expand quickfix context' },
         { '<', '<Cmd>lua require("quicker").collapse()<CR>', desc = 'Reduce quickfix context' },
       },
+
+      max_filename_width = function()
+        return math.floor(math.min(95, vim.o.columns / 3))
+      end,
     },
   },
 

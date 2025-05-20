@@ -40,7 +40,6 @@ return {
           hidden = 'hidden',
           vertical = 'up:60%',
           horizontal = 'right:50%',
-          title = false,
         },
       },
 
@@ -257,18 +256,18 @@ return {
     })
 
     map_fzf('<Leader>h', 'oldfiles', {
-      desc = 'history in current directory',
+      desc = 'history in project',
       args = merge(presets.title('History (Project)'), { cwd_only = true }),
     })
     map_fzf('<Leader>H', 'oldfiles', { desc = 'history' })
 
     -- search file contents
     map_fzf('<Leader>r', 'live_grep', {
-      desc = 'by regex in project',
+      desc = 'regex in project',
       args = function() return { query = expand('<cword>') } end,
     })
     map_fzf('<Leader>R', 'live_grep', {
-      desc = 'by regex in current directory',
+      desc = 'regex in current directory',
       args = function()
         return merge(presets.title('Grep (current directory)'), {
           cwd = expand('%:h'),

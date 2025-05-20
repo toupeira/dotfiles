@@ -73,12 +73,13 @@ return {
 
         { mode = 'n', keys = '<Leader><F1>', desc = '➜ help' },
         { mode = 'n', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
-        { mode = 'n', keys = '<Leader><Leader>L', desc = '➜ lsp' },
-        { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
+        { mode = 'n', keys = '<Leader>a', desc = '➜ ai' },
         { mode = 'n', keys = '<Leader>L', desc = '➜ lsp' },
-        -- { mode = 'n', keys = '<Leader>dR', desc = 'Smart rename' },
+        { mode = 'n', keys = '<Leader>S', desc = '➜ sessions' },
         { mode = 'n', keys = '<Leader>g', desc = '➜ git' },
         { mode = 'v', keys = '<Leader>g', desc = '➜ git' },
+        { mode = 'n', keys = '<Leader><Leader>L', desc = '➜ lsp' },
+        { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
       },
 
       window = {
@@ -145,6 +146,7 @@ return {
 
     -- mini.starter ----------------------------------------------------
     local starter = require('mini.starter')
+    local fzf = require('fzf-lua')
     local is_home = vim.fn.getcwd() == os.getenv('HOME')
 
     util.command('MiniStarter', 'lua MiniStarter.open()', 'Open start screen')
@@ -186,19 +188,18 @@ return {
 
         -- FZF shortcuts
         vim.tbl_map(function(item)
-          return {
+          return item and {
             section = 'Search',
             name = item.name,
-            action = function()
+            action = item.action or function()
               vim.fn.feedkeys(vim.g.mapleader .. item.key)
             end,
           }
         end, {
-          { name = 'Files',   key = 'f' },
-          { name = 'History', key = 'h' },
-          { name = 'Grep',    key = 'r' },
-          { name = 'Notes',   key = 'o' },
-          { name = 'Tags',    key = 'T' },
+          { name = 'Files',   action = fzf.files },
+          { name = 'Grep',    action = fzf.live_grep },
+          { name = 'History', key = is_home and 'H' or 'h' },
+          not is_home and { name = 'Tags', action = fzf.tags },
         })
       },
 
@@ -243,6 +244,9 @@ return {
         mappings     = { basic = false, move_with_alt = true },
         autocommands = { basic = true },
       })
+      util.unmap('n', '<LocalLeader>b')
+      util.unmap('n', '<LocalLeader>h')
+      util.unmap('n', '<LocalLeader>i')
 
       -- mini.bracketed ------------------------------------------------
       require('mini.bracketed').setup({
