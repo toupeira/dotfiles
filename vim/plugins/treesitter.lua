@@ -74,7 +74,7 @@ return {
 
     highlight = { enable = true },
     endwise = { enable = true },
-    indent = { enable = false },
+    indent = { enable = true },
     matchup = { enable = true },
 
     refactor = {

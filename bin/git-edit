@@ -1,5 +1,12 @@
 #!/bin/bash
 
+root=$( git root )
+if [ "$root" ]; then
+  cd "$root" || exit 1
+else
+  exit 1
+fi
+
 files=()
 dry_run=
 

@@ -173,11 +173,11 @@ return {
 
             ['@string.special.path.diff'] = { link = '@markup.strong' },
 
-            ['@keyword.gitcommit'] = { link = 'String' },
+            ['@keyword.gitcommit'] = { link = 'Statement' },
             ['@markup.heading.gitcommit'] = { link = 'Bold' },
             ['@markup.link.gitcommit'] = { fg = 'palette.green', style = 'bold' },
             ['@string.special.path.gitcommit'] = { link = '@markup.strong' },
-            ['@variable.parameter.gitcommit'] = { link = 'Statement' },
+            ['@variable.parameter.gitcommit'] = { link = 'String' },
 
             ['@keyword.git_rebase'] = { link = '@markup.strong' },
             ['@constant.git_rebase'] = { link = 'Statement' },

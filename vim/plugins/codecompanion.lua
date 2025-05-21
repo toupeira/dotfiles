@@ -1,12 +1,12 @@
 local util = require('util')
 
 return {
-	'olimorris/codecompanion.nvim',
-	dependencies = {
+  'olimorris/codecompanion.nvim',
+  dependencies = {
     'fidget.nvim',
-		'nvim-treesitter',
-		'nvim-lua/plenary.nvim',
-	},
+    'nvim-treesitter',
+    'nvim-lua/plenary.nvim',
+  },
 
   cmd = {
     'CodeCompanion',
@@ -20,50 +20,50 @@ return {
     { '<Leader>aa', '<Cmd>CodeCompanionActions<CR>', mode = { 'n', 'v' }, desc = 'AI: Show actions' },
   },
 
-	opts = {
-		adapters = {
-			openrouter = function()
-				return require('codecompanion.adapters').extend('openai_compatible', {
+  opts = {
+    adapters = {
+      openrouter = function()
+        return require('codecompanion.adapters').extend('openai_compatible', {
           formatted_name = 'OpenRouter',
-					env = {
-						url = 'https://openrouter.ai/api',
-						api_key = 'OPENROUTER_API_KEY',
-						chat_url = '/v1/chat/completions',
-					},
-					schema = {
-						model = {
-              default = 'anthropic/claude-3.7-sonnet',
+          env = {
+            url = 'https://openrouter.ai/api',
+            api_key = 'OPENROUTER_API_KEY',
+            chat_url = '/v1/chat/completions',
+          },
+          schema = {
+            model = {
+              default = 'google/gemini-2.5-pro-preview',
               -- default = 'google/gemini-2.5-flash-preview',
-              -- default = 'google/gemini-2.5-pro-preview',
-						},
-					},
-				})
-			end,
-		},
-		strategies = {
-      cmd    = { adapter = 'openrouter' },
-      inline = { adapter = 'gemini' },
-      chat   = { adapter = 'gemini',
-				keymaps = {
-					close = { modes = { n = 'Q', i = '<Nop>' }},
+              -- default = 'anthropic/claude-3.7-sonnet',
+            },
+          },
+        })
+      end,
+    },
+    strategies = {
+      cmd    = { adapter = 'anthropic' },
+      inline = { adapter = 'anthropic' },
+      chat   = { adapter = 'anthropic',
+        keymaps = {
+          close = { modes = { n = 'Q', i = '<Nop>' }},
           send =  { modes = { n = '<C-s>' }},
-					stop =  { modes = { n = 'gA' }},
-				},
-			},
-		},
+          stop =  { modes = { n = 'gA' }},
+        },
+      },
+    },
 
-		display = {
+    display = {
       action_palette = { provider = 'default' },
 
-			chat = {
-				window = {
-					layout = 'horizontal',
+      chat = {
+        window = {
+          layout = 'horizontal',
           width = 0.4,
           height = 0.3,
-				},
-			},
-		},
-	},
+        },
+      },
+    },
+  },
 
   config = function(_, opts)
     require('codecompanion').setup(opts)

@@ -317,7 +317,7 @@ return {
         if repeat_move.last_move then
           repeat_move.repeat_last_move_next()
         else
-          MiniJump.smart_jump()
+          MiniJump.jump()
         end
       end, { force = true }, 'Repeat jump')
 

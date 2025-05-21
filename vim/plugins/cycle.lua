@@ -62,6 +62,10 @@ return {
         ruby = { 'eruby', 'haml' },
       },
 
+      gitcommit = {
+        { 'feat', 'fix', 'chore', 'docs', 'revert' },
+      },
+
       gitrebase = {
         { 'pick', 'reword', 'edit', 'squash', 'fixup', 'drop' },
       },
