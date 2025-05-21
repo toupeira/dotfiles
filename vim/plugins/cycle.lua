@@ -39,6 +39,7 @@ return {
       { 'old', 'new' },
       { 'only', 'except' },
       { 'on', 'off' },
+      { 'plus', 'minus' },
       { 'public', 'private' },
       { 'read', 'write' },
       { 'show', 'hide' },

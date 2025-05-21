@@ -32,12 +32,12 @@ return {
       local gitsigns = require('gitsigns')
       local args = { buffer = bufnr, force = true }
 
-      local next_unstaged_hunk, prev_unstaged_hunk = util.make_repeatable(
+      local next_hunk, prev_hunk = util.make_repeatable(
         function()
           if vim.wo.diff then
             vim.cmd.normal({']c', bang = true})
           else
-            gitsigns.nav_hunk('next')
+            gitsigns.nav_hunk('next', { target = 'all' })
           end
         end,
 
@@ -45,24 +45,24 @@ return {
           if vim.wo.diff then
             vim.cmd.normal({'[c', bang = true})
           else
-            gitsigns.nav_hunk('prev')
+            gitsigns.nav_hunk('prev', { target = 'all' })
           end
         end
       )
 
-      local next_staged_hunk, prev_staged_hunk = util.make_repeatable(
+      local next_unstaged_hunk, prev_unstaged_hunk = util.make_repeatable(
         function()
-          gitsigns.nav_hunk('next', { target = 'staged' })
+          gitsigns.nav_hunk('next', { target = 'unstaged' })
         end,
         function()
-          gitsigns.nav_hunk('prev', { target = 'staged' })
+          gitsigns.nav_hunk('prev', { target = 'unstaged' })
         end
       )
 
-      nmap(']c', next_unstaged_hunk, args, 'Jump to next unstaged hunk')
-      nmap('[c', prev_unstaged_hunk, args, 'Jump to previous unstaged hunk')
-      nmap(']C', next_staged_hunk, args, 'Jump to next staged hunk')
-      nmap('[C', prev_staged_hunk, args, 'Jump to previous staged hunk')
+      nmap(']c', next_hunk, args, 'Jump to next hunk')
+      nmap('[c', prev_hunk, args, 'Jump to previous hunk')
+      nmap(']C', next_unstaged_hunk, args, 'Jump to next unstaged hunk')
+      nmap('[C', prev_unstaged_hunk, args, 'Jump to previous unstaged hunk')
 
       nmap('<Leader>ga', gitsigns.stage_hunk, args, 'Stage current hunk')
       nmap('<Leader>gR', gitsigns.reset_hunk, args, 'Reset current hunk')

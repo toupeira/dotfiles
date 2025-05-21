@@ -140,7 +140,7 @@ return {
 
   lazy_file { 'tpope/vim-projectionist',
     config = function()
-      local function alternate_create()
+      util.command('AC', function()
         local confirm = vim.o.confirm
         local ok, _ = pcall(function() vim.cmd.A() end)
 
@@ -149,9 +149,7 @@ return {
         end
 
         vim.o.confirm = confirm
-      end
-
-      vim.api.nvim_create_user_command('AC', alternate_create, {})
+      end, 'Create alternate file')
     end
   },
 

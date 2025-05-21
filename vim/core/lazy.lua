@@ -9,16 +9,22 @@ end
 
 vim.opt.rtp:prepend(LAZY_PATH)
 
+local lazy = require('lazy')
+
 require('lazy.core.handler.event').mappings.LazyFile = {
   id = 'LazyFile', event = { 'BufReadPre', 'BufNewFile' }
 }
 
-util.nmap('<Leader>@', function() require('lazy').home() end, 'Open Lazy')
+util.nmap('<Leader>@', lazy.home, 'Open Lazy')
 
-require('lazy').setup('plugins', {
+lazy.setup({
   root = LAZY_ROOT,
   change_detection = { notify = false },
   concurrency = math.max(4, vim.uv.available_parallelism()) * 8,
+
+  spec = {
+    import = 'plugins',
+  },
 
   install = {
     missing = not util.is_sudo,

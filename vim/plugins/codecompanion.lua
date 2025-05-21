@@ -18,7 +18,7 @@ return {
   keys = {
     { '<Leader>aa', ':AI<CR>', mode = { 'n', 'v' }, desc = 'AI: Toggle chat' },
     { '<Leader>aA', '<Cmd>CodeCompanionActions<CR>', mode = { 'n', 'v' }, desc = 'AI: Show actions' },
-    { '<Leader>aQ', 'lua require("codecompanion.strategies.inline"):stop()', desc = 'AI: Stop inline request' },
+    { '<Leader>aS', 'lua require("codecompanion.strategies.inline"):stop()', desc = 'AI: Stop inline request' },
   },
 
   opts = {
@@ -88,6 +88,13 @@ return {
           layout = 'horizontal',
           width = 0.4,
           height = 0.3,
+
+          opts = {
+            numberwidth = vim.o.numberwidth,
+            signcolumn = vim.o.signcolumn,
+            relativenumber = false,
+            winfixheight = true,
+          },
         },
       },
     },

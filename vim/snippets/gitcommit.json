@@ -1,5 +1,5 @@
 {
-  "ai-claude":       { "body": "Assisted-by: anthropic/claude-3.7-sonnet" },
-  "ai-gemini-flash": { "body": "Assisted-by: google/gemini-2.5-flash-preview" },
-  "ai-gemini-pro":   { "body": "Assisted-by: google/gemini-2.5-pro-preview" }
+  "ai-claude":       { "body": "Co-authored-by: anthropic/claude-3.7-sonnet" },
+  "ai-gemini-flash": { "body": "Co-authored-by: google/gemini-2.5-flash-preview" },
+  "ai-gemini-pro":   { "body": "Co-authored-by: google/gemini-2.5-pro-preview" }
 }

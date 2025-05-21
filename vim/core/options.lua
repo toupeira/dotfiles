@@ -50,8 +50,6 @@ vim.opt.shortmess:append { a = true, A = true, c = true, C = true }
 vim.o.cursorline = true
 vim.o.cursorlineopt = 'number'
 
-vim.o.winheight = 3
-vim.o.winminheight = 3
 vim.o.splitbelow = true
 vim.o.splitright = true
 -- vim.o.splitkeep = 'screen'

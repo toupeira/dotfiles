@@ -26,7 +26,7 @@ return {
 
       ['<C-Space>'] = {},
       ['<C-n>'] = { 'show', 'select_next', 'fallback_to_mappings' },
-      ['<C-k>'] = { 'show_documentation', 'hide_documentation' },
+      ['<C-_>'] = { 'show_documentation', 'hide_documentation' },
       ['<M-b>'] = { 'scroll_documentation_up', 'fallback' },
       ['<M-f>'] = { 'scroll_documentation_down', 'fallback' },
       ['<M-e>'] = { function(cmp) cmp.scroll_documentation_down(1) end, 'fallback' },

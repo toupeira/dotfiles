@@ -192,22 +192,6 @@ util.alias_command = function(aliases)
   end
 end
 
--- Set a {hl} group
-util.hl_set = function(hl, opts)
-  opts = opts or {}
-  vim.api.nvim_set_hl(0, hl, opts)
-end
-
--- Clear a {hl} group
-util.hl_clear = function(hl)
-  vim.api.nvim_set_hl(0, hl, {})
-end
-
--- Link a {hl} group to {link}
-util.hl_link = function(hl, link)
-  vim.api.nvim_set_hl(0, hl, { link = link })
-end
-
 -- Return a hex color for the {key} property
 -- of the {name} highlighting group.
 util.get_color = function(name, key)
@@ -220,6 +204,32 @@ util.get_color = function(name, key)
 end
 
 -- UI helpers ----------------------------------------------------------
+
+-- Show a {message} with an optional {hl} group.
+util.echo = function(message, hl)
+  return vim.api.nvim_echo({{ message, hl }}, false, {})
+end
+
+-- Show an error {message}.
+util.error = function(message)
+  message = message:gsub('^Vim:E[0-9]*: ', '')
+  return util.echo(message, 'ErrorMsg')
+end
+
+-- Show a notification {message} with optional {options}.
+util.notify = function(message, opts)
+  opts = util.merge({ key = message, level = 'INFO' }, opts)
+  local level = vim.log.levels[opts.level]
+  return vim.notify(message, level, opts)
+end
+
+-- Show a notification {message} for a toggle setting.
+util.notify_toggle = function(message, enabled)
+  return util.notify(message, {
+    annote = enabled and ' Enabled ' or ' Disabled',
+    level = enabled and 'INFO' or 'WARN',
+  })
+end
 
 -- Return the number of tabs.
 util.tab_count = function()
@@ -298,32 +308,6 @@ util.close_tab = function()
   if util.buffer_count() <= 1 and util.tab_count() > 1 and (name == '' or name:match('^ministarter:')) then
     vim.cmd.tabclose()
   end
-end
-
--- Show a {message} with an optional {hl} group.
-util.echo = function(message, hl)
-  return vim.api.nvim_echo({{ message, hl }}, false, {})
-end
-
--- Show an error {message}.
-util.error = function(message)
-  message = message:gsub('^Vim:E[0-9]*: ', '')
-  return util.echo(message, 'ErrorMsg')
-end
-
--- Show a notification {message} with optional {options}.
-util.notify = function(message, opts)
-  opts = util.merge({ key = message, level = 'INFO' }, opts)
-  local level = vim.log.levels[opts.level]
-  return vim.notify(message, level, opts)
-end
-
--- Show a notification {message} for a toggle setting.
-util.notify_toggle = function(message, enabled)
-  return util.notify(message, {
-    annote = enabled and ' Enabled ' or ' Disabled',
-    level = enabled and 'INFO' or 'WARN',
-  })
 end
 
 -- Return the path of the current buffer, starting with either

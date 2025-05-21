@@ -232,6 +232,7 @@ return {
 
             MiniJump = { link = 'Visual' },
             MiniStarterFooter = { link = 'DiagnosticInfo' },
+            MiniTrailspace = { bg = 'bg2' },
 
             NeogitCursorLine = { link = 'MsgArea' },
             NeogitChangeModified = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },

@@ -286,21 +286,14 @@ return {
       end
 
       -- mini.diff -----------------------------------------------------
-      require('mini.diff').setup()
+      local diff = require('mini.diff')
 
-      local original_enable = MiniDiff.enable
-      MiniDiff.enable = function(...)
-        vim.g.minidiff_disable = false
-        return original_enable(buf_id)
+      -- disable all mappings and default diffing
+      for key, _ in pairs(diff.config.mappings) do
+        diff.config.mappings[key] = ''
       end
 
-      local original_disable = MiniDiff.disable
-      MiniDiff.disable = function(...)
-        vim.g.minidiff_disable = true
-        return original_disable(...)
-      end
-
-      MiniDiff.disable()
+      diff.setup({ source = diff.gen_source.none() })
 
       -- mini.jump -----------------------------------------------------
       require('mini.jump').setup()
@@ -398,7 +391,6 @@ return {
           MiniTrailspace.trim()
         end
       end, 'Trim trailing whitespace')
-      util.hl_set('MiniTrailspace', { bg = util.get_color('Pmenu', 'bg') })
     end)
   end
 }
