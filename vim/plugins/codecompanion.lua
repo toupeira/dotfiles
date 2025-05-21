@@ -16,12 +16,39 @@ return {
   },
 
   keys = {
-    { '<Leader>ai', ':AI<CR>', mode = { 'n', 'v' }, desc = 'AI: Toggle chat' },
-    { '<Leader>aa', '<Cmd>CodeCompanionActions<CR>', mode = { 'n', 'v' }, desc = 'AI: Show actions' },
+    { '<Leader>aa', ':AI<CR>', mode = { 'n', 'v' }, desc = 'AI: Toggle chat' },
+    { '<Leader>aA', '<Cmd>CodeCompanionActions<CR>', mode = { 'n', 'v' }, desc = 'AI: Show actions' },
+    { '<Leader>aQ', 'lua require("codecompanion.strategies.inline"):stop()', desc = 'AI: Stop inline request' },
   },
 
   opts = {
     adapters = {
+      opts = {
+        show_defaults = false,
+        show_model_choices = true,
+      },
+
+      anthropic = function()
+        return require('codecompanion.adapters').extend('anthropic', {
+          schema = {
+            model = {
+              default = 'claude-3-5-haiku-latest',
+              -- default = 'claude-3-7-sonnet-latest',
+            },
+          },
+        })
+      end,
+
+      gemini = function()
+        return require('codecompanion.adapters').extend('gemini', {
+          schema = {
+            model = {
+              default = 'gemini-2.5-flash-preview-04-17',
+            },
+          },
+        })
+      end,
+
       openrouter = function()
         return require('codecompanion.adapters').extend('openai_compatible', {
           formatted_name = 'OpenRouter',
@@ -40,6 +67,7 @@ return {
         })
       end,
     },
+
     strategies = {
       cmd    = { adapter = 'anthropic' },
       inline = { adapter = 'anthropic' },
@@ -83,28 +111,38 @@ return {
       local args = #opts.args > 0 and opts.args or nil
 
       if opts.bang then
+        -- called with a bang: generate a Vim command
         vim.cmd.CodeCompanionCmd({ args = { args }})
       elseif opts.range == 0 then
+        -- called normally: toggle the chat
         vim.cmd.echo()
         vim.cmd.CodeCompanionChat({ args = { args or 'Toggle' }})
       else
+        -- called with a selection: open the inline assistant
         vim.cmd.echo()
         vim.cmd.CodeCompanion({
           args = { args },
           range = { opts.line1, opts.line2 },
         })
       end
-    end, { nargs = '*', range = true, bang = true }, 'AI: Toggle chat')
+    end, {
+      desc = 'AI: Toggle chat',
+      nargs = '*',
+      range = true,
+      bang = true,
+      complete = function(arg_lead, cmdline, _)
+        local commands = require('codecompanion.commands')
+        return commands[1].opts.complete(arg_lead, cmdline:gsub('AI', 'CodeCompanion', 1))
+      end
+    })
 
     util.alias_command({
       ai = 'AI', aI = 'AI', Ai = 'AI',
     })
 
-    util.nmap('<Leader>aA', function()
-      require('codecompanion.strategies.inline'):stop()
-    end, 'AI: Cancel request')
-
-    util.autocmd('FileType', 'codecompanion', function ()
+    -- hide the chat with 'q', close it with 'Q'
+    util.autocmd('FileType', 'codecompanion', function (event)
+      MiniClue.enable_buf_triggers(event.buf)
       util.nmap('q', '<Cmd>CodeCompanionChat Toggle<CR>', 'AI: Hide chat', { buffer = true, force = true })
     end)
   end

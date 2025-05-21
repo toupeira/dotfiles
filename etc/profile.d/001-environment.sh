@@ -1,7 +1,11 @@
 #!/bin/bash
 
 export PATH="/usr/sbin:/slack/dotfiles/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
-[ -d ~/bin ] && export PATH="$PATH":~/bin
+
+for dir in ~/bin /slack/dotfiles/packages/mason/bin; do
+  [ -d "$dir" ] && export PATH="$PATH:$dir"
+done
+unset dir
 
 # terminal apps
 export TERMINAL_EMULATOR="x-terminal-emulator"

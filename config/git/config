@@ -16,6 +16,7 @@
   statusHints = false
   commitBeforeMerge = false
   resolveConflict = false
+  waitingForEditor = false
 
 [user]
   name = Markus Koller

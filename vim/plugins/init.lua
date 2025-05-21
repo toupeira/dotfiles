@@ -114,7 +114,7 @@ return {
       end, mode = { 'n' }, desc = 'Toggle cursor trail' },
     },
     opts = {
-      enabled = true,
+      enabled = false,
       smear_insert_mode = false,
       min_horizontal_distance_smear = 10,
       min_vertical_distance_smear = 2,

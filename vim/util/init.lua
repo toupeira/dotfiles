@@ -172,6 +172,7 @@ end
 util.command = function(name, command, opts, desc)
   if type(opts) == 'string' then opts = { desc = opts } end
   if type(desc) == 'string' then opts = util.merge(opts, { desc = desc }) end
+  if type(desc) == 'table'  then opts = util.merge(opts, desc) end
 
   return vim.api.nvim_create_user_command(name, command, opts or {})
 end
