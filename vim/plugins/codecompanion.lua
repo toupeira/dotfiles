@@ -6,6 +6,23 @@ return {
     'fidget.nvim',
     'nvim-treesitter',
     'nvim-lua/plenary.nvim',
+
+    'ravitemer/codecompanion-history.nvim',
+
+    {
+      'ravitemer/mcphub.nvim',
+      build = 'bundled_build.lua',
+      cmd = 'MCPHub',
+      keys = {
+        { '<Leader>$', '<Cmd>MCPHub<CR>', desc = 'Open MCB Hub' },
+      },
+
+      opts = {
+        shutdown_delay = 0,
+        use_bundled_binary = true,
+        auto_toggle_mcp_servers = false,
+      },
+    },
   },
 
   cmd = {
@@ -13,12 +30,14 @@ return {
     'CodeCompanionActions',
     'CodeCompanionChat',
     'CodeCompanionCmd',
+    'CodeCompanionHistory',
   },
 
   keys = {
     { '<Leader>aa', ':AI<CR>', mode = { 'n', 'v' }, desc = 'AI: Toggle chat' },
     { '<Leader>aA', '<Cmd>CodeCompanionActions<CR>', mode = { 'n', 'v' }, desc = 'AI: Show actions' },
     { '<Leader>aS', 'lua require("codecompanion.strategies.inline"):stop()', desc = 'AI: Stop inline request' },
+    { '<Leader>ah', '<Cmd>CodeCompanionHistory<CR>', desc = 'AI: Show chat history' },
   },
 
   opts = {
@@ -95,6 +114,26 @@ return {
             relativenumber = false,
             winfixheight = true,
           },
+        },
+      },
+    },
+
+    extensions = {
+      history = {
+        enabled = true,
+        opts = {
+          auto_save = true,
+          save_chat_keymap = 'gS',
+          picker = 'fzf-lua',
+        },
+      },
+
+      mcphub = {
+        callback = 'mcphub.extensions.codecompanion',
+        opts = {
+          show_result_in_chat = true,
+          make_vars = true,
+          make_slash_commands = true,
         },
       },
     },

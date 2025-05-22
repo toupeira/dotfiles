@@ -386,7 +386,7 @@ return {
 
       -- mini.trailspace -----------------------------------------------
       require('mini.trailspace').setup()
-      nmap('<Leader>$', function()
+      nmap('<Leader>W', function()
         if vim.bo.modifiable then
           MiniTrailspace.trim()
         end

@@ -89,10 +89,10 @@ return {
       end, { expr = true, desc = desc })
     end
 
-    map_toggle({ 'n', 't' }, '<M-z>', 'bash', 'Toggle shell terminal')
-    map_toggle({ 'n', 't' }, '<M-a>', 'aider', 'Aider: Toggle terminal')
+    map_toggle({ 'n', 't' }, '<M-z>', 'bash', 'Toggle terminal')
+    map_toggle({ 'n', 't' }, '<M-a>', 'aider', 'Aider: Toggle window')
 
-    nmap('<Leader>!', '<M-z>', { remap = true })
+    nmap('<Leader>!', '<M-z>', 'Toggle terminal', { remap = true })
 
     nmap('<Leader>ab', function() vim.cmd.AiderExec('/add', vim.fn.expand('%:p')) end, { desc = 'Aider: Add current file' })
     nmap('<Leader>ad', function() vim.cmd.AiderExec('/drop', vim.fn.expand('%:p')) end, { desc = 'Aider: Drop current file' })

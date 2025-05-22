@@ -59,7 +59,7 @@ return {
 
       local notify = vim.notify
       vim.notify = function(msg, level, opts)
-        if level >= vim.log.levels.ERROR then
+        if type(level) == 'number' and level >= vim.log.levels.ERROR then
           return notify(msg, level, opts)
         else
           return fidget.notify(msg, level, opts)
