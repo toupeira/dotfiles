@@ -208,6 +208,10 @@ return {
             rubySymbol = { link = 'Special' },
 
             -- plugins
+            CodeCompanionHtmlBuffer = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },
+            CodeCompanionHtmlTool = { fg = 'diag.info', bg = 'diag_bg.info', style = 'bold' },
+            CodeCompanionHtmlVariable = { fg = 'diag.hint', bg = 'diag_bg.hint', style = 'bold' },
+
             CmpItemMenu = { link = 'Comment' },
             CmpItemKindSnippet = { link = 'Function' },
 

@@ -220,7 +220,7 @@ end
 util.notify = function(message, opts)
   opts = util.merge({ key = message, level = 'INFO' }, opts)
   local level = vim.log.levels[opts.level]
-  return vim.notify(message, level, opts)
+  return require('fidget').notify(message, level, opts)
 end
 
 -- Show a notification {message} for a toggle setting.
@@ -310,6 +310,33 @@ util.close_tab = function()
   end
 end
 
+-- Return the window title for the current buffer
+util.window_title = function()
+  local filename = expand('%:t')
+  local filetype = vim.bo.filetype
+  local buftype = vim.bo.buftype
+
+  -- don't show a title on startup
+  if filetype == 'ministarter' or (vim.bo.bufhidden == 'hide' and filename == 'filetype-match-scratch') then
+    return ''
+  end
+
+  -- use filetype as title for non-file buffers
+  if filetype ~= '' and (buftype == 'nofile' or buftype == 'terminal' or filetype == 'help') then
+    return '@' .. vim.fn.tolower(filetype)
+  end
+
+  local title = filename
+  if vim.bo.modified then
+    title = title .. ' ●'
+  end
+  if vim.bo.readonly then
+    title = title .. ' 󰌾 '
+  end
+
+  return title
+end
+
 -- Return the path of the current buffer, starting with either
 -- the basename of a Git repository, or the absolute path for
 -- other directories ('repository/dir', '/etc/dir', '~/dir').
@@ -320,10 +347,7 @@ end
 util.project_path = function(max_length, max_depth)
   local path = expand('%:p:h')
     :gsub('/%.git$', '')
-    :gsub('^term://(.*)//[0-9]+.*', '%1')
-    :gsub('^ministarter:.*', '')
-    :gsub('^fugitive:.*', '')
-    :gsub('^diffview:.*', '')
+    :gsub('^[a-z]*://.*', '')
 
   local _, git_dir = pcall(vim.fn.FugitiveGitDir)
   local root, name

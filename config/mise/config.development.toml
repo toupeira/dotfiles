@@ -1,14 +1,12 @@
 [tools]
 ruby = "3.4.4"
-node = "24.0.2"
+node = "24.1.0"
 
-uv = "0.7.5"
-"pipx:aider-chat" = { version = "0.83.1", uvx_args = "--python python3.12" }
+uv = "0.7.8"
+"pipx:aider-chat" = { version = "0.83.2", uvx_args = "--python python3.12" }
 
 "ubi:BurntSushi/xsv" = "0.13.0"
 "ubi:dlvhdr/diffnav" = "0.3.1"
-
-"npm:@openai/codex" = "0.1.2505172129"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]

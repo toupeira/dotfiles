@@ -5,13 +5,6 @@ local nmap = util.nmap
 return {
   'milanglacier/yarepl.nvim',
   cmd = {
-    'AiderExec',
-    'AiderSendDrop',
-    'AiderSendLs',
-    'AiderSendNo',
-    'AiderSendReset',
-    'AiderSendYes',
-    'AiderSetPrefix',
     'REPLClose',
     'REPLExec',
     'REPLFocus',
@@ -90,14 +83,7 @@ return {
     end
 
     map_toggle({ 'n', 't' }, '<M-z>', 'bash', 'Toggle terminal')
-    map_toggle({ 'n', 't' }, '<M-a>', 'aider', 'Aider: Toggle window')
-
     nmap('<Leader>!', '<M-z>', 'Toggle terminal', { remap = true })
-
-    nmap('<Leader>ab', function() vim.cmd.AiderExec('/add', vim.fn.expand('%:p')) end, { desc = 'Aider: Add current file' })
-    nmap('<Leader>ad', function() vim.cmd.AiderExec('/drop', vim.fn.expand('%:p')) end, { desc = 'Aider: Drop current file' })
-    nmap('<Leader>al', ':AiderSendLs', { desc = 'Aider: List files' })
-    nmap('<Leader>aD', ':AiderSendDrop', { desc = 'Aider: Drop all files' })
 
     util.autocmd({ 'BufWinEnter', 'WinEnter' }, '#*#*', 'startinsert!')
   end,

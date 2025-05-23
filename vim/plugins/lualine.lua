@@ -67,8 +67,7 @@ return {
         },
 
         lualine_c = {
-          {
-            'filetype',
+          { 'filetype',
             icon_only = true,
             separator = '',
             padding = { left = 1, right = 0 },
@@ -101,6 +100,9 @@ return {
         },
 
         lualine_x = {
+          { 'codecompanion-custom',
+            color = { fg = magenta, gui = 'bold' },
+          },
           { 'diagnostics',
             sources = { 'nvim_diagnostic' },
             symbols = { error = '● ', warn = '● ', info = '● ', hint = '● ' },
@@ -111,6 +113,9 @@ return {
               return util.project_path(max)
             end,
             icon = '',
+            cond = function()
+              return vim.bo.buftype == '' or vim.bo.filetype == 'ministarter'
+            end,
           },
           { function()
               return vim.o.fileencoding == 'utf-8' and '' or vim.o.fileencoding
@@ -136,7 +141,7 @@ return {
                 table.insert(names, client.name)
               end
               return util.join(names, '|')
-            end
+            end,
           },
         },
 
@@ -159,7 +164,12 @@ return {
               return ':' .. col .. (col < 10 and ' ' or '')
             end,
             separator = '',
-            padding = { left = 0, right = 1 },
+            padding = 0,
+          },
+          { '%P',
+            type = 'stl',
+            separator = '',
+            color = { gui = 'NONE' },
           },
           { 'selectioncount',
             icon = '󱄽',

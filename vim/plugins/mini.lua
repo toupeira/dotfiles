@@ -24,6 +24,7 @@ return {
         -- Leader triggers
         { mode = 'n', keys = '<Leader>' },
         { mode = 'v', keys = '<Leader>' },
+        { mode = 'n', keys = '<Leader>!' },
         { mode = 'n', keys = '<LocalLeader>' },
         { mode = 'v', keys = '<LocalLeader>' },
         { mode = 'n', keys = '<F1>' },
@@ -299,7 +300,9 @@ return {
         diff.config.mappings[key] = ''
       end
 
-      diff.setup({ source = diff.gen_source.none() })
+      diff.setup({
+        source = diff.gen_source.none(),
+      })
 
       -- mini.jump -----------------------------------------------------
       require('mini.jump').setup()

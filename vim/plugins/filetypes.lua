@@ -43,6 +43,20 @@ return {
     ft = { 'markdown', 'codecompanion' },
     cmd = { 'Markview' },
     opts = function(plugin)
+      local function wrap_tag(icon, hl_group)
+        return {
+          on_opening_tag = {
+            conceal = '',
+            virt_text_pos = 'inline',
+            virt_text = {
+              { icon .. ' ', hl_group },
+            },
+          },
+          on_node = { hl_group = hl_group },
+          on_closing_tag = { conceal = '' },
+        }
+      end
+
       return {
         preview = {
           filetypes = plugin.ft,
@@ -67,6 +81,18 @@ return {
           checkboxes = {
             checked = { text = '󰄲', hl = 'Keyword', scope_hl = 'MarkviewCheckboxStriked' },
             unchecked = { text = '󰄱', hl = 'Keyword', scope_hl = '' },
+          },
+        },
+
+        html = {
+          container_elements = {
+            ['^buf$']     = wrap_tag('', 'CodeCompanionHtmlBuffer'),
+            ['^tool$']    = wrap_tag('', 'CodeCompanionHtmlTool'),
+            ['^help$']    = wrap_tag('󰘥', 'CodeCompanionHtmlVariable'),
+            ['^image$']   = wrap_tag('', 'CodeCompanionHtmlVariable'),
+            ['^symbols$'] = wrap_tag('', 'CodeCompanionHtmlVariable'),
+            ['^url$']     = wrap_tag('󰖟', 'CodeCompanionHtmlVariable'),
+            ['^var$']     = wrap_tag('', 'CodeCompanionHtmlVariable'),
           },
         },
       }

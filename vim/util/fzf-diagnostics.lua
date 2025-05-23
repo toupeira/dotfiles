@@ -1,4 +1,5 @@
 -- copied from /slack/dotfiles/packages/lazy/fzf-lua/lua/fzf-lua/providers/diagnostic.lua
+-- TODO: submit upstream
 local uv = vim.uv or vim.loop
 local core = require "fzf-lua.core"
 local utils = require "fzf-lua.utils"

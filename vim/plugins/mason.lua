@@ -34,7 +34,7 @@ return {
       check_outdated_packages_on_open = false,
       border = 'rounded',
       width = 0.9,
-      height = 0.8,
+      height = 0.9,
     },
   }
 }

@@ -21,6 +21,10 @@ return {
         shutdown_delay = 0,
         use_bundled_binary = true,
         auto_toggle_mcp_servers = false,
+
+        ui = {
+          window = { width = 0.9, height = 0.9 },
+        },
       },
     },
   },
@@ -34,9 +38,10 @@ return {
   },
 
   keys = {
-    { '<Leader>aa', ':AI<CR>', mode = { 'n', 'v' }, desc = 'AI: Toggle chat' },
-    { '<Leader>aA', '<Cmd>CodeCompanionActions<CR>', mode = { 'n', 'v' }, desc = 'AI: Show actions' },
-    { '<Leader>aS', 'lua require("codecompanion.strategies.inline"):stop()', desc = 'AI: Stop inline request' },
+    { '<M-a>', '<Cmd>AI<CR>', mode = { 'n', 'v' }, desc = 'AI: Toggle chat' },
+    { '<Leader>an', '<Cmd>CodeCompanionChat<CR>', desc = 'AI: Start a new chat' },
+    { '<Leader>aa', '<Cmd>CodeCompanionActions<CR>', mode = { 'n', 'v' }, desc = 'AI: Show actions' },
+    { '<Leader>aS', '<Cmd>lua require("codecompanion.strategies.inline"):stop()<CR>', desc = 'AI: Stop inline request' },
     { '<Leader>ah', '<Cmd>CodeCompanionHistory<CR>', desc = 'AI: Show chat history' },
   },
 
@@ -65,8 +70,9 @@ return {
         })
       end,
 
-      anthropic = function()
+      claude = function()
         return require('codecompanion.adapters').extend('anthropic', {
+          formatted_name = 'Claude',
           schema = {
             model = {
               default = 'claude-3-5-haiku-latest',
@@ -88,12 +94,19 @@ return {
     },
 
     strategies = {
-      cmd    = { adapter = 'anthropic' },
-      inline = { adapter = 'anthropic' },
-      chat   = { adapter = 'anthropic',
+      cmd    = { adapter = 'claude' },
+      inline = { adapter = 'claude' },
+      chat   = { adapter = 'claude',
+        roles = {
+          llm = function(adapter)
+            return 'Response from ' .. adapter.formatted_name .. ' 📌'
+          end,
+          user = 'Me ⚗️',
+        },
+
         keymaps = {
           close = { modes = { n = 'Q', i = '<Nop>' }},
-          stop =  { modes = { n = 'gA' }},
+          stop =  { modes = { n = '<Leader>aS' }},
           send =  {
             modes = { n = '<C-s>' },
             callback = function(chat)
@@ -112,16 +125,17 @@ return {
       action_palette = { provider = 'default' },
 
       chat = {
+        intro_message = 'Press ? for options',
+
         window = {
           layout = 'horizontal',
           width = 0.4,
-          height = 0.3,
+          height = 0.4,
 
           opts = {
             numberwidth = vim.o.numberwidth,
             signcolumn = vim.o.signcolumn,
             relativenumber = false,
-            winfixheight = true,
           },
         },
       },
@@ -132,6 +146,7 @@ return {
         enabled = true,
         opts = {
           auto_save = true,
+          expiration_days = 30,
           save_chat_keymap = 'gS',
           picker = 'fzf-lua',
         },
@@ -157,8 +172,6 @@ return {
         cmd.opts.provider = 'fzf_lua'
       end
     end
-
-    require('util.fidget-codecompanion'):init()
   end,
 
   init = function()

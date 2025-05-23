@@ -56,7 +56,7 @@ bindings = [
 ]
 
 [selection]
-semantic_escape_chars = ",│`|\"' (){}<>[]\t"
+semantic_escape_chars = ",│┃|`\"' (){}<>[]\t"
 
 [terminal.shell]
 program = 'bash'

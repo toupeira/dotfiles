@@ -37,12 +37,17 @@ if os.getenv('XDG_SESSION_TYPE') ~= 'tty' or os.getenv('SSH_CONNECTION') then
 
   if not util.is_headless then
     vim.o.title = true
-    vim.o.titlestring = "  %t%{&modified ? ' ●' : ''}%{&readonly ? ' 󰌾 ' : ''} [%{v:lua.require('util').project_path()}]"
+    vim.o.titlestring = "  %{v:lua.require('util').window_title()} [%{v:lua.require('util').project_path()}]"
   end
 end
 
 vim.o.updatetime = 250
-vim.opt.shortmess:append { a = true, A = true, c = true, C = true }
+vim.opt.shortmess:append {
+  a = true,
+  A = true,
+  c = true,
+  C = true,
+}
 
 vim.o.cursorline = true
 vim.o.cursorlineopt = 'number'

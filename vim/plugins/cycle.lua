@@ -72,26 +72,26 @@ return {
       },
 
       javascript = {
-        { 'else', 'else if' },
+        { 'if', 'else', 'else if' },
       },
 
       lua = {
-        { 'else', 'elseif' },
+        { 'if', 'else', 'elseif' },
       },
 
       ruby = {
+        { 'if', 'unless' },
+        { 'else', 'elsif' },
+        { 'class', 'module' },
         { 'allow', 'expect' },
         { 'build', 'create' },
-        { 'class', 'module' },
         { 'delete', 'destroy' },
-        { 'else', 'elsif' },
         { 'get', 'post', 'put', 'patch' },
-        { 'if', 'unless' },
         { 'present', 'blank' },
       },
 
       sh = {
-        { 'else', 'elif' },
+        { 'if', 'else', 'elif' },
       },
     },
   },
