@@ -29,9 +29,6 @@ vim.filetype.add({
 -- Disable maps from filetype plugins
 vim.g.no_plugin_maps = 1
 
--- Set a default commentstring
-vim.o.commentstring = '# %s'
-
 -- Interface -----------------------------------------------------------
 
 if os.getenv('XDG_SESSION_TYPE') ~= 'tty' or os.getenv('SSH_CONNECTION') then

@@ -58,6 +58,9 @@ return {
         { mode = 'n', keys = ']' },
         { mode = 'n', keys = '[' },
 
+        -- mini.comment
+        { mode = 'n', keys = 'gc' },
+
         -- mini.surround
         { mode = 'n', keys = 'S' },
         { mode = 'v', keys = 'S' },
@@ -284,6 +287,9 @@ return {
           end
         end
       end
+
+      -- mini.comment --------------------------------------------------
+      require('mini.comment').setup()
 
       -- mini.diff -----------------------------------------------------
       local diff = require('mini.diff')

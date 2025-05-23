@@ -6,7 +6,7 @@ local autocmd = util.autocmd
 local filetypes = {
   ['crontab']  = { 'nowritebackup' },
   ['css,scss'] = { 'iskeyword+=%' },
-  ['dosini']   = { 'commentstring=#\\ %s', 'foldmethod=syntax' },
+  ['dosini']   = { 'foldmethod=syntax' },
   ['gdscript'] = { 'expandtab' },
   ['help']     = { 'buflisted' },
   ['iss']      = { 'commentstring=;\\ %s' },
