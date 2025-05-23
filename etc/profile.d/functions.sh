@@ -167,9 +167,9 @@ function dotfiles {
       path="$dotfiles"
     elif [ -d "$dotfiles/$2" ]; then
       path="$dotfiles/$2"
-    elif path=$( dt list mise "$2" | head -1 ) && [ "$path" ]; then
+    elif path=$( dotfiles list mise "$2" | head -1 ) && [ "$path" ]; then
       path="$dotfiles/packages/mise/installs/$path/latest"
-    elif path=$( dt list lazy "$2" | head -1 ) && [ "$path" ]; then
+    elif path=$( dotfiles list lazy "$2" | head -1 ) && [ "$path" ]; then
       path="$dotfiles/packages/lazy/$path"
     fi
 

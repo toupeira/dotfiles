@@ -1,5 +1,5 @@
 cache-prompts: true
-watch-files: true
+# watch-files: true
 
 dark-mode: true
 code-theme: monokai

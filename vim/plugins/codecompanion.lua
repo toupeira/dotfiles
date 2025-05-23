@@ -47,6 +47,24 @@ return {
         show_model_choices = true,
       },
 
+      openrouter = function()
+        return require('codecompanion.adapters').extend('openai_compatible', {
+          formatted_name = 'OpenRouter',
+          env = {
+            url = 'https://openrouter.ai/api',
+            api_key = 'OPENROUTER_API_KEY',
+            chat_url = '/v1/chat/completions',
+          },
+          schema = {
+            model = {
+              default = 'google/gemini-2.5-pro-preview',
+              -- default = 'google/gemini-2.5-flash-preview',
+              -- default = 'anthropic/claude-3.7-sonnet',
+            },
+          },
+        })
+      end,
+
       anthropic = function()
         return require('codecompanion.adapters').extend('anthropic', {
           schema = {
@@ -67,24 +85,6 @@ return {
           },
         })
       end,
-
-      openrouter = function()
-        return require('codecompanion.adapters').extend('openai_compatible', {
-          formatted_name = 'OpenRouter',
-          env = {
-            url = 'https://openrouter.ai/api',
-            api_key = 'OPENROUTER_API_KEY',
-            chat_url = '/v1/chat/completions',
-          },
-          schema = {
-            model = {
-              default = 'google/gemini-2.5-pro-preview',
-              -- default = 'google/gemini-2.5-flash-preview',
-              -- default = 'anthropic/claude-3.7-sonnet',
-            },
-          },
-        })
-      end,
     },
 
     strategies = {
@@ -93,8 +93,17 @@ return {
       chat   = { adapter = 'anthropic',
         keymaps = {
           close = { modes = { n = 'Q', i = '<Nop>' }},
-          send =  { modes = { n = '<C-s>' }},
           stop =  { modes = { n = 'gA' }},
+          send =  {
+            modes = { n = '<C-s>' },
+            callback = function(chat)
+              if vim.fn.mode() == 'i' then
+                vim.cmd.stopinsert()
+              end
+
+              require('codecompanion.strategies.chat.keymaps').send.callback(chat)
+            end
+          },
         },
       },
     },

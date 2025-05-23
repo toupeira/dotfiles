@@ -914,7 +914,7 @@ function run {
             );;
           mise)
             INSTALLED_PACKAGES[mise]=$(
-              mise ls --no-header | awk '{ print $1 }'
+              find "$DOTFILES/packages/mise/installs" -mindepth 1 -maxdepth 1 -type d -printf '%P\n'
             );;
           *)
             usage
