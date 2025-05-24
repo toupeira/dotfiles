@@ -5,6 +5,26 @@ return {
   { 'hail2u/vim-css3-syntax',  ft = { 'css', 'scss' }},
   { 'hashivim/vim-terraform',  ft = { 'terraform', 'hcl' }},
 
+  { 'brianhuster/live-preview.nvim',
+    ft = { 'markdown', 'html', 'asciidoc', 'svg' },
+    cmd = 'LivePreview',
+    keys = function(plugin)
+      return {
+        {
+          '<LocalLeader>P', function()
+            if require('livepreview').is_running() then
+              vim.cmd.LivePreview('close')
+            else
+              vim.cmd.LivePreview('start')
+            end
+          end,
+          ft = plugin.ft,
+          desc = 'Toggle live preview',
+        },
+      }
+    end,
+  },
+
   { 'catgoose/nvim-colorizer.lua',
     ft = { 'css', 'scss', 'lua' },
     cmd = 'ColorizerToggle',
@@ -20,19 +40,6 @@ return {
         },
       }
     end
-  },
-
-  { 'iamcco/markdown-preview.nvim',
-    build = function() vim.fn['mkdp#util#install']() end,
-    ft = { 'markdown' },
-    cmd = {
-      'MarkdownPreviewToggle',
-      'MarkdownPreview',
-      'MarkdownPreviewStop',
-    },
-    keys = {
-      { '<LocalLeader>P', '<Cmd>MarkdownPreviewToggle<CR>', ft = 'markdown', desc = 'Toggle Markdown preview' },
-    },
   },
 
   { 'OXY2DEV/helpview.nvim',

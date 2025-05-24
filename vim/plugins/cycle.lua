@@ -44,6 +44,7 @@ return {
       { 'read', 'write' },
       { 'show', 'hide' },
       { 'staging', 'production' },
+      { 'start', 'stop' },
       { 'to', 'from' },
       { 'top', 'bottom' },
       { 'true', 'false' },
