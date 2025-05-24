@@ -20,23 +20,9 @@ return {
         util.nmap('<C-p>', function()
           require('treesitter-context').go_to_context(vim.v.count1)
         end)
-      end
+      end,
     },
   },
-
-  config = function(_, opts)
-    require('nvim-treesitter.configs').setup(opts)
-
-    local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-    nvomap(';', repeat_move.repeat_last_move_next)
-    nvomap('|', repeat_move.repeat_last_move_previous)
-    nvomap('<S-Tab>', '|', { force = true, remap = true })
-
-    nvomap('f', repeat_move.builtin_f_expr, { expr = true, force = true })
-    nvomap('F', repeat_move.builtin_F_expr, { expr = true, force = true })
-    nvomap('t', repeat_move.builtin_t_expr, { expr = true, force = true })
-    nvomap('T', repeat_move.builtin_T_expr, { expr = true, force = true })
-  end,
 
   opts = {
     ensure_installed = util.is_sudo and {} or {
@@ -135,5 +121,19 @@ return {
         },
       },
     },
-  }
+  },
+
+  config = function(_, opts)
+    require('nvim-treesitter.configs').setup(opts)
+
+    local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+    nvomap(';', repeat_move.repeat_last_move_next)
+    nvomap('|', repeat_move.repeat_last_move_previous)
+    nvomap('<S-Tab>', '|', { force = true, remap = true })
+
+    nvomap('f', repeat_move.builtin_f_expr, { expr = true, force = true })
+    nvomap('F', repeat_move.builtin_F_expr, { expr = true, force = true })
+    nvomap('t', repeat_move.builtin_t_expr, { expr = true, force = true })
+    nvomap('T', repeat_move.builtin_T_expr, { expr = true, force = true })
+  end,
 }

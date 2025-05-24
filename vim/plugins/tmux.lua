@@ -26,6 +26,6 @@ return {
       map(modes, '<C-k>', splits.move_cursor_up, 'Go to window on the top')
       map(modes, '<C-l>', splits.move_cursor_right, 'Go to window on the right')
       map(modes, '<C-\\>', splits.move_cursor_previous, 'Go to previous window')
-    end
+    end,
   },
 }

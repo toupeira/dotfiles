@@ -105,5 +105,5 @@ return {
       event = { 'CursorMoved', 'CursorMovedI' },
       group = 'incline',
     })
-  end
+  end,
 }

@@ -213,5 +213,5 @@ return {
       MiniClue.enable_buf_triggers(event.buf)
       util.nmap('q', '<Cmd>CodeCompanionChat Toggle<CR>', 'AI: Hide chat', { buffer = true, force = true })
     end)
-  end
+  end,
 }

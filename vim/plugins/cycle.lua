@@ -44,6 +44,7 @@ return {
       { 'read', 'write' },
       { 'show', 'hide' },
       { 'staging', 'production' },
+      { 'start', 'stop' },
       { 'to', 'from' },
       { 'top', 'bottom' },
       { 'true', 'false' },
@@ -125,5 +126,5 @@ return {
         vim.g['cycle_default_groups_for_' .. alias] = vim.g['cycle_default_groups_for_' .. lang]
       end
     end
-  end
+  end,
 }

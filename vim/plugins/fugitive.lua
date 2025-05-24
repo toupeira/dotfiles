@@ -24,7 +24,7 @@ return {
             return vim.fn['gitlab#fugitive#handler'](...)
           end
         }
-      end
+      end,
     }
   },
 
@@ -54,5 +54,5 @@ return {
     util.autocmd('User', { 'FugitiveObject', 'FugitivePager' }, function()
       nmap('q', { 'cclose', 'bwipeout' }, { buffer = true })
     end)
-  end
+  end,
 }

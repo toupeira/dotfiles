@@ -44,5 +44,5 @@ return {
 
     nmap('<Leader>i', aerial.nav_toggle, 'Toggle symbols popup')
     nmap('<LocalLeader>i', aerial.toggle, 'Toggle symbols sidebar')
-  end
+  end,
 }

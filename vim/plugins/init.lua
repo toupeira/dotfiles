@@ -19,14 +19,14 @@ return {
     init = function()
       vim.g.bufferize_focus_output = true
       util.alias_command({ B = 'Bufferize' })
-    end
+    end,
   },
 
   lazy_file { 'andymass/vim-matchup',
     init = function()
       vim.g.matchup_matchparen_deferred = 1
       vim.g.matchup_matchparen_offscreen = {}
-    end
+    end,
   },
 
   { 'folke/flash.nvim',
@@ -88,14 +88,14 @@ return {
       util.autocmd('FileType', 'any-jump', function()
         vim.bo.buflisted = false
       end)
-    end
+    end,
   },
 
   very_lazy { 'psliwka/vim-smoothie',
     init = function()
       vim.g.smoothie_speed_constant_factor = 20
       vim.g.smoothie_speed_linear_factor = 20
-    end
+    end,
   },
 
   very_lazy { 'shellRaining/hlchunk.nvim',
@@ -127,13 +127,13 @@ return {
       if #autocmds then
         vim.api.nvim_del_autocmd(autocmds[1].id)
       end
-    end
+    end,
   },
 
   lazy_file { 'sickill/vim-pasta',
     init = function()
       vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
-    end
+    end,
   },
 
   very_lazy { 'sphamba/smear-cursor.nvim',
@@ -157,7 +157,7 @@ return {
     init = function()
       vim.g.dispatch_no_maps = 1
       vim.g.dispatch_handlers = { 'job' }
-    end
+    end,
   },
 
   lazy_file { 'tpope/vim-eunuch',
@@ -166,7 +166,7 @@ return {
         ['D'] = 'Delete',
         ['D!'] = 'Delete!'
       })
-    end
+    end,
   },
 
   lazy_file { 'tpope/vim-projectionist',
@@ -181,7 +181,7 @@ return {
 
         vim.o.confirm = confirm
       end, 'Create alternate file')
-    end
+    end,
   },
 
   very_lazy { 'tpope/vim-ragtag',
@@ -191,14 +191,14 @@ return {
         util.unmap('i', '<C-v>%', { buffer = true })
         util.unmap('i', '<C-v>&', { buffer = true })
       end)
-    end
+    end,
   },
 
   very_lazy { 'tpope/vim-rsi',
     config = function()
       -- restore default mapping for <C-d>
       util.unmap({ 'i', 'c' }, '<C-d>')
-    end
+    end,
   },
 
   lazy_file { 'willothy/flatten.nvim',
@@ -210,7 +210,7 @@ return {
   lazy_file { 'wsdjeg/vim-fetch',
     config = function()
       map({ 'n', 'x' }, 'gF', '<C-w><C-f>', { force = true }, 'Go to file in split')
-    end
+    end,
   },
 
   { 'y3owk1n/time-machine.nvim',

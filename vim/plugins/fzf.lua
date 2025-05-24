@@ -367,5 +367,5 @@ return {
     end
 
     map_fzf('<Leader>gp', projects, { desc = 'projects' })
-  end
+  end,
 }

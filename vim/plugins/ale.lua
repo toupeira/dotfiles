@@ -45,5 +45,5 @@ return {
     util.autocmd({ 'BufRead', 'BufNewFile' }, '.env', function()
       vim.b.ale_sh_shellcheck_exclusions = 'SC2034'
     end)
-  end
+  end,
 }

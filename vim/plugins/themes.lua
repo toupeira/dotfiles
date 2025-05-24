@@ -8,7 +8,7 @@ return {
   { 'sainnhe/gruvbox-material', lazy = true,
     init = function()
       vim.g.gruvbox_material_background = 'hard'
-    end
+    end,
   },
 
   { 'EdenEast/nightfox.nvim',
@@ -262,6 +262,6 @@ return {
           },
         },
       }
-    end
-  }
+    end,
+  },
 }

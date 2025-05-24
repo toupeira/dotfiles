@@ -74,5 +74,5 @@ return {
         print(vim.inspect(vim.lsp.buf.list_workspace_folders()))
       end, args, 'Show LSP workspace folders')
     end)
-  end
+  end,
 }

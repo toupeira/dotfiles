@@ -4,16 +4,17 @@ local autocmd = util.autocmd
 -- Filetype settings ---------------------------------------------------
 
 local filetypes = {
-  ['crontab']  = { 'nowritebackup' },
-  ['css,scss'] = { 'iskeyword+=%' },
-  ['dosini']   = { 'foldmethod=syntax' },
-  ['gdscript'] = { 'expandtab' },
-  ['help']     = { 'buflisted' },
-  ['iss']      = { 'commentstring=;\\ %s' },
-  ['lua']      = { 'path+=./lua', 'keywordprg=:help' },
-  ['make']     = { 'noexpandtab' },
-  ['qf']       = { 'nobuflisted' },
-  ['ruby']     = { 'iskeyword+=?,!' },
+  ['crontab']   = { 'nowritebackup' },
+  ['css,scss']  = { 'iskeyword+=%' },
+  ['dosini']    = { 'foldmethod=syntax' },
+  ['gdscript']  = { 'expandtab' },
+  ['gitconfig'] = { 'commentstring=#\\ %s' },
+  ['help']      = { 'buflisted' },
+  ['iss']       = { 'commentstring=;\\ %s' },
+  ['lua']       = { 'path+=./lua', 'keywordprg=:help' },
+  ['make']      = { 'noexpandtab' },
+  ['qf']        = { 'nobuflisted' },
+  ['ruby']      = { 'iskeyword+=?,!' },
 
   ['gitcommit,gitrebase,NeogitCommitMessage'] = {
     'colorcolumn=50,72',

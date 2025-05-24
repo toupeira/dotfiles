@@ -53,14 +53,15 @@
   whitespace = red reverse
 
 [delta]
+  syntax-theme = Monokai Extended
   paging = always
   navigate = true
   tabs = 2
 
   plus-style = syntax "#15331d"
-  plus-emph-style = bold normal "#1d572d"
+  plus-emph-style = bold syntax "#1d572d"
   minus-style = syntax "#401a1b"
-  minus-emph-style = bold normal "#80302f"
+  minus-emph-style = bold syntax "#80302f"
 
   commit-decoration-style = yellow ul
   file-style = bold blue

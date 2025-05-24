@@ -80,5 +80,5 @@ return {
     util.autocmd({ 'TabNew', 'TabClosed' }, function()
       config.options.always_show_bufferline = #vim.fn.gettabinfo() > 1
     end)
-  end
+  end,
 }

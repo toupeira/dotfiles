@@ -401,5 +401,5 @@ return {
         end
       end, 'Trim trailing whitespace')
     end)
-  end
+  end,
 }

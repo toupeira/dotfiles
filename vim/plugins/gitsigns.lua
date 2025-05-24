@@ -75,6 +75,6 @@ return {
       nmap('<Leader>gB', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
 
       util.map({'o', 'x'}, 'ih', ':Gitsigns select_hunk', args)
-    end
-  }
+    end,
+  },
 }

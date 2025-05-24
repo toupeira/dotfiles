@@ -179,5 +179,5 @@ return {
         },
       },
     }
-  end
+  end,
 }
