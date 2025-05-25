@@ -151,7 +151,6 @@ return {
     -- mini.starter ----------------------------------------------------
     local starter = require('mini.starter')
     local fzf = require('fzf-lua')
-    local is_home = vim.fn.getcwd() == os.getenv('HOME')
 
     util.command('MiniStarter', 'lua MiniStarter.open()', 'Open start screen')
     util.autocmd('User', 'VeryLazy', 'lua MiniStarter.refresh()')
@@ -175,7 +174,7 @@ return {
         end,
 
         -- recent files
-        starter.sections.recent_files(9, not is_home, function(path)
+        starter.sections.recent_files(9, not util.is_home, function(path)
           local dir = vim.fn.fnamemodify(path, ':.:h')
           if dir == '.' then
             return ''
@@ -195,15 +194,15 @@ return {
           return item and {
             section = 'Search',
             name = item.name,
-            action = item.action or function()
+            action = function()
               vim.fn.feedkeys(vim.g.mapleader .. item.key)
             end,
           }
         end, {
-          { name = 'Files',   action = fzf.files },
-          { name = 'Grep',    action = fzf.live_grep },
-          { name = 'History', key = is_home and 'H' or 'h' },
-          not is_home and { name = 'Tags', action = fzf.tags },
+          { name = 'Files',   key = 'f' },
+          { name = 'Grep',    key = 'r' },
+          { name = 'History', key = util.is_home and 'H' or 'h' },
+          not util.is_home and { name = 'Tags', key = 'T' },
         })
       },
 

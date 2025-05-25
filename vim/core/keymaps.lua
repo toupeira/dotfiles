@@ -91,6 +91,9 @@ imap('<M-O>', '<C-o>O', 'Insert line above')
 imap('<M-k>', '<C-o>gk', 'Up')
 imap('<M-j>', '<C-o>gj', 'Down')
 
+vmap('/', '<C-\\><C-n>`</\\%V', 'Search forward within visual selection')
+vmap('?', '<C-\\><C-n>`<?\\%V', 'Search backward within visual selection')
+
 nvomap('*', 'g*', { force = true }, 'Search for current word (loose)')
 nvomap('#', 'g#', { force = true }, 'Search backwards for current word (loose)')
 nvomap('g*', '*', 'Search for current word (strict)')

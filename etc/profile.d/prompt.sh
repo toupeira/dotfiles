@@ -14,6 +14,12 @@ PS1_HOST=" "
 PS1="\[\e[1;35m\]\$(_prompt_jobs)\[\e[0m\]\[\e[1;30m\]$PS1_USER\[\e[1;33m\]$PS1_HOST\[\e[0;36m\][\[\e[1;36m\]\$_prompt_dir\[\e[0;36m\]]\[\e[0m\] "
 PS2=" \[\e[1;36m\]»\[\e[0m\] "
 
+# Enclose the primary prompt between
+# ← OSC 133;D;retval ST (report exit status of previous command)
+# ← OSC 133;A ST (mark beginning of prompt)
+# → OSC 133;B ST (mark end of prompt, beginning of command line)
+PS1='\[\e]133;D;$?\e\\\e]133;A\e\\\]'"$PS1"'\[\e]133;B\e\\\]'
+
 # Set current directory and update title on changes
 
 PROMPT_COMMAND=( '

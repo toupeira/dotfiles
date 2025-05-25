@@ -9,7 +9,6 @@ local filetypes = {
   ['dosini']    = { 'foldmethod=syntax' },
   ['gdscript']  = { 'expandtab' },
   ['gitconfig'] = { 'commentstring=#\\ %s' },
-  ['help']      = { 'buflisted' },
   ['iss']       = { 'commentstring=;\\ %s' },
   ['lua']       = { 'path+=./lua', 'keywordprg=:help' },
   ['make']      = { 'noexpandtab' },
@@ -18,6 +17,11 @@ local filetypes = {
 
   ['gitcommit,gitrebase,NeogitCommitMessage'] = {
     'colorcolumn=50,72',
+  },
+
+  ['help'] = {
+    'buflisted',
+    'winhighlight=Normal:NormalFloat',
   },
 
   ['text,mail,markdown'] = {
@@ -33,11 +37,6 @@ local filetypes = {
     -- automatically continue lists and blockquotes
     'comments=b:*,b:-,b:+,n:>',
     'formatoptions+=r',
-  },
-
-  ['vim'] = {
-    'foldmethod=marker',
-    'foldlevel=0'
   },
 }
 

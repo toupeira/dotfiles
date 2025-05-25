@@ -4,6 +4,8 @@ local merge = util.merge
 local expand = vim.fn.expand
 
 local presets = {
+  -- fzf-lua options
+
   preview = {
     winopts = { preview = { hidden = 'nohidden' }},
     fzf_opts = { ['--layout'] = 'reverse' },
@@ -17,10 +19,22 @@ local presets = {
     winopts = { height = 12, row = 0.9 },
   },
 
+  -- fzf-lua arguments
+
   title = function(value)
-    return {
-      winopts = { title = ' ' .. value .. ' ' }
-    }
+    return { winopts = { title = ' ' .. value .. ' ' }}
+  end,
+
+  cwd = function()
+    return { cwd = expand('%:h') }
+  end,
+
+  cword = function()
+    return vim.bo.filetype == 'ministarter' and {} or { query = expand('<cword>') }
+  end,
+
+  hidden = function()
+    return util.is_home and { hidden = false } or {}
   end,
 }
 
@@ -134,7 +148,8 @@ return {
       }),
 
       files = {
-        fd_opts = '--color always --max-results 99999 --type f --type l --hidden --exclude .git',
+        fd_opts = '--color always --max-results 99999 --type f --type l --exclude .git',
+        hidden = true,
         git_icons = false,
         no_header = true,
 
@@ -237,11 +252,14 @@ return {
     util.nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume last search')
 
     -- search files
-    map_fzf('<Leader>f', 'files')
+    map_fzf('<Leader>f', 'files', { args = presets.hidden })
     map_fzf('<Leader>F', 'files', {
       desc = 'files in current directory',
       args = function()
-        return merge(presets.title('Files (current directory)'), { cwd = expand('%:h') })
+        return merge(
+          presets.title('Files (current directory)'),
+          presets.cwd()
+        )
       end,
     })
     map_fzf('<Leader>o', 'files', {
@@ -264,15 +282,16 @@ return {
     -- search file contents
     map_fzf('<Leader>r', 'live_grep', {
       desc = 'regex in project',
-      args = function() return { query = expand('<cword>') } end,
+      args = presets.cword,
     })
     map_fzf('<Leader>R', 'live_grep', {
       desc = 'regex in current directory',
       args = function()
-        return merge(presets.title('Grep (current directory)'), {
-          cwd = expand('%:h'),
-          query = expand('<cword>'),
-        })
+        return merge(
+          presets.title('Grep (current directory)'),
+          presets.cwd(),
+          presets.cword()
+        )
       end,
     })
 

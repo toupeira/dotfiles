@@ -44,6 +44,7 @@ return {
 
   { 'OXY2DEV/helpview.nvim',
     ft = { 'help' },
+    cmd = 'Helpview',
   },
 
   { 'OXY2DEV/markview.nvim',
@@ -69,7 +70,7 @@ return {
           filetypes = plugin.ft,
           ignore_buftypes = {},
           modes = { 'n', 'no', 'c', 'i' },
-          hybrid_modes = { 'n', 'i' },
+          hybrid_modes = { 'i' },
           linewise_hybrid_mode = true,
         },
 

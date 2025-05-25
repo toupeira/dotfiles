@@ -309,7 +309,7 @@ function sman  {
 
 function sheet {
   if [ $# -eq 0 ]; then
-    cd /slack/documents/Noten || return
+    cd /slack/documents/Sheets || return
   else
     command sheet "$@"
   fi

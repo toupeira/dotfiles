@@ -23,6 +23,7 @@ end
 
 -- Configuration helpers -----------------------------------------------
 
+util.is_home = vim.fn.getcwd() == os.getenv('HOME')
 util.is_sudo = os.getenv('SUDO_COMMAND') ~= nil
 util.is_ssh = os.getenv('SSH_CONNECTION') ~= nil
 util.is_tmux = os.getenv('TMUX') ~= nil

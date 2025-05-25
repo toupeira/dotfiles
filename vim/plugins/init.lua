@@ -118,14 +118,22 @@ return {
 
       -- work around broken folding
       -- https://github.com/shellRaining/hlchunk.nvim/issues/143
-      local autocmds = vim.api.nvim_get_autocmds({
+      local autocmd = {
         group = 'hlchunk_indent',
         event = 'User',
-        pattern = 'WinScrolledY',
-      })
+      }
+
+      local autocmds = vim.api.nvim_get_autocmds(util.merge(autocmd, {
+        pattern = { 'WinScrolledX', 'WinScrolledY' },
+      }))
 
       if #autocmds then
         vim.api.nvim_del_autocmd(autocmds[1].id)
+        vim.api.nvim_del_autocmd(autocmds[2].id)
+        util.autocmd('WinScrolled', {
+          group = autocmd.group,
+          callback = autocmds[1].callback,
+        })
       end
     end,
   },
