@@ -108,9 +108,10 @@ return {
 
       diagnostics = merge(presets.preview, presets.reverse, {
         color_icons = true,
+        color_headings = true,
         diag_source = true,
+        diag_code = true,
         sort = 1,
-        fzf_opts = { ['--wrap'] = true },
       }),
 
       git = {
@@ -299,9 +300,8 @@ return {
     map_fzf('<Leader>t', 'btags', { desc = 'buffer symbols' })
     map_fzf('<Leader>T', 'tags', { desc = 'project symbols' })
 
-    local diagnostics = require('util.fzf-diagnostics')
-    map_fzf('<Leader>d', diagnostics.diagnostics, { desc = 'diagnostics in current file' })
-    map_fzf('<Leader>D', diagnostics.all, {
+    map_fzf('<Leader>d', 'diagnostics_document', { desc = 'diagnostics in current file' })
+    map_fzf('<Leader>D', 'diagnostics_workspace', {
       desc = 'diagnostics in project',
       args = presets.title('Diagnostics (Workspace)'),
     })

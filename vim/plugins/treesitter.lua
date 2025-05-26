@@ -22,6 +22,26 @@ return {
         end)
       end,
     },
+
+    { 'aaronik/treewalker.nvim',
+      cmd = 'Treewalker',
+      init = function()
+        local function move(action)
+          return function()
+            vim.cmd.Treewalker(action)
+            pcall(vim.cmd.foldopen)
+          end
+        end
+
+        local descendant, ancestor = util.make_repeatable(move('Right'), move('Left'))
+        local next, previous = util.make_repeatable(move('Down'), move('Up'))
+
+        nvomap(']s', descendant, 'Move to descendant node')
+        nvomap('[s', ancestor, 'Move to ancestor node')
+        nvomap(']S', next, 'Move to next neighbor node')
+        nvomap('[S', previous, 'Move to previous neighbor node')
+      end
+    },
   },
 
   opts = {
@@ -99,25 +119,21 @@ return {
           [']a'] = { query = '@parameter.inner', desc = 'Next argument' },
           [']m'] = { query = '@class.outer', desc = 'Next module' },
           [']f'] = { query = '@function.outer', desc = 'Next function' },
-          [']s'] = { query = '@local.scope', query_group = 'locals', desc = 'Next scope' },
         },
         goto_next_end = {
           [']A'] = { query = '@parameter.inner', desc = 'End of argument' },
           [']M'] = { query = '@class.outer', desc = 'End of module' },
           [']F'] = { query = '@function.outer', desc = 'End of function' },
-          [']S'] = { query = '@local.scope', query_group = 'locals', desc = 'End of scope' },
         },
         goto_previous_start = {
           ['[a'] = { query = '@parameter.inner', desc = 'Previous argument' },
           ['[m'] = { query = '@class.outer', desc = 'Previous module' },
           ['[f'] = { query = '@function.outer', desc = 'Previous function' },
-          ['[s'] = { query = '@local.scope', query_group = 'locals', desc = 'Previous scope' },
         },
         goto_previous_end = {
           ['[A'] = { query = '@parameter.inner', desc = 'End of previous argument' },
           ['[M'] = { query = '@class.outer', desc = 'End of previous module' },
           ['[F'] = { query = '@function.outer', desc = 'End of previous function' },
-          ['[S'] = { query = '@local.scope', query_group = 'locals', desc = 'End of previous scope' },
         },
       },
     },
@@ -127,8 +143,8 @@ return {
     require('nvim-treesitter.configs').setup(opts)
 
     local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-    nvomap(';', repeat_move.repeat_last_move_next)
-    nvomap('|', repeat_move.repeat_last_move_previous)
+    nvomap(';', repeat_move.repeat_last_move)
+    nvomap('|', repeat_move.repeat_last_move_opposite)
     nvomap('<S-Tab>', '|', { force = true, remap = true })
 
     nvomap('f', repeat_move.builtin_f_expr, { expr = true, force = true })

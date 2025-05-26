@@ -316,7 +316,7 @@ return {
 
       nmap(';', function ()
         if repeat_move.last_move then
-          repeat_move.repeat_last_move_next()
+          repeat_move.repeat_last_move()
         else
           MiniJump.jump()
         end
@@ -324,7 +324,7 @@ return {
 
       nmap('|', function ()
         if repeat_move.last_move then
-          repeat_move.repeat_last_move_previous()
+          repeat_move.repeat_last_move_opposite()
         else
           MiniJump.jump(nil, true)
         end
