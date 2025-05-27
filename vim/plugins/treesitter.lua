@@ -16,11 +16,6 @@ return {
         min_window_height = 10,
         multiwindow = true,
       },
-      init = function()
-        util.nmap('<C-p>', function()
-          require('treesitter-context').go_to_context(vim.v.count1)
-        end)
-      end,
     },
 
     { 'aaronik/treewalker.nvim',

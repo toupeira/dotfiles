@@ -12,7 +12,6 @@ local filetypes = {
   ['iss']       = { 'commentstring=;\\ %s' },
   ['lua']       = { 'path+=./lua', 'keywordprg=:help' },
   ['make']      = { 'noexpandtab' },
-  ['qf']        = { 'nobuflisted' },
   ['ruby']      = { 'iskeyword+=?,!' },
 
   ['gitcommit,gitrebase,NeogitCommitMessage'] = {
@@ -21,6 +20,10 @@ local filetypes = {
 
   ['help'] = {
     'buflisted',
+    'winhighlight=Normal:NormalFloat',
+  },
+
+  ['qf'] = {
     'winhighlight=Normal:NormalFloat',
   },
 
@@ -46,9 +49,8 @@ end
 
 -- Helpers -------------------------------------------------------------
 
--- Setup quickfix windows
+-- Resize quickfix windows
 autocmd('FileType', 'qf', function()
-  vim.wo.wrap = false
   util.resize_window({ max = 10 })
 end)
 
@@ -125,7 +127,6 @@ autocmd('FileType', {
   'fugitive',
   'gitsigns-blame',
   'help',
-  'man',
   'neo-tree-popup',
   'notify',
   'qf',
@@ -139,6 +140,12 @@ autocmd('FileType', {
     }, { force = true, buffer = event.buf })
   end
 )
+
+-- Add some mappings for `:Man` command from `runtime/ftplugin/man.vim`
+autocmd('FileType', 'man', function()
+  util.nmap('gO', require('man').show_toc, 'Show table of contents', { force = true })
+  util.nmap('q', ':lclose<CR><C-w>q')
+end)
 
 -- Check if we need to reload the file when it changed
 autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, function()

@@ -135,6 +135,7 @@ util.alias_command({
   ['QA!'] = 'qa!', ['Qa!'] = 'qa!', ['qA!'] = 'qa!',
   ['WQ']  = 'wq',  ['Wq']  = 'wq',  ['wQ']  = 'wq',
   ['WQ!'] = 'wq!', ['Wq!'] = 'wq!', ['wQ!'] = 'wq!',
+  ['SET'] = 'set', ['SEt'] = 'set', ['Set'] = 'set',
 })
 
 nmap('zS', ':Inspect', 'Inspect highlighting groups')
