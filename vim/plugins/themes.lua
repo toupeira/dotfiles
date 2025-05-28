@@ -240,6 +240,7 @@ return {
 
             NeogitCursorLine = { link = 'MsgArea' },
             NeogitChangeModified = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },
+            NeogitNormal = { link = 'NormalFloat' },
             NeogitRecentcommits = { fg = 'diag.info', bg ='diag_bg.info', style = 'bold' },
             NeogitStagedchanges = { fg = 'diag.ok', bg = 'diag_bg.ok', style = 'bold' },
             NeogitUnstagedchanges = { fg = 'diag.error', bg = 'diag_bg.error', style = 'bold' },

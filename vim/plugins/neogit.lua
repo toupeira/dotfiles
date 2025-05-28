@@ -10,6 +10,7 @@ return {
     console_timeout = 250,
     disable_hint = true,
     graph_style = 'unicode',
+    kind = 'split',
     remember_settings = false,
 
     mappings = {
@@ -26,6 +27,7 @@ return {
         ['<m-n>'] = false,
         ['<m-r>'] = false,
       },
+
       rebase_editor = {
         ['<C-g><C-g>'] = 'Submit',
         ['<C-g><C-k>'] = 'Abort',
