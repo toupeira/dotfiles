@@ -274,11 +274,11 @@ return {
       args = merge(presets.title('Buffers (all)'), { show_unlisted = true }),
     })
 
-    map_fzf('<Leader>h', 'oldfiles', {
+    map_fzf('<Leader>h', 'oldfiles', { desc = 'history' })
+    map_fzf('<Leader>H', 'oldfiles', {
       desc = 'history in project',
       args = merge(presets.title('History (Project)'), { cwd_only = true }),
     })
-    map_fzf('<Leader>H', 'oldfiles', { desc = 'history' })
 
     -- search file contents
     map_fzf('<Leader>r', 'live_grep', {

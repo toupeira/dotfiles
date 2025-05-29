@@ -105,7 +105,9 @@ return {
         },
 
         variables = {
-          buffer = { default_params = 'watch' },
+          buffer = {
+            opts = { default_params = 'watch' },
+          },
         },
 
         keymaps = {
@@ -176,15 +178,6 @@ return {
       if cmd.opts.provider == 'mini_pick' then
         cmd.opts.provider = 'fzf_lua'
       end
-    end
-
-    -- auto-watch buffers
-    -- https://github.com/olimorris/codecompanion.nvim/pull/1516
-    local buffer = require('codecompanion.strategies.chat.variables.buffer')
-    local original_new = buffer.new
-    buffer.new = function(args)
-      args.params = args.params or 'watch'
-      return original_new(args)
     end
   end,
 

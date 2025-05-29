@@ -18,9 +18,6 @@ return {
   opts = {
     signature = { enabled = true },
 
-    -- breaks help completion with quotes etc.
-    cmdline = { enabled = false },
-
     keymap = {
       preset = 'super-tab',
 

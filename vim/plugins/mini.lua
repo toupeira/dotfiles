@@ -201,7 +201,7 @@ return {
         end, {
           { name = 'Files',   key = 'f' },
           { name = 'Grep',    key = 'r' },
-          { name = 'History', key = util.is_home and 'H' or 'h' },
+          { name = 'History', key = 'h' },
           not util.is_home and { name = 'Tags', key = 'T' },
         })
       },
