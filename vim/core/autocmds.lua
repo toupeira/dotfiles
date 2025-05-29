@@ -144,7 +144,7 @@ autocmd('FileType', {
 -- Add some mappings for `:Man` command from `runtime/ftplugin/man.vim`
 autocmd('FileType', 'man', function()
   util.nmap('gO', require('man').show_toc, 'Show table of contents', { force = true })
-  util.nmap('q', ':lclose<CR><C-w>q')
+  util.nmap('q', ':lclose<CR><C-w>q', { buffer = true })
 end)
 
 -- Check if we need to reload the file when it changed

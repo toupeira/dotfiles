@@ -1,5 +1,4 @@
 --links=no
---exclude=@.gitignore
 --exclude=*.css
 --exclude=*.ini
 --exclude=*.json

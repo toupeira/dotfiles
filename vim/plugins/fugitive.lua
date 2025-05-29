@@ -29,10 +29,7 @@ return {
   },
 
   init = function()
-    nmap('<Leader>gl', "&modifiable ? ':Gclog %<CR>' : ':Gclog<CR>'", { expr = true, silent = true },
-      'Open Git log for current file')
     vmap('<Leader>gl', ':Gclog', 'Open Git log for selection')
-    nmap('<Leader>gL', ':Gclog', 'Open Git log for repository')
     nmap('<Leader>gd', ':Git log -p %', 'Open Git diff for current file')
 
     nmap('<Leader>gF', ':Git pull -v', 'Pull current Git branch')

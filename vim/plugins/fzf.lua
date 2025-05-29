@@ -8,15 +8,28 @@ local presets = {
 
   preview = {
     winopts = { preview = { hidden = 'nohidden' }},
-    fzf_opts = { ['--layout'] = 'reverse' },
   },
 
   reverse = {
     fzf_opts = { ['--layout'] = 'reverse-list', ['--no-sort'] = true },
   },
 
-  small = {
-    winopts = { height = 12, row = 0.9 },
+  bottom = {
+    fzf_opts = { ['--layout'] = 'reverse-list' },
+
+    -- from ivy profile
+    winopts = {
+      row = 1,
+      col = 0,
+      width = 1,
+      height = 0.4,
+      title_pos = 'left',
+      border = { '', '─', '', '', '', '', '', '' },
+      preview = {
+        layout = 'horizontal',
+        title_pos = 'left',
+      },
+    },
   },
 
   -- fzf-lua arguments
@@ -105,8 +118,9 @@ return {
       lines = presets.reverse,
       manpages = presets.preview,
       marks = presets.preview,
+      treesitter = merge(presets.bottom, presets.preview),
 
-      diagnostics = merge(presets.preview, presets.reverse, {
+      diagnostics = merge(presets.bottom, presets.preview, {
         color_icons = true,
         color_headings = true,
         diag_source = true,
@@ -115,9 +129,11 @@ return {
       }),
 
       git = {
-        branches = presets.preview,
-        diff = presets.preview,
-        status = presets.preview,
+        branches = merge(presets.bottom, presets.preview),
+        bcommits = merge(presets.preview, presets.reverse),
+        commits = merge(presets.preview, presets.reverse),
+        diff = merge(presets.bottom, presets.preview),
+        status = merge(presets.bottom, presets.preview),
       },
 
       lsp = {
@@ -144,7 +160,7 @@ return {
         },
       }),
 
-      buffers = merge(presets.small, {
+      buffers = merge(presets.bottom, presets.preview, {
         fzf_opts = { ['--header-lines'] = false },
       }),
 
@@ -172,10 +188,13 @@ return {
         file_ignore_patterns = { '%.git/COMMIT_EDITMSG' },
       }),
 
-      btags = presets.title('Tags (Buffer)'),
-      tags = merge(presets.title('Tags (Project)'), {
+      btags = merge(presets.bottom, presets.preview, presets.title('Tags (Buffer)'), {
+        ctags_args = '-f- -u',
+      }),
+
+      tags = merge(presets.bottom, presets.preview, presets.title('Tags (Project)'), {
         ctags_autogen = true,
-        cmd = 'ctags -f - $( git ls-files ) 2>/dev/null',
+        cmd = '( git ls-files 2>/dev/null || fdfind ) | ctags -f- -L- -u',
       }),
     }
   end,
@@ -341,30 +360,24 @@ return {
     -- search git
     map_fzf('<Leader>gm', 'git_status')
     map_fzf('<Leader>gc', 'git_branches')
+    map_fzf('<Leader>gl', 'git_bcommits')
+    map_fzf('<Leader>gL', 'git_commits')
 
     -- search projects
     local projects = function(settings)
-      settings = merge(settings, {
-        fd_opts = '-u --glob --type d ".{git,obsidian}" ~/src /slack',
+      settings = merge(presets.bottom, presets.title('Projects'), {
+        fd_opts = '-u --glob --type d ".{git,obsidian}" --exclude .stversions ~/src /slack',
         toggle_hidden_flag = '--exclude "{archive,packages}"',
         fzf_opts = { ['--multi'] = false },
         previewer = 'tree',
         cwd_prompt = false,
 
-        winopts = {
-          title = ' Projects ',
-          height = 12,
-          row = 0.9,
-          preview = { layout = 'horizontal' },
-        },
-
         fn_transform = function(path)
-          path = path:gsub('^󰉋' .. fzf.utils.nbsp, '')
           path = path:gsub('/%.[^/]*/$', '')
           return string.format('%-32s%s%s',
             fzf.utils.ansi_codes.cyan('󰂿 ' .. vim.fn.fnamemodify(path, ':t')),
             fzf.utils.nbsp,
-            fzf.utils.ansi_codes.blue('󰉋' .. fzf.utils.nbsp .. vim.fn.fnamemodify(path, ':~'))
+            fzf.utils.ansi_codes.blue(vim.fn.fnamemodify(path, ':~'))
           )
         end,
 
@@ -380,7 +393,7 @@ return {
             fzf.files({ cwd = file.path })
           end
         }
-      })
+      }, settings or {})
 
       fzf.files(settings)
     end

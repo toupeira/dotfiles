@@ -3,7 +3,6 @@ local util = require('util')
 return {
   'olimorris/codecompanion.nvim',
   dependencies = {
-    'fidget.nvim',
     'nvim-treesitter',
     'nvim-lua/plenary.nvim',
 
@@ -99,7 +98,21 @@ return {
       chat   = { adapter = 'claude',
         roles = {
           llm = function(adapter)
-            return 'Response from ' .. adapter.formatted_name .. ' 📌'
+            return string.format(
+              'Response from %s (%s) 📌',
+              adapter.formatted_name,
+              adapter.model.name
+                :gsub('.*/', '')
+                :gsub('claude%-opus%-4[^:]*',     'opus-4')
+                :gsub('claude%-sonnet%-4[^:]*',   'sonnet-4')
+                :gsub('claude%-3.7%-sonnet[^:]*', 'sonnet-3.7')
+                :gsub('claude%-3.5%-sonnet[^:]*', 'sonnet-3.5')
+                :gsub('claude%-3.5%-haiku[^:]*',  'haiku-3.7')
+                :gsub('deepseek.*v3[^:]*',        'deepseek-3')
+                :gsub('deepseek.*r1[^:]*',        'deepseek-r1')
+                :gsub('gemini.*pro[^:]*',         'gemini-pro')
+                :gsub('gemini.*flash[^:]*',       'gemini-flash')
+            )
           end,
           user = 'Me ⚗️',
         },
@@ -132,10 +145,7 @@ return {
         strategy = 'chat',
         description = 'Edit the current buffer',
         prompts = {
-          {
-            role = 'user',
-            content = '@editor #buffer ',
-          },
+          { role = 'user', content = '@editor #buffer\n\n' },
         },
         opts = {
           auto_submit = false,
@@ -147,10 +157,7 @@ return {
         strategy = 'chat',
         description = 'Edit with full tooling',
         prompts = {
-          {
-            role = 'user',
-            content = '@full_stack_dev #buffer ',
-          },
+          { role = 'user', content = '@full_stack_dev #buffer\n\n' },
         },
         opts = {
           auto_submit = false,
@@ -229,23 +236,23 @@ return {
       if opts.bang then
         -- called with a bang: generate a Vim command
         vim.cmd.CodeCompanionCmd({ args = { args }})
-      elseif opts.range == 0 then
-        -- called normally: toggle the chat
-        vim.cmd.echo()
-        if codecompanion.last_chat() then
-          vim.cmd.CodeCompanionChat({ args = { args or 'Toggle' }})
-        else
-          config.display.chat.start_in_insert_mode = true
-          codecompanion.prompt('edit')
-          config.display.chat.start_in_insert_mode = false
-        end
-      else
+      elseif opts.range ~= 0 then
         -- called with a selection: open the inline assistant
         vim.cmd.echo()
         vim.cmd.CodeCompanion({
           args = { args },
           range = { opts.line1, opts.line2 },
         })
+      else
+        -- called normally: toggle the chat
+        vim.cmd.echo()
+        if codecompanion.last_chat() or args then
+          vim.cmd.CodeCompanionChat({ args = { args or 'Toggle' }})
+        else
+          config.display.chat.start_in_insert_mode = true
+          vim.cmd.CodeCompanionChat()
+          config.display.chat.start_in_insert_mode = false
+        end
       end
     end, {
       desc = 'AI: Toggle chat',

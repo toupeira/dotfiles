@@ -160,14 +160,6 @@ return {
     },
   },
 
-  { 'tpope/vim-dispatch',
-    cmd = { 'Dispatch', 'Make' },
-    init = function()
-      vim.g.dispatch_no_maps = 1
-      vim.g.dispatch_handlers = { 'job' }
-    end,
-  },
-
   lazy_file { 'tpope/vim-eunuch',
     init = function()
       util.alias_command({
