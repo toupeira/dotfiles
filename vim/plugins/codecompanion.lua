@@ -127,12 +127,51 @@ return {
       },
     },
 
+    prompt_library = {
+      ['Edit'] = {
+        strategy = 'chat',
+        description = 'Edit the current buffer',
+        prompts = {
+          {
+            role = 'user',
+            content = '@editor #buffer ',
+          },
+        },
+        opts = {
+          auto_submit = false,
+          short_name = 'edit',
+          is_slash_cmd = true,
+        },
+      },
+      ['Develop'] = {
+        strategy = 'chat',
+        description = 'Edit with full tooling',
+        prompts = {
+          {
+            role = 'user',
+            content = '@full_stack_dev #buffer ',
+          },
+        },
+        opts = {
+          auto_submit = false,
+          short_name = 'dev',
+          is_slash_cmd = true,
+        },
+      },
+    },
+
     display = {
       action_palette = { provider = 'default' },
 
       chat = {
-        intro_message = 'Press ? for options',
         icons = { pinned_buffer = '📌 ' },
+
+        tools = {
+          opts = {
+            auto_submit_errors = true,
+            auto_submit_success = true,
+          },
+        },
 
         window = {
           layout = 'horizontal',
@@ -184,6 +223,8 @@ return {
   init = function()
     util.command('AI', function(opts)
       local args = #opts.args > 0 and opts.args or nil
+      local codecompanion = require('codecompanion')
+      local config = require('codecompanion.config')
 
       if opts.bang then
         -- called with a bang: generate a Vim command
@@ -191,7 +232,13 @@ return {
       elseif opts.range == 0 then
         -- called normally: toggle the chat
         vim.cmd.echo()
-        vim.cmd.CodeCompanionChat({ args = { args or 'Toggle' }})
+        if codecompanion.last_chat() then
+          vim.cmd.CodeCompanionChat({ args = { args or 'Toggle' }})
+        else
+          config.display.chat.start_in_insert_mode = true
+          codecompanion.prompt('edit')
+          config.display.chat.start_in_insert_mode = false
+        end
       else
         -- called with a selection: open the inline assistant
         vim.cmd.echo()

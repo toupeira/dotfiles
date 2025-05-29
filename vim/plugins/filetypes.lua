@@ -94,13 +94,14 @@ return {
 
         html = {
           container_elements = {
-            ['^buf$']     = wrap_tag('', 'CodeCompanionHtmlBuffer'),
-            ['^tool$']    = wrap_tag('', 'CodeCompanionHtmlTool'),
-            ['^help$']    = wrap_tag('󰘥', 'CodeCompanionHtmlVariable'),
-            ['^image$']   = wrap_tag('', 'CodeCompanionHtmlVariable'),
-            ['^symbols$'] = wrap_tag('', 'CodeCompanionHtmlVariable'),
-            ['^url$']     = wrap_tag('󰖟', 'CodeCompanionHtmlVariable'),
-            ['^var$']     = wrap_tag('', 'CodeCompanionHtmlVariable'),
+            ['^buf$']         = wrap_tag('', 'CodeCompanionHtmlBuffer'),
+            ['^tool$']        = wrap_tag('', 'CodeCompanionHtmlTool'),
+            ['^user_prompt$'] = wrap_tag('', 'CodeCompanionHtmlTool'),
+            ['^help$']        = wrap_tag('󰘥', 'CodeCompanionHtmlVariable'),
+            ['^image$']       = wrap_tag('', 'CodeCompanionHtmlVariable'),
+            ['^symbols$']     = wrap_tag('', 'CodeCompanionHtmlVariable'),
+            ['^url$']         = wrap_tag('󰖟', 'CodeCompanionHtmlVariable'),
+            ['^var$']         = wrap_tag('', 'CodeCompanionHtmlVariable'),
           },
         },
       }
