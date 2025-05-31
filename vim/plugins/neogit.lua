@@ -1,7 +1,12 @@
 return {
   'NeogitOrg/neogit',
 
-  cmd = 'Neogit',
+  cmd = {
+    'Neogit',
+    'NeogitCommit',
+    'NeogitLogCurrent',
+  },
+
   keys = {
     { '<Leader>gs', '<Cmd>Neogit<CR>', desc = 'Open Neogit' },
   },

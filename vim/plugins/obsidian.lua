@@ -6,7 +6,6 @@ return {
 
   opts = {
     disable_frontmatter = true,
-    open_app_foreground = true,
     picker = { name = 'fzf-lua' },
     follow_url_func = function(url)
       vim.fn.jobstart({ 'xdg-open', url })

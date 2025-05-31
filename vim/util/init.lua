@@ -127,9 +127,18 @@ end
 
 -- Create autocommand
 local augroup_default
-util.autocmd = function(event, pattern, command)
-  augroup_default = augroup_default or util.augroup('dotfiles')
-  local opts = { group = augroup_default }
+util.autocmd = function(event, pattern, opts, command)
+  opts = opts or {}
+
+  if type(opts) ~= 'table' then
+    command = opts
+    opts = {}
+  end
+
+  if type(pattern) == 'table' and not vim.isarray(pattern) then
+    opts = pattern
+    pattern = nil
+  end
 
   if pattern and not command then
     command = pattern
@@ -141,31 +150,12 @@ util.autocmd = function(event, pattern, command)
     opts.callback = command
   elseif type(command) == 'string' then
     opts.command = command
-  elseif type(command) == 'table' then
-    opts = util.merge(opts, command)
   end
+
+  augroup_default = augroup_default or util.augroup('dotfiles')
+  opts.group = augroup_default
 
   return vim.api.nvim_create_autocmd(event, opts)
-end
-
--- Create autocmd that only runs once.
---
--- Returning true doesn't work with multiple patterns
--- https://github.com/neovim/neovim/issues/26493
-util.autocmd_once = function(event, pattern, command)
-  if pattern and not command then
-    command = pattern
-    pattern = nil
-  end
-
-  local autocmd_id
-  local handler = function()
-    vim.api.nvim_del_autocmd(autocmd_id)
-    command()
-  end
-
-  autocmd_id = util.autocmd(event, pattern, handler)
-  return autocmd_id
 end
 
 -- Create user command
