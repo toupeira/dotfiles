@@ -208,9 +208,10 @@ return {
             rubySymbol = { link = 'Special' },
 
             -- plugins
-            CodeCompanionHtmlBuffer = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },
-            CodeCompanionHtmlTool = { fg = 'diag.info', bg = 'diag_bg.info', style = 'bold' },
-            CodeCompanionHtmlVariable = { fg = 'diag.hint', bg = 'diag_bg.hint', style = 'bold' },
+            CodeCompanionChatBuffer = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },
+            CodeCompanionChatTool = { fg = 'diag.info', bg = 'diag_bg.info', style = 'bold' },
+            CodeCompanionChatToolGroup = { fg = 'diag.error', bg = 'diag_bg.error', style = 'bold' },
+            CodeCompanionChatVariable = { fg = 'diag.hint', bg = 'diag_bg.hint', style = 'bold' },
 
             CmpItemMenu = { link = 'Comment' },
             CmpItemKindSnippet = { link = 'Function' },

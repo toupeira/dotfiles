@@ -34,16 +34,22 @@ return {
 
       local next_hunk, prev_hunk = util.make_repeatable(
         function()
-          if vim.wo.diff then
-            vim.cmd.normal({']c', bang = true})
+          local mini_diff_data = MiniDiff.get_buf_data()
+          if mini_diff_data and #mini_diff_data.hunks > 0 then
+            MiniDiff.goto_hunk('next')
+          elseif vim.wo.diff then
+            vim.cmd.normal({ ']c', bang = true })
           else
             gitsigns.nav_hunk('next', { target = 'all' })
           end
         end,
 
         function()
-          if vim.wo.diff then
-            vim.cmd.normal({'[c', bang = true})
+          local mini_diff_data = MiniDiff.get_buf_data()
+          if mini_diff_data and #mini_diff_data.hunks > 0 then
+            MiniDiff.goto_hunk('prev')
+          elseif vim.wo.diff then
+            vim.cmd.normal({ '[c', bang = true })
           else
             gitsigns.nav_hunk('prev', { target = 'all' })
           end

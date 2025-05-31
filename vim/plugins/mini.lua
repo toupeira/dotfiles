@@ -229,7 +229,7 @@ return {
       },
     })
 
-    util.autocmd_once('User', 'VeryLazy', function()
+    util.autocmd('User', 'VeryLazy', { once = true }, function()
       -- mini.ai -------------------------------------------------------
       require('mini.ai').setup()
 
@@ -301,6 +301,7 @@ return {
 
       diff.setup({
         source = diff.gen_source.none(),
+        options = { wrap_goto = true },
       })
 
       -- mini.jump -----------------------------------------------------

@@ -20,10 +20,9 @@ local filetypes = {
 
   ['help'] = {
     'buflisted',
-    'winhighlight=Normal:NormalFloat',
   },
 
-  ['qf'] = {
+  ['help,man,qf'] = {
     'winhighlight=Normal:NormalFloat',
   },
 

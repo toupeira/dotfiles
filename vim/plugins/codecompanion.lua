@@ -117,6 +117,18 @@ return {
           user = 'Me ⚗️',
         },
 
+        tools = {
+          opts = {
+            auto_submit_errors = true,
+            auto_submit_success = false,
+          },
+
+          plan = {
+            callback = 'strategies.chat.agents.tools.plan',
+            description = 'Manage an internal todo list',
+          },
+        },
+
         variables = {
           buffer = {
             opts = { default_params = 'watch' },
@@ -172,13 +184,6 @@ return {
 
       chat = {
         icons = { pinned_buffer = '📌 ' },
-
-        tools = {
-          opts = {
-            auto_submit_errors = true,
-            auto_submit_success = true,
-          },
-        },
 
         window = {
           layout = 'horizontal',

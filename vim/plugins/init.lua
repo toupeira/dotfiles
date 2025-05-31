@@ -127,7 +127,7 @@ return {
         pattern = { 'WinScrolledX', 'WinScrolledY' },
       }))
 
-      if #autocmds then
+      if #autocmds > 0 then
         vim.api.nvim_del_autocmd(autocmds[1].id)
         vim.api.nvim_del_autocmd(autocmds[2].id)
         util.autocmd('WinScrolled', {

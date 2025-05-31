@@ -127,9 +127,18 @@ end
 
 -- Create autocommand
 local augroup_default
-util.autocmd = function(event, pattern, command)
-  augroup_default = augroup_default or util.augroup('dotfiles')
-  local opts = { group = augroup_default }
+util.autocmd = function(event, pattern, opts, command)
+  opts = opts or {}
+
+  if type(opts) ~= 'table' then
+    command = opts
+    opts = {}
+  end
+
+  if type(pattern) == 'table' and not vim.isarray(pattern) then
+    opts = pattern
+    pattern = nil
+  end
 
   if pattern and not command then
     command = pattern
@@ -141,31 +150,12 @@ util.autocmd = function(event, pattern, command)
     opts.callback = command
   elseif type(command) == 'string' then
     opts.command = command
-  elseif type(command) == 'table' then
-    opts = util.merge(opts, command)
   end
+
+  augroup_default = augroup_default or util.augroup('dotfiles')
+  opts.group = augroup_default
 
   return vim.api.nvim_create_autocmd(event, opts)
-end
-
--- Create autocmd that only runs once.
---
--- Returning true doesn't work with multiple patterns
--- https://github.com/neovim/neovim/issues/26493
-util.autocmd_once = function(event, pattern, command)
-  if pattern and not command then
-    command = pattern
-    pattern = nil
-  end
-
-  local autocmd_id
-  local handler = function()
-    vim.api.nvim_del_autocmd(autocmd_id)
-    command()
-  end
-
-  autocmd_id = util.autocmd(event, pattern, handler)
-  return autocmd_id
 end
 
 -- Create user command
@@ -323,7 +313,7 @@ util.window_title = function()
   end
 
   -- use filetype as title for non-file buffers
-  if filetype ~= '' and (buftype == 'nofile' or buftype == 'terminal' or filetype == 'help') then
+  if filetype ~= '' and filetype ~= 'man' and (buftype == 'nofile' or buftype == 'terminal') then
     return '@' .. vim.fn.tolower(filetype)
   end
 
@@ -348,13 +338,17 @@ end
 util.project_path = function(max_length, max_depth)
   local path = expand('%:p:h')
     :gsub('/%.git$', '')
-    :gsub('^[a-z]*://.*', '')
+    :gsub('^[a-z]*:.*', '')
 
-  local _, git_dir = pcall(vim.fn.FugitiveGitDir)
+  if path == '' then
+    path = vim.fn.getcwd()
+  end
+
+  local ok, git_dir = pcall(vim.fn.FugitiveGitDir)
   local root, name
 
   -- determine root and name
-  if git_dir and git_dir ~= '' then
+  if ok and git_dir ~= '' then
     root = fnamemodify(git_dir, ':p:h:h')
     name = fnamemodify(root, ':t')
   else

@@ -15,8 +15,6 @@ local presets = {
   },
 
   bottom = {
-    fzf_opts = { ['--layout'] = 'reverse-list' },
-
     -- from ivy profile
     winopts = {
       row = 1,
@@ -63,10 +61,19 @@ return {
         width = 0.9,
         height = 0.9,
         row = 0.5,
+
         preview = {
           hidden = 'hidden',
           vertical = 'up:60%',
           horizontal = 'right:50%',
+        },
+
+        -- restore defaults from fzf.sh
+        treesitter = {
+          fzf_colors = {
+            ['hl'] = '#d7ffaf:bold',
+            ['hl+'] = '#ecffd9',
+          },
         },
       },
 
@@ -80,7 +87,7 @@ return {
           ['<M-b>'] = 'preview-half-page-up',
           ['<M-r>'] = 'preview-page-reset',
         },
-        -- remove defaults, still uses $FZF_DEFAULT_OPTS
+        -- restore defaults from fzf.sh
         fzf = {},
       },
 
@@ -120,26 +127,10 @@ return {
       marks = presets.preview,
       treesitter = merge(presets.bottom, presets.preview),
 
-      diagnostics = merge(presets.bottom, presets.preview, {
-        color_icons = true,
-        color_headings = true,
-        diag_source = true,
-        diag_code = true,
-        sort = 1,
+      buffers = merge(presets.bottom, presets.preview, {
+        fzf_opts = { ['--header-lines'] = false },
+        formatter = "path.filename_first",
       }),
-
-      git = {
-        branches = merge(presets.bottom, presets.preview),
-        bcommits = merge(presets.preview, presets.reverse),
-        commits = merge(presets.preview, presets.reverse),
-        diff = merge(presets.bottom, presets.preview),
-        status = merge(presets.bottom, presets.preview),
-      },
-
-      lsp = {
-        finder = presets.preview,
-        code_actions = presets.preview,
-      },
 
       colorschemes = merge(presets.reverse, {
         colors = {
@@ -160,9 +151,26 @@ return {
         },
       }),
 
-      buffers = merge(presets.bottom, presets.preview, {
-        fzf_opts = { ['--header-lines'] = false },
+      diagnostics = merge(presets.bottom, presets.preview, {
+        color_icons = true,
+        color_headings = true,
+        diag_source = true,
+        diag_code = true,
+        sort = 1,
       }),
+
+      git = {
+        branches = merge(presets.bottom, presets.preview),
+        bcommits = merge(presets.preview, presets.reverse, presets.title('Git Log (Buffer)')),
+        commits = merge(presets.preview, presets.reverse, presets.title('Git Log (Project)')),
+        diff = merge(presets.bottom, presets.preview),
+        status = merge(presets.bottom, presets.preview),
+      },
+
+      lsp = {
+        finder = presets.preview,
+        code_actions = presets.preview,
+      },
 
       files = {
         fd_opts = '--color always --max-results 99999 --type f --type l --exclude .git',
@@ -290,7 +298,7 @@ return {
     map_fzf('<Leader>b', 'buffers')
     map_fzf('<Leader>B', 'buffers', {
       desc = 'all buffers',
-      args = merge(presets.title('Buffers (all)'), { show_unlisted = true }),
+      args = merge(presets.title('Buffers (All)'), { show_unlisted = true }),
     })
 
     map_fzf('<Leader>h', 'oldfiles', { desc = 'history' })

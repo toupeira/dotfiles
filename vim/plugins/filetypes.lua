@@ -80,8 +80,8 @@ return {
             marker_minus       = { add_padding = false, text = '-' },
             marker_plus        = { add_padding = false, text = '+' },
             marker_star        = { add_padding = false, text = '*' },
-            marker_dot         = { add_padding = false },
-            marker_parenthesis = { add_padding = false },
+            marker_dot         = { add_padding = false, conceal_on_checkboxes = false },
+            marker_parenthesis = { add_padding = false, conceal_on_checkboxes = false },
           },
         },
 
@@ -94,14 +94,14 @@ return {
 
         html = {
           container_elements = {
-            ['^buf$']         = wrap_tag('', 'CodeCompanionHtmlBuffer'),
-            ['^tool$']        = wrap_tag('', 'CodeCompanionHtmlTool'),
-            ['^user_prompt$'] = wrap_tag('', 'CodeCompanionHtmlTool'),
-            ['^help$']        = wrap_tag('󰘥', 'CodeCompanionHtmlVariable'),
-            ['^image$']       = wrap_tag('', 'CodeCompanionHtmlVariable'),
-            ['^symbols$']     = wrap_tag('', 'CodeCompanionHtmlVariable'),
-            ['^url$']         = wrap_tag('󰖟', 'CodeCompanionHtmlVariable'),
-            ['^var$']         = wrap_tag('', 'CodeCompanionHtmlVariable'),
+            ['^buf$']         = wrap_tag('', 'CodeCompanionChatBuffer'),
+            ['^tool$']        = wrap_tag('', 'CodeCompanionChatTool'),
+            ['^user_prompt$'] = wrap_tag('', 'CodeCompanionChatTool'),
+            ['^help$']        = wrap_tag('󰘥', 'CodeCompanionChatVariable'),
+            ['^image$']       = wrap_tag('', 'CodeCompanionChatVariable'),
+            ['^symbols$']     = wrap_tag('', 'CodeCompanionChatVariable'),
+            ['^url$']         = wrap_tag('󰖟', 'CodeCompanionChatVariable'),
+            ['^var$']         = wrap_tag('', 'CodeCompanionChatVariable'),
           },
         },
       }

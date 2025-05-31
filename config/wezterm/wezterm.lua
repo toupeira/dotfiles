@@ -6,6 +6,7 @@ config.adjust_window_size_when_changing_font_size = false
 config.check_for_updates = false
 config.enable_scroll_bar = false
 config.hide_tab_bar_if_only_one_tab = true
+config.max_fps = 120
 config.scrollback_lines = 10000
 config.window_background_opacity = 0.85
 
