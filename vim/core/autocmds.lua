@@ -53,24 +53,6 @@ autocmd('FileType', 'qf', function()
   util.resize_window({ max = 10 })
 end)
 
--- Setup terminals
-autocmd('TermOpen', function()
-  vim.wo.number = false
-  vim.wo.relativenumber = false
-  vim.wo.signcolumn = 'no'
-  vim.wo.winhighlight = 'Normal:NormalFloat'
-end)
-
--- Automatically enter/leave insert mode for terminals
-autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
-autocmd({ 'BufWinLeave', 'WinLeave' }, 'term://*', 'stopinsert')
-
--- Auto-close certain terminal commands
-util.autocmd('TermClose', 'term://*:{git,glow} *', function()
-  util.close_buffer()
-  util.close_window()
-end)
-
 -- Enter insert mode when committing
 autocmd('FileType', 'gitcommit', function()
   if vim.fn.getline(1) == '' then
@@ -78,6 +60,14 @@ autocmd('FileType', 'gitcommit', function()
     vim.cmd.startinsert()
   end
 end)
+
+-- Setup terminals
+autocmd('TermOpen', function()
+  vim.wo.winhighlight = 'Normal:NormalFloat'
+end)
+
+--- Automatically enter insert mode for terminals
+autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
 
 -- Git helpers
 local git_command = function(action, key, command, check)
@@ -99,6 +89,14 @@ end
 git_command('Stage', '<Leader>gA', 'git add -p', 'git unstaged')
 git_command('Unstage', '<Leader>gU', 'git reset HEAD -p', 'git staged')
 git_command('Discard', '<Leader>gD', 'git checkout -p', 'git unstaged')
+
+-- Auto-close Git commands on success or cancel
+util.autocmd('TermClose', 'term://*:git *', function()
+  if vim.v.event.status == 0 or vim.v.event.status == 130 then
+    util.close_buffer()
+    util.close_window()
+  end
+end)
 
 -- Autocommands adapted from
 -- https://github.com/LazyVim/LazyVim/blob/main/lua/lazyvim/config/autocmds.lua

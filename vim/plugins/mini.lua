@@ -353,17 +353,17 @@ return {
         },
 
         mappings = {
-          ['('] = { neigh_pattern = '[^\\][ \n]' },
-          ['['] = { neigh_pattern = '[^\\][ \n]' },
-          ['{'] = { neigh_pattern = '[^\\][ \n]' },
-          ['"'] = { neigh_pattern = '[^%a)}%]\\][ \n]' },
-          ["'"] = { neigh_pattern = '[^%a)}%]\\][ \n]' },
-          ['`'] = { neigh_pattern = '[^%a)}%]\\][ \n]' },
+          ['('] = { neigh_pattern = '[^\\][%s)}%]]' },
+          ['['] = { neigh_pattern = '[^\\][%s)}%]]' },
+          ['{'] = { neigh_pattern = '[^\\][%s)}%]]' },
+          ['"'] = { neigh_pattern = '[^\\%a"][%s)}%]]' },
+          ["'"] = { neigh_pattern = "[^\\%a'][%s)}%]]" },
+          ['`'] = { neigh_pattern = '[^\\%a`][%s)}%]]' },
 
           [' '] = {
             action = 'closeopen',
             pair = '  ',
-            neigh_pattern = '[%(%{][%)%}]',
+            neigh_pattern = '[({%[][)}%]]',
           },
         }
       })

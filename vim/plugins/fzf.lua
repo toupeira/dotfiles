@@ -214,7 +214,20 @@ return {
     vim.g.fzf_history_dir = vim.fn.stdpath('state') .. '/fzf'
 
     fzf.setup(opts)
-    require('fzf-lua.providers.ui_select').register()
+
+    fzf.register_ui_select(function(select_opts, items)
+      local title = select_opts.prompt
+      select_opts.prompt = '» '
+
+      local height = math.min(
+        presets.bottom.winopts.height,
+        (#items + 1) / vim.o.lines
+      )
+
+      return merge(presets.bottom, presets.title(title), {
+        winopts = { height = height },
+      })
+    end)
 
     util.alias_command({
       fzf = 'FzfLua', Fzf = 'FzfLua', FZF = 'FzfLua', FZf = 'FzfLua',

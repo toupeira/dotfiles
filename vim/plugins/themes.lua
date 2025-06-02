@@ -255,6 +255,13 @@ return {
             NeoTreeGitUnstaged = { link = 'WarningMsg' },
             NeoTreeGitUntracked = { link = 'ErrorMsg' },
 
+            SnacksIndent = { fg = 'bg2' },
+            SnacksIndentScope = { fg = 'fg3' },
+            SnacksInputBorder = { link = 'FloatBorder' },
+            SnacksInputNormal = { link = 'NormalFloat' },
+            SnacksInputIcon = { link = 'DiagnosticInfo' },
+            SnacksInputTitle = { link = 'FloatTitle' },
+
             TreesitterContextBottom = { style = 'underline', sp = 'bg3' },
             TSDefinition = { link = 'Visual' },
 

@@ -98,46 +98,6 @@ return {
     end,
   },
 
-  very_lazy { 'shellRaining/hlchunk.nvim',
-    opts = {
-      indent = {
-        enable = true,
-        style = '#222633',
-      },
-
-      chunk = {
-        enable = true,
-        chars = { right_arrow = '─' },
-        style = '#4b5263',
-        duration = 0,
-      },
-    },
-
-    config = function(_, opts)
-      require('hlchunk').setup(opts)
-
-      -- work around broken folding
-      -- https://github.com/shellRaining/hlchunk.nvim/issues/143
-      local autocmd = {
-        group = 'hlchunk_indent',
-        event = 'User',
-      }
-
-      local autocmds = vim.api.nvim_get_autocmds(util.merge(autocmd, {
-        pattern = { 'WinScrolledX', 'WinScrolledY' },
-      }))
-
-      if #autocmds > 0 then
-        vim.api.nvim_del_autocmd(autocmds[1].id)
-        vim.api.nvim_del_autocmd(autocmds[2].id)
-        util.autocmd('WinScrolled', {
-          group = autocmd.group,
-          callback = autocmds[1].callback,
-        })
-      end
-    end,
-  },
-
   lazy_file { 'sickill/vim-pasta',
     init = function()
       vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
