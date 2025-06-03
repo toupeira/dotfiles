@@ -19,9 +19,7 @@ return {
     signature = { enabled = true },
 
     -- awkward because completeopt=longest isn't supported
-    cmdline = {
-      enabled = false,
-    },
+    cmdline = { enabled = false },
 
     fuzzy = {
       sorts = { 'exact', 'score', 'sort_text' },
@@ -33,6 +31,10 @@ return {
 
     keymap = {
       preset = 'super-tab',
+
+      -- mapped with `mini.keymap`
+      ['<Tab>'] = {},
+      ['<S-Tab>'] = {},
 
       ['<C-Space>'] = {},
       ['<C-n>'] = { 'show', 'select_next', 'fallback_to_mappings' },

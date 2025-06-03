@@ -331,6 +331,37 @@ return {
         end
       end, { force = true }, 'Repeat jump backward')
 
+      -- mini.keymap ---------------------------------------------------
+      local keymap = require('mini.keymap')
+
+      keymap.map_multistep('i', '<Tab>', {
+        'blink_accept',
+        'vimsnippet_next',
+        'increase_indent',
+        -- jump after next delimiter on current line
+        util.merge(
+          keymap.gen_step.search_pattern([=[[()\[\]{}"'`]]=], 'cW', {
+            side = 'after',
+            stopline = function() return vim.fn.line('.') end,
+          }), {
+            condition = function()
+              -- insert tabs at end of the line
+              return vim.fn.col('.') ~= vim.fn.col('$')
+            end
+          }
+        ),
+      })
+
+      keymap.map_multistep('i', '<S-Tab>', {
+        'vimsnippet_prev',
+        'decrease_indent',
+        -- jump before previous delimiter on current line
+        keymap.gen_step.search_pattern([=[[()\[\]{}"'`]]=], 'bW', {
+          side = 'before',
+          stopline = function() return vim.fn.line('.') end,
+        }),
+      })
+
       -- mini.move -----------------------------------------------------
       require('mini.move').setup()
       imap('<M-H>', ':lua MiniMove.move_line("left")',  'Move line left')
@@ -353,9 +384,9 @@ return {
         },
 
         mappings = {
-          ['('] = { neigh_pattern = '[^\\][%s)}%]]' },
-          ['['] = { neigh_pattern = '[^\\][%s)}%]]' },
-          ['{'] = { neigh_pattern = '[^\\][%s)}%]]' },
+          ['('] = { neigh_pattern = '[^\\][%s}%]]' },
+          ['['] = { neigh_pattern = '[^\\][%s)}]' },
+          ['{'] = { neigh_pattern = '[^\\][%s)%]]' },
           ['"'] = { neigh_pattern = '[^\\%a"][%s)}%]]' },
           ["'"] = { neigh_pattern = "[^\\%a'][%s)}%]]" },
           ['`'] = { neigh_pattern = '[^\\%a`][%s)}%]]' },
