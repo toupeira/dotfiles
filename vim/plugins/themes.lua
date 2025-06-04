@@ -156,12 +156,12 @@ return {
 
             ['@markup.heading'] = { fg = 'palette.blue', style = 'bold' },
             ['@markup.italic'] = { style = 'italic' },
-            ['@markup.link.url'] = { fg = 'palette.magenta', style = 'underline' },
+            ['@markup.link.url'] = { fg = 'palette.blue', style = 'underline' },
             ['@markup.list'] = { link = 'PreProc' },
             ['@markup.raw'] = { fg = 'syntax.string', style = 'NONE' },
             ['@markup.strong'] = { fg = 'palette.yellow', style = 'bold' },
 
-            ['@string.special.url'] = { fg = 'palette.blue', style = 'underline' },
+            ['@string.special.url'] = { link = '@markup.link.url' },
 
             -- filetypes
             ['@function.builtin.bash'] = { link = 'Operator' },
@@ -185,7 +185,7 @@ return {
 
             ['@markup.heading.ini'] = { link = '@markup.strong' },
 
-            ['@markup.link.label.markdown_inline'] = { fg = 'palette.blue', style = 'underline' },
+            ['@markup.link.label.markdown_inline'] = { link = '@markup.link.url' },
 
             ['@keyword.ruby'] = { link = 'Statement' },
             ['@keyword.type.ruby'] = { link = 'Statement' },
@@ -193,19 +193,6 @@ return {
             ['@function.macro.vim'] = { link = 'Macro' },
             ['@keyword.vim'] = { link = 'Statement' },
             ['@variable.builtin.vim'] = { link = 'PreProc' },
-
-            shFunctionKey = { link = 'Statement' },
-            shSet = { link = 'Operator' },
-            shStatement = { link = 'Operator' },
-
-            rubyCapitalizedMethod = { link = 'Type' },
-            rubyInclude = { link = 'Operator' },
-            rubyInstanceVariable = { link = 'Keyword' },
-            rubyInterpolation = { link = 'Operator' },
-            rubyInterpolationDelimiter = { link = 'Keyword' },
-            rubyPseudoVariable = { link = 'Special' },
-            rubyStringDelimiter = { link = 'String' },
-            rubySymbol = { link = 'Special' },
 
             -- plugins
             CodeCompanionChatBuffer = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },
@@ -216,7 +203,7 @@ return {
             CmpItemMenu = { link = 'Comment' },
             CmpItemKindSnippet = { link = 'Function' },
 
-            -- FlashCurrent = { link = 'CurSearch' },
+            FlashCurrent = { link = 'CurSearch' },
             FlashLabel = { fg = 'palette.search.bg0', bg = 'palette.search.fg0', style = 'bold' },
 
             FugitiveblameAnnotation = { link = 'StatusLine' },
@@ -231,6 +218,8 @@ return {
             LazyButtonActive = { link = 'LazyH1' },
             LazyDimmed = { link = 'Comment' },
             LazyProp = { link = 'Comment' },
+
+            MarkviewPalette0Fg = { link = 'MarkviewPalette1Fg' },
 
             MatchParen = { fg = 'none', bg = 'sel0', style = 'bold' },
             MatchWord = { style = 'bold' },

@@ -53,6 +53,8 @@ return {
     opts = function(plugin)
       local function wrap_tag(icon, hl_group)
         return {
+          on_node = { hl_group = hl_group },
+          on_closing_tag = { conceal = '' },
           on_opening_tag = {
             conceal = '',
             virt_text_pos = 'inline',
@@ -60,8 +62,6 @@ return {
               { icon .. ' ', hl_group },
             },
           },
-          on_node = { hl_group = hl_group },
-          on_closing_tag = { conceal = '' },
         }
       end
 

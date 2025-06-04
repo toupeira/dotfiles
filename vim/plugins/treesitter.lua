@@ -135,6 +135,9 @@ return {
   },
 
   config = function(_, opts)
+    -- define filetype aliases
+    vim.treesitter.language.register('yaml', 'eruby.yaml')
+
     require('nvim-treesitter.configs').setup(opts)
 
     local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
