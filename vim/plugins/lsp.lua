@@ -31,8 +31,7 @@ return {
   },
 
   keys = {
-    { '<Leader>%', '<Cmd>LspInfo<CR>', desc = 'Show LSP status' },
-    { '<Leader>LS', '<Cmd>LspStart<CR>', desc = 'Start LSP server' },
+    { '<Leader>%', '<Cmd>checkhealth lsp<CR>', desc = 'Show LSP status' },
   },
 
   config = function(_, opts)
@@ -43,23 +42,38 @@ return {
       settings.install = nil
       require('lspconfig')[server].setup(settings)
 
-      -- TODO: use `vim.lsp.config()`, it doesn't support autostart yet
+      -- TODO: switch to native configuration
       -- vim.lsp.config(server, settings)
-      -- vim.lsp.enable(server)
     end
 
+    -- TODO: `LspStart` and `LspStop` now require an argument and don't target all matching servers anymore
+    local function lsp_start()
+      local configs = require('lspconfig.util').get_config_by_ft(vim.bo.filetype)
+
+      for _, config in ipairs(configs) do
+        vim.lsp.enable(config.name)
+      end
+    end
+
+    local function lsp_stop()
+      local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
+
+      for _, client in ipairs(clients) do
+        client.stop()
+      end
+    end
+
+    nmap('<Leader>LS', lsp_start, 'Start LSP server')
+
     util.autocmd('LspDetach', function(event)
-      nmap('<Leader>LS', ':LspStart', { force = true, buffer = event.buf }, 'Start LSP server')
+      util.unmap({ 'n' }, '<Leader>LS', { buffer = event.buf })
     end)
 
     util.autocmd('LspAttach', function(event)
-      -- Enable omni-completion
-      vim.bo[event.buf].omnifunc = 'v:lua.vim.lsp.omnifunc'
-
       -- Buffer local mappings
       local args = { force = true, buffer = event.buf }
 
-      nmap('<Leader>LS', ':LspStop', args, 'Stop LSP server')
+      nmap('<Leader>LS', lsp_stop, args, 'Stop LSP server')
 
       nmap('gd', vim.lsp.buf.definition, args, 'Go to LSP definition')
       nmap('gD', vim.lsp.buf.declaration, args, 'Go to LSP declaration')
