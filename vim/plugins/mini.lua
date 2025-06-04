@@ -414,13 +414,14 @@ return {
       -- mini.surround -------------------------------------------------
       require('mini.surround').setup({
         mappings = {
-          add = 'Sa',
-          delete = 'Sd',
-          find = 'Sf',
-          find_left = 'SF',
-          highlight = 'Sh',
-          replace = 'Sr',
-          update_n_lines = 'Sn',
+          add = 'SA',
+          delete = 'SD',
+          replace = 'SR',
+          highlight = 'SH',
+
+          find = '',
+          find_left = '',
+          update_n_lines = '',
         },
       })
 

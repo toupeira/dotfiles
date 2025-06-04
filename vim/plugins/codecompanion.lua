@@ -53,6 +53,7 @@ return {
 
       openrouter = function()
         return require('codecompanion.adapters').extend('openai_compatible', {
+          name = 'openrouter',
           formatted_name = 'OpenRouter',
           env = {
             url = 'https://openrouter.ai/api',

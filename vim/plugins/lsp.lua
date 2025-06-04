@@ -35,23 +35,20 @@ return {
   },
 
   config = function(_, opts)
-    require('lspconfig.ui.windows').default_options = opts.ui
-
     for server, settings in pairs(servers) do
-      settings.autostart = settings.autostart or false
       settings.install = nil
-      require('lspconfig')[server].setup(settings)
-
-      -- TODO: switch to native configuration
-      -- vim.lsp.config(server, settings)
+      vim.lsp.config(server, settings)
     end
 
     -- TODO: `LspStart` and `LspStop` now require an argument and don't target all matching servers anymore
     local function lsp_start()
-      local configs = require('lspconfig.util').get_config_by_ft(vim.bo.filetype)
+      local filetype = vim.bo.filetype
 
-      for _, config in ipairs(configs) do
-        vim.lsp.enable(config.name)
+      for name, _ in pairs(vim.lsp.config._configs) do
+        local filetypes = vim.lsp.config[name].filetypes
+        if filetypes and vim.tbl_contains(filetypes, filetype) then
+          vim.lsp.enable(name)
+        end
       end
     end
 
@@ -59,7 +56,7 @@ return {
       local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
 
       for _, client in ipairs(clients) do
-        client.stop()
+        vim.lsp.enable(client.name, false)
       end
     end
 
