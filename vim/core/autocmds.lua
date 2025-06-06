@@ -34,6 +34,8 @@ local filetypes = {
     'conceallevel=2',
     'suffixesadd+=.md',
     'foldlevel=2',
+    -- reset after ftplugin
+    'foldtext=',
     -- reset after obsidian.nvim
     'foldexpr=MarkdownFold()',
     -- automatically continue lists and blockquotes
@@ -145,7 +147,7 @@ autocmd('FileType', 'man', function()
 end)
 
 -- Check if we need to reload the file when it changed
-autocmd({ 'FocusGained', 'TermClose', 'TermLeave' }, function()
+autocmd({ 'FocusGained', 'TermLeave', 'VimResume' }, function()
   if vim.o.buftype ~= 'nofile' then
     vim.cmd.checktime()
   end
