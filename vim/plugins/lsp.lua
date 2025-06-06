@@ -31,36 +31,15 @@ return {
   },
 
   keys = {
+    { '<Leader>LS', '<Cmd>LspStart<CR>', 'Start LSP server' },
     { '<Leader>%', '<Cmd>checkhealth lsp<CR>', desc = 'Show LSP status' },
   },
 
-  config = function(_, opts)
+  config = function()
     for server, settings in pairs(servers) do
       settings.install = nil
       vim.lsp.config(server, settings)
     end
-
-    -- TODO: `LspStart` and `LspStop` now require an argument and don't target all matching servers anymore
-    local function lsp_start()
-      local filetype = vim.bo.filetype
-
-      for name, _ in pairs(vim.lsp.config._configs) do
-        local filetypes = vim.lsp.config[name].filetypes
-        if filetypes and vim.tbl_contains(filetypes, filetype) then
-          vim.lsp.enable(name)
-        end
-      end
-    end
-
-    local function lsp_stop()
-      local clients = vim.lsp.get_clients({ bufnr = vim.api.nvim_get_current_buf() })
-
-      for _, client in ipairs(clients) do
-        vim.lsp.enable(client.name, false)
-      end
-    end
-
-    nmap('<Leader>LS', lsp_start, 'Start LSP server')
 
     util.autocmd('LspDetach', function(event)
       util.unmap({ 'n' }, '<Leader>LS', { buffer = event.buf })
@@ -70,7 +49,7 @@ return {
       -- Buffer local mappings
       local args = { force = true, buffer = event.buf }
 
-      nmap('<Leader>LS', lsp_stop, args, 'Stop LSP server')
+      nmap('<Leader>LS', '<Cmd>LspStop<CR>', args, 'Stop LSP server')
 
       nmap('gd', vim.lsp.buf.definition, args, 'Go to LSP definition')
       nmap('gD', vim.lsp.buf.declaration, args, 'Go to LSP declaration')

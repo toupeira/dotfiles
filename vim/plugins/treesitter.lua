@@ -74,9 +74,7 @@ return {
     },
 
     highlight = { enable = true },
-    endwise = { enable = true },
     indent = { enable = true },
-    matchup = { enable = true },
 
     refactor = {
       navigation = {
@@ -103,8 +101,6 @@ return {
           ['im'] = { query = '@class.inner', desc = 'Select current module body' },
           ['af'] = { query = '@function.outer', desc = 'Select current function' },
           ['if'] = { query = '@function.inner', desc = 'Select current function body' },
-          ['aa'] = { query = '@parameter.outer', desc = 'Select all arguments' },
-          ['ia'] = { query = '@parameter.inner', desc = 'Select current argument' },
         },
       },
 

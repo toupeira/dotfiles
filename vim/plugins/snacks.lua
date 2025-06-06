@@ -33,7 +33,11 @@ return {
         title_pos = 'left',
         relative = 'cursor',
         row = 1,
-        col = 0,
+        col = -2,
+
+        keys = {
+          i_ctrl_c = { '<C-c>', 'cancel', mode = 'i' },
+        },
       },
 
       terminal = {
