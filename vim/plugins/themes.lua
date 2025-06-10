@@ -195,7 +195,10 @@ return {
             ['@variable.builtin.vim'] = { link = 'PreProc' },
 
             -- plugins
-            CodeCompanionChatBuffer = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },
+            BlinkCmpDocBorder = { link = 'FloatBorder' },
+            BlinkCmpMenuBorder = { link = 'FloatBorder' },
+            BlinkCmpSignatureHelpBorder = { link = 'FloatBorder' },
+
             CodeCompanionChatTool = { fg = 'diag.info', bg = 'diag_bg.info', style = 'bold' },
             CodeCompanionChatToolGroup = { fg = 'diag.error', bg = 'diag_bg.error', style = 'bold' },
             CodeCompanionChatVariable = { fg = 'diag.hint', bg = 'diag_bg.hint', style = 'bold' },

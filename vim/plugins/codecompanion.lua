@@ -40,7 +40,7 @@ return {
     { '<M-a>', '<Cmd>AI<CR>', mode = { 'n', 'v' }, desc = 'AI: Toggle chat' },
     { '<Leader>an', '<Cmd>CodeCompanionChat<CR>', desc = 'AI: Start a new chat' },
     { '<Leader>aa', '<Cmd>CodeCompanionActions<CR>', mode = { 'n', 'v' }, desc = 'AI: Show actions' },
-    { '<Leader>aS', '<Cmd>lua require("codecompanion.strategies.inline"):stop()<CR>', desc = 'AI: Stop inline request' },
+    { '<Leader>aA', '<Cmd>lua require("codecompanion.strategies.inline"):stop()<CR>', desc = 'AI: Abort inline request' },
     { '<Leader>ah', '<Cmd>CodeCompanionHistory<CR>', desc = 'AI: Show chat history' },
   },
 
@@ -58,35 +58,17 @@ return {
           env = {
             url = 'https://openrouter.ai/api',
             api_key = 'OPENROUTER_API_KEY',
-            chat_url = '/v1/chat/completions',
           },
           schema = {
             model = {
-              default = 'google/gemini-2.5-pro-preview',
-              -- default = 'google/gemini-2.5-flash-preview',
-              -- default = 'anthropic/claude-3.7-sonnet',
-            },
-          },
-        })
-      end,
-
-      claude = function()
-        return require('codecompanion.adapters').extend('anthropic', {
-          formatted_name = 'Claude',
-          schema = {
-            model = {
-              default = 'claude-3-5-haiku-latest',
-              -- default = 'claude-3-7-sonnet-latest',
-            },
-          },
-        })
-      end,
-
-      gemini = function()
-        return require('codecompanion.adapters').extend('gemini', {
-          schema = {
-            model = {
-              default = 'gemini-2.5-flash-preview-04-17',
+              -- default = 'anthropic/claude-sonnet-4',
+              -- default = 'deepseek/deepseek-chat-v3-0324:free',
+              -- default = 'deepseek/deepseek-r1-0528:free', -- doesn't support tools yet
+              -- default = 'google/gemini-2.5-flash-preview-05-20',
+              default = 'google/gemini-2.5-flash-preview-05-20:thinking',
+              -- default = 'google/gemini-2.5-pro-preview',
+              -- default = 'meta-llama/llama-4-maverick:free',
+              -- default = 'openai/o4-mini-high',
             },
           },
         })
@@ -94,9 +76,9 @@ return {
     },
 
     strategies = {
-      cmd    = { adapter = 'claude' },
-      inline = { adapter = 'claude' },
-      chat   = { adapter = 'claude',
+      cmd    = { adapter = 'openrouter' },
+      inline = { adapter = 'openrouter' },
+      chat   = { adapter = 'openrouter',
         roles = {
           llm = function(adapter)
             return string.format(
@@ -122,6 +104,7 @@ return {
           opts = {
             auto_submit_errors = true,
             auto_submit_success = false,
+            wait_timeout = 300000,
           },
 
           plan = {
@@ -130,15 +113,9 @@ return {
           },
         },
 
-        variables = {
-          buffer = {
-            opts = { default_params = 'watch' },
-          },
-        },
-
         keymaps = {
-          close = { modes = { n = 'Q', i = '<Nop>' }},
-          stop =  { modes = { n = '<Leader>aS' }},
+          close = { modes = { n = 'q', i = '<Nop>' }},
+          stop =  { modes = { n = 'gA' }},
           send =  {
             modes = { n = '<C-s>' },
             callback = function(chat)
@@ -158,7 +135,7 @@ return {
         strategy = 'chat',
         description = 'Edit the current buffer',
         prompts = {
-          { role = 'user', content = '@editor #buffer\n\n' },
+          { role = 'user', content = '@insert_edit_into_file #buffer\n\n' },
         },
         opts = {
           auto_submit = false,
@@ -202,7 +179,6 @@ return {
 
     extensions = {
       history = {
-        enabled = true,
         opts = {
           auto_save = true,
           expiration_days = 30,
@@ -213,11 +189,6 @@ return {
 
       mcphub = {
         callback = 'mcphub.extensions.codecompanion',
-        opts = {
-          show_result_in_chat = true,
-          make_vars = true,
-          make_slash_commands = true,
-        },
       },
     },
   },
@@ -275,10 +246,8 @@ return {
       ai = 'AI', aI = 'AI', Ai = 'AI',
     })
 
-    -- hide the chat with 'q', close it with 'Q'
     util.autocmd('FileType', 'codecompanion', function (event)
       MiniClue.enable_buf_triggers(event.buf)
-      util.nmap('q', '<Cmd>CodeCompanionChat Toggle<CR>', 'AI: Hide chat', { buffer = true, force = true })
     end)
   end,
 }

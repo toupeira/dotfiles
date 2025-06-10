@@ -16,9 +16,8 @@ return {
   },
 
   opts = {
-    signature = { enabled = true },
-
-    -- awkward because completeopt=longest isn't supported
+    -- feels awkward because completeopt=longest isn't supported
+    -- https://github.com/Saghen/blink.cmp/issues/337
     cmdline = { enabled = false },
 
     fuzzy = {
@@ -46,53 +45,6 @@ return {
       ['<M-t>'] = (util.is_tmux and { function(cmp) cmp.show({ providers = { 'tmux' }}) end } or { 'fallback' }),
     },
 
-    sources = {
-      min_keyword_length = 2,
-
-      default = function()
-        return {
-          'path',
-          'buffer',
-          'snippets',
-          #util.lsp_clients() > 0 and 'lsp' or 'omni'
-        }
-      end,
-
-      providers = {
-        path = {
-          transform_items = hide_source,
-          opts = {
-            get_cwd = function(_)
-              return vim.fn.getcwd()
-            end,
-          },
-        },
-        buffer = {
-          transform_items = hide_source,
-          opts = {
-            get_bufnrs = function()
-              return vim.tbl_filter(
-                function(buf)
-                  return vim.fn.buflisted(buf) == 1 and
-                         vim.fn.bufloaded(buf) == 1
-                end,
-                vim.api.nvim_list_bufs()
-              )
-            end,
-          }
-        },
-        tmux = {
-          enabled = util.is_tmux,
-          module = 'blink-cmp-tmux',
-          name = 'tmux',
-          opts = {
-            all_panes = true,
-            capture_history = true,
-          },
-        },
-      },
-    },
-
     completion = {
       keyword = { range = 'full' },
       trigger = { show_in_snippet = false },
@@ -113,8 +65,69 @@ return {
             'lsp',
             'omni',
           },
+        },
+      },
+
+      documentation = {
+        window = { border = 'rounded' },
+      },
+    },
+
+    signature = {
+      enabled = true,
+      window = { border = 'rounded' },
+    },
+
+    sources = {
+      min_keyword_length = 2,
+
+      default = function()
+        return {
+          'path',
+          'buffer',
+          'snippets',
+          #util.lsp_clients() > 0 and 'lsp' or 'omni'
         }
-      }
+      end,
+
+      providers = {
+        path = {
+          enabled = function()
+            return vim.bo.filetype ~= 'codecompanion'
+          end,
+          transform_items = hide_source,
+          opts = {
+            get_cwd = function(_)
+              return vim.fn.getcwd()
+            end,
+          },
+        },
+
+        buffer = {
+          transform_items = hide_source,
+          opts = {
+            get_bufnrs = function()
+              return vim.tbl_filter(
+                function(buf)
+                  return vim.fn.buflisted(buf) == 1 and
+                         vim.fn.bufloaded(buf) == 1
+                end,
+                vim.api.nvim_list_bufs()
+              )
+            end,
+          },
+        },
+
+        tmux = {
+          enabled = util.is_tmux,
+          module = 'blink-cmp-tmux',
+          name = 'tmux',
+          opts = {
+            all_panes = true,
+            capture_history = true,
+          },
+        },
+      },
     },
   },
 }

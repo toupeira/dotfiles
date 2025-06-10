@@ -51,16 +51,14 @@ return {
     ft = { 'markdown', 'codecompanion' },
     cmd = { 'Markview' },
     opts = function(plugin)
-      local function wrap_tag(icon, hl_group)
+      local function conceal_tag(icon, hl_group)
         return {
           on_node = { hl_group = hl_group },
           on_closing_tag = { conceal = '' },
           on_opening_tag = {
             conceal = '',
             virt_text_pos = 'inline',
-            virt_text = {
-              { icon .. ' ', hl_group },
-            },
+            virt_text = {{ icon .. ' ', hl_group }},
           },
         }
       end
@@ -94,14 +92,16 @@ return {
 
         html = {
           container_elements = {
-            ['^buf$']         = wrap_tag('', 'CodeCompanionChatBuffer'),
-            ['^tool$']        = wrap_tag('', 'CodeCompanionChatTool'),
-            ['^user_prompt$'] = wrap_tag('', 'CodeCompanionChatTool'),
-            ['^help$']        = wrap_tag('󰘥', 'CodeCompanionChatVariable'),
-            ['^image$']       = wrap_tag('', 'CodeCompanionChatVariable'),
-            ['^symbols$']     = wrap_tag('', 'CodeCompanionChatVariable'),
-            ['^url$']         = wrap_tag('󰖟', 'CodeCompanionChatVariable'),
-            ['^var$']         = wrap_tag('', 'CodeCompanionChatVariable'),
+            ['^buf$']         = conceal_tag('', 'CodeCompanionChatVariable'),
+            ['^file$']        = conceal_tag('', 'CodeCompanionChatVariable'),
+            ['^help$']        = conceal_tag('󰘥', 'CodeCompanionChatVariable'),
+            ['^image$']       = conceal_tag('', 'CodeCompanionChatVariable'),
+            ['^symbols$']     = conceal_tag('', 'CodeCompanionChatVariable'),
+            ['^url$']         = conceal_tag('󰖟', 'CodeCompanionChatVariable'),
+            ['^var$']         = conceal_tag('', 'CodeCompanionChatVariable'),
+            ['^tool$']        = conceal_tag('', 'CodeCompanionChatTool'),
+            ['^user_prompt$'] = conceal_tag('', 'CodeCompanionChatTool'),
+            ['^group$']       = conceal_tag('', 'CodeCompanionChatToolGroup'),
           },
         },
       }

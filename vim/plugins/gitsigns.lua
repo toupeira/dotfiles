@@ -7,12 +7,13 @@ return {
   event = 'VeryLazy',
 
   opts = {
+    attach_to_untracked = true,
     sign_priority = 100,
 
     signs = {
       add          = { text = '▉' },
       change       = { text = '▉' },
-      untracked    = { text = '○' },
+      untracked    = { text = '▉' },
       delete       = { text = '⨯' },
       topdelete    = { text = '⨯' },
     },
