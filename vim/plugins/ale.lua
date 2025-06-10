@@ -39,7 +39,6 @@ return {
 
     vim.g.ale_ruby_rubocop_auto_correct_all = 1
     vim.g.ale_lua_luacheck_options = '--globals vim --max-line-length 160'
-    vim.g.ale_lua_stylua_options = '--verify'
     vim.g.ale_terraform_terraform_executable = 'tofu'
 
     util.autocmd({ 'BufRead', 'BufNewFile' }, '.env', function()

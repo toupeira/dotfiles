@@ -22,10 +22,11 @@ local presets = {
       width = 1,
       height = 0.4,
       title_pos = 'left',
-      border = { '', '─', '', '', '', '', '', '' },
+      border = { '╭', '─', '┬', '│', '┴', '─', '╰', '│' },
       preview = {
         layout = 'horizontal',
         title_pos = 'left',
+        border = { '┬', '─', '╮', '│', '╯', '─', '─', '' },
       },
     },
   },
@@ -159,19 +160,6 @@ return {
         sort = 1,
       }),
 
-      git = {
-        branches = merge(presets.bottom, presets.preview),
-        bcommits = merge(presets.preview, presets.reverse, presets.title('Git Log (Buffer)')),
-        commits = merge(presets.preview, presets.reverse, presets.title('Git Log (Project)')),
-        diff = merge(presets.bottom, presets.preview),
-        status = merge(presets.bottom, presets.preview),
-      },
-
-      lsp = {
-        finder = presets.preview,
-        code_actions = presets.preview,
-      },
-
       files = {
         fd_opts = '--color always --max-results 99999 --type f --type l --exclude .git',
         hidden = true,
@@ -186,9 +174,22 @@ return {
         },
       },
 
+      git = {
+        branches = merge(presets.bottom, presets.preview),
+        bcommits = merge(presets.preview, presets.reverse, presets.title('Git Log (Buffer)')),
+        commits = merge(presets.preview, presets.reverse, presets.title('Git Log (Project)')),
+        diff = merge(presets.bottom, presets.preview),
+        status = merge(presets.bottom, presets.preview),
+      },
+
       grep = {
         multiline = 1,
         RIPGREP_CONFIG_PATH = vim.env.RIPGREP_CONFIG_PATH,
+      },
+
+      lsp = {
+        finder = presets.preview,
+        code_actions = presets.preview,
       },
 
       oldfiles = merge(presets.title('History'), {
@@ -221,11 +222,14 @@ return {
 
       local height = math.min(
         presets.bottom.winopts.height,
-        (#items + 1) / vim.o.lines
+        (#items + 2) / vim.o.lines
       )
 
-      return merge(presets.bottom, presets.title(title), {
-        winopts = { height = height },
+      return merge(presets.bottom, presets.reverse, presets.title(title), {
+        winopts = {
+          border = 'rounded',
+          height = height,
+        },
       })
     end)
 
@@ -235,7 +239,7 @@ return {
 
     -- when opening multiple files, open both the quickfix list and the first file
     fzf.defaults.actions.files.default = function(selected, settings)
-      fzf.actions.file_edit(selected, settings)
+      fzf.actions.file_edit({ selected[1] }, settings)
 
       if #selected > 1 then
         fzf.actions.file_sel_to_qf(selected, settings)
@@ -383,6 +387,11 @@ return {
     map_fzf('<Leader>gc', 'git_branches')
     map_fzf('<Leader>gl', 'git_bcommits')
     map_fzf('<Leader>gL', 'git_commits')
+
+    -- search Aerial symbols
+    map_fzf('<Leader>i', function()
+      require('aerial').fzf_lua_picker(merge(presets.bottom, presets.preview))
+    end, { desc = 'symbols' })
 
     -- search projects
     local projects = function(settings)

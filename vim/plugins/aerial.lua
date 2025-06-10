@@ -3,12 +3,17 @@ local nmap = util.nmap
 
 return {
   'stevearc/aerial.nvim',
+
   cmd = {
     'AerialToggle',
     'AerialNavToggle',
     'AerialNext',
     'AerialPrev',
     'AerialGo',
+  },
+
+  keys = {
+    { '<LocalLeader>i', '<Cmd>AerialToggle<CR>', desc = 'Toggle symbols sidebar' },
   },
 
   opts = {
@@ -23,10 +28,10 @@ return {
     },
 
     nav = {
-      min_width = 0.29,
-      max_width = 0.29,
-      min_height = 0.6,
-      max_height = 0.9,
+      min_width = 0.3,
+      max_width = 0.3,
+      min_height = 0.8,
+      max_height = 0.8,
       win_opts = { winblend = 0 },
       keymaps = { q = 'actions.close' },
       preview = true,
@@ -41,8 +46,5 @@ return {
 
     nmap(']]', next_symbol, { force = true }, 'Go to next symbol')
     nmap('[[', previous_symbol, { force = true }, 'Go to previous symbol')
-
-    nmap('<Leader>i', aerial.nav_toggle, 'Toggle symbols popup')
-    nmap('<LocalLeader>i', aerial.toggle, 'Toggle symbols sidebar')
   end,
 }

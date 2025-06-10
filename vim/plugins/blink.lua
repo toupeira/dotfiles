@@ -60,6 +60,9 @@ return {
 
       providers = {
         path = {
+          enabled = function()
+            return vim.bo.filetype ~= 'codecompanion'
+          end,
           transform_items = hide_source,
           opts = {
             get_cwd = function(_)
@@ -67,6 +70,7 @@ return {
             end,
           },
         },
+
         buffer = {
           transform_items = hide_source,
           opts = {
@@ -79,8 +83,9 @@ return {
                 vim.api.nvim_list_bufs()
               )
             end,
-          }
+          },
         },
+
         tmux = {
           enabled = util.is_tmux,
           module = 'blink-cmp-tmux',
@@ -113,8 +118,8 @@ return {
             'lsp',
             'omni',
           },
-        }
-      }
+        },
+      },
     },
   },
 }
