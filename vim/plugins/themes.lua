@@ -118,6 +118,7 @@ return {
             NonText = { fg = 'palette.comment' },
             EndOfBuffer = { fg = 'bg4' },
             Folded = { fg = 'palette.comment', bg = 'bg3', style = 'bold' },
+            FoldColumn = { link = 'LineNr' },
 
             Pmenu = { bg = 'bg0' },
             PmenuSel = { fg = 'white', bg = 'black', style = 'bold' },

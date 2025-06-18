@@ -197,6 +197,11 @@ return {
         file_ignore_patterns = { '%.git/COMMIT_EDITMSG' },
       }),
 
+      spell_suggest = {
+        winopts = { col = -2 },
+        fzf_opts = { ['--layout'] = 'reverse' },
+      },
+
       btags = merge(presets.bottom, presets.preview, presets.title('Tags (Buffer)'), {
         ctags_args = '-f- -u',
       }),

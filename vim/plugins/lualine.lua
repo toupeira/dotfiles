@@ -109,12 +109,14 @@ return {
             colored = true,
           },
           { function()
-              local max = math.max(10, vim.fn.winwidth(0) - 60 - #vim.fn.expand('%:t'))
+              local max = math.max(10, vim.o.columns - 60 - #vim.fn.expand('%:t'))
               return util.project_path(max)
             end,
             icon = '',
             cond = function()
-              return vim.bo.buftype == '' or vim.bo.filetype == 'ministarter'
+              return vim.o.columns > 70 and (
+                vim.bo.buftype == '' or vim.bo.filetype == 'ministarter'
+              )
             end,
           },
           { function()
@@ -141,6 +143,9 @@ return {
                 table.insert(names, client.name)
               end
               return util.join(names, '|')
+            end,
+            cond = function()
+              return vim.o.columns > 70
             end,
           },
         },

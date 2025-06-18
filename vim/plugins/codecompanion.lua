@@ -181,6 +181,7 @@ return {
       history = {
         opts = {
           auto_save = true,
+          default_buf_title = '[New chat]',
           expiration_days = 30,
           save_chat_keymap = 'gS',
           picker = 'fzf-lua',
