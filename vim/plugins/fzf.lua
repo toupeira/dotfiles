@@ -395,7 +395,7 @@ return {
 
     -- search Aerial symbols
     map_fzf('<Leader>i', function()
-      require('aerial').fzf_lua_picker(merge(presets.bottom, presets.preview))
+      require('aerial.fzf-lua').pick_symbol(merge(presets.bottom, presets.preview))
     end, { desc = 'symbols' })
 
     -- search projects
