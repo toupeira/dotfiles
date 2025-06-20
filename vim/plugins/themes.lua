@@ -158,7 +158,8 @@ return {
             ['@markup.heading'] = { fg = 'palette.blue', style = 'bold' },
             ['@markup.italic'] = { style = 'italic' },
             ['@markup.link.url'] = { fg = 'palette.blue', style = 'underline' },
-            ['@markup.list'] = { link = 'PreProc' },
+            ['@markup.list'] = { fg = 'palette.yellow' },
+            ['@markup.math'] = { fg = 'palette.magenta', style = 'bold' },
             ['@markup.raw'] = { fg = 'syntax.string', style = 'NONE' },
             ['@markup.strong'] = { fg = 'palette.yellow', style = 'bold' },
 

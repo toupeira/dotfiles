@@ -20,15 +20,7 @@ return {
     -- https://github.com/Saghen/blink.cmp/issues/337
     cmdline = { enabled = false },
 
-    fuzzy = {
-      sorts = { 'exact', 'score', 'sort_text' },
-
-      -- work around weird sorting behaviour
-      -- https://github.com/Saghen/blink.cmp/issues/1642
-      implementation = 'lua',
-    },
-
-    keymap = {
+    keymap = { -- {{{
       preset = 'super-tab',
 
       -- mapped with `mini.keymap`
@@ -44,8 +36,8 @@ return {
       ['<M-y>'] = { function(cmp) cmp.scroll_documentation_up(1) end, 'fallback' },
       ['<M-t>'] = (util.is_tmux and { function(cmp) cmp.show({ providers = { 'tmux' }}) end } or { 'fallback' }),
     },
-
-    completion = {
+    -- }}}
+    completion = { -- {{{
       keyword = { range = 'full' },
       trigger = { show_in_snippet = false },
 
@@ -72,13 +64,21 @@ return {
         window = { border = 'rounded' },
       },
     },
+    -- }}}
+    fuzzy = { -- {{{
+      sorts = { 'exact', 'score', 'sort_text' },
 
-    signature = {
+      -- work around weird sorting behaviour
+      -- https://github.com/Saghen/blink.cmp/issues/1642
+      implementation = 'lua',
+    },
+    -- }}}
+    signature = { -- {{{
       enabled = true,
       window = { border = 'rounded' },
     },
-
-    sources = {
+    -- }}}
+    sources = { -- {{{
       min_keyword_length = 2,
 
       default = function()
@@ -129,5 +129,6 @@ return {
         },
       },
     },
+    -- }}}
   },
 }

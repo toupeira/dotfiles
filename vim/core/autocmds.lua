@@ -1,7 +1,7 @@
 local util = require('util')
 local autocmd = util.autocmd
 
--- Filetype settings ---------------------------------------------------
+-- Filetype settings --------------------------------------------------- {{{
 
 local filetypes = {
   ['crontab']   = { 'nowritebackup' },
@@ -10,7 +10,7 @@ local filetypes = {
   ['gdscript']  = { 'expandtab' },
   ['gitconfig'] = { 'commentstring=#\\ %s' },
   ['iss']       = { 'commentstring=;\\ %s' },
-  ['lua']       = { 'path+=./lua', 'keywordprg=:help' },
+  ['lua']       = { 'foldlevel=0', 'foldmethod=marker', 'path+=./lua', 'keywordprg=:help' },
   ['make']      = { 'noexpandtab' },
   ['ruby']      = { 'iskeyword+=?,!' },
 
@@ -48,7 +48,8 @@ for filetype, settings in pairs(filetypes) do
   autocmd('FileType', filetype, 'setlocal ' .. util.join(settings, ' '))
 end
 
--- Helpers -------------------------------------------------------------
+-- }}}
+-- Helpers ------------------------------------------------------------- {{{
 
 -- Resize quickfix windows
 autocmd('FileType', 'qf', function()
@@ -162,3 +163,5 @@ autocmd('BufWritePre', function(event)
   local file = vim.uv.fs_realpath(event.match) or event.match
   vim.fn.mkdir(vim.fn.fnamemodify(file, ':p:h'), 'p')
 end)
+
+-- }}}

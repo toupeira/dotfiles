@@ -5,7 +5,7 @@ local nvomap = util.nvomap
 
 return {
   'tpope/vim-fugitive',
-  dependencies = {
+  dependencies = { -- {{{
     { 'tpope/vim-rhubarb',
       dependencies = { 'fugitive-gitlab.vim' },
     },
@@ -25,7 +25,7 @@ return {
         }
       end,
     }
-  },
+  }, -- }}}
 
   init = function()
     vmap('<Leader>gl', ':Gclog', 'Open Git log for selection')

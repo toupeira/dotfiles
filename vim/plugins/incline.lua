@@ -13,11 +13,12 @@ return {
   config = function(_, opts)
     local helpers = require('incline.helpers')
     local icons = require('nvim-web-devicons')
+    local aerial
 
     local comment = util.get_color('Comment')
     local separator = {  '  ', group = 'Comment' }
 
-    local function get_filename(props)
+    local function get_filename(props) -- {{{
       if props.windows <= 1 or props.buffers <= 1 then
         return
       end
@@ -39,9 +40,8 @@ return {
         guifg = props.focused and 'white' or comment,
       }
     end
-
-    local aerial
-    local function get_symbols(props)
+    -- }}}
+    local function get_symbols(props) -- {{{
       if not props.focused then
         return
       end
@@ -75,8 +75,8 @@ return {
         group = 'Comment',
       }
     end
-
-    opts.render = function(props)
+    -- }}}
+    opts.render = function(props) -- {{{
       props.windows = util.window_count()
       props.buffers = util.buffer_count()
 
@@ -97,6 +97,7 @@ return {
 
       return result
     end
+    -- }}}
 
     require('incline').setup(opts)
 

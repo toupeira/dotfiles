@@ -6,7 +6,7 @@ local line = vim.fn.line
 local pathshorten = vim.fn.pathshorten
 local winnr = vim.fn.winnr
 
--- Lua helpers ---------------------------------------------------------
+-- Lua helpers --------------------------------------------------------- {{{
 
 util.split = vim.fn.split
 util.join = table.concat
@@ -21,7 +21,8 @@ util.clamp = function(value, min, max)
   return math.max(min, math.min(max, value))
 end
 
--- Configuration helpers -----------------------------------------------
+-- }}}
+-- Configuration helpers ----------------------------------------------- {{{
 
 util.is_home = vim.fn.getcwd() == os.getenv('HOME')
 util.is_sudo = os.getenv('SUDO_COMMAND') ~= nil
@@ -194,7 +195,8 @@ util.get_color = function(name, key)
   end
 end
 
--- UI helpers ----------------------------------------------------------
+-- }}}
+-- UI helpers ---------------------------------------------------------- {{{
 
 -- Show a {message} with an optional {hl} group.
 util.echo = function(message, hl)
@@ -441,5 +443,7 @@ util.make_repeatable = function(...)
   return require('nvim-treesitter.textobjects.repeatable_move')
     .make_repeatable_move_pair(...)
 end
+
+-- }}}
 
 return util

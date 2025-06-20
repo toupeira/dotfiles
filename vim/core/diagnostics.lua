@@ -3,6 +3,8 @@ local nmap = util.nmap
 
 local severity = vim.diagnostic.severity
 
+-- Settings ------------------------------------------------------------ {{{
+
 vim.diagnostic.config({
   severity_sort = true,
   float = false,
@@ -20,6 +22,8 @@ vim.diagnostic.config({
   },
 })
 
+-- }}}
+-- Keymaps ------------------------------------------------------------- {{{
 local with_virtual_lines = {
   virtual_lines = {
     current_line = true,
@@ -79,3 +83,5 @@ nmap('<LocalLeader>d', function()
 
   util.notify_toggle('Inline diagnostics:', not config.virtual_lines)
 end, 'Toggle inline diagnostics')
+
+-- }}}

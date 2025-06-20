@@ -4,7 +4,7 @@ return {
   'mason-org/mason.nvim',
   event = 'VeryLazy',
   build = ':MasonUpdate',
-  dependencies = {
+  dependencies = { -- {{{
     { 'WhoIsSethDaniel/mason-tool-installer.nvim',
       opts = {
         ensure_installed = (util.is_sudo or util.is_ssh) and {} or {
@@ -21,7 +21,7 @@ return {
         },
       },
     },
-  },
+  }, -- }}}
 
   keys = {
     { '<leader>#', '<Cmd>Mason<CR>', desc = 'Open Mason' }

@@ -4,8 +4,7 @@ local merge = util.merge
 local expand = vim.fn.expand
 
 local presets = {
-  -- fzf-lua options
-
+  -- fzf-lua options {{{
   preview = {
     winopts = { preview = { hidden = 'nohidden' }},
   },
@@ -30,9 +29,8 @@ local presets = {
       },
     },
   },
-
-  -- fzf-lua arguments
-
+  -- }}}
+  -- provider arguments {{{
   title = function(value)
     return { winopts = { title = ' ' .. value .. ' ' }}
   end,
@@ -48,6 +46,7 @@ local presets = {
   hidden = function()
     return util.is_home and { hidden = false } or {}
   end,
+  -- }}}
 }
 
 return {
@@ -58,7 +57,7 @@ return {
     local fzf = require('fzf-lua')
 
     return {
-      winopts = {
+      winopts = { -- {{{
         width = 0.9,
         height = 0.9,
         row = 0.5,
@@ -69,7 +68,7 @@ return {
           horizontal = 'right:50%',
         },
 
-        -- restore defaults from fzf.sh
+        -- restore settings from fzf.sh
         treesitter = {
           fzf_colors = {
             ['hl'] = '#d7ffaf:bold',
@@ -77,8 +76,8 @@ return {
           },
         },
       },
-
-      keymap = {
+      -- }}}
+      keymap = { -- {{{
         builtin = {
           true, -- inherit defaults
           ['<C-_>'] = 'toggle-preview',
@@ -91,30 +90,28 @@ return {
         -- restore defaults from fzf.sh
         fzf = {},
       },
-
-      fzf_opts = {
+      -- }}}
+      fzf_opts = { -- {{{
         ['--layout'] = 'default',
       },
-
-      hls = {
+      -- }}}
+      hls = { -- {{{
         header_bind = 'WarningMsg',
         header_text = 'Type',
         buf_flag_cur = 'Title',
         buf_flag_alt = 'WarningMsg',
       },
-
-      -- add directory previewer
-      previewers = {
+      -- }}}
+      previewers = { -- {{{
+        -- add directory previewer
         tree = {
           cmd = 'tree',
           args = '-dxC --gitignore --prune --noreport',
           _ctor = require('fzf-lua.previewer').fzf.cmd,
         },
       },
-
-      -- provider settings
-
-      defaults = {
+      -- }}}
+      defaults = { -- {{{
         color_icons = true,
       },
 
@@ -210,16 +207,17 @@ return {
         ctags_autogen = true,
         cmd = '( git ls-files 2>/dev/null || fdfind ) | ctags -f- -L- -u',
       }),
+      -- }}}
     }
   end,
 
   config = function(_, opts)
+    -- setup plugin {{{
     local fzf = require('fzf-lua')
+    fzf.setup(opts)
 
     -- use history per provider
     vim.g.fzf_history_dir = vim.fn.stdpath('state') .. '/fzf'
-
-    fzf.setup(opts)
 
     fzf.register_ui_select(function(select_opts, items)
       local title = select_opts.prompt
@@ -271,33 +269,34 @@ return {
     end
 
     -- helper to add mappings for a provider
-    local function map_fzf(key, provider, opts)
-      opts = opts or {}
-      opts.mode = opts.mode or 'n'
-      opts.desc = opts.desc or provider
+    local function map_fzf(key, provider, map)
+      map = map or {}
+      map.mode = map.mode or 'n'
+      map.desc = map.desc or provider
         :gsub('_', ' ')
         :gsub('git', 'Git')
         :gsub('lsp', 'LSP')
 
       -- start search with '<Leader><key>'
-      util.map(opts.mode, key, function()
+      util.map(map.mode, key, function()
         last_cword = expand('<cword>')
         if type(provider) == 'function' then
           provider()
         else
-          fzf[provider](get_args(opts.args))
+          fzf[provider](get_args(map.args))
         end
-      end, 'Search ' .. opts.desc)
+      end, 'Search ' .. map.desc)
 
       -- resume last search with '<Leader><Leader><key>'
-      util.map(opts.mode, '<Leader>' .. key, function()
-        local resume_args = get_args(opts.args)
+      util.map(map.mode, '<Leader>' .. key, function()
+        local resume_args = get_args(map.args)
         resume_args.resume = true
         resume_args.query = nil
         fzf[provider](resume_args)
-      end, 'Resume ' .. opts.desc .. ' search')
+      end, 'Resume ' .. map.desc .. ' search')
     end
-
+    -- }}}
+    -- setup keymaps {{{
     -- resume last provider
     util.nmap('<Leader><Leader><Leader>', fzf.resume, 'Resume last search')
 
@@ -434,5 +433,6 @@ return {
     end
 
     map_fzf('<Leader>gp', projects, { desc = 'projects' })
+    -- }}}
   end,
 }

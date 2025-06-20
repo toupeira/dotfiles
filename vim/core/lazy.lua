@@ -1,5 +1,6 @@
 local util = require('util')
 
+-- Install lazy.nvim {{{
 local LAZY_ROOT = '/slack/dotfiles/packages/lazy'
 local LAZY_PATH = LAZY_ROOT .. '/lazy.nvim'
 
@@ -8,6 +9,7 @@ if not vim.uv.fs_stat(LAZY_PATH) then
 end
 
 vim.opt.rtp:prepend(LAZY_PATH)
+-- }}}
 
 local lazy = require('lazy')
 
@@ -17,7 +19,7 @@ require('lazy.core.handler.event').mappings.LazyFile = {
 
 util.nmap('<Leader>@', lazy.home, 'Open Lazy')
 
-lazy.setup({
+lazy.setup({ -- {{{
   root = LAZY_ROOT,
   change_detection = { notify = false },
   concurrency = math.max(4, vim.uv.available_parallelism()) * 8,
@@ -67,4 +69,4 @@ lazy.setup({
       },
     },
   },
-})
+}) -- }}}

@@ -2,7 +2,7 @@ local util = require('util')
 
 return {
   'olimorris/codecompanion.nvim',
-  dependencies = {
+  dependencies = { -- {{{
     'nvim-treesitter',
     'nvim-lua/plenary.nvim',
 
@@ -26,7 +26,7 @@ return {
         },
       },
     },
-  },
+  }, -- }}}
 
   cmd = {
     'CodeCompanion',
@@ -44,7 +44,7 @@ return {
     { '<Leader>ah', '<Cmd>CodeCompanionHistory<CR>', desc = 'AI: Show chat history' },
   },
 
-  opts = {
+  opts = { -- {{{
     adapters = {
       opts = {
         show_defaults = false,
@@ -193,19 +193,8 @@ return {
       },
     },
   },
-
-  config = function(_, opts)
-    require('codecompanion').setup(opts)
-
-    local slash_commands = require('codecompanion.config').strategies.chat.slash_commands
-    for _, cmd in pairs(slash_commands) do
-      if cmd.opts.provider == 'mini_pick' then
-        cmd.opts.provider = 'fzf_lua'
-      end
-    end
-  end,
-
-  init = function()
+  -- }}}
+  init = function() -- {{{
     util.command('AI', function(opts)
       local args = #opts.args > 0 and opts.args or nil
       local codecompanion = require('codecompanion')
@@ -251,4 +240,5 @@ return {
       MiniClue.enable_buf_triggers(event.buf)
     end)
   end,
+  -- }}}
 }

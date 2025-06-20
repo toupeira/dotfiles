@@ -5,9 +5,10 @@ local imap = util.imap
 
 return {
   'echasnovski/mini.nvim',
+  event = 'VeryLazy',
 
-  config = function()
-    -- mini.clue -----------------------------------------------------
+  init = function()
+    -- mini.clue ------------------------------------------------------- {{{
     local clue = require('mini.clue')
 
     util.autocmd('User', 'MiniStarterOpened', function(event)
@@ -91,21 +92,27 @@ return {
         delay = vim.o.timeoutlen,
       },
     })
-
-    -- mini.icons ------------------------------------------------------
+    -- }}}
+    -- mini.hipatterns ------------------------------------------------- {{{
+    util.autocmd('FileType', function(args)
+      local filetype = vim.bo[args.buf].filetype
+      vim.b[args.buf].minihipatterns_disable = filetype ~= 'markdown'
+    end)
+    -- }}}
+    -- mini.icons ------------------------------------------------------ {{{
     require('mini.icons').setup({
       lsp = {
         ['function'] = { glyph = '󰊕' },
       }
     })
     MiniIcons.mock_nvim_web_devicons()
-
-    -- mini.misc -------------------------------------------------------
+    -- }}}
+    -- mini.misc ------------------------------------------------------- {{{
     require('mini.misc').setup_auto_root(
       { '.git', '.obsidian' }, vim.fs.dirname
     )
-
-    -- mini.sessions -------------------------------------------------
+    -- }}}
+    -- mini.sessions --------------------------------------------------- {{{
     require('mini.sessions').setup({
       autoread = true,
       file = '.session.vim',
@@ -147,8 +154,8 @@ return {
         util.error(error)
       end
     end, 'Delete saved session')
-
-    -- mini.starter ----------------------------------------------------
+    -- }}}
+    -- mini.starter ---------------------------------------------------- {{{
     local starter = require('mini.starter')
     local fzf = require('fzf-lua')
 
@@ -228,210 +235,223 @@ return {
         starter.gen_hook.padding(0, vim.o.lines / 5.5),
       },
     })
+    -- }}}
+  end,
 
-    util.autocmd('User', 'VeryLazy', { once = true }, function()
-      -- mini.ai -------------------------------------------------------
-      require('mini.ai').setup()
+  config = function()
+    -- mini.ai --------------------------------------------------------- {{{
+    require('mini.ai').setup()
+    -- }}}
+    -- mini.align ------------------------------------------------------ {{{
+    require('mini.align').setup({
+      mappings = {
+        start = '<Leader>=',
+        start_with_preview = '<Leader>+',
+      },
+    })
+    -- }}}
+    -- mini.basics ----------------------------------------------------- {{{
+    require('mini.basics').setup({
+      options      = { basic = false, win_borders = 'bold' },
+      mappings     = { basic = false, move_with_alt = true },
+      autocommands = { basic = true },
+    })
+    util.unmap('n', '<LocalLeader>b')
+    util.unmap('n', '<LocalLeader>h')
+    util.unmap('n', '<LocalLeader>i')
+    -- }}}
+    -- mini.bracketed -------------------------------------------------- {{{
+    require('mini.bracketed').setup({
+      comment    = { suffix = '' }, -- ']c' used by vim/gitsigns
+      file       = { suffix = '' }, -- ']f' not useful
+      oldfile    = { suffix = '' }, -- ']o' not useful
+    })
 
-      -- mini.align ----------------------------------------------------
-      require('mini.align').setup({
-        mappings = {
-          start = '<Leader>=',
-          start_with_preview = '<Leader>+',
+    local original_diagnostic = MiniBracketed.diagnostic
+    MiniBracketed.diagnostic = function(...)
+      if vim.diagnostic.show_current_line_id then
+        vim.diagnostic.hide_current_line()
+      end
+
+      original_diagnostic(...)
+      vim.diagnostic.show_current_line()
+    end
+
+    for _, key in ipairs({ 'b', 'e', 'i', 'j', 'l', 'q', 't', 'u', 'w', 'x', 'y' }) do
+      for _, mode in ipairs({ 'n', 'x', 'o' }) do
+        local next = vim.fn.maparg(']' .. key, mode, false, true)
+        local prev = vim.fn.maparg('[' .. key, mode, false, true)
+
+        if next.rhs and prev.rhs then
+          local next_rhs = next.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
+          local prev_rhs = prev.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
+
+          local next_repeat, prev_repeat = util.make_repeatable(
+            function() pcall(vim.cmd, next_rhs) end,
+            function() pcall(vim.cmd, prev_rhs) end
+          )
+
+          util.map(mode, ']' .. key, next_repeat, { force = true }, next.desc)
+          util.map(mode, '[' .. key, prev_repeat, { force = true }, prev.desc)
+        end
+      end
+    end
+    -- }}}
+    -- mini.comment ---------------------------------------------------- {{{
+    require('mini.comment').setup()
+    -- }}}
+    -- mini.diff ------------------------------------------------------- {{{
+    local diff = require('mini.diff')
+
+    -- disable all mappings and default diffing
+    for key, _ in pairs(diff.config.mappings) do
+      diff.config.mappings[key] = ''
+    end
+
+    diff.setup({
+      source = diff.gen_source.none(),
+      options = { wrap_goto = true },
+    })
+    -- }}}
+    -- mini.hipatterns ------------------------------------------------- {{{
+    local hipatterns = require('mini.hipatterns')
+    hipatterns.setup({
+      highlighters = {
+        tags = {
+          pattern = '#[A-Za-z]+[A-Za-z0-9_/-]*[A-Za-z0-9]+',
+          group = '@markup.math',
         },
-      })
+      },
+    })
+    -- }}}
+    -- mini.jump ------------------------------------------------------- {{{
+    require('mini.jump').setup()
 
-      -- mini.basics ---------------------------------------------------
-      require('mini.basics').setup({
-        options      = { basic = false, win_borders = 'bold' },
-        mappings     = { basic = false, move_with_alt = true },
-        autocommands = { basic = true },
-      })
-      util.unmap('n', '<LocalLeader>b')
-      util.unmap('n', '<LocalLeader>h')
-      util.unmap('n', '<LocalLeader>i')
+    local original_jump = MiniJump.jump
+    local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
 
-      -- mini.bracketed ------------------------------------------------
-      require('mini.bracketed').setup({
-        comment    = { suffix = '' }, -- ']c' used by vim/gitsigns
-        file       = { suffix = '' }, -- ']f' not useful
-        oldfile    = { suffix = '' }, -- ']o' not useful
-      })
+    MiniJump.jump = function(...)
+      repeat_move.last_move = nil
+      return original_jump(...)
+    end
 
-      local original_diagnostic = MiniBracketed.diagnostic
-      MiniBracketed.diagnostic = function(...)
-        if vim.diagnostic.show_current_line_id then
-          vim.diagnostic.hide_current_line()
-        end
-
-        original_diagnostic(...)
-        vim.diagnostic.show_current_line()
+    nmap(';', function ()
+      if repeat_move.last_move then
+        repeat_move.repeat_last_move()
+      else
+        MiniJump.jump()
       end
+    end, { force = true }, 'Repeat jump')
 
-      for _, key in ipairs({ 'b', 'e', 'i', 'j', 'l', 'q', 't', 'u', 'w', 'x', 'y' }) do
-        for _, mode in ipairs({ 'n', 'x', 'o' }) do
-          local next = vim.fn.maparg(']' .. key, mode, false, true)
-          local prev = vim.fn.maparg('[' .. key, mode, false, true)
-
-          if next.rhs and prev.rhs then
-            local next_rhs = next.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
-            local prev_rhs = prev.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
-
-            local next_repeat, prev_repeat = util.make_repeatable(
-              function() pcall(vim.cmd, next_rhs) end,
-              function() pcall(vim.cmd, prev_rhs) end
-            )
-
-            util.map(mode, ']' .. key, next_repeat, { force = true }, next.desc)
-            util.map(mode, '[' .. key, prev_repeat, { force = true }, prev.desc)
-          end
-        end
+    nmap('|', function ()
+      if repeat_move.last_move then
+        repeat_move.repeat_last_move_opposite()
+      else
+        MiniJump.jump(nil, true)
       end
+    end, { force = true }, 'Repeat jump backward')
+    -- }}}
+    -- mini.keymap ----------------------------------------------------- {{{
+    local keymap = require('mini.keymap')
 
-      -- mini.comment --------------------------------------------------
-      require('mini.comment').setup()
-
-      -- mini.diff -----------------------------------------------------
-      local diff = require('mini.diff')
-
-      -- disable all mappings and default diffing
-      for key, _ in pairs(diff.config.mappings) do
-        diff.config.mappings[key] = ''
-      end
-
-      diff.setup({
-        source = diff.gen_source.none(),
-        options = { wrap_goto = true },
-      })
-
-      -- mini.jump -----------------------------------------------------
-      require('mini.jump').setup()
-
-      local original_jump = MiniJump.jump
-      local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-
-      MiniJump.jump = function(...)
-        repeat_move.last_move = nil
-        return original_jump(...)
-      end
-
-      nmap(';', function ()
-        if repeat_move.last_move then
-          repeat_move.repeat_last_move()
-        else
-          MiniJump.jump()
-        end
-      end, { force = true }, 'Repeat jump')
-
-      nmap('|', function ()
-        if repeat_move.last_move then
-          repeat_move.repeat_last_move_opposite()
-        else
-          MiniJump.jump(nil, true)
-        end
-      end, { force = true }, 'Repeat jump backward')
-
-      -- mini.keymap ---------------------------------------------------
-      local keymap = require('mini.keymap')
-
-      keymap.map_multistep('i', '<Tab>', {
-        'blink_accept',
-        'vimsnippet_next',
-        'increase_indent',
-        -- jump after next delimiter on current line
-        util.merge(
-          keymap.gen_step.search_pattern([=[[()\[\]{}"'`]]=], 'cW', {
-            side = 'after',
-            stopline = function() return vim.fn.line('.') end,
-          }), {
-            condition = function()
-              -- insert tabs at end of the line
-              return vim.fn.col('.') ~= vim.fn.col('$')
-            end
-          }
-        ),
-      })
-
-      keymap.map_multistep('i', '<S-Tab>', {
-        'vimsnippet_prev',
-        'decrease_indent',
-        -- jump before previous delimiter on current line
-        keymap.gen_step.search_pattern([=[[()\[\]{}"'`]]=], 'bW', {
-          side = 'before',
+    keymap.map_multistep('i', '<Tab>', {
+      'blink_accept',
+      'vimsnippet_next',
+      'increase_indent',
+      -- jump after next delimiter on current line
+      util.merge(
+        keymap.gen_step.search_pattern([=[[()\[\]{}"'`]]=], 'cW', {
+          side = 'after',
           stopline = function() return vim.fn.line('.') end,
-        }),
-      })
-
-      -- mini.move -----------------------------------------------------
-      require('mini.move').setup()
-      imap('<M-H>', ':lua MiniMove.move_line("left")',  'Move line left')
-      imap('<M-J>', ':lua MiniMove.move_line("down")',  'Move line down')
-      imap('<M-K>', ':lua MiniMove.move_line("up")',    'Move line up')
-      imap('<M-L>', ':lua MiniMove.move_line("right")', 'Move line right')
-
-      -- mini.operators ------------------------------------------------
-      require('mini.operators').setup({
-        sort = { prefix = '' },
-        exchange = { prefix = 'ge' },
-      })
-      vmap('D', 'gm', { remap = true }, 'Duplicate selection')
-
-      -- mini.pairs ----------------------------------------------------
-      require('mini.pairs').setup({
-        modes = {
-          command = false,
-          terminal = false,
-        },
-
-        mappings = {
-          ['('] = { neigh_pattern = '[^\\][%s}%]]' },
-          ['['] = { neigh_pattern = '[^\\][%s)}]' },
-          ['{'] = { neigh_pattern = '[^\\][%s)%]]' },
-          ['"'] = { neigh_pattern = '[^\\%a"][%s)}%]]' },
-          ["'"] = { neigh_pattern = "[^\\%a'][%s)}%]]" },
-          ['`'] = { neigh_pattern = '[^\\%a`][%s)}%]]' },
-
-          [' '] = {
-            action = 'closeopen',
-            pair = '  ',
-            neigh_pattern = '[({][)}]',
-          },
+        }), {
+          condition = function()
+            -- insert tabs at end of the line
+            return vim.fn.col('.') ~= vim.fn.col('$')
+          end
         }
-      })
+      ),
+    })
 
-      -- re-add undo chain to <CR> from core/keymaps.lua
-      local original_cr = MiniPairs.cr
-      MiniPairs.cr = function(...)
-        return "u" .. original_cr(...)
-      end
+    keymap.map_multistep('i', '<S-Tab>', {
+      'vimsnippet_prev',
+      'decrease_indent',
+      -- jump before previous delimiter on current line
+      keymap.gen_step.search_pattern([=[[()\[\]{}"'`]]=], 'bW', {
+        side = 'before',
+        stopline = function() return vim.fn.line('.') end,
+      }),
+    })
+    -- }}}
+    -- mini.move ------------------------------------------------------- {{{
+    require('mini.move').setup()
+    imap('<M-H>', ':lua MiniMove.move_line("left")',  'Move line left')
+    imap('<M-J>', ':lua MiniMove.move_line("down")',  'Move line down')
+    imap('<M-K>', ':lua MiniMove.move_line("up")',    'Move line up')
+    imap('<M-L>', ':lua MiniMove.move_line("right")', 'Move line right')
+    -- }}}
+    -- mini.operators -------------------------------------------------- {{{
+    require('mini.operators').setup({
+      sort = { prefix = '' },
+      exchange = { prefix = 'ge' },
+    })
+    vmap('D', 'gm', { remap = true }, 'Duplicate selection')
+    -- }}}
+    -- mini.pairs ------------------------------------------------------ {{{
+    require('mini.pairs').setup({
+      modes = {
+        command = false,
+        terminal = false,
+      },
 
-      -- mini.pick -----------------------------------------------------
-      require('mini.pick').setup({
-        options = { content_from_bottom = true },
-        window = { prompt_prefix = '» ' },
-      })
+      mappings = {
+        ['('] = { neigh_pattern = '[^\\][%s}%]]' },
+        ['['] = { neigh_pattern = '[^\\][%s)}]' },
+        ['{'] = { neigh_pattern = '[^\\][%s)%]]' },
+        ['"'] = { neigh_pattern = '[^\\%a"][%s)}%]]' },
+        ["'"] = { neigh_pattern = "[^\\%a'][%s)}%]]" },
+        ['`'] = { neigh_pattern = '[^\\%a`][%s)}%]]' },
 
-      -- mini.surround -------------------------------------------------
-      require('mini.surround').setup({
-        mappings = {
-          add = 'SA',
-          delete = 'SD',
-          replace = 'SR',
-          highlight = 'SH',
-
-          find = '',
-          find_left = '',
-          update_n_lines = '',
+        [' '] = {
+          action = 'closeopen',
+          pair = '  ',
+          neigh_pattern = '[({][)}]',
         },
-      })
+      }
+    })
 
-      -- mini.trailspace -----------------------------------------------
-      require('mini.trailspace').setup()
-      nmap('<Leader>W', function()
-        if vim.bo.modifiable then
-          MiniTrailspace.trim()
-        end
-      end, 'Trim trailing whitespace')
-    end)
+    -- re-add undo chain to <CR> from core/keymaps.lua
+    local original_cr = MiniPairs.cr
+    MiniPairs.cr = function(...)
+      return "u" .. original_cr(...)
+    end
+    -- }}}
+    -- mini.pick ------------------------------------------------------- {{{
+    require('mini.pick').setup({
+      options = { content_from_bottom = true },
+      window = { prompt_prefix = '» ' },
+    })
+    -- }}}
+    -- mini.surround --------------------------------------------------- {{{
+    require('mini.surround').setup({
+      mappings = {
+        add = 'SA',
+        delete = 'SD',
+        replace = 'SR',
+        highlight = 'SH',
+
+        find = '',
+        find_left = '',
+        update_n_lines = '',
+      },
+    })
+    -- }}}
+    -- mini.trailspace ------------------------------------------------- {{{
+    require('mini.trailspace').setup()
+    nmap('<Leader>W', function()
+      if vim.bo.modifiable then
+        MiniTrailspace.trim()
+      end
+    end, 'Trim trailing whitespace')
+    -- }}}
   end,
 }

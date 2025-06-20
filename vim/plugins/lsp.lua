@@ -16,7 +16,7 @@ local install_servers = (util.is_sudo or util.is_ssh) and {} or vim.tbl_filter(
 return {
   'neovim/nvim-lspconfig',
   event = 'LazyFile',
-  dependencies = {
+  dependencies = { -- {{{
     { 'mason-org/mason-lspconfig.nvim',
       dependencies = { 'mason.nvim' },
       opts = {
@@ -28,7 +28,7 @@ return {
       ft = 'lua',
       config = true,
     },
-  },
+  }, -- }}}
 
   keys = {
     { '<Leader>LS', '<Cmd>LspStart<CR>', 'Start LSP server' },

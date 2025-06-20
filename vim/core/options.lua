@@ -1,6 +1,6 @@
 local util = require('util')
 
--- Disable language providers ------------------------------------------
+-- Disable language providers ------------------------------------------ {{{
 
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
@@ -8,7 +8,8 @@ vim.g.loaded_python_provider = 0
 vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
--- Custom filetypes ----------------------------------------------------
+-- }}}
+-- Custom filetypes ---------------------------------------------------- {{{
 
 vim.filetype.add({
   extension = {
@@ -29,7 +30,8 @@ vim.filetype.add({
 -- Disable maps from filetype plugins
 vim.g.no_plugin_maps = 1
 
--- Interface -----------------------------------------------------------
+-- }}}
+-- Interface ----------------------------------------------------------- {{{
 
 if os.getenv('XDG_SESSION_TYPE') ~= 'tty' or os.getenv('SSH_CONNECTION') then
   vim.o.termguicolors = true
@@ -83,7 +85,8 @@ util.autocmd('CmdWinEnter', 'quit')
 vim.o.cmdwinheight = 1
 vim.o.cedit = ''
 
--- History -------------------------------------------------------------
+-- }}}
+-- History ------------------------------------------------------------- {{{
 
 vim.o.undofile = true
 vim.o.history = 1000
@@ -93,14 +96,16 @@ vim.opt.jumpoptions:remove { 'clean' }
 vim.opt.shada:append { "'1000", '\"100' }
 vim.opt.shada:remove { "'100", '<50' }
 
--- Line wrapping and endings -------------------------------------------
+-- }}}
+-- Line wrapping and endings ------------------------------------------- {{{
 
 vim.opt.fileformats:append { 'mac' }
 
 vim.o.breakindent = true
 vim.o.showbreak = ' •• '
 
--- Indents -------------------------------------------------------------
+-- }}}
+-- Indents ------------------------------------------------------------- {{{
 
 vim.o.tabstop = 2
 vim.o.softtabstop = 2
@@ -109,7 +114,8 @@ vim.o.shiftwidth = 2
 vim.o.expandtab = true
 vim.o.shiftround = true
 
--- Searching -----------------------------------------------------------
+-- }}}
+-- Searching ----------------------------------------------------------- {{{
 
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -125,16 +131,19 @@ if vim.fn.executable('rg') then
   vim.o.grepprg = 'rg --vimgrep'
 end
 
--- Concealing ----------------------------------------------------------
+-- }}}
+-- Concealing ---------------------------------------------------------- {{{
 
 vim.o.concealcursor = ''
 vim.o.conceallevel = 0
 
--- Diffs ---------------------------------------------------------------
+-- }}}
+-- Diffs --------------------------------------------------------------- {{{
 
 vim.opt.diffopt:append { 'algorithm:histogram', 'indent-heuristic' }
 
--- Folds ---------------------------------------------------------------
+-- }}}
+-- Folds --------------------------------------------------------------- {{{
 
 vim.o.foldmethod = 'indent'
 vim.o.foldlevel = 99999
@@ -145,7 +154,10 @@ vim.opt.fillchars:append({
 	foldclose = '',
 })
 
--- Runtime plugin settings ---------------------------------------------
+-- }}}
+-- Runtime plugin settings --------------------------------------------- {{{
 
 vim.g.markdown_folding = 1
 vim.g.markdown_recommended_style = 0
+
+-- }}}

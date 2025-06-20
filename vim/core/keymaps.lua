@@ -6,9 +6,7 @@ local cmap = util.cmap
 local tmap = util.tmap
 local nvomap = util.nvomap
 
-local expand = vim.fn.expand
-
--- Mode switching ------------------------------------------------------
+-- Mode switching ------------------------------------------------------ {{{
 
 imap('<C-c>', '<Esc>', 'Leave insert mode')
 tmap('<Esc>', '<C-\\><C-n>', 'Leave insert mode')
@@ -24,7 +22,8 @@ nmap('<C-c>', function()
   if jump then jump.stop_jumping() end
 end, 'Clear search and command line')
 
--- Window navigation ---------------------------------------------------
+-- }}}
+-- Window navigation --------------------------------------------------- {{{
 
 nmap('<Leader>s', ':split', 'Split horizontally')
 nmap('<Leader><Leader>s', ':botright split', 'Split horizontally (full width)')
@@ -46,7 +45,8 @@ end, 'Close current buffer (keep window)')
 
 nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window')
 
--- Tab navigation ------------------------------------------------------
+-- }}}
+-- Tab navigation ------------------------------------------------------ {{{
 
 nmap('H', ':tabprevious', 'Go to previous tab')
 nmap('L', ':tabnext', 'Go to next tab')
@@ -55,7 +55,8 @@ nmap('<Leader><C-t>', ':tabnew | MiniStarter', 'Open new tab')
 nmap('<Leader><C-n>', ':tab split', 'Open current window to new tab')
 nmap('<Leader><C-w>', ':tabclose', 'Close current tab')
 
--- File editing --------------------------------------------------------
+-- }}}
+-- File editing -------------------------------------------------------- {{{
 
 -- remove default mappings
 util.unmap('n', 'Y')
@@ -65,7 +66,7 @@ nmap('<Leader>Q', ':quitall', 'Quit')
 
 nmap('<C-s>', ':write', 'Save current buffer')
 nmap('<Leader>w', ':write', 'Save current buffer')
-nmap('<Leader>C', function() return ':e ' .. expand('%:p:h') .. '/' end, { expr = true, desc = 'Create file in directory of current buffer' })
+nmap('<Leader>C', function() return ':e ' .. vim.fn.expand('%:p:h') .. '/' end, { expr = true, desc = 'Create file in directory of current buffer' })
 
 vmap('<C-c>', '"+y`]', 'Copy to clipboard')
 nmap('<C-v>', '"+gP', 'Paste from clipboard')
@@ -87,9 +88,6 @@ vmap('.', ':normal .', 'Repeat for each line in selection')
 
 imap('<M-o>', '<C-o>o', 'Insert line below')
 imap('<M-O>', '<C-o>O', 'Insert line above')
-
-imap('<M-k>', '<C-o>gk', 'Up')
-imap('<M-j>', '<C-o>gj', 'Down')
 
 vmap('/', '<C-\\><C-n>`</\\%V', 'Search forward within visual selection')
 vmap('?', '<C-\\><C-n>`<?\\%V', 'Search backward within visual selection')
@@ -126,7 +124,8 @@ end
 -- don't open tags with Ctrl-LeftClick
 nmap('<C-LeftMouse>', '<nop>')
 
--- Utilities -----------------------------------------------------------
+-- }}}
+-- Utilities ----------------------------------------------------------- {{{
 
 util.alias_command({
   ['E']   = 'e',   ['E!']  = 'e!',
@@ -150,3 +149,5 @@ nmap('<M-g>', {
   "echomsg expand('%:p')",
   "let @+ = expand('%:p') . ':' . line('.')",
 }, 'Show and copy absolute file path with number')
+
+-- }}}

@@ -5,7 +5,7 @@ return {
   { 'hail2u/vim-css3-syntax',  ft = { 'css', 'scss' }},
   { 'hashivim/vim-terraform',  ft = { 'terraform', 'hcl' }},
 
-  { 'brianhuster/live-preview.nvim',
+  { 'brianhuster/live-preview.nvim', -- {{{
     ft = { 'markdown', 'html', 'asciidoc', 'svg' },
     cmd = 'LivePreview',
     keys = function(plugin)
@@ -24,8 +24,8 @@ return {
       }
     end,
   },
-
-  { 'catgoose/nvim-colorizer.lua',
+  -- }}}
+  { 'catgoose/nvim-colorizer.lua', -- {{{
     ft = { 'css', 'scss', 'lua' },
     cmd = 'ColorizerToggle',
     keys = {
@@ -41,13 +41,13 @@ return {
       }
     end,
   },
-
-  { 'OXY2DEV/helpview.nvim',
+  -- }}}
+  { 'OXY2DEV/helpview.nvim', -- {{{
     ft = { 'help' },
     cmd = 'Helpview',
   },
-
-  { 'OXY2DEV/markview.nvim',
+  -- }}}
+  { 'OXY2DEV/markview.nvim', -- {{{
     ft = { 'markdown', 'codecompanion' },
     cmd = { 'Markview' },
     opts = function(plugin)
@@ -65,6 +65,7 @@ return {
 
       return {
         preview = {
+          debounce = 10,
           filetypes = plugin.ft,
           ignore_buftypes = {},
           modes = { 'n', 'no', 'c', 'i' },
@@ -107,8 +108,8 @@ return {
       }
     end,
   },
-
-  { 'stevearc/quicker.nvim',
+  -- }}}
+  { 'stevearc/quicker.nvim', -- {{{
     ft = 'qf',
 
     opts = {
@@ -124,8 +125,8 @@ return {
       end,
     },
   },
-
-  { 'vim-ruby/vim-ruby',
+  -- }}}
+  { 'vim-ruby/vim-ruby', -- {{{
     ft = 'ruby',
     init = function()
       vim.g.ruby_operators = 1
@@ -137,4 +138,5 @@ return {
       vim.g.ruby_indent_hanging_elements = 0
     end,
   },
+  -- }}}
 }
