@@ -1,3 +1,5 @@
+-- vim: foldmethod=marker foldlevel=0
+
 local util = require('util')
 local nmap = util.nmap
 local vmap = util.vmap
@@ -8,7 +10,7 @@ return {
   event = 'VeryLazy',
 
   init = function()
-    -- mini.clue ------------------------------------------------------- {{{
+    -- mini.clue {{{
     local clue = require('mini.clue')
 
     util.autocmd('User', 'MiniStarterOpened', function(event)
@@ -93,13 +95,13 @@ return {
       },
     })
     -- }}}
-    -- mini.hipatterns ------------------------------------------------- {{{
+    -- mini.hipatterns {{{
     util.autocmd('FileType', function(args)
       local filetype = vim.bo[args.buf].filetype
       vim.b[args.buf].minihipatterns_disable = filetype ~= 'markdown'
     end)
     -- }}}
-    -- mini.icons ------------------------------------------------------ {{{
+    -- mini.icons {{{
     require('mini.icons').setup({
       lsp = {
         ['function'] = { glyph = '󰊕' },
@@ -107,12 +109,12 @@ return {
     })
     MiniIcons.mock_nvim_web_devicons()
     -- }}}
-    -- mini.misc ------------------------------------------------------- {{{
+    -- mini.misc {{{
     require('mini.misc').setup_auto_root(
       { '.git', '.obsidian' }, vim.fs.dirname
     )
     -- }}}
-    -- mini.sessions --------------------------------------------------- {{{
+    -- mini.sessions {{{
     require('mini.sessions').setup({
       autoread = true,
       file = '.session.vim',
@@ -155,7 +157,7 @@ return {
       end
     end, 'Delete saved session')
     -- }}}
-    -- mini.starter ---------------------------------------------------- {{{
+    -- mini.starter {{{
     local starter = require('mini.starter')
     local fzf = require('fzf-lua')
 
@@ -239,10 +241,10 @@ return {
   end,
 
   config = function()
-    -- mini.ai --------------------------------------------------------- {{{
+    -- mini.ai {{{
     require('mini.ai').setup()
     -- }}}
-    -- mini.align ------------------------------------------------------ {{{
+    -- mini.align {{{
     require('mini.align').setup({
       mappings = {
         start = '<Leader>=',
@@ -250,7 +252,7 @@ return {
       },
     })
     -- }}}
-    -- mini.basics ----------------------------------------------------- {{{
+    -- mini.basics {{{
     require('mini.basics').setup({
       options      = { basic = false, win_borders = 'bold' },
       mappings     = { basic = false, move_with_alt = true },
@@ -260,7 +262,7 @@ return {
     util.unmap('n', '<LocalLeader>h')
     util.unmap('n', '<LocalLeader>i')
     -- }}}
-    -- mini.bracketed -------------------------------------------------- {{{
+    -- mini.bracketed {{{
     require('mini.bracketed').setup({
       comment    = { suffix = '' }, -- ']c' used by vim/gitsigns
       file       = { suffix = '' }, -- ']f' not useful
@@ -277,30 +279,32 @@ return {
       vim.diagnostic.show_current_line()
     end
 
-    for _, key in ipairs({ 'b', 'e', 'i', 'j', 'l', 'q', 't', 'u', 'w', 'x', 'y' }) do
-      for _, mode in ipairs({ 'n', 'x', 'o' }) do
-        local next = vim.fn.maparg(']' .. key, mode, false, true)
-        local prev = vim.fn.maparg('[' .. key, mode, false, true)
+    for _, config in pairs(MiniBracketed.config) do
+      if config.suffix ~= '' then
+        for _, mode in ipairs({ 'n', 'x', 'o' }) do
+          local next = vim.fn.maparg(']' .. config.suffix, mode, false, true)
+          local prev = vim.fn.maparg('[' .. config.suffix, mode, false, true)
 
-        if next.rhs and prev.rhs then
-          local next_rhs = next.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
-          local prev_rhs = prev.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
+          if next.rhs and prev.rhs then
+            local next_rhs = next.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
+            local prev_rhs = prev.rhs:gsub('<Cmd>', ''):gsub('<CR>', '')
 
-          local next_repeat, prev_repeat = util.make_repeatable(
-            function() pcall(vim.cmd, next_rhs) end,
-            function() pcall(vim.cmd, prev_rhs) end
-          )
+            local next_repeat, prev_repeat = util.make_repeatable(
+              function() pcall(vim.cmd, next_rhs) end,
+              function() pcall(vim.cmd, prev_rhs) end
+            )
 
-          util.map(mode, ']' .. key, next_repeat, { force = true }, next.desc)
-          util.map(mode, '[' .. key, prev_repeat, { force = true }, prev.desc)
+            util.map(mode, ']' .. config.suffix, next_repeat, { force = true }, next.desc)
+            util.map(mode, '[' .. config.suffix, prev_repeat, { force = true }, prev.desc)
+          end
         end
       end
     end
     -- }}}
-    -- mini.comment ---------------------------------------------------- {{{
+    -- mini.comment {{{
     require('mini.comment').setup()
     -- }}}
-    -- mini.diff ------------------------------------------------------- {{{
+    -- mini.diff {{{
     local diff = require('mini.diff')
 
     -- disable all mappings and default diffing
@@ -313,7 +317,7 @@ return {
       options = { wrap_goto = true },
     })
     -- }}}
-    -- mini.hipatterns ------------------------------------------------- {{{
+    -- mini.hipatterns {{{
     local hipatterns = require('mini.hipatterns')
     hipatterns.setup({
       highlighters = {
@@ -324,7 +328,7 @@ return {
       },
     })
     -- }}}
-    -- mini.jump ------------------------------------------------------- {{{
+    -- mini.jump {{{
     require('mini.jump').setup()
 
     local original_jump = MiniJump.jump
@@ -351,7 +355,7 @@ return {
       end
     end, { force = true }, 'Repeat jump backward')
     -- }}}
-    -- mini.keymap ----------------------------------------------------- {{{
+    -- mini.keymap {{{
     local keymap = require('mini.keymap')
 
     keymap.map_multistep('i', '<Tab>', {
@@ -382,21 +386,21 @@ return {
       }),
     })
     -- }}}
-    -- mini.move ------------------------------------------------------- {{{
+    -- mini.move {{{
     require('mini.move').setup()
     imap('<M-H>', ':lua MiniMove.move_line("left")',  'Move line left')
     imap('<M-J>', ':lua MiniMove.move_line("down")',  'Move line down')
     imap('<M-K>', ':lua MiniMove.move_line("up")',    'Move line up')
     imap('<M-L>', ':lua MiniMove.move_line("right")', 'Move line right')
     -- }}}
-    -- mini.operators -------------------------------------------------- {{{
+    -- mini.operators {{{
     require('mini.operators').setup({
       sort = { prefix = '' },
       exchange = { prefix = 'ge' },
     })
     vmap('D', 'gm', { remap = true }, 'Duplicate selection')
     -- }}}
-    -- mini.pairs ------------------------------------------------------ {{{
+    -- mini.pairs {{{
     require('mini.pairs').setup({
       modes = {
         command = false,
@@ -425,13 +429,13 @@ return {
       return "u" .. original_cr(...)
     end
     -- }}}
-    -- mini.pick ------------------------------------------------------- {{{
+    -- mini.pick {{{
     require('mini.pick').setup({
       options = { content_from_bottom = true },
       window = { prompt_prefix = '» ' },
     })
     -- }}}
-    -- mini.surround --------------------------------------------------- {{{
+    -- mini.surround {{{
     require('mini.surround').setup({
       mappings = {
         add = 'SA',
@@ -445,7 +449,7 @@ return {
       },
     })
     -- }}}
-    -- mini.trailspace ------------------------------------------------- {{{
+    -- mini.trailspace {{{
     require('mini.trailspace').setup()
     nmap('<Leader>W', function()
       if vim.bo.modifiable then

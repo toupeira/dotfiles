@@ -1,3 +1,5 @@
+-- vim: foldmethod=marker foldlevel=0
+
 local util = require('util')
 local merge = util.merge
 
@@ -165,9 +167,9 @@ return {
 
         actions = {
           ['ctrl-g'] = fzf.actions.toggle_ignore,
-          ['alt-i'] = false,
-          ['alt-h'] = false,
           ['alt-f'] = false,
+          ['alt-h'] = false,
+          ['alt-i'] = false,
         },
       },
 

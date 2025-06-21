@@ -17,6 +17,7 @@ return {
       delete       = { text = '⨯' },
       topdelete    = { text = '⨯' },
     },
+
     signs_staged = {
       add          = { text = '▉' },
       change       = { text = '▉' },

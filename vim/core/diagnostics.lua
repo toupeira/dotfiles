@@ -1,9 +1,11 @@
+-- vim: foldmethod=marker foldlevel=0
+
 local util = require('util')
 local nmap = util.nmap
 
 local severity = vim.diagnostic.severity
 
--- Settings ------------------------------------------------------------ {{{
+-- Settings {{{
 
 vim.diagnostic.config({
   severity_sort = true,
@@ -23,7 +25,8 @@ vim.diagnostic.config({
 })
 
 -- }}}
--- Keymaps ------------------------------------------------------------- {{{
+-- Keymaps {{{
+
 local with_virtual_lines = {
   virtual_lines = {
     current_line = true,

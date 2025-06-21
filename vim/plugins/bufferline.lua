@@ -6,7 +6,7 @@ return {
   'akinsho/bufferline.nvim',
   event = 'VeryLazy',
 
-  opts = { -- {{{
+  opts = {
     options = {
       always_show_bufferline = false,
       indicator = { style = 'none' },
@@ -44,8 +44,8 @@ return {
       },
     },
   },
-  -- }}}
-  config = function(_, opts) -- {{{
+
+  config = function(_, opts)
     local bufferline = require('bufferline')
     local orange = util.get_color('DiagnosticWarn')
 
@@ -81,5 +81,4 @@ return {
       config.options.always_show_bufferline = #vim.fn.gettabinfo() > 1
     end)
   end,
-  -- }}}
 }

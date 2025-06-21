@@ -1,6 +1,8 @@
+-- vim: foldmethod=marker foldlevel=0
+
 local util = require('util')
 
--- Disable language providers ------------------------------------------ {{{
+-- Disable language providers {{{
 
 vim.g.loaded_node_provider = 0
 vim.g.loaded_perl_provider = 0
@@ -9,7 +11,7 @@ vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
 -- }}}
--- Custom filetypes ---------------------------------------------------- {{{
+-- Custom filetypes {{{
 
 vim.filetype.add({
   extension = {
@@ -31,7 +33,7 @@ vim.filetype.add({
 vim.g.no_plugin_maps = 1
 
 -- }}}
--- Interface ----------------------------------------------------------- {{{
+-- Interface {{{
 
 if os.getenv('XDG_SESSION_TYPE') ~= 'tty' or os.getenv('SSH_CONNECTION') then
   vim.o.termguicolors = true
@@ -86,7 +88,7 @@ vim.o.cmdwinheight = 1
 vim.o.cedit = ''
 
 -- }}}
--- History ------------------------------------------------------------- {{{
+-- History {{{
 
 vim.o.undofile = true
 vim.o.history = 1000
@@ -97,7 +99,7 @@ vim.opt.shada:append { "'1000", '\"100' }
 vim.opt.shada:remove { "'100", '<50' }
 
 -- }}}
--- Line wrapping and endings ------------------------------------------- {{{
+-- Line wrapping {{{
 
 vim.opt.fileformats:append { 'mac' }
 
@@ -105,7 +107,7 @@ vim.o.breakindent = true
 vim.o.showbreak = ' •• '
 
 -- }}}
--- Indents ------------------------------------------------------------- {{{
+-- Indenting {{{
 
 vim.o.tabstop = 2
 vim.o.softtabstop = 2
@@ -115,7 +117,7 @@ vim.o.expandtab = true
 vim.o.shiftround = true
 
 -- }}}
--- Searching ----------------------------------------------------------- {{{
+-- Searching {{{
 
 vim.o.ignorecase = true
 vim.o.smartcase = true
@@ -132,32 +134,58 @@ if vim.fn.executable('rg') then
 end
 
 -- }}}
--- Concealing ---------------------------------------------------------- {{{
+-- Concealing {{{
 
 vim.o.concealcursor = ''
 vim.o.conceallevel = 0
 
 -- }}}
--- Diffs --------------------------------------------------------------- {{{
+-- Diffing {{{
 
 vim.opt.diffopt:append { 'algorithm:histogram', 'indent-heuristic' }
 
 -- }}}
--- Folds --------------------------------------------------------------- {{{
+-- Folding {{{
 
-vim.o.foldmethod = 'indent'
 vim.o.foldlevel = 99999
+vim.o.foldcolumn = 'auto'
+vim.o.foldmethod = 'expr'
+vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.o.foldtext = 'v:lua.custom_foldtext()'
 
-vim.opt.fillchars:append({
-	foldsep = ' ',
-  foldopen = '',
-	foldclose = '',
-})
+_G.custom_foldtext = function()
+  local foldtext = vim.fn.foldtext()
+  local lines = foldtext:gsub('^+%-*', ' '):gsub(':.*', ' ')
+
+  local width = vim.api.nvim_win_get_width(0)
+  local code = vim.fn.getline(vim.v.foldstart)
+    :gsub('\t', string.rep(' ', vim.fn.shiftwidth()))
+    :gsub(' *%{%{%{ *$', '')
+    :gsub(' +%-%- *$', '')
+    :gsub(' *# *$', '')
+    :sub(1, width - #lines - 12)
+
+  local spacing = string.rep(
+    '·',
+    width
+    - vim.o.numberwidth
+    - vim.api.nvim_strwidth(code)
+    - #lines
+    - 6 -- spacing
+  )
+
+  return string.format(
+    '%s %s%s',
+    code,
+    spacing,
+    lines
+  )
+end
 
 -- }}}
--- Runtime plugin settings --------------------------------------------- {{{
+-- Runtime plugin settings {{{
 
-vim.g.markdown_folding = 1
+vim.g.markdown_folding = 0
 vim.g.markdown_recommended_style = 0
 
 -- }}}

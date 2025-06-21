@@ -2,7 +2,8 @@ local util = require('util')
 
 return {
   'olimorris/codecompanion.nvim',
-  dependencies = { -- {{{
+
+  dependencies = {
     'nvim-treesitter',
     'nvim-lua/plenary.nvim',
 
@@ -26,7 +27,7 @@ return {
         },
       },
     },
-  }, -- }}}
+  },
 
   cmd = {
     'CodeCompanion',
@@ -44,7 +45,7 @@ return {
     { '<Leader>ah', '<Cmd>CodeCompanionHistory<CR>', desc = 'AI: Show chat history' },
   },
 
-  opts = { -- {{{
+  opts = {
     adapters = {
       opts = {
         show_defaults = false,
@@ -171,6 +172,7 @@ return {
           opts = {
             numberwidth = vim.o.numberwidth,
             signcolumn = vim.o.signcolumn,
+            number = true,
             relativenumber = false,
           },
         },
@@ -193,8 +195,8 @@ return {
       },
     },
   },
-  -- }}}
-  init = function() -- {{{
+
+  init = function()
     util.command('AI', function(opts)
       local args = #opts.args > 0 and opts.args or nil
       local codecompanion = require('codecompanion')
@@ -240,5 +242,4 @@ return {
       MiniClue.enable_buf_triggers(event.buf)
     end)
   end,
-  -- }}}
 }

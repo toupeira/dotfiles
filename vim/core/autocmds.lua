@@ -1,7 +1,9 @@
+-- vim: foldmethod=marker foldlevel=0
+
 local util = require('util')
 local autocmd = util.autocmd
 
--- Filetype settings --------------------------------------------------- {{{
+-- Filetype settings {{{
 
 local filetypes = {
   ['crontab']   = { 'nowritebackup' },
@@ -10,7 +12,7 @@ local filetypes = {
   ['gdscript']  = { 'expandtab' },
   ['gitconfig'] = { 'commentstring=#\\ %s' },
   ['iss']       = { 'commentstring=;\\ %s' },
-  ['lua']       = { 'foldlevel=0', 'foldmethod=marker', 'path+=./lua', 'keywordprg=:help' },
+  ['lua']       = { 'foldlevel=1', 'path+=./lua', 'keywordprg=:help' },
   ['make']      = { 'noexpandtab' },
   ['ruby']      = { 'iskeyword+=?,!' },
 
@@ -30,12 +32,10 @@ local filetypes = {
     'linebreak',
   },
 
-  ['markdown'] = {
+  ['markdown,codecompanion'] = {
     'conceallevel=2',
     'suffixesadd+=.md',
     'foldlevel=2',
-    -- reset after ftplugin
-    'foldtext=',
     -- reset after obsidian.nvim
     'foldexpr=MarkdownFold()',
     -- automatically continue lists and blockquotes
@@ -49,11 +49,13 @@ for filetype, settings in pairs(filetypes) do
 end
 
 -- }}}
--- Helpers ------------------------------------------------------------- {{{
+-- Helpers {{{
 
 -- Resize quickfix windows
 autocmd('FileType', 'qf', function()
-  util.resize_window({ max = 10 })
+  util.resize_window({
+    max = math.floor(util.clamp(vim.o.lines / 3, 1, 10)),
+  })
 end)
 
 -- Enter insert mode when committing
@@ -69,7 +71,7 @@ autocmd('TermOpen', function()
   vim.wo.winhighlight = 'Normal:NormalFloat'
 end)
 
---- Automatically enter insert mode for terminals
+-- Automatically enter insert mode for terminals
 autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
 
 -- Git helpers

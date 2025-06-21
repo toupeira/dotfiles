@@ -5,7 +5,8 @@ return {
   'nvim-treesitter/nvim-treesitter',
   event = 'VeryLazy',
   build = ':TSUpdate',
-  dependencies = { -- {{{
+
+  dependencies = {
     { 'nvim-treesitter/nvim-treesitter-refactor' },
     { 'nvim-treesitter/nvim-treesitter-textobjects' },
     { 'RRethy/nvim-treesitter-endwise' },
@@ -37,7 +38,7 @@ return {
         nvomap('[S', previous, 'Move to previous neighbor node')
       end
     },
-  }, -- }}}
+  },
 
   opts = {
     ensure_installed = util.is_sudo and {} or {

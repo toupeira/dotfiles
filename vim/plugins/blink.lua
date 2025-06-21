@@ -11,6 +11,7 @@ return {
   'saghen/blink.cmp',
   version = '1.*',
   event = 'VeryLazy',
+
   dependencies = {
     { 'mgalliou/blink-cmp-tmux', cond = util.is_tmux },
   },
@@ -20,7 +21,7 @@ return {
     -- https://github.com/Saghen/blink.cmp/issues/337
     cmdline = { enabled = false },
 
-    keymap = { -- {{{
+    keymap = {
       preset = 'super-tab',
 
       -- mapped with `mini.keymap`
@@ -36,8 +37,8 @@ return {
       ['<M-y>'] = { function(cmp) cmp.scroll_documentation_up(1) end, 'fallback' },
       ['<M-t>'] = (util.is_tmux and { function(cmp) cmp.show({ providers = { 'tmux' }}) end } or { 'fallback' }),
     },
-    -- }}}
-    completion = { -- {{{
+
+    completion = {
       keyword = { range = 'full' },
       trigger = { show_in_snippet = false },
 
@@ -64,21 +65,21 @@ return {
         window = { border = 'rounded' },
       },
     },
-    -- }}}
-    fuzzy = { -- {{{
+
+    fuzzy = {
       sorts = { 'exact', 'score', 'sort_text' },
 
       -- work around weird sorting behaviour
       -- https://github.com/Saghen/blink.cmp/issues/1642
       implementation = 'lua',
     },
-    -- }}}
-    signature = { -- {{{
+
+    signature = {
       enabled = true,
       window = { border = 'rounded' },
     },
-    -- }}}
-    sources = { -- {{{
+
+    sources = {
       min_keyword_length = 2,
 
       default = function()
@@ -129,6 +130,5 @@ return {
         },
       },
     },
-    -- }}}
   },
 }

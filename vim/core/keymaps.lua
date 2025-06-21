@@ -1,3 +1,5 @@
+-- vim: foldmethod=marker foldlevel=0
+
 local util = require('util')
 local nmap = util.nmap
 local vmap = util.vmap
@@ -6,7 +8,7 @@ local cmap = util.cmap
 local tmap = util.tmap
 local nvomap = util.nvomap
 
--- Mode switching ------------------------------------------------------ {{{
+-- Mode switching {{{
 
 imap('<C-c>', '<Esc>', 'Leave insert mode')
 tmap('<Esc>', '<C-\\><C-n>', 'Leave insert mode')
@@ -23,7 +25,7 @@ nmap('<C-c>', function()
 end, 'Clear search and command line')
 
 -- }}}
--- Window navigation --------------------------------------------------- {{{
+-- Window navigation {{{
 
 nmap('<Leader>s', ':split', 'Split horizontally')
 nmap('<Leader><Leader>s', ':botright split', 'Split horizontally (full width)')
@@ -46,7 +48,7 @@ end, 'Close current buffer (keep window)')
 nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window')
 
 -- }}}
--- Tab navigation ------------------------------------------------------ {{{
+-- Tab navigation {{{
 
 nmap('H', ':tabprevious', 'Go to previous tab')
 nmap('L', ':tabnext', 'Go to next tab')
@@ -56,7 +58,7 @@ nmap('<Leader><C-n>', ':tab split', 'Open current window to new tab')
 nmap('<Leader><C-w>', ':tabclose', 'Close current tab')
 
 -- }}}
--- File editing -------------------------------------------------------- {{{
+-- File editing {{{
 
 -- remove default mappings
 util.unmap('n', 'Y')
@@ -125,7 +127,7 @@ end
 nmap('<C-LeftMouse>', '<nop>')
 
 -- }}}
--- Utilities ----------------------------------------------------------- {{{
+-- Utilities {{{
 
 util.alias_command({
   ['E']   = 'e',   ['E!']  = 'e!',

@@ -1,4 +1,5 @@
 local util = require('util')
+local lazy = util.lazy
 local very_lazy = util.very_lazy
 local lazy_file = util.lazy_file
 local map = util.map
@@ -15,22 +16,20 @@ return {
   very_lazy { 'tpope/vim-repeat' },
   very_lazy { 'tpope/vim-scriptease' },
 
-  { 'AndrewRadev/bufferize.vim', -- {{{
+  lazy      { 'AndrewRadev/bufferize.vim',
     cmd = 'Bufferize',
     init = function()
       vim.g.bufferize_focus_output = true
       util.alias_command({ B = 'Bufferize' })
     end,
   },
-  -- }}}
-  lazy_file { 'andymass/vim-matchup', -- {{{
+  lazy_file { 'andymass/vim-matchup',
     init = function()
       vim.g.matchup_matchparen_deferred = 1
       vim.g.matchup_matchparen_offscreen = {}
     end,
   },
-  -- }}}
-  { 'folke/flash.nvim', -- {{{
+  lazy      { 'folke/flash.nvim',
     keys = {
       { '<Leader>j', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Jump to position' },
       { '<Leader>J', mode = { 'n', 'x', 'o' }, function() require('flash').treesitter() end, desc = 'Select Treesitter node' },
@@ -44,8 +43,11 @@ return {
       },
     },
   },
-  -- }}}
-  very_lazy { 'j-hui/fidget.nvim', -- {{{
+  very_lazy { 'j-hui/fidget.nvim',
+    keys = {
+      { '<Leader>N', '<Cmd>Bufferize Fidget history<CR>', 'Show notification history' },
+    },
+
     opts = {
       notification = {
         view = { group_separator = '——' },
@@ -67,8 +69,7 @@ return {
       end
     end,
   },
-  -- }}}
-  { 'pechorin/any-jump.vim', -- {{{
+  lazy      { 'pechorin/any-jump.vim',
     url = 'https://github.com/toupeira/any-jump.vim',
     branch = 'feat/window-borders',
     keys = {
@@ -87,21 +88,18 @@ return {
       end)
     end,
   },
-  -- }}}
-  very_lazy { 'psliwka/vim-smoothie', -- {{{
+  very_lazy { 'psliwka/vim-smoothie',
     init = function()
       vim.g.smoothie_speed_constant_factor = 20
       vim.g.smoothie_speed_linear_factor = 20
     end,
   },
-  -- }}}
-  lazy_file { 'sickill/vim-pasta', -- {{{
+  lazy_file { 'sickill/vim-pasta',
     init = function()
       vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
     end,
   },
-  -- }}}
-  very_lazy { 'sphamba/smear-cursor.nvim', -- {{{
+  very_lazy { 'sphamba/smear-cursor.nvim',
     keys = {
       { '<LocalLeader>t', function()
         local cursor = require('smear_cursor')
@@ -116,8 +114,7 @@ return {
       min_vertical_distance_smear = 2,
     },
   },
-  -- }}}
-  lazy_file { 'tpope/vim-eunuch', -- {{{
+  lazy_file { 'tpope/vim-eunuch',
     init = function()
       util.alias_command({
         ['D'] = 'Delete',
@@ -125,8 +122,7 @@ return {
       })
     end,
   },
-  -- }}}
-  lazy_file { 'tpope/vim-projectionist', -- {{{
+  lazy_file { 'tpope/vim-projectionist',
     config = function()
       util.command('AC', function()
         local confirm = vim.o.confirm
@@ -140,8 +136,7 @@ return {
       end, 'Create alternate file')
     end,
   },
-  -- }}}
-  very_lazy { 'tpope/vim-ragtag', -- {{{
+  very_lazy { 'tpope/vim-ragtag',
     config = function()
       imap('<C-]>', '</<Plug>ragtagHtmlComplete')
       util.autocmd('User', 'Ragtag', function()
@@ -150,44 +145,30 @@ return {
       end)
     end,
   },
-  -- }}}
-  very_lazy { 'tpope/vim-rsi', -- {{{
+  very_lazy { 'tpope/vim-rsi',
     config = function()
       -- restore default mapping for <C-d>
       util.unmap({ 'i', 'c' }, '<C-d>')
     end,
   },
-  -- }}}
-  lazy_file { 'willothy/flatten.nvim', -- {{{
+  lazy_file { 'willothy/flatten.nvim',
     opts = {
       window = { open = 'alternate' },
     },
   },
-  -- }}}
-  lazy_file { 'wsdjeg/vim-fetch', -- {{{
+  lazy_file { 'wsdjeg/vim-fetch',
     config = function()
-      map({ 'n', 'x' }, 'gF', '<C-w><C-f>', { force = true }, 'Go to file in split')
+      map('n', 'gf', '<Cmd>call fetch#cfile(v:count1)<CR>', 'Go to file')
+      map('v', 'gf', '<Cmd>call fetch#visual(v:count1)<CR>', 'Go to file')
+
+      map('n', 'gF', '<C-w><C-s><Cmd>call fetch#cfile(v:count1)<CR>', { force = true }, 'Go to file in split')
+      map('v', 'gF', '<C-w><C-s><Cmd>call fetch#visual(v:count1)<CR>', { force = true }, 'Go to file in split')
     end,
   },
-  -- }}}
-  { 'y3owk1n/time-machine.nvim', -- {{{
-    cmd = 'TimeMachineToggle',
-    keys = {
-      { '<Leader>u', '<Cmd>TimeMachineToggle<CR>', desc = 'Toggle time machine' },
-    },
-    opts = {
-      split_opts = {
-        split = 'right',
-        width = 35,
-      },
-    }
-  },
-  -- }}}
-  { 'ziontee113/icon-picker.nvim', -- {{{
+  lazy      { 'ziontee113/icon-picker.nvim',
     keys = {
       { '<M-.>', '<Cmd>IconPickerInsert<CR>', mode = { 'i' }, desc = 'Insert emoji' },
     },
     opts = { disable_legacy_commands = true },
   },
-  -- }}}
 }

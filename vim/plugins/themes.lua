@@ -10,7 +10,6 @@ return {
       vim.g.gruvbox_material_background = 'hard'
     end,
   },
-
   { 'EdenEast/nightfox.nvim',
     priority = 1000,
 
@@ -117,8 +116,7 @@ return {
 
             NonText = { fg = 'palette.comment' },
             EndOfBuffer = { fg = 'bg4' },
-            Folded = { fg = 'palette.comment', bg = 'bg3', style = 'bold' },
-            FoldColumn = { link = 'LineNr' },
+            Folded = { fg = 'palette.sel1', bg = 'bg3', style = 'bold' },
 
             Pmenu = { bg = 'bg0' },
             PmenuSel = { fg = 'white', bg = 'black', style = 'bold' },
@@ -248,6 +246,8 @@ return {
             NeoTreeGitStaged = { link = 'MoreMsg' },
             NeoTreeGitUnstaged = { link = 'WarningMsg' },
             NeoTreeGitUntracked = { link = 'ErrorMsg' },
+
+            QuickFixLineNr = { link = 'Visual' },
 
             SnacksIndent = { fg = 'bg2' },
             SnacksIndentScope = { fg = 'fg3' },

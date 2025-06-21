@@ -3,11 +3,15 @@ local util = require('util')
 return {
   'nvim-neo-tree/neo-tree.nvim',
   lazy = false,
+
   dependencies = {
     'MunifTanjim/nui.nvim',
   },
 
-  cmd = 'Neotree',
+  cmd = {
+    'Neotree',
+  },
+
   keys = {
     { '-', '<Cmd>Neotree toggle reveal action=show<CR>', desc = 'Toggle Neotree sidebar'},
     { '_', '<Cmd>Neotree toggle reveal position=current<CR>', desc = 'Toggle Neotree window'},

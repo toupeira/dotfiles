@@ -3,6 +3,7 @@ local util = require('util')
 return {
   'dense-analysis/ale',
   event = 'LazyFile',
+
   dependencies = { 'mason.nvim' },
 
   init = function()

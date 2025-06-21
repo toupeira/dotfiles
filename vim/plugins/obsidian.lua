@@ -2,7 +2,10 @@ return {
   'obsidian-nvim/obsidian.nvim',
   ft = 'markdown',
   cmd = 'Obsidian',
-  dependencies = { 'nvim-lua/plenary.nvim' },
+
+  dependencies = {
+    'nvim-lua/plenary.nvim',
+  },
 
   opts = {
     disable_frontmatter = true,
@@ -13,10 +16,10 @@ return {
 
     ui = {
       enable = false,
-      checkboxes = {
-        ['x'] = { char = '󰄲', hl_group = 'Keyword' },
-        [' '] = { char = '󰄱', hl_group = 'Keyword' },
-      },
+    },
+
+    checkbox = {
+      order = { ' ', 'x', '-' },
     },
 
     completion = {

@@ -131,11 +131,14 @@ function mvln {
 function rg.edit {
   [ "$1" = "-l" ] && shift
 
-  local files
-  mapfile -t files < <( rg -l -- "$@" )
-  if [ "${#files[@]}" ]; then
+  local files=$( rg --sort=path --vimgrep -- "$@" )
+  if [ "$files" ]; then
     local pattern=${1//\\b/}
-    sensible-vim "+silent /\\v$pattern" "+normal ggn" "${files[@]}"
+    sensible-vim \
+      "+silent bdelete 1" \
+      "+silent /\\v$pattern" \
+      "+copen" \
+      -q <( echo "$files" )
   else
     echo "No files found."
   fi
