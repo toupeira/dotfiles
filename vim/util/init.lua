@@ -6,7 +6,7 @@ local line = vim.fn.line
 local pathshorten = vim.fn.pathshorten
 local winnr = vim.fn.winnr
 
--- Lua helpers --------------------------------------------------------- {{{
+-- Lua helpers {{{
 
 util.split = vim.fn.split
 util.join = table.concat
@@ -22,7 +22,7 @@ util.clamp = function(value, min, max)
 end
 
 -- }}}
--- Configuration helpers ----------------------------------------------- {{{
+-- Configuration helpers {{{
 
 util.is_home = vim.fn.getcwd() == os.getenv('HOME')
 util.is_sudo = os.getenv('SUDO_COMMAND') ~= nil
@@ -36,6 +36,11 @@ util.lsp_clients = function()
 end
 
 -- Load plugins after startup
+util.lazy = function(plugin)
+  plugin.lazy = true
+  return plugin
+end
+
 util.very_lazy = function(plugin)
   plugin.event = 'VeryLazy'
   return plugin
@@ -196,7 +201,7 @@ util.get_color = function(name, key)
 end
 
 -- }}}
--- UI helpers ---------------------------------------------------------- {{{
+-- UI helpers {{{
 
 -- Show a {message} with an optional {hl} group.
 util.echo = function(message, hl)

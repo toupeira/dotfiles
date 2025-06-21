@@ -1,4 +1,5 @@
 local util = require('util')
+local lazy = util.lazy
 local very_lazy = util.very_lazy
 local lazy_file = util.lazy_file
 local map = util.map
@@ -15,7 +16,7 @@ return {
   very_lazy { 'tpope/vim-repeat' },
   very_lazy { 'tpope/vim-scriptease' },
 
-  { 'AndrewRadev/bufferize.vim', -- {{{
+  lazy      { 'AndrewRadev/bufferize.vim', -- {{{
     cmd = 'Bufferize',
     init = function()
       vim.g.bufferize_focus_output = true
@@ -30,7 +31,7 @@ return {
     end,
   },
   -- }}}
-  { 'folke/flash.nvim', -- {{{
+  lazy      { 'folke/flash.nvim', -- {{{
     keys = {
       { '<Leader>j', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Jump to position' },
       { '<Leader>J', mode = { 'n', 'x', 'o' }, function() require('flash').treesitter() end, desc = 'Select Treesitter node' },
@@ -46,6 +47,10 @@ return {
   },
   -- }}}
   very_lazy { 'j-hui/fidget.nvim', -- {{{
+    keys = {
+      { '<Leader>N', '<Cmd>Bufferize Fidget history<CR>', 'Show notification history' },
+    },
+
     opts = {
       notification = {
         view = { group_separator = '——' },
@@ -68,7 +73,7 @@ return {
     end,
   },
   -- }}}
-  { 'pechorin/any-jump.vim', -- {{{
+  lazy      { 'pechorin/any-jump.vim', -- {{{
     url = 'https://github.com/toupeira/any-jump.vim',
     branch = 'feat/window-borders',
     keys = {
@@ -170,7 +175,7 @@ return {
     end,
   },
   -- }}}
-  { 'y3owk1n/time-machine.nvim', -- {{{
+  lazy      { 'y3owk1n/time-machine.nvim', -- {{{
     cmd = 'TimeMachineToggle',
     keys = {
       { '<Leader>u', '<Cmd>TimeMachineToggle<CR>', desc = 'Toggle time machine' },
@@ -183,7 +188,7 @@ return {
     }
   },
   -- }}}
-  { 'ziontee113/icon-picker.nvim', -- {{{
+  lazy      { 'ziontee113/icon-picker.nvim', -- {{{
     keys = {
       { '<M-.>', '<Cmd>IconPickerInsert<CR>', mode = { 'i' }, desc = 'Insert emoji' },
     },

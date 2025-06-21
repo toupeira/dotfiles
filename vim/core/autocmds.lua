@@ -1,7 +1,7 @@
 local util = require('util')
 local autocmd = util.autocmd
 
--- Filetype settings --------------------------------------------------- {{{
+-- Filetype settings {{{
 
 local filetypes = {
   ['crontab']   = { 'nowritebackup' },
@@ -30,12 +30,10 @@ local filetypes = {
     'linebreak',
   },
 
-  ['markdown'] = {
+  ['markdown,codecompanion'] = {
     'conceallevel=2',
     'suffixesadd+=.md',
     'foldlevel=2',
-    -- reset after ftplugin
-    'foldtext=',
     -- reset after obsidian.nvim
     'foldexpr=MarkdownFold()',
     -- automatically continue lists and blockquotes
@@ -49,7 +47,7 @@ for filetype, settings in pairs(filetypes) do
 end
 
 -- }}}
--- Helpers ------------------------------------------------------------- {{{
+-- Helpers {{{
 
 -- Resize quickfix windows
 autocmd('FileType', 'qf', function()
@@ -69,7 +67,7 @@ autocmd('TermOpen', function()
   vim.wo.winhighlight = 'Normal:NormalFloat'
 end)
 
---- Automatically enter insert mode for terminals
+-- Automatically enter insert mode for terminals
 autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
 
 -- Git helpers

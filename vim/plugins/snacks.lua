@@ -1,6 +1,6 @@
 return {
   'folke/snacks.nvim',
-  event = 'VeryLazy',
+  event = 'LazyFile',
 
   keys = {
     { '<M-z>', function()
@@ -13,7 +13,7 @@ return {
   },
 
   opts = {
-    indent = {
+    indent = { -- {{{
       animate = { enabled = false },
 
       chunk = {
@@ -25,12 +25,18 @@ return {
         }
       },
     },
-
-    input = {
+    -- }}}
+    input = { -- {{{
       icon = '',
     },
-
-    styles = {
+    -- }}}
+    statuscolumn = { -- {{{
+      left = { 'git' },
+      right = { 'mark', 'sign', 'fold' },
+      folds = { open = true },
+    },
+    -- }}}
+    styles = { -- {{{
       input = {
         title_pos = 'left',
         relative = 'cursor',
@@ -49,5 +55,6 @@ return {
         wo = { winbar = '' },
       },
     },
+    -- }}}
   },
 }

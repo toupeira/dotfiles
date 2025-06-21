@@ -171,6 +171,7 @@ return {
           opts = {
             numberwidth = vim.o.numberwidth,
             signcolumn = vim.o.signcolumn,
+            number = true,
             relativenumber = false,
           },
         },
