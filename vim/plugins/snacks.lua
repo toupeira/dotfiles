@@ -69,6 +69,8 @@ return {
     },
 
     picker = {
+      ui_select = false,
+
       layout = {
         preset = 'ivy',
         layout = {

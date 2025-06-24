@@ -150,37 +150,7 @@ vim.opt.diffopt:append { 'algorithm:histogram', 'indent-heuristic' }
 vim.o.foldlevel = 99999
 vim.o.foldcolumn = 'auto'
 vim.o.foldmethod = 'expr'
-vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-vim.o.foldtext = 'v:lua.custom_foldtext()'
-
-_G.custom_foldtext = function()
-  local foldtext = vim.fn.foldtext()
-  local lines = foldtext:gsub('^+%-*', ' '):gsub(':.*', ' ')
-
-  local width = vim.api.nvim_win_get_width(0)
-  local code = vim.fn.getline(vim.v.foldstart)
-    :gsub('\t', string.rep(' ', vim.fn.shiftwidth()))
-    :gsub(' *%{%{%{ *$', '')
-    :gsub(' +%-%- *$', '')
-    :gsub(' *# *$', '')
-    :sub(1, width - #lines - 12)
-
-  local spacing = string.rep(
-    '·',
-    width
-    - vim.o.numberwidth
-    - vim.api.nvim_strwidth(code)
-    - #lines
-    - 6 -- spacing
-  )
-
-  return string.format(
-    '%s %s%s',
-    code,
-    spacing,
-    lines
-  )
-end
+vim.o.foldtext = ''
 
 -- }}}
 -- Runtime plugin settings {{{

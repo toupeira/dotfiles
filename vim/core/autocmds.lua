@@ -79,7 +79,9 @@ local git_command = function(action, key, command, check)
   local desc = action .. ' changes interactively'
   util.command('G' .. action, function()
     if vim.fn.system(check) ~= '' then
-      vim.cmd.terminal(command)
+      require('snacks.terminal').open(command, {
+        win = { height = 0.5 },
+      })
     else
       util.notify('Git:', {
         annote = 'No changes to ' .. action:lower() .. '.',

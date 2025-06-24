@@ -18,8 +18,24 @@ return {
   },
 
   opts = {
+    default_component_configs = {
+      git_status = {
+        symbols = {
+          added     = '',
+          deleted   = '',
+          modified  = '',
+          renamed   = '',
+          untracked = '',
+          ignored   = '◌',
+          unstaged  = '○',
+          staged    = '●',
+          conflict  = '',
+        },
+      },
+    },
+
     window = {
-      width = 35,
+      width = '30%',
 
       mappings = {
         ['<Tab>'] = 'toggle_node',
@@ -52,6 +68,18 @@ return {
       bind_to_cwd = false,
       follow_current_file = { enabled = true },
       hijack_netrw_behavior = 'open_current',
+
+      window = {
+        mappings = {
+          ['[c'] = 'prev_git_modified',
+          [']c'] = 'next_git_modified',
+          ['[g'] = false,
+          [']g'] = false,
+
+          ['ga'] = 'git_add_file',
+          ['gu'] = 'git_unstage_file',
+        }
+      }
     },
   },
 }
