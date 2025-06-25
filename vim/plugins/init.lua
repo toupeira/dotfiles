@@ -37,6 +37,10 @@ return {
       { 'R', mode = { 'o', 'x' }, function() require('flash').treesitter_search() end, desc = 'Remote select Treesitter node' },
     },
     opts = {
+      search = {
+        mode = 'fuzzy',
+      },
+
       modes = {
         search = { enabled = false },
         char = { enabled = false },

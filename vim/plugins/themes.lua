@@ -207,7 +207,7 @@ return {
             CmpItemKindSnippet = { link = 'Function' },
 
             FlashCurrent = { link = 'CurSearch' },
-            FlashLabel = { fg = 'palette.search.bg0', bg = 'palette.search.fg0', style = 'bold' },
+            FlashLabel = { fg = 'palette.black', bg = 'palette.yellow', style = 'bold' },
 
             FugitiveblameAnnotation = { link = 'StatusLine' },
 
