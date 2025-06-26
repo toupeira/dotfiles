@@ -58,9 +58,8 @@ bindings = [
 [selection]
 semantic_escape_chars = ",│┃|`\"' (){}<>[]\t"
 
-[terminal.shell]
-program = 'bash'
-args = ['-l']
+[terminal]
+shell = { program = 'bash', args = ['-l'] }
 
 [window]
 opacity = 0.85

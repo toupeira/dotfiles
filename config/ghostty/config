@@ -1,0 +1,13 @@
+command = bash --login
+
+theme = tokyonight
+background = black
+background-opacity = 0.85
+
+font-family = Hack Nerd Font
+
+window-padding-x = 0
+window-padding-y = 0
+window-padding-color = extend
+
+app-notifications = no-clipboard-copy

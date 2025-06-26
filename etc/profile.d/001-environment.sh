@@ -12,6 +12,7 @@ export TERMINAL_EMULATOR="x-terminal-emulator"
 export EDITOR="sensible-vim"
 export PAGER="less"
 export LESS="-iRMK --mouse"
+export MANPAGER="sensible-vim +Man!"
 export SYSTEMD_LESS="iRMKFX --mouse"
 export RIPGREP_CONFIG_PATH=~/.config/rg/config
 export BAT_THEME="TwoDark"

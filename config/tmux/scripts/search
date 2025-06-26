@@ -19,6 +19,10 @@ case "$1" in
     search ".*𝝺.*"
     ;;
 
+  quotes)
+    search "('[^']+'|\"[^\"]+\")"
+    ;;
+
   # interesting things (URLs, emails, hashes, IPs)
   interesting)
     urls='\b(https?://|git@|git://|ssh://|ftp://|file:///)[[:alnum:]?=%/_.:,;~@!#$&()*+-]*'

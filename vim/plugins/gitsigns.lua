@@ -79,6 +79,12 @@ return {
       vmap('<Leader>ga', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Stage selected hunk')
       vmap('<Leader>gR', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Reset selected hunk')
 
+      nmap('<Leader>gd', function()
+        gitsigns.toggle_numhl()
+        gitsigns.toggle_linehl()
+        gitsigns.toggle_word_diff()
+      end, args, 'Toggle inline diff')
+
       nmap('<Leader>gb', gitsigns.blame, args, 'Open Git blame for current file')
       nmap('<Leader>gB', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
 

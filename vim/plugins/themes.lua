@@ -213,6 +213,7 @@ return {
 
             FzfLuaBorder = { link = 'FloatBorder' },
             FzfLuaTitle = { link = '@markup.heading' },
+            FzfLuaPreviewTitle = { link = 'Title' },
 
             GitSignsAdd    = { fg = 'git.add', bg = 'diff.add' },
             GitSignsChange = { fg = 'git.changed', bg = 'diff.change' },

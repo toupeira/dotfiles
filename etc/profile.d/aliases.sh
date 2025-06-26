@@ -42,7 +42,6 @@ alias mutt='neomutt'
 alias ffmpeg='ffmpeg -hide_banner'
 alias ffprobe='ffprobe -hide_banner'
 alias colortest='colortest-python -np'
-alias man='MANPAGER="sensible-vim +Man!" man'
 
 # system administration
 alias sctl='systemctl'

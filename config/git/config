@@ -154,6 +154,7 @@
   staged = !git --no-pager diff --cached --name-only
   unstaged = ls-files --modified --others --exclude-standard
   ss = !git --no-pager show --stat
+  show-fuller = show --format=fuller
 
   l = log --date=human-local --pretty=format:'%C(yellow)%h%Creset %C(green)[%ad]%Creset %C(037)%an:%Creset %C(white)%s%Creset%C(auto)%d%Creset'
   la = l --all

@@ -86,7 +86,6 @@ user_pref("browser.urlbar.suggest.calculator", true);
 user_pref("browser.urlbar.trimURLs", false);
 
 // Search
-user_pref("browser.search.hiddenOneOffs", "Google,DuckDuckGo");
 user_pref("browser.search.separatePrivateDefault", true);
 user_pref("browser.search.separatePrivateDefault.ui.enabled", true);
 user_pref("browser.search.suggest.enabled", false);

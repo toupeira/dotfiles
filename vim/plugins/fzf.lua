@@ -213,17 +213,28 @@ return {
     }
   end,
 
-  config = function(_, opts)
+  config = function(_, plugin_opts)
     -- setup plugin {{{
     local fzf = require('fzf-lua')
-    fzf.setup(opts)
+    fzf.setup(plugin_opts)
+
+    -- use bottom layout by default
+    local fzf_exec = fzf.core.fzf_exec
+    fzf.core.fzf_exec = function(contents, opts)
+      if not opts.winopts or vim.deep_equal(vim.tbl_keys(opts.winopts), { 'height' }) then
+        opts = merge(presets.bottom, opts)
+        vim.print(opts)
+      end
+
+      return fzf_exec(contents, opts)
+    end
 
     -- use history per provider
     vim.g.fzf_history_dir = vim.fn.stdpath('state') .. '/fzf'
 
-    fzf.register_ui_select(function(select_opts, items)
-      local title = select_opts.prompt
-      select_opts.prompt = '» '
+    fzf.register_ui_select(function(opts, items)
+      local title = opts.prompt
+      opts.prompt = '» '
 
       local height = math.min(
         presets.bottom.winopts.height,
@@ -245,6 +256,7 @@ return {
     -- when opening multiple files, open both the quickfix list and the first file
     fzf.defaults.actions.files.default = function(selected, settings)
       fzf.actions.file_edit({ selected[1] }, settings)
+      vim.bo.buflisted = true
 
       if #selected > 1 then
         fzf.actions.file_sel_to_qf(selected, settings)
@@ -319,9 +331,24 @@ return {
     })
 
     map_fzf('<Leader>b', 'buffers')
-    map_fzf('<Leader>B', 'buffers', {
+    map_fzf('<Leader>B', function()
+      -- show buffers from all tabs
+      local core = require('scope.core')
+      core.revalidate()
+
+      local nvim_list_bufs = vim.api.nvim_list_bufs
+      vim.api.nvim_list_bufs = function()
+        return vim.iter(core.cache):flatten():totable()
+      end
+
+      fzf.buffers(merge(
+        presets.title('Buffers (All tabs)'),
+        { show_unlisted = true }
+      ))
+
+      vim.api.nvim_list_bufs = nvim_list_bufs
+    end, {
       desc = 'all buffers',
-      args = merge(presets.title('Buffers (All)'), { show_unlisted = true }),
     })
 
     map_fzf('<Leader>h', 'oldfiles', { desc = 'history' })
