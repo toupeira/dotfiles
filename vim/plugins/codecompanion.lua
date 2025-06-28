@@ -63,11 +63,10 @@ return {
           schema = {
             model = {
               -- default = 'anthropic/claude-sonnet-4',
-              -- default = 'deepseek/deepseek-chat-v3-0324:free',
+              default = 'deepseek/deepseek-chat-v3-0324:free',
               -- default = 'deepseek/deepseek-r1-0528:free', -- doesn't support tools yet
-              -- default = 'google/gemini-2.5-flash-preview-05-20',
-              default = 'google/gemini-2.5-flash-preview-05-20:thinking',
-              -- default = 'google/gemini-2.5-pro-preview',
+              -- default = 'google/gemini-2.5-flash',
+              -- default = 'google/gemini-2.5-pro',
               -- default = 'meta-llama/llama-4-maverick:free',
               -- default = 'openai/o4-mini-high',
             },
@@ -136,7 +135,7 @@ return {
         strategy = 'chat',
         description = 'Edit the current buffer',
         prompts = {
-          { role = 'user', content = '@insert_edit_into_file #buffer\n\n' },
+          { role = 'user', content = '@{insert_edit_into_file} #{buffer}\n\n' },
         },
         opts = {
           auto_submit = false,
@@ -148,7 +147,7 @@ return {
         strategy = 'chat',
         description = 'Edit with full tooling',
         prompts = {
-          { role = 'user', content = '@full_stack_dev #buffer\n\n' },
+          { role = 'user', content = '@{full_stack_dev} #{buffer}\n\n' },
         },
         opts = {
           auto_submit = false,
@@ -239,6 +238,7 @@ return {
     })
 
     util.autocmd('FileType', 'codecompanion', function (event)
+      -- luacheck: globals MiniClue
       MiniClue.enable_buf_triggers(event.buf)
     end)
   end,

@@ -12,7 +12,6 @@ return {
 
   config = function(_, opts)
     local helpers = require('incline.helpers')
-    local icons = require('nvim-web-devicons')
     local aerial
 
     local comment = util.get_color('Comment')
@@ -29,9 +28,9 @@ return {
         filename = '[No Name]'
       end
 
-      local icon = icons.get_icon(
-        filename, vim.fn.fnamemodify(filename, ':e'),
-        { default = true }
+      local icon = require('mini.icons').get(
+        'filetype',
+        vim.bo[props.buf].filetype
       )
 
       return {

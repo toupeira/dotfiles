@@ -19,8 +19,15 @@ return {
       close_command = util.close_buffer,
       right_mouse_command = nil,
 
+      -- luacheck: globals MiniIcons
       get_element_icon = function(element)
-        local icon, _hl = MiniIcons.get('extension', element.extension)
+        local icon
+        if element.filetype ~= '' then
+          icon = MiniIcons.get('filetype', element.filetype)
+        else
+          icon = MiniIcons.get('extension', element.extension)
+        end
+
         return icon
       end,
     },

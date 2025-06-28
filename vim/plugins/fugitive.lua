@@ -1,7 +1,6 @@
 local util = require('util')
 local nmap = util.nmap
 local vmap = util.vmap
-local nvomap = util.nvomap
 
 return {
   'tpope/vim-fugitive',

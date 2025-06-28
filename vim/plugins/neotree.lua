@@ -13,7 +13,7 @@ return {
   },
 
   keys = {
-    { '-', '<Cmd>Neotree toggle reveal action=show<CR>', desc = 'Toggle Neotree sidebar'},
+    { '-', '<Cmd>Neotree toggle reveal<CR>', desc = 'Toggle Neotree sidebar'},
     { '_', '<Cmd>Neotree toggle reveal position=current<CR>', desc = 'Toggle Neotree window'},
   },
 
@@ -35,7 +35,7 @@ return {
     },
 
     window = {
-      width = '30%',
+      width = 30,
 
       mappings = {
         ['<Tab>'] = 'toggle_node',

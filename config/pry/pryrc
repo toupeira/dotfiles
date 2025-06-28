@@ -57,5 +57,3 @@ lambda {
     ]
   )
 }.call
-
-# vim: ft=ruby

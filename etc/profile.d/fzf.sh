@@ -1,9 +1,17 @@
 #!/bin/bash
 # shellcheck disable=SC2034
 
-export FZF_DEFAULT_COMMAND="fdfind --color always --max-results 99999"
+export FZF_DEFAULT_COMMAND=$( echo \
+  fdfind \
+    --hidden \
+    --exclude .git \
+    --color always \
+    --max-results 99999
+)
+
 export FZF_DEFAULT_OPTS="
   --ansi
+  --list-border
   --cycle
   --filepath-word
   --highlight-line
@@ -11,13 +19,17 @@ export FZF_DEFAULT_OPTS="
   --info inline-right
   --layout default
   --no-height
-  --no-separator
   --prompt '» '
   --preview-window 'right,50%,hidden,<60(up,60%,hidden)'
+  --preview-label ' Preview '
 
   --color dark
+  --color bg:#11131a
+  --color border:#2f3347
   --color prompt:#82b1ff
   --color header:#82b1ff
+  --color label:#82b1ff:bold
+  --color preview-label:#c3e88d
   --color info:240
   --color hl:#d7ffaf:bold
   --color hl+:#ecffd9
@@ -45,22 +57,24 @@ FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"
 FZF_ALT_C_COMMAND="$FZF_DEFAULT_COMMAND --type d"
 
 FZF_CTRL_R_OPTS="
-  --prompt 'History» '
+  --list-label ' History '
   --history '$HOME/.local/state/history/fzf-history'
   --preview 'echo {} | sed -r \"s/^[0-9]*\\t*//\"'
   --preview-window 'default,up,5,hidden,wrap'
 "
 FZF_CTRL_T_OPTS="
+  --list-label ' Files '
   --preview 'batcat -f --style numbers {}'
   --bind 'start:transform-prompt(echo \${PWD/#\$HOME/\~}/)'
-  --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_CTRL_T_COMMAND --unrestricted --exclude .git)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
+  --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_CTRL_T_COMMAND --unrestricted)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
 FZF_ALT_C_OPTS="
+  --list-label ' Directories '
   --history '$HOME/.local/state/history/fzf-cd'
   --preview 'tree -xC --gitignore --prune --noreport {}'
   --preview-window 'default,right,50%'
   --bind 'start:transform-prompt(echo \${PWD/#\$HOME/\~}/)'
-  --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_ALT_C_COMMAND --unrestricted --exclude .git)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
+  --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_ALT_C_COMMAND --unrestricted)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
 
 # Setup FZF keybindings and completions.
@@ -82,8 +96,10 @@ function __tmux_complete {
   done
 
   result=$(
-    printf '%s\n' "${words[@]}" \ | sort | uniq | \
-      fzf --bind "ctrl-f:unbind(ctrl-f)+reload($FZF_CTRL_T_COMMAND)"
+    printf '%s\n' "${words[@]}" | sort | uniq | \
+      fzf \
+        --bind "ctrl-f:unbind(ctrl-f)+reload($FZF_CTRL_T_COMMAND)" \
+        --list-label ' tmux '
   )
 
   [ "$result" ] && tmux send-keys "$result"

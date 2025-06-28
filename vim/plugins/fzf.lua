@@ -95,6 +95,7 @@ return {
       -- }}}
       fzf_opts = { -- {{{
         ['--layout'] = 'default',
+        ['--no-list-border'] = true,
       },
       -- }}}
       hls = { -- {{{
@@ -385,7 +386,7 @@ return {
 
     -- search vim history
     map_fzf('<Leader>:', 'command_history', { mode = { 'n', 'v' }})
-    map_fzf('<Leader>/', 'search_history')
+    map_fzf('<Leader>/', 'search_history', { mode = { 'n', 'v' }})
 
     -- search vim internals
     map_fzf('<F1><F1>', 'help_tags')

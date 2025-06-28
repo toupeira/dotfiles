@@ -22,12 +22,13 @@ PS1='\[\e]133;D;$?\e\\\e]133;A\e\\\]'"$PS1"'\[\e]133;B\e\\\]'
 
 # Set current directory and update title on changes
 
-PROMPT_COMMAND=( '
-  type -p _mise_hook && _mise_hook;
-  [ "$PWD" != "$_last_pwd" ] && _prompt_dir=$( _prompt_dir);
-  [ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir";
-  _last_pwd="$PWD"
-' )
+PROMPT_COMMAND=(
+  '_prompt_status'
+  'type -p _mise_hook && _mise_hook'
+  '[ "$PWD" != "$_last_pwd" ] && _prompt_dir=$( _prompt_dir)'
+  '[ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir"'
+  '_last_pwd="$PWD"'
+)
 
 # Prompt helpers
 function _prompt_dir {
@@ -51,6 +52,19 @@ function _prompt_dir {
 
   dir=${dir/#$HOME/\~}
   echo "$dir"
+}
+
+function _prompt_status {
+  case "$?" in
+    0|130)
+      return
+      ;;
+    *)
+      local message=" $?"
+      local col=$(( COLUMNS - ${#message} ))
+      echo -ne "\e[s\e[1A\e[99999D\e[${col}C\e[1m\e[38;5;166m${message}\e[0m\e[u"
+      ;;
+  esac
 }
 
 function _prompt_jobs {

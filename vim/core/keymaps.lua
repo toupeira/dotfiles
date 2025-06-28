@@ -45,7 +45,7 @@ nmap('<Leader>x', function()
   util.close_tab()
 end, 'Close current buffer (keep window)')
 
-nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window')
+nmap('<LocalLeader>q', function() util.toggle_list('c') end, 'Toggle quickfix window')
 
 -- }}}
 -- Tab navigation {{{

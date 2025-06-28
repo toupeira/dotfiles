@@ -1,5 +1,4 @@
 local util = require('util')
-local map = util.map
 
 return {
   { 'tmux-plugins/tmux-open', lazy = true },
@@ -17,15 +16,12 @@ return {
       multiplexer_integration = 'tmux',
     },
 
-    init = function()
-      local splits = require('smart-splits')
-      local modes = { 'n', 'c', 'v', 't' }
-
-      map(modes, '<C-h>', splits.move_cursor_left, 'Go to window on the left')
-      map(modes, '<C-j>', splits.move_cursor_down, 'Go to window on the bottom')
-      map(modes, '<C-k>', splits.move_cursor_up, 'Go to window on the top')
-      map(modes, '<C-l>', splits.move_cursor_right, 'Go to window on the right')
-      map(modes, '<C-\\>', splits.move_cursor_previous, 'Go to previous window')
-    end,
+    keys = {
+      { '<C-h>', mode = { 'n', 'c', 'v', 't' }, '<Cmd>lua require("smart-splits").move_cursor_left()<CR>', desc = 'Go to window on the left' },
+      { '<C-j>', mode = { 'n', 'c', 'v', 't' }, '<Cmd>lua require("smart-splits").move_cursor_down()<CR>', desc = 'Go to window on the bottom' },
+      { '<C-k>', mode = { 'n', 'c', 'v', 't' }, '<Cmd>lua require("smart-splits").move_cursor_up()<CR>', desc = 'Go to window on the top' },
+      { '<C-l>', mode = { 'n', 'c', 'v', 't' }, '<Cmd>lua require("smart-splits").move_cursor_right()<CR>', desc = 'Go to window on the right' },
+      { '<C-\\>', mode = { 'n', 'c', 'v', 't' }, '<Cmd>lua require("smart-splits").move_cursor_previous()<CR>', desc = 'Go to previous window' },
+    },
   },
 }

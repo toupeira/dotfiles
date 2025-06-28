@@ -8,7 +8,7 @@ return {
         return '<M-z>'
       end
 
-      vim.schedule(Snacks.terminal.toggle)
+      vim.schedule(require('snacks.terminal').toggle)
     end, mode = { 'n', 't' }, expr = true, desc = 'Toggle terminal' },
 
     { '<Leader>gx',

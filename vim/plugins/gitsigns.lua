@@ -34,6 +34,7 @@ return {
       local gitsigns = require('gitsigns')
       local args = { buffer = bufnr, force = true }
 
+      -- luacheck: globals MiniDiff
       local next_hunk, prev_hunk = util.make_repeatable(
         function()
           local mini_diff_data = MiniDiff.get_buf_data()
@@ -79,14 +80,14 @@ return {
       vmap('<Leader>ga', function() gitsigns.stage_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Stage selected hunk')
       vmap('<Leader>gR', function() gitsigns.reset_hunk {vim.fn.line('.'), vim.fn.line('v')} end, args, 'Reset selected hunk')
 
-      nmap('<Leader>gd', function()
+      nmap('<LocalLeader>gd', function()
         gitsigns.toggle_numhl()
         gitsigns.toggle_linehl()
         gitsigns.toggle_word_diff()
       end, args, 'Toggle inline diff')
 
       nmap('<Leader>gb', gitsigns.blame, args, 'Open Git blame for current file')
-      nmap('<Leader>gB', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
+      nmap('<LocalLeader>gb', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
 
       util.map({'o', 'x'}, 'ih', ':Gitsigns select_hunk', args)
     end,

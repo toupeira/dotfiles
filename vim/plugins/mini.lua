@@ -1,4 +1,5 @@
 -- vim: foldmethod=marker foldlevel=0
+-- luacheck: globals MiniBracketed MiniClue MiniIcons MiniJump MiniPairs MiniSessions MiniStarter MiniTrailspace
 
 local util = require('util')
 local nmap = util.nmap
@@ -11,89 +12,12 @@ return {
 
   init = function()
     -- mini.clue {{{
-    local clue = require('mini.clue')
-
     util.autocmd('User', 'MiniStarterOpened', function(event)
       MiniClue.enable_buf_triggers(event.buf)
       util.nmap('g', function()
         MiniStarter.add_to_query('g', event.buf)
       end, { buffer = event.buf, nowait = true, force = true })
     end)
-
-    vim.o.timeoutlen = 500
-
-    clue.setup({
-      triggers = {
-        -- Leader triggers
-        { mode = 'n', keys = '<Leader>' },
-        { mode = 'v', keys = '<Leader>' },
-        { mode = 'n', keys = '<Leader>!' },
-        { mode = 'n', keys = '<LocalLeader>' },
-        { mode = 'v', keys = '<LocalLeader>' },
-        { mode = 'n', keys = '<F1>' },
-
-        -- Built-in completion
-        { mode = 'i', keys = '<C-x>' },
-
-        -- `g` key
-        { mode = 'n', keys = 'g' },
-        { mode = 'v', keys = 'g' },
-
-        -- Marks
-        { mode = 'n', keys = "'" },
-        { mode = 'n', keys = '`' },
-        { mode = 'v', keys = "'" },
-        { mode = 'v', keys = '`' },
-
-        -- Registers
-        { mode = 'n', keys = '"' },
-        { mode = 'v', keys = '"' },
-        { mode = 'i', keys = '<C-r>' },
-        { mode = 'c', keys = '<C-r>' },
-
-        -- Window commands
-        { mode = 'n', keys = '<C-w>' },
-
-        -- `z` key
-        { mode = 'n', keys = 'z' },
-        { mode = 'v', keys = 'z' },
-
-        -- mini.bracketed and others
-        { mode = 'n', keys = ']' },
-        { mode = 'n', keys = '[' },
-
-        -- mini.comment
-        { mode = 'n', keys = 'gc' },
-
-        -- mini.surround
-        { mode = 'n', keys = 'S' },
-        { mode = 'v', keys = 'S' },
-      },
-
-      clues = {
-        clue.gen_clues.builtin_completion(),
-        clue.gen_clues.g(),
-        clue.gen_clues.marks(),
-        clue.gen_clues.registers(),
-        clue.gen_clues.windows(),
-        clue.gen_clues.z(),
-
-        { mode = 'n', keys = '<Leader><F1>', desc = '➜ help' },
-        { mode = 'n', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
-        { mode = 'n', keys = '<Leader>a', desc = '➜ ai' },
-        { mode = 'n', keys = '<Leader>L', desc = '➜ lsp' },
-        { mode = 'n', keys = '<Leader>S', desc = '➜ sessions' },
-        { mode = 'n', keys = '<Leader>g', desc = '➜ git' },
-        { mode = 'v', keys = '<Leader>g', desc = '➜ git' },
-        { mode = 'n', keys = '<Leader><Leader>L', desc = '➜ lsp' },
-        { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
-      },
-
-      window = {
-        config = { width = 40, border = 'rounded' },
-        delay = vim.o.timeoutlen,
-      },
-    })
     -- }}}
     -- mini.hipatterns {{{
     util.autocmd('FileType', function(args)
@@ -103,6 +27,11 @@ return {
     -- }}}
     -- mini.icons {{{
     require('mini.icons').setup({
+      filetype = {
+        lua = { glyph = '' },
+        sh = { glyph = '' },
+      },
+
       lsp = {
         ['function'] = { glyph = '󰊕' },
       }
@@ -136,8 +65,6 @@ return {
 
     nmap('<Leader>SS', function()
       vim.g.minisessions_disable = false
-
-      local name = util.project_path(0)
       MiniSessions.write('.session.vim', { force = true })
     end, 'Save current session')
 
@@ -159,7 +86,6 @@ return {
     -- }}}
     -- mini.starter {{{
     local starter = require('mini.starter')
-    local fzf = require('fzf-lua')
 
     util.command('MiniStarter', 'lua MiniStarter.open()', 'Open start screen')
     util.autocmd('User', 'VeryLazy', 'lua MiniStarter.refresh()')
@@ -300,6 +226,88 @@ return {
         end
       end
     end
+    -- }}}
+    -- mini.clue {{{
+    local clue = require('mini.clue')
+    vim.o.timeoutlen = 500
+
+    clue.setup({
+      triggers = {
+        -- Leader triggers
+        { mode = 'n', keys = '<Leader>' },
+        { mode = 'v', keys = '<Leader>' },
+        { mode = 'n', keys = '<Leader>!' },
+        { mode = 'n', keys = '<LocalLeader>' },
+        { mode = 'v', keys = '<LocalLeader>' },
+        { mode = 'n', keys = '<F1>' },
+
+        -- Built-in completion
+        { mode = 'i', keys = '<C-x>' },
+
+        -- `g` key
+        { mode = 'n', keys = 'g' },
+        { mode = 'v', keys = 'g' },
+
+        -- Marks
+        { mode = 'n', keys = "'" },
+        { mode = 'n', keys = '`' },
+        { mode = 'v', keys = "'" },
+        { mode = 'v', keys = '`' },
+
+        -- Registers
+        { mode = 'n', keys = '"' },
+        { mode = 'v', keys = '"' },
+        { mode = 'i', keys = '<C-r>' },
+        { mode = 'c', keys = '<C-r>' },
+
+        -- Window commands
+        { mode = 'n', keys = '<C-w>' },
+
+        -- `z` key
+        { mode = 'n', keys = 'z' },
+        { mode = 'v', keys = 'z' },
+
+        -- mini.bracketed and others
+        { mode = 'n', keys = ']' },
+        { mode = 'n', keys = '[' },
+
+        -- mini.comment
+        { mode = 'n', keys = 'gc' },
+
+        -- mini.surround
+        { mode = 'n', keys = 'S' },
+        { mode = 'v', keys = 'S' },
+      },
+
+      clues = {
+        clue.gen_clues.builtin_completion(),
+        clue.gen_clues.g(),
+        clue.gen_clues.marks(),
+        clue.gen_clues.registers(),
+        clue.gen_clues.windows(),
+        clue.gen_clues.z(),
+
+        { mode = 'n', keys = '<Leader><F1>', desc = '➜ help' },
+
+        { mode = 'n', keys = '<Leader>a', desc = '➜ ai' },
+        { mode = 'n', keys = '<Leader>L', desc = '➜ lsp' },
+        { mode = 'n', keys = '<Leader>P', desc = '➜ dap' },
+        { mode = 'n', keys = '<Leader>S', desc = '➜ sessions' },
+        { mode = 'n', keys = '<Leader>g', desc = '➜ git' },
+        { mode = 'v', keys = '<Leader>g', desc = '➜ git' },
+
+        { mode = 'n', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
+        { mode = 'v', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
+        { mode = 'n', keys = '<Leader><Leader>L', desc = '➜ lsp' },
+        { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
+        { mode = 'n', keys = '<LocalLeader>g', desc = '➜ git' },
+      },
+
+      window = {
+        config = { width = 40, border = 'rounded' },
+        delay = vim.o.timeoutlen,
+      },
+    })
     -- }}}
     -- mini.comment {{{
     require('mini.comment').setup()

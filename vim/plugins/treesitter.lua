@@ -3,7 +3,7 @@ local nvomap = util.nvomap
 
 return {
   'nvim-treesitter/nvim-treesitter',
-  event = 'VeryLazy',
+  event = 'LazyFile',
   build = ':TSUpdate',
 
   dependencies = {

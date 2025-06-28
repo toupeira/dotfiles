@@ -31,10 +31,10 @@ return {
   },
   lazy      { 'folke/flash.nvim',
     keys = {
-      { '<Leader>j', mode = { 'n', 'x', 'o' }, function() require('flash').jump() end, desc = 'Jump to position' },
-      { '<Leader>J', mode = { 'n', 'x', 'o' }, function() require('flash').treesitter() end, desc = 'Select Treesitter node' },
-      { 'r', mode = 'o', function() require('flash').remote() end, desc = 'Remote jump to position' },
-      { 'R', mode = { 'o', 'x' }, function() require('flash').treesitter_search() end, desc = 'Remote select Treesitter node' },
+      { '<Leader>j', mode = { 'n', 'x', 'o' }, '<Cmd>lua require("flash").jump()<CR>', desc = 'Jump to position' },
+      { '<Leader>J', mode = { 'n', 'x', 'o' }, '<Cmd>lua require("flash").treesitter()<CR>', desc = 'Select Treesitter node' },
+      { 'r', mode = 'o', '<Cmd>lua require("flash").remote()<CR>', desc = 'Remote jump to position' },
+      { 'R', mode = { 'o', 'x' }, '<Cmd>lua require("flash").treesitter_search()<CR>', desc = 'Remote select Treesitter node' },
     },
     opts = {
       search = {
@@ -59,12 +59,12 @@ return {
     },
 
     init = function()
-      local fidget = require('fidget')
-      fidget.notification.default_config.name = ' '
-      fidget.notification.default_config.ttl = 2
-
       local notify = vim.notify
       vim.notify = function(msg, level, opts)
+        local fidget = require('fidget')
+        fidget.notification.default_config.name = ' '
+        fidget.notification.default_config.ttl = 2
+
         if type(level) == 'number' and level >= vim.log.levels.ERROR then
           return notify(msg, level, opts)
         else

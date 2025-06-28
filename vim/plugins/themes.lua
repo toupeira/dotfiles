@@ -1,15 +1,13 @@
-local util = require('util')
-
 return {
   { 'catppuccin/nvim', name = 'catppuccin', lazy = true },
   { 'folke/tokyonight.nvim', lazy = true },
   { 'marko-cerovac/material.nvim', lazy = true },
-
   { 'sainnhe/gruvbox-material', lazy = true,
     init = function()
       vim.g.gruvbox_material_background = 'hard'
     end,
   },
+
   { 'EdenEast/nightfox.nvim',
     priority = 1000,
 
