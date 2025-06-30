@@ -51,7 +51,7 @@ return {
       util.nmap('q', '<Cmd>DapToggleRepl<CR>', util.merge(args, { remap = false }))
 
       vim.b.completion = false
-      vim.wo.winhighlight = 'Normal:NormalFloat'
+      vim.wo[0][0].winhighlight = 'Normal:NormalFloat'
 
       require('dap.ext.autocompl').attach()
 

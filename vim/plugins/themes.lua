@@ -71,7 +71,8 @@ return {
 
             diff = {
               add = '#1c4428',
-              delete = '#993d3d',
+              delete = '#401a1b',
+              delete_bright = '#80302f',
               change = '#293f66',
               text = '#3e5f99',
             }
@@ -131,8 +132,12 @@ return {
             IncSearch = { link = 'Search' },
             Substitute = { link = 'Search' },
 
-            DiffDelete = { fg = 'palette.red' },
+            DiffAdd = { style = 'bold' },
             DiffText = { style = 'bold' },
+            DiffDelete = { fg = 'palette.red', bg = 'palette.diff.delete_bright' },
+            diffAdded = { fg = 'palette.green', bg = 'diff.add', style = 'bold' },
+            diffChanged = { fg = 'palette.blue', bg = 'diff.change' },
+            diffRemoved = { fg = 'palette.red', bg = 'diff.delete' },
 
             ErrorMsg = { style = 'bold' },
             WarningMsg = { style = 'bold' },

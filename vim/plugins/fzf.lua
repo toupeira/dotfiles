@@ -239,7 +239,7 @@ return {
 
       local height = math.min(
         presets.bottom.winopts.height,
-        (#items + 2) / vim.o.lines
+        (#items + 3) / vim.o.lines
       )
 
       return merge(presets.bottom, presets.reverse, presets.title(title), {
@@ -438,7 +438,7 @@ return {
 
         fn_transform = function(path)
           path = path:gsub('/%.[^/]*/$', '')
-          return string.format('%-32s%s%s',
+          return string.format('%-40s%s%s',
             fzf.utils.ansi_codes.cyan('󰂿 ' .. vim.fn.fnamemodify(path, ':t')),
             fzf.utils.nbsp,
             fzf.utils.ansi_codes.blue(vim.fn.fnamemodify(path, ':~'))

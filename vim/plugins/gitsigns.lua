@@ -32,6 +32,7 @@ return {
 
     on_attach = function(bufnr)
       local gitsigns = require('gitsigns')
+      local config = require('gitsigns.config').config
       local args = { buffer = bufnr, force = true }
 
       -- luacheck: globals MiniDiff
@@ -84,10 +85,16 @@ return {
         gitsigns.toggle_numhl()
         gitsigns.toggle_linehl()
         gitsigns.toggle_word_diff()
+
+        util.notify_toggle('Inline Diff:', config.linehl)
       end, args, 'Toggle inline diff')
 
       nmap('<Leader>gb', gitsigns.blame, args, 'Open Git blame for current file')
-      nmap('<LocalLeader>gb', gitsigns.toggle_current_line_blame, args, 'Toggle blame for current line')
+      nmap('<LocalLeader>gb', function()
+        gitsigns.toggle_current_line_blame()
+
+        util.notify_toggle('Inline Blame:', config.current_line_blame)
+      end, args, 'Toggle blame for current line')
 
       util.map({'o', 'x'}, 'ih', ':Gitsigns select_hunk', args)
     end,

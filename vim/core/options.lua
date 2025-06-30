@@ -150,8 +150,7 @@ vim.opt.diffopt:append { 'algorithm:histogram', 'indent-heuristic' }
 
 vim.o.foldlevel = 99999
 vim.o.foldcolumn = 'auto'
-vim.o.foldmethod = 'expr'
-vim.o.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+vim.o.foldmethod = 'indent'
 vim.o.foldtext = ''
 
 -- }}}

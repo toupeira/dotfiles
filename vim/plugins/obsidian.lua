@@ -1,3 +1,5 @@
+local util = require('util')
+
 return {
   'obsidian-nvim/obsidian.nvim',
   ft = 'markdown',
@@ -48,19 +50,13 @@ return {
       },
     },
 
-    mappings = {
-      ['gf'] = {
-        action = function() return require('obsidian').util.gf_passthrough() end,
-        opts = { buffer = true, expr = true },
-      },
-      ['<CR>'] = {
-        action = function() return require('obsidian').util.smart_action() end,
-        opts = { buffer = true, expr = true },
-      },
-      ['<M-space>'] = {
-        action = function() return require('obsidian').util.toggle_checkbox() end,
-        opts = { buffer = true },
-      },
+    callbacks = {
+      enter_note = function(_, note)
+        local opts = { buffer = note.bufnr, force = true }
+
+        util.nmap('gf', '<Cmd>Obsidian follow_link<CR>', opts, 'Go to file')
+        util.nmap('<M-space>', '<Cmd>Obsidian toggle_checkbox<CR>', opts, 'Toggle checkbox')
+      end,
     },
 
     daily_notes = {

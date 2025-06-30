@@ -68,7 +68,7 @@ end)
 
 -- Setup terminals
 autocmd('TermOpen', function()
-  vim.wo.winhighlight = 'Normal:NormalFloat'
+  vim.wo[0][0].winhighlight = 'Normal:NormalFloat'
 end)
 
 -- Automatically enter insert mode for terminals
