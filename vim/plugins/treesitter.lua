@@ -132,15 +132,7 @@ return {
   },
 
   config = function(_, opts)
-    -- define filetype aliases
-    vim.treesitter.language.register('yaml', 'eruby.yaml')
-
     require('nvim-treesitter.configs').setup(opts)
-
-    util.autocmd('FileType', opts.ensure_installed, function()
-      vim.wo[0][0].foldmethod = 'expr'
-      vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
-    end)
 
     local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
     nvomap(';', repeat_move.repeat_last_move)

@@ -107,7 +107,7 @@ return {
   },
   very_lazy { 'sphamba/smear-cursor.nvim',
     keys = {
-      { '<LocalLeader>t', function()
+      { '<LocalLeader>ct', function()
         local cursor = require('smear_cursor')
         cursor.toggle()
         util.notify_toggle('Cursor trail:', cursor.enabled)
@@ -164,9 +164,6 @@ return {
   },
   lazy_file { 'wsdjeg/vim-fetch',
     config = function()
-      map('n', 'gf', '<Cmd>call fetch#cfile(v:count1)<CR>', 'Go to file')
-      map('v', 'gf', '<Cmd>call fetch#visual(v:count1)<CR>', 'Go to file')
-
       map('n', 'gF', '<C-w><C-s><Cmd>call fetch#cfile(v:count1)<CR>', { force = true }, 'Go to file in split')
       map('v', 'gF', '<C-w><C-s><Cmd>call fetch#visual(v:count1)<CR>', { force = true }, 'Go to file in split')
     end,

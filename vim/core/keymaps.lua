@@ -113,13 +113,14 @@ end, { expr = true }, 'Toggle fold or show inline diagnostics')
 local default_foldlevel = 99999
 local original_foldlevel
 nmap('<LocalLeader>f', function()
-  if vim.o.foldlevel == default_foldlevel then
-    vim.o.foldlevel = original_foldlevel or 0
+  local wo = vim.wo[0][0]
+  if wo.foldlevel == default_foldlevel then
+    wo.foldlevel = original_foldlevel or 0
   else
-    original_foldlevel = vim.o.foldlevel
-    vim.o.foldlevel = default_foldlevel
+    original_foldlevel = wo.foldlevel
+    wo.foldlevel = default_foldlevel
   end
-  util.notify_toggle('Folding:', vim.o.foldlevel ~= default_foldlevel)
+  util.notify_toggle('Folding:', wo.foldlevel ~= default_foldlevel)
 end, 'Toggle folding')
 
 local undo_chains = {

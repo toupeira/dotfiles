@@ -1,7 +1,7 @@
 <advancedsettings>
   <gui>
-    <!--<algorithmdirtyregions>2</algorithmdirtyregions>--><!-- causes flicker -->
-    <!--<smartredraw>true</smartredraw>--><!-- causes redraw issues -->
+    <algorithmdirtyregions>2</algorithmdirtyregions>
+    <smartredraw>true</smartredraw>
   </gui>
 
   <video>

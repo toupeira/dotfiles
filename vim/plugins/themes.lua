@@ -2,11 +2,6 @@ return {
   { 'catppuccin/nvim', name = 'catppuccin', lazy = true },
   { 'folke/tokyonight.nvim', lazy = true },
   { 'marko-cerovac/material.nvim', lazy = true },
-  { 'sainnhe/gruvbox-material', lazy = true,
-    init = function()
-      vim.g.gruvbox_material_background = 'hard'
-    end,
-  },
 
   { 'EdenEast/nightfox.nvim',
     priority = 1000,
@@ -37,13 +32,13 @@ return {
           nordfox = {
             black   = shade('#191c26'),
             red     = shade('#ff6b83'),
-            green   = shade('#C3E88D'),
+            green   = shade('#c3e88d'),
             yellow  = shade('#ffcb6b'),
             blue    = shade('#82b1ff'),
             magenta = shade('#c792ea'),
-            cyan    = shade('#89DDFF'),
+            cyan    = shade('#89ddff'),
             white   = shade('#bfc7d5'),
-            orange  = shade('#F78C6C'),
+            orange  = shade('#f78c6c'),
             pink    = shade('#ff869a'),
 
             comment = '#697098',
@@ -104,7 +99,7 @@ return {
         },
 
         groups = {
-          all = {
+          nordfox = {
             -- editor interface
             LineNr = { bg = 'bg0' },
             SignColumn = { link = 'LineNr' },
@@ -118,6 +113,8 @@ return {
             Folded = { fg = 'palette.sel1', bg = 'bg3', style = 'bold' },
 
             Pmenu = { bg = 'bg0' },
+            PmenuKind = { fg = 'palette.blue' },
+            PmenuExtra = { fg = 'palette.comment' },
             PmenuSel = { fg = 'white', bg = 'black', style = 'bold' },
             PmenuThumb = { bg = 'bg2' },
 

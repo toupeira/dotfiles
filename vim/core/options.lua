@@ -11,7 +11,7 @@ vim.g.loaded_python3_provider = 0
 vim.g.loaded_ruby_provider = 0
 
 -- }}}
--- Custom filetypes {{{
+-- Filetypes {{{
 
 vim.filetype.add({
   extension = {
@@ -29,6 +29,9 @@ vim.filetype.add({
     pryrc = 'ruby',
   },
 })
+
+-- Define Treesitter aliases
+vim.treesitter.language.register('yaml', 'eruby.yaml')
 
 -- Disable maps from filetype plugins
 vim.g.no_plugin_maps = 1

@@ -40,7 +40,13 @@ return {
     -- }}}
     -- mini.misc {{{
     require('mini.misc').setup_auto_root(
-      { '.git', '.obsidian' }, vim.fs.dirname
+      {
+        '.git',
+        '.obsidian',
+        'LICENSE',
+        'LICENSE.md',
+        'LICENSE.txt',
+      }, vim.fs.dirname
     )
     -- }}}
     -- mini.sessions {{{
@@ -184,9 +190,14 @@ return {
       mappings     = { basic = false, move_with_alt = true },
       autocommands = { basic = true },
     })
+
     util.unmap('n', '<LocalLeader>b')
+    util.unmap('n', '<LocalLeader>c')
     util.unmap('n', '<LocalLeader>h')
     util.unmap('n', '<LocalLeader>i')
+
+    util.nmap('<LocalLeader>cc', ':setlocal cursorcolumn! cursorcolumn?<CR>', "Toggle 'cursorcolumn'")
+    util.nmap('<LocalLeader>cl', ':setlocal cursorline! cursorline?<CR>', "Toggle 'cursorline'")
     -- }}}
     -- mini.bracketed {{{
     require('mini.bracketed').setup({
@@ -300,6 +311,8 @@ return {
         { mode = 'v', keys = '<Leader><Leader>', desc = '➜ resume fuzzy search' },
         { mode = 'n', keys = '<Leader><Leader>L', desc = '➜ lsp' },
         { mode = 'n', keys = '<Leader><Leader>g', desc = '➜ git' },
+
+        { mode = 'n', keys = '<LocalLeader>c', desc = '➜ cursor' },
         { mode = 'n', keys = '<LocalLeader>g', desc = '➜ git' },
       },
 
@@ -377,8 +390,13 @@ return {
           stopline = function() return vim.fn.line('.') end,
         }), {
           condition = function()
-            -- insert tabs at end of the line
-            return vim.fn.col('.') ~= vim.fn.col('$')
+            local col = vim.fn.charcol('.')
+            local neigh = vim.fn.getline('.'):sub(col - 1, col)
+            return
+              -- insert tabs at end of the line
+              col ~= vim.fn.charcol('$')
+              -- insert tabs unless punctuation is on either side
+              and neigh:match('%p')
           end
         }
       ),

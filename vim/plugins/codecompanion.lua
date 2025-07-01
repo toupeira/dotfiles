@@ -1,5 +1,12 @@
 local util = require('util')
 
+local default_adapter
+if vim.env.OPENAI_API_KEY and not vim.env.OPENAI_BASE_URL then
+  default_adapter = 'openai'
+else
+  default_adapter = 'gemini'
+end
+
 return {
   'olimorris/codecompanion.nvim',
 
@@ -68,7 +75,33 @@ return {
               -- default = 'google/gemini-2.5-flash',
               -- default = 'google/gemini-2.5-pro',
               -- default = 'meta-llama/llama-4-maverick:free',
+              -- default = 'openai/gpt-4.1',
+              -- default = 'openai/o3',
+              -- default = 'openai/o4-mini',
               -- default = 'openai/o4-mini-high',
+            },
+          },
+        })
+      end,
+
+      gemini = function()
+        return require('codecompanion.adapters').extend('gemini', {
+          schema = {
+            model = {
+              default = 'gemini-2.5-flash',
+              -- default = 'gemini-2.5-pro',
+            },
+          },
+        })
+      end,
+
+      openai = function()
+        return require('codecompanion.adapters').extend('openai', {
+          schema = {
+            model = {
+              -- default = 'gpt-4.1',
+              -- default = 'o3',
+              default = 'o4-mini',
             },
           },
         })
@@ -76,9 +109,9 @@ return {
     },
 
     strategies = {
-      cmd    = { adapter = 'openrouter' },
-      inline = { adapter = 'openrouter' },
-      chat   = { adapter = 'openrouter',
+      cmd    = { adapter = default_adapter },
+      inline = { adapter = default_adapter },
+      chat   = { adapter = default_adapter,
         roles = {
           llm = function(adapter)
             return string.format(
@@ -143,6 +176,7 @@ return {
           is_slash_cmd = true,
         },
       },
+
       ['Develop'] = {
         strategy = 'chat',
         description = 'Edit with full tooling',
@@ -161,7 +195,10 @@ return {
       action_palette = { provider = 'default' },
 
       chat = {
-        icons = { pinned_buffer = '📌 ' },
+        icons = {
+          buffer_pin = '📌 ',
+          buffer_watch = '👁️ ',
+        },
 
         window = {
           layout = 'horizontal',
@@ -191,6 +228,15 @@ return {
 
       mcphub = {
         callback = 'mcphub.extensions.codecompanion',
+      },
+
+      rules = {
+        opts = {
+          rules_filenames = {
+            'CLAUDE.md',
+            'README.md',
+          },
+        },
       },
     },
   },

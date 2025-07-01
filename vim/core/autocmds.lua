@@ -36,8 +36,6 @@ local filetypes = {
     'conceallevel=2',
     'suffixesadd+=.md',
     'foldlevel=2',
-    -- reset after obsidian.nvim
-    'foldexpr=MarkdownFold()',
     -- automatically continue lists and blockquotes
     'comments=b:*,b:-,b:+,n:>',
     'formatoptions+=r',
@@ -47,6 +45,21 @@ local filetypes = {
 for filetype, settings in pairs(filetypes) do
   autocmd('FileType', filetype, 'setlocal ' .. util.join(settings, ' '))
 end
+
+-- Enable Treesitter folding if available
+util.autocmd('FileType', function()
+  if not vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] then
+    return
+  end
+
+  vim.wo[0][0].foldmethod = 'expr'
+  if vim.bo.filetype == 'markdown' then
+    -- Use default folding from ftplugin for Markdown
+    vim.wo[0][0].foldexpr = 'MarkdownFold()'
+  else
+    vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+  end
+end)
 
 -- }}}
 -- Helpers {{{

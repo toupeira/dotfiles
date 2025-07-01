@@ -12,23 +12,23 @@ foreground = '#ffffff'
 
 [colors.normal]
 black = '#000000'
-red = '#FF4040'
-green = '#4D9A05'
-yellow = '#C3A000'
-blue = '#417FCF'
-magenta = '#8E6199'
-cyan = '#05979A'
-white = '#D3D6CF'
+red = '#ff4040'
+green = '#4d9a05'
+yellow = '#c3a000'
+blue = '#417fcf'
+magenta = '#8e6199'
+cyan = '#05979a'
+white = '#d3d6cf'
 
 [colors.bright]
 black = '#545652'
-red = '#FF4040'
-green = '#89E234'
-yellow = '#FBE84F'
-blue = '#82B1FF'
-magenta = '#AC7EA8'
-cyan = '#34E2E2'
-white = '#EDEDEB'
+red = '#ff4040'
+green = '#89e234'
+yellow = '#fbe84f'
+blue = '#82b1ff'
+magenta = '#ac7ea8'
+cyan = '#34e2e2'
+white = '#ededeb'
 
 [keyboard]
 bindings = [

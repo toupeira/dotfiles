@@ -71,7 +71,7 @@ return {
       },
 
       gitrebase = {
-        { 'pick', 'reword', 'edit', 'squash', 'fixup', 'drop' },
+        { 'pick', 'reword', 'squash', 'fixup', 'edit', 'drop' },
       },
 
       javascript = {

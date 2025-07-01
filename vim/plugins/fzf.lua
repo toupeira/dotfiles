@@ -131,6 +131,7 @@ return {
       buffers = merge(presets.bottom, presets.preview, {
         fzf_opts = { ['--header-lines'] = false },
         formatter = "path.filename_first",
+        no_header = true,
       }),
 
       colorschemes = merge(presets.reverse, {
@@ -139,16 +140,8 @@ return {
           'nightfox',
           'duskfox',
           'carbonfox',
-          'gruvbox-material',
-          'catppuccin-mocha',
-          'material-deep-ocean',
-          'tokyonight-night',
-
           'dayfox',
           'dawnfox',
-          'catppuccin-latte',
-          'material-lighter',
-          'tokyonight-day',
         },
       }),
 
@@ -375,8 +368,8 @@ return {
     })
 
     map_fzf('<Leader>l', 'blines', { desc = 'lines in buffer' })
-    map_fzf('<Leader>t', 'btags', { desc = 'buffer symbols' })
-    map_fzf('<Leader>T', 'tags', { desc = 'project symbols' })
+    map_fzf('<Leader>i', 'btags', { desc = 'buffer symbols' })
+    map_fzf('<Leader>I', 'tags', { desc = 'project symbols' })
 
     map_fzf('<Leader>d', 'diagnostics_document', { desc = 'diagnostics in current file' })
     map_fzf('<Leader>D', 'diagnostics_workspace', {
@@ -419,11 +412,9 @@ return {
     -- search git
     map_fzf('<Leader>gm', 'git_status')
     map_fzf('<Leader>gc', 'git_branches')
-    map_fzf('<Leader>gl', 'git_bcommits')
-    map_fzf('<Leader>gL', 'git_commits')
 
     -- search Aerial symbols
-    map_fzf('<Leader>i', function()
+    map_fzf('<Leader>t', function()
       require('aerial.fzf-lua').pick_symbol(merge(presets.bottom, presets.preview))
     end, { desc = 'symbols' })
 

@@ -28,7 +28,7 @@ return {
     ft = { 'css', 'scss', 'lua' },
     cmd = 'ColorizerToggle',
     keys = {
-      { '<LocalLeader>c', '<Cmd>ColorizerToggle<CR>', desc = 'Toggle colorizer' },
+      { '<LocalLeader>C', '<Cmd>ColorizerToggle<CR>', desc = 'Toggle color highlighting' },
     },
     opts = function(plugin)
       return {

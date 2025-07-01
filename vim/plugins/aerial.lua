@@ -13,7 +13,7 @@ return {
   },
 
   keys = {
-    { '<LocalLeader>i', '<Cmd>AerialToggle<CR>', desc = 'Toggle symbols sidebar' },
+    { '<LocalLeader>t', '<Cmd>AerialToggle<CR>', desc = 'Toggle symbols sidebar' },
   },
 
   opts = {

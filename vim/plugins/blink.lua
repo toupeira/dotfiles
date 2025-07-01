@@ -53,7 +53,6 @@ return {
             { 'source_name' },
           },
           treesitter = {
-            'buffer',
             'snippets',
             'lsp',
             'omni',

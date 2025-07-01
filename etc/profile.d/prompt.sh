@@ -56,7 +56,7 @@ function _prompt_dir {
 
 function _prompt_status {
   case "$?" in
-    0|130)
+    0|130|148)
       return
       ;;
     *)
