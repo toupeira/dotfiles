@@ -28,6 +28,7 @@ return {
     -- mini.icons {{{
     require('mini.icons').setup({
       filetype = {
+        help = { glyph = '󰋗' },
         lua = { glyph = '' },
         sh = { glyph = '' },
       },

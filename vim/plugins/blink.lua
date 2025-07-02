@@ -67,10 +67,6 @@ return {
 
     fuzzy = {
       sorts = { 'exact', 'score', 'sort_text' },
-
-      -- work around weird sorting behaviour
-      -- https://github.com/Saghen/blink.cmp/issues/1642
-      implementation = 'lua',
     },
 
     signature = {

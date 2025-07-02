@@ -1,3 +1,5 @@
+-- vim: foldmethod=marker foldlevel=0
+
 return {
   { 'catppuccin/nvim', name = 'catppuccin', lazy = true },
   { 'folke/tokyonight.nvim', lazy = true },
@@ -18,17 +20,17 @@ return {
       end
 
       return {
-        options = {
+        options = { -- {{{
           module_default = false,
           terminal_colors = false,
 
           modules = {
-            neogit = true,
+            blink = true,
             neotree = true,
           }
-        },
+        }, -- }}}
 
-        palettes = {
+        palettes = { -- {{{
           nordfox = {
             black   = shade('#191c26'),
             red     = shade('#ff6b83'),
@@ -72,9 +74,9 @@ return {
               text = '#3e5f99',
             }
           },
-        },
+        }, -- }}}
 
-        specs = {
+        specs = { -- {{{
           nordfox = {
             syntax = {
               const = 'red',      -- orange
@@ -96,11 +98,11 @@ return {
               changed = 'blue',
             },
           },
-        },
+        }, -- }}}
 
         groups = {
           nordfox = {
-            -- editor interface
+            -- editor interface {{{
             LineNr = { bg = 'bg0' },
             SignColumn = { link = 'LineNr' },
             CursorLine = { bg = 'bg2' },
@@ -139,8 +141,9 @@ return {
             ErrorMsg = { style = 'bold' },
             WarningMsg = { style = 'bold' },
             MoreMsg = { fg = 'diag.hint' },
+            -- }}}
 
-            -- syntax highlighting
+            -- syntax highlighting {{{
             Delimiter = { fg = 'syntax.statement' },
             Statement = { fg = 'syntax.statement' },
             Title = { fg = 'syntax.string' },
@@ -162,8 +165,9 @@ return {
             ['@markup.strong'] = { fg = 'palette.yellow', style = 'bold' },
 
             ['@string.special.url'] = { link = '@markup.link.url' },
+            -- }}}
 
-            -- filetypes
+            -- filetypes {{{
             ['@function.builtin.bash'] = { link = 'Operator' },
             ['@keyword.bash'] = { link = 'Operator' },
             ['@keyword.directive.bash'] = { link = 'Comment' },
@@ -193,18 +197,16 @@ return {
             ['@function.macro.vim'] = { link = 'Macro' },
             ['@keyword.vim'] = { link = 'Statement' },
             ['@variable.builtin.vim'] = { link = 'PreProc' },
+            -- }}}
 
-            -- plugins
-            BlinkCmpDocBorder = { link = 'FloatBorder' },
-            BlinkCmpMenuBorder = { link = 'FloatBorder' },
-            BlinkCmpSignatureHelpBorder = { link = 'FloatBorder' },
+            -- plugins {{{
+            BlinkCmpLabelMatch = { style = 'bold' },
+            BlinkCmpMenuBorder = { link = 'BlinkCmpDocBorder' },
+            BlinkCmpSignatureHelpBorder = { link = 'BlinkCmpDocBorder' },
 
             CodeCompanionChatTool = { fg = 'diag.info', bg = 'diag_bg.info', style = 'bold' },
             CodeCompanionChatToolGroup = { fg = 'diag.error', bg = 'diag_bg.error', style = 'bold' },
             CodeCompanionChatVariable = { fg = 'diag.hint', bg = 'diag_bg.hint', style = 'bold' },
-
-            CmpItemMenu = { link = 'Comment' },
-            CmpItemKindSnippet = { link = 'Function' },
 
             FlashCurrent = { link = 'CurSearch' },
             FlashLabel = { fg = 'palette.black', bg = 'palette.yellow', style = 'bold' },
@@ -232,7 +234,6 @@ return {
             MiniStarterFooter = { link = 'DiagnosticInfo' },
             MiniTrailspace = { bg = 'bg2' },
 
-            NeogitCursorLine = { link = 'MsgArea' },
             NeogitChangeModified = { fg = 'diag.warn', bg = 'diag_bg.warn', style = 'bold' },
             NeogitNormal = { link = 'NormalFloat' },
             NeogitRecentcommits = { fg = 'diag.info', bg ='diag_bg.info', style = 'bold' },
@@ -259,10 +260,7 @@ return {
 
             TreesitterContextBottom = { style = 'underline', sp = 'bg3' },
             TSDefinition = { link = 'Visual' },
-
-            WhichKey = { fg = 'palette.yellow', style = 'bold' },
-            WhichKeyDesc = { fg = 'palette.green' },
-            WhichKeyGroup = { fg = 'palette.blue', style = 'bold' },
+            -- }}}
           },
         },
       }
