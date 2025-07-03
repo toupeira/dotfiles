@@ -376,8 +376,8 @@
       <t>ShowSubtitles</t>
       <t mod="ctrl">noop</t><!-- disabled -->
       <l>NextSubtitle</l>
-      <left>Seek(-10)</left><!-- changed -->
-      <right>Seek(10)</right><!-- changed -->
+      <left>Seek(-5)</left><!-- changed -->
+      <right>Seek(5)</right><!-- changed -->
       <up>StepForward</up><!-- changed -->
       <down>SmallStepBack</down><!-- changed -->
       <up mod="longpress">AudioNextLanguage</up>
@@ -480,7 +480,7 @@
       <v>Addon.Default.OpenSettings(xbmc.player.musicviz)</v>
       <text>Addon.Default.OpenSettings(xbmc.player.musicviz)</text>
       <n>ActivateWindow(MusicPlaylist)</n>
-      <left>Seek(-10)</left><!-- changed -->
+      <left>Seek(-5)</left><!-- changed -->
       <right>Seek(5)</right><!-- changed -->
       <left mod="longpress">noop</left><!-- disabled -->
       <right mod="longpress">noop</right><!-- disabled -->
