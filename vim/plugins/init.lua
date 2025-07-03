@@ -51,18 +51,25 @@ return {
       { '<Leader>N', '<Cmd>Bufferize Fidget history<CR>', desc = 'Show notification history' },
     },
 
-    opts = {
-      notification = {
-        view = { group_separator = '——' },
-      },
-    },
+    opts = function()
+      return {
+        notification = {
+          view = { group_separator = '——' },
+
+          configs = {
+            default = util.merge(require('fidget.notification').default_config, {
+              name = '',
+              ttl = 2,
+            }),
+          },
+        },
+      }
+    end,
 
     init = function()
       local notify = vim.notify
       vim.notify = function(msg, level, opts)
         local fidget = require('fidget')
-        fidget.notification.default_config.name = ' '
-        fidget.notification.default_config.ttl = 2
 
         if type(level) == 'number' and level >= vim.log.levels.ERROR then
           return notify(msg, level, opts)
