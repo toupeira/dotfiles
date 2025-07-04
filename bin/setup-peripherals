@@ -68,7 +68,7 @@ case "$HOSTNAME" in
     pactl set-sink-volume  "$( get sink )" 100%
 
     # Setup keyboard
-    solaar config 1 fn-swap off
+    solaar config 1 fn-swap off 2>/dev/null
     ;;
 
   *)

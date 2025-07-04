@@ -287,8 +287,8 @@ return {
         { mode = 'n', keys = 'gc' },
 
         -- mini.surround
-        { mode = 'n', keys = 'S' },
-        { mode = 'v', keys = 'S' },
+        { mode = 'n', keys = 's' },
+        { mode = 'v', keys = 's' },
       },
 
       clues = {
@@ -344,7 +344,12 @@ return {
     hipatterns.setup({
       highlighters = {
         tags = {
-          pattern = '#[A-Za-z]+[A-Za-z0-9_/-]*[A-Za-z0-9]+',
+          pattern = '%s#%a+[%a%d_/-]*[%a%d]+',
+          group = '@markup.math',
+        },
+
+        tags_start_of_line = {
+          pattern = '^#%a+[%a%d_/-]*[%a%d]+',
           group = '@markup.math',
         },
       },
@@ -465,16 +470,20 @@ return {
     -- mini.surround {{{
     require('mini.surround').setup({
       mappings = {
-        add = 'SA',
-        delete = 'SD',
-        replace = 'SR',
-        highlight = 'SH',
-
         find = '',
         find_left = '',
         update_n_lines = '',
       },
     })
+
+    nmap("sa'", "saiw'", { remap = true }, 'Surround word with single quotes')
+    nmap('sa"', 'saiw"', { remap = true }, 'Surround word with double quotes')
+
+    nmap('sa(', 'saiw(', { remap = true }, 'Surround word with parentheses')
+    nmap('sa{', 'saiw{', { remap = true }, 'Surround word with braces')
+    nmap('sa[', 'saiw[', { remap = true }, 'Surround word with brackets')
+
+    nmap('sat', 'saiwt', { remap = true }, 'Surround word with tag')
     -- }}}
     -- mini.trailspace {{{
     require('mini.trailspace').setup()
