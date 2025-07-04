@@ -75,6 +75,7 @@ user_pref("general.smoothScroll.lines.durationMaxMS", 100);
 user_pref("general.smoothScroll.lines.durationMinMS", 50);
 user_pref("general.smoothScroll.mouseWheel.durationMaxMS", 100);
 user_pref("general.smoothScroll.mouseWheel.durationMinMS", 50);
+user_pref("widget.non-native-theme.scrollbar.style", 1);
 
 // Location bar
 user_pref("browser.urlbar.groupLabels.enabled", false);

@@ -326,6 +326,10 @@ util.window_title = function()
     return '@' .. vim.fn.tolower(filetype)
   end
 
+  if filename == '' and buftype == '' then
+    filename = '[No Name]'
+  end
+
   local title = filename
   if vim.bo.modified then
     title = title .. ' ●'

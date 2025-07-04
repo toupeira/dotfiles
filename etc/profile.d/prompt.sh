@@ -62,7 +62,7 @@ function _prompt_status {
     *)
       local message=" $?"
       local col=$(( COLUMNS - ${#message} ))
-      echo -ne "\e[s\e[1A\e[99999D\e[${col}C\e[1m\e[38;5;166m${message}\e[0m\e[u"
+      echo -ne "\e[s\e[1A\e[99999D\e[${col}C\e[1;31m${message}\e[0m\e[u"
       ;;
   esac
 }

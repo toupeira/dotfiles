@@ -120,6 +120,7 @@ return {
 
       blines = presets.reverse,
       builtin = presets.reverse,
+      changes = presets.preview,
       helptags = presets.preview,
       highlights = presets.preview,
       jumps = presets.preview,
@@ -385,12 +386,15 @@ return {
     map_fzf('<F1><F1>', 'help_tags')
     map_fzf('<F1>C', 'colorschemes')
     map_fzf('<F1>c', 'commands')
+    map_fzf('<F1>:', 'commands')
     map_fzf('<F1>h', 'highlights')
     map_fzf('<F1>j', 'jumps')
     map_fzf('<F1>k', 'keymaps')
     map_fzf('<F1>M', 'man_pages')
     map_fzf('<F1>m', 'marks')
+    map_fzf("<F1>'", 'marks')
     map_fzf('<F1>r', 'registers')
+    map_fzf('<F1>"', 'registers')
 
     map_fzf('<F1>f', 'builtin', { desc = 'FZF providers' })
 

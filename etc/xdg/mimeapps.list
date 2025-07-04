@@ -24,7 +24,7 @@ image/svg+xml=org.gnome.Loupe.desktop
 image/tiff=org.gnome.Loupe.desktop
 image/webp=org.gnome.Loupe.desktop
 
-application/pdf=org.gnome.Evince.desktop
+application/pdf=org.gnome.Papers.desktop
 application/zip=org.gnome.FileRoller.desktop
 inode/directory=org.gnome.Nautilus.desktop
 

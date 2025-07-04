@@ -42,6 +42,8 @@ alias mutt='neomutt'
 alias ffmpeg='ffmpeg -hide_banner'
 alias ffprobe='ffprobe -hide_banner'
 alias colortest='colortest-python -np'
+alias yt-dlp.cookies='yt-dlp --cookies-from-browser firefox'
+alias cal='ncal'
 
 # system administration
 alias sctl='systemctl'

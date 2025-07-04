@@ -1,5 +1,4 @@
 --audio-quality 0
---cookies-from-browser firefox
 --format-sort "res:1080"
 --embed-subs
 --sub-langs 'en.*'

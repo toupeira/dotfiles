@@ -54,7 +54,7 @@ nmap('H', ':tabprevious', 'Go to previous tab')
 nmap('L', ':tabnext', 'Go to next tab')
 
 nmap('<Leader><C-t>', ':tabnew | MiniStarter', 'Open new tab')
-nmap('<Leader><C-n>', ':tab split', 'Open current window to new tab')
+nmap('<Leader><C-n>', ':tab split', 'Open current window in new tab')
 nmap('<Leader><C-w>', ':tabclose', 'Close current tab')
 
 -- }}}
@@ -100,6 +100,10 @@ nvomap('g*', '*', 'Search for current word (strict)')
 nvomap('g#', '#', 'Search backwards for current word (strict)')
 
 nmap('du', ':diffupdate', 'Update diffs')
+
+-- swap `s` with `S` for mini.surround
+nmap('s', '<Nop>')
+nmap('S', 's')
 
 nmap('<Space>', function()
   local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
