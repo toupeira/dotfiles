@@ -48,11 +48,11 @@ function usage {
 
 ### output helpers {{{
 
-# Output a message with a colored symbol in front
+# Output a message with a colored icon in front
 function msg {
   local message=${1/$HOME/\~}
-  local color=${2:-4}
-  local symbol=${3:-●}
+  local color=${2:-2}
+  local icon=${3:-}
 
   if [ $# -gt 3 ]; then
     shift 3
@@ -60,7 +60,7 @@ function msg {
   fi
 
   if [ -n "$message" ]; then
-    echo -e "${echo_options[@]}" " \e[0;3${color}m$symbol\e[0m $message\e[0m" \
+    echo -e "${echo_options[@]}" " \e[0;3${color}m$icon\e[0m $message\e[0m" \
       | sed -re 's/\{\{/\o033[1m/g' \
              -e 's/\}\}/\o033[22m/g'
   else
@@ -87,14 +87,14 @@ function abort {
 
 # Ask a yes/no question, defaulting to no
 function ask {
-  msg "$1 \e[0;36m[y/\e[1;36mN\e[0;36m] " "${2:-6}" "»" -n >&2
+  msg "$1 \e[0;36m[y/\e[1;36mN\e[0;36m] " "${2:-6}" "" -n >&2
   read -r
   [ "${REPLY:0:1}" = "Y" ] || [ "${REPLY:0:1}" = "y" ]
 }
 
 # Ask a yes/no question, defaulting to yes
 function ask-yes {
-  msg "$1 \e[0;36m[\e[1;36mY\e[0;36m/n] " "${2:-6}" "»" -n >&2
+  msg "$1 \e[0;36m[\e[1;36mY\e[0;36m/n] " "${2:-6}" "" -n >&2
   read -r
   [ "${REPLY:0:1}" != "N" ] && [ "${REPLY:0:1}" != "n" ]
 }
@@ -671,29 +671,51 @@ function run {
       status "Running tests..."
       local output status
 
-      function fail {
+      local count test
+      local total=$( grep -c '^ *testing ".*"$' "$0" )
+
+      function testing {
+        test=$1
+        verbose "[{{$(( ++count ))/$total}}] Testing {{$1}}"
+      }
+
+      function assert {
         if [ $status -ne 0 ] || [ "$output" ]; then
+          error "Test failed: {{$test}}"
           [ "$output" ] && echo "$output"
-          error "$1"
         fi
       }
 
+      testing "bin/dotfiles"
       output=$( "$DOTFILES/bin/dotfiles" --path 2>&1 )
       status=$?
       [ "$output" = "$DOTFILES" ] && output=
-      fail "{{bin/dotfiles}} is broken!"
+      assert
 
+      testing "symlinks to /home"
       output=$( fdfind . "$DOTFILES" -t l -x readlink -f {} | grep ^/home/ )
       status=0
-      fail "Symlinks to {{/home}} found!"
+      assert
 
-      output=$( sh -c ". $DOTFILES/etc/profile" 2>&1 )
-      status=$?
-      fail "{{etc/profile}} is broken with {{sh}}!"
-
+      testing "bash configuration"
       output=$( bash -ic "" 2>&1 )
       status=$?
-      fail "{{etc/profile}} is broken with {{bash}}!"
+      assert
+
+      testing "sh configuration"
+      output=$( sh -c ". $DOTFILES/etc/profile" 2>&1 )
+      status=$?
+      assert
+
+      testing "nvim configuration"
+      output=$( nvim --headless +quit 2>&1 )
+      status=$?
+      assert
+
+      testing "tmux configuration"
+      output=$( tmux source-file "$DOTFILES/config/tmux/tmux.conf" 2>&1 )
+      status=$?
+      assert
       ;;
     # }}}
 
@@ -833,28 +855,41 @@ function run {
       ;;
 
     update-apt)
+      status "Updating Debian packages..."
       system sudo aptitude update \
         && system sudo aptitude upgrade
       ;;
     update-flatpak)
+      status "Updating Flatpak packages..."
       system flatpak update \
         && system flatpak uninstall --unused \
         && system flatpak uninstall --delete-data
       ;;
     update-firmware)
+      status "Updating firmware versions..."
       system fwupdmgr update
       ;;
     update-mise)
+      status "Updating Mise tools..."
       system mise plugins update \
         && system mise upgrade --bump --interactive \
         && system mise prune \
         && git add config/mise
       ;;
     update-gems)
-      system gem update --system \
-        && run packages -f :gem
+      status "Updating RubyGems..."
+      system gem update --system
+
+      status "Updating installed gems..."
+      run packages -f :gem
+
+      if ask "{{Remove old gem versions?}}"; then
+        system gem clean
+      fi
       ;;
     update-completions)
+      status "Updating shell completions..."
+
       local completions="$DOTFILES/local/share/bash-completion/completions"
 
       function update-completions {
@@ -1031,7 +1066,7 @@ if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
 fi
 
 COMMAND=
-STATUS=
+STATUS=0
 
 # Parse arguments
 while [ $# -gt 0 ]; do

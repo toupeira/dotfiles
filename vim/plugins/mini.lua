@@ -35,6 +35,14 @@ return {
 
       lsp = {
         ['function'] = { glyph = '󰊕' },
+        method = { glyph = '󰊕' },
+
+        class = { glyph = '' },
+        module = { glyph = '' },
+        interface = { glyph = '' },
+
+        field = { glyph = '' },
+        property = { glyph = '' },
       }
     })
     MiniIcons.mock_nvim_web_devicons()

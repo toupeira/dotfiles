@@ -352,6 +352,8 @@ return {
       args = merge(presets.title('History (Project)'), { cwd_only = true }),
     })
 
+    map_fzf('<Leader>Q', 'quickfix')
+
     -- search file contents
     map_fzf('<Leader>r', 'live_grep', {
       desc = 'regex in project',

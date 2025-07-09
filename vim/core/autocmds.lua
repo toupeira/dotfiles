@@ -110,6 +110,57 @@ git_command('Stage', '<Leader>gA', 'git add -p', 'git unstaged')
 git_command('Unstage', '<Leader>gU', 'git reset HEAD -p', 'git staged')
 git_command('Discard', '<Leader>gD', 'git checkout -p', 'git unstaged')
 
+util.command('Edit', function(info)
+  local output = vim.system(
+    { 'sh', '-c', 'git-edit -n ' .. info.args },
+    { text = true }
+  ):wait()
+
+  local message = output.stderr
+    :gsub('\27.-m', '')
+    :gsub('\n', '')
+
+  if output.code == 0 then
+    local files = vim.split(output.stdout:gsub('\n$', ''), '\n')
+    if #files == 0 or files[1] == '' then
+      util.echo('  No ' .. info.args .. ' files', 'WarningMsg')
+      return
+    end
+
+    util.echo(message, 'MoreMsg')
+    local old_buf = vim.fn.bufnr()
+
+    for file in vim.iter(files) do
+      vim.cmd.badd(file)
+    end
+
+    vim.cmd('silent drop ' .. files[1])
+
+    if vim.api.nvim_buf_is_valid(old_buf) and vim.bo[old_buf].buftype == '' and vim.fn.bufname(old_buf) == '' and not vim.bo[old_buf].modified then
+      vim.cmd('silent bdelete ' .. old_buf)
+    end
+  else
+    util.echo(message, 'WarningMsg')
+  end
+end, {
+  nargs = '*',
+  complete = function (pattern)
+    return vim.iter({
+      vim.iter({
+        '--modified',
+        '--staged',
+        '--unstaged',
+        '--last',
+      }):filter(function(candidate)
+        return candidate:match('^' .. pattern:gsub('-', '%%-'))
+      end):totable(),
+      vim.fn.getcompletion(pattern, 'file')
+    }):flatten():totable()
+  end
+}, 'Edit Git files')
+
+util.alias_command({ E = 'Edit' })
+
 -- Auto-close Git commands on success or cancel
 util.autocmd('TermClose', 'term://*:git *', function()
   if vim.v.event.status == 0 or vim.v.event.status == 130 then

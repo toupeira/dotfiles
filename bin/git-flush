@@ -6,7 +6,7 @@ merged_branches=$(
 )
 
 for branch in $merged_branches; do
-  echo -ne " \e[1;33m» \e[22mRemove branch \e[1m$branch\e[22m? [\e[1mY\e[22m/n]\e[0m "
+  echo -ne " \e[1;33m \e[22mRemove branch \e[1m$branch\e[22m? [\e[1mY\e[22m/n]\e[0m "
   read -r
 
   if [ "$REPLY" != "N" ] && [ "$REPLY" != "n" ]; then

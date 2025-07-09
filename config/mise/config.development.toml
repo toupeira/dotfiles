@@ -1,8 +1,8 @@
 [tools]
 ruby = "3.4.4"
-node = "24.3.0"
+node = "24.4.0"
 
-uv = "0.7.19"
+uv = "0.7.20"
 "pipx:aider-chat" = { version = "0.85.1", uvx_args = "--python python3.12" }
 
 "ubi:BurntSushi/xsv" = "0.13.0"

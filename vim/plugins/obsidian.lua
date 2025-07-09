@@ -13,9 +13,6 @@ return {
     disable_frontmatter = true,
     legacy_commands = false,
     picker = { name = 'fzf-lua' },
-    follow_url_func = function(url)
-      vim.fn.jobstart({ 'xdg-open', url })
-    end,
 
     ui = {
       enable = false,
@@ -28,6 +25,7 @@ return {
     completion = {
       nvim_cmp = false,
       blink = true,
+      create_new = false,
     },
 
     workspaces = {

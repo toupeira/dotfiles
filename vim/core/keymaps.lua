@@ -45,7 +45,7 @@ nmap('<Leader>x', function()
   util.close_tab()
 end, 'Close current buffer (keep window)')
 
-nmap('<LocalLeader>q', function() util.toggle_list('c') end, 'Toggle quickfix window')
+nmap('<Leader>q', function() util.toggle_list('c') end, 'Toggle quickfix window')
 
 -- }}}
 -- Tab navigation {{{
@@ -63,8 +63,6 @@ nmap('<Leader><C-w>', ':tabclose', 'Close current tab')
 -- remove default mappings
 util.unmap('n', 'Y')
 util.unmap('n', '<C-l>')
-
-nmap('<Leader>Q', ':quitall', 'Quit')
 
 nmap('<C-s>', ':write', 'Save current buffer')
 nmap('<Leader>w', ':write', 'Save current buffer')
@@ -147,12 +145,9 @@ nmap('<C-LeftMouse>', '<nop>')
 -- Utilities {{{
 
 util.alias_command({
-  ['E']   = 'e',   ['E!']  = 'e!',
-  ['Q']   = 'q',   ['Q!']  = 'q!',
+  ['Q']   = 'q',
   ['QA']  = 'qa',  ['Qa']  = 'qa',  ['qA']  = 'qa',
-  ['QA!'] = 'qa!', ['Qa!'] = 'qa!', ['qA!'] = 'qa!',
   ['WQ']  = 'wq',  ['Wq']  = 'wq',  ['wQ']  = 'wq',
-  ['WQ!'] = 'wq!', ['Wq!'] = 'wq!', ['wQ!'] = 'wq!',
   ['SET'] = 'set', ['SEt'] = 'set', ['Set'] = 'set',
 })
 

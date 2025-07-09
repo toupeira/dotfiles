@@ -15,7 +15,7 @@ M.pick_symbol = function(opts)
   local filename = vim.api.nvim_buf_get_name(bufnr)
   local ok, backend = pcall(backends.get)
 
-  if not ok then
+  if not ok or not backend then
     backends.log_support_err()
     return
   elseif not data.has_symbols(bufnr) then

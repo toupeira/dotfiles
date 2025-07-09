@@ -18,10 +18,10 @@ def status(message):
 def ask(message, default=True):
     try:
         if default:
-            reply = input(' \033[1;33m» %s \033[22m[\033[1mY\033[22m/n]\033[0m ' % message).lower()
+            reply = input(' \033[1;33m %s \033[22m[\033[1mY\033[22m/n]\033[0m ' % message).lower()
             return not len(reply) or reply[0] != 'n'
         else:
-            reply = input(' \033[1;33m» %s \033[22m[y/\033[1mN\033[22m]\033[0m ' % message).lower()
+            reply = input(' \033[1;33m %s \033[22m[y/\033[1mN\033[22m]\033[0m ' % message).lower()
             return len(reply) and reply[0] == 'y'
     except KeyboardInterrupt:
         print()
