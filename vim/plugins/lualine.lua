@@ -51,6 +51,7 @@ return {
 
         lualine_b = {
           { 'branch',
+            icon = '',
             fmt = function(branch)
               if vim.o.termguicolors and (branch == 'main' or branch == 'master') then
                 return ''

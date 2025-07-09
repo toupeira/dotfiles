@@ -35,6 +35,7 @@ return {
       { 'internal', 'external' },
       { 'in', 'out' },
       { 'left', 'right' },
+      { 'local', 'remote' },
       { 'max', 'min' },
       { 'next', 'previous' },
       { 'old', 'new' },

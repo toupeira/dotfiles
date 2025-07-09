@@ -135,8 +135,8 @@ function rg.edit {
   if [ "$files" ]; then
     local pattern=${1//\\b/}
     sensible-vim \
-      "+silent bdelete 1" \
-      "+silent /\\v$pattern" \
+      "+silent! bdelete 1" \
+      "+silent! /\\v$pattern" \
       "+copen" \
       -q <( echo "$files" )
   else

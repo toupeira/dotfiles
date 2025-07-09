@@ -694,6 +694,14 @@ function run {
       output=$( bash -ic "" 2>&1 )
       status=$?
       fail "{{etc/profile}} is broken with {{bash}}!"
+
+      output=$( nvim --headless +quit 2>&1 )
+      if [ "$output" ]; then
+        status=1
+      else
+        status=0
+      fi
+      fail "{{vim}} configuration is broken!"
       ;;
     # }}}
 
@@ -833,28 +841,41 @@ function run {
       ;;
 
     update-apt)
+      status "Updating Debian packages..."
       system sudo aptitude update \
         && system sudo aptitude upgrade
       ;;
     update-flatpak)
+      status "Updating Flatpak packages..."
       system flatpak update \
         && system flatpak uninstall --unused \
         && system flatpak uninstall --delete-data
       ;;
     update-firmware)
+      status "Updating firmware versions..."
       system fwupdmgr update
       ;;
     update-mise)
+      status "Updating Mise tools..."
       system mise plugins update \
         && system mise upgrade --bump --interactive \
         && system mise prune \
         && git add config/mise
       ;;
     update-gems)
-      system gem update --system \
-        && run packages -f :gem
+      status "Updating RubyGems..."
+      system gem update --system
+
+      status "Updating installed gems..."
+      run packages -f :gem
+
+      if ask "{{Remove old gem versions?}}"; then
+        system gem clean
+      fi
       ;;
     update-completions)
+      status "Updating shell completions..."
+
       local completions="$DOTFILES/local/share/bash-completion/completions"
 
       function update-completions {

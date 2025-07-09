@@ -105,7 +105,7 @@ return {
             -- editor interface {{{
             LineNr = { bg = 'bg0' },
             SignColumn = { link = 'LineNr' },
-            CursorLine = { bg = 'bg2' },
+            CursorLine = { link = 'Visual' },
             CursorLineNr = { fg = 'palette.comment' },
             CursorLineSign = { link = 'CursorLineNr' },
             Visual = { style = 'bold' },
