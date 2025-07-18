@@ -1,3 +1,5 @@
+model: gemini/gemini-2.5-flash
+
 cache-prompts: true
 # watch-files: true
 

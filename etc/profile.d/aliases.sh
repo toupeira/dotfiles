@@ -87,6 +87,8 @@ function notes {
   [ $# -gt 0 ] && n "$@" || cd ~/notes || return
 }
 
+alias oc='opencode'
+alias co='claude'
 alias ai='aider'
 function aider {
   (

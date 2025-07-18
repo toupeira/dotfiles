@@ -13,6 +13,7 @@ return {
     disable_frontmatter = true,
     legacy_commands = false,
     picker = { name = 'fzf-lua' },
+    footer = { enabled = false },
 
     ui = {
       enable = false,

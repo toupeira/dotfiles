@@ -1,12 +1,17 @@
 [tools]
-ruby = "3.4.4"
-node = "24.4.0"
+# Languages
+ruby = "3.4.5"
+node = "24.4.1"
 
-uv = "0.7.20"
-"pipx:aider-chat" = { version = "0.85.1", uvx_args = "--python python3.12" }
-
+# Tools
 "ubi:BurntSushi/xsv" = "0.13.0"
 "ubi:dlvhdr/diffnav" = "0.3.1"
+
+# AI tools
+uv = "0.7.20"
+"pipx:aider-chat" = { version = "0.85.2", uvx_args = "--python python3.12" }
+"ubi:sst/opencode" = "0.3.20"
+"npm:@anthropic-ai/claude-code" = "1.0.56"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]

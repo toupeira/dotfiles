@@ -1,8 +1,8 @@
 [tools]
 difftastic = "0.64.0"
 fzf = "0.64.0"
-neovim = "0.11.2"
-usage = "2.2.0"
+neovim = "0.11.3"
+usage = "2.2.2"
 
 [settings]
 auto_install = false

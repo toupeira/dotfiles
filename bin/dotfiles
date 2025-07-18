@@ -10,6 +10,7 @@ function usage {
   echo
   echo "Options:"
   echo "  -v, --verbose               Increase verbosity"
+  echo "  -q, --quiet                 Decrease verbosity"
   echo "  -d, --debug                 Output debug information"
   echo "      --path                  Show path to the dotfiles repository and exit"
   echo
@@ -75,7 +76,7 @@ function status  {
            -e 's/\}\}/\o033[1;37m/g' )
   msg "{{$message}}" 2;
 }
-function info    { msg "\e[0;34m$1" 4; }
+function info    { [ "$QUIET" ] || msg "\e[0;34m$1" 4; }
 function warning { msg "\e[0;33m$1" 3 >&2; }
 function error   { msg "\e[0;33m$1" 1 >&2; STATUS=1; }
 
@@ -317,7 +318,7 @@ function run {
       git remote set-url --push    origin "git@github.com:$repository"
 
       local hook="$DOTFILES/.git/hooks/pre-commit"
-      echo -e "#!/bin/sh\nbin/dotfiles test" > "$hook"
+      echo -e "#!/bin/sh\nbin/dotfiles --quiet test" > "$hook"
       chmod +x "$hook"
 
       run link-dotfiles "$@"
@@ -676,7 +677,7 @@ function run {
 
       function testing {
         test=$1
-        verbose "[{{$(( ++count ))/$total}}] Testing {{$1}}"
+        info "[{{$(( ++count ))/$total}}] Testing {{$1}}"
       }
 
       function assert {
@@ -1072,6 +1073,7 @@ STATUS=0
 while [ $# -gt 0 ]; do
   case "$1" in
     -v|--verbose) VERBOSE=1;;
+    -q|--quiet)   QUIET=1;;
     -d|--debug)   DEBUG=1;;
        --path)    exec echo "$DOTFILES";;
     -*|help)      usage;;
