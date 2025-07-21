@@ -8,9 +8,9 @@ node = "24.4.1"
 "ubi:dlvhdr/diffnav" = "0.3.1"
 
 # AI tools
-uv = "0.7.20"
+uv = "0.8.0"
 "pipx:aider-chat" = { version = "0.85.2", uvx_args = "--python python3.12" }
-"ubi:sst/opencode" = "0.3.20"
+"ubi:sst/opencode" = "0.3.54"
 "npm:@anthropic-ai/claude-code" = "1.0.56"
 
 [settings]

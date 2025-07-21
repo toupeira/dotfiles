@@ -93,16 +93,17 @@ return {
               }
             end,
           },
-          { 'searchcount',
-            icon = '',
-            separator = '',
-            color = { fg = green, gui = 'bold' },
-          },
         },
 
         lualine_x = {
           { 'codecompanion-custom',
             color = { fg = magenta, gui = 'bold' },
+          },
+          { 'searchcount',
+            icon = '',
+            separator = '',
+            padding = 0,
+            color = { fg = green, gui = 'bold' },
           },
           { 'diagnostics',
             sources = { 'nvim_diagnostic' },
