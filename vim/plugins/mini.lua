@@ -295,8 +295,8 @@ return {
         { mode = 'n', keys = 'gc' },
 
         -- mini.surround
-        { mode = 'n', keys = 's' },
-        { mode = 'v', keys = 's' },
+        { mode = 'n', keys = 'S' },
+        { mode = 'v', keys = 'S' },
       },
 
       clues = {
@@ -478,20 +478,25 @@ return {
     -- mini.surround {{{
     require('mini.surround').setup({
       mappings = {
+        add = 'SA',
+        delete = 'SD',
+        replace = 'SR',
+        highlight = 'SH',
+
         find = '',
         find_left = '',
         update_n_lines = '',
       },
     })
 
-    nmap("sa'", "saiw'", { remap = true }, 'Surround word with single quotes')
-    nmap('sa"', 'saiw"', { remap = true }, 'Surround word with double quotes')
+    nmap("SA'", "SAiw'", { remap = true }, 'Surround word with single quotes')
+    nmap('SA"', 'SAiw"', { remap = true }, 'Surround word with double quotes')
 
-    nmap('sa(', 'saiw(', { remap = true }, 'Surround word with parentheses')
-    nmap('sa{', 'saiw{', { remap = true }, 'Surround word with braces')
-    nmap('sa[', 'saiw[', { remap = true }, 'Surround word with brackets')
+    nmap('SA(', 'SAiw(', { remap = true }, 'Surround word with parentheses')
+    nmap('SA{', 'SAiw{', { remap = true }, 'Surround word with braces')
+    nmap('SA[', 'SAiw[', { remap = true }, 'Surround word with brackets')
 
-    nmap('sat', 'saiwt', { remap = true }, 'Surround word with tag')
+    nmap('SAt', 'SAiwt', { remap = true }, 'Surround word with tag')
     -- }}}
     -- mini.trailspace {{{
     require('mini.trailspace').setup()

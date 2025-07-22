@@ -99,10 +99,6 @@ nvomap('g#', '#', 'Search backwards for current word (strict)')
 
 nmap('du', ':diffupdate', 'Update diffs')
 
--- swap `s` with `S` for mini.surround
-nmap('s', '<Nop>')
-nmap('S', 's')
-
 nmap('<Space>', function()
   local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
   if #diagnostics > 0 then
