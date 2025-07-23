@@ -200,7 +200,7 @@ return {
             -- }}}
 
             -- plugins {{{
-            BlinkCmpLabelMatch = { style = 'bold' },
+            BlinkCmpLabelMatch = { fg = 'palette.search.fg0', style = 'bold' },
             BlinkCmpMenuBorder = { link = 'BlinkCmpDocBorder' },
             BlinkCmpSignatureHelpBorder = { link = 'BlinkCmpDocBorder' },
 
