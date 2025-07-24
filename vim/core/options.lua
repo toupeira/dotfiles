@@ -133,7 +133,7 @@ vim.opt.iskeyword:append { '^[' }
 vim.opt.iskeyword:append { '^]' }
 
 if vim.fn.executable('rg') then
-  vim.o.grepprg = 'rg --vimgrep'
+  vim.o.grepprg = 'rg --sort=path --vimgrep'
 end
 
 -- }}}

@@ -434,10 +434,10 @@ util.toggle_list = function(id)
   end
 
   if id == 'c' and #vim.fn.getqflist() == 0 then
-    util.notify('Quickfix list:', { annote = 'Empty', level = 'WARN' })
+    util.echo('Quickfix list is empty', 'WarningMsg')
     return
   elseif id == 'l' and #vim.fn.getloclist(0) == 0 then
-    util.notify('Location list:', { annote = 'Empty', level = 'WARN' })
+    util.echo('Location list is empty', 'WarningMsg')
     return
   end
 

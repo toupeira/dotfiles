@@ -87,6 +87,18 @@ end)
 -- Automatically enter insert mode for terminals
 autocmd({ 'BufWinEnter', 'WinEnter' }, 'term://*', 'startinsert!')
 
+-- Grep wrapper
+util.command('Grep', function(info)
+  vim.cmd('silent grep! ' .. info.args)
+  if #vim.fn.getqflist() > 0 then
+    vim.cmd.copen()
+  else
+    util.echo('No results for "' .. info.args .. '"', 'WarningMsg')
+  end
+end, { nargs = '+', complete = 'file' })
+
+util.alias_command({ gr = 'Grep', rg = 'Grep' })
+
 -- Git helpers
 local git_command = function(action, key, command, check)
   local desc = action .. ' changes interactively'
