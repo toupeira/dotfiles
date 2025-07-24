@@ -18,6 +18,7 @@ return {
 
     {
       'ravitemer/mcphub.nvim',
+      enabled = false,
       build = 'bundled_build.lua',
       cmd = 'MCPHub',
       keys = {
@@ -227,6 +228,7 @@ return {
       },
 
       mcphub = {
+        enabled = false,
         callback = 'mcphub.extensions.codecompanion',
       },
 
