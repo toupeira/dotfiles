@@ -1,6 +1,6 @@
 [tools]
 difftastic = "0.64.0"
-fzf = "0.64.0"
+fzf = "0.65.0"
 neovim = "0.11.3"
 usage = "2.2.2"
 
