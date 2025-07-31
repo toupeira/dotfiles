@@ -11,7 +11,7 @@ path="$3"
 
 # cleanup
 rmdir -p /slack/series/**/* 2>/dev/null
-find /slack/movies -type f -iname '*.srt' | while read -r subtitle; do
+find /slack/movies/ -type f -iname '*.srt' | while read -r subtitle; do
   find "${subtitle%%.*}"* ! -iname '*.srt' | grep -q . || rm -f "$subtitle"
 done
 

@@ -132,7 +132,7 @@ return {
       buffers = merge(presets.bottom, presets.preview, {
         fzf_opts = { ['--header-lines'] = false },
         formatter = "path.filename_first",
-        no_header = true,
+        headers = false,
       }),
 
       colorschemes = merge(presets.reverse, {
@@ -158,7 +158,8 @@ return {
         fd_opts = '--color always --max-results 99999 --type f --type l --exclude .git',
         hidden = true,
         git_icons = false,
-        no_header = true,
+        headers = false,
+        line_query = true,
 
         actions = {
           ['ctrl-g'] = fzf.actions.toggle_ignore,
