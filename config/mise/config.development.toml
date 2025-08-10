@@ -1,16 +1,16 @@
 [tools]
 # Languages
 ruby = "3.4.5"
-node = "24.4.1"
+node = "24.5.0"
 
 # Tools
 "ubi:BurntSushi/xsv" = "0.13.0"
 "ubi:dlvhdr/diffnav" = "0.3.1"
 
 # AI tools
-uv = "0.8.4"
-"pipx:aider-chat" = { version = "0.85.2", uvx_args = "--python python3.12" }
-"npm:@anthropic-ai/claude-code" = "1.0.64"
+uv = "0.8.8"
+"pipx:aider-chat" = { version = "0.86.0", uvx_args = "--python python3.12" }
+"npm:@anthropic-ai/claude-code" = "1.0.72"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]

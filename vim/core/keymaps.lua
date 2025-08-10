@@ -66,7 +66,7 @@ util.unmap('n', '<C-l>')
 
 nmap('<C-s>', ':write', 'Save current buffer')
 nmap('<Leader>w', ':write', 'Save current buffer')
-nmap('<Leader>C', function() return ':e ' .. vim.fn.expand('%:p:h') .. '/' end, { expr = true, desc = 'Create file in directory of current buffer' })
+nmap('<Leader>C', function() return ':e ' .. vim.fn.expand('%:h') .. '/' end, { expr = true, desc = 'Create file in directory of current buffer' })
 
 vmap('<C-c>', '"+y`]', 'Copy to clipboard')
 nmap('<C-v>', '"+gP', 'Paste from clipboard')
