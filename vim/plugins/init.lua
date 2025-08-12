@@ -3,6 +3,7 @@ local lazy = util.lazy
 local very_lazy = util.very_lazy
 local lazy_file = util.lazy_file
 local map = util.map
+local nmap = util.nmap
 local imap = util.imap
 
 return {
@@ -26,7 +27,14 @@ return {
     init = function()
       vim.g.matchup_matchparen_deferred = 1
       vim.g.matchup_matchparen_offscreen = {}
+      vim.g.matchup_treesitter_disable_virtual_text = 1
     end,
+    config = function()
+      nmap('<LocalLeader>m', function()
+        vim.fn['matchup#matchparen#toggle']()
+        util.notify_toggle('Match highlighting:', vim.g.matchup_matchparen_enabled == 1)
+      end, 'Toggle match highlighting')
+    end
   },
   lazy      { 'folke/flash.nvim',
     keys = {

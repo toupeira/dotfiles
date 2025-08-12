@@ -409,8 +409,8 @@ return {
             return
               -- insert tabs at end of the line
               col ~= vim.fn.charcol('$')
-              -- insert tabs unless punctuation is on either side
-              and neigh:match('%p')
+              -- insert tabs unless a delimiter is next to the cursor
+              and neigh:match([=[[()%[%]{}"'`]]=])
           end
         }
       ),

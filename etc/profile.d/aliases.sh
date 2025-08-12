@@ -87,16 +87,6 @@ function notes {
   [ $# -gt 0 ] && n "$@" || cd ~/notes || return
 }
 
-alias oc='opencode'
-alias co='claude'
-alias ai='aider'
-function aider {
-  (
-    [ -d .git ] || cd /slack/dotfiles || return
-    command aider "$@"
-  )
-}
-
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases
