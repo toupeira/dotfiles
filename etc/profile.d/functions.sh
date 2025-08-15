@@ -270,12 +270,20 @@ function ssh.mux {
 
 # Browse a JSON file
 function jq.less {
-  jq -C . "$1" | less
+  local file=${1:--}
+  jq -C . "$file" | less
 }
 
 # Tail a JSON logfile
 function jq.tail {
-  tail -f "$1" | jq --unbuffered .
+  local file=${1:--}
+  tail -f "$file" | jq --unbuffered .
+}
+
+# Decode Base64 values in a given key
+function jq.base64-decode {
+  local key=${1:-.data}
+  jq "$key | map_values(@base64d)"
 }
 
 # Serve a directory over HTTP
