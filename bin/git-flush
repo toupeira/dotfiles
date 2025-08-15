@@ -2,6 +2,7 @@
 
 merged_branches=$(
   git branch --format '%(refname:short)' --merged \
+    | grep -v ' detached ' \
     | grep -Evx "$( git default-branch )|$( git rev-parse --abbrev-ref HEAD )|develop|development"
 )
 

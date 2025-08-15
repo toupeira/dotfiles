@@ -136,3 +136,8 @@ user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 // Confirm quitting
 user_pref("browser.warnOnQuit", true);
 user_pref("browser.warnOnQuitShortcut", true);
+
+// Disable AI features
+user_pref("browser.ml.enable", false);
+user_pref("browser.ml.chat.enabled", false);
+user_pref("browser.tabs.groups.smart.enabled", false);
