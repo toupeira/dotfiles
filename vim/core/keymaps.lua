@@ -99,6 +99,17 @@ nvomap('g#', '#', 'Search backwards for current word (strict)')
 
 nmap('du', ':diffupdate', 'Update diffs')
 
+nmap('M', '<Nop>')
+nmap('M!', { ':delmarks!', ':redraw!' }, 'Delete all buffer marks')
+nmap('M@', { ':delmarks A-Z', ':redraw!' }, 'Delete all global marks')
+
+for _, letter in ipairs(util.split('abcdefghijklmnopqrstuvwxzy', '\\zs')) do
+  nmap('m' .. letter,         { ':mark ' .. letter, ':redraw!' })
+  nmap('m' .. letter:upper(), { ':mark ' .. letter:upper(), ':redraw!' })
+  nmap('M' .. letter,         { ':delmarks ' .. letter, ':redraw!' })
+  nmap('M' .. letter:upper(), { ':delmarks ' .. letter:upper(), ':redraw!' })
+end
+
 nmap('<Space>', function()
   local diagnostics = vim.diagnostic.get(0, { lnum = vim.fn.line('.') - 1 })
   if #diagnostics > 0 then
