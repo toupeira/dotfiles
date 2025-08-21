@@ -71,15 +71,13 @@ return {
           schema = {
             model = {
               -- default = 'anthropic/claude-sonnet-4',
-              default = 'deepseek/deepseek-chat-v3-0324:free',
-              -- default = 'deepseek/deepseek-r1-0528:free', -- doesn't support tools yet
+              -- default = 'anthropic/claude-opus-4.1',
               -- default = 'google/gemini-2.5-flash',
               -- default = 'google/gemini-2.5-pro',
-              -- default = 'meta-llama/llama-4-maverick:free',
-              -- default = 'openai/gpt-4.1',
-              -- default = 'openai/o3',
-              -- default = 'openai/o4-mini',
-              -- default = 'openai/o4-mini-high',
+              -- default = 'openai/gpt-5-mini',
+              -- default = 'openai/gpt-5',
+              default = 'deepseek/deepseek-chat-v3-0324:free',
+              -- default = 'deepseek/deepseek-r1-0528:free', -- doesn't support tools yet
             },
           },
         })
@@ -89,8 +87,8 @@ return {
         return require('codecompanion.adapters').extend('gemini', {
           schema = {
             model = {
-              default = 'gemini-2.5-flash',
-              -- default = 'gemini-2.5-pro',
+              -- default = 'gemini-2.5-flash',
+              default = 'gemini-2.5-pro',
             },
           },
         })
@@ -100,9 +98,8 @@ return {
         return require('codecompanion.adapters').extend('openai', {
           schema = {
             model = {
-              -- default = 'gpt-4.1',
-              -- default = 'o3',
-              default = 'o4-mini',
+              default = 'gpt-5-mini',
+              -- default = 'gpt-5',
             },
           },
         })
@@ -230,15 +227,6 @@ return {
       mcphub = {
         enabled = false,
         callback = 'mcphub.extensions.codecompanion',
-      },
-
-      rules = {
-        opts = {
-          rules_filenames = {
-            'CLAUDE.md',
-            'README.md',
-          },
-        },
       },
     },
   },
