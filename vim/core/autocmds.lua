@@ -48,7 +48,7 @@ end
 
 -- Enable Treesitter folding if available
 util.autocmd('FileType', function()
-  if not vim.treesitter.highlighter.active[vim.api.nvim_get_current_buf()] then
+  if not vim.treesitter.language.get_lang(vim.bo.filetype) then
     return
   end
 
@@ -97,7 +97,12 @@ util.command('Grep', function(info)
   end
 end, { nargs = '+', complete = 'file' })
 
-util.alias_command({ gr = 'Grep', rg = 'Grep' })
+util.alias_command({
+  Gr = 'Grep',
+  gr = 'Grep',
+  Rg = 'Grep',
+  rg = 'Grep',
+})
 
 -- Git helpers
 local git_command = function(action, key, command, check)
@@ -222,9 +227,9 @@ autocmd('FileType', {
 )
 
 -- Add some mappings for `:Man` command from `runtime/ftplugin/man.vim`
-autocmd('FileType', 'man', function()
-  util.nmap('gO', require('man').show_toc, 'Show table of contents', { force = true })
-  util.nmap('q', ':lclose<CR><C-w>q', { buffer = true })
+autocmd('FileType', 'man', function(event)
+  util.nmap('gO', require('man').show_toc, 'Show table of contents', { buffer = event.buf, force = true })
+  util.nmap('q', ':lclose<CR><C-w>q', { buffer = event.buf, force = true })
 end)
 
 -- Check if we need to reload the file when it changed

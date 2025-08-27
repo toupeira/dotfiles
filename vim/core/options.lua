@@ -125,7 +125,6 @@ vim.o.shiftround = true
 vim.o.ignorecase = true
 vim.o.smartcase = true
 vim.o.inccommand = 'nosplit'
-vim.o.keywordprg = ':Manpage'
 vim.o.showmatch = true
 
 vim.opt.iskeyword:append { '-' }

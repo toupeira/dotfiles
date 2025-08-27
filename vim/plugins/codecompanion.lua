@@ -55,55 +55,57 @@ return {
 
   opts = {
     adapters = {
-      opts = {
-        show_defaults = false,
-        show_model_choices = true,
+      http = {
+        opts = {
+          show_defaults = false,
+          show_model_choices = true,
+        },
+
+        openrouter = function()
+          return require('codecompanion.adapters').extend('openai_compatible', {
+            name = 'openrouter',
+            formatted_name = 'OpenRouter',
+            env = {
+              url = 'https://openrouter.ai/api',
+              api_key = 'OPENROUTER_API_KEY',
+            },
+            schema = {
+              model = {
+                -- default = 'anthropic/claude-sonnet-4',
+                -- default = 'anthropic/claude-opus-4.1',
+                -- default = 'google/gemini-2.5-flash',
+                -- default = 'google/gemini-2.5-pro',
+                -- default = 'openai/gpt-5-mini',
+                -- default = 'openai/gpt-5',
+                default = 'deepseek/deepseek-chat-v3-0324:free',
+                -- default = 'deepseek/deepseek-r1-0528:free', -- doesn't support tools yet
+              },
+            },
+          })
+        end,
+
+        gemini = function()
+          return require('codecompanion.adapters').extend('gemini', {
+            schema = {
+              model = {
+                -- default = 'gemini-2.5-flash',
+                default = 'gemini-2.5-pro',
+              },
+            },
+          })
+        end,
+
+        openai = function()
+          return require('codecompanion.adapters').extend('openai', {
+            schema = {
+              model = {
+                default = 'gpt-5-mini',
+                -- default = 'gpt-5',
+              },
+            },
+          })
+        end,
       },
-
-      openrouter = function()
-        return require('codecompanion.adapters').extend('openai_compatible', {
-          name = 'openrouter',
-          formatted_name = 'OpenRouter',
-          env = {
-            url = 'https://openrouter.ai/api',
-            api_key = 'OPENROUTER_API_KEY',
-          },
-          schema = {
-            model = {
-              -- default = 'anthropic/claude-sonnet-4',
-              -- default = 'anthropic/claude-opus-4.1',
-              -- default = 'google/gemini-2.5-flash',
-              -- default = 'google/gemini-2.5-pro',
-              -- default = 'openai/gpt-5-mini',
-              -- default = 'openai/gpt-5',
-              default = 'deepseek/deepseek-chat-v3-0324:free',
-              -- default = 'deepseek/deepseek-r1-0528:free', -- doesn't support tools yet
-            },
-          },
-        })
-      end,
-
-      gemini = function()
-        return require('codecompanion.adapters').extend('gemini', {
-          schema = {
-            model = {
-              -- default = 'gemini-2.5-flash',
-              default = 'gemini-2.5-pro',
-            },
-          },
-        })
-      end,
-
-      openai = function()
-        return require('codecompanion.adapters').extend('openai', {
-          schema = {
-            model = {
-              default = 'gpt-5-mini',
-              -- default = 'gpt-5',
-            },
-          },
-        })
-      end,
     },
 
     strategies = {

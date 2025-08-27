@@ -135,16 +135,18 @@ return {
         lualine_y = {
           { 'filetype',
             fmt = function(filetype)
-              local clients = util.lsp_clients()
-              if #clients == 0 then
-                return filetype
+              local clients = {}
+              for _, client in pairs(util.lsp_clients()) do
+                if client.name ~= 'obsidian-ls' then
+                  table.insert(clients, client.name)
+                end
               end
 
-              local names = {}
-              for _, client in pairs(clients) do
-                table.insert(names, client.name)
+              if #clients == 0 then
+                return filetype
+              else
+                return util.join(clients, '|')
               end
-              return util.join(names, '|')
             end,
             cond = function()
               return vim.o.columns > 70
