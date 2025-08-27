@@ -632,6 +632,12 @@ function run {
         fix system rm -v "$path"
       done
 
+      path=/etc/tmpfiles.d/tmp.conf
+      if [ -f "$path" ]; then
+        list "$path"
+        fix system rm -v "$path"
+      fi
+
       lint root "Skeleton files"
       for path in $( sudo fdfind '^(\.bashrc|\.profile)$' /root --type f -u ); do
         list "$path"
@@ -858,7 +864,7 @@ function run {
     update-apt)
       status "Updating Debian packages..."
       system sudo aptitude update \
-        && system sudo aptitude upgrade
+        && system sudo aptitude full-upgrade
       ;;
     update-flatpak)
       status "Updating Flatpak packages..."

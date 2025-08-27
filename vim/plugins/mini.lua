@@ -7,7 +7,7 @@ local vmap = util.vmap
 local imap = util.imap
 
 return {
-  'echasnovski/mini.nvim',
+  'nvim-mini/mini.nvim',
   event = 'VeryLazy',
 
   init = function()
@@ -295,8 +295,7 @@ return {
         { mode = 'n', keys = 'gc' },
 
         -- mini.surround
-        { mode = 'n', keys = 'S' },
-        { mode = 'v', keys = 'S' },
+        { mode = 'n', keys = 'ys' },
       },
 
       clues = {
@@ -477,26 +476,32 @@ return {
     -- }}}
     -- mini.surround {{{
     require('mini.surround').setup({
+      respect_selection_type = true,
+
       mappings = {
-        add = 'SA',
-        delete = 'SD',
-        replace = 'SR',
-        highlight = 'SH',
+        add = 'ys',
+        delete = 'ds',
+        replace = 'cs',
 
         find = '',
         find_left = '',
+        highlight = '',
         update_n_lines = '',
       },
     })
 
-    nmap("SA'", "SAiw'", { remap = true }, 'Surround word with single quotes')
-    nmap('SA"', 'SAiw"', { remap = true }, 'Surround word with double quotes')
+    nmap('yss', '^ysg_', { remap = true } , 'Surround current line')
 
-    nmap('SA(', 'SAiw(', { remap = true }, 'Surround word with parentheses')
-    nmap('SA{', 'SAiw{', { remap = true }, 'Surround word with braces')
-    nmap('SA[', 'SAiw[', { remap = true }, 'Surround word with brackets')
+    nmap("ysq", "ysiw'", { remap = true }, 'Surround word with single quotes')
+    nmap("ys'", "ysiw'", { remap = true }, 'Surround word with single quotes')
+    nmap('ys"', 'ysiw"', { remap = true }, 'Surround word with double quotes')
 
-    nmap('SAt', 'SAiwt', { remap = true }, 'Surround word with tag')
+    nmap('ysb', 'ysiw(', { remap = true }, 'Surround word with parentheses')
+    nmap('ys(', 'ysiw(', { remap = true }, 'Surround word with parentheses')
+    nmap('ys{', 'ysiw{', { remap = true }, 'Surround word with braces')
+    nmap('ys[', 'ysiw[', { remap = true }, 'Surround word with brackets')
+
+    nmap('yst', 'ysiwt', { remap = true }, 'Surround word with tag')
     -- }}}
     -- mini.trailspace {{{
     require('mini.trailspace').setup()

@@ -129,6 +129,7 @@ nmap('<LocalLeader>f', function()
     original_foldlevel = wo.foldlevel
     wo.foldlevel = default_foldlevel
   end
+  vim.cmd('normal! zz')
   util.notify_toggle('Folding:', wo.foldlevel ~= default_foldlevel)
 end, 'Toggle folding')
 

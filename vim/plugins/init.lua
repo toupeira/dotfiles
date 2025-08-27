@@ -8,7 +8,6 @@ local imap = util.imap
 
 return {
   lazy_file { 'AndrewRadev/splitjoin.vim', submodules = false },
-  lazy_file { 'tpope/vim-rails' },
 
   very_lazy { 'tiagovla/scope.nvim', config = true },
   very_lazy { 'tpope/vim-abolish' },
@@ -156,6 +155,9 @@ return {
         vim.o.confirm = confirm
       end, 'Create alternate file')
     end,
+  },
+  lazy_file { 'tpope/vim-rails',
+    dependencies = 'vim-projectionist',
   },
   very_lazy { 'tpope/vim-ragtag',
     config = function()
