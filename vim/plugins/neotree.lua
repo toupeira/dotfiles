@@ -8,10 +8,6 @@ return {
     'MunifTanjim/nui.nvim',
   },
 
-  cmd = {
-    'Neotree',
-  },
-
   keys = {
     { '-', '<Cmd>Neotree toggle reveal<CR>', desc = 'Toggle Neotree sidebar'},
     { '_', '<Cmd>Neotree toggle reveal position=current<CR>', desc = 'Toggle Neotree window'},

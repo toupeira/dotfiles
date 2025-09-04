@@ -43,6 +43,11 @@ return {
       { 'R', mode = { 'o', 'x' }, '<Cmd>lua require("flash").treesitter_search()<CR>', desc = 'Remote select Treesitter node' },
     },
     opts = {
+      label = {
+        exclude = 'q',
+        uppercase = false,
+      },
+
       search = {
         mode = 'fuzzy',
       },
