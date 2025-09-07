@@ -8,7 +8,7 @@ node = "24.7.0"
 "ubi:dlvhdr/diffnav" = "0.3.1"
 
 # AI tools
-"npm:@anthropic-ai/claude-code" = "1.0.98"
+"npm:@anthropic-ai/claude-code" = "1.0.108"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
