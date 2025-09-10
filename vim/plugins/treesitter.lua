@@ -65,6 +65,7 @@ return {
       'python',
       'regex',
       'ruby',
+      'scss',
       'toml',
       'typescript',
       'vim',

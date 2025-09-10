@@ -234,7 +234,7 @@ return {
 
       local height = math.min(
         presets.bottom.winopts.height,
-        (#items + 3) / vim.o.lines
+        (#items + 5) / vim.o.lines
       )
 
       return merge(presets.bottom, presets.reverse, presets.title(title), {
