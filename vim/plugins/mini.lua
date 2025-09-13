@@ -479,6 +479,9 @@ return {
       },
     })
 
+    util.unmap('x', 'ys')
+    vmap('S', ':lua MiniSurround.add("visual")', { silent = true })
+
     nmap('yss', '^ysg_', { remap = true } , 'Surround current line')
 
     nmap("ysq", "ysiw'", { remap = true }, 'Surround word with single quotes')

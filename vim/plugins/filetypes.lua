@@ -114,6 +114,7 @@ return {
       keys = {
         { '>', '<Cmd>lua require("quicker").expand({ before = 1, after = 1, add_to_existing = true })<CR>', desc = 'Expand quickfix context' },
         { '<', '<Cmd>lua require("quicker").collapse()<CR>', desc = 'Reduce quickfix context' },
+        { 'R', '<Cmd>lua require("quicker").refresh()<CR>', desc = 'Refresh quickfix list' },
       },
 
       max_filename_width = function()

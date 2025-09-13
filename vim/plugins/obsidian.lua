@@ -51,7 +51,7 @@ return {
     },
 
     callbacks = {
-      enter_note = function(_, note)
+      enter_note = function(note)
         local opts = { buffer = note.bufnr, force = true }
 
         util.nmap('gf', '<Cmd>Obsidian follow_link<CR>', opts, 'Go to file')

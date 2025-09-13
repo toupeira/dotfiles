@@ -48,7 +48,6 @@ alias cal='ncal'
 # system administration
 alias sctl='systemctl'
 alias jctl='journalctl'
-alias jctl.lnav='jctl -f | lnav'
 alias pstree='pstree -GUh'
 alias ftrace='strace -fe trace=file'
 alias ptrace='strace -fe trace=process'
