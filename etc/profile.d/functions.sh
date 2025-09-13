@@ -298,14 +298,14 @@ function serve {
   python3 -m http.server "$port"
 }
 
-function dusort {
+function du.sort {
   (
     if [ $# -eq 0 ]; then
-      du -sch -- *
+      command du -sh -- *
     elif [ $# -eq 1 ]; then
-      du -sch -- "${1%/}"/*
+      command du -sh -- "${1%/}"/*
     else
-      du -sch -- "${@%/}"
+      command du -sh -- "${@%/}"
     fi
   ) | sort -h
 }
