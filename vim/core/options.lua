@@ -33,9 +33,6 @@ vim.filetype.add({
 -- Define Treesitter aliases
 vim.treesitter.language.register('yaml', 'eruby.yaml')
 
--- Disable maps from filetype plugins
-vim.g.no_plugin_maps = 1
-
 -- }}}
 -- Interface {{{
 
@@ -93,6 +90,7 @@ vim.o.cedit = ''
 -- }}}
 -- History {{{
 
+vim.o.exrc = true
 vim.o.undofile = true
 vim.o.history = 1000
 
@@ -131,9 +129,7 @@ vim.opt.iskeyword:append { '-' }
 vim.opt.iskeyword:append { '^[' }
 vim.opt.iskeyword:append { '^]' }
 
-if vim.fn.executable('rg') then
-  vim.o.grepprg = 'rg --sort=path --vimgrep'
-end
+vim.o.grepprg = 'rg --sort=path --vimgrep'
 
 -- }}}
 -- Concealing {{{
@@ -156,6 +152,9 @@ vim.o.foldtext = ''
 
 -- }}}
 -- Runtime plugin settings {{{
+
+-- Disable maps from filetype plugins
+vim.g.no_plugin_maps = 1
 
 vim.g.markdown_folding = 0
 vim.g.markdown_recommended_style = 0

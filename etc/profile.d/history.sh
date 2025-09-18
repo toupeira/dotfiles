@@ -4,7 +4,7 @@
 
 # History settings
 mkdir -p ~/.local/state/history
-HISTFILE=~/.local/state/history/bash
+[ "$HISTFILE" ] && HISTFILE=~/.local/state/history/bash
 HISTSIZE=50000
 HISTFILESIZE=50000
 HISTCONTROL="ignoredups"
