@@ -8,7 +8,7 @@ while ! ql running >/dev/null; do
   sleep 1
 done
 
-echo -e " \e[1;32m● \e[1;37mExporting playlists...\e[0m"
+echo -e " \e[1;32m󰎆 \e[1;37mExporting playlists...\e[0m"
 
 while read -r query; do
   read -r title
@@ -26,12 +26,12 @@ while read -r query; do
   if [ -n "$files" ]; then
     count=$( echo "$files" | wc -l )
     diff=$(( count - previous ))
-    echo -ne "   \e[1;34m● $title:\e[22m $count songs\e[0m"
+    echo -ne "   \e[1;34m󰎆 $title:\e[22m $count songs\e[0m"
     [ "$diff" -ne 0 ] && printf ' \e[1;32m(%+d)\e[0m' "$diff"
     echo
     echo "$files" > "$playlist"
   else
-    echo -ne "   \e[1;33m● $title:\e[22m No songs, deleting... \e[1m(-$previous)\e[0m"
+    echo -ne "   \e[1;33m󰎆 $title:\e[22m No songs, deleting... \e[1m(-$previous)\e[0m"
     echo
     rm -f "$playlist"
   fi
