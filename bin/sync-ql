@@ -13,7 +13,7 @@ else:
     METADATA_IMPORT = METADATA_EXPORT.replace(HOSTNAME, 'schtube')
 
 def status(message):
-    print(' \033[1;32m● \033[1;37m%s\033[0m' % message)
+    print(' \033[1;32m󰎆 \033[1;37m%s\033[0m' % message)
 
 def ask(message, default=True):
     try:
@@ -33,13 +33,13 @@ def log(file, key, value=''):
 
     if not last_file or file != last_file:
         file = file.replace(MUSIC + '/', '')
-        print('   \033[0;36m● %s/\033[1m%s\033[0m' % (
+        print('   \033[0;36m󰎆 %s/\033[1m%s\033[0m' % (
             os.path.dirname(file),
             os.path.basename(file)
         ))
         last_file = file
 
-    print('     \033[0;35m● %s \033[1m%s\033[0m' % (key, value))
+    print('     \033[0;35m󰎆 %s \033[1m%s\033[0m' % (key, value))
 
 ### Init
 

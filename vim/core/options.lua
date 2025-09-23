@@ -36,7 +36,7 @@ vim.treesitter.language.register('yaml', 'eruby.yaml')
 -- }}}
 -- Interface {{{
 
-if os.getenv('XDG_SESSION_TYPE') ~= 'tty' or os.getenv('SSH_CONNECTION') then
+if os.getenv('COLORTERM') == 'truecolor' then
   vim.o.termguicolors = true
   vim.o.pumblend = 10
 

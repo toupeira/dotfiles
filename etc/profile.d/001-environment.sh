@@ -18,8 +18,6 @@ export RIPGREP_CONFIG_PATH=~/.config/rg/config
 export BAT_THEME="TwoDark"
 export WEZTERM_SHELL_SKIP_ALL=1
 
-[ "$TERM" = "tmux-256color" ] && export COLORTERM=${COLORTERM:-truecolor}
-
 # desktop apps
 export GTK_A11Y=none
 export NO_AT_BRIDGE=1

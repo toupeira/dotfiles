@@ -85,6 +85,8 @@ user_pref("browser.urlbar.shortcuts.bookmarks", false);
 user_pref("browser.urlbar.shortcuts.history", false);
 user_pref("browser.urlbar.shortcuts.tabs", false);
 user_pref("browser.urlbar.suggest.calculator", true);
+user_pref("browser.urlbar.suggest.engines", false);
+user_pref("browser.urlbar.suggest.quickactions", false);
 user_pref("browser.urlbar.trimURLs", false);
 
 // Search
@@ -107,7 +109,6 @@ user_pref("browser.download.manager.addToRecentDocs", false);
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
 
 // Media
-user_pref("media.ffmpeg.vaapi.enabled", true);
 user_pref("media.hardwaremediakeys.enabled", false);
 user_pref("pdfjs.ignoreDestinationZoom", true);
 

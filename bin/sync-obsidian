@@ -178,7 +178,7 @@ def format_movie(movie)
 end
 
 if ARGS[:ratings]
-  puts "\e[0;32m● Importing IMDb ratings... \e[1m(#{count_csv(ARGS[:ratings])})\e[0m"
+  puts "\e[0;32m Importing IMDb ratings... \e[1m(#{count_csv(ARGS[:ratings])})\e[0m"
   FileUtils.rm_f(Dir.glob("#{FOLDER}/Filme & TV/[1-9]*.md"))
 
   all_movies = parse_csv(ARGS[:ratings])
@@ -196,7 +196,7 @@ if ARGS[:ratings]
 end
 
 if ARGS[:watchlist]
-  puts "\e[0;32m● Importing IMDb watchlist... \e[1m(#{count_csv(ARGS[:watchlist])})\e[0m"
+  puts "\e[0;32m Importing IMDb watchlist... \e[1m(#{count_csv(ARGS[:watchlist])})\e[0m"
   FileUtils.rm_f(Dir.glob("#{FOLDER}/Filme & TV/Watchlist*.md"))
 
   movies = parse_csv(ARGS[:watchlist])
@@ -236,7 +236,7 @@ end
 # ----------------------------------------------------------------------
 
 if ARGS[:goodreads]
-  puts "\e[0;32m● Importing Goodreads library... \e[1m(#{count_csv(ARGS[:goodreads])})\e[0m"
+  puts "\e[0;32m Importing Goodreads library... \e[1m(#{count_csv(ARGS[:goodreads])})\e[0m"
   FileUtils.rm_f(Dir.glob("#{FOLDER}/Bücher/*.md"))
 
   all_books = parse_csv(ARGS[:goodreads])
@@ -258,7 +258,7 @@ end
 # ----------------------------------------------------------------------
 
 if ARGS[:calendar]
-  puts "\e[0;32m● Importing calendar...\e[0m"
+  puts "\e[0;32m Importing calendar...\e[0m"
 
   time_range = Range.new(DateTime.now - 30, DateTime.now + 180)
   entries = []
