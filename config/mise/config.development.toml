@@ -1,14 +1,14 @@
 [tools]
 # Languages
 ruby = "3.4.6"
-node = "24.8.0"
+node = "24.9.0"
 
 # Tools
 "ubi:BurntSushi/xsv" = "0.13.0"
 "ubi:dlvhdr/diffnav" = "0.3.1"
 
 # AI tools
-"npm:@anthropic-ai/claude-code" = "1.0.117"
+"npm:@anthropic-ai/claude-code" = "2.0.1"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]

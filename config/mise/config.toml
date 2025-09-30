@@ -1,8 +1,8 @@
 [tools]
-difftastic = "0.64.0"
+difftastic = { version = "0.65.0", exe = "difft" }
 fzf = "0.65.2"
 neovim = "0.11.4"
-usage = "2.2.2"
+usage = "2.3.2"
 
 [settings]
 auto_install = false

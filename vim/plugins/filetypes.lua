@@ -1,3 +1,5 @@
+local util = require('util')
+
 return {
   { 'antonk52/markdowny.nvim', ft = { 'markdown' }, config = true },
   { 'elixir-lang/vim-elixir',  ft = { 'elixir', 'eelixir' }},
@@ -104,6 +106,20 @@ return {
         },
       }
     end,
+    config = function(_, opts)
+      require('markview').setup(opts)
+
+      require('markview.extras.checkboxes').setup({
+        default = 'x',
+        states = {
+          { ' ', 'x', '-' },
+        },
+      })
+
+      util.autocmd('User', 'MarkviewAttach', function(event)
+        util.nvomap('<M-space>', ':Checkbox toggle', { buffer = event.buf }, 'Toggle checkbox')
+      end)
+    end
   },
   { 'stevearc/quicker.nvim',
     ft = 'qf',
