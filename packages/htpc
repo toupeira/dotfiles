@@ -1,5 +1,4 @@
 filebot
 qbittorrent
 
-flatpak: com.valvesoftware.SteamLink
 flatpak: tv.kodi.Kodi
