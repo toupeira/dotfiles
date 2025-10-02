@@ -74,7 +74,7 @@ vim.diagnostic.toggle_current_line = function()
   end
 end
 
-nmap('<LocalLeader>d', function()
+nmap('<LocalLeader>i', function()
   local config = vim.diagnostic.config()
 
   -- always disable first to clear the autocmd

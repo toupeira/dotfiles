@@ -133,6 +133,18 @@ nmap('<LocalLeader>f', function()
   util.notify_toggle('Folding:', wo.foldlevel ~= default_foldlevel)
 end, 'Toggle folding')
 
+nmap('<LocalLeader>d', function()
+  if vim.tbl_contains(vim.opt.diffopt:get(), 'algorithm:histogram') then
+    vim.opt.diffopt:remove('algorithm:histogram')
+    vim.opt.diffopt:append('algorithm:patience')
+    util.notify('Diff algorithm:', { annote = 'Patience' })
+  else
+    vim.opt.diffopt:remove('algorithm:patience')
+    vim.opt.diffopt:append('algorithm:histogram')
+    util.notify('Diff algorithm:', { annote = 'Histogram' })
+  end
+end, 'Toggle diff algorithm')
+
 local undo_chains = {
   ['<CR>'] = 'new line',
 }

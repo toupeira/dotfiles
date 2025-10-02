@@ -203,7 +203,6 @@ return {
     util.unmap('n', '<LocalLeader>b')
     util.unmap('n', '<LocalLeader>c')
     util.unmap('n', '<LocalLeader>h')
-    util.unmap('n', '<LocalLeader>i')
 
     util.nmap('<LocalLeader>cc', ':setlocal cursorcolumn! cursorcolumn?<CR>', "Toggle 'cursorcolumn'")
     util.nmap('<LocalLeader>cl', ':setlocal cursorline! cursorline?<CR>', "Toggle 'cursorline'")
