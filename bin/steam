@@ -11,8 +11,14 @@ if [ "$HOSTNAME" = "schtube" ] && bluetoothctl show | grep -q 'Powered: no'; the
   enable_bluetooth=1
 fi
 
-[ "$enable_bluetooth" ] && (bluetoothctl power on; rfkill unblock bluetooth)
+if [ "$enable_bluetooth" ]; then
+  rfkill unblock bluetooth
+  bluetoothctl power on
+fi
 
 $steam "$@"
 
-[ "$enable_bluetooth" ] && (bluetoothctl power off; rfkill block bluetooth)
+if [ "$enable_bluetooth" ]; then
+  bluetoothctl power off
+  rfkill block bluetooth
+fi
