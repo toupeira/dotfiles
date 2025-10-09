@@ -486,6 +486,7 @@ return {
     nmap("ysq", "ysiw'", { remap = true }, 'Surround word with single quotes')
     nmap("ys'", "ysiw'", { remap = true }, 'Surround word with single quotes')
     nmap('ys"', 'ysiw"', { remap = true }, 'Surround word with double quotes')
+    nmap('ys`', 'ysiw`', { remap = true }, 'Surround word with backticks')
 
     nmap('ysb', 'ysiw(', { remap = true }, 'Surround word with parentheses')
     nmap('ys(', 'ysiw(', { remap = true }, 'Surround word with parentheses')
