@@ -418,7 +418,7 @@ return {
 
     -- search git
     map_fzf('<Leader>gm', 'git_status')
-    map_fzf('<Leader>gc', 'git_branches')
+    map_fzf('<Leader>gS', 'git_branches')
 
     -- search Aerial symbols
     map_fzf('<Leader>t', function()

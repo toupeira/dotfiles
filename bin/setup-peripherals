@@ -7,7 +7,8 @@ function get {
 case "$HOSTNAME" in
   ocelot)
     # Setup display
-    dconf write /org/gnome/desktop/interface/text-scaling-factor 1.35
+    dconf write /org/gnome/desktop/interface/monospace-font-name '"Hack Nerd Font 10.2"'
+    dconf write /org/gnome/desktop/interface/text-scaling-factor 1.4
 
     # Setup audio
     cards=$( pactl list short cards )
@@ -67,6 +68,8 @@ case "$HOSTNAME" in
   schtube)
     # Setup display
     xrandr --output DP-1 --mode 1920x1080 --rate 120
+
+    dconf write /org/gnome/desktop/interface/monospace-font-name '"Hack Nerd Font 11.4"'
     dconf write /org/gnome/desktop/interface/text-scaling-factor 1.25
 
     # Setup audio

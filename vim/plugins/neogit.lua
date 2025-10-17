@@ -8,14 +8,13 @@ return {
   },
 
   keys = {
-    { '<Leader>gs', '<Cmd>Neogit<CR>', desc = 'Open Neogit' },
+    { '<Leader>gs', '<Cmd>Neogit<CR>', desc = 'Open Neogit status' },
   },
 
   opts = {
     console_timeout = 250,
     disable_hint = true,
     graph_style = 'unicode',
-    kind = 'split',
     remember_settings = false,
 
     integrations = {

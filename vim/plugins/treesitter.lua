@@ -76,7 +76,7 @@ return {
     },
 
     highlight = { enable = true },
-    indent = { enable = false },
+    indent = { enable = true },
 
     refactor = {
       navigation = {
