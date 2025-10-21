@@ -135,6 +135,7 @@ user_pref("view_source.wrap_long_lines", true);
 user_pref("toolkit.legacyUserProfileCustomizations.stylesheets", true);
 
 // Confirm quitting
+user_pref("browser.tabs.warnOnClose", true);
 user_pref("browser.warnOnQuit", true);
 user_pref("browser.warnOnQuitShortcut", true);
 

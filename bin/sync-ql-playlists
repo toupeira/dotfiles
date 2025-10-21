@@ -15,7 +15,7 @@ while read -r query; do
   [[ "$title" =~ ^(Added|Good|Favourite|Best) ]] || continue
 
   playlist="$MUSIC/$title.m3u"
-  files=$( quodlibet --print-query="$query" | sed "s,^$MUSIC/,," | sort )
+  files=$( quodlibet --print-query="$query" | sed -r "s,^(/mnt)?$MUSIC/,," | sort )
 
   if [ -f "$playlist" ]; then
     previous=$( wc -l < "$playlist" )

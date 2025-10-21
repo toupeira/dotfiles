@@ -209,9 +209,11 @@ return {
     -- }}}
     -- mini.bracketed {{{
     require('mini.bracketed').setup({
-      comment    = { suffix = '' }, -- ']c' used by vim/gitsigns
-      file       = { suffix = '' }, -- ']f' not useful
-      oldfile    = { suffix = '' }, -- ']o' not useful
+      indent  = { options = { change_type = 'diff' }},
+
+      comment = { suffix = '' }, -- ']c' used by vim/gitsigns
+      file    = { suffix = '' }, -- ']f' not useful
+      oldfile = { suffix = '' }, -- ']o' not useful
     })
 
     local original_diagnostic = MiniBracketed.diagnostic
