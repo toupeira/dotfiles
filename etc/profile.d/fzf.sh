@@ -19,6 +19,8 @@ export FZF_DEFAULT_OPTS="
   --info inline-right
   --layout default
   --no-height
+  --gutter ' '
+  --gutter-raw ' '
   --prompt '» '
   --preview-window 'right,50%,hidden,<60(up,60%,hidden)'
   --preview-label ' Preview '
@@ -33,7 +35,6 @@ export FZF_DEFAULT_OPTS="
   --color info:240
   --color hl:#d7ffaf:bold
   --color hl+:#ecffd9
-  --color gutter:-1
 
   --bind alt-a:toggle-all
   --bind ctrl-n:down

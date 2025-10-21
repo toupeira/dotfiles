@@ -4,5 +4,3 @@ podman
 podman-docker
 skopeo
 uidmap
-
-flatpak: dev.skynomads.Seabird

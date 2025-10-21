@@ -1,6 +1,6 @@
 [tools]
 difftastic = { version = "0.65.0", exe = "difft" }
-fzf = "0.65.2"
+fzf = "0.66.0"
 neovim = "0.11.4"
 usage = "2.3.2"
 
