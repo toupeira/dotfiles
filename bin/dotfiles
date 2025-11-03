@@ -579,13 +579,21 @@ function run {
       function fix  { [ "$fix" ] && indent 6 && "$@"; }
 
       lint dotfiles "Empty directories"
-      for path in $( fdfind . "$DOTFILES" --type d --type e ); do
+      while read -r path; do
         list "$path"
         fix system rmdir -v "$path"
-      done
+      done < <( fdfind . "$DOTFILES" --type d --type e )
 
       lint home+etc "Orphaned symlinks"
-      paths=$(
+      while read -r path; do
+        if [ "$(basename "$path")" = "lock" ]; then
+          # --exclude lock doesn't work: https://github.com/sharkdp/fd/issues/746
+          continue
+        fi
+
+        list "$path"
+        fix system rm -v "$path"
+      done < <(
         sudo fdfind . ~ /root /etc --type l -u \
           --follow \
           --mount \
@@ -594,21 +602,11 @@ function run {
           --exclude src --exclude tmp
       )
 
-      for path in $paths; do
-        if [ "$(basename "$path")" = "lock" ]; then
-          # --exclude lock doesn't work: https://github.com/sharkdp/fd/issues/746
-          continue
-        fi
-
-        list "$path"
-        fix system rm -v "$path"
-      done
-
       lint home "Incorrect owners"
-      for path in $( fdfind . ~ -o root --mount ); do
+      while read -r path; do
         list "$path"
         fix system chown "$USER:$USER" -v "$path"
-      done
+      done < <( fdfind . ~ -o root --mount )
 
       lint etc "Incorrect permissions"
 
@@ -627,10 +625,10 @@ function run {
       fi
 
       lint etc "Configuration file clutter"
-      for path in $( sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --type f -u ); do
+      while read -r path; do
         list "$path"
         fix system rm -v "$path"
-      done
+      done < <( sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --type f -u )
 
       path=/etc/tmpfiles.d/tmp.conf
       if [ -f "$path" ]; then
@@ -639,10 +637,10 @@ function run {
       fi
 
       lint root "Skeleton files"
-      for path in $( sudo fdfind '^(\.bashrc|\.profile)$' /root --type f -u ); do
+      while read -r path; do
         list "$path"
         fix system rm -v "$path"
-      done
+      done < <( sudo fdfind '^(\.bashrc|\.profile)$' /root --type f -u )
 
       lint root "Dotfile symlinks"
       for path in config/nvim config/fd config/rg config/mise local/share/mise; do
@@ -657,10 +655,10 @@ function run {
 
       lint slack "Syncthing conflicts"
       mapfile -t folders < <( syncthing-folders )
-      for path in $( fdfind -u '\.sync-conflict-.*' "${folders[@]}" | grep -Fv /.stversions/ ); do
+      while read -r path; do
         list "$path"
         fix system rm -v "$path"
-      done
+      done < <( fdfind -u '\.sync-conflict-.*' "${folders[@]}" | grep -Fv /.stversions/ )
 
       origin=~/.config/monitors.xml
       local gdm=/var/lib/gdm3

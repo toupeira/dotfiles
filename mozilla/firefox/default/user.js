@@ -67,6 +67,7 @@ user_pref("urlclassifier.trackingSkipURLs", "disqus.com, c.disquscdn.com, cdmu.d
 
 // Tabs
 user_pref("browser.tabs.firefox-view", false);
+user_pref("browser.tabs.groups.enabled", false);
 user_pref("browser.tabs.hoverPreview.enabled", true);
 user_pref("browser.tabs.hoverPreview.showThumbnails", false);
 user_pref("browser.tabs.loadBookmarksInBackground", true);
@@ -143,3 +144,4 @@ user_pref("browser.warnOnQuitShortcut", true);
 user_pref("browser.ml.enable", false);
 user_pref("browser.ml.chat.enabled", false);
 user_pref("browser.tabs.groups.smart.enabled", false);
+user_pref("extensions.ml.enabled", false);

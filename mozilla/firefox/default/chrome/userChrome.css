@@ -1,10 +1,11 @@
 /* Remove tab context menu items */
 menuitem#context_openANewTab,
-menuitem#context_openANewTab + menuseparator,
+menuitem#context_ungroupTab + menuseparator,
 menuitem#context_bookmarkTab,
 menuitem#context_bookmarkSelectedTabs,
 menuitem#context_duplicateTab,
 menuitem#context_duplicateTabs,
+menuitem#context_closeDuplicateTabs,
 menu#context_moveTabOptions
 {
   display: none !important;
@@ -19,19 +20,7 @@ menuitem#context-sendaudio,
 menuitem#context-print-selection,
 menuitem#context-searchselect-private,
 menuitem#context-setDesktopBackground,
-menuseparator#frame-sep,
-menuseparator#context-media-eme-separator,
-menuseparator#context-sep-setbackground,
-menu[label="Firefox Multi-Account Containers"]
+menuseparator#context-sep-setbackground
 {
   display: none !important;
-}
-
-/* Remove play buttons in tabs */
-.tab-audio-button[activemedia-blocked] {
-  display: none !important;
-}
-
-.tab-icon-stack[activemedia-blocked] {
-  --tab-icon-end-margin: 5.5px !important;
 }

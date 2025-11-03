@@ -147,6 +147,8 @@
 # Aliases {{{
 
 [alias]
+  h = help
+
   s = status -sb
   st = status
   sta = -c diff.ignoreSubmodules=none st

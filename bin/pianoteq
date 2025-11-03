@@ -2,4 +2,13 @@
 
 cd ~/src/upstream/pianoteq || exit 1
 
-exec pw-jack ./x86-64bit/"Pianoteq 8" "$@"
+addons=/slack/sound/patches/pianoteq
+link=~/.local/share/Modartt/Pianoteq/Addons
+
+if [ -d "$addons" ] && [ ! -L "$link" ]; then
+  rm -rf "$link"
+  mkdir -p "$( dirname "$link" )"
+  ln -s "$addons" "$link"
+fi
+
+exec pw-jack ./x86-64bit/"Pianoteq 9" "$@"
