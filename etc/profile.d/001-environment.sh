@@ -16,24 +16,17 @@ export MANPAGER="sensible-vim +Man!"
 export SYSTEMD_LESS="iRMKFX --mouse"
 export RIPGREP_CONFIG_PATH=~/.config/rg/config
 export BAT_THEME="TwoDark"
-export WEZTERM_SHELL_SKIP_ALL=1
 
 # desktop apps
 export GTK_A11Y=none
 export NO_AT_BRIDGE=1
-export QT_AUTO_SCREEN_SCALE_FACTOR=0
+
+if [ "$XDG_SESSION_TYPE" = "wayland" ] && [ ! "$QT_SCALE_FACTOR" ]; then
+  export QT_SCALE_FACTOR=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
+  QT_SCALE_FACTOR=${QT_SCALE_FACTOR:-1}
+fi
 
 export CALIBRE_USE_DARK_PALETTE=1
-export CHROMIUM_FLAGS="--password-store=basic --enable-features=VaapiVideoDecodeLinuxGL,VaapiVideoEncoder"
-
-# colorize manpages
-export LESS_TERMCAP_mb=$'\e[1;31m'
-export LESS_TERMCAP_md=$'\e[1;32m'
-export LESS_TERMCAP_us=$'\e[1;33m'
-export LESS_TERMCAP_me=$'\e[0m'
-export LESS_TERMCAP_se=$'\e[0m'
-export LESS_TERMCAP_ue=$'\e[0m'
-export GROFF_NO_SGR=1
 
 # initialize mise
 if [ "$HOSTNAME" != "snafu" ]; then

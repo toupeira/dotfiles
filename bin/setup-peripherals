@@ -37,21 +37,8 @@ case "$HOSTNAME" in
 
   meerkat)
     # Setup display
-    screens=$( xrandr --current | grep -w connected )
-
-    if [ "$( echo "$screens" | wc -l )" = 1 ]; then
-      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.4
-      dconf write /org/gnome/desktop/interface/cursor-size 48
-    elif [[ $screens = *3840x2160* ]]; then
-      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.5
-      dconf write /org/gnome/desktop/interface/cursor-size 48
-    elif [[ $screens = *3440x1440* ]]; then
-      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.0
-      dconf write /org/gnome/desktop/interface/cursor-size 32
-    elif [[ $screens = *2560x1440* ]]; then
-      dconf write /org/gnome/desktop/interface/text-scaling-factor 1.0
-      dconf write /org/gnome/desktop/interface/cursor-size 32
-    fi
+    dconf write /org/gnome/desktop/interface/monospace-font-name '"Hack Nerd Font 10.2"'
+    dconf write /org/gnome/desktop/interface/text-scaling-factor 1.4
 
     # Setup audio
     pactl set-card-profile   "$( get card )" output:analog-stereo+input:analog-stereo
@@ -67,8 +54,6 @@ case "$HOSTNAME" in
 
   schtube)
     # Setup display
-    xrandr --output DP-1 --mode 1920x1080 --rate 120
-
     dconf write /org/gnome/desktop/interface/monospace-font-name '"Hack Nerd Font 11.4"'
     dconf write /org/gnome/desktop/interface/text-scaling-factor 1.25
 

@@ -1,13 +1,7 @@
 #!/bin/bash
 # shellcheck disable=SC2034
 
-export FZF_DEFAULT_COMMAND=$( echo \
-  fdfind \
-    --hidden \
-    --exclude .git \
-    --color always \
-    --max-results 99999
-)
+export FZF_DEFAULT_COMMAND="fdfind --hidden --exclude .git --color always --max-results 99999"
 
 export FZF_DEFAULT_OPTS="
   --ansi

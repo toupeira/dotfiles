@@ -45,11 +45,12 @@ case "$1" in
     status
     ;;
   quantum)
-    pw-metadata -n settings 0 clock.force-quantum "$2"
+    shift
+    pw-metadata -n settings 0 clock.force-quantum "$@"
     ;;
   *)
     echo "Usage: pw [status|start|stop|restart|enable|disable]"
-    echo "       pw quantum <QUANTUM>"
+    echo "       pw quantum [QUANTUM]"
     exit 1
     ;;
 esac

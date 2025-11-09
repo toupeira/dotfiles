@@ -1,7 +1,0 @@
-#!/bin/bash
-id=$( xprop -root _NET_ACTIVE_WINDOW | cut -d\  -f5 )
-if xprop -id "$id" | grep -q 'WM_CLASS.*"zeal"'; then
-  wmctrl -i -Y "$id"
-else
-  zeal "$@" &>/dev/null &
-fi

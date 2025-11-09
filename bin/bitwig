@@ -14,11 +14,7 @@ if [ "$1" = "-j" ]; then
 fi
 
 if pgrep -x bitwig-studio >/dev/null; then
-  if [ "$1" ]; then
-    exec $bitwig "$@"
-  else
-    exec wmctrl -xa com.bitwig.BitwigStudio
-  fi
+  exec $bitwig "$@"
 fi
 
 workspace=/slack/sound/bitwig/workspace

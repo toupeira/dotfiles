@@ -1,5 +1,6 @@
 # system
 apparmor
+bluetooth
 dnsmasq-base
 dosfstools
 eject
@@ -15,6 +16,7 @@ flatpak
 flatseal
 fwupd
 intel-media-va-driver-non-free
+inxi
 linux-cpupower
 lm-sensors
 mesa-utils
@@ -30,6 +32,7 @@ wireless-regdb
 
 # multimedia
 alsa-utils
+drm-info
 gstreamer1.0-libav
 gstreamer1.0-plugins-bad
 libavcodec-extra
@@ -44,6 +47,7 @@ vainfo
 # desktop
 dconf-cli
 dconf-editor
+desktop-base
 file-roller
 firewall-config
 fonts-liberation
@@ -54,12 +58,12 @@ fonts-roboto
 fonts-roboto-slab
 gnome-browser-connector
 gnome-clocks
+gnome-core
 gnome-core-shim
-gnome-screenshot
-gnome-session-xsession
 gnome-shell-extension-prefs
 gnome-tweaks
 gparted
+libdecor-0-plugin-1-gtk
 libgdk-pixbuf2.0-bin
 libnotify-bin
 menulibre
@@ -67,17 +71,13 @@ network-manager-gnome
 numix-gtk-theme
 numix-icon-theme-circle
 qt6-gtk-platformtheme
+qt6-wayland
 seahorse
-task-desktop
-task-gnome-desktop
-ttf-mscorefonts-installer
 xdg-user-dirs-gtk
 xdg-utils
 
 # xorg
-wmctrl
 xclip
-xdotool
 xinput
 
 # apps
@@ -92,7 +92,6 @@ firefox
 foliate
 gcolor3
 gimp
-mousai
 mpv
 quodlibet
 scummvm

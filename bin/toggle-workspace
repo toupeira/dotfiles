@@ -1,6 +1,0 @@
-#!/bin/bash
-if wmctrl -d | grep -q '^0  \*'; then
-  wmctrl -s 1
-else
-  wmctrl -s 0
-fi

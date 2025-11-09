@@ -1,10 +1,11 @@
 [Desktop Entry]
-Version=1.1
-Type=Application
 Name=Firefox
-Icon=/slack/images/Icons/firefox-flat.png
 Exec=/usr/lib/firefox/firefox %u
+Terminal=false
+X-MultipleArgs=false
+Type=Application
+Icon=/slack/images/Icons/firefox-flat.png
 MimeType=x-scheme-handler/http;x-scheme-handler/https;x-scheme-handler/mailto;
 Categories=Network;WebBrowser;
+StartupWMClass=firefox
 StartupNotify=true
-StartupWMClass=Firefox

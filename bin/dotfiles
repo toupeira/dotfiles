@@ -661,10 +661,9 @@ function run {
       done < <( fdfind -u '\.sync-conflict-.*' "${folders[@]}" | grep -Fv /.stversions/ )
 
       origin=~/.config/monitors.xml
-      local gdm=/var/lib/gdm3
-      if [ -f "$origin" ] && [ -d "$gdm" ]; then
+      if [ -f "$origin" ]; then
         lint gdm "Monitor configuration"
-        target="$gdm/.config/monitors.xml"
+        target="/etc/xdg/monitors.xml"
         if ! sudo diff -q "$origin" "$target" &>/dev/null; then
           list "$target"
           fix system cp -v "$origin" "$target"

@@ -1,0 +1,7 @@
+[Desktop Entry]
+Version=1.1
+Type=Application
+Name=Pianoteq
+Icon=activity-simplepiano
+Exec=pianoteq
+Actions=

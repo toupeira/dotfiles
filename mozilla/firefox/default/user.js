@@ -66,6 +66,7 @@ user_pref("datareporting.policy.dataSubmissionEnabled", true);
 user_pref("urlclassifier.trackingSkipURLs", "disqus.com, c.disquscdn.com, cdmu.disqus.com");
 
 // Tabs
+user_pref("browser.link.open_newwindow.override.external", 7);
 user_pref("browser.tabs.firefox-view", false);
 user_pref("browser.tabs.groups.enabled", false);
 user_pref("browser.tabs.hoverPreview.enabled", true);
@@ -110,6 +111,7 @@ user_pref("browser.download.manager.addToRecentDocs", false);
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
 
 // Media
+user_pref("gfx.wayland.hdr", true);
 user_pref("media.hardwaremediakeys.enabled", false);
 user_pref("pdfjs.ignoreDestinationZoom", true);
 
@@ -143,5 +145,6 @@ user_pref("browser.warnOnQuitShortcut", true);
 // Disable AI features
 user_pref("browser.ml.enable", false);
 user_pref("browser.ml.chat.enabled", false);
+user_pref("browser.ml.chat.menu", false);
 user_pref("browser.tabs.groups.smart.enabled", false);
 user_pref("extensions.ml.enabled", false);

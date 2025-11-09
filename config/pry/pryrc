@@ -16,7 +16,7 @@ class Array
 end
 
 lambda {
-  gray     = ->(text) { "\001\e[1;30m\002#{text}\001\e[0m\002" }
+  gray     = ->(text) { "\001\e[1;38;5;242m\002#{text}\001\e[0m\002" }
   darkcyan = ->(text) { "\001\e[0;36m\002#{text}\001\e[0m\002" }
   red      = ->(text) { "\001\e[1;31m\002#{text}\001\e[0m\002" }
   magenta  = ->(text) { "\001\e[1;35m\002#{text}\001\e[0m\002" }

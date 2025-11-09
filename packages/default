@@ -40,7 +40,7 @@ jq
 less
 libnss-systemd
 linux-sysctl-defaults
-locales-all
+locales
 lsof
 ltrace
 lynx
@@ -76,7 +76,6 @@ systemd
 systemd-cron
 systemd-sysv
 systemd-timesyncd
-task-english
 tcpdump
 tig
 tmux

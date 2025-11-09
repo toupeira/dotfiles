@@ -75,15 +75,14 @@ case "$action" in
         done
       )
     elif pgrep -f /app/obsidian >/dev/null; then
-      exec wmctrl -xa obsidian
+      files=( "$( obsidian_url )" )
     elif pgrep -f 'firefox -P Denteo' &>/dev/null; then
       files=( "$( obsidian_url "$NOTES/Projekte/Denteo/Inbox.md" )" )
     else
       files=( "$( obsidian_url "$NOTES/Home/Dashboard.md" )" )
     fi
 
-    flatpak run md.obsidian.Obsidian -- "${files[@]}" &>/dev/null &
-    wmctrl -xa obsidian
+    flatpak run md.obsidian.Obsidian "${files[@]}" &>/dev/null &
     ;;
   list)
     printf '%s\n' "${files[@]}"

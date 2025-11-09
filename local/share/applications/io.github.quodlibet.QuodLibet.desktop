@@ -10,4 +10,6 @@ StartupWMClass=io.github.quodlibet.QuodLibet
 Type=Application
 Icon=io.github.quodlibet.QuodLibet
 Categories=AudioVideo;Audio;Player;GTK;
+
+#http://live.gnome.org/GnomeGoals/NotificationSource
 X-GNOME-UsesNotifications=true
