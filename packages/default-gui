@@ -15,6 +15,7 @@ firmware-mediatek
 flatpak
 flatseal
 fwupd
+hdparm
 intel-media-va-driver-non-free
 inxi
 linux-cpupower
@@ -25,9 +26,10 @@ mesa-vulkan-drivers
 nvtop
 plymouth
 plymouth-label
+rfkill
 smartmontools
-thermald
-tlp
+tuned
+tuned-ppd
 wireless-regdb
 
 # multimedia
