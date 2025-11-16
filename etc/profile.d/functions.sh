@@ -135,9 +135,10 @@ function rg.edit {
   if [ "$files" ]; then
     local pattern=${1//\\b/}
     sensible-vim \
-      "+silent! bdelete 1" \
-      "+silent! /\\v$pattern" \
-      "+copen" \
+      -c "silent! bdelete 1" \
+      -c "silent! /\\v$pattern" \
+      -c "copen" \
+      -c "for file in getqflist()->map({_,val -> bufname(val.bufnr)})->uniq() | exe 'badd ' . fnameescape(file) | endfor" \
       -q <( echo "$files" )
   else
     echo "No files found."

@@ -937,7 +937,7 @@ function run {
         case "$1" in
           apt)
             INSTALLED_PACKAGES[apt]=$(
-              dpkg --get-selections | cut -f1 | cut -d: -f1
+              dpkg --get-selections | grep '\sinstall$' | cut -f1 | cut -d: -f1
             );;
           gem)
             INSTALLED_PACKAGES[gem]=$(

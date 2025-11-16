@@ -1,4 +1,3 @@
-Defaults	secure_path="/usr/sbin:/usr/bin:/slack/dotfiles/bin"
-Defaults  insults, shell_noargs
-Defaults  !env_editor, editor = /usr/bin/vim
-Defaults  timestamp_type = global
+Defaults secure_path="/usr/sbin:/usr/bin:/slack/dotfiles/bin"
+Defaults insults, shell_noargs
+Defaults timestamp_type = global

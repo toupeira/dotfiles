@@ -1,7 +1,8 @@
 [default]
 # video
-fullscreen=yes
+vo=dmabuf-wayland,gpu-next,gpu
 hwdec=auto
+fullscreen=yes
 geometry=50%:50%
 
 # audio
