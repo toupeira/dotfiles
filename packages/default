@@ -24,6 +24,7 @@ file
 fortune-anarchism
 fortune-mod
 fortunes
+gawk
 git
 git-absorb
 git-delta
@@ -46,7 +47,6 @@ ltrace
 lynx
 mailutils
 make
-mawk
 mise
 moreutils
 ncal

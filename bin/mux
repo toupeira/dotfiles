@@ -210,7 +210,7 @@ case "$1" in
     [ "$NVIM" ] && exit
     title="$2"
 
-    echo -ne "\e]2;$title\e" >&2
+    echo -ne "\e]2;$title\007" >&2
     ;;
 
   # Create a new window

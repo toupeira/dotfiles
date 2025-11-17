@@ -1,0 +1,33 @@
+#!/bin/bash
+# Wrap commands for the Window Calls extension for GNOME Shell
+# https://github.com/ickyicky/window-calls
+
+function wincall {
+  local method="$1"
+  shift
+
+  dbus-send --session --print-reply=literal \
+    --dest=org.gnome.Shell \
+    "/org/gnome/Shell/Extensions/Windows" \
+    "org.gnome.Shell.Extensions.Windows.$method" \
+    "$@"
+}
+
+case "$1" in
+  list)
+    wincall List | jq
+    ;;
+  activate)
+    id=$( wincall List | jq "[.[] | select(.wm_class == \"$2\")] | first | .id // empty" )
+    if [ "$id" ]; then
+      wincall Activate "uint32:$id"
+    else
+      exit 1
+    fi
+    ;;
+  *)
+    echo "Usage: wincall list"
+    echo "       wincall activate <WINDOWID>"
+    exit 255
+    ;;
+esac

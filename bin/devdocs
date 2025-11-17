@@ -1,0 +1,3 @@
+#!/bin/bash
+app_id="chrome-ahiigpfcghkbjfcibpojancebdfjmoop-Default"
+wincall activate "$app_id" || gio launch ~/.local/share/applications/"$app_id.desktop"

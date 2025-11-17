@@ -75,7 +75,7 @@ case "$action" in
         done
       )
     elif pgrep -f /app/obsidian >/dev/null; then
-      files=( "$( obsidian_url )" )
+      exec wincall activate obsidian
     elif pgrep -f 'firefox -P Denteo' &>/dev/null; then
       files=( "$( obsidian_url "$NOTES/Projekte/Denteo/Inbox.md" )" )
     else

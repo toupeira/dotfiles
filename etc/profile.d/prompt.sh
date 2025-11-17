@@ -68,10 +68,12 @@ function _prompt_status {
 }
 
 function _prompt_jobs {
-  local jobs=$( jobs | grep -Fvc ']   Done ' )
+  local jobs=$( jobs | wc -l )
 
   if [ "$jobs" -gt 0 ]; then
-    printf '[%d job%s] ' "$jobs" "$( [ "$jobs" -eq 1 ] || echo -n s )"
+    echo -n "[$jobs job"
+    [ "$jobs" -eq 1 ] || echo -n "s"
+    echo -n "] "
   fi
 }
 
