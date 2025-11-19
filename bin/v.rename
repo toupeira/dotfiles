@@ -74,8 +74,8 @@ filebot \
 status="$?"
 
 if [ $status -eq 0 ] && [ "$action" != "test" ]; then
-  # update Kodi
-  curl -s --connect-timeout 1 --data-binary '{ "jsonrpc": "2.0", "method": "VideoLibrary.Scan", "id": "v.rename" }' -H 'content-type: application/json;' http://localhost:8080/jsonrpc >/dev/null
+  flatpak run --command=/app/bin/kodi-send tv.kodi.Kodi \
+    --action 'UpdateLibrary(video)'
 fi
 
 exit "$status"
