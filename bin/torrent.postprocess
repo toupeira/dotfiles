@@ -34,8 +34,8 @@ elif [ "$type" = "tv" ]; then
   size=$( du -sm "$path" | cut -f1 )
 
   if [ "$size" -lt 30 ]; then
-    curl http://localhost:9090/api/v2/torrents/delete --data "hashes=$hash&deleteFiles=true"
+    curl http://localhost:9191/api/v2/torrents/delete --data "hashes=$hash&deleteFiles=true"
   else
-    curl http://localhost:9090/api/v2/torrents/stop --data "hashes=$hash"
+    curl http://localhost:9191/api/v2/torrents/stop --data "hashes=$hash"
   fi
 fi
