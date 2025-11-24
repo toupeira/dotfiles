@@ -1,2 +1,5 @@
 [Context]
 filesystems=/slack/games/steam
+
+[System Bus Policy]
+org.freedesktop.NetworkManager=talk

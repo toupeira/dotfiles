@@ -9,6 +9,10 @@ if [ "$XDG_SESSION_TYPE" = "wayland" ]; then
 fi
 
 case "$HOSTNAME" in
+  ocelot)
+    cols=140
+    rows=60
+    ;;
   schtube)
     cols=90
     rows=36
