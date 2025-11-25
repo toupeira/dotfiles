@@ -36,13 +36,14 @@ function _prompt_dir {
   local root=$( git rev-parse --show-toplevel 2>/dev/null )
 
   if [ "$root" ]; then
-    dir="${dir#"${root%/*}"/}"
+    dir=${dir#"${root%/*}"/}
     dir=${dir/#dotfiles\/packages\/mise\/installs\/ruby\/*\/lib\/ruby\/gems\//🗃️ }
     dir=${dir/#dotfiles\/packages\/mise\/installs\//🗃️ }
     dir=${dir/#dotfiles\//📦 }
-    dir=${dir/#dotfiles/📦}
+    [ "$dir" = "dotfiles" ] && dir="📦"
+
     dir=${dir/#denteo\//🦷 }
-    dir=${dir/#denteo/🦷}
+    [ "$dir" = "denteo" ] && dir="🦷"
   elif [ "$dir" = "" ]; then
     dir="/"
   else
