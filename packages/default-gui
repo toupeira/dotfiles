@@ -23,6 +23,7 @@ lm-sensors
 mesa-utils
 mesa-va-drivers
 mesa-vulkan-drivers
+network-manager
 nvtop
 plymouth
 plymouth-label
@@ -104,3 +105,19 @@ yt-dlp
 flatpak: md.obsidian.Obsidian
 flatpak: org.gnome.Decibels
 flatpak: org.gtk.Gtk3theme.Numix
+
+-fwupd-amd64-signed
+-gimp-plugin-registry
+-gnome-session-xsession
+-gnome-screenshot
+-mousai
+-network-manager-gnome
+-peek
+-qt5-gtk-platformtheme
+-task-desktop
+-task-gnome-desktop
+-thermald
+-tlp
+-ttf-mscorefonts-installer
+-wmctrl
+-xdotool

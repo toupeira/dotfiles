@@ -86,3 +86,11 @@ wget
 whois
 zip
 zstd
+
+-chafa
+-imagemagick
+-lnav
+-locales-all
+-mawk
+-s-tui
+-task-english

@@ -60,7 +60,7 @@ function msg {
     local echo_options=( "$@" )
   fi
 
-  if [ -n "$message" ]; then
+  if [ "$message" ]; then
     echo -e "${echo_options[@]}" " \e[0;3${color}m$icon\e[0m $message\e[0m" \
       | sed -re 's/\{\{/\o033[1m/g' \
              -e 's/\}\}/\o033[22m/g'
@@ -82,7 +82,7 @@ function error   { msg "\e[0;33m$1" 1 >&2; STATUS=1; }
 
 # Output error message and exit
 function abort {
-  [ -n "$1" ] && error "$@"
+  [ "$1" ] && error "$@"
   exit 1
 }
 
@@ -102,7 +102,7 @@ function ask-yes {
 
 # Ask to continue or abort
 function ask-abort {
-  [ -n "$1" ] && error "$@"
+  [ "$1" ] && error "$@"
   if ! ask "{{Do you want to continue?}}" 1; then
     abort
   fi
@@ -189,7 +189,7 @@ function has-news {
 
 # Run a command in a tmux pane if possible
 function mux-wrap {
-  if [ -n "$TMUX" ]; then
+  if [ "$TMUX" ]; then
     system mux -s -d "$@"
   else
     system "$@"
@@ -762,11 +762,13 @@ function run {
         packages=$( echo "$packages"; grep -E "$filter" "$path-gui" )
       fi
 
-      if [ -n "$packages" ]; then
+      if [ "$packages" ]; then
         status "Installing {{$list}} packages..."
       fi
 
-      function get-packages { echo "$packages" | grep -E "$1" | sed 's/.*: //' | sort; }
+      function get-packages {
+        echo "$packages" | grep -E "$1" | sed 's/.*: //' | sort
+      }
 
       local packages_apt=$(  get-packages "^[^:#]+$" )
       local packages_gem=$(  get-packages '^gem:' )
@@ -777,24 +779,32 @@ function run {
         if [ "$force" ]; then
           echo "$1" | sort
         elif [ "$1" ]; then
-          comm -23 <( echo "$1" ) <( echo "$2" | sort );
+          comm -23 <( echo "$1" ) <( echo "$2" );
         fi
       }
 
-      [ -n "$packages_apt" ] && local missing_apt=$(
-        get-missing "$packages_apt" "$( run list apt )"
-      )
-      [ -n "$packages_flat" ] && has flatpak && local missing_flat=$(
+      if [ "$packages_apt" ]; then
+        local list_apt=$( run list apt )
+        local missing_apt=$(
+          get-missing "$( echo "$packages_apt" | grep -v '^-' )" "$list_apt";
+          comm -12 \
+            <( echo "$list_apt ") \
+            <( echo "$packages_apt" | grep '^-' | cut -d- -f2- ) \
+            | sed 's/$/_/'
+        )
+      fi
+
+      [ "$packages_flat" ] && has flatpak && local missing_flat=$(
         get-missing "$packages_flat" "$( run list flatpak )"
       )
-      [ -n "$packages_gem" ] && has ruby && local missing_gem=$(
+      [ "$packages_gem" ] && has ruby && local missing_gem=$(
         get-missing "$packages_gem" "$( run list gem )"
       )
       [ "$list" = "default" ] && has mise && local missing_mise=$(
         mise ls --missing --no-header | awk '{ print $1 }'
       )
 
-      if [ -z "$missing_apt"  ] &&
+      if [ -z "$missing_apt"  ] && \
          [ -z "$missing_gem"  ] && \
          [ -z "$missing_flat" ] && \
          [ -z "$missing_mise" ]; then
@@ -802,17 +812,18 @@ function run {
       fi
 
       function list-packages {
-        [ -n "$2" ] || return
+        [ "$2" ] || return
         for package in $2; do
           indent 2
           info "[$1] {{$package}}"
         done
       }
 
-      list-packages apt     "$missing_apt"
-      list-packages gem     "$missing_gem"
-      list-packages flatpak "$missing_flat"
-      list-packages mise    "$missing_mise"
+      list-packages apt       "$( echo "$missing_apt" | grep -v '_$' )"
+      list-packages apt:purge "$( echo "$missing_apt" | grep '_$' | sed 's/_$//' )"
+      list-packages gem       "$missing_gem"
+      list-packages flatpak   "$missing_flat"
+      list-packages mise      "$missing_mise"
       echo
 
       # Install the packages
@@ -821,7 +832,7 @@ function run {
           local type=$1
           shift
 
-          [ -n "$1" ] || return
+          [ "$1" ] || return
           mapfile -t packages <<< "$1"
           shift
 
@@ -845,7 +856,7 @@ function run {
         local command="$( basename "$0" ) update-$type"
         shift
 
-        if [ -n "$filter" ] && [ "$filter" != "$type" ]; then
+        if [ "$filter" ] && [ "$filter" != "$type" ]; then
           return
         elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
           mux-wrap -w -t "update-packages [$type]" "$command"
@@ -940,23 +951,23 @@ function run {
         case "$1" in
           apt)
             INSTALLED_PACKAGES[apt]=$(
-              dpkg --get-selections | grep '\sinstall$' | cut -f1 | cut -d: -f1
+              dpkg --get-selections | grep '\sinstall$' | cut -f1 | cut -d: -f1 | sort
             );;
           gem)
             INSTALLED_PACKAGES[gem]=$(
-              gem list --no-versions
+              gem list --no-versions | sort
             );;
           flatpak)
             INSTALLED_PACKAGES[flatpak]=$(
-              flatpak list --columns=application | tail -n +1
+              flatpak list --columns=application | tail -n +1 | sort
             );;
           lazy)
             INSTALLED_PACKAGES[lazy]=$(
-              find "$DOTFILES/packages/lazy" -mindepth 1 -maxdepth 1 -type d -printf '%P\n'
+              find "$DOTFILES/packages/lazy" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort
             );;
           mise)
             INSTALLED_PACKAGES[mise]=$(
-              find "$DOTFILES/packages/mise/installs" -mindepth 1 -maxdepth 1 -type d -printf '%P\n'
+              find "$DOTFILES/packages/mise/installs" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort
             );;
           *)
             usage
@@ -991,7 +1002,7 @@ function run {
         exit
       fi
 
-      if [ -n "$1" ]; then
+      if [ "$1" ]; then
         local paths=( "$@" )
       else
         local paths=( "$DOTFILES"/dconf/*.ini )

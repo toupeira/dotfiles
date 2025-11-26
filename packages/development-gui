@@ -1,1 +1,6 @@
 flatpak: org.godotengine.Godot
+
+-gfortran
+-libopenblas-dev
+-sqlitebrowser
+-zeal
