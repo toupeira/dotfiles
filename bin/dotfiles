@@ -324,7 +324,10 @@ function run {
       run link-dotfiles "$@"
       run link-slack
       run packages
-      has-gui && run dconf sync
+
+      if has-gui; then
+        run dconf sync
+      fi
       ;;
     # }}}
     link-dotfiles) # {{{

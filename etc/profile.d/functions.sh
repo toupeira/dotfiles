@@ -218,17 +218,12 @@ function src_alias {
   shift 2
 
   if [ -d "$project" ]; then
-    local project_path="$project"
-  else
-    local project_path="$( command src --path )/$project"
-  fi
-
-  if [ -d "$project_path" ]; then
     local space=''
     [ $# -gt 0 ] && space=' '
     alias $alias="src $project$space$*"
     __git_complete "$alias" _src_alias
   else
+    echo "$project: Path not found"
     return 1
   fi
 }
