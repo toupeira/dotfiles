@@ -43,6 +43,7 @@ return {
       { 'on', 'off' },
       { 'open', 'close' },
       { 'plus', 'minus' },
+      { 'prefix', 'suffix' },
       { 'public', 'private' },
       { 'read', 'write' },
       { 'show', 'hide' },
