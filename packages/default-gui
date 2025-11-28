@@ -15,6 +15,7 @@ firmware-mediatek
 flatpak
 flatseal
 fwupd
+fwupd-amd64-signed
 hdparm
 intel-media-va-driver-non-free
 inxi
@@ -28,10 +29,12 @@ nvtop
 plymouth
 plymouth-label
 rfkill
+shim-signed
 smartmontools
+systemd-boot
+systemd-boot-efi-amd64-signed
 tuned
 tuned-ppd
-wireless-regdb
 
 # multimedia
 alsa-utils
@@ -106,10 +109,11 @@ flatpak: md.obsidian.Obsidian
 flatpak: org.gnome.Decibels
 flatpak: org.gtk.Gtk3theme.Numix
 
--fwupd-amd64-signed
+-cabextract
 -gimp-plugin-registry
 -gnome-session-xsession
 -gnome-screenshot
+-gnome-terminal
 -mousai
 -network-manager-gnome
 -peek
@@ -118,6 +122,7 @@ flatpak: org.gtk.Gtk3theme.Numix
 -task-gnome-desktop
 -thermald
 -tlp
+-ttf-bitstream-vera
 -ttf-mscorefonts-installer
 -wmctrl
 -xdotool

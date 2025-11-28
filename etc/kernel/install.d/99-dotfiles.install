@@ -1,0 +1,21 @@
+#!/bin/bash
+
+cmdline=$( grep -o 'root=[^ ]*' /proc/cmdline )
+cmdline="$cmdline ro quiet noresume splash threadirqs preempt=full"
+
+if grep -Fq GenuineIntel /proc/cpuinfo; then
+  cmdline="$cmdline intel_pstate=enable"
+elif grep -Fq AuthenticAMD /proc/cpuinfo; then
+  cmdline="$cmdline amd_pstate=active"
+fi
+
+case "$( hostname -s )" in
+  meerkat)
+    cmdline="$cmdline nosgx"
+    ;;
+  schtube)
+    cmdline="$cmdline nosgx video=1920x1080M@120"
+    ;;
+esac
+
+echo "$cmdline" > /etc/kernel/cmdline
