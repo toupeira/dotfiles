@@ -11,8 +11,7 @@ function has_completion {
   local name="${2:-_$1}"
 
   type -p "$name" && return
-  _completion_loader "$1"
-  type -p "$name"
+  _comp_load "$1"
 }
 
 # Custom completions

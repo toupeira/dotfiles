@@ -17,6 +17,7 @@ shopt -s globstar
 shopt -s histappend
 shopt -s histverify
 shopt -s nocaseglob
+shopt -s progcomp_alias
 
 # Disable flow control (Ctrl-S/Q)
 [ -t 1 ] && stty -ixon

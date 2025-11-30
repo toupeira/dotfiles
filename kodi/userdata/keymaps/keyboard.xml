@@ -52,6 +52,7 @@
       <m>Menu</m>
       <n mod="ctrl">ActivateWindow(PlayerControls)</n>
       <s>ActivateWindow(ShutdownMenu)</s>
+      <s mod="alt">ActivateWindow(Settings)</s>
       <escape>PreviousMenu</escape>
       <escape mod="longpress">Back</escape>
       <i>Info</i>
@@ -154,15 +155,15 @@
       <f10>noop</f10>                     <!-- MCE Vol up --><!-- disabled -->
       <f9>noop</f9>                       <!-- MCE Vol down --><!-- disabled -->
       <f8>noop</f8>                       <!-- MCE mute --><!-- disabled -->
-      <g mod="ctrl">noop</g>  <!-- MCE Guide --><!-- disabled -->
-      <!-- <m mod="ctrl">noop</m>    <!-1- MCE My music -1-><!-1- disabled -1-> -->
-      <i mod="ctrl">noop</i> <!-- MCE My pictures --><!-- disabled -->
-      <e mod="ctrl">noop</e>    <!-- MCE videos --><!-- disabled -->
-      <m mod="ctrl,shift">noop</m>         <!-- MCE DVD menu --><!-- disabled -->
-      <o mod="ctrl">noop</o>  <!-- MCE Recorded TV --><!-- disabled -->
-      <t mod="ctrl">noop</t>  <!-- MCE Live TV  --><!-- disabled -->
-      <t mod="ctrl,shift">noop</t>  <!-- MCE TV --><!-- disabled -->
-      <a mod="ctrl">noop</a>  <!-- MCE Radio --><!-- disabled -->
+      <g mod="ctrl">noop</g>              <!-- MCE Guide --><!-- disabled -->
+      <m mod="ctrl">noop</m>              <!-1- MCE My music -1-><!-1- disabled -1-> -->
+      <i mod="ctrl">noop</i>              <!-- MCE My pictures --><!-- disabled -->
+      <e mod="ctrl">noop</e>              <!-- MCE videos --><!-- disabled -->
+      <m mod="ctrl,shift">noop</m>        <!-- MCE DVD menu --><!-- disabled -->
+      <o mod="ctrl">noop</o>              <!-- MCE Recorded TV --><!-- disabled -->
+      <t mod="ctrl">noop</t>              <!-- MCE Live TV  --><!-- disabled -->
+      <t mod="ctrl,shift">noop</t>        <!-- MCE TV --><!-- disabled -->
+      <a mod="ctrl">noop</a>              <!-- MCE Radio --><!-- disabled -->
       <!-- MCE keypresses without an obvious use in Kodi -->
       <u mod="ctrl">Notification(MCEKeypress, DVD subtitle, 3)</u>
       <a mod="ctrl,shift">Notification(MCEKeypress, DVD audio, 3)</a>
@@ -251,10 +252,7 @@
       <e>PreviousMenu</e>
       <t>ShowTimerRule</t>
       <epg>PreviousMenu</epg>
-      <g>PreviousMenu</g><!-- changed -->
-      <backspace>PreviousMenu</backspace><!-- added -->
-      <opensquarebracket>PreviousChannelGroup</opensquarebracket><!-- added -->
-      <closesquarebracket>NextChannelGroup</closesquarebracket><!-- added -->
+      <g>NextChannelGroup</g>
       <n>ActivateWindow(PVRGuideControls)</n>
       <backspace mod="longpress">Number0</backspace> <!-- 0 key goes to "now" on EPG timeline -->
       <browser_back mod="longpress">Number0</browser_back> <!-- 0 key goes to "now" on EPG timeline -->
@@ -375,7 +373,7 @@
       <zoom>AspectRatio</zoom>
       <t>ShowSubtitles</t>
       <t mod="ctrl">noop</t><!-- disabled -->
-      <l>NextSubtitle</l>
+      <l>DialogSelectSubtitle</l>
       <left>Seek(-5)</left><!-- changed -->
       <right>Seek(5)</right><!-- changed -->
       <up>StepForward</up><!-- changed -->
@@ -385,11 +383,11 @@
       <lessthan>PlayerControl(tempodown)</lessthan><!-- changed -->
       <greaterthan>PlayerControl(tempoup)</greaterthan><!-- changed -->
       <a>AudioDelay</a>
-      <a mod="ctrl">AudioNextLanguage</a>
+      <a mod="ctrl">DialogSelectAudio</a>
       <escape>Fullscreen</escape>
       <c>Playlist</c>
       <v>ActivateWindow(Teletext)</v>
-      <v mod="ctrl">VideoNextStream</v>
+      <v mod="ctrl">DialogSelectVideo</v>
       <text>ActivateWindow(Teletext)</text>
       <up mod="ctrl">SubtitleShiftUp</up>
       <down mod="ctrl">SubtitleShiftDown</down>
@@ -428,6 +426,16 @@
       <menu>OSD</menu>
     </keyboard>
   </GameOSD>
+  <GameSaves>
+    <keyboard>
+      <delete>delete</delete>
+    </keyboard>
+  </GameSaves>
+  <InGameSaves>
+    <keyboard>
+      <delete>delete</delete>
+    </keyboard>
+  </InGameSaves>
   <VideoTimeSeek>
     <keyboard>
       <return>Select</return>
@@ -583,7 +591,7 @@
       <z>AspectRatio</z>
       <zoom>AspectRatio</zoom>
       <t>ShowSubtitles</t>
-      <l>NextSubtitle</l>
+      <l>DialogSelectSubtitle</l>
       <a>AudioDelay</a>
       <escape>Fullscreen</escape>
       <return>Select</return>
@@ -672,15 +680,6 @@
       <blue>Blue</blue>
     </keyboard>
   </Teletext>
-  <Favourites>
-    <keyboard>
-      <backspace>Close</backspace>
-      <browser_back>Close</browser_back>
-      <u>MoveItemUp</u>
-      <d>MoveItemDown</d>
-      <backspace mod="longpress">ActivateWindow(Home)</backspace>
-    </keyboard>
-  </Favourites>
   <FavouritesBrowser>
     <keyboard>
       <u>MoveItemUp</u>
@@ -703,7 +702,7 @@
       <down>Down</down>
       <return>OSD</return>
       <enter>OSD</enter>
-      <g>ActivateWindow(TVGuide)</g><!-- added -->
+      <g>ActivateWindow(PVRChannelGuide)</g>
       <c>ActivateWindow(PVROSDChannels)</c>
       <return mod="longpress">ActivateWindow(PVROSDChannels)</return>
       <enter mod="longpress">ActivateWindow(PVROSDChannels)</enter>
@@ -766,9 +765,6 @@
       <backspace>Close</backspace>
       <escape>Close</escape>
       <browser_back>Close</browser_back>
-      <c>Close</c><!-- added -->
-      <opensquarebracket>PreviousChannelGroup</opensquarebracket><!-- added -->
-      <closesquarebracket>NextChannelGroup</closesquarebracket><!-- added -->
     </keyboard>
   </PVROSDChannels>
   <PVRChannelGuide>
