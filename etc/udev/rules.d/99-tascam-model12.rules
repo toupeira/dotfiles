@@ -1,1 +1,0 @@
-SUBSYSTEM=="sound", ATTRS{idVendor}=="0644", ATTRS{idProduct}=="805f", ENV{PULSE_PROFILE_SET}="tascam-model12-profile.conf"
