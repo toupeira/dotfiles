@@ -55,12 +55,13 @@ user_pref("privacy.trackingprotection.enabled", true);
 user_pref("signon.firefoxRelay.feature", "disabled");
 user_pref("signon.rememberSignons", false);
 
-// Enable telemetry
+// Enable some telemetry
 user_pref("browser.crashReports.unsubmittedCheck.autoSubmit2", true);
 user_pref("browser.tabs.crashReporting.sendReport", true);
 user_pref("datareporting.healthreport.uploadEnabled", true);
 user_pref("datareporting.usage.uploadEnabled", true);
 user_pref("datareporting.policy.dataSubmissionEnabled", true);
+user_pref("toolkit.telemetry.enabled", false)
 
 // Tracking Protection whitelist
 user_pref("urlclassifier.trackingSkipURLs", "disqus.com, c.disquscdn.com, cdmu.disqus.com");
@@ -143,8 +144,14 @@ user_pref("browser.warnOnQuit", true);
 user_pref("browser.warnOnQuitShortcut", true);
 
 // Disable AI features
-user_pref("browser.ml.enable", false);
 user_pref("browser.ml.chat.enabled", false);
 user_pref("browser.ml.chat.menu", false);
+user_pref("browser.ml.chat.page", false);
+user_pref("browser.ml.chat.sidebar", false);
+user_pref("browser.ml.enable", false);
+user_pref("browser.ml.linkPreview.enabled", false);
 user_pref("browser.tabs.groups.smart.enabled", false);
+user_pref("browser.tabs.groups.smart.userEnabled", false);
 user_pref("extensions.ml.enabled", false);
+user_pref("pdfjs.enableAltTextModelDownload", false);
+user_pref("pdfjs.enableGuessAltText", false);
