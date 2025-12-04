@@ -2,6 +2,7 @@
 # video
 vo=gpu-next,gpu
 hwdec=auto
+target-colorspace-hint=auto
 fullscreen=yes
 geometry=50%:50%
 

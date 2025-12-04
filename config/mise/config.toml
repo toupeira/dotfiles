@@ -2,7 +2,7 @@
 difftastic = { version = "0.67.0", exe = "difft" }
 fzf = "0.67.0"
 neovim = "0.11.5"
-usage = "2.8.0"
+usage = "2.9.0"
 
 [settings]
 auto_install = false
