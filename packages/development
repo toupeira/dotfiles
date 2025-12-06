@@ -27,6 +27,7 @@ python3-all-venv
 python-dev-is-python3
 python-is-python3
 -ipython3
+-python3-ipython
 
 # lua
 luarocks

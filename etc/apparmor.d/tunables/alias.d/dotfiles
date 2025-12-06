@@ -1,0 +1,23 @@
+# aliases don't work with variables:
+# https://gitlab.com/apparmor/apparmor/-/issues/544
+#
+# the aliases still match if the variables are expanded manually,
+# but glob patterns at the beginning of a path break the parser.
+#
+# so instead add the aliases on other paths which are allowed
+# in the default profiles, as a proxy to the real paths
+
+# @{HOME}/.local/share/applications/{,*.desktop}
+alias /usr/share/fonts/ -> /slack/dotfiles/local/share/applications/,
+
+# @{HOME}/.config/mimeapps.list
+alias /etc/xdg/{,*-}mimeapps.list -> /slack/dotfiles/etc/xdg/mimeapps.list,
+
+# @{HOME}/.local/share/fonts
+alias /usr/share/fonts/ -> /slack/scrapbook/config/fonts/,
+# @{HOME}/.config/fontconfig/
+alias /usr/share/fonts/ -> /slack/dotfiles/config/fontconfig/,
+
+# @{HOME}/.config/gtk-{3,4}.0/
+alias /etc/gtk/ -> /slack/dotfiles/config/gtk-3.0/,
+alias /etc/gtk/ -> /slack/dotfiles/config/gtk-4.0/,

@@ -109,15 +109,33 @@ flatpak: md.obsidian.Obsidian
 flatpak: org.gnome.Decibels
 flatpak: org.gtk.Gtk3theme.Numix
 
+-at-spi2-core
+-at-spi2-common
+-bluez-obexd
 -cabextract
+-evolution-data-server
+-evolution-data-server-common
 -gimp-plugin-registry
--gnome-session-xsession
+-gnome-bluetooth-sendto
+-gnome-calendar
+-gnome-contacts
+-gnome-online-accounts
+-gnome-online-miners
 -gnome-screenshot
+-gnome-session-xsession
+-gnome-shell-extensions
+-gnome-software
 -gnome-terminal
+-gnome-user-share
+-gstreamer1.0-packagekit
+-orca
+-malcontent
+-malcontent-gui
 -mousai
 -network-manager-gnome
 -peek
 -qt5-gtk-platformtheme
+-simple-scan
 -task-desktop
 -task-gnome-desktop
 -thermald

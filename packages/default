@@ -76,7 +76,6 @@ systemd-cron
 systemd-sysv
 systemd-timesyncd
 tcpdump
-tig
 tmux
 tree
 unattended-upgrades
@@ -88,9 +87,12 @@ zip
 zstd
 
 -chafa
+-eatmydata
 -imagemagick
+-info
 -lnav
 -locales-all
 -mawk
 -s-tui
 -task-english
+-tig

@@ -5,14 +5,14 @@ Standards-Version: 3.9.2
 Package: gnome-core-shim
 Version: 1:99.0
 Provides: at-spi2-core (= 1:99),
+          at-spi2-common (= 1:99),
           evolution-data-server (= 1:99),
           evolution-data-server-common (= 1:99),
+          gnome-bluetooth-sendto (= 1:99),
+          gnome-calendar (= 1:99),
           gnome-contacts (= 1:99),
           gnome-online-accounts (= 1:99),
-          gnome-online-miners (= 1:99),
-          gnome-shell-extensions (= 1:99),
           gnome-software (= 1:99),
-          gnome-user-share (= 1:99),
           gstreamer1.0-packagekit (= 1:99),
           orca (= 1:99),
           simple-scan (= 1:99)

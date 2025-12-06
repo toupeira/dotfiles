@@ -73,9 +73,9 @@ filebot \
   "${args[@]}"
 status="$?"
 
-if [ $status -eq 0 ] && [ "$action" != "test" ]; then
+if [ $status -eq 0 ] && [ "$action" != "test" ] && pgrep -x kodi >/dev/null; then
   flatpak run --command=/app/bin/kodi-send tv.kodi.Kodi \
-    --action 'UpdateLibrary(video)'
+    --action 'UpdateLibrary(video)' >/dev/null
 fi
 
 exit "$status"

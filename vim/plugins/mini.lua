@@ -19,12 +19,6 @@ return {
       end, { buffer = event.buf, nowait = true, force = true })
     end)
     -- }}}
-    -- mini.hipatterns {{{
-    util.autocmd('FileType', function(args)
-      local filetype = vim.bo[args.buf].filetype
-      vim.b[args.buf].minihipatterns_disable = filetype ~= 'markdown'
-    end)
-    -- }}}
     -- mini.icons {{{
     require('mini.icons').setup({
       filetype = {
@@ -343,20 +337,7 @@ return {
     })
     -- }}}
     -- mini.hipatterns {{{
-    local hipatterns = require('mini.hipatterns')
-    hipatterns.setup({
-      highlighters = {
-        tags = {
-          pattern = '%s#%a+[%a%d_/-]*[%a%d]+',
-          group = '@markup.math',
-        },
-
-        tags_start_of_line = {
-          pattern = '^#%a+[%a%d_/-]*[%a%d]+',
-          group = '@markup.math',
-        },
-      },
-    })
+    require('mini.hipatterns').setup()
     -- }}}
     -- mini.jump {{{
     require('mini.jump').setup()

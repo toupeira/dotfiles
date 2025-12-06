@@ -951,7 +951,7 @@ function run {
         case "$1" in
           apt)
             INSTALLED_PACKAGES[apt]=$(
-              dpkg --get-selections | grep '\sinstall$' | cut -f1 | cut -d: -f1 | sort
+              dpkg-query -W -f '${Package}\t${Status}\n' | grep ' installed$' | cut -f1 | sort
             );;
           gem)
             INSTALLED_PACKAGES[gem]=$(
