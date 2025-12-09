@@ -1,5 +1,4 @@
 7zip
-apt-file
 apt-listchanges
 bash-completion
 bat
@@ -86,6 +85,7 @@ whois
 zip
 zstd
 
+-apt-file
 -chafa
 -eatmydata
 -imagemagick

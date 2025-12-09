@@ -26,8 +26,6 @@ if [ "$XDG_SESSION_TYPE" = "wayland" ] && [ ! "$QT_SCALE_FACTOR" ]; then
   QT_SCALE_FACTOR=${QT_SCALE_FACTOR:-1}
 fi
 
-export CALIBRE_USE_DARK_PALETTE=1
-
 # initialize mise
 if [ "$HOSTNAME" != "snafu" ]; then
   export MISE_ENV='development'
