@@ -1,47 +1,53 @@
 #!/bin/bash
 # shellcheck disable=SC2034
 
-export FZF_DEFAULT_COMMAND="fdfind --hidden --exclude .git --color always --max-results 99999"
+export FZF_DEFAULT_COMMAND="\
+fdfind \
+  --hidden \
+  --exclude .git \
+  --color always \
+  --max-results 99999 \
+"
 
-export FZF_DEFAULT_OPTS="
-  --ansi
-  --list-border
-  --cycle
-  --filepath-word
-  --highlight-line
-  --history '$HOME/.local/state/history/fzf'
-  --info inline-right
-  --layout default
-  --no-height
-  --gutter ' '
-  --gutter-raw ' '
-  --prompt '» '
-  --preview-window 'right,50%,hidden,<60(up,60%,hidden)'
-  --preview-label ' Preview '
-
-  --color dark
-  --color bg:#11131a
-  --color border:#2f3347
-  --color prompt:#82b1ff
-  --color header:#82b1ff
-  --color label:#82b1ff:bold
-  --color preview-label:#c3e88d
-  --color info:240
-  --color hl:#d7ffaf:bold
-  --color hl+:#ecffd9
-
-  --bind alt-a:toggle-all
-  --bind ctrl-n:down
-  --bind ctrl-p:up
-  --bind ctrl-f:page-down
-  --bind ctrl-b:page-up
-  --bind down:next-history
-  --bind up:previous-history
-  --bind ctrl-/:toggle-preview
-  --bind alt-e:preview-down
-  --bind alt-y:preview-up
-  --bind alt-f:preview-half-page-down
-  --bind alt-b:preview-half-page-up
+export FZF_DEFAULT_OPTS="\
+  --ansi \
+  --list-border \
+  --cycle \
+  --filepath-word \
+  --highlight-line \
+  --history '$HOME/.local/state/history/fzf' \
+  --info inline-right \
+  --layout default \
+  --no-height \
+  --gutter ' ' \
+  --gutter-raw ' ' \
+  --prompt '» ' \
+  --preview-window 'right,50%,hidden,<60(up,60%,hidden)' \
+  --preview-label ' Preview ' \
+\
+  --color dark \
+  --color bg:#11131a \
+  --color border:#2f3347 \
+  --color prompt:#82b1ff \
+  --color header:#82b1ff \
+  --color label:#82b1ff:bold \
+  --color preview-label:#c3e88d \
+  --color info:240 \
+  --color hl:#d7ffaf:bold \
+  --color hl+:#ecffd9 \
+\
+  --bind alt-a:toggle-all \
+  --bind ctrl-n:down \
+  --bind ctrl-p:up \
+  --bind ctrl-f:page-down \
+  --bind ctrl-b:page-up \
+  --bind down:next-history \
+  --bind up:previous-history \
+  --bind ctrl-/:toggle-preview \
+  --bind alt-e:preview-down \
+  --bind alt-y:preview-up \
+  --bind alt-f:preview-half-page-down \
+  --bind alt-b:preview-half-page-up \
 "
 
 [ "$BASH_INTERACTIVE" ] || return

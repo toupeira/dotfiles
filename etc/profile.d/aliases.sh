@@ -47,7 +47,9 @@ alias cal='ncal'
 
 # system administration
 alias sctl='systemctl'
+alias sctl.user='systemctl --user'
 alias jctl='journalctl'
+alias jctl.user='journalctl --user'
 alias pstree='pstree -GUh'
 alias ftrace='strace -fe trace=file'
 alias ptrace='strace -fe trace=process'

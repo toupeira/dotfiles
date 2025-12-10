@@ -1,4 +1,4 @@
 [Desktop Entry]
 Name=setup-peripherals
-Exec=setup-peripherals
+Exec=/slack/dotfiles/bin/setup-peripherals
 Type=Application

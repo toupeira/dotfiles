@@ -20,8 +20,8 @@ complete -F _command spring
 complete -F _command pw-jack
 
 has_completion pgrep _comp_cmd_pgrep && complete -F _comp_cmd_pgrep psgrep pskill
-has_completion systemctl && complete -F _systemctl sctl
-has_completion journalctl && complete -F _journalctl jctl
+has_completion systemctl && complete -F _systemctl sctl sctl.user
+has_completion journalctl && complete -F _journalctl jctl jctl.user
 
 # git completions
 if has_completion git __git_main; then

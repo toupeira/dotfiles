@@ -101,7 +101,6 @@ mpv
 quodlibet
 scummvm
 shotwell
-syncthing-gtk
 yt-dlp
 
 flatpak: io.missioncenter.MissionCenter
@@ -137,6 +136,7 @@ flatpak: org.gtk.Gtk3theme.Numix
 -peek
 -qt5-gtk-platformtheme
 -simple-scan
+-syncthing-gtk
 -task-desktop
 -task-gnome-desktop
 -thermald
