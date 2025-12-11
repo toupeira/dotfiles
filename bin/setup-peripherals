@@ -1,8 +1,5 @@
 #!/bin/bash
 
-# Work around https://bugs.debian.org/cgi-bin/bugreport.cgi?bug=1121628
-systemctl --user start gnome-session-x11-services-ready.target
-
 function get {
   pactl list short "$1s" | grep -Fv .monitor | awk "/$2/ { print \$2 }" | head -1
 }

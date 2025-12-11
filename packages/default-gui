@@ -108,8 +108,9 @@ flatpak: md.obsidian.Obsidian
 flatpak: org.gnome.Decibels
 flatpak: org.gtk.Gtk3theme.Numix
 
--at-spi2-core
+-alsa-ucm-conf
 -at-spi2-common
+-at-spi2-core
 -bluez-obexd
 -cabextract
 -calibre
@@ -128,11 +129,11 @@ flatpak: org.gtk.Gtk3theme.Numix
 -gnome-terminal
 -gnome-user-share
 -gstreamer1.0-packagekit
--orca
 -malcontent
 -malcontent-gui
 -mousai
 -network-manager-gnome
+-orca
 -peek
 -qt5-gtk-platformtheme
 -simple-scan

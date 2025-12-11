@@ -1,3 +1,5 @@
+// vim: ft=aptconf
+//
 // Unattended-Upgrade::Origins-Pattern controls which packages are
 // upgraded.
 //
@@ -38,8 +40,8 @@ Unattended-Upgrade::Origins-Pattern {
         // migration to the specified archive (e.g. testing becomes the
         // new stable).
 //      "o=Debian,a=stable";
-        "o=Debian,a=unstable,l=Debian";
-        "o=liquorix,a=unstable,l=kernel";
+        "o=Debian,a=unstable";
+        "o=mise,a=stable";
 //      "o=Debian,a=stable-updates";
 //      "o=Debian,a=proposed-updates";
 //      "o=Debian Backports,a=stable-backports,l=Debian Backports";
@@ -47,6 +49,8 @@ Unattended-Upgrade::Origins-Pattern {
 
 // Python regular expressions, matching packages to exclude from upgrading
 Unattended-Upgrade::Package-Blacklist {
+    "gnome-";
+
     // The following matches all packages starting with linux-
 //  "linux-";
 
