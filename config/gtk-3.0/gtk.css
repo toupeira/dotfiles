@@ -1,3 +1,6 @@
+@define-color accent_color #f0544c;
+@define-color accent_bg_color #f0544c;
+
 scrollbar slider {
   padding: 3px;
 }

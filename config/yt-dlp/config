@@ -1,4 +1,4 @@
 --audio-quality 0
---format-sort "res:1080"
+--format-sort "res:1080,vcodec:vp9.2,vcodec:vp9,vcodec:h265,vcodec:h264"
 --embed-subs
 --sub-langs 'en.*'
