@@ -30,7 +30,6 @@ git-extras
 gnupg
 gocryptfs
 graphicsmagick
-httpie
 inetutils-telnet
 iotop
 iproute2
@@ -88,6 +87,7 @@ zstd
 -apt-file
 -chafa
 -eatmydata
+-httpie
 -imagemagick
 -info
 -lnav
