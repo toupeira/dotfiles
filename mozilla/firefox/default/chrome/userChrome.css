@@ -1,6 +1,5 @@
 /* Remove tab context menu items */
 menuitem#context_openANewTab,
-menuitem#context_ungroupTab + menuseparator,
 menuitem#context_bookmarkTab,
 menuitem#context_bookmarkSelectedTabs,
 menuitem#context_duplicateTab,
@@ -34,7 +33,7 @@ menuseparator#context-sep-setbackground
   --tab-icon-end-margin: 5.5px !important;
 }
 
-/* Hide the "New" label on "Search Image with Google Lens" */
-#context-visual-search::after {
+/* Hide the "New" label on "Add Split View" */
+#context_moveTabToSplitView::after {
   display: none !important;
 }

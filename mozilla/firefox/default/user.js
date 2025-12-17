@@ -73,6 +73,7 @@ user_pref("browser.tabs.groups.enabled", false);
 user_pref("browser.tabs.hoverPreview.enabled", true);
 user_pref("browser.tabs.hoverPreview.showThumbnails", false);
 user_pref("browser.tabs.loadBookmarksInBackground", true);
+user_pref("browser.tabs.splitView.enabled", true);
 
 // Scrolling
 user_pref("general.smoothScroll.lines.durationMaxMS", 100);
