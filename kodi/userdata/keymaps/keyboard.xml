@@ -382,12 +382,12 @@
       <down mod="longpress">NextSubtitle</down>
       <lessthan>PlayerControl(tempodown)</lessthan><!-- changed -->
       <greaterthan>PlayerControl(tempoup)</greaterthan><!-- changed -->
-      <a>AudioDelay</a>
-      <a mod="ctrl">DialogSelectAudio</a>
+      <a mod="ctrl">AudioDelay</a><!-- changed -->
+      <a>DialogSelectAudio</a><!-- changed -->
       <escape>Fullscreen</escape>
       <c>Playlist</c>
-      <v>ActivateWindow(Teletext)</v>
-      <v mod="ctrl">DialogSelectVideo</v>
+      <v mod="ctrl">ActivateWindow(Teletext)</v><!-- changed -->
+      <v>DialogSelectVideo</v><!-- changed -->
       <text>ActivateWindow(Teletext)</text>
       <up mod="ctrl">SubtitleShiftUp</up>
       <down mod="ctrl">SubtitleShiftDown</down>
@@ -592,7 +592,7 @@
       <zoom>AspectRatio</zoom>
       <t>ShowSubtitles</t>
       <l>DialogSelectSubtitle</l>
-      <a>AudioDelay</a>
+      <a mod="ctrl">AudioDelay</a><!-- changed -->
       <escape>Fullscreen</escape>
       <return>Select</return>
       <enter>Select</enter>      <!-- backspace>Fullscreen</backspace -->

@@ -32,7 +32,7 @@ return {
   },
 
   keys = {
-    { '<Leader>LS', '<Cmd>LspStart<CR>', 'Start LSP server' },
+    { '<Leader>LS', '<Cmd>LspStart<CR>', desc = 'Start LSP server' },
     { '<Leader>%', '<Cmd>checkhealth lsp<CR>', desc = 'Show LSP status' },
   },
 

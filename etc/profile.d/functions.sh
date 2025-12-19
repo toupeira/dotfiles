@@ -91,6 +91,17 @@ function login_banner {
   fi
 }
 
+# Show size of installed packages
+function pkgsize {
+  dpkg-query -Wf '${Installed-Size}\t\t${Package}\n' \
+    | sort -n \
+    | awk '
+        BEGIN { size = 0 };
+        { size += $1; print };
+        END { print size "\t\ttotal" }' \
+    | numfmt --from-unit=1024 --to=iec
+}
+
 # Move a file or directory and replace it by a symlink to the new location
 function mvln {
   if [ "$1" = "-n" ]; then

@@ -1,0 +1,117 @@
+[/]
+custom-keybindings=['/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom0/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom4/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom5/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom6/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom7/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom8/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom9/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom10/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom11/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom12/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom13/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom14/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom2/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom3/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom15/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom16/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom17/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom18/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom19/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom20/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom22/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom24/', '/org/gnome/settings-daemon/plugins/media-keys/custom-keybindings/custom1/']
+
+[custom-keybindings/custom0]
+binding='<Alt>grave'
+command='x-terminal-emulator'
+name='Terminal'
+
+[custom-keybindings/custom1]
+binding='<Super>y'
+command='flatpak run io.missioncenter.MissionCenter'
+name='System Monitor'
+
+[custom-keybindings/custom10]
+binding='<Super>t'
+command='ql toggle-window'
+name='QL Toggle Window'
+
+[custom-keybindings/custom11]
+binding='<Primary><Alt>s'
+command='ql open-browser SearchBar'
+name='QL Search'
+
+[custom-keybindings/custom12]
+binding='<Primary><Alt>f'
+command='ql open-browser Filesystem'
+name='QL Browse Files'
+
+[custom-keybindings/custom13]
+binding='<Primary><Alt>a'
+command='x-terminal-emulator -e tmux new sudo aptitude'
+name='Terminal Aptitude'
+
+[custom-keybindings/custom14]
+binding='<Control><Alt>r'
+command='x-terminal-emulator -e tmux new pry'
+name='Terminal Ruby'
+
+[custom-keybindings/custom15]
+binding='<Primary><Alt>2'
+command='ql rating 0.4'
+name='QL Rate ⭐⭐'
+
+[custom-keybindings/custom16]
+binding='<Primary><Alt>3'
+command='ql rating 0.6'
+name='QL Rate ⭐⭐⭐'
+
+[custom-keybindings/custom17]
+binding='<Primary><Alt>4'
+command='ql rating 0.8'
+name='QL Rate ⭐⭐⭐⭐'
+
+[custom-keybindings/custom18]
+binding='<Primary><Alt>5'
+command='ql rating 1.0'
+name='QL Rate ⭐⭐⭐⭐⭐'
+
+[custom-keybindings/custom19]
+binding='<Super>backslash'
+command='ql stop'
+name='QL Stop'
+
+[custom-keybindings/custom2]
+binding='<Primary><Alt>z'
+command='ql start-playing'
+name='QL Start Playing'
+
+[custom-keybindings/custom20]
+binding='<Control><Alt>backslash'
+command='setup-peripherals'
+name='Setup peripherals'
+
+[custom-keybindings/custom22]
+binding='<Super>u'
+command='devdocs'
+name='DevDocs'
+
+[custom-keybindings/custom24]
+binding='<Super>o'
+command='obsidian'
+name='Obsidian'
+
+[custom-keybindings/custom3]
+binding='<Primary><Alt>1'
+command='ql rating 0.2'
+name='QL Rate ⭐'
+
+[custom-keybindings/custom4]
+binding='<Super>z'
+command='ql play-pause'
+name='QL Play'
+
+[custom-keybindings/custom5]
+binding='<Super>s'
+command='ql next'
+name='QL Next'
+
+[custom-keybindings/custom6]
+binding='<Super>a'
+command='ql previous'
+name='QL Previous'
+
+[custom-keybindings/custom7]
+binding='<Super>q'
+command='ql seek -0:5'
+name='QL Rewind'
+
+[custom-keybindings/custom8]
+binding='<Super>w'
+command='ql seek +0:5'
+name='QL Fastforward'
+
+[custom-keybindings/custom9]
+binding='<Super>x'
+command='ql shuffle toggle'
+name='QL Shuffle'

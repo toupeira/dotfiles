@@ -138,11 +138,22 @@ return {
       colorschemes = merge(presets.reverse, {
         colors = {
           'nordfox',
+          'carbonfox',
           'nightfox',
           'duskfox',
-          'carbonfox',
-          'dayfox',
           'dawnfox',
+          'dayfox',
+
+          'catppuccin-mocha',
+          'catppuccin-macchiato',
+          'catppuccin-frappe',
+          'catppuccin-latte',
+
+          'material-deep-ocean',
+          'material-darker',
+          'material-palenight',
+          'material-oceanic',
+          'material-lighter',
         },
       }),
 

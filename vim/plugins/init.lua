@@ -15,6 +15,14 @@ return {
   very_lazy { 'tpope/vim-repeat' },
   very_lazy { 'tpope/vim-scriptease' },
 
+  lazy      { 'allaman/emoji.nvim',
+    keys = {
+      { '<M-.>', '<Cmd>Emoji insert<CR>', mode = { 'i' }, desc = 'Insert emoji' },
+    },
+    opts = {
+      plugin_path = require('lazy.core.config').options.root,
+    },
+  },
   lazy      { 'AndrewRadev/bufferize.vim',
     cmd = 'Bufferize',
     init = function()
@@ -189,11 +197,5 @@ return {
       map('n', 'gF', '<C-w><C-s><Cmd>call fetch#cfile(v:count1)<CR>', { force = true }, 'Go to file in split')
       map('v', 'gF', '<C-w><C-s><Cmd>call fetch#visual(v:count1)<CR>', { force = true }, 'Go to file in split')
     end,
-  },
-  lazy      { 'ziontee113/icon-picker.nvim',
-    keys = {
-      { '<M-.>', '<Cmd>IconPickerInsert<CR>', mode = { 'i' }, desc = 'Insert emoji' },
-    },
-    opts = { disable_legacy_commands = true },
   },
 }

@@ -170,11 +170,10 @@
   di = diff
   dc = diff --cached
   ds = -c core.pager='less -FX' diff --stat
-  dt = !git -c diff.external='difft --display inline'
   news = ds ORIG_HEAD..
 
   diffnav = "!f() { [ $# -eq 0 ] && set -- diff; git "$@" | diffnav; }; f"
-  dn = diffnav
+  nav = diffnav
 
   b = rev-parse --abbrev-ref HEAD
   br = branch -vv

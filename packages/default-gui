@@ -9,20 +9,15 @@ exfat-fuse
 exfatprogs
 firewalld
 firmware-linux
-firmware-amd-graphics
-firmware-intel-graphics
-firmware-mediatek
 flatpak
 flatseal
 fwupd
 fwupd-amd64-signed
 hdparm
-intel-media-va-driver-non-free
 inxi
 linux-cpupower
 lm-sensors
 mesa-utils
-mesa-va-drivers
 mesa-vulkan-drivers
 network-manager
 nvtop
@@ -98,7 +93,6 @@ gcolor3
 gimp
 mpv
 quodlibet
-scummvm
 shotwell
 yt-dlp
 
@@ -115,6 +109,7 @@ flatpak: org.gtk.Gtk3theme.Numix
 -calibre
 -evolution-data-server
 -evolution-data-server-common
+-firmware-mediatek
 -gimp-plugin-registry
 -gnome-bluetooth-sendto
 -gnome-browser-connector

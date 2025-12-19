@@ -282,7 +282,12 @@ if ARGS[:calendar]
 
     case line
     when /^SUMMARY:(.*)/
-      current[:summary] = $1.chomp
+      current[:summary] = $1.chomp.delete_suffix(' (regionaler Feiertag)')
+
+      if current[:summary] =~ /Quarter Moon/
+        entries.delete(current)
+        next
+      end
     when /^DESCRIPTION:(.*)/
       current[:description] = $1.chomp.gsub(/\\[rn]/, "\n")
       add_to_description = true

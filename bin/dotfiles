@@ -199,10 +199,19 @@ function mux-wrap {
 ### }}}
 ### dotfiles helpers {{{
 
-# Check if machine has a GUI
+# Check for machine properties
+
 function has-gui {
   [ "$CHASSIS_TYPE" ] || CHASSIS_TYPE=$( hostnamectl chassis )
   [ "$CHASSIS_TYPE" = "desktop" ] || [ "$CHASSIS_TYPE" = "laptop" ]
+}
+
+function has-amd {
+  grep -Fq AuthenticAMD /proc/cpuinfo
+}
+
+function has-intel {
+  grep -Fq GenuineIntel /proc/cpuinfo
 }
 
 # Load rules for the given keys
@@ -758,8 +767,16 @@ function run {
       # Read packages from list
       local packages=$( grep -E "$filter" "$path" )
 
-      if has-gui && [ -f "$path-gui" ]; then
-        packages=$( echo "$packages"; grep -E "$filter" "$path-gui" )
+      if has-gui; then
+        if [ -f "$path-gui" ]; then
+          packages=$( echo "$packages"; grep -E "$filter" "$path-gui" )
+        fi
+
+        if has-amd && [ -f "$path-amd" ]; then
+          packages=$( echo "$packages"; grep -E "$filter" "$path-amd" )
+        elif has-intel && [ -f "$path-intel" ]; then
+          packages=$( echo "$packages"; grep -E "$filter" "$path-intel" )
+        fi
       fi
 
       if [ "$packages" ]; then

@@ -1,0 +1,6 @@
+amd64-microcode
+firmware-amd-graphics
+
+-firmware-intel-graphics
+-intel-media-va-driver-non-free
+-intel-microcode
