@@ -67,9 +67,11 @@
       <tab>FullScreen</tab>
       <printscreen>Screenshot</printscreen>
       <s mod="ctrl">Screenshot</s>
-      <minus>noop</minus><!-- disabled -->
-      <plus>noop</plus><!-- disabled -->
-      <equals>noop</equals><!-- disabled -->
+      <!--
+      <minus>VolumeDown</minus>
+      <plus>VolumeUp</plus>
+      <equals>VolumeUp</equals>
+      -->
       <zero>Number0</zero>
       <one>Number1</one>
       <two>Number2</two>
@@ -80,8 +82,10 @@
       <seven>Number7</seven>
       <eight>Number8</eight>
       <nine>Number9</nine>
-      <numpadminus>noop</numpadminus><!-- disabled -->
-      <numpadplus>noop</numpadplus><!-- disabled -->
+      <!--
+      <numpadminus>VolumeDown</numpadminus>
+      <numpadplus>VolumeUp</numpadplus>
+      -->
       <numpadzero>Number0</numpadzero>
       <numpadone>Number1</numpadone>
       <numpadtwo>Number2</numpadtwo>
@@ -92,19 +96,20 @@
       <numpadseven>Number7</numpadseven>
       <numpadeight>Number8</numpadeight>
       <numpadnine>Number9</numpadnine>
-      <forwardslash>RunScript(script.globalsearch)</forwardslash><!-- added -->
       <backslash>ToggleFullScreen</backslash>
       <home>FirstPage</home>
       <end>LastPage</end>
       <power>ActivateWindow(ShutdownMenu)</power>
       <sleep>ActivateWindow(ShutdownMenu)</sleep>
       <!-- PVR windows -->
-      <e>noop</e><!-- disabled -->
-      <epg>noop</epg><!-- disabled -->
-      <h>noop</h><!-- disabled -->
-      <j>noop</j><!-- disabled -->
-      <k>noop</k><!-- disabled -->
-      <b>noop</b><!-- disabled -->
+      <!--
+      <e>ActivateWindow(TVGuide)</e>
+      <epg>ActivateWindow(TVGuide)</epg>
+      <h>ActivateWindow(TVChannels)</h>
+      <j>ActivateWindow(RadioChannels)</j>
+      <k>ActivateWindow(TVRecordings)</k>
+      <b>ActivateWindow(TVTimers)</b>
+      -->
       <!-- PVR -->
       <red>ActivateWindow(TVChannels)</red>
       <green>ActivateWindow(Videos)</green>
@@ -116,15 +121,18 @@
       <browser_refresh/>
       <browser_stop/>
       <browser_search/>
+      <forwardslash>RunScript(script.globalsearch)</forwardslash><!-- added -->
       <insert>ActivateWindow(FavouritesBrowser)</insert><!-- added -->
       <browser_favorites>ActivateWindow(FavouritesBrowser)</browser_favorites>
       <favorites>ActivateWindow(FavouritesBrowser)</favorites>
       <config>ActivateWindow(Settings)</config>
       <browser_home>ActivateWindow(Home)</browser_home>
       <homepage>ActivateWindow(Home)</homepage>
-      <volume_mute>noop</volume_mute><!-- disabled -->
-      <volume_down>noop</volume_down><!-- disabled -->
-      <volume_up>noop</volume_up><!-- disabled -->
+      <!--
+      <volume_mute>Mute</volume_mute>
+      <volume_down>VolumeDown</volume_down>
+      <volume_up>VolumeUp</volume_up>
+      -->
       <next_track>SkipNext</next_track>
       <prev_track>SkipPrevious</prev_track>
       <stop>Stop</stop>
@@ -142,31 +150,35 @@
       <!-- ****************************************************** -->
       <!-- MS Media Center keyboard shortcuts sent by MCE remotes -->
       <!-- See http://msdn.microsoft.com/en-us/library/bb189249.aspx -->
-      <p mod="ctrl,shift">Play</p>        <!-- Play -->
-      <s mod="ctrl,shift">Stop</s>        <!-- Stop -->
-      <p mod="ctrl">Pause</p>             <!-- Pause -->
-      <f mod="ctrl,shift">FastForward</f> <!-- Fwd -->
-      <b mod="ctrl,shift">Rewind</b>      <!-- Rew -->
-      <f mod="ctrl">SkipNext</f>          <!-- Skip -->
-      <b mod="ctrl">SkipPrevious</b>      <!-- Replay -->
-      <d mod="ctrl">Info</d>              <!-- MCE Details -->
-      <r mod="ctrl">Record</r>            <!-- Record -->
-      <f4 mod="alt">PreviousMenu</f4>     <!-- Exit -->
-      <f10>noop</f10>                     <!-- MCE Vol up --><!-- disabled -->
-      <f9>noop</f9>                       <!-- MCE Vol down --><!-- disabled -->
-      <f8>noop</f8>                       <!-- MCE mute --><!-- disabled -->
-      <g mod="ctrl">noop</g>              <!-- MCE Guide --><!-- disabled -->
-      <m mod="ctrl">noop</m>              <!-1- MCE My music -1-><!-1- disabled -1-> -->
-      <i mod="ctrl">noop</i>              <!-- MCE My pictures --><!-- disabled -->
-      <e mod="ctrl">noop</e>              <!-- MCE videos --><!-- disabled -->
-      <m mod="ctrl,shift">noop</m>        <!-- MCE DVD menu --><!-- disabled -->
-      <o mod="ctrl">noop</o>              <!-- MCE Recorded TV --><!-- disabled -->
-      <t mod="ctrl">noop</t>              <!-- MCE Live TV  --><!-- disabled -->
-      <t mod="ctrl,shift">noop</t>        <!-- MCE TV --><!-- disabled -->
-      <a mod="ctrl">noop</a>              <!-- MCE Radio --><!-- disabled -->
+      <!--
+      <p mod="ctrl,shift">Play</p>
+      <s mod="ctrl,shift">Stop</s>
+      <p mod="ctrl">Pause</p>
+      <f mod="ctrl,shift">FastForward</f>
+      <b mod="ctrl,shift">Rewind</b>
+      <f mod="ctrl">SkipNext</f>
+      <b mod="ctrl">SkipPrevious</b>
+      <d mod="ctrl">Info</d>
+      <r mod="ctrl">Record</r>
+      <f4 mod="alt">PreviousMenu</f4>
+      <f10>VolumeUp</f10>
+      <f9>VolumeDown</f9>
+      <f8>Mute</f8>
+      <g mod="ctrl">ActivateWindow(TVGuide)</g>
+      <m mod="ctrl">ActivateWindow(music)</m>
+      <i mod="ctrl">ActivateWindow(pictures)</i>
+      <e mod="ctrl">ActivateWindow(videos)</e>
+      <m mod="ctrl,shift">PlayerControl(ShowVideoMenu)</m>
+      <o mod="ctrl">ActivateWindow(TVRecordings)</o>
+      <t mod="ctrl">ActivateWindow(TVChannels)</t>
+      <t mod="ctrl,shift">ActivateWindow(TVChannels)</t>
+      <a mod="ctrl">ActivateWindow(RadioChannels)</a>
+      -->
       <!-- MCE keypresses without an obvious use in Kodi -->
+      <!--
       <u mod="ctrl">Notification(MCEKeypress, DVD subtitle, 3)</u>
       <a mod="ctrl,shift">Notification(MCEKeypress, DVD audio, 3)</a>
+      -->
       <k mod="ctrl,shift">ReloadKeymaps</k>
       <d mod="ctrl,shift">ToggleDebug</d>
       <r mod="ctrl,shift">ToggleDirtyRegionVisualization</r>
@@ -372,7 +384,9 @@
       <z>AspectRatio</z>
       <zoom>AspectRatio</zoom>
       <t>ShowSubtitles</t>
-      <t mod="ctrl">noop</t><!-- disabled -->
+      <!--
+      <t mod="ctrl">SubtitleAlign</t>
+      -->
       <l>DialogSelectSubtitle</l>
       <left>Seek(-5)</left><!-- changed -->
       <right>Seek(5)</right><!-- changed -->
@@ -389,8 +403,8 @@
       <v mod="ctrl">ActivateWindow(Teletext)</v><!-- changed -->
       <v>DialogSelectVideo</v><!-- changed -->
       <text>ActivateWindow(Teletext)</text>
-      <up mod="ctrl">SubtitleShiftUp</up>
-      <down mod="ctrl">SubtitleShiftDown</down>
+      <up mod="ctrl">SubtitleDelayPlus</up><!-- changed -->
+      <down mod="ctrl">SubtitleDelayMinus</down><!-- changed -->
       <pageup>ChapterOrBigStepForward</pageup><!-- changed -->
       <pagedown>ChapterOrBigStepBack</pagedown><!-- changed -->
       <plus mod="ctrl">VolAmpUp</plus>
@@ -467,10 +481,10 @@
     <keyboard>
       <f>FastForward</f>
       <r>Rewind</r>
-      <period>noop</period><!-- disabled -->
-      <comma>noop</comma><!-- disabled -->
-      <greaterthan>SkipNext</greaterthan><!-- added -->
-      <lessthan>SkipPrevious</lessthan><!-- added -->
+      <!--
+      <period>SkipNext</period>
+      <comma>SkipPrevious</comma>
+      -->
       <pageup>IncreaseRating</pageup>
       <pagedown>DecreaseRating</pagedown>
       <backspace>Fullscreen</backspace>
@@ -490,10 +504,14 @@
       <n>ActivateWindow(MusicPlaylist)</n>
       <left>Seek(-5)</left><!-- changed -->
       <right>Seek(5)</right><!-- changed -->
-      <left mod="longpress">noop</left><!-- disabled -->
-      <right mod="longpress">noop</right><!-- disabled -->
+      <!--
+      <left mod="longpress">Rewind</left>
+      <right mod="longpress">FastForward</right>
+      -->
       <up>StepForward</up><!-- changed -->
       <down>SmallStepBack</down><!-- changed -->
+      <greaterthan>SkipNext</greaterthan><!-- added -->
+      <lessthan>SkipPrevious</lessthan><!-- added -->
       <o>PlayerProcessInfo</o>
       <l>LockPreset</l>
       <escape>FullScreen</escape>
