@@ -12,7 +12,7 @@ echo -e " \e[1;32m󰎆 \e[1;37mExporting playlists...\e[0m"
 
 while read -r query; do
   read -r title
-  [[ "$title" =~ ^(Added|Good|Favourite|Best) ]] || continue
+  [[ "$title" =~ ^(Default|Added|Rated) ]] || continue
 
   playlist="$MUSIC/$title.m3u"
   files=$( quodlibet --print-query="$query" | sed -r "s,^(/mnt)?$MUSIC/,," | sort )
