@@ -754,6 +754,7 @@ function run {
 
       if [[ "$list" = *:* ]]; then
         local filter="^${list##*:}:"
+        [ "$filter" = "^apt:" ] && filter="^[^:#]+$"
         local list="${list%%:*}"
       else
         local filter="."

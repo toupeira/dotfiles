@@ -144,7 +144,9 @@ function rg.edit {
 
   local files=$( rg --sort=path --vimgrep -- "$@" )
   if [ "$files" ]; then
-    local pattern=${1//\\b/}
+    local pattern=$1
+    pattern=${pattern//\\b/}
+    pattern=${pattern//@/\\@}
     sensible-vim \
       -c "silent! bdelete 1" \
       -c "silent! /\\v$pattern" \

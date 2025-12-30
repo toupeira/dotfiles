@@ -2,7 +2,7 @@
 # video
 vo=gpu-next,gpu
 hwdec=auto
-#target-colorspace-hint=auto
+target-colorspace-hint=no
 fullscreen=yes
 geometry=50%:50%
 
@@ -17,7 +17,7 @@ sub-font-size=38
 sub-bold=yes
 sub-border-size=4
 sub-border-color=0/0/0/0.6
-sub-color=1/1/1/0.6
+sub-color=1/1/1/0.8
 slang=en,eng,de,ger
 subs-with-matching-audio=yes
 

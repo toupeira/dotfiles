@@ -125,7 +125,6 @@ flatpak: org.gtk.Gtk3theme.Numix
 -gnome-terminal
 -gnome-user-share
 -gstreamer1.0-packagekit
--libgdk-pixbuf2.0-bin
 -malcontent
 -malcontent-gui
 -mousai

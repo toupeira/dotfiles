@@ -1,9 +1,0 @@
-#!/bin/bash
-
-dir=~/src/upstream/quodlibet
-
-if [ -d "$dir" ]; then
-  exec "$dir"/quodlibet.py "$@"
-else
-  exec /usr/bin/quodlibet "$@"
-fi
