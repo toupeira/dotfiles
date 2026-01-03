@@ -61,7 +61,7 @@ user_pref("browser.tabs.crashReporting.sendReport", true);
 user_pref("datareporting.healthreport.uploadEnabled", true);
 user_pref("datareporting.usage.uploadEnabled", true);
 user_pref("datareporting.policy.dataSubmissionEnabled", true);
-user_pref("toolkit.telemetry.enabled", false)
+user_pref("toolkit.telemetry.enabled", false);
 
 // Tracking Protection whitelist
 user_pref("urlclassifier.trackingSkipURLs", "disqus.com, c.disquscdn.com, cdmu.disqus.com");

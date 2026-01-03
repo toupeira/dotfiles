@@ -271,10 +271,6 @@ return {
       end
     })
 
-    util.alias_command({
-      ai = 'AI', aI = 'AI', Ai = 'AI',
-    })
-
     util.autocmd('FileType', 'codecompanion', function (event)
       -- luacheck: globals MiniClue
       MiniClue.enable_buf_triggers(event.buf)

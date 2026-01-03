@@ -164,13 +164,6 @@ nmap('<C-LeftMouse>', '<nop>')
 -- }}}
 -- Utilities {{{
 
-util.alias_command({
-  ['Q']   = 'q',
-  ['QA']  = 'qa',  ['Qa']  = 'qa',  ['qA']  = 'qa',
-  ['WQ']  = 'wq',  ['Wq']  = 'wq',  ['wQ']  = 'wq',
-  ['SET'] = 'set', ['SEt'] = 'set', ['Set'] = 'set',
-})
-
 nmap('zS', ':Inspect', 'Inspect highlighting groups')
 nmap('zT', ':InspectTree', 'Inspect syntax tree')
 

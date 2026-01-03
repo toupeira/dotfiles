@@ -1,0 +1,9 @@
+[Desktop Entry]
+Version=1.1
+Type=Application
+Name=Kodi
+GenericName=Media Center
+Comment=Manage and view your media
+Icon=tv.kodi.Kodi
+Exec=kodi
+Categories=AudioVideo;Player;TV;Video;

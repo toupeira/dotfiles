@@ -1,5 +1,7 @@
 #!/bin/bash
 
+export QT_SCALE_FACTOR=
+
 systemctl start virtualbox
 virtualbox
 systemctl stop virtualbox

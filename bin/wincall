@@ -15,19 +15,38 @@ function wincall {
 
 case "$1" in
   list)
-    wincall List | jq
+    count=$( wincall GetWorkspaceCount | awk '{ print $2 }' )
+    echo "$count workspaces:"
+    wincall GetWorkspaces | jq -c '.[]'
+    for workspace in $(seq 0 $((count - 1)) ); do
+      echo
+      echo "Windows on workspace $workspace:"
+      wincall GetWorkspaceWindows "uint32:$workspace" | jq -c '.[]'
+    done
     ;;
-  activate)
-    id=$( wincall List | jq "[.[] | select(.wm_class == \"$2\")] | first | .id // empty" )
+  activate|close|maximize|minimize|unmaximize|unminimize)
+    method=${1^}
+    id=$( wincall List | jq "[.[] | select(.wm_class | test(\"$2\"; \"i\"))] | first | .id // empty" )
+
     if [ "$id" ]; then
-      wincall Activate "uint32:$id"
+      wincall "$method" "uint32:$id"
     else
+      echo "Window not found: $2"
       exit 1
     fi
     ;;
+  switch)
+    wincall SwitchWorkspace "uint32:$2"
+    ;;
   *)
     echo "Usage: wincall list"
-    echo "       wincall activate <WINDOWID>"
+    echo "       wincall switch <WORKSPACE>"
+    echo "       wincall activate <WINDOW>"
+    echo "       wincall close <WINDOW>"
+    echo "       wincall maximize <WINDOW>"
+    echo "       wincall minimize <WINDOW>"
+    echo "       wincall unmaximize <WINDOW>"
+    echo "       wincall unminimize <WINDOW>"
     exit 255
     ;;
 esac

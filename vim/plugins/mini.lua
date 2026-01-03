@@ -323,6 +323,11 @@ return {
       },
     })
     -- }}}
+    -- mini.cmdline {{{
+    require('mini.cmdline').setup({
+      autocomplete = { enable = false },
+    })
+    -- }}}
     -- mini.diff {{{
     local diff = require('mini.diff')
 
