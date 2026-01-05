@@ -217,6 +217,22 @@ return {
         cmd = '( git ls-files 2>/dev/null || fdfind ) | ctags -f- -L- -u',
       }),
       -- }}}
+      ui_select = function(opts, items) -- {{{
+        local title = opts.prompt
+        opts.prompt = '» '
+
+        local height = math.min(
+          presets.bottom.winopts.height,
+          (#items + 5) / vim.o.lines
+        )
+
+        return merge(presets.bottom, presets.reverse, presets.title(title), {
+          winopts = {
+            border = 'rounded',
+            height = height,
+          },
+        })
+      end, -- }}}
     }
   end,
 
@@ -238,23 +254,6 @@ return {
 
     -- use history per provider
     vim.g.fzf_history_dir = vim.fn.stdpath('state') .. '/fzf'
-
-    fzf.register_ui_select(function(opts, items)
-      local title = opts.prompt
-      opts.prompt = '» '
-
-      local height = math.min(
-        presets.bottom.winopts.height,
-        (#items + 5) / vim.o.lines
-      )
-
-      return merge(presets.bottom, presets.reverse, presets.title(title), {
-        winopts = {
-          border = 'rounded',
-          height = height,
-        },
-      })
-    end)
 
     util.alias_command({
       fzf = 'FzfLua', Fzf = 'FzfLua', FZF = 'FzfLua', FZf = 'FzfLua',
