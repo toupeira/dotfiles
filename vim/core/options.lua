@@ -77,6 +77,7 @@ vim.o.showmode = false
 vim.o.ruler = false
 vim.o.report = 0
 vim.o.wildmode = 'longest:full,full'
+vim.o.wildoptions = 'pum,tagfile'
 
 vim.o.mouse = 'ar'
 vim.o.mousemodel = 'extend'

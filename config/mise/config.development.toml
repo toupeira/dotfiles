@@ -4,8 +4,8 @@ ruby = "4.0.0"
 node = "25.2.1"
 
 # Tools
-"npm:@anthropic-ai/claude-code" = "2.0.76"
-"github:dlvhdr/diffnav" = "0.3.1"
+"npm:@anthropic-ai/claude-code" = "2.1.5"
+"github:dlvhdr/diffnav" = "0.4.0"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
