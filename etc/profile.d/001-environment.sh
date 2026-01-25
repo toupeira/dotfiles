@@ -27,13 +27,15 @@ if [ "$XDG_SESSION_TYPE" = "wayland" ] && [ ! "$QT_SCALE_FACTOR" ]; then
 fi
 
 # initialize mise
-if [ "$HOSTNAME" != "snafu" ]; then
-  export MISE_ENV='development'
-  [ "$TMUX" ] && tmux set-environment MISE_ENV "$MISE_ENV"
-fi
+if [ -d ~/.config/mise ]; then
+  if [ "$HOSTNAME" != "snafu" ]; then
+    export MISE_ENV='development'
+    [ "$TMUX" ] && tmux set-environment MISE_ENV "$MISE_ENV"
+  fi
 
-if [ "$BASH_INTERACTIVE" ]; then
-  eval "$( mise activate bash )"
-else
-  eval "$( mise activate --shims )"
+  if [ "$BASH_INTERACTIVE" ]; then
+    eval "$( mise activate bash )"
+  else
+    eval "$( mise activate --shims )"
+  fi
 fi

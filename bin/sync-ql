@@ -2,6 +2,11 @@
 
 import os, sys, socket, subprocess
 
+# Use Git repository if present
+repo = os.path.expanduser('~') + '/src/upstream/quodlibet'
+if os.path.isdir(repo):
+    sys.path.insert(0, repo)
+
 HOSTNAME = socket.gethostname()
 METADATA_EXPORT = '/slack/scrapbook/config/quodlibet/metadata.' + HOSTNAME + '.tsv'
 

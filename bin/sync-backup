@@ -18,5 +18,10 @@ fi
 
 cd /slack || exit 1
 
+echo
+echo -e " \e[1;32m●\e[22m \e[22mSyncing backups to \e[1m$BACKUP\e[22m...\e[0m"
+
 rsync -av --update --delete \
   "${DIRS[@]}" "$BACKUP" "$@"
+
+echo

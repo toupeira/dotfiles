@@ -23,7 +23,7 @@ shopt -s progcomp_alias
 [ -t 1 ] && stty -ixon
 
 # Start tmux or attach to existing session
-if [ "$BASH_LOGIN" ] && [ -z "$TMUX" ] && [ "$UID" -ne 0 ] && [ -z "$SUDO_USER" ] && has tmux; then
+if [ "$BASH_LOGIN" ] && [ -z "$TMUX" ] && [ "$UID" -ne 0 ] && [ -z "$SUDO_USER" ] && [ -d ~/.config/tmux ]; then
   session=$( tmux list-sessions 2>/dev/null | grep -Fvm1 attached | cut -d: -f1 )
   if [ "$session" ]; then
     exec tmux attach-session -t "$session"

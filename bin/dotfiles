@@ -801,7 +801,7 @@ function run {
         fi
       }
 
-      if [ "$packages_apt" ]; then
+      if [ "$packages_apt" ] && has aptitude; then
         local list_apt=$( run list apt )
         local missing_apt=$(
           get-missing "$( echo "$packages_apt" | grep -v '^-' )" "$list_apt";
@@ -968,14 +968,17 @@ function run {
       if ! [ "${INSTALLED_PACKAGES[$1]}" ]; then
         case "$1" in
           apt)
+            has dpkg-query || abort
             INSTALLED_PACKAGES[apt]=$(
               dpkg-query -W -f '${Package}\t${Status}\n' | grep ' installed$' | cut -f1 | sort
             );;
           gem)
+            has gem || abort
             INSTALLED_PACKAGES[gem]=$(
               gem list --no-versions | sort
             );;
           flatpak)
+            has flatpak || abort
             INSTALLED_PACKAGES[flatpak]=$(
               flatpak list --columns=application | tail -n +1 | sort
             );;
@@ -984,6 +987,7 @@ function run {
               find "$DOTFILES/packages/lazy" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort
             );;
           mise)
+            has mise || abort
             INSTALLED_PACKAGES[mise]=$(
               find "$DOTFILES/packages/mise/installs" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort
             );;

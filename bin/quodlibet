@@ -1,0 +1,10 @@
+#!/bin/bash
+
+REPO=~/src/upstream/quodlibet
+
+if [ -d "$REPO" ]; then
+  exec "$REPO"/quodlibet.py "$@"
+else
+  zenity --error --title "Quod Libet" --text "Git repository not found."
+  exit 1
+fi

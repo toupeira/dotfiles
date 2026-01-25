@@ -33,7 +33,7 @@ for file in "${files[@]}"; do
         options="-sample_fmt s16 -ar 48000"
       fi
       ;;
-    wav)
+    wav|WAV)
       options="-sample_fmt s16"
       ;;
     *)

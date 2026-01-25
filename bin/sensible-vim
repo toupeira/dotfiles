@@ -1,6 +1,6 @@
 #!/bin/bash
 
-vim='mise exec -- nvim'
+vim=${VIMCMD:-mise exec -- nvim}
 
 if [ "$VIMCMD" = 'vip' ] || [[ "$PWD" =~ /\.secrets ]]; then
   exec $vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" -c "set shada=" "$@"

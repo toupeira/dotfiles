@@ -1,0 +1,114 @@
+#!/bin/bash
+
+trap 'exit 1' INT
+
+ROMS="/slack/games/roms"
+
+case "$1" in
+  card)
+    LABEL="SD card"
+    TARGET="/media/$USER/ROMS"
+    ;;
+
+  deck)
+    LABEL="Steam Deck"
+    TARGET="steamdeck:Games/retrodeck"
+    ;;
+
+  ls|list)
+    total=0
+
+    function format {
+      printf '%-15s %10s %10s\n' "$@"
+    }
+
+    echo 'system                size      files'
+    echo '-------------------------------------'
+
+    for path in "$ROMS"/*; do
+      system=$( basename "$path" )
+      size=$( du -shL "$path" | awk '{ print $1 }' )
+
+      case "$system" in
+        ports)
+          count=$( find "$path" -maxdepth 1 -type d | wc -l )
+          ;;
+        *)
+          count=$( find "$path" -maxdepth 1 -type f | wc -l )
+          ;;
+      esac
+      total=$(( total + count ))
+      format "$system" "$size" "$count"
+    done
+
+    echo '-------------------------------------'
+    size=$( du -shL "$ROMS" | awk '{ print $1 }' )
+    format "total" "$size" "$total"
+
+    exit
+    ;;
+
+  *)
+    echo "Usage: sync-roms [list|card|deck] [RSYNC-OPTIONS]"
+    exit 255
+    ;;
+esac
+shift
+
+function rsync {
+  command rsync -Wrv \
+    --size-only \
+    --copy-links \
+    "$@"
+}
+
+if [[ "$TARGET" != *:* ]] && ! mountpoint -q "$TARGET"; then
+  echo "$TARGET is not mounted."
+  exit 1
+fi
+
+echo
+echo -e " \e[1;32m●\e[22m \e[22mSyncing ROMs from \e[1m$ROMS\e[22m to \e[1m$LABEL\e[22m...\e[0m"
+rsync \
+  --exclude 'gamelist.xml' \
+  --exclude 'images' \
+  --exclude 'mplayer' \
+  --exclude 'ports' \
+  --exclude 'scummvm/games/.scummvm' \
+  "$ROMS/" "$TARGET/roms/" "$@"
+
+[ -d "$TARGET" ] || exit
+
+echo
+echo -e " \e[1;32m●\e[22m \e[22mSyncing ports from \e[1m$LABEL\e[22m to \e[1m$ROMS\e[22m...\e[0m"
+rsync \
+  --delete \
+  --exclude 'PortMaster' \
+  --exclude 'ThemeMaster' \
+  --exclude 'autoinstall' \
+  "$TARGET/roms/ports/" "$ROMS/ports/" "$@"
+
+echo
+echo -e " \e[1;32m●\e[22m \e[22mSyncing metadata from \e[1m$LABEL\e[22m to \e[1m$ROMS\e[22m...\e[0m"
+
+for gamelist in "$TARGET"/roms/*/gamelist.xml; do
+  path=$( dirname "$gamelist" )
+  system=$( basename "$path" )
+
+  [[ "$system" =~ ^(mplayer|ports)$ ]] && continue
+
+  echo -e "   \e[1;32m- ${system}\e[0m"
+
+  rsync \
+    --info=stats0,flist0 \
+    "$gamelist" "$ROMS/$system/gamelist.xml" "$@"
+
+  if [ -e "$path/images" ]; then
+    rsync \
+      --info=stats0,flist0 \
+      --delete \
+      "$path/images/" "$ROMS/$system/images/" "$@"
+  fi
+done
+
+echo
