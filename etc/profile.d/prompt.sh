@@ -41,9 +41,6 @@ function _prompt_dir {
     dir=${dir/#dotfiles\/packages\/mise\/installs\//🗃️ }
     dir=${dir/#dotfiles\//📦 }
     [ "$dir" = "dotfiles" ] && dir="📦"
-
-    dir=${dir/#denteo\//🦷 }
-    [ "$dir" = "denteo" ] && dir="🦷"
   elif [ "$dir" = "" ]; then
     dir="/"
   else

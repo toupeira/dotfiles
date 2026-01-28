@@ -29,9 +29,6 @@
 [gpg.ssh]
   allowedSignersFile = ~/.ssh/allowed_signers
 
-[includeIf "gitdir:~/src/denteo/"]
-  path = config.denteo
-
 [git-extras]
   default-branch = main
 
