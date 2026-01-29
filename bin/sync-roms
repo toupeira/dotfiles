@@ -70,7 +70,10 @@ fi
 echo
 echo -e " \e[1;32m●\e[22m \e[22mSyncing ROMs from \e[1m$ROMS\e[22m to \e[1m$LABEL\e[22m...\e[0m"
 rsync \
+  --exclude '.directory' \
   --exclude 'gamelist.xml' \
+  --exclude 'systeminfo.txt' \
+  --exclude 'systems.txt' \
   --exclude 'images' \
   --exclude 'mplayer' \
   --exclude 'ports' \

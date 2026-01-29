@@ -16,7 +16,6 @@ if [ "$enable_bluetooth" ]; then
   bluetoothctl power on
 fi
 
-wincall switch 1
 $steam "$@"
 
 if [ "$enable_bluetooth" ]; then
