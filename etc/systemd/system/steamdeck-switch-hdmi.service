@@ -1,0 +1,11 @@
+[Unit]
+Description=Switch HDMI input before sleep
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+ExecStart=/slack/dotfiles/bin/switch-hdmi 3.4.0.0
+
+[Install]
+WantedBy=sleep.target

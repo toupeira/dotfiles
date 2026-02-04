@@ -1,26 +1,37 @@
 #!/bin/bash
+# shellcheck disable=SC2034
+#
 # /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
 
+[ "$BASH_VERSION" ] && [[ "$-" == *i* ]] && BASH_INTERACTIVE=1
+[ "$BASH_INTERACTIVE" ] && shopt -q login_shell && BASH_LOGIN=1
+
 PS1='\h:\w\$ '
 
-if [ -d /etc/profile.d ]; then
-  for i in /etc/profile.d/*.sh; do
-    if [ -r "$i" ]; then
-      . "$i"
-    fi
-  done
-  unset i
-fi
+# Helper to check for commands
+has() {
+  command -v "$1" &>/dev/null
+}
 
-if [ -d ~/.profile.d ]; then
-  for i in ~/.profile.d/*.sh; do
-    if [ -r "$i" ]; then
-      . "$i"
-    fi
-  done
-  unset i
-fi
+# Helper to append paths
+append_path () {
+  case ":$PATH:" in
+    *:"$1":*)
+      ;;
+    *)
+      PATH="${PATH:+$PATH:}$1"
+  esac
+}
+
+for file in /etc/profile.d/*.sh /slack/dotfiles/etc/profile.d/*.sh ~/.profile.d/*.sh; do
+  if [ -r "$file" ]; then
+    . "$file"
+  fi
+done
+
+unset file
+unset -f append_path
 
 if [ "$BASH_INTERACTIVE" ]; then
   login_banner

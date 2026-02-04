@@ -22,7 +22,7 @@ case "$1" in
       printf '%-15s %10s %10s\n' "$@"
     }
 
-    echo 'system                size      files'
+    echo 'system                size       roms'
     echo '-------------------------------------'
 
     for path in "$ROMS"/*; do

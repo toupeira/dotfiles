@@ -1,6 +1,6 @@
 #!/bin/bash
 
-if [ "$1"  = "-f" ] || ! which bitwig-studio &>/dev/null; then
+if [ "$1"  = "-f" ] || ! command -v bitwig-studio >/dev/null; then
   shift
   flatpak=1
   bitwig="flatpak run com.bitwig.BitwigStudio"

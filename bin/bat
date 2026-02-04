@@ -1,0 +1,6 @@
+#!/bin/bash
+if command -v batcat >/dev/null; then
+  exec batcat "$@"
+else
+  exec /usr/bin/bat "$@"
+fi

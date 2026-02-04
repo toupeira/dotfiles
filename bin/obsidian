@@ -14,7 +14,7 @@ function msg {
 }
 
 function find_notes {
-  fdfind "$1\.md$" "$NOTES" -t f --exclude '/Sammlungen'
+  fd "$1\.md$" "$NOTES" -t f --exclude '/Sammlungen'
 }
 
 function obsidian_url {
