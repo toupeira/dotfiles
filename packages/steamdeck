@@ -1,0 +1,21 @@
+# tools
+arch: bat
+arch: fzf
+arch: git-delta
+arch: inetutils
+arch: neovim
+
+# apps
+flatpak: com.github.neithern.g4music
+flatpak: com.github.tchx84.Flatseal
+flatpak: de.haeckerfelix.Shortwave
+flatpak: io.missioncenter.MissionCenter
+flatpak: org.gnome.Loupe
+flatpak: org.mozilla.firefox
+flatpak: rocks.shy.VacuumTube
+flatpak: tech.feliciano.pocket-casts
+
+# games
+flatpak: com.shatteredpixel.shatteredpixeldungeon
+flatpak: net.retrodeck.retrodeck
+flatpak: org.scummvm.ScummVM

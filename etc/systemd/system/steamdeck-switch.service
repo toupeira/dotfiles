@@ -1,0 +1,14 @@
+[Unit]
+Description=Switch HDMI input on sleep and resume
+Before=sleep.target
+StopWhenUnneeded=yes
+
+[Service]
+Type=oneshot
+RemainAfterExit=yes
+ExecStart=/slack/dotfiles/bin/switch-hdmi 3.4.0.0
+ExecStop=/slack/dotfiles/bin/switch-hdmi
+ExecStop=/slack/dotfiles/bin/switch-wifi
+
+[Install]
+WantedBy=sleep.target

@@ -15,6 +15,11 @@ case "$1" in
     TARGET="steamdeck:Games/retrodeck"
     ;;
 
+  powkiddy)
+    LABEL="Powkiddy RGB30"
+    TARGET="powkiddy:"
+    ;;
+
   ls|list)
     total=0
 
@@ -22,7 +27,7 @@ case "$1" in
       printf '%-15s %10s %10s\n' "$@"
     }
 
-    echo 'system                size      files'
+    echo 'system                size       roms'
     echo '-------------------------------------'
 
     for path in "$ROMS"/*; do

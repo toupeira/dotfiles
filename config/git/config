@@ -239,7 +239,7 @@
   sh = "!f() { [ $# -gt 0 ] && \"$@\"; }; f"
   bash = "!f() { [ $# -gt 0 ] && bash -ic \"$@\"; }; f"
   rg = !rg
-  fd = !fdfind --hidden
+  fd = !fd --hidden
   rake  = !rake
   rails = !rails
   guard = !guard

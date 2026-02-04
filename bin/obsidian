@@ -14,7 +14,7 @@ function msg {
 }
 
 function find_notes {
-  fdfind "$1\.md$" "$NOTES" -t f --exclude '/Sammlungen'
+  fd "$1\.md$" "$NOTES" -t f --exclude '/Sammlungen'
 }
 
 function obsidian_url {
@@ -80,7 +80,9 @@ case "$action" in
       files=( "$( obsidian_url "$NOTES/Home/Dashboard.md" )" )
     fi
 
-    flatpak run md.obsidian.Obsidian "${files[@]}" &>/dev/null &
+    flatpak run md.obsidian.Obsidian \
+      --password-store=basic \
+      "${files[@]}" &>/dev/null &
     ;;
   list)
     printf '%s\n' "${files[@]}"

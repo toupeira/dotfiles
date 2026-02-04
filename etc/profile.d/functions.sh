@@ -62,7 +62,7 @@ function login_banner {
     echo
   fi
 
-  if [ -z "$SSH_CONNECTION" ]; then
+  if [ -z "$SSH_CONNECTION" ] && [ -z "$SUDO_USER" ]; then
     local event=$( calendar -l 0 | grep '^\w' | sort -R | head -1 )
     if [ "$event" ]; then
       echo -ne "📅 \e[1;33m"

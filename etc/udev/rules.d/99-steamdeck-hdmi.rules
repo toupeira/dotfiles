@@ -1,0 +1,1 @@
+ACTION=="add", SUBSYSTEM=="cec", RUN+="/slack/dotfiles/bin/switch-hdmi"
