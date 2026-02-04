@@ -1,0 +1,24 @@
+#!/bin/bash
+
+if [ ! -c /dev/cec0 ]; then
+  echo "No CEC device."
+  exit 0
+elif ! command -v cec-ctl >/dev/null; then
+  echo "Couldn't find cec-ctl."
+  exit 1
+fi
+
+cec-ctl --clear --playback >/dev/null
+
+if [ "$1" ]; then
+  addr=$1
+else
+  addr=$( cec-ctl --logical-address | awk '/Physical Address/ { print $4 }' )
+  if [ ! "$addr" ]; then
+    echo "Couldn't find HDMI address."
+    exit 1
+  fi
+fi
+
+echo "Switching HDMI input to $addr..."
+cec-ctl --set-stream-path phys-addr="$addr" >/dev/null

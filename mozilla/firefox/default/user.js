@@ -3,7 +3,6 @@
 user_pref("app.normandy.api_url", "");
 user_pref("app.normandy.enabled", false);
 user_pref("app.shield.optoutstudies.enabled", false);
-user_pref("beacon.enabled", false);
 user_pref("browser.aboutConfig.showWarning", false);
 user_pref("browser.contentblocking.category", "strict");
 user_pref("browser.disableResetPrompt", true);
@@ -113,7 +112,6 @@ user_pref("browser.download.manager.addToRecentDocs", false);
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
 
 // Media
-user_pref("gfx.wayland.hdr", true);
 user_pref("media.hardwaremediakeys.enabled", false);
 user_pref("pdfjs.ignoreDestinationZoom", true);
 

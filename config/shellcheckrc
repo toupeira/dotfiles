@@ -1,4 +1,6 @@
 # vim: ft=conf
 
+enable=SC2230  # Replace `which` with `command -v`
+
 disable=SC1090 # Allow dynamic sources
 disable=SC2155 # Allow subshells in assignments

@@ -7,7 +7,7 @@ if [ "$1" = "--link" ]; then
   steam="flatpak run com.valvesoftware.SteamLink"
 fi
 
-if [ "$HOSTNAME" = "schtube" ] && bluetoothctl show | grep -q 'Powered: no'; then
+if [ "$HOSTNAME" = "schtube" ] && pgrep -x bluetoothd >/dev/null && bluetoothctl show | grep -q 'Powered: no'; then
   enable_bluetooth=1
 fi
 

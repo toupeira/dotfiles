@@ -214,7 +214,7 @@ return {
 
       tags = merge(presets.bottom, presets.preview, presets.title('Tags (Project)'), {
         ctags_autogen = true,
-        cmd = '( git ls-files 2>/dev/null || fdfind ) | ctags -f- -L- -u',
+        cmd = '( git ls-files 2>/dev/null || fd ) | ctags -f- -L- -u',
       }),
       -- }}}
       ui_select = function(opts, items) -- {{{

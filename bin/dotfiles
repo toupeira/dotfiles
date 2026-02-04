@@ -174,7 +174,7 @@ function git {
 
 # Check for existing commands
 function has {
-  which "$1" >/dev/null
+  command -v "$1" >/dev/null
 }
 
 # Check for local Git changes
@@ -192,6 +192,11 @@ function mux-wrap {
   if [ "$TMUX" ]; then
     system mux -s -d "$@"
   else
+    while [ $# -gt 0 ] && [ "$1" != "--" ]; do
+      shift
+    done
+    shift
+
     system "$@"
   fi
 }
@@ -202,6 +207,7 @@ function mux-wrap {
 # Check for machine properties
 
 function has-gui {
+  [ "$HOSTNAME" = "steamdeck" ] && return 1
   [ "$CHASSIS_TYPE" ] || CHASSIS_TYPE=$( hostnamectl chassis )
   [ "$CHASSIS_TYPE" = "desktop" ] || [ "$CHASSIS_TYPE" = "laptop" ]
 }
@@ -266,8 +272,8 @@ function validate {
   local target=$( target "$1" )
   target=${target:${#DOTFILES}+1}
 
-  if [[ $target =~ $SKIP_PATHS ]] || \
-   { [[ $target =~ $LINK_PATHS ]] && ! [[ $target =~ $HOST_PATHS ]]; }; then
+  if { [[ $target =~ $SKIP_PATHS ]] || [[ $target =~ $LINK_PATHS ]]; } && \
+     ! [[ $target =~ $HOST_PATHS ]]; then
     debug skipping "$target"
     return 1
   fi
@@ -281,7 +287,7 @@ function target {
 
   if [[ "$origin" =~ ^$HOME/ ]]; then
     local target="${origin:${#HOME}+1}"
-  elif [[ "$origin" =~ ^/etc/ ]]; then
+  elif [[ "$origin" =~ ^/etc(/|$) ]]; then
     local target="${origin:1}"
   elif [[ "$origin" =~ ^$DOTFILES/ ]]; then
     local target="${origin:${#DOTFILES}+1}"
@@ -342,7 +348,7 @@ function run {
     link-dotfiles) # {{{
       if [ $# -eq 0 ]; then
         status "Linking {{dotfiles}}..."
-        mapfile -t dotfiles < <( fdfind . "$DOTFILES" --exact-depth 1 )
+        mapfile -t dotfiles < <( fd . "$DOTFILES" --exact-depth 1 )
         set -- "${dotfiles[@]}"
       fi
 
@@ -371,16 +377,26 @@ function run {
         fi
       done
 
-      run link /slack/documents/Notes ~/notes
+      if [ -d /slack/documents/Notes ]; then
+        run link /slack/documents/Notes ~/notes
+      fi
 
-      for path in $( syncthing-folders ); do
-        local stignore="$path/.stignore.template"
-        [ -f "$stignore" ] && run link "$( basename "$stignore" )" "$path/.stignore"
-      done
+      if has syncthing; then
+        for path in $( syncthing-folders ); do
+          local stignore="$path/.stignore.template"
+          [ -f "$stignore" ] && run link "$( basename "$stignore" )" "$path/.stignore"
+        done
+      fi
       ;;
     # }}}
     link) # {{{
       [ $# -eq 0 ] && usage
+
+      local force=0
+      if [ "$1" = "-f" ]; then
+        force=1
+        shift
+      fi
 
       if [ "$2" ]; then
         local origin="$2"
@@ -397,12 +413,10 @@ function run {
         if [ ! -e "$target" ]; then
           error "Path not found: {{$target}}"
           return
-        elif ! validate "$origin"; then
+        elif [ $force -eq 0 ] && ! validate "$origin"; then
           return
         fi
       fi
-
-      local force=0
 
       if [ -L "$origin" ]; then
         local link=$( readlink "$origin" 2>/dev/null )
@@ -557,7 +571,7 @@ function run {
         run packages
       fi
 
-      if has-news vim/lazy-lock.json; then
+      if has-news vim/lazy-lock.json && [ -d "$DOTFILES/packages/lazy" ]; then
         run update-lazy
       fi
 
@@ -594,23 +608,26 @@ function run {
       while read -r path; do
         list "$path"
         fix system rmdir -v "$path"
-      done < <( fdfind . "$DOTFILES" --type d --type e )
+      done < <( fd . "$DOTFILES" --type d --type e )
 
       lint home+etc "Orphaned symlinks"
       while read -r path; do
-        if [ "$(basename "$path")" = "lock" ]; then
-          # --exclude lock doesn't work: https://github.com/sharkdp/fd/issues/746
-          continue
-        fi
+        # --exclude doesn't work with --follow: https://github.com/sharkdp/fd/issues/746
+        case "$(basename "$path")" in
+          lock|.steampath) continue;;
+        esac
 
         list "$path"
         fix system rm -v "$path"
       done < <(
-        sudo fdfind . ~ /root /etc --type l -u \
+        sudo fd . ~ /root /etc --type l -u \
           --follow \
           --mount \
           --exclude dotfiles \
-          --exclude /.local/share/flatpak/repo --exclude /.var/app \
+          --exclude /.local/share/flatpak/repo \
+          --exclude /.local/share/Steam \
+          --exclude /.steam \
+          --exclude /.var/app \
           --exclude src --exclude tmp
       )
 
@@ -618,15 +635,26 @@ function run {
       while read -r path; do
         list "$path"
         fix system chown "$USER:$USER" -v "$path"
-      done < <( fdfind . ~ -o root --mount )
+      done < <(
+        fd . ~ -o root --mount \
+          --exclude /dotfiles \
+          --exclude /homebrew/plugins
+      )
 
       lint etc "Incorrect permissions"
 
-      local sudoers="$DOTFILES/etc/sudoers.d/dotfiles"
-      if [ "$( stat -c %U:%G "$sudoers" )" != "root:root" ]; then
-        list "$sudoers"
-        fix system chown -v root:root "$sudoers"
-      fi
+      paths=(
+        "bin/switch-wifi"
+        "etc/sudoers.d/dotfiles"
+      )
+
+      for path in "${paths[@]}"; do
+        path="$DOTFILES/$path"
+        if [ "$( stat -c %U:%G "$path" )" != "root:root" ]; then
+          list "$path"
+          fix system chown -v root:root "$path"
+        fi
+      done
 
       if [ -d /etc/plymouth ]; then
         local plymouth="/etc/plymouth/plymouthd.conf"
@@ -640,7 +668,7 @@ function run {
       while read -r path; do
         list "$path"
         fix system rm -v "$path"
-      done < <( sudo fdfind '.*\.(dpkg|ucf)-.*' /etc --type f -u )
+      done < <( sudo fd '.*\.(dpkg|ucf)-.*' /etc --type f -u )
 
       path=/etc/tmpfiles.d/tmp.conf
       if [ -f "$path" ]; then
@@ -652,25 +680,28 @@ function run {
       while read -r path; do
         list "$path"
         fix system rm -v "$path"
-      done < <( sudo fdfind '^(\.bashrc|\.profile)$' /root --type f -u )
+      done < <( sudo fd '^(\.bashrc|\.profile)$' /root --type f -u )
 
       lint root "Dotfile symlinks"
       for path in config/nvim config/fd config/rg config/mise local/share/mise; do
         target=$( origin "$path" )
         origin=${target/#$HOME/\/root}
 
+        [ -e "$target" ] || continue
         [ "$( sudo readlink "$origin" )" = "$target" ] && continue
 
         list "$origin"
         fix sudo ln -snfv "$target" "$origin"
       done
 
-      lint slack "Syncthing conflicts"
-      mapfile -t folders < <( syncthing-folders )
-      while read -r path; do
-        list "$path"
-        fix system rm -v "$path"
-      done < <( fdfind -u '\.sync-conflict-.*' "${folders[@]}" | grep -Fv /.stversions/ )
+      if has syncthing; then
+        lint slack "Syncthing conflicts"
+        mapfile -t folders < <( syncthing-folders )
+        while read -r path; do
+          list "$path"
+          fix system rm -v "$path"
+        done < <( fd -u '\.sync-conflict-.*' "${folders[@]}" | grep -Fv /.stversions/ )
+      fi
 
       origin=~/.config/monitors.xml
       if [ -f "$origin" ]; then
@@ -709,7 +740,7 @@ function run {
       assert
 
       testing "symlinks to /home"
-      output=$( fdfind . "$DOTFILES" -t l -x readlink -f {} | grep ^/home/ )
+      output=$( fd . "$DOTFILES" -t l -x readlink -f {} | grep ^/home/ )
       status=0
       assert
 
@@ -723,15 +754,19 @@ function run {
       status=$?
       assert
 
-      testing "nvim configuration"
-      output=$( nvim --headless +quit 2>&1 )
-      status=$?
-      assert
+      if has nvim; then
+        testing "nvim configuration"
+        output=$( nvim --headless +quit 2>&1 )
+        status=$?
+        assert
+      fi
 
-      testing "tmux configuration"
-      output=$( tmux source-file "$DOTFILES/config/tmux/tmux.conf" 2>&1 )
-      status=$?
-      assert
+      if has tmux; then
+        testing "tmux configuration"
+        output=$( tmux source-file "$DOTFILES/config/tmux/tmux.conf" 2>&1 )
+        status=$?
+        assert
+      fi
       ;;
     # }}}
 
@@ -789,6 +824,7 @@ function run {
       }
 
       local packages_apt=$(  get-packages "^[^:#]+$" )
+      local packages_arch=$( get-packages "^arch:" )
       local packages_gem=$(  get-packages '^gem:' )
       local packages_flat=$( get-packages '^flatpak:' )
 
@@ -812,17 +848,24 @@ function run {
         )
       fi
 
+      [ "$packages_arch" ] && has pacman && local missing_arch=$(
+        get-missing "$packages_arch" "$( run list arch )"
+      )
+
       [ "$packages_flat" ] && has flatpak && local missing_flat=$(
         get-missing "$packages_flat" "$( run list flatpak )"
       )
+
       [ "$packages_gem" ] && has ruby && local missing_gem=$(
         get-missing "$packages_gem" "$( run list gem )"
       )
+
       [ "$list" = "default" ] && has mise && local missing_mise=$(
         mise ls --missing --no-header | awk '{ print $1 }'
       )
 
       if [ -z "$missing_apt"  ] && \
+         [ -z "$missing_arch"  ] && \
          [ -z "$missing_gem"  ] && \
          [ -z "$missing_flat" ] && \
          [ -z "$missing_mise" ]; then
@@ -839,6 +882,7 @@ function run {
 
       list-packages apt       "$( echo "$missing_apt" | grep -v '_$' )"
       list-packages apt:purge "$( echo "$missing_apt" | grep '_$' | sed 's/_$//' )"
+      list-packages arch      "$missing_arch"
       list-packages gem       "$missing_gem"
       list-packages flatpak   "$missing_flat"
       list-packages mise      "$missing_mise"
@@ -854,12 +898,14 @@ function run {
           mapfile -t packages <<< "$1"
           shift
 
-          mux-wrap -w -t "install-packages [$list:$type]" "$@" "${packages[@]}"
-          system tmux select-layout even-vertical
+          mux-wrap -w -t "install-packages [$list:$type]" \
+            -- "$@" "${packages[@]}"
+          [ "$TMUX" ] && system tmux select-layout even-vertical
         }
 
         install-packages apt     "$missing_apt"  sudo aptitude install
-        install-packages flatpak "$missing_flat" flatpak install
+        install-packages arch    "$missing_arch" sudo pacman -S --needed
+        install-packages flatpak "$missing_flat" sudo flatpak install
         install-packages mise    "$missing_mise" 'mise install && mise prune'
         install-packages gems    "$missing_gem"  gem install
       fi
@@ -877,8 +923,9 @@ function run {
         if [ "$filter" ] && [ "$filter" != "$type" ]; then
           return
         elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
-          mux-wrap -w -t "update-packages [$type]" "$command"
-          system tmux select-layout even-vertical
+          mux-wrap -w -t "update-packages [$type]" \
+            -- "$command"
+          [ "$TMUX" ] && system tmux select-layout even-vertical
         fi
       }
 
@@ -897,8 +944,8 @@ function run {
       ;;
     update-flatpak)
       status "Updating Flatpak packages..."
-      system flatpak update \
-        && system flatpak uninstall --unused \
+      system sudo flatpak update \
+        && system sudo flatpak uninstall --unused \
         && system flatpak uninstall --delete-data
       ;;
     update-firmware)
@@ -972,6 +1019,10 @@ function run {
             INSTALLED_PACKAGES[apt]=$(
               dpkg-query -W -f '${Package}\t${Status}\n' | grep ' installed$' | cut -f1 | sort
             );;
+          arch)
+            has pacman || abort
+            pacman -Qq | sort
+            ;;
           gem)
             has gem || abort
             INSTALLED_PACKAGES[gem]=$(
@@ -1013,7 +1064,7 @@ function run {
           warning "{{Found local dconf changes:}}"
           git status -s dconf
           echo
-          mux-wrap git diff dconf
+          mux-wrap -- git diff dconf
 
           ask "{{Ignore and load committed settings?}}" || abort
           git checkout dconf

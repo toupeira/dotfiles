@@ -1,0 +1,2 @@
+# Override the rule from /usr/lib/udev/rules.d/64-ext4.rules for USB devices
+SUBSYSTEM=="block", ENV{ID_FS_TYPE}=="ext2|ext3|ext4|ext4dev|jbd", ENV{ID_BUS}=="usb", ENV{UDISKS_AUTO}="1"

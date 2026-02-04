@@ -1,0 +1,6 @@
+#!/bin/bash
+if command -v fdfind >/dev/null; then
+  exec fdfind "$@"
+else
+  exec /usr/bin/fd "$@"
+fi

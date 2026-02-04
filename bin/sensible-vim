@@ -1,11 +1,17 @@
 #!/bin/bash
 
-vim=${VIMCMD:-mise exec -- nvim}
+if [ "$VIMCMD" ]; then
+  vim=$VIMCMD
+elif command -v mise >/dev/null; then
+  vim="mise exec -- nvim"
+elif command -v nvim >/dev/null; then
+  vim="nvim"
+else
+  vim="vim"
+fi
 
 if [ "$VIMCMD" = 'vip' ] || [[ "$PWD" =~ /\.secrets ]]; then
   exec $vim -i NONE -c "set noswapfile" -c "set noundofile" -c "set nobackup" -c "set shada=" "$@"
-elif [ -n "$VIMCMD" ]; then
-  vim="$VIMCMD"
 elif [ -z "$TERM" ] || [ "$TERM" = "dumb" ]; then
   vim="xdg-terminal-exec $vim"
 fi

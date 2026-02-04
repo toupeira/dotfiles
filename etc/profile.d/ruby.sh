@@ -46,18 +46,4 @@ alias rake='_bundle_exec rake'
 alias rspec='_bundle_exec rspec'
 alias rubocop='_bundle_exec rubocop'
 
-function _spring_exec {
-  local command="$1"
-  shift
-
-  if [ -x bin/spring ]; then
-    spring "$command" "$@"
-  else
-    command "$command" "$@"
-  fi
-}
-
 alias r='rails'
-alias sr='srails'
-alias srails='_spring_exec rails'
-alias srspec='_spring_exec rspec -f doc'

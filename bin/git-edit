@@ -83,7 +83,7 @@ if [ ! "$select" ]; then
     commit=$1
     shift
   else
-    mapfile -t files < <( fdfind . -t f | fzf --multi -1 -q "$*" )
+    mapfile -t files < <( fd . -t f | fzf --multi -1 -q "$*" )
     [ "${#files[@]}" = 0 ] && exit
   fi
 fi

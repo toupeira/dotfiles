@@ -1,0 +1,28 @@
+#!/bin/bash
+
+WLAN=$( nmcli -g uuid,type connection show | grep -Fm1 wireless | cut -d: -f1 )
+if [ ! "$WLAN" ]; then
+  exit
+fi
+
+LAN=0
+
+if [ $# -eq 0 ]; then
+  nmcli device | grep -q 'ethernet.* connected' && LAN=1
+elif ! [[ $1 =~ ^(eth|en) ]]; then
+  exit
+elif [ "$2" = "up" ]; then
+  LAN=1
+elif [ "$2" = "down" ]; then
+  LAN=0
+else
+  exit
+fi
+
+if [ $LAN -eq 1 ]; then
+  echo "Disabling wireless connection..."
+  sudo nmcli radio wifi off
+else
+  echo "Enabling wireless connection..."
+  sudo nmcli radio wifi on
+fi

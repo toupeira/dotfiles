@@ -1,11 +1,10 @@
 [tools]
 # Languages
 ruby = "4.0.1"
-node = "25.5.0"
+node = "25.6.1"
 
 # Tools
-"npm:@anthropic-ai/claude-code" = "2.1.29"
-"github:dlvhdr/diffnav" = "0.8.1"
+"github:dlvhdr/diffnav" = "0.9.0"
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]

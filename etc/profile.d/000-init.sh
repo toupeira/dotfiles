@@ -1,14 +1,6 @@
 #!/bin/bash
-# shellcheck disable=SC2034
 
-[ "$BASH_VERSION" ] && [[ "$-" == *i* ]] && BASH_INTERACTIVE=1
-[ "$BASH_INTERACTIVE" ] && shopt -q login_shell && BASH_LOGIN=1
 [ "$BASH_INTERACTIVE" ] || return
-
-# Helper to check for commands
-has() {
-  command -v "$1" &>/dev/null
-}
 
 # Shell options
 shopt -s autocd

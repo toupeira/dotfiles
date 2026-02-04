@@ -3,16 +3,21 @@
 trap 'exit 1' INT
 
 ROMS="/slack/games/roms"
+METADATA=1
 
 case "$1" in
   card)
-    LABEL="SD card"
     TARGET="/media/$USER/ROMS"
+    NAME=$TARGET
     ;;
 
   deck)
-    LABEL="Steam Deck"
-    TARGET="steamdeck:Games/retrodeck"
+    TARGET="steamdeck:"
+    METADATA=0
+    ;;
+
+  powkiddy)
+    TARGET="powkiddy:"
     ;;
 
   ls|list)
@@ -22,7 +27,7 @@ case "$1" in
       printf '%-15s %10s %10s\n' "$@"
     }
 
-    echo 'system                size      files'
+    echo 'system                size       roms'
     echo '-------------------------------------'
 
     for path in "$ROMS"/*; do
@@ -49,7 +54,7 @@ case "$1" in
     ;;
 
   *)
-    echo "Usage: sync-roms [list|card|deck] [RSYNC-OPTIONS]"
+    echo "Usage: sync-roms [list|card|deck|powkiddy] [RSYNC-OPTIONS]"
     exit 255
     ;;
 esac
@@ -62,14 +67,26 @@ function rsync {
     "$@"
 }
 
-if [[ "$TARGET" != *:* ]] && ! mountpoint -q "$TARGET"; then
+if [[ "$TARGET" = *:* ]]; then
+  NAME=${TARGET%%:*}
+elif ! mountpoint -q "$TARGET"; then
   echo "$TARGET is not mounted."
   exit 1
 fi
 
 echo
-echo -e " \e[1;32m●\e[22m \e[22mSyncing ROMs from \e[1m$ROMS\e[22m to \e[1m$LABEL\e[22m...\e[0m"
+echo -e " \e[1;32m●\e[22m \e[22mSyncing ROMs from \e[1m$ROMS\e[22m to \e[1m$NAME\e[22m...\e[0m"
 rsync \
+  --exclude '*.cfg' \
+  --exclude '*.dsv' \
+  --exclude '*.hi' \
+  --exclude '*.nv' \
+  --exclude '*.pure.zip' \
+  --exclude '*.sav' \
+  --exclude '*.srm' \
+  --exclude '*.ssv' \
+  --exclude '*.sv2' \
+  --exclude '*.txt' \
   --exclude '.directory' \
   --exclude 'gamelist.xml' \
   --exclude 'systeminfo.txt' \
@@ -77,24 +94,43 @@ rsync \
   --exclude 'images' \
   --exclude 'mplayer' \
   --exclude 'ports' \
+  --exclude 'savestates' \
+  --exclude 'screenshots' \
+  --exclude 'bios/Databases' \
+  --exclude 'dreamcast/data' \
+  --exclude 'pico-8/backup' \
+  --exclude 'pico-8/bbs' \
+  --exclude 'pico-8/carts' \
+  --exclude 'pico-8/cdata' \
+  --exclude 'pico-8/cstore' \
+  --exclude 'pico-8/plates' \
+  --exclude 'psp/PSP' \
   --exclude 'scummvm/games/.scummvm' \
   "$ROMS/" "$TARGET/roms/" "$@"
 
-[ -d "$TARGET" ] || exit
+[ $METADATA = 1 ] || exit
 
 echo
-echo -e " \e[1;32m●\e[22m \e[22mSyncing ports from \e[1m$LABEL\e[22m to \e[1m$ROMS\e[22m...\e[0m"
+echo -e " \e[1;32m●\e[22m \e[22mSyncing ports from \e[1m$NAME\e[22m to \e[1m$ROMS\e[22m...\e[0m"
 rsync \
   --delete \
+  --exclude 'autoinstall' \
   --exclude 'PortMaster' \
   --exclude 'ThemeMaster' \
-  --exclude 'autoinstall' \
+  --exclude 'SAVE' \
+  --exclude 'saves' \
   "$TARGET/roms/ports/" "$ROMS/ports/" "$@"
 
 echo
-echo -e " \e[1;32m●\e[22m \e[22mSyncing metadata from \e[1m$LABEL\e[22m to \e[1m$ROMS\e[22m...\e[0m"
+echo -e " \e[1;32m●\e[22m \e[22mSyncing metadata from \e[1m$NAME\e[22m to \e[1m$ROMS\e[22m...\e[0m"
 
-for gamelist in "$TARGET"/roms/*/gamelist.xml; do
+if [ -d "$TARGET" ]; then
+  gamelists=$( ls "$TARGET"/roms/*/gamelist.xml 2>/dev/null )
+else
+  gamelists=$( ssh "$NAME" 'ls roms/*/gamelist.xml 2>/dev/null' | sed -r "s/^/$NAME:/" )
+fi
+
+for gamelist in $gamelists; do
   path=$( dirname "$gamelist" )
   system=$( basename "$path" )
 
@@ -106,12 +142,10 @@ for gamelist in "$TARGET"/roms/*/gamelist.xml; do
     --info=stats0,flist0 \
     "$gamelist" "$ROMS/$system/gamelist.xml" "$@"
 
-  if [ -e "$path/images" ]; then
-    rsync \
-      --info=stats0,flist0 \
-      --delete \
-      "$path/images/" "$ROMS/$system/images/" "$@"
-  fi
+  rsync \
+    --info=stats0,flist0 \
+    --delete \
+    "$path/images/" "$ROMS/$system/images/" "$@"
 done
 
 echo

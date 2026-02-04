@@ -26,9 +26,14 @@ PROMPT_COMMAND=(
   '_prompt_status'
   'type -p _mise_hook && _mise_hook'
   '[ "$PWD" != "$_last_pwd" ] && _prompt_dir=$( _prompt_dir)'
-  '[ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir"'
   '_last_pwd="$PWD"'
 )
+
+if [ "$TMUX" ]; then
+  PROMPT_COMMAND+=(
+    '[ ${#_prompt_dir} -gt 24 ] && mux title "${_prompt_dir:0:24}…" || mux title "$_prompt_dir"'
+  )
+fi
 
 # Prompt helpers
 function _prompt_dir {
