@@ -102,6 +102,9 @@ return {
   lazy_file { 'mong8se/actually.nvim',
     dependencies = { 'fzf-lua' },
   },
+  lazy_file { 'nemanjamalesija/smart-paste.nvim',
+    opts = { exclude_filetypes = { 'help', 'gitsigns-blame' }},
+  },
   lazy      { 'pechorin/any-jump.vim',
     url = 'https://github.com/toupeira/any-jump.vim',
     branch = 'feat/window-borders',
@@ -125,11 +128,6 @@ return {
     init = function()
       vim.g.smoothie_speed_constant_factor = 20
       vim.g.smoothie_speed_linear_factor = 20
-    end,
-  },
-  lazy_file { 'sickill/vim-pasta',
-    init = function()
-      vim.g.pasta_disabled_filetypes = { 'qf', 'fugitiveblame' }
     end,
   },
   very_lazy { 'sphamba/smear-cursor.nvim',

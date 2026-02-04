@@ -2,7 +2,7 @@
 # shellcheck disable=SC2034
 
 export FZF_DEFAULT_COMMAND="\
-fdfind \
+fd \
   --hidden \
   --exclude .git \
   --color always \
@@ -65,7 +65,7 @@ FZF_CTRL_R_OPTS="
 "
 FZF_CTRL_T_OPTS="
   --list-label ' Files '
-  --preview 'batcat -f --style numbers {}'
+  --preview 'bat -f --style numbers {}'
   --bind 'start:transform-prompt(echo \${PWD/#\$HOME/\~}/)'
   --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_CTRL_T_COMMAND --unrestricted)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
@@ -77,6 +77,20 @@ FZF_ALT_C_OPTS="
   --bind 'start:transform-prompt(echo \${PWD/#\$HOME/\~}/)'
   --bind 'ctrl-g:unbind(ctrl-g)+reload($FZF_ALT_C_COMMAND --unrestricted)+transform-header(echo -e \"\\e[0;33m(\\e[1;33msearching all\\e[0;33m)\")'
 "
+
+# Remove unsupported options on SteamOS
+if [ "$HOSTNAME" = "steamdeck" ]; then
+  FZF_DEFAULT_OPTS=$(
+    echo "$FZF_DEFAULT_OPTS" | sed -r \
+      -e "s/--list-border//" \
+      -e "s/--gutter(-raw)? '.*?'//" \
+      -e "s/--(list|border)-label '.*?'//"
+  )
+
+  FZF_CTRL_R_OPTS=$( echo "$FZF_CTRL_R_OPTS" | sed -r "s/--list-label '.*?'//" )
+  FZF_CTRL_T_OPTS=$( echo "$FZF_CTRL_T_OPTS" | sed -r "s/--list-label '.*?'//" )
+  FZF_ALT_C_OPTS=$( echo "$FZF_ALT_C_OPTS" | sed -r "s/--list-label '.*?'//" )
+fi
 
 # Setup FZF keybindings and completions.
 # Use Ctrl-F instead of Ctrl-T to complete files
