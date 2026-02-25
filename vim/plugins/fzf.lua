@@ -60,8 +60,8 @@ return {
 
     return {
       winopts = { -- {{{
-        width = 0.9,
-        height = 0.9,
+        width = 0.95,
+        height = 0.94,
         row = 0.5,
 
         preview = {

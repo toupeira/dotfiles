@@ -12,12 +12,12 @@ case "$1" in
     ;;
 
   deck)
-    TARGET="steamdeck:"
+    TARGET="steamdeck:/home/deck"
     METADATA=0
     ;;
 
   powkiddy)
-    TARGET="powkiddy:"
+    TARGET="powkiddy:/storage"
     ;;
 
   ls|list)

@@ -1,6 +1,6 @@
 command = bash --login
 
-theme = tokyonight
+theme = Wombat
 background = black
 background-opacity = 0.85
 

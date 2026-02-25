@@ -1,7 +1,7 @@
 [tools]
-fzf = "0.67.0"
+fzf = "0.68.0"
 neovim = "0.11.6"
-usage = "2.16.2"
+usage = "2.18.1"
 
 [settings]
 auto_install = false
