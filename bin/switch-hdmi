@@ -1,10 +1,13 @@
 #!/bin/bash
 
 if [ ! -c /dev/cec0 ]; then
-  echo "No CEC device."
+  echo "Couldn't find CEC device."
   exit 0
 elif ! command -v cec-ctl >/dev/null; then
   echo "Couldn't find cec-ctl."
+  exit 1
+elif ! grep -Fxq connected /sys/class/drm/card0-{HDMI,DP}-1/status 2>/dev/null; then
+  echo "HDMI is not connected."
   exit 1
 fi
 
