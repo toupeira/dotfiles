@@ -56,7 +56,9 @@ case "$1" in
       bundle)
         [ -f Gemfile ] && mux -b -d -w bundle
 
-        if [ -f yarn.lock ]; then
+        if [ -f bun.lock ]; then
+          mux -b -d -w bun install
+        elif [ -f yarn.lock ]; then
           mux -b -d -w yarn
         elif [ -f package.json ]; then
           mux -b -d -w npm install
@@ -80,7 +82,7 @@ case "$1" in
           exit 1
         fi
         ;;
-      dev)
+      dev|edit)
         options="-d"
 
         if [ -x bin/dev ]; then
@@ -89,6 +91,8 @@ case "$1" in
           command="foreman Procfile.dev"
         elif [ -f Procfile ]; then
           command="foreman Procfile"
+        elif [ -f project.godot ]; then
+          exec start godot project.godot
         else
           echo "Can't find development setup for project."
           exit 1
@@ -112,47 +116,21 @@ case "$1" in
 
         exit 0
         ;;
-      server)
+      run|server)
         options="-d"
 
-        if [ -f GDK_ROOT ] || [ -f ../GDK_ROOT ]; then
-          gdk start
-          command="gdk tail"
-        elif [ -x bin/rails ] || [ -x script/rails ]; then
-          command="rails server"
-        elif [ -x bin/middleman ]; then
-          command="middleman server"
-        elif [ -f mix.exs ] && grep -q :phoenix mix.exs; then
-          command="mix phoenix.server"
-        elif [ -f elm-package.json ]; then
-          command="elm live Main.elm"
-        elif [ -f package.json ] && jq -e .scripts.serve package.json >/dev/null; then
-          command="yarn -s serve --open"
-        elif [ -f .ember-cli ]; then
-          command="ember serve"
-        elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
-          command="grunt serve"
+        if [ -x bin/run ]; then
+          command="bin/run"
         elif [ -x bin/server ]; then
           command="bin/server"
+        elif [ -x bin/rails ] || [ -x script/rails ]; then
+          command="rails server"
+        elif [ -f mix.exs ] && grep -q :phoenix mix.exs; then
+          command="mix phoenix.server"
+        elif [ -f project.godot ]; then
+          exec godot
         else
           echo "Can't find server for project."
-          exit 1
-        fi
-        ;;
-      watcher)
-        options="-d"
-
-        if [ -f Guardfile ]; then
-          command="bundle exec guard"
-        elif [ -f elm-package.json ]; then
-          command="elm live Main.elm"
-        elif [ -f angular.json ] || [ -f .angular-cli.json ]; then
-          command="ng test"
-          [ -f yarn.lock ] && command="yarn exec -s -- $command"
-        elif [ -f Gruntfile.js ] || [ -f Gruntfile.coffee ]; then
-          command="grunt watch"
-        else
-          echo "Can't find watcher for project."
           exit 1
         fi
         ;;

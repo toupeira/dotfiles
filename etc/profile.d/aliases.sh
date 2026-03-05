@@ -90,7 +90,7 @@ function notes {
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases
-for i in bundle console dev log migrate server watcher; do
+for i in bundle console dev edit log migrate run server; do
   eval "alias @$i='mux @$i'"
 done
 unset i
