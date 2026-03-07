@@ -13,28 +13,7 @@ return {
   dependencies = {
     'nvim-treesitter',
     'nvim-lua/plenary.nvim',
-
     'ravitemer/codecompanion-history.nvim',
-
-    {
-      'ravitemer/mcphub.nvim',
-      enabled = false,
-      build = 'bundled_build.lua',
-      cmd = 'MCPHub',
-      keys = {
-        { '<Leader>$', '<Cmd>MCPHub<CR>', desc = 'Open MCB Hub' },
-      },
-
-      opts = {
-        shutdown_delay = 0,
-        use_bundled_binary = true,
-        auto_toggle_mcp_servers = false,
-
-        ui = {
-          window = { width = 0.9, height = 0.9 },
-        },
-      },
-    },
   },
 
   cmd = {
@@ -224,11 +203,6 @@ return {
           save_chat_keymap = 'gS',
           picker = 'fzf-lua',
         },
-      },
-
-      mcphub = {
-        enabled = false,
-        callback = 'mcphub.extensions.codecompanion',
       },
     },
   },

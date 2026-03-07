@@ -33,7 +33,7 @@ return {
 
   keys = {
     { '<Leader>LS', '<Cmd>LspStart<CR>', desc = 'Start LSP server' },
-    { '<Leader>%', '<Cmd>checkhealth lsp<CR>', desc = 'Show LSP status' },
+    { '<Leader>$', '<Cmd>checkhealth lsp<CR>', desc = 'Show LSP status' },
   },
 
   config = function()
