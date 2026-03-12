@@ -69,12 +69,6 @@ case "$1" in
       console)
         if [ -x bin/rails ]; then
           command="rails console"
-        elif [ -x bin/middleman ]; then
-          command="middleman console"
-        elif [ -f elm-package.json ]; then
-          command="elm-repl"
-        elif [ -f Gruntfile.js ]; then
-          command="node"
         elif [ -x bin/console ]; then
           command="bin/console"
         else
@@ -92,7 +86,7 @@ case "$1" in
         elif [ -f Procfile ]; then
           command="foreman Procfile"
         elif [ -f project.godot ]; then
-          exec start godot project.godot
+          exec start godot project.godot "$@"
         else
           echo "Can't find development setup for project."
           exit 1
@@ -128,7 +122,7 @@ case "$1" in
         elif [ -f mix.exs ] && grep -q :phoenix mix.exs; then
           command="mix phoenix.server"
         elif [ -f project.godot ]; then
-          exec godot
+          exec godot "$@"
         else
           echo "Can't find server for project."
           exit 1
