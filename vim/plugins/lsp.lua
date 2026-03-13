@@ -3,13 +3,14 @@ local nmap = util.nmap
 local nvomap = util.nvomap
 
 local servers = {
-  bashls = { install = true },
-  lua_ls = { install = true },
+  bashls   = { install = true },
+  gdscript = { enable = true },
+  lua_ls   = { install = true },
   ruby_lsp = {},
 }
 
 local install_servers = (util.is_sudo or util.is_ssh) and {} or vim.tbl_filter(
-  function(key) return servers[key]['install'] end,
+  function(key) return servers[key].install end,
   vim.tbl_keys(servers)
 )
 
@@ -38,8 +39,11 @@ return {
 
   config = function()
     for server, settings in pairs(servers) do
-      settings.install = nil
-      vim.lsp.config(server, settings)
+      vim.lsp.config(server, settings.opts or {})
+
+      if settings.enable then
+        vim.lsp.enable(server)
+      end
     end
 
     util.autocmd('LspDetach', function(event)

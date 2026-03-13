@@ -93,6 +93,7 @@ zstd
 -lnav
 -locales-all
 -mawk
+-resolvconf
 -s-tui
 -task-english
 -tig
