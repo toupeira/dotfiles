@@ -1,5 +1,5 @@
 [Unit]
-Description=Switch HDMI input on sleep and resume
+Description=Switch HDMI and wifi on sleep and resume
 Before=sleep.target
 StopWhenUnneeded=yes
 
