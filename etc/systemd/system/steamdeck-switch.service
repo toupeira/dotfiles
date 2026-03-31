@@ -1,5 +1,5 @@
 [Unit]
-Description=Switch HDMI and wifi on sleep and resume
+Description=Run Steam Deck hooks on sleep and resume
 Before=sleep.target
 StopWhenUnneeded=yes
 
@@ -9,6 +9,7 @@ RemainAfterExit=yes
 ExecStart=/slack/dotfiles/bin/switch-hdmi 3.4.0.0
 ExecStop=/slack/dotfiles/bin/switch-hdmi
 ExecStop=/slack/dotfiles/bin/switch-wifi
+ExecStop=/usr/bin/systemctl restart bluetooth
 
 [Install]
 WantedBy=sleep.target

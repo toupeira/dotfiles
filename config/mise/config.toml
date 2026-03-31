@@ -1,7 +1,7 @@
 [tools]
 fzf = "0.70.0"
-neovim = "0.11.6"
-usage = "2.18.2"
+neovim = "0.12.0"
+usage = "3.2.0"
 
 [settings]
 auto_install = false
