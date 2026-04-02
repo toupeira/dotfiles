@@ -12,7 +12,7 @@ local filetypes = {
   ['gdscript']  = { 'expandtab' },
   ['gitconfig'] = { 'commentstring=#\\ %s' },
   ['iss']       = { 'commentstring=;\\ %s' },
-  ['lua']       = { 'foldlevel=1', 'path+=./lua', 'keywordprg=:help' },
+  ['lua']       = { 'foldlevel=1', 'path+=./lua', 'keywordprg=:help!' },
   ['make']      = { 'noexpandtab' },
   ['ruby']      = { 'iskeyword+=?,!' },
 

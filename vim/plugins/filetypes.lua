@@ -117,7 +117,7 @@ return {
       })
 
       util.autocmd('User', 'MarkviewAttach', function(event)
-        util.nvomap('<M-space>', ':Checkbox toggle', { buffer = event.buf }, 'Toggle checkbox')
+        util.nvomap('<M-space>', ':Checkbox toggle', { buffer = event.buf, force = true }, 'Toggle checkbox')
       end)
     end
   },

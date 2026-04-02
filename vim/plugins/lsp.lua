@@ -14,6 +14,17 @@ local install_servers = (util.is_sudo or util.is_ssh) and {} or vim.tbl_filter(
   vim.tbl_keys(servers)
 )
 
+-- Only enable LSP servers that are explicitly configured here.
+-- `:lsp enable` will also use any servers from `nvim-lspconfig` matching the current filetype.
+local lsp_enable = function()
+  for server, _ in pairs(servers) do
+    local config = vim.lsp.config[server]
+    if config and vim.list_contains(config.filetypes, vim.bo.filetype) then
+      vim.lsp.enable(server)
+    end
+  end
+end
+
 return {
   'neovim/nvim-lspconfig',
   event = 'LazyFile',
@@ -33,7 +44,7 @@ return {
   },
 
   keys = {
-    { '<Leader>LS', '<Cmd>LspStart<CR>', desc = 'Start LSP server' },
+    { '<Leader>LS', lsp_enable, desc = 'Enable LSP' },
     { '<Leader>$', '<Cmd>checkhealth lsp<CR>', desc = 'Show LSP status' },
   },
 
@@ -47,14 +58,14 @@ return {
     end
 
     util.autocmd('LspDetach', function(event)
-      util.unmap({ 'n' }, '<Leader>LS', { buffer = event.buf })
+      pcall(util.unmap, { 'n' }, '<Leader>LS', { buffer = event.buf })
     end)
 
     util.autocmd('LspAttach', function(event)
       -- Buffer local mappings
       local args = { force = true, buffer = event.buf }
 
-      nmap('<Leader>LS', '<Cmd>LspStop<CR>', args, 'Stop LSP server')
+      nmap('<Leader>LS', '<Cmd>lsp disable', args, 'Disable LSP')
 
       nmap('gd', vim.lsp.buf.definition, args, 'Go to LSP definition')
       nmap('gD', vim.lsp.buf.declaration, args, 'Go to LSP declaration')

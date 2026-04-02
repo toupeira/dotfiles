@@ -1,0 +1,5 @@
+#!/bin/bash
+
+export GDK_BACKEND=wayland
+
+exec pw-jack /usr/bin/audacity "$@"

@@ -42,6 +42,7 @@ libavfilter-extra
 libavformat-extra
 pavucontrol
 pipewire-audio
+pipewire-jack
 pulseaudio-utils
 rtkit
 vainfo
