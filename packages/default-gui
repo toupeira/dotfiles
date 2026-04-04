@@ -48,6 +48,7 @@ rtkit
 vainfo
 
 # desktop
+at-spi2-core
 dconf-cli
 dconf-editor
 desktop-base
@@ -103,8 +104,6 @@ flatpak: org.gnome.Decibels
 flatpak: org.gtk.Gtk3theme.Numix
 
 -alsa-ucm-conf
--at-spi2-common
--at-spi2-core
 -bluez-obexd
 -cabextract
 -calibre

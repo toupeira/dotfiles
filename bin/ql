@@ -30,13 +30,21 @@ case "$command" in
       stars="$stars⭐"
     done
 
-    filename=$( awk -F= '/^~filename/ { print $2 }' $QL/current 2>/dev/null )
+    filename=$( awk -F= '/^~filename=/ { print $2 }' $QL/current 2>/dev/null )
     if [ -f "$filename" ]; then
       cover=$( find "$( dirname "$filename" )"/cover.* 2>/dev/null | head -1 )
       [ -f "$cover" ] && icon="$cover"
     fi
 
-    notify -i "$icon" -h string:desktop-entry:quodlibet "$( quodlibet --print-playing )" "$stars"
+    title=$( awk -F= '/^title=/ { print $2 }' $QL/current 2>/dev/null )
+    album=$( awk -F= '/^album=/ { print $2 }' $QL/current 2>/dev/null )
+    artist=$( awk -F= '/^artist=/ { print $2 }' $QL/current 2>/dev/null | sed -rz  's/\n(.)/, \1/g' )
+
+    text="$title"
+    [ "$album" ] && text="$text • $album"
+    text="$text • $artist"
+
+    notify -a "Quod Libet" -i "$icon" "$text" "$stars"
     ;;
 esac
 

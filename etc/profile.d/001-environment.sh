@@ -18,9 +18,6 @@ export RIPGREP_CONFIG_PATH=~/.config/rg/config
 export BAT_THEME="TwoDark"
 
 # desktop apps
-export GTK_A11Y=none
-export NO_AT_BRIDGE=1
-
 if [ "$XDG_SESSION_TYPE" = "wayland" ] && [ ! "$QT_SCALE_FACTOR" ]; then
   export QT_SCALE_FACTOR=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
   QT_SCALE_FACTOR=${QT_SCALE_FACTOR:-1}
