@@ -61,7 +61,6 @@
   "vim-eunuch": { "branch": "master", "commit": "e86bb794a1c10a2edac130feb0ea590a00d03f1e" },
   "vim-fetch": { "branch": "master", "commit": "b88bc5c4a8652b73bcdb577e0c90700a5064fd00" },
   "vim-fugitive": { "branch": "master", "commit": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0" },
-  "vim-godot": { "branch": "master", "commit": "2cecd0c83a7b3f012142a584d53a3a51be246c8e" },
   "vim-matchup": { "branch": "master", "commit": "0fb1e6b7cea34e931a2af50b8ad565c5c4fd8f4d" },
   "vim-projectionist": { "branch": "master", "commit": "5ff7bf79a6ef741036d2038a226bcb5f8b1cd296" },
   "vim-ragtag": { "branch": "master", "commit": "51b313e8a2e3a44f37b9d625bc0d461e9066b7e9" },

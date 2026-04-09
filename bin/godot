@@ -1,2 +1,0 @@
-#!/bin/sh
-exec flatpak run org.godotengine.Godot "$@"

@@ -4,6 +4,7 @@ ruby = "4.0.2"
 node = "25.8.2"
 
 # Tools
+godot = "4.6.2-stable"
 "github:dlvhdr/diffnav" = "0.11.0"
 
 [settings]

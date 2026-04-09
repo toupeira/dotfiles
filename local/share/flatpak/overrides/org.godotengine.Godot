@@ -1,2 +1,0 @@
-[Context]
-filesystems=!host;~/src;/slack/scrapbook/src;xdg-download:ro;xdg-music:ro;xdg-pictures:ro
