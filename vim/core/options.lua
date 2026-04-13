@@ -157,6 +157,8 @@ vim.o.foldtext = ''
 -- Disable maps from filetype plugins
 vim.g.no_plugin_maps = 1
 
+vim.g.gdscript_recommended_style = 0
+
 vim.g.markdown_folding = 0
 vim.g.markdown_recommended_style = 0
 
