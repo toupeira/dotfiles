@@ -1,7 +1,7 @@
 [tools]
 # Languages
 ruby = "4.0.2"
-node = "25.8.2"
+node = "25.9.0"
 
 # Tools
 godot = "4.6.2-stable"
