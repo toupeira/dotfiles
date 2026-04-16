@@ -297,14 +297,27 @@ function jq.base64-decode {
 
 # Serve a directory over HTTP
 function serve {
+  local dir
+  if [ -d "$1" ]; then
+    dir=$1
+    shift
+  fi
+
   if [ "$1" ]; then
     local port="$1"
+    shift
   else
     local port=$((9000 + RANDOM % 1000))
   fi
 
-  xdg-open "http://localhost:$port/" &>/dev/null
-  python3 -m http.server "$port"
+  (
+    if [ "$dir" ]; then
+      cd "$dir" || exit 1
+    fi
+
+    xdg-open "http://localhost:$port/" &>/dev/null
+    python3 -m http.server "$port" "$@"
+  )
 }
 
 function du.sort {
