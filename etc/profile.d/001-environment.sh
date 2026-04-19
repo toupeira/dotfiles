@@ -27,12 +27,11 @@ fi
 if [ -d ~/.config/mise ]; then
   if [ "$HOSTNAME" != "snafu" ]; then
     export MISE_ENV='development'
-    [ "$TMUX" ] && tmux set-environment MISE_ENV "$MISE_ENV"
   fi
 
   if [ "$BASH_INTERACTIVE" ]; then
     eval "$( mise activate bash )"
   else
-    eval "$( mise activate --shims )"
+    PATH="$HOME/.local/share/mise/shims:$PATH"
   fi
 fi

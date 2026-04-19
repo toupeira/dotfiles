@@ -14,16 +14,6 @@ has() {
   command -v "$1" &>/dev/null
 }
 
-# Helper to append paths
-append_path () {
-  case ":$PATH:" in
-    *:"$1":*)
-      ;;
-    *)
-      PATH="${PATH:+$PATH:}$1"
-  esac
-}
-
 for file in /etc/profile.d/*.sh /slack/dotfiles/etc/profile.d/*.sh ~/.profile.d/*.sh; do
   if [ -r "$file" ]; then
     . "$file"
