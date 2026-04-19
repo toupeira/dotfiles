@@ -14,11 +14,12 @@ for path in $paths; do
   echo
   echo -e " \e[1;32m●\e[22m \e[22mSyncing \e[1m$path\e[22m with \e[1;33m$target\e[0m"
 
+  args=()
   case "$path" in
     games)
-      args=( -ignore 'Path steam' );;
-    *)
-      args=();;
+      args+=( -ignore 'Path steam' )
+      [ "$HOSTNAME" = "meerkat" ] && args+=( -ignore 'Path roms' )
+      ;;
   esac
 
   unison \
