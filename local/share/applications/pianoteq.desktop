@@ -4,4 +4,3 @@ Type=Application
 Name=Pianoteq
 Icon=activity-simplepiano
 Exec=/slack/dotfiles/bin/pianoteq
-Actions=
