@@ -1,0 +1,22 @@
+#!/bin/bash
+
+read -rd '' settings <<EOF
+
+filesystem/directories/default_project_path = "$HOME/src"
+
+network/connection/network_mode = 1
+
+run/bottom_panel/action_on_play = 0
+
+text_editor/appearance/minimap/show_minimap = false
+text_editor/behavior/files/open_dominant_script_on_scene_change = true
+text_editor/behavior/files/trim_trailing_whitespace_on_save = true
+text_editor/behavior/indent/size = 2
+text_editor/behavior/indent/type = 1
+
+EOF
+
+for config in ~/.config/godot/editor_settings-*.tres; do
+  echo -e " \e[1;32m●\e[22m \e[22mSyncing \e[1m$config\e[0m"
+  echo "$settings" >> "$config"
+done

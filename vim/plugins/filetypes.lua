@@ -87,6 +87,8 @@ return {
             checked = { text = '󰄲', hl = 'Keyword', scope_hl = 'MarkviewCheckboxStriked' },
             unchecked = { text = '󰄱', hl = 'Keyword', scope_hl = '' },
           },
+
+          tags = { enable = false },
         },
 
         html = {

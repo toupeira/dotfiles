@@ -46,18 +46,23 @@ for filetype, settings in pairs(filetypes) do
   autocmd('FileType', filetype, 'setlocal ' .. util.join(settings, ' '))
 end
 
--- Enable Treesitter folding if available
-util.autocmd('FileType', function()
-  if not vim.treesitter.language.get_lang(vim.bo.filetype) then
+-- Enable Treesitter if available
+autocmd('FileType', function(event)
+  local language = vim.treesitter.language.get_lang(event.match)
+  if not vim.treesitter.language.add(language) then
     return
   end
 
-  vim.wo[0][0].foldmethod = 'expr'
+  vim.treesitter.start(event.buf, language)
+
+  -- vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+
+  vim.wo.foldmethod = 'expr'
   if vim.bo.filetype == 'markdown' then
     -- Use default folding from ftplugin for Markdown
-    vim.wo[0][0].foldexpr = 'MarkdownFold()'
+    vim.wo.foldexpr = 'MarkdownFold()'
   else
-    vim.wo[0][0].foldexpr = 'v:lua.vim.treesitter.foldexpr()'
+    vim.wo.foldexpr = 'v:lua.vim.treesitter.foldexpr()'
   end
 end)
 

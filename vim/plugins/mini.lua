@@ -5,6 +5,7 @@ local util = require('util')
 local nmap = util.nmap
 local vmap = util.vmap
 local imap = util.imap
+local nvomap = util.nvomap
 
 return {
   'nvim-mini/mini.nvim',
@@ -355,14 +356,14 @@ return {
     require('mini.jump').setup()
 
     local original_jump = MiniJump.jump
-    local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
+    local repeat_move = require('nvim-treesitter-textobjects.repeatable_move')
 
     MiniJump.jump = function(...)
       repeat_move.last_move = nil
       return original_jump(...)
     end
 
-    nmap(';', function ()
+    nvomap(';', function ()
       if repeat_move.last_move then
         repeat_move.repeat_last_move()
       else
@@ -370,7 +371,7 @@ return {
       end
     end, { force = true }, 'Repeat jump')
 
-    nmap('|', function ()
+    nvomap('|', function ()
       if repeat_move.last_move then
         repeat_move.repeat_last_move_opposite()
       else

@@ -450,9 +450,36 @@ util.toggle_list = function(id)
 end
 
 -- Make next/previous movements repeatable
-util.make_repeatable = function(...)
-  return require('nvim-treesitter.textobjects.repeatable_move')
-    .make_repeatable_move_pair(...)
+util.make_repeatable = function(forward, backward)
+  local repeatable_move = require('nvim-treesitter-textobjects.repeatable_move')
+
+  local repeatable = function(opts, ...)
+    if opts.forward then
+      forward(...)
+    else
+      backward(...)
+    end
+  end
+
+  local repeatable_forward = function(...)
+    repeatable_move.last_move = {
+      func = repeatable,
+      opts = { forward = true },
+      additional_args = { ... },
+    }
+    forward(...)
+  end
+
+  local repeatable_backward = function(...)
+    repeatable_move.last_move = {
+      func = repeatable,
+      opts = { forward = false },
+      additional_args = { ... },
+    }
+    backward(...)
+  end
+
+  return repeatable_forward, repeatable_backward
 end
 
 -- }}}

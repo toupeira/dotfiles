@@ -76,7 +76,7 @@ case "$1" in
           exit 1
         fi
         ;;
-      dev|edit)
+      dev)
         options="-d"
 
         if [ -x bin/dev ]; then
@@ -85,11 +85,16 @@ case "$1" in
           command="foreman Procfile.dev"
         elif [ -f Procfile ]; then
           command="foreman Procfile"
-        elif [ -f project.godot ]; then
-          exec start godot project.godot "$@"
         else
           echo "Can't find development setup for project."
           exit 1
+        fi
+        ;;
+      edit)
+        if [ -f project.godot ]; then
+          exec start godot project.godot "$@"
+        else
+          exec sensible-vim "$@"
         fi
         ;;
       log)

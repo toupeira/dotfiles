@@ -1,15 +1,91 @@
 local util = require('util')
 local nvomap = util.nvomap
 
+local languages = {
+  'bash',
+  'c',
+  'comment',
+  'css',
+  'diff',
+  'gdscript',
+  'gdshader',
+  'git_config',
+  'git_rebase',
+  'gitattributes',
+  'gitcommit',
+  'gitignore',
+  'html',
+  'ini',
+  'javascript',
+  'json',
+  'lua',
+  'markdown',
+  'markdown_inline',
+  'mermaid',
+  'python',
+  'regex',
+  'ruby',
+  'scss',
+  'toml',
+  'typescript',
+  'vim',
+  'vimdoc',
+  'vue',
+  'yaml',
+  'xml',
+}
+
+local map_select = function(key, query, desc)
+  return {
+    key,
+    mode = { 'x', 'o' },
+    '<Cmd>lua require("nvim-treesitter-textobjects.select").select_textobject("' .. query .. '", "textobjects")<CR>',
+    desc = desc,
+  }
+end
+
+local map_move = function(key, query, action, desc)
+  return {
+    key,
+    mode = { 'n', 'x', 'o' },
+    '<Cmd>lua require("nvim-treesitter-textobjects.move").' .. action .. '("' .. query .. '", "textobjects")<CR>',
+    desc = desc,
+  }
+end
+
 return {
   'nvim-treesitter/nvim-treesitter',
-  event = 'LazyFile',
   build = ':TSUpdate',
 
   dependencies = {
-    { 'nvim-treesitter/nvim-treesitter-refactor' },
-    { 'nvim-treesitter/nvim-treesitter-textobjects' },
     { 'RRethy/nvim-treesitter-endwise' },
+
+    { 'nvim-treesitter/nvim-treesitter-textobjects',
+      keys = {
+        map_select('am', '@class.outer', 'Select current module'),
+        map_select('im', '@class.inner', 'Select current module body'),
+        map_select('af', '@function.outer', 'Select current function'),
+        map_select('if', '@function.inner', 'Select current function body'),
+
+        map_move(']a', '@parameter.inner', 'goto_next_start', 'Next argument'),
+        map_move('[a', '@parameter.inner', 'goto_previous_start', 'Previous argument'),
+        map_move(']A', '@parameter.inner', 'goto_next_end', 'End of argument'),
+        map_move('[A', '@parameter.inner', 'goto_previous_end', 'End of previous argument'),
+
+        map_move(']m', '@class.outer', 'goto_next_start', 'Next module'),
+        map_move('[m', '@class.outer', 'goto_previous_start', 'Previous module'),
+        map_move(']M', '@class.outer', 'goto_next_end', 'End of module'),
+        map_move('[M', '@class.outer', 'goto_previous_end', 'End of previous module'),
+
+        map_move(']f', '@function.outer', 'goto_next_start', 'Next function'),
+        map_move('[f', '@function.outer', 'goto_previous_start', 'Previous function'),
+        map_move(']F', '@function.outer', 'goto_next_end', 'End of function'),
+        map_move('[F', '@function.outer', 'goto_previous_end', 'End of previous function'),
+      },
+      opts = {
+        select = { lookahead = true },
+      },
+    },
 
     { 'nvim-treesitter/nvim-treesitter-context',
       opts = {
@@ -20,7 +96,6 @@ return {
     },
 
     { 'aaronik/treewalker.nvim',
-      cmd = 'Treewalker',
       init = function()
         local function move(action)
           return function()
@@ -40,109 +115,9 @@ return {
     },
   },
 
-  opts = {
-    ensure_installed = util.is_sudo and {} or {
-      'bash',
-      'c',
-      'comment',
-      'css',
-      'diff',
-      'gdscript',
-      'gdshader',
-      'git_config',
-      'git_rebase',
-      'gitattributes',
-      'gitcommit',
-      'gitignore',
-      'html',
-      'ini',
-      'javascript',
-      'json',
-      'lua',
-      'markdown',
-      'markdown_inline',
-      'mermaid',
-      'python',
-      'regex',
-      'ruby',
-      'scss',
-      'toml',
-      'typescript',
-      'vim',
-      'vimdoc',
-      'vue',
-      'yaml',
-      'xml',
-    },
-
-    highlight = { enable = true },
-    indent = { enable = false },
-
-    refactor = {
-      navigation = {
-        enable = true,
-        keymaps = {
-          goto_next_usage = '<C-]>',
-          goto_previous_usage = '<C-[>',
-        },
-      },
-
-      smart_rename = {
-        enable = true,
-        keymaps = { smart_rename = 'gR' },
-      },
-    },
-
-    textobjects = {
-      select = {
-        enable = true,
-        lookahead = true,
-
-        keymaps = {
-          ['am'] = { query = '@class.outer', desc = 'Select current module' },
-          ['im'] = { query = '@class.inner', desc = 'Select current module body' },
-          ['af'] = { query = '@function.outer', desc = 'Select current function' },
-          ['if'] = { query = '@function.inner', desc = 'Select current function body' },
-        },
-      },
-
-      move = {
-        enable = true,
-        goto_next_start = {
-          [']a'] = { query = '@parameter.inner', desc = 'Next argument' },
-          [']m'] = { query = '@class.outer', desc = 'Next module' },
-          [']f'] = { query = '@function.outer', desc = 'Next function' },
-        },
-        goto_next_end = {
-          [']A'] = { query = '@parameter.inner', desc = 'End of argument' },
-          [']M'] = { query = '@class.outer', desc = 'End of module' },
-          [']F'] = { query = '@function.outer', desc = 'End of function' },
-        },
-        goto_previous_start = {
-          ['[a'] = { query = '@parameter.inner', desc = 'Previous argument' },
-          ['[m'] = { query = '@class.outer', desc = 'Previous module' },
-          ['[f'] = { query = '@function.outer', desc = 'Previous function' },
-        },
-        goto_previous_end = {
-          ['[A'] = { query = '@parameter.inner', desc = 'End of previous argument' },
-          ['[M'] = { query = '@class.outer', desc = 'End of previous module' },
-          ['[F'] = { query = '@function.outer', desc = 'End of previous function' },
-        },
-      },
-    },
-  },
-
-  config = function(_, opts)
-    require('nvim-treesitter.configs').setup(opts)
-
-    local repeat_move = require('nvim-treesitter.textobjects.repeatable_move')
-    nvomap(';', repeat_move.repeat_last_move)
-    nvomap('|', repeat_move.repeat_last_move_opposite)
-    nvomap('<S-Tab>', '|', { force = true, remap = true })
-
-    nvomap('f', repeat_move.builtin_f_expr, { expr = true, force = true })
-    nvomap('F', repeat_move.builtin_F_expr, { expr = true, force = true })
-    nvomap('t', repeat_move.builtin_t_expr, { expr = true, force = true })
-    nvomap('T', repeat_move.builtin_T_expr, { expr = true, force = true })
+  config = function()
+    if not util.is_sudo then
+      require('nvim-treesitter').install(languages)
+    end
   end,
 }
