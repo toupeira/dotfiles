@@ -175,19 +175,18 @@ function rg.delta {
 # Switch to dotfiles repository if no arguments are passed
 function dotfiles {
   local path
-  local dotfiles="/slack/dotfiles"
 
   if [ $# -eq 0 ]; then
-    cd "$dotfiles" || return 1
+    cd "$DOTFILES" || return 1
   elif [ "$1" = "cd" ]; then
     if [ ! "$2" ]; then
-      path="$dotfiles"
-    elif [ -d "$dotfiles/$2" ]; then
-      path="$dotfiles/$2"
+      path="$DOTFILES"
+    elif [ -d "$DOTFILES/$2" ]; then
+      path="$DOTFILES/$2"
     elif path=$( dotfiles list mise "$2" | head -1 ) && [ "$path" ]; then
-      path="$dotfiles/packages/mise/installs/$path/latest"
+      path="$DOTFILES/packages/mise/installs/$path/latest"
     elif path=$( dotfiles list lazy "$2" | head -1 ) && [ "$path" ]; then
-      path="$dotfiles/packages/lazy/$path"
+      path="$DOTFILES/packages/lazy/$path"
     fi
 
     if [ -d "$path" ]; then
@@ -197,7 +196,7 @@ function dotfiles {
       return 1
     fi
   else
-    "$dotfiles/bin/dotfiles" "$@"
+    "$DOTFILES/bin/dotfiles" "$@"
   fi
 }
 

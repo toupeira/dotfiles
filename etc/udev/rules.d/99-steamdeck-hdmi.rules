@@ -1,1 +1,1 @@
-ACTION=="change", SUBSYSTEM=="drm", ENV{HOTPLUG}=="1", RUN+="/usr/bin/systemd-run --no-block /slack/dotfiles/bin/switch-hdmi"
+ACTION=="change", SUBSYSTEM=="drm", ENV{HOTPLUG}=="1", RUN+="/usr/bin/systemd-run --no-block /home/deck/dotfiles/bin/switch-hdmi"

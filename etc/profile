@@ -4,6 +4,12 @@
 # /etc/profile: system-wide .profile file for the Bourne shell (sh(1))
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
 
+if [ "$HOSTNAME" = "steamdeck" ]; then
+  DOTFILES="/home/deck/dotfiles"
+else
+  DOTFILES="/slack/dotfiles"
+fi
+
 [ "$BASH_VERSION" ] && [[ "$-" == *i* ]] && BASH_INTERACTIVE=1
 [ "$BASH_INTERACTIVE" ] && shopt -q login_shell && BASH_LOGIN=1
 
@@ -14,7 +20,17 @@ has() {
   command -v "$1" &>/dev/null
 }
 
-for file in /etc/profile.d/*.sh /slack/dotfiles/etc/profile.d/*.sh ~/.profile.d/*.sh; do
+# Helper for SteamOS
+append_path() {
+  case ":$PATH:" in
+    *:"$1":*)
+      ;;
+    *)
+      PATH="${PATH:+$PATH:}$1"
+  esac
+}
+
+for file in /etc/profile.d/*.sh "$DOTFILES/etc/profile.d"/*.sh ~/.profile.d/*.sh; do
   if [ -r "$file" ]; then
     . "$file"
   fi

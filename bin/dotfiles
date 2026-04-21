@@ -1,7 +1,11 @@
 #!/bin/bash
 # vim: foldmethod=marker foldlevel=0
 
-DOTFILES="/slack/dotfiles"
+if [ "$HOSTNAME" = "steamdeck" ]; then
+  DOTFILES="/home/deck/dotfiles"
+else
+  DOTFILES="/slack/dotfiles"
+fi
 
 ### usage {{{
 
@@ -338,6 +342,12 @@ function run {
 
       run link-dotfiles "$@"
       run link-slack
+
+      if [ "$HOSTNAME" = "steamdeck" ]; then
+        status "Setting up {{pacman}}..."
+        sudo pacman-key --populate holo
+      fi
+
       run packages
 
       if has-gui; then
@@ -895,6 +905,7 @@ function run {
           shift
 
           [ "$1" ] || return
+          local packages
           mapfile -t packages <<< "$1"
           shift
 
@@ -1021,7 +1032,7 @@ function run {
             );;
           arch)
             has pacman || abort
-            pacman -Qq | sort
+            pacman -Qq | grep . | sort
             ;;
           gem)
             has gem || abort
@@ -1048,7 +1059,12 @@ function run {
         esac
       fi
 
-      echo "${INSTALLED_PACKAGES[$1]}" | sort | fzf -f "$2"
+      local list=${INSTALLED_PACKAGES[$1]}
+      if [ "$2" ]; then
+        list=$( echo "$list" | fzf -f "$2" )
+      fi
+
+      echo "$list"
       ;;
     # }}}
 

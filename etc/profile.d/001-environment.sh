@@ -1,8 +1,8 @@
 #!/bin/bash
 
-export PATH="/usr/sbin:/slack/dotfiles/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
+export PATH="/usr/sbin:$DOTFILES/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
 
-for dir in ~/bin /slack/dotfiles/packages/mason/bin; do
+for dir in ~/bin "$DOTFILES/packages/mason/bin"; do
   [ -d "$dir" ] && export PATH="$PATH:$dir"
 done
 unset dir

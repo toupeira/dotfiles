@@ -6,9 +6,9 @@ StopWhenUnneeded=yes
 [Service]
 Type=oneshot
 RemainAfterExit=yes
-ExecStart=/slack/dotfiles/bin/switch-hdmi 3.4.0.0
-ExecStop=/slack/dotfiles/bin/switch-hdmi
-ExecStop=/slack/dotfiles/bin/switch-wifi
+ExecStart=/home/deck/dotfiles/bin/switch-hdmi 3.4.0.0
+ExecStop=/home/deck/dotfiles/bin/switch-hdmi
+ExecStop=/home/deck/dotfiles/bin/switch-wifi
 ExecStop=/usr/bin/systemctl restart bluetooth
 
 [Install]
