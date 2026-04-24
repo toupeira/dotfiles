@@ -83,6 +83,8 @@ vim.o.mouse = 'ar'
 vim.o.mousemodel = 'extend'
 vim.opt.guicursor:remove { 't:block-blinkon500-blinkoff500-TermCursor' }
 
+vim.o.winborder = 'rounded'
+
 -- Get rid of the command window
 util.autocmd('CmdWinEnter', 'quit')
 vim.o.cmdwinheight = 1

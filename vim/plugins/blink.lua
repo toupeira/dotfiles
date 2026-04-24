@@ -43,6 +43,7 @@ return {
       trigger = { show_in_snippet = false },
 
       menu = {
+        border = 'none',
         max_height = 10,
         winblend = vim.o.pumblend,
 
@@ -59,10 +60,6 @@ return {
           },
         },
       },
-
-      documentation = {
-        window = { border = 'rounded' },
-      },
     },
 
     fuzzy = {
@@ -71,7 +68,6 @@ return {
 
     signature = {
       enabled = true,
-      window = { border = 'rounded' },
     },
 
     sources = {

@@ -326,7 +326,7 @@ return {
       },
 
       window = {
-        config = { width = 40, border = 'rounded' },
+        config = { width = 40 },
         delay = vim.o.timeoutlen,
       },
     })

@@ -229,15 +229,10 @@ function src_alias {
   local project="$2"
   shift 2
 
-  if [ -d "$project" ]; then
-    local space=''
-    [ $# -gt 0 ] && space=' '
-    alias $alias="src $project$space$*"
-    __git_complete "$alias" _src_alias
-  else
-    echo "$project: Path not found"
-    return 1
-  fi
+  [ -d "$project" ] || return
+
+  alias $alias="src $project"
+  __git_complete "$alias" _src_alias
 }
 
 # Sudo wrapper for systemctl

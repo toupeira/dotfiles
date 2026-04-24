@@ -130,8 +130,11 @@ return {
       treesitter = merge(presets.bottom, presets.preview),
 
       buffers = merge(presets.bottom, presets.preview, {
-        fzf_opts = { ['--header-lines'] = false },
-        formatter = "path.filename_first",
+        fzf_opts = {
+          ['--header-lines'] = false,
+          ['--with-nth']  = '3..',
+        },
+        formatter = 'path.filename_first',
         headers = false,
       }),
 

@@ -106,8 +106,6 @@ return {
     opts = { exclude_filetypes = { 'help', 'gitsigns-blame' }},
   },
   lazy      { 'pechorin/any-jump.vim',
-    url = 'https://github.com/toupeira/any-jump.vim',
-    branch = 'feat/window-borders',
     keys = {
       { 'gd', '<Cmd>AnyJump<CR>', desc = 'Jump to definition' },
       { 'gd', '<Cmd>AnyJumpVisual<CR>', mode = { 'v' }, desc = 'Jump to definition' },
@@ -116,7 +114,6 @@ return {
     init = function()
       vim.g.any_jump_disable_default_keybindings = 1
       vim.g.any_jump_center_screen_after_jump = true
-      vim.g.any_jump_window_border = 'rounded'
       vim.g.any_jump_window_width_ratio = 0.8
 
       util.autocmd('FileType', 'any-jump', function()
