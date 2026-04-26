@@ -33,7 +33,7 @@ menuseparator#context-sep-setbackground
   --tab-icon-end-margin: 5.5px !important;
 }
 
-/* Hide the "New" label on "Add Split View" */
-#context_moveTabToSplitView::after {
+/* Hide "New" badges */
+menuitem.badge-new::after {
   display: none !important;
 }
