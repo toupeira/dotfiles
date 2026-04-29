@@ -8,6 +8,10 @@ command="$1"
 argument="$2"
 
 case "$command" in
+  '')
+    quodlibet &>/dev/null &
+    exit
+    ;;
   start-hidden)
     shift
 

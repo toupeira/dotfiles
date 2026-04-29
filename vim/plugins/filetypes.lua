@@ -48,6 +48,9 @@ return {
   { 'OXY2DEV/markview.nvim',
     ft = { 'markdown', 'codecompanion' },
     cmd = { 'Markview' },
+    keys = {
+      { '<LocalLeader>M', '<Cmd>Markview toggle<CR>', desc = 'Toggle Markdown formatting' },
+    },
     opts = function(plugin)
       local function conceal_tag(icon, hl_group)
         return {
