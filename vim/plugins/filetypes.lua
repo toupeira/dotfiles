@@ -76,7 +76,7 @@ return {
 
         markdown = {
           list_items = {
-            shift_width = 2,
+            shift_width = 0,
             marker_minus       = { add_padding = false, text = '-' },
             marker_plus        = { add_padding = false, text = '●' },
             marker_star        = { add_padding = false, text = '●' },

@@ -36,6 +36,7 @@ local filetypes = {
     'conceallevel=2',
     'suffixesadd+=.md',
     'foldlevel=2',
+    'showbreak=NONE',
     -- automatically continue lists and blockquotes
     'comments=b:*,b:-,b:+,n:>',
     'formatoptions+=r',

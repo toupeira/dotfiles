@@ -56,6 +56,8 @@ lazy.setup({
   },
 
   ui = {
+    border = 'rounded',
+    backdrop = 100,
     size = { width = 0.9, height = 0.9 },
   },
 
