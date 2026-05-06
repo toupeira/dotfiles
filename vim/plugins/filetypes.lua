@@ -75,6 +75,11 @@ return {
         },
 
         markdown = {
+          headings = {
+            setext_1 = false,
+            setext_2 = false,
+          },
+
           list_items = {
             shift_width = 0,
             marker_minus       = { add_padding = false, text = '-' },
