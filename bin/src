@@ -69,7 +69,7 @@ case "$ACTION" in
   list|ls|l|-l)
     if [ -z "$all" ]; then
       filter="
-        -not \( -path $SRC/archive -prune \)
+        -not \( -path $SRC/scrapbook -prune \)
         -not \( -path $SRC/upstream -prune \)
       "
     fi
@@ -86,7 +86,7 @@ case "$ACTION" in
     [ $# -gt 0 ] && pattern="$pattern$( printf '|%s' "$@" )"
 
     eval find -L "$SRC" \
-      -mindepth 1 -maxdepth 4 \
+      -mindepth 1 \
       -type d $filter -name .git \
       | sed -r "s|^($SRC/)(.+)/\.git$|$format|" \
       | grep -E "$pattern" \

@@ -26,7 +26,7 @@ fi
 # initialize mise
 if [ -d ~/.config/mise ]; then
   if [ "$HOSTNAME" != "snafu" ]; then
-    export MISE_ENV='development'
+    export MISE_ENV='development,gamedev'
   fi
 
   if [ "$BASH_INTERACTIVE" ]; then
