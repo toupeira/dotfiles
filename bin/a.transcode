@@ -25,20 +25,30 @@ for file in "${files[@]}"; do
   ext=${file##*.}
   dirname=$( dirname "$file" )
   basename=$( basename "$file" ".$ext" )
-  unset options
+  options=()
 
-  case "$ext" in
+  mime=$( file -b --mime-type "$file" )
+  if [ "${mime:0:6}" != "audio/" ]; then
+    echo " [1;33m●[22m Skipping: [1m$file[0m"
+    continue
+  fi
+
+  case "$format" in
+    wav)
+      options+=( -sample_fmt s16 )
+      ;;
     flac)
       if file "$file" | grep -Eq '24 bit.* (96|192) kHz'; then
-        options="-sample_fmt s16 -ar 48000"
+        options+=( -sample_fmt s16 -ar 48000 )
+      else
+        options+=( -sample_fmt s16 )
       fi
       ;;
-    wav|WAV)
-      options="-sample_fmt s16"
+    mp3)
+      options+=( -q:a 0 ) # best VBR
       ;;
-    *)
-      echo " [1;33m●[22m Skipping: [1m$file[0m"
-      continue
+    ogg)
+      options+=( -q:a 6 ) # ~192kbps VBR
       ;;
   esac
 
@@ -46,10 +56,5 @@ for file in "${files[@]}"; do
   mkdir -p "$( dirname "$target" )"
 
   echo " [1;32m●[22m Converting: [1m$basename [1;33m{[1m.$ext[22m => [1m.$format[22m}[0m "
-
-  if [ "$format" = "mp3" ]; then
-    options="$options -q:a 0"
-  fi
-
-  ffmpeg -loglevel warning -i "$file" $options "$target"
+  ffmpeg -loglevel warning -i "$file" "${options[@]}" "$target"
 done
