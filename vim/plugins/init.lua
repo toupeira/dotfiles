@@ -8,12 +8,11 @@ local imap = util.imap
 
 return {
   lazy_file { 'AndrewRadev/splitjoin.vim', submodules = false },
+  lazy_file { 'tpope/vim-characterize' },
 
   very_lazy { 'tiagovla/scope.nvim', config = true },
   very_lazy { 'tpope/vim-abolish' },
-  very_lazy { 'tpope/vim-characterize' },
   very_lazy { 'tpope/vim-repeat' },
-  very_lazy { 'tpope/vim-scriptease' },
 
   lazy      { 'allaman/emoji.nvim',
     keys = {
