@@ -5,6 +5,7 @@ node = "25.9.0"
 
 # Tools
 "github:dlvhdr/diffnav" = "0.11.0"
+"github:TheWaWaR/simple-http-server" = { version = "0.8.0", bin = "simple-http-server" }
 
 [settings]
 idiomatic_version_file_enable_tools = ["node"]
