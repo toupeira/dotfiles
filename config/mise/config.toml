@@ -1,8 +1,8 @@
 [tools]
-fzf = "0.71.0"
-neovim = "0.12.1"
+fzf = "0.72.0"
+neovim = "0.12.2"
 tree-sitter = "0.26.8"
-usage = "3.2.0"
+usage = "3.3.0"
 
 [settings]
 auto_install = false

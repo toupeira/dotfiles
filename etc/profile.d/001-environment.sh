@@ -27,6 +27,7 @@ fi
 if [ -d ~/.config/mise ]; then
   if [ "$HOSTNAME" != "snafu" ]; then
     export MISE_ENV='development,gamedev'
+    [ "$TMUX" ] && tmux set-environment MISE_ENV "$MISE_ENV"
   fi
 
   if [ "$BASH_INTERACTIVE" ]; then
