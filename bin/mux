@@ -54,6 +54,7 @@ case "$1" in
     # Or run a predefined command
     case "$proc" in
       bundle)
+        [ -f mise.toml ] && mux -b -d -w mise install
         [ -f Gemfile ] && mux -b -d -w bundle
 
         if [ -f bun.lock ]; then
