@@ -11,10 +11,12 @@ if [ $# -eq 1 ] && [ "$( basename "$1" )" = "converted" ]; then
 fi
 
 format=flac
+mono=
 
 while [ $# -gt 0 ]; do
   case "$1" in
     -f ) format="$2"; shift 2;;
+    -m ) mono=1; shift 1;;
     *  ) break;;
   esac
 done
@@ -51,6 +53,8 @@ for file in "${files[@]}"; do
       options+=( -q:a 6 ) # ~192kbps VBR
       ;;
   esac
+
+  [ "$mono" ] && options+=( -ac 1 )
 
   target="$dirname/converted/$basename.$format"
   mkdir -p "$( dirname "$target" )"
