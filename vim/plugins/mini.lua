@@ -270,7 +270,10 @@ return {
         -- `g` key
         { mode = 'n', keys = 'g' },
         { mode = 'v', keys = 'g' },
+        { mode = 'n', keys = 'g=' },
         { mode = 'n', keys = 'gc' },
+        { mode = 'n', keys = 'ge' },
+        { mode = 'n', keys = 'gm' },
 
         -- Marks
         { mode = 'n', keys = "'" },
@@ -424,8 +427,9 @@ return {
     -- }}}
     -- mini.operators {{{
     require('mini.operators').setup({
-      sort = { prefix = '' },
       exchange = { prefix = 'ge' },
+      replace = { prefix = '' },
+      sort = { prefix = '' },
     })
     vmap('D', 'gm', { remap = true }, 'Duplicate selection')
     -- }}}

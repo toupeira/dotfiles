@@ -385,8 +385,6 @@ return {
     })
 
     map_fzf('<Leader>l', 'blines', { desc = 'lines in buffer' })
-    map_fzf('<Leader>i', 'btags', { desc = 'buffer symbols' })
-    map_fzf('<Leader>I', 'tags', { desc = 'project symbols' })
 
     map_fzf('<Leader>d', 'diagnostics_document', { desc = 'diagnostics in current file' })
     map_fzf('<Leader>D', 'diagnostics_workspace', {
@@ -417,17 +415,22 @@ return {
     -- search spellcheck
     map_fzf('<Leader>z', 'spell_suggest', { desc = 'spelling suggestions' })
 
+    -- search ctags
+    map_fzf('<Leader>et', 'btags', { desc = 'buffer tags' })
+    map_fzf('<Leader>eT', 'tags', { desc = 'project tags' })
+
     -- search LSP
-    map_fzf('<Leader>La', 'lsp_code_actions')
-    map_fzf('<Leader>Ld', 'lsp_definitions')
-    -- map_fzf('<Leader>LD', 'lsp_declarations')
-    -- map_fzf('<Leader>Li', 'lsp_implementations')
-    map_fzf('<Leader>LI', 'lsp_incoming_calls')
-    map_fzf('<Leader>LO', 'lsp_outgoing_calls')
-    map_fzf('<Leader>Lr', 'lsp_references')
-    map_fzf('<Leader>Lt', 'lsp_document_symbols')
-    map_fzf('<Leader>LT', 'lsp_live_workspace_symbols')
-    -- map_fzf('<Leader>Lt', 'lsp_typedefs')
+    map_fzf('<Leader>ea', 'lsp_code_actions')
+    map_fzf('<Leader>ed', 'lsp_definitions')
+    map_fzf('<Leader>eD', 'lsp_declarations')
+    map_fzf('<Leader>ef', 'lsp_finder')
+    map_fzf('<Leader>eI', 'lsp_implementations')
+    map_fzf('<Leader>ei', 'lsp_incoming_calls')
+    map_fzf('<Leader>eo', 'lsp_outgoing_calls')
+    map_fzf('<Leader>er', 'lsp_references')
+    map_fzf('<Leader>es', 'lsp_document_symbols')
+    map_fzf('<Leader>eS', 'lsp_live_workspace_symbols')
+    -- map_fzf('<Leader>et', 'lsp_typedefs')
 
     -- search git
     map_fzf('<Leader>gm', 'git_status')

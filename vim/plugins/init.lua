@@ -42,29 +42,6 @@ return {
       end, 'Toggle match highlighting')
     end
   },
-  lazy      { 'folke/flash.nvim',
-    keys = {
-      { '<Leader>j', mode = { 'n', 'x', 'o' }, '<Cmd>lua require("flash").jump()<CR>', desc = 'Jump to position' },
-      { '<Leader>J', mode = { 'n', 'x', 'o' }, '<Cmd>lua require("flash").treesitter()<CR>', desc = 'Select Treesitter node' },
-      { 'r', mode = 'o', '<Cmd>lua require("flash").remote()<CR>', desc = 'Remote jump to position' },
-      { 'R', mode = { 'o', 'x' }, '<Cmd>lua require("flash").treesitter_search()<CR>', desc = 'Remote select Treesitter node' },
-    },
-    opts = {
-      label = {
-        exclude = 'q',
-        uppercase = false,
-      },
-
-      search = {
-        mode = 'fuzzy',
-      },
-
-      modes = {
-        search = { enabled = false },
-        char = { enabled = false },
-      },
-    },
-  },
   very_lazy { 'j-hui/fidget.nvim',
     keys = {
       { '<Leader>N', '<Cmd>Bufferize Fidget history<CR>', desc = 'Show notification history' },
