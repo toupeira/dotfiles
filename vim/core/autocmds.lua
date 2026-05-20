@@ -38,7 +38,7 @@ local filetypes = {
     'foldlevel=2',
     'showbreak=NONE',
     -- automatically continue lists and blockquotes
-    'comments=b:*,b:-,b:+,n:>',
+    'comments=b:-\\ [\\ ],b:-\\ [x],b:-,b:*,b:+,n:>',
     'formatoptions+=r',
   },
 }
