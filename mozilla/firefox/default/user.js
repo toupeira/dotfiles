@@ -46,13 +46,17 @@ user_pref("geo.enabled", false);
 user_pref("media.autoplay.default", 5);
 user_pref("network.allow-experiments", false);
 user_pref("network.captive-portal-service.enabled", false);
-user_pref("network.trr.mode", 5);
 user_pref("permissions.default.desktop-notification", 2);
 user_pref("permissions.default.geo", 2);
 user_pref("privacy.query_stripping", true);
 user_pref("privacy.trackingprotection.enabled", true);
 user_pref("signon.firefoxRelay.feature", "disabled");
 user_pref("signon.rememberSignons", false);
+
+// DNS over HTTP settings
+user_pref("network.trr.mode", 3);
+user_pref("network.trr.uri", "https://dns.quad9.net/dns-query");
+user_pref("network.trr.custom_uri", "https://dns.quad9.net/dns-query");
 
 // Enable some telemetry
 user_pref("browser.crashReports.unsubmittedCheck.autoSubmit2", true);
@@ -61,9 +65,6 @@ user_pref("datareporting.healthreport.uploadEnabled", true);
 user_pref("datareporting.usage.uploadEnabled", true);
 user_pref("datareporting.policy.dataSubmissionEnabled", true);
 user_pref("toolkit.telemetry.enabled", false);
-
-// Tracking Protection whitelist
-user_pref("urlclassifier.trackingSkipURLs", "disqus.com, c.disquscdn.com, cdmu.disqus.com");
 
 // Tabs
 user_pref("browser.link.open_newwindow.override.external", 7);
