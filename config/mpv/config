@@ -1,8 +1,6 @@
 [default]
 # video
-vo=gpu-next,gpu
 hwdec=auto
-target-colorspace-hint=no
 fullscreen=yes
 geometry=50%:50%
 
