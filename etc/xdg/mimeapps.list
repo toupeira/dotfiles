@@ -26,6 +26,7 @@ image/webp=org.gnome.Loupe.desktop
 
 application/pdf=org.gnome.Evince.desktop
 application/zip=org.gnome.FileRoller.desktop
+application/x-7z-compressed=org.gnome.FileRoller.desktop
 inode/directory=org.gnome.Nautilus.desktop
 
 application/epub+zip=com.github.johnfactotum.Foliate.desktop
