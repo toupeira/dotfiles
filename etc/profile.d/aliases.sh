@@ -77,6 +77,7 @@ alias vi='vim'
 alias vip='VIMCMD=vip sensible-vim'
 alias vimdiff='vim -d'
 alias nt='vi "+Neotree show current"'
+alias vd.semicolon='vd --csv-delimiter=";"'
 
 alias g='git'
 alias e='git-edit'
