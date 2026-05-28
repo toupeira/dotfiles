@@ -1,5 +1,13 @@
 #!/bin/bash
 
+function msg {
+  local msg=$1
+  local color=${2:-2}
+  local icon=${3:-●}
+
+  echo -e " \e[1;3${color}m$icon \e[22m$msg\e[0m" >&2
+}
+
 if [ -z "$1" ]; then
   echo "Usage: $0 [-f FORMAT] FILES"
   exit
@@ -10,13 +18,13 @@ if [ $# -eq 1 ] && [ "$( basename "$1" )" = "converted" ]; then
   exit
 fi
 
+options=()
 format=flac
-mono=
 
 while [ $# -gt 0 ]; do
   case "$1" in
     -f ) format="$2"; shift 2;;
-    -m ) mono=1; shift 1;;
+    -m ) options+=( -ac 1 ); shift 1;;
     *  ) break;;
   esac
 done
@@ -27,38 +35,36 @@ for file in "${files[@]}"; do
   ext=${file##*.}
   dirname=$( dirname "$file" )
   basename=$( basename "$file" ".$ext" )
-  options=()
+  file_options=( "${options[@]}" )
 
   mime=$( file -b --mime-type "$file" )
   if [ "${mime:0:6}" != "audio/" ]; then
-    echo " [1;33m●[22m Skipping: [1m$file[0m"
+    msg "Skipping: \e[1m$file"
     continue
   fi
 
   case "$format" in
     wav)
-      options+=( -sample_fmt s16 )
+      file_options+=( -sample_fmt s16 )
       ;;
     flac)
       if file "$file" | grep -Eq '24 bit.* (96|192) kHz'; then
-        options+=( -sample_fmt s16 -ar 48000 )
+        file_options+=( -sample_fmt s16 -ar 48000 )
       else
-        options+=( -sample_fmt s16 )
+        file_options+=( -sample_fmt s16 )
       fi
       ;;
     mp3)
-      options+=( -q:a 0 ) # best VBR
+      file_options+=( -q:a 0 ) # best VBR
       ;;
     ogg)
-      options+=( -q:a 6 ) # ~192kbps VBR
+      file_options+=( -q:a 6 ) # ~192kbps VBR
       ;;
   esac
-
-  [ "$mono" ] && options+=( -ac 1 )
 
   target="$dirname/converted/$basename.$format"
   mkdir -p "$( dirname "$target" )"
 
-  echo " [1;32m●[22m Converting: [1m$basename [1;33m{[1m.$ext[22m => [1m.$format[22m}[0m "
-  ffmpeg -loglevel warning -i "$file" "${options[@]}" "$target"
+  msg "Converting \e[1m$basename \e[0;33m{\e[1m.$ext\e[22m => \e[1m.$format\e[22m}"
+  ffmpeg -loglevel warning -i "$file" "${file_options[@]}" "$target"
 done

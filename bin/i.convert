@@ -1,0 +1,54 @@
+#!/bin/bash
+
+function msg {
+  local msg=$1
+  local color=${2:-2}
+  local icon=${3:-●}
+
+  echo -e " \e[1;3${color}m$icon \e[22m$msg\e[0m" >&2
+}
+
+if [ -z "$1" ]; then
+  echo "Usage: $0 [-f FORMAT] FILES"
+  exit
+fi
+
+options=()
+format=webp
+
+while [ $# -gt 0 ]; do
+  case "$1" in
+    -f ) format="$2"; shift 2;;
+    *  ) break;;
+  esac
+done
+
+readarray -d '' files < <( find "$@" -type f ! -path '*/converted/*' -print0 | sort -z )
+
+for file in "${files[@]}"; do
+  ext=${file##*.}
+  dirname=$( dirname "$file" )
+  basename=$( basename "$file" ".$ext" )
+  file_options=( "${options[@]}" )
+
+  mime=$( file -b --mime-type "$file" )
+  if [ "${mime:0:6}" != "image/" ]; then
+    msg "Skipping: \e[1m$file"
+    continue
+  fi
+
+  case "$format" in
+    jpg|jpeg)
+      file_options+=( -quality 10 )
+      ;;
+    webp)
+      file_options+=( -quality 5 )
+      ;;
+  esac
+
+  target="$dirname/converted/$basename.$format"
+  mkdir -p "$( dirname "$target" )"
+
+  msg "Converting \e[1m$basename \e[0;33m{\e[1m.$ext\e[22m => \e[1m.$format\e[22m}"
+  gm convert "${file_options[@]}" "$file" "$target"
+done
