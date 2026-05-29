@@ -1,7 +1,7 @@
 [tools]
-fzf = "0.72.0"
+fzf = "0.73.1"
 neovim = "0.12.2"
-tree-sitter = "0.26.8"
+tree-sitter = "0.26.9"
 usage = "3.3.0"
 
 [settings]

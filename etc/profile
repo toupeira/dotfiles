@@ -5,9 +5,9 @@
 # and Bourne compatible shells (bash(1), ksh(1), ash(1), ...).
 
 if [ "$HOSTNAME" = "steamdeck" ]; then
-  DOTFILES="/home/deck/dotfiles"
+  export DOTFILES="/home/deck/dotfiles"
 else
-  DOTFILES="/slack/dotfiles"
+  export DOTFILES="/slack/dotfiles"
 fi
 
 [ "$BASH_VERSION" ] && [[ "$-" == *i* ]] && BASH_INTERACTIVE=1

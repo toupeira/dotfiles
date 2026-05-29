@@ -1,11 +1,7 @@
 #!/bin/bash
 # vim: foldmethod=marker foldlevel=0
 
-if [ "$HOSTNAME" = "steamdeck" ]; then
-  DOTFILES="/home/deck/dotfiles"
-else
-  DOTFILES="/slack/dotfiles"
-fi
+DOTFILES=${DOTFILES:-/slack/dotfiles}
 
 ### usage {{{
 
@@ -1169,7 +1165,7 @@ function run {
 ### main {{{
 
 if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
-  abort "Can't find dotfiles script in repository, please check your \$DOTFILES"
+  abort "Couldn't find dotfiles repository in '$DOTFILES'"
 fi
 
 COMMAND=
