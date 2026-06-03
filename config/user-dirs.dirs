@@ -7,10 +7,10 @@
 # 
 XDG_DESKTOP_DIR="$HOME/Desktop"
 XDG_DOWNLOAD_DIR="/slack/tmp"
-XDG_TEMPLATES_DIR="$HOME/"
+XDG_TEMPLATES_DIR="$HOME"
 XDG_PUBLICSHARE_DIR="/slack/tmp"
 XDG_DOCUMENTS_DIR="/slack/documents"
 XDG_MUSIC_DIR="/slack/music"
 XDG_PICTURES_DIR="/slack/images"
-XDG_VIDEOS_DIR="/slack/tmp"
+XDG_VIDEOS_DIR="/slack/images"
 XDG_PROJECTS_DIR="$HOME/src"

@@ -231,7 +231,7 @@ function src_alias {
 
   [ -d "$project" ] || return
 
-  alias $alias="src $project"
+  eval "alias $alias='src $project'"
   __git_complete "$alias" _src_alias
 }
 

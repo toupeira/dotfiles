@@ -35,7 +35,8 @@ alias egrep='grep -E'
 alias fgrep='grep -F'
 alias rgrep='grep -r'
 alias ssh.direct='ssh -o ControlPath=none'
-alias ssh.syncthing='echo "Opening Syncthing proxy in http://localhost:9393"; ssh.direct -NL 9393:localhost:8384'
+alias ssh.proxy='echo "Starting SOCKS proxy at socks5://localhost:8080"; ssh.direct -ND 8080'
+alias ssh.syncthing='echo "Starting Syncthing proxy at http://localhost:9393"; ssh.direct -NL 9393:localhost:8384'
 alias fd='fd --hidden'
 alias mutt='neomutt'
 alias ffmpeg='ffmpeg -hide_banner'
@@ -91,10 +92,18 @@ function notes {
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases
-for i in bundle console dev edit log migrate run server; do
-  eval "alias @$i='mux @$i'"
+for command in bundle console dev edit log migrate run server; do
+  eval "alias @$command='mux @$command'"
 done
-unset i
+unset command
+
+# slack aliases
+for dir in documents download images tmp scrapbook; do
+  name=${dir:0:3}
+  [ "$dir" = "images" ] && name="img"
+  [ -d "/slack/$dir" ] && eval "alias $name='cd /slack/$dir'"
+done
+unset dir name
 
 # sudo aliases
 

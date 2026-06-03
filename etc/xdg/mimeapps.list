@@ -2,6 +2,7 @@
 x-scheme-handler/http=firefox.desktop
 x-scheme-handler/https=firefox.desktop
 x-scheme-handler/mailto=firefox.desktop
+x-scheme-handler/chrome=firefox.desktop
 
 application/json=nvim.desktop
 application/xml=nvim.desktop
@@ -9,6 +10,7 @@ application/x-ruby=nvim.desktop
 application/x-shellscript=nvim.desktop
 text/calendar=nvim.desktop
 text/csv=nvim.desktop
+text/html=nvim.desktop
 text/markdown=nvim.desktop
 text/org=nvim.desktop
 text/plain=nvim.desktop
@@ -17,7 +19,9 @@ text/x-patch=nvim.desktop
 text/x-python3=nvim.desktop
 text/x-python=nvim.desktop
 text/x-ruby=nvim.desktop
+text/xml=nvim.desktop
 
+image/gif=org.gnome.Loupe.desktop
 image/jpeg=org.gnome.Loupe.desktop
 image/png=org.gnome.Loupe.desktop
 image/svg+xml=org.gnome.Loupe.desktop

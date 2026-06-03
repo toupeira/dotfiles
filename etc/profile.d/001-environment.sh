@@ -17,6 +17,10 @@ export SYSTEMD_LESS="iRMKFX --mouse"
 export RIPGREP_CONFIG_PATH=~/.config/rg/config
 export BAT_THEME="TwoDark"
 
+# debian tools
+export DEBEMAIL='markus@snafu.ch'
+export DEBFULLNAME='Markus Koller'
+
 # desktop apps
 if [ "$XDG_SESSION_TYPE" = "wayland" ] && [ ! "$QT_SCALE_FACTOR" ]; then
   export QT_SCALE_FACTOR=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
