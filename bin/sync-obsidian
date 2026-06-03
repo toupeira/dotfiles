@@ -266,7 +266,10 @@ if ARGS[:calendar]
   skip = true
   add_to_description = false
 
-  URI.open(ARGS[:path]).each_line do |line|
+  data = URI.open(ARGS[:path]).read
+  File.write("#{FOLDER}/Kalender/#{ARGS[:calendar]}.ics", data)
+
+  data.each_line do |line|
     case line.strip
     when 'BEGIN:VEVENT'
       entries << current = {}
