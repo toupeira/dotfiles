@@ -4,6 +4,7 @@ ruby = "4.0.5"
 node = "26.2.0"
 
 # Tools
+blender = "5.1.2"
 "github:dlvhdr/diffnav" = "0.11.0"
 "github:TheWaWaR/simple-http-server" = { version = "0.8.0", bin = "simple-http-server" }
 
