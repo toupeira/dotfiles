@@ -1,19 +1,13 @@
 #!/bin/bash
 
-function msg {
-  local msg=$1
-  local color=${2:-2}
-  local icon=${3:-}
-
-  echo -e " \e[1;3${color}m$icon \e[22m$msg\e[0m" >&2
-}
+. "$( dirname "$0" )/lib.sh"
+set-icon ""
 
 root=$( git root 2>/dev/null )
 if [ "$root" ]; then
   cd "$root" || exit 1
 else
-  msg "\e[1m$PWD is not a Git repository" 3
-  exit 1
+  abort "{{$PWD}} is not a Git repository"
 fi
 
 label='files'
@@ -108,13 +102,13 @@ case "$select" in
 esac
 
 if [ "${#files[@]}" = 0 ]; then
-  msg "\e[1mNo $label" 3
-  exit 1
+  warning "{{No $label}}"
+  abort
 elif [ ${#files[@]} -eq 1 ] && [ "$label" = "files" ]; then
-  msg "Editing \e[1m${files[0]}"
+  msg "Editing {{${files[0]}}}"
 else
   [ ${#files[@]} -eq 1 ] && label=${label//files/file}
-  msg "Editing \e[1m${#files[@]} $label"
+  msg "Editing {{${#files[@]} $label}}"
 fi
 
 if [ "$dry_run" ]; then

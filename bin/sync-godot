@@ -1,12 +1,7 @@
 #!/bin/bash
 
-function msg {
-  local msg=$1
-  local color=${2:-2}
-  local icon=${3:-}
-
-  echo -e " \e[1;3${color}m$icon \e[22m$msg\e[0m" >&2
-}
+. "$( dirname "$0" )/lib.sh"
+set-icon ""
 
 read -rd '' settings <<EOF
 
@@ -25,13 +20,13 @@ text_editor/behavior/indent/type = 1
 EOF
 
 for config in ~/.config/godot/editor_settings-*.tres; do
-  msg "Syncing \e[1m${config/$HOME/\~}"
+  msg "Syncing {{${config/$HOME/\~}}}"
   echo "$settings" >> "$config"
 done
 
 for project in ~/src/*/project.godot; do
   project=$( dirname "$project" )
-  msg "Syncing \e[1m${project/$HOME/\~}"
+  msg "Syncing {{${project/$HOME/\~}}}"
   [ -f "$project/mise.toml" ] && cp /slack/dotfiles/config/mise/config.gamedev.toml "$project/mise.toml"
   git -C "$project" status -s
 done

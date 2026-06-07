@@ -1,12 +1,6 @@
 #!/bin/bash
 
-function msg {
-  local msg=$1
-  local color=${2:-2}
-  local icon=${3:-●}
-
-  echo -e " \e[1;3${color}m$icon \e[22m$msg\e[0m" >&2
-}
+. "$( dirname "$0" )/lib.sh"
 
 if [ -z "$1" ]; then
   echo "Usage: $0 [-f FORMAT] FILES"
@@ -33,7 +27,7 @@ for file in "${files[@]}"; do
 
   mime=$( file -b --mime-type "$file" )
   if [ "${mime:0:6}" != "image/" ]; then
-    msg "Skipping: \e[1m$file"
+    warning "Skipping {{$file}}"
     continue
   fi
 
@@ -49,6 +43,6 @@ for file in "${files[@]}"; do
   target="$dirname/converted/$basename.$format"
   mkdir -p "$( dirname "$target" )"
 
-  msg "Converting \e[1m$basename \e[0;33m{\e[1m.$ext\e[22m => \e[1m.$format\e[22m}"
+  msg "Converting {{$basename}} \e[0;33m({{.$ext}} => {{.$format}})"
   gm convert "${file_options[@]}" "$file" "$target"
 done

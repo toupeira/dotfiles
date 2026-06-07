@@ -1,6 +1,9 @@
 #!/bin/bash
 # vim: foldmethod=marker foldlevel=0
 
+. "$( dirname "$0" )/lib.sh"
+set-icon ""
+
 DOTFILES=${DOTFILES:-/slack/dotfiles}
 
 ### usage {{{
@@ -12,7 +15,7 @@ function usage {
   echo "  -v, --verbose               Increase verbosity"
   echo "  -q, --quiet                 Decrease verbosity"
   echo "  -d, --debug                 Output debug information"
-  echo "      --path                  Show path to the dotfiles repository and exit"
+  echo "      --path                  Show path to the dotfiles repository"
   echo
   echo "Commands:"
   echo "  init                        Initialize symlinks, packages, dconf settings"
@@ -43,89 +46,6 @@ function usage {
   echo
 
   exit 255
-}
-
-### }}}
-
-### output helpers {{{
-
-# Output a message with a colored icon in front
-function msg {
-  local message=${1/$HOME/\~}
-  local color=${2:-2}
-  local icon=${3:-}
-
-  if [ $# -gt 3 ]; then
-    shift 3
-    local echo_options=( "$@" )
-  fi
-
-  if [ "$message" ]; then
-    echo -e "${echo_options[@]}" " \e[0;3${color}m$icon\e[0m $message\e[0m" \
-      | sed -re 's/\{\{/\o033[1m/g' \
-             -e 's/\}\}/\o033[22m/g'
-  else
-    echo -e "${echo_options[@]}"
-  fi
-}
-
-# Helpers for colored messages
-function status  {
-  local message=$(echo "$1" \
-    | sed -re 's/\{\{/\o033[1;32m/g' \
-           -e 's/\}\}/\o033[1;37m/g' )
-  msg "{{$message}}" 2;
-}
-function info    { [ "$QUIET" ] || msg "\e[0;34m$1" 4; }
-function warning { msg "\e[0;33m$1" 3 >&2; }
-function error   { msg "\e[0;33m$1" 1 >&2; STATUS=1; }
-
-# Output error message and exit
-function abort {
-  [ "$1" ] && error "$@"
-  exit 1
-}
-
-# Ask a yes/no question, defaulting to no
-function ask {
-  msg "$1 \e[0;36m[y/\e[1;36mN\e[0;36m] " "${2:-6}" "" -n >&2
-  read -r
-  [ "${REPLY:0:1}" = "Y" ] || [ "${REPLY:0:1}" = "y" ]
-}
-
-# Ask a yes/no question, defaulting to yes
-function ask-yes {
-  msg "$1 \e[0;36m[\e[1;36mY\e[0;36m/n] " "${2:-6}" "" -n >&2
-  read -r
-  [ "${REPLY:0:1}" != "N" ] && [ "${REPLY:0:1}" != "n" ]
-}
-
-# Ask to continue or abort
-function ask-abort {
-  [ "$1" ] && error "$@"
-  if ! ask "{{Do you want to continue?}}" 1; then
-    abort
-  fi
-}
-
-# Output verbose message
-function verbose {
-  [ "$VERBOSE" = 1 ] && info "$@"
-}
-
-# Output debug message
-function debug {
-  [ "$DEBUG" = 1 ] || return
-
-  echo -e "\e[0;35m$( printf '%10s' "$1" ): │ \e[1m$2\e[0m" >&2
-}
-
-# Output indentation
-function indent {
-  local count=${1:-2}
-  for (( i = 0; i < count; i++ )) do
-    printf ' '
-  done
 }
 
 ### }}}
@@ -170,11 +90,6 @@ function git {
   fi
 
   return $status
-}
-
-# Check for existing commands
-function has {
-  command -v "$1" >/dev/null
 }
 
 # Check for local Git changes
@@ -1069,7 +984,7 @@ function run {
       shift
 
       if [ "$action" = "sync" ]; then
-        run dconf dump >/dev/null
+        run dconf dump 2>/dev/null
 
         if has-changes dconf; then
           echo
@@ -1083,8 +998,8 @@ function run {
         fi
 
         status "Loading {{dconf}} settings..."
-        run dconf load >/dev/null
-        exit
+        run dconf load 2>/dev/null
+        return
       fi
 
       if [ "$1" ]; then
@@ -1148,10 +1063,12 @@ function run {
     # }}}
     e|edit) # {{{
       case "$1" in
-        vim|v)  git edit vim/init.lua;;
-        git|g)  git edit config/git/config;;
-        tmux|t) git edit config/tmux/tmux.conf;;
-        *)      git edit "$@";
+        dotfiles|d) git-edit bin/dotfiles;;
+        lib|l)      git-edit bin/lib.sh;;
+        vim|v)      git-edit vim/init.lua;;
+        git|g)      git-edit config/git/config;;
+        tmux|t)     git-edit config/tmux/tmux.conf;;
+        *)          git-edit "$@";
       esac
       ;;
     # }}}
@@ -1169,14 +1086,13 @@ if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
 fi
 
 COMMAND=
-STATUS=0
 
 # Parse arguments
 while [ $# -gt 0 ]; do
   case "$1" in
-    -v|--verbose) VERBOSE=1;;
-    -q|--quiet)   QUIET=1;;
-    -d|--debug)   DEBUG=1;;
+    -v|--verbose) set-verbose;;
+    -q|--quiet)   set-quiet;;
+    -d|--debug)   set-debug;;
        --path)    exec echo "$DOTFILES";;
     -*|help)      usage;;
     *)
@@ -1189,7 +1105,7 @@ done
 
 if [ "${#COMMAND[@]}" ]; then
   run "${COMMAND[@]}"
-  exit ${STATUS:$?}
+  finish
 else
   usage
 fi

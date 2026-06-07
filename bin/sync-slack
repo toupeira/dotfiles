@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. "$( dirname "$0" )/lib.sh"
+
 trap 'exit 1' INT
 
 if [ "$HOSTNAME" = "ocelot" ]; then
@@ -14,7 +16,7 @@ fi
 
 for path in "$@"; do
   echo
-  echo -e " \e[1;32m●\e[22m \e[22mSyncing \e[1m$path\e[22m with \e[1;33m$target\e[0m"
+  msg "Syncing {{$path}} with \e[1;33m$target"
 
   args=()
   case "$path" in

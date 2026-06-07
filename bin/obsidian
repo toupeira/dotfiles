@@ -1,17 +1,12 @@
 #!/bin/bash
 
+. "$( dirname "$0" )/lib.sh"
+set-icon ""
+
 NOTES="/slack/documents/Notes"
 
 files=()
 action='open'
-
-function msg {
-  local msg=$1
-  local color=${2:-2}
-  local icon=${3:-}
-
-  echo -e " \e[1;3${color}m$icon \e[22m$msg\e[0m" >&2
-}
 
 function find_notes {
   fd "$1\.md$" "$NOTES" -t f --exclude '/Sammlungen'
@@ -60,11 +55,11 @@ for pattern in "$@"; do
 done
 
 if [ "${#files[@]}" = 0 ] && [ "$TERM" != "dumb" ]; then
-  [ "$action" != "list" ] && msg "No notes found for \e[1m'$*'" 3
+  [ "$action" != "list" ] && warning "No notes found for {{'$*'}}"
   exit 1
 fi
 
-filenames=$( echo -e "\e[1m${files[*]}\e[0m" | sed -r "s,$NOTES/,,g" )
+filenames=$( echo -e "{{${files[*]}}}" | sed -r "s,$NOTES/,,g" )
 case "$action" in
   open)
     if [ "${#files[@]}" -gt 0 ]; then
