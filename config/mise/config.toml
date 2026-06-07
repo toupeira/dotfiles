@@ -2,7 +2,7 @@
 fzf = "0.73.1"
 neovim = "0.12.2"
 tree-sitter = "0.26.9"
-usage = "3.3.0"
+usage = "3.4.0"
 
 [settings]
 auto_install = false
@@ -10,3 +10,4 @@ not_found_auto_install = false
 env_file = ".env"
 disable_backends = ["asdf"]
 disable_hints = ["outdated_bump"]
+minimum_release_age = "7d"
