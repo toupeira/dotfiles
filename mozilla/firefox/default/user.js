@@ -112,6 +112,7 @@ user_pref("browser.download.manager.addToRecentDocs", false);
 user_pref("browser.download.start_downloads_in_tmp_dir", true);
 
 // Media
+user_pref("gfx.color_management.hdr", true);
 user_pref("media.hardwaremediakeys.enabled", false);
 user_pref("pdfjs.ignoreDestinationZoom", true);
 
