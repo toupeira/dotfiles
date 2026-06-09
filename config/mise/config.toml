@@ -11,3 +11,6 @@ env_file = ".env"
 disable_backends = ["asdf"]
 disable_hints = ["outdated_bump"]
 minimum_release_age = "7d"
+
+[settings.ruby]
+compile = false
