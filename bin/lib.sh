@@ -63,14 +63,14 @@ function finish {
 
 # Ask a yes/no question, defaulting to no
 function ask {
-  msg "\e[1;37m$1 \e[0;36m[y/{{N}}] " 6 "" -n
+  msg "\e[0m$1 \e[0;36m[y/{{N}}] " 6 "" -n
   read -r
   [ "${REPLY:0:1}" = "Y" ] || [ "${REPLY:0:1}" = "y" ]
 }
 
 # Ask a yes/no question, defaulting to yes
 function ask-yes {
-  msg "\e[1;37m$1 \e[0;36m[{{Y}}/n] " 6 "" -n
+  msg "\e[0m$1 \e[0;36m[{{Y}}/n] " 6 "" -n
   read -r
   [ "${REPLY:0:1}" != "N" ] && [ "${REPLY:0:1}" != "n" ]
 }

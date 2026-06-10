@@ -1,0 +1,42 @@
+#!/bin/bash
+
+action=$1
+shift
+
+function usage {
+  echo "Usage: $( basename "$0" ) COMMAND [args]"
+  echo
+  echo "Commands:"
+  echo "  list                  List installed packages"
+  echo "  install PACKAGE...    Install packages"
+  echo "  uninstall PACKAGE...  Uninstall packages"
+  echo "  update                Update installed packages"
+  echo
+  exit 255
+}
+
+case "$action" in
+  list)
+    fd . ~/.mix/archives -t d --exact-depth 1 --format '{/}' 2>/dev/null \
+      | sed 's/-[^-]*$//' \
+      | sort
+    ;;
+  install)
+    for package in "$@"; do
+      mix archive.install --force hex "$package"
+    done
+    ;;
+  uninstall)
+    for package in "$@"; do
+      mix archive.uninstall "$package"
+    done
+    ;;
+  update)
+    for package in $( "$0" list | grep -Fvx hex ); do
+      "$0" install "$package"
+    done
+    ;;
+  *)
+    usage
+    ;;
+esac

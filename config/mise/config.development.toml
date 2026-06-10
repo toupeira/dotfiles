@@ -1,7 +1,7 @@
 [tools]
 # Languages
 ruby = "4.0.5"
-node = "26.2.0"
+node = "26.3.0"
 
 # Tools
 blender = "5.1.2"

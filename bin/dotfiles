@@ -744,10 +744,11 @@ function run {
         echo "$packages" | grep -E "$1" | sed 's/.*: //' | sort
       }
 
-      local packages_apt=$(  get-packages "^[^:#]+$" )
+      local packages_apt=$( get-packages "^[^:#]+$" )
       local packages_arch=$( get-packages "^arch:" )
-      local packages_gem=$(  get-packages '^gem:' )
-      local packages_flat=$( get-packages '^flatpak:' )
+      local packages_flatpak=$( get-packages '^flatpak:' )
+      local packages_gem=$( get-packages '^gem:' )
+      local packages_hex=$( get-packages '^hex:' )
 
       # Find the missing packages for this list
       function get-missing {
@@ -759,36 +760,41 @@ function run {
       }
 
       if [ "$packages_apt" ] && has aptitude; then
-        local list_apt=$( run list apt )
+        local installed_apt=$( run list apt )
         local missing_apt=$(
-          get-missing "$( echo "$packages_apt" | grep -v '^-' )" "$list_apt";
+          get-missing "$( echo "$packages_apt" | grep -v '^-' )" "$installed_apt";
           comm -12 \
-            <( echo "$list_apt ") \
+            <( echo "$installed_apt ") \
             <( echo "$packages_apt" | grep '^-' | cut -d- -f2- ) \
             | sed 's/$/_/'
         )
       fi
 
-      [ "$packages_arch" ] && has pacman && local missing_arch=$(
-        get-missing "$packages_arch" "$( run list arch )"
-      )
+      if [ "$packages_arch" ] && has pacman; then
+        local missing_arch=$( get-missing "$packages_arch" "$( run list arch )" )
+      fi
 
-      [ "$packages_flat" ] && has flatpak && local missing_flat=$(
-        get-missing "$packages_flat" "$( run list flatpak )"
-      )
+      if [ "$packages_flatpak" ] && has flatpak; then
+        local missing_flatpak=$( get-missing "$packages_flatpak" "$( run list flatpak )" )
+      fi
 
-      [ "$packages_gem" ] && has ruby && local missing_gem=$(
-        get-missing "$packages_gem" "$( run list gem )"
-      )
+      if [ "$packages_gem" ] && has gem; then
+        local missing_gem=$( get-missing "$packages_gem" "$( run list gem )" )
+      fi
 
-      [ "$list" = "default" ] && has mise && local missing_mise=$(
-        mise ls --missing --no-header | awk '{ print $1 }'
-      )
+      if [ "$packages_hex" ] && has mix; then
+        local missing_hex=$( get-missing "$packages_hex" "$( run list hex )" )
+      fi
+
+      if [ "$list" = "default" ] && has mise; then
+        local missing_mise=$( mise ls --missing --no-header | awk '{ print $1 }' )
+      fi
 
       if [ -z "$missing_apt"  ] && \
          [ -z "$missing_arch"  ] && \
+         [ -z "$missing_flatpak" ] && \
          [ -z "$missing_gem"  ] && \
-         [ -z "$missing_flat" ] && \
+         [ -z "$missing_hex" ] && \
          [ -z "$missing_mise" ]; then
         return
       fi
@@ -804,9 +810,11 @@ function run {
       list-packages apt       "$( echo "$missing_apt" | grep -v '_$' )"
       list-packages apt:purge "$( echo "$missing_apt" | grep '_$' | sed 's/_$//' )"
       list-packages arch      "$missing_arch"
-      list-packages gem       "$missing_gem"
-      list-packages flatpak   "$missing_flat"
+      list-packages flatpak   "$missing_flatpak"
+
       list-packages mise      "$missing_mise"
+      list-packages gem       "$missing_gem"
+      list-packages hex       "$missing_hex"
       echo
 
       # Install the packages
@@ -825,11 +833,13 @@ function run {
           [ "$TMUX" ] && system tmux select-layout even-vertical
         }
 
-        install-packages apt     "$missing_apt"  sudo aptitude install
-        install-packages arch    "$missing_arch" sudo pacman -S --needed
-        install-packages flatpak "$missing_flat" sudo flatpak install
-        install-packages mise    "$missing_mise" 'mise install && mise prune'
-        install-packages gems    "$missing_gem"  gem install
+        install-packages apt     "$missing_apt"     sudo aptitude install
+        install-packages arch    "$missing_arch"    sudo pacman -S --needed
+        install-packages flatpak "$missing_flatpak" sudo flatpak install
+
+        install-packages mise    "$missing_mise"    'mise install && mise prune'
+        install-packages gem     "$missing_gem"     gem install
+        install-packages hex     "$missing_hex"     hex install
       fi
       echo
       ;;
@@ -854,8 +864,10 @@ function run {
       has aptitude && update-packages apt
       has flatpak  && update-packages flatpak
       has fwupdmgr && update-packages firmware
+
       has mise     && update-packages mise
-      has ruby     && update-packages gems
+      has gem      && update-packages gem
+      has mix      && update-packages hex
       has mise     && update-packages completions
       ;;
 
@@ -875,13 +887,18 @@ function run {
       system fwupdmgr update
       ;;
     update-mise)
+      local args=()
+      if [ "$1" = "-f" ]; then
+        args=( --minimum-release-age 0d )
+      fi
+
       status "Updating Mise tools..."
       system mise plugins update \
-        && system mise upgrade --bump --interactive \
+        && system mise upgrade --bump --interactive "${args[@]}" \
         && system mise prune \
         && git add config/mise
       ;;
-    update-gems)
+    update-gem)
       status "Updating RubyGems..."
       system gem update --system
 
@@ -892,6 +909,10 @@ function run {
         system gem clean
       fi
       ;;
+    update-hex)
+      status "Updating Hex packages..."
+      system hex update
+      ;;
     update-completions)
       status "Updating shell completions..."
 
@@ -900,6 +921,7 @@ function run {
       function update-completions {
         local tool="$1"
         local command
+        local args=( completion bash )
         shift
 
         if has "$tool"; then
@@ -911,13 +933,16 @@ function run {
           return
         fi
 
-        [ "$tool" = "rclone" ] && set -- -
+        case "$tool" in
+          mix) args=( complete.bash );;
+        esac
 
         info "Updating {{$tool}} completions..."
-        "${command[@]}" completion bash > "$completions/_$tool" "$@"
+        "${command[@]}" "${args[@]}" > "$completions/_$tool"
       }
 
       update-completions mise
+      update-completions mix
       update-completions kubectl
       update-completions rclone
 
@@ -933,44 +958,40 @@ function run {
     list|ls) # {{{
       [ $# -eq 0 ] && usage
 
-      declare -gA INSTALLED_PACKAGES
-      if ! [ "${INSTALLED_PACKAGES[$1]}" ]; then
-        case "$1" in
-          apt)
-            has dpkg-query || abort
-            INSTALLED_PACKAGES[apt]=$(
-              dpkg-query -W -f '${Package}\t${Status}\n' | grep ' installed$' | cut -f1 | sort
-            );;
-          arch)
-            has pacman || abort
-            pacman -Qq | grep . | sort
-            ;;
-          gem)
-            has gem || abort
-            INSTALLED_PACKAGES[gem]=$(
-              gem list --no-versions | sort
-            );;
-          flatpak)
-            has flatpak || abort
-            INSTALLED_PACKAGES[flatpak]=$(
-              flatpak list --columns=application | tail -n +1 | sort
-            );;
-          lazy)
-            INSTALLED_PACKAGES[lazy]=$(
-              find "$DOTFILES/packages/lazy" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort
-            );;
-          mise)
-            has mise || abort
-            INSTALLED_PACKAGES[mise]=$(
-              find "$DOTFILES/packages/mise/installs" -mindepth 1 -maxdepth 1 -type d -printf '%P\n' | sort
-            );;
-          *)
-            usage
-            ;;
-        esac
-      fi
+      local list
+      case "$1" in
+        apt)
+          has dpkg-query || abort
+          list=$( dpkg-query -W -f '${Package}\t${Status}\n' | grep ' installed$' | cut -f1 | sort )
+          ;;
+        arch)
+          has pacman || abort
+          list=$( pacman -Qq | grep . | sort )
+          ;;
+        flatpak)
+          has flatpak || abort
+          list=$( flatpak list --columns=application | tail -n +1 | sort )
+          ;;
+        gem)
+          has gem || abort
+          list=$( gem list --no-versions | sort )
+          ;;
+        hex)
+          has mix || abort
+          list=$( hex list )
+          ;;
+        lazy)
+          list=$( fd . "$DOTFILES/packages/lazy" -t d --exact-depth 1 --format '{/}' | sort )
+          ;;
+        mise)
+          has mise || abort
+          list=$( fd . "$DOTFILES/packages/mise/installs" -t d --exact-depth 1 --format '{/}' | sort )
+          ;;
+        *)
+          usage
+          ;;
+      esac
 
-      local list=${INSTALLED_PACKAGES[$1]}
       if [ "$2" ]; then
         list=$( echo "$list" | fzf -f "$2" )
       fi
