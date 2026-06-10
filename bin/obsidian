@@ -9,7 +9,7 @@ files=()
 action='open'
 
 function find_notes {
-  fd "$1\.md$" "$NOTES" -t f --exclude '/Sammlungen'
+  fd "^$1.*\.md$" "$NOTES" -t f --exclude '/Sammlungen'
 }
 
 function obsidian_url {
@@ -78,7 +78,7 @@ case "$action" in
       "${files[@]}" &>/dev/null &
     ;;
   list)
-    printf '%s\n' "${files[@]}"
+    printf '%s\n' "${files[@]}" | sed -r "s,$NOTES/,,"
     ;;
   edit)
     msg "Editing: $filenames"

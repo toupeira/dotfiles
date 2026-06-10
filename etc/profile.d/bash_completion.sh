@@ -37,34 +37,22 @@ fi
 
 # Debian completions
 function _packages_available {
-  local cword="${COMP_WORDS[COMP_CWORD]}"
-  mapfile -t COMPREPLY < <(
-    compgen -W "$( apt-cache --no-generate pkgnames -- "$cword" )"
-  )
+  _comp_compgen -c "$2" -x apt-cache packages
 }
 complete -F _packages_available pkget pkgshow
 
 function _packages_installed {
-  local cword="${COMP_WORDS[COMP_CWORD]}"
-  mapfile -t COMPREPLY < <(
-    _xfunc dpkg _comp_dpkg_installed_packages "$cword"
-  )
+  _comp_compgen -c "$2" -x dpkg purgeable_packages
 }
 complete -F _packages_installed pkglist pkgpurge pkgremove
 
 # src completion
-function _src_projects {
-  local cword="${COMP_WORDS[COMP_CWORD]}"
-
-  mapfile -t COMPREPLY < <(
-    compgen -W "$( src list -a "$cword" )"
-  )
-}
-complete -F _src_projects src
+complete -C 'src list -a' src
 
 function _src_alias {
-  local cword="${COMP_WORDS[COMP_CWORD]}"
-  if [ "${cword:0:1}" = "@" ]; then
+  local cur="${COMP_WORDS[COMP_CWORD]}"
+
+  if [ "${cur:0:1}" = "@" ]; then
     _mux
   else
     __git_wrap__git_main
@@ -73,14 +61,14 @@ function _src_alias {
 
 # mux completion
 function _mux {
-  local cword="${COMP_WORDS[COMP_CWORD]}"
+  local cur="${COMP_WORDS[COMP_CWORD]}"
 
-  if [ "${cword:0:1}" = "@" ]; then
+  if [ "${cur:0:1}" = "@" ]; then
     local commands=( bundle console dev edit log migrate run server )
     mapfile -t COMPREPLY < <(
       compgen -W "$(
         (printf '%s:\n' "${commands[@]}"; cat Procfile 2>/dev/null) \
-          | grep -Eo "^${cword:1}[-[:alnum:]]*" \
+          | grep -Eo "^${cur:1}[-[:alnum:]]*" \
           | sed -r 's/^/@/'
       )"
     )
@@ -92,10 +80,8 @@ complete -F _mux mux
 
 # notes completion
 function _notes {
-  local cword="${COMP_WORDS[COMP_CWORD]}"
-
   mapfile -t COMPREPLY < <(
-    compgen -W "$( fd . /slack/scrapbook/notes -t f -x echo '{/.}' )" "$cword"
+    obsidian --list "$2" | xargs -d $'\n' printf '%q\n'
   )
 }
 
