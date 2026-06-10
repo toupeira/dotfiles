@@ -55,6 +55,7 @@ case "$1" in
     case "$proc" in
       bundle)
         [ -f mise.toml ] && mux -b -d -w mise install
+        [ -f mix.exs ] && mux -b -d -w mix setup
         [ -f Gemfile ] && mux -b -d -w bundle
 
         if [ -f bun.lock ]; then
@@ -126,7 +127,7 @@ case "$1" in
         elif [ -x bin/rails ] || [ -x script/rails ]; then
           command="rails server"
         elif [ -f mix.exs ] && grep -q :phoenix mix.exs; then
-          command="mix phoenix.server"
+          command="mix phx.server"
         elif [ -f project.godot ]; then
           exec godot "$@"
         else
