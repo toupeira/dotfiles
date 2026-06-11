@@ -23,6 +23,7 @@ return {
     vim.g.ale_fix_on_save_ignore = { 'rubocop' }
 
     vim.g.ale_linters = {
+      elixir = { 'mix' },
       javascript = { 'eslint' },
       json = { 'jsonlint' },
       ruby = { 'ruby', 'rubocop' },
