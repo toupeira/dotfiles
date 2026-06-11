@@ -58,7 +58,7 @@ function abort {
 
 # Exit with the last or configured status code
 function finish {
-  exit ${STATUS:$?}
+  exit "${STATUS:-$?}"
 }
 
 # Ask a yes/no question, defaulting to no

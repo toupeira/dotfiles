@@ -1,35 +1,112 @@
 #!/bin/bash
 
+PROJECT=$( basename "$PWD" )
+
 function usage {
-  echo "Usage: mux [OPTIONS] [--] [COMMAND..]"
+  echo "Usage: mux [OPTIONS] [--] [COMMAND...]"
   echo
   echo "Commands:"
   echo "  mux                   Create a new window"
-  echo "  mux COMMAND..         Run a command in a new window"
+  echo "  mux COMMAND...        Run a command in a new window"
   echo "  mux @PROCESS          Run a process from a Procfile in a new window"
   echo
-  echo "  mux loop COMMAND..    Run a command repeatedly"
+  echo "  mux loop COMMAND..    Run a command in a loop"
   echo "  mux title TITLE       Set the current tmux window title"
   echo
   echo "Options:"
-  echo "  -t TITLE      Specify title for new window"
-  echo "  -s            Split window horizontally"
-  echo "  -v            Split window vertically"
-  echo "  -w            Wait after command exits"
+  echo "  -t TITLE    Specify title for new window"
+  echo "  -s          Split window horizontally"
+  echo "  -b          Split small window horizontally"
+  echo "  -v          Split window vertically"
+  echo "  -d          Detach new window"
+  echo "  -l          Loop command in window"
+  echo "  -w          Wait after command exits"
   echo
-  echo "Pass options to tmux:"
-  echo "  -d, -c PATH, -l SIZE, -p PERCENTAGE"
-  echo
-
   exit 255
 }
 
+function is-elixir  { [ -f mix.exs ]; }
+function is-phoenix { is-elixir && grep -Fq :phoenix mix.exs; }
+function is-ruby    { [ -f Gemfile ]; }
+function is-rails   { is-ruby && [ -x bin/rails ]; }
+function is-godot   { [ -f project.godot ]; }
+
+function run {
+  action="new-window"
+  args=()
+  unset title loop wait
+
+  while [ "${1:0:1}" = "-" ]; do
+    case "$1" in
+      --)
+        shift
+        break
+        ;;
+      -t)
+        title="$2"
+        shift
+        ;;
+      -s)
+        action="split-window"
+        args+=( -v )
+        ;;
+      -b)
+        action="split-window"
+        args+=( -v -l 10 )
+        ;;
+      -v)
+        action="split-window"
+        args+=( -h )
+        ;;
+      -d)
+        args+=( -d )
+        ;;
+      -l)
+        loop=1
+        ;;
+      -w)
+        wait=1
+        ;;
+      *)
+        usage
+        ;;
+    esac
+
+    shift
+  done
+
+  command=( "$@" )
+
+  if [ $# -eq 0 ]; then
+    command=( bash --login )
+  elif [ -z "$title" ]; then
+    title="$* [$PROJECT]"
+  fi
+
+  if [ "$loop" ]; then
+    command=( "$0" loop "${command[@]}" )
+  fi
+
+  if [ "$wait" ]; then
+    wait="echo -ne '\n\e[1;32m ● \e[22mDone: [ \e[1m$*\e[22m ]\e[0m '; read -n 1"
+  fi
+
+  tmux $action "${args[@]}" -- "
+    $0 title '$title';
+    ${command[*]};
+    $wait
+  " || tmux display "Pane too small"
+}
+
 case "$1" in
-  # Run a process from a Procfile
+  help)
+    usage
+    ;;
   @*)
     proc="${1:1}"
     shift
 
+    # Run a process from a Procfile
     if [ -f Procfile ]; then
       commands=$( grep -Eo "^$proc.*:.+" Procfile )
       count=$( echo "$commands" | grep -c . )
@@ -41,7 +118,7 @@ case "$1" in
           title=${localproc:${#proc}+1}
           title=${title:-$localproc}
 
-          $0 -t "@$title" -d "$@" "$0 loop '$command'"
+          run -d -l -t "@$title [$PROJECT]" -d "$@" "$command"
         done
 
         exit
@@ -49,51 +126,58 @@ case "$1" in
     fi
 
     command="$proc $*"
-    options="-b"
+    args=( -b )
 
-    # Or run a predefined command
+    # Or run a default process
     case "$proc" in
       bundle)
-        [ -f mise.toml ] && mux -b -d -w mise install
-        [ -f mix.exs ] && mux -b -d -w mix setup
-        [ -f Gemfile ] && mux -b -d -w bundle
+        function run-bundle {
+          run -b -d -w -t "@bundle: $* [$PROJECT]" -- "$@"
+        }
+
+        if [ -f mise.toml ]; then
+          run-bundle mise install
+        fi
+
+        if is-phoenix; then
+          run-bundle mix setup
+        elif is-elixir; then
+          run-bundle mix deps.get
+        elif is-ruby; then
+          run-bundle bundle
+        fi
 
         if [ -f bun.lock ]; then
-          mux -b -d -w bun install
+          run-bundle bun install
         elif [ -f yarn.lock ]; then
-          mux -b -d -w yarn
+          run-bundle yarn install
         elif [ -f package.json ]; then
-          mux -b -d -w npm install
+          run-bundle npm install
         fi
 
         exit 0
         ;;
       console)
-        if [ -x bin/rails ]; then
+        if is-elixir; then
+          command="iex -S mix"
+        elif is-rails; then
           command="rails console"
-        elif [ -x bin/console ]; then
-          command="bin/console"
         else
           echo "Can't find console for project."
           exit 1
         fi
         ;;
       dev)
-        options="-d"
+        args=( -d -l )
 
         if [ -x bin/dev ]; then
           command="bin/dev"
-        elif [ -f Procfile.dev ]; then
-          command="foreman Procfile.dev"
-        elif [ -f Procfile ]; then
-          command="foreman Procfile"
         else
-          echo "Can't find development setup for project."
-          exit 1
+          exec $0 @server
         fi
         ;;
       edit)
-        if [ -f project.godot ]; then
+        if is-godot; then
           exec start godot project.godot "$@"
         else
           exec sensible-vim "$@"
@@ -108,43 +192,45 @@ case "$1" in
         fi
         ;;
       migrate)
-        if [ -f Gemfile ] && [ -d db/migrate ]; then
-          mux -b -d -w "bundle exec rake db:migrate; [ -f db/schema.rb ] && git checkout db/schema.rb; [ -f db/structure.sql ] && git checkout db/structure.sql"
+        args=( -b -d -w )
+
+        if is-phoenix; then
+          command="mix ecto.migrate"
+        elif is-rails; then
+          command="bundle exec rake db:migrate; [ -f db/schema.rb ] && git checkout db/schema.rb; [ -f db/structure.sql ] && git checkout db/structure.sql"
         else
           echo "Can't find migrations for project."
           exit 1
         fi
-
-        exit 0
         ;;
-      run|server)
-        options="-d"
-
-        if [ -x bin/run ]; then
-          command="bin/run"
-        elif [ -x bin/server ]; then
-          command="bin/server"
-        elif [ -x bin/rails ] || [ -x script/rails ]; then
-          command="rails server"
-        elif [ -f mix.exs ] && grep -q :phoenix mix.exs; then
-          command="mix phx.server"
-        elif [ -f project.godot ]; then
+      run)
+        if is-godot; then
           exec godot "$@"
+        else
+          exec $0 @server
+        fi
+        ;;
+      server)
+        args=( -d -l )
+
+        if is-phoenix; then
+          command="mix phx.server"
+        elif is-rails; then
+          command="rails server"
         else
           echo "Can't find server for project."
           exit 1
         fi
         ;;
       *)
-        echo "Unknown process '$proc'"
+        echo "Can't find process '@$proc'"
         exit 1
         ;;
     esac
 
-    $0 -t "@$proc [$( basename "$PWD" )]" $options "$@" "$0 loop $command"
+    run -t "@$proc [$PROJECT]" "${args[@]}" "$@" -- "$command"
     ;;
 
-  # Run a process repeatedly
   loop)
     shift
     command=( "$@" )
@@ -183,75 +269,15 @@ case "$1" in
     done
     ;;
 
-  # Set the current terminal / tmux pane title
   title)
     [ $# -eq 2 ] || usage
     [ "$NVIM" ] && exit
-    title="$2"
 
+    title="$2"
     echo -ne "\e]2;$title\007" >&2
     ;;
 
-  # Create a new window
   *)
-    action="new-window"
-    unset args title wait
-
-    while [ "${1:0:1}" = "-" ]; do
-      case "$1" in
-        --)
-          shift
-          break
-          ;;
-        -t)
-          title="$2"
-          shift
-          ;;
-        -s)
-          action="split-window"
-          args="$args -v"
-          ;;
-        -b)
-          action="split-window"
-          args="$args -v -l 10"
-          ;;
-        -v)
-          action="split-window"
-          args="$args -h"
-          ;;
-        -d)
-          args="$args $1"
-          ;;
-        -c|-l|-p)
-          args="$args $1 $2"
-          shift
-          ;;
-        -w)
-          wait=1
-          ;;
-        *)
-          usage
-          ;;
-      esac
-
-      shift
-    done
-
-    if [ $# -eq 0 ]; then
-      set --
-      set -- bash --login
-    elif [ -z "$title" ]; then
-      title="$* [$( basename "$PWD" )]"
-    fi
-
-    if [ "$wait" ]; then
-      wait="echo -ne '\n\e[1;32m ● \e[22mDone: [ \e[1m$*\e[22m ]\e[0m '; read -n 1"
-    fi
-
-    tmux $action $args -- "
-      $0 title '$title';
-      $*;
-      $wait
-    " || tmux display "Pane too small"
+    run "$@"
     ;;
 esac
