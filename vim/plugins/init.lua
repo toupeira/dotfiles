@@ -126,20 +126,6 @@ return {
       })
     end,
   },
-  lazy_file { 'tpope/vim-projectionist',
-    config = function()
-      util.command('AC', function()
-        local confirm = vim.o.confirm
-        local ok, _ = pcall(function() vim.cmd.A() end)
-
-        if not ok then
-          util.error('No alternate file')
-        end
-
-        vim.o.confirm = confirm
-      end, 'Create alternate file')
-    end,
-  },
   lazy_file { 'tpope/vim-rails',
     dependencies = 'vim-projectionist',
   },
