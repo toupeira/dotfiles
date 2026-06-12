@@ -111,7 +111,7 @@ unset dir name
 alias sudo='sudo '
 
 # vim
-alias suvi='sudo TMUX=$TMUX sensible-vim'
+alias suvi='sudo TMUX=$TMUX $( which sensible-vim )'
 alias sudiff='suvi -d'
 
 # file management

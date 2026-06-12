@@ -256,6 +256,7 @@ function run {
 
       if [ "$HOSTNAME" = "steamdeck" ]; then
         status "Setting up {{pacman}}..."
+        sudo pacman-key --init
         sudo pacman-key --populate holo
       fi
 
@@ -541,10 +542,11 @@ function run {
         list "$path"
         fix system rm -v "$path"
       done < <(
-        sudo fd . ~ /root /etc --type l -u \
+        sudo $( which fd ) . ~ /root /etc --type l -u \
           --follow \
           --mount \
           --exclude dotfiles \
+          --exclude previous \
           --exclude /.local/share/flatpak/repo \
           --exclude /.local/share/Steam \
           --exclude /.steam \
@@ -559,7 +561,7 @@ function run {
       done < <(
         fd . ~ -o root --mount \
           --exclude /dotfiles \
-          --exclude /homebrew/plugins
+          --exclude /homebrew
       )
 
       lint etc "Incorrect permissions"
@@ -589,7 +591,7 @@ function run {
       while read -r path; do
         list "$path"
         fix system rm -v "$path"
-      done < <( sudo fd '.*\.(dpkg|ucf)-.*' /etc --type f -u )
+      done < <( sudo "$( which fd )" '.*\.(dpkg|ucf)-.*' /etc --type f -u )
 
       path=/etc/tmpfiles.d/tmp.conf
       if [ -f "$path" ]; then
@@ -601,7 +603,7 @@ function run {
       while read -r path; do
         list "$path"
         fix system rm -v "$path"
-      done < <( sudo fd '^(\.bashrc|\.profile)$' /root --type f -u )
+      done < <( sudo "$( which fd )" '^(\.bashrc|\.profile)$' /root --type f -u )
 
       lint root "Dotfile symlinks"
       for path in config/nvim config/fd config/rg config/mise local/share/mise; do
