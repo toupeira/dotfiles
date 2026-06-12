@@ -18,9 +18,9 @@ return {
 
       ['project.godot'] = {
         ['project.godot'] = { type = 'project' },
-        ['*.gd'] = { type = 'class' },
+        ['*.gd'] = { type = 'class', alternate = '{}.tscn' },
+        ['*.tscn'] = { type = 'scene', alternate = '{}.gd' },
         ['*.tres'] = { type = 'resource' },
-        ['*.tscn'] = { type = 'scene' },
       },
     }
 

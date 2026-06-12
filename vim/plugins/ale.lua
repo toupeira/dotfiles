@@ -7,6 +7,8 @@ return {
   dependencies = { 'mason.nvim' },
 
   init = function()
+    util.nmap('<Leader>i', ':ALEDetail')
+
     vim.g.ale_disable_lsp = 1
 
     vim.g.ale_set_loclist = 0
