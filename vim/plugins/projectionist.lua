@@ -8,6 +8,7 @@ return {
     vim.g.projectionist_heuristics = {
       ['mix.exs'] = {
         ['mix.exs'] = { type = 'mix' },
+        ['config/*.exs'] = { type = 'config' },
         ['lib/mix/tasks/*.ex'] = { type = 'task' },
 
         ['test/*_test.exs'] = {
@@ -47,7 +48,6 @@ return {
       local test_web = 'test/' .. name .. '_web/'
 
       vim.fn['projectionist#append'](root, {
-        ['config/*.exs'] = { type = 'config' },
         ['priv/static/*'] = { type = 'static' },
 
         ['assets/css/app.css'] = { type = 'stylesheet' },

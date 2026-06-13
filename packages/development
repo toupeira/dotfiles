@@ -15,7 +15,9 @@ visidata
 
 # erlang
 elixir
+erlang-base
 erlang-dev
+erlang-syntax-tools
 erlang-xmerl
 
 hex: igniter_new

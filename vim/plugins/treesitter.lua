@@ -7,6 +7,7 @@ local languages = {
   'comment',
   'css',
   'diff',
+  'eex',
   'elixir',
   'erlang',
   'gdscript',

@@ -17,6 +17,17 @@ function has {
   command -v "$1" >/dev/null
 }
 
+# Highlight substrings marked with `{{..}}`
+function highlight {
+  local text=$1
+  local start=${2:-1}
+  local end=${3:-22}
+
+  echo -e "$text" | sed -r \
+    -e "s/\{\{/\o033[${start}m/g" \
+    -e "s/\}\}/\o033[${end}m/g"
+}
+
 # Output a message with a colored icon in front
 function msg {
   local message=${1/$HOME/\~}
@@ -29,9 +40,7 @@ function msg {
   fi
 
   if [ "$message" ]; then
-    echo -e "${echo_options[@]}" " \e[1;3${color}m$icon \e[22m$message\e[0m" \
-      | sed -re 's/\{\{/\o033[1m/g' \
-             -e 's/\}\}/\o033[22m/g' >&2
+    echo -e "${echo_options[@]}" " \e[1;3${color}m$icon \e[22m$( highlight "$message" )\e[0m" >&2
   else
     echo -e "${echo_options[@]}" >&2
   fi
@@ -39,9 +48,7 @@ function msg {
 
 # Helpers for colored messages
 function status  {
-  local message=$(echo "$1" \
-    | sed -re 's/\{\{/\o033[1;32m/g' \
-           -e 's/\}\}/\o033[1;37m/g' )
+  local message=$( highlight "$1" 32 37 )
   msg "\e[1;37m$message" 2;
 }
 
