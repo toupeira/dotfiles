@@ -2,7 +2,7 @@
 fzf = "0.73.1"
 neovim = "0.12.3"
 tree-sitter = "0.26.9"
-usage = "3.4.0"
+usage = "3.5.0"
 
 [settings]
 auto_install = false

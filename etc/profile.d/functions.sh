@@ -183,10 +183,10 @@ function dotfiles {
       path="$DOTFILES"
     elif [ -d "$DOTFILES/$2" ]; then
       path="$DOTFILES/$2"
-    elif path=$( dotfiles list mise "$2" | head -1 ) && [ "$path" ]; then
-      path="$DOTFILES/packages/mise/installs/$path/latest"
     elif path=$( dotfiles list lazy "$2" | head -1 ) && [ "$path" ]; then
       path="$DOTFILES/packages/lazy/$path"
+    elif path=$( dotfiles list mise "$2" | head -1 ) && [ "$path" ]; then
+      path="$DOTFILES/packages/mise/installs/$path/latest"
     fi
 
     if [ -d "$path" ]; then
