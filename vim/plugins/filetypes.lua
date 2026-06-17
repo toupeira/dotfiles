@@ -1,9 +1,10 @@
 local util = require('util')
 
 return {
-  { 'antonk52/markdowny.nvim', ft = { 'markdown' }, config = true },
-  { 'hail2u/vim-css3-syntax',  ft = { 'css', 'scss' }},
-  { 'hashivim/vim-terraform',  ft = { 'terraform', 'hcl' }},
+  { 'antonk52/markdowny.nvim',   ft = { 'markdown' }, config = true },
+  { 'elixir-editors/vim-elixir', ft = { 'elixir', 'eex', 'heex' }},
+  { 'hail2u/vim-css3-syntax',    ft = { 'css', 'scss' }},
+  { 'hashivim/vim-terraform',    ft = { 'terraform', 'hcl' }},
 
   { 'brianhuster/live-preview.nvim',
     ft = { 'markdown', 'html', 'asciidoc', 'svg' },
@@ -34,8 +35,11 @@ return {
       return {
         lazy_load = true,
         filetypes = plugin.ft,
-        user_default_options = {
-          names = false,
+
+        options = {
+          parsers = {
+            css = true,
+          },
         },
       }
     end,

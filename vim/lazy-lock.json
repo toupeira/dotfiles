@@ -1,7 +1,7 @@
 {
   "actually.nvim": { "branch": "main", "commit": "3740b81196e895e3db01f34a0afcb79a4a9bc475" },
   "aerial.nvim": { "branch": "master", "commit": "28fe6e822ae344544c379d60fcb13c9519a1f08a" },
-  "ale": { "branch": "fix/elixir-mix", "commit": "4d4c042298fd1a0254a3ff5f8c0af9205acd07f6" },
+  "ale": { "branch": "fix/elixir-mix", "commit": "935173bb4ee41390154e60abd98629a117a11eae" },
   "any-jump.vim": { "branch": "master", "commit": "f95674d9a4251ac02f452d5f1861e4422f4652c7" },
   "blink-cmp-tmux": { "branch": "main", "commit": "1ef35d8e388475ab8eaeecfc12e196c78bd5de04" },
   "blink.cmp": { "branch": "main", "commit": "78336bc89ee5365633bcf754d93df01678b5c08f" },
@@ -55,6 +55,7 @@
   "vim-characterize": { "branch": "master", "commit": "a8bffac6cead6b2869d939ecad06312b187a4c79" },
   "vim-css3-syntax": { "branch": "main", "commit": "8c8635778b8eba441fa8d5aa0ab77c7be0eeefb8" },
   "vim-cycle": { "branch": "master", "commit": "2e3974f1e5626fadbfefe8b85016fffde665a7c8" },
+  "vim-elixir": { "branch": "master", "commit": "6dff29176eb35e025bc94b262bf6d4e517e11f7d" },
   "vim-eunuch": { "branch": "master", "commit": "e86bb794a1c10a2edac130feb0ea590a00d03f1e" },
   "vim-fetch": { "branch": "master", "commit": "b88bc5c4a8652b73bcdb577e0c90700a5064fd00" },
   "vim-fugitive": { "branch": "master", "commit": "3b753cf8c6a4dcde6edee8827d464ba9b8c4a6f0" },

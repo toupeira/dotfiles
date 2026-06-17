@@ -56,8 +56,9 @@ autocmd('FileType', function(event)
 
   vim.treesitter.start(event.buf, language)
 
-  if vim.tbl_contains({ 'heex' }, language) then
-    vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+  if vim.tbl_contains({ 'eex', 'heex' }, language) then
+    vim.cmd('runtime! indent/eelixir.vim')
+    -- vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
   end
 
   vim.wo.foldmethod = 'expr'

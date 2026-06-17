@@ -52,7 +52,7 @@ function run {
         ;;
       -b)
         action="split-window"
-        args+=( -v -l 10 )
+        args+=( -vfl 25% )
         ;;
       -v)
         action="split-window"
