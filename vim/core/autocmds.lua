@@ -56,10 +56,12 @@ autocmd('FileType', function(event)
 
   vim.treesitter.start(event.buf, language)
 
-  -- vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+  if vim.tbl_contains({ 'heex' }, language) then
+    vim.bo.indentexpr = "v:lua.require('nvim-treesitter').indentexpr()"
+  end
 
   vim.wo.foldmethod = 'expr'
-  if vim.bo.filetype == 'markdown' then
+  if language == 'markdown' then
     -- Use default folding from ftplugin for Markdown
     vim.wo.foldexpr = 'MarkdownFold()'
   else
