@@ -66,6 +66,11 @@ return {
           alternate = test_web .. 'controllers/{}_test.exs',
         },
 
+        [web .. 'plugs/*.ex'] = {
+          type = 'plug',
+          alternate = test_web .. 'plugs/{}_test.exs',
+        },
+
         [web .. 'controllers/page_html/*.heex'] = {
           type = 'page',
         },
