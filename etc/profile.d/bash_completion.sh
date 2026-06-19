@@ -64,7 +64,7 @@ function _mux {
   local cur="${COMP_WORDS[COMP_CWORD]}"
 
   if [ "${cur:0:1}" = "@" ]; then
-    local commands=( bundle console dev edit log migrate run server )
+    local commands=( bundle console dev edit log migrate run server test )
     mapfile -t COMPREPLY < <(
       compgen -W "$(
         (printf '%s:\n' "${commands[@]}"; cat Procfile 2>/dev/null) \

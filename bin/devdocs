@@ -1,3 +1,9 @@
 #!/bin/bash
-app_id="chrome-ahiigpfcghkbjfcibpojancebdfjmoop-Default"
-wincall activate "$app_id" || gio launch ~/.local/share/applications/"$app_id.desktop"
+
+app_id="ahiigpfcghkbjfcibpojancebdfjmoop"
+
+if pgrep -f "$app_id" >/dev/null; then
+  wincall activate "$app_id"
+else
+  gio launch ~/.local/share/applications/"chrome-${app_id}-Default.desktop"
+fi

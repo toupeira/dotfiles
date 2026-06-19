@@ -52,6 +52,8 @@ export FZF_DEFAULT_OPTS="\
 
 [ "$BASH_INTERACTIVE" ] || return
 
+touch ~/.local/state/history/fzf
+
 FZF_COMPLETION_TRIGGER='//'
 
 FZF_CTRL_T_COMMAND="$FZF_DEFAULT_COMMAND"

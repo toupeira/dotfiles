@@ -4,5 +4,5 @@ Name=Kodi
 GenericName=Media Center
 Comment=Manage and view your media
 Icon=tv.kodi.Kodi
-Exec=kodi
+Exec=/slack/dotfiles/bin/kodi
 Categories=AudioVideo;Player;TV;Video;

@@ -1,4 +1,5 @@
 7zip
+apparmor
 apt-listchanges
 bash-completion
 bat
@@ -6,6 +7,7 @@ bc
 bind9-dnsutils
 bsd-mailx
 btop
+build-essential
 busybox-static
 calendar
 colortest-python
@@ -28,7 +30,6 @@ git-absorb
 git-delta
 git-extras
 gnupg
-gocryptfs
 graphicsmagick
 inetutils-telnet
 inotify-tools
@@ -38,6 +39,8 @@ iw
 jq
 less
 libnss-systemd
+libsctp1
+linux-image-amd64
 linux-sysctl-defaults
 locales
 lsof
@@ -78,8 +81,8 @@ tcpdump
 tmux
 tree
 unattended-upgrades
-unison
 unzip
+wamerican
 wget
 whois
 wtmpdb
@@ -88,14 +91,21 @@ zstd
 
 -apt-file
 -chafa
+-cron
+-debian-faq
+-doc-debian
 -eatmydata
 -httpie
 -imagemagick
 -info
+-laptop-detect
 -lnav
 -locales-all
 -mawk
+-nano
 -resolvconf
 -s-tui
 -task-english
 -tig
+-vim-tiny
+-xauth

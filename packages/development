@@ -1,11 +1,12 @@
 # build system
 autoconf
 automake
-build-essential
 manpages-dev
 pkg-config
 
 # tools
+ansible-core
+ansible-mitogen
 gettext
 hexyl
 hyperfine

@@ -1,5 +1,4 @@
 # system
-apparmor
 bluetooth
 dnsmasq-base
 dosfstools
@@ -7,7 +6,6 @@ eject
 esmtp-run
 exfat-fuse
 exfatprogs
-firewalld
 firmware-linux
 flatpak
 flatseal
@@ -53,7 +51,6 @@ dconf-cli
 dconf-editor
 desktop-base
 file-roller
-firewall-config
 fonts-liberation
 fonts-noto
 fonts-noto-cjk
@@ -93,9 +90,11 @@ firefox
 foliate
 gcolor3
 gimp
+gocryptfs
 mpv
 quodlibet
 shotwell
+unison
 yt-dlp
 
 flatpak: io.missioncenter.MissionCenter

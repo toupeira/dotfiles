@@ -1,5 +1,7 @@
 #!/bin/bash
 
+. /slack/dotfiles/bin/lib.sh
+
 PROJECT=$( basename "$PWD" )
 
 function usage {
@@ -25,6 +27,7 @@ function usage {
   exit 255
 }
 
+function is-ansible { [ -f ansible.cfg ]; }
 function is-elixir  { [ -f mix.exs ]; }
 function is-phoenix { is-elixir && grep -Fq :phoenix mix.exs; }
 function is-ruby    { [ -f Gemfile ]; }
@@ -88,7 +91,7 @@ function run {
   fi
 
   if [ "$wait" ]; then
-    wait="echo -ne '\n\e[1;32m ● \e[22mDone: [ \e[1m$*\e[22m ]\e[0m '; read -n 1"
+    wait="echo -ne '\n$( msg "Done: [ {{$*}} ] " 2>&1 )'; read -n 1"
   fi
 
   tmux $action "${args[@]}" -- "
@@ -139,7 +142,9 @@ case "$1" in
           run-bundle mise install
         fi
 
-        if is-phoenix; then
+        if is-ansible; then
+          run-bundle ansible-galaxy collection install -r requirements.yml "$@"
+        elif is-phoenix; then
           run-bundle mix setup
         elif is-elixir; then
           run-bundle mix deps.get
@@ -184,6 +189,8 @@ case "$1" in
         fi
         ;;
       log)
+        args+=( -d )
+
         if [ -f "log/development.log" ]; then
           command="tail -n 0 -f log/development.log"
         else
@@ -192,7 +199,7 @@ case "$1" in
         fi
         ;;
       migrate)
-        args=( -b -d -w )
+        args+=( -d -w )
 
         if is-phoenix; then
           command="mix ecto.migrate"
@@ -204,7 +211,18 @@ case "$1" in
         fi
         ;;
       run)
-        if is-godot; then
+        if is-ansible; then
+          if [ $# -eq 0 ]; then
+            sudo true
+            set -- "$HOSTNAME"
+          else
+            set -- "$@" --ask-become-pass
+          fi
+
+          warning "[{{ansible}}] Updating {{$1}}..."
+          exec ansible-playbook site.yml --diff --limit "$@"
+        elif is-godot; then
+          msg "Running {{Godot}} project"
           exec godot "$@"
         else
           exec $0 @server
@@ -222,8 +240,27 @@ case "$1" in
           exit 1
         fi
         ;;
+      test)
+        args+=( -d -w )
+
+        if is-ansible; then
+          if [ $# -eq 0 ]; then
+            sudo true
+            set -- "$HOSTNAME"
+          else
+            set -- "$@" --ask-become-pass
+          fi
+
+          info "[{{ansible}}] Testing {{$1}}..."
+          exec ansible-playbook site.yml --check --diff --limit "$@"
+        elif is-phoenix; then
+          command="mix test"
+        elif is-rails; then
+          command="rails test"
+        fi
+        ;;
       *)
-        echo "Can't find process '@$proc'"
+        abort "Can't find process '@$proc'"
         exit 1
         ;;
     esac

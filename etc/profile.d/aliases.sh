@@ -36,7 +36,7 @@ alias fgrep='grep -F'
 alias rgrep='grep -r'
 alias ssh.direct='ssh -o ControlPath=none'
 alias ssh.proxy='echo "Starting SOCKS proxy at socks5://localhost:8080"; ssh.direct -ND 8080'
-alias ssh.syncthing='echo "Starting Syncthing proxy at http://localhost:9393"; ssh.direct -NL 9393:localhost:8384'
+alias ssh.syncthing='echo "Starting Syncthing proxy at http://localhost:9394"; ssh.direct -NL 9394:localhost:8384'
 alias fd='fd --hidden'
 alias mutt='neomutt'
 alias ffmpeg='ffmpeg -hide_banner'
@@ -92,7 +92,7 @@ function notes {
 alias ssh-keygen-secure='ssh-keygen -o -t ed25519'
 
 # mux aliases
-for command in bundle console dev edit log migrate run server; do
+for command in bundle console dev edit log migrate run server test; do
   eval "alias @$command='mux @$command'"
 done
 unset command
@@ -119,7 +119,6 @@ alias sucp='sudo cp -i'
 alias sumv='sudo mv -i'
 alias surm='sudo rm -I'
 alias suln='sudo ln'
-alias sush='sudo -i'
 alias suown='sudo chown -vR root:root'
 alias sumod='sudo chmod -vR 644'
 

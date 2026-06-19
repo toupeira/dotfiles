@@ -102,6 +102,15 @@ function has-news {
   git diff --stat ORIG_HEAD.. "$@" | grep -q .
 }
 
+# Check for files that were linked
+declare -A LINKED_PATHS
+function has-linked {
+  for file in "$@"; do
+    [ "${LINKED_PATHS[$file]}" ] && return 0
+  done
+  return 1
+}
+
 # Run a command in a tmux pane if possible
 function mux-wrap {
   if [ "$TMUX" ]; then
@@ -122,17 +131,25 @@ function mux-wrap {
 # Check for machine properties
 
 function has-gui {
-  [ "$HOSTNAME" = "steamdeck" ] && return 1
+  is-steamos && return 1
   [ "$CHASSIS_TYPE" ] || CHASSIS_TYPE=$( hostnamectl chassis )
   [ "$CHASSIS_TYPE" = "desktop" ] || [ "$CHASSIS_TYPE" = "laptop" ]
 }
 
-function has-amd {
+function is-amd {
   grep -Fq AuthenticAMD /proc/cpuinfo
 }
 
-function has-intel {
+function is-intel {
   grep -Fq GenuineIntel /proc/cpuinfo
+}
+
+function is-debian {
+  [ -f /etc/debian_version ]
+}
+
+function is-steamos {
+  [ -f /etc/steamos-release ]
 }
 
 # Load rules for the given keys
@@ -230,7 +247,7 @@ function origin {
 
 # Return all Syncthing folders
 function syncthing-folders {
-  syncthing cli config dump-json | jq -r '.folders[].path'
+  syncthing cli config dump-json | jq -r '.folders[] | select(.type != "receiveencrypted") | .path'
 }
 
 ### }}}
@@ -254,23 +271,29 @@ function run {
       run link-dotfiles "$@"
       run link-slack
 
-      if [ "$HOSTNAME" = "steamdeck" ]; then
+      if is-debian && has-linked "$DOTFILES/etc/apt/sources.list.d/"*; then
+        status "Setting up {{apt}}..."
+        sudo aptitude update
+      elif is-steamos; then
         status "Setting up {{pacman}}..."
-        sudo pacman-key --init
-        sudo pacman-key --populate holo
+        system sudo steamos-readonly disable
+        system sudo pacman-key --init
+        system sudo pacman-key --populate holo
       fi
 
       run packages
 
       if has-gui; then
         run dconf sync
+      elif is-steamos; then
+        system sudo steamos-readonly enable
       fi
       ;;
     # }}}
     link-dotfiles) # {{{
       if [ $# -eq 0 ]; then
         status "Linking {{dotfiles}}..."
-        mapfile -t dotfiles < <( fd . "$DOTFILES" --exact-depth 1 )
+        mapfile -t dotfiles < <( find "$DOTFILES"/* -maxdepth 0 )
         set -- "${dotfiles[@]}"
       fi
 
@@ -294,7 +317,7 @@ function run {
       status "Linking {{slack}}..."
       for dir in /slack/*; do
         local name=$( basename "$dir" )
-        if [ -d "$dir" ] && ! [[ "$name" =~ ^(backups|dotfiles|lost\+found|scrapbook|virtualbox)$ ]]; then
+        if [ -d "$dir" ] && ! [[ "$name" =~ ^(backups|dotfiles|lost\+found|scrapbook|virtualbox)$ ]] && ! [ -d "$dir/0.syncthing-enc" ]; then
           run link "$dir" ~/"$name"
         fi
       done
@@ -374,6 +397,7 @@ function run {
 
         if [ ! -e "$origin" ] && system ln -s "$target" "$origin"; then
           info "Successfully linked {{$origin}}"
+          LINKED_PATHS[$target]=1
         else
           error "Error while linking {{$origin}}"
           return
@@ -522,7 +546,11 @@ function run {
       local paths count origin target
       local total=$( grep -c '^ *lint .* ".*"$' "$0" )
 
-      function lint { info "[{{$(( ++count ))/$total}}] $( printf '%8s' "$1" ): {{$2}}"; }
+      function lint {
+        (( count++ ))
+        info "[{{$( printf '%2d/%2d' "$count" "$total" )}}] $( printf '%8s' "$1" ): {{$2}}"
+      }
+
       function list { indent 3; warning "{{$1}}"; }
       function fix  { [ "$fix" ] && indent 6 && "$@"; }
 
@@ -542,7 +570,7 @@ function run {
         list "$path"
         fix system rm -v "$path"
       done < <(
-        sudo $( which fd ) . ~ /root /etc --type l -u \
+        sudo "$( which fd )" . ~ /root /etc --type l -u \
           --follow \
           --mount \
           --exclude dotfiles \
@@ -551,6 +579,8 @@ function run {
           --exclude /.local/share/Steam \
           --exclude /.steam \
           --exclude /.var/app \
+          --exclude /games \
+          --exclude /sound \
           --exclude src --exclude tmp
       )
 
@@ -568,7 +598,6 @@ function run {
 
       paths=(
         "bin/switch-wifi"
-        "etc/sudoers.d/dotfiles"
       )
 
       for path in "${paths[@]}"; do
@@ -579,7 +608,7 @@ function run {
         fi
       done
 
-      if [ -d /etc/plymouth ]; then
+      if [ -d /etc/plymouth ] && ! is-steamos; then
         local plymouth="/etc/plymouth/plymouthd.conf"
         if diff "$plymouth" "$DOTFILES/$plymouth" | grep -q .; then
           list "$plymouth"
@@ -599,13 +628,8 @@ function run {
         fix system rm -v "$path"
       fi
 
-      lint root "Skeleton files"
-      while read -r path; do
-        list "$path"
-        fix system rm -v "$path"
-      done < <( sudo "$( which fd )" '^(\.bashrc|\.profile)$' /root --type f -u )
-
       lint root "Dotfile symlinks"
+      fix sudo mkdir -p /root/.config /root/.local/share /root/.local/share/nvim >/dev/null
       for path in config/nvim config/fd config/rg config/mise local/share/mise; do
         target=$( origin "$path" )
         origin=${target/#$HOME/\/root}
@@ -616,6 +640,14 @@ function run {
         list "$origin"
         fix sudo ln -snfv "$target" "$origin"
       done
+
+      if has dpkg-query; then
+        lint apt "Unpurged packages"
+        for package in $( dpkg-query -W -f '${Package}\t${Status}\n' | grep ' config-files$' | cut -f1 | sort ); do
+          list "$package"
+          fix sudo dpkg -P "$package"
+        done
+      fi
 
       if has syncthing; then
         lint slack "Syncthing conflicts"
@@ -731,9 +763,9 @@ function run {
           packages=$( echo "$packages"; grep -E "$filter" "$path-gui" )
         fi
 
-        if has-amd && [ -f "$path-amd" ]; then
+        if is-amd && [ -f "$path-amd" ]; then
           packages=$( echo "$packages"; grep -E "$filter" "$path-amd" )
-        elif has-intel && [ -f "$path-intel" ]; then
+        elif is-intel && [ -f "$path-intel" ]; then
           packages=$( echo "$packages"; grep -E "$filter" "$path-intel" )
         fi
       fi
@@ -851,19 +883,23 @@ function run {
 
       function update-packages {
         local type="$1"
-        local command="$( basename "$0" ) update-$type"
         shift
+
+        set -- "$0" "update-$type"
 
         if [ "$filter" ] && [ "$filter" != "$type" ]; then
           return
         elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
           mux-wrap -w -t "update-packages [$type]" \
-            -- "$command"
+            -- "$@"
           [ "$TMUX" ] && system tmux select-layout even-vertical
         fi
       }
 
+      system sudo true
+
       has aptitude && update-packages apt
+      has pacman   && update-packages arch
       has flatpak  && update-packages flatpak
       has fwupdmgr && update-packages firmware
 
@@ -878,9 +914,14 @@ function run {
       system sudo aptitude update \
         && system sudo aptitude full-upgrade
       ;;
+    update-arch)
+      system sudo steamos-readonly disable
+      system sudo pacman -Syu
+      system sudo steamos-readonly enable
+      ;;
     update-flatpak)
       status "Updating Flatpak packages..."
-      system sudo flatpak update \
+      system sudo --preserve-env=XDG_DATA_DIRS flatpak update \
         && system sudo flatpak uninstall --unused \
         && system flatpak uninstall --delete-data
       ;;
