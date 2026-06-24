@@ -2,8 +2,6 @@
 
 if [ "$VIMCMD" ]; then
   vim=$VIMCMD
-elif command -v mise >/dev/null; then
-  vim="mise exec -- nvim"
 elif command -v nvim >/dev/null; then
   vim="nvim"
 else

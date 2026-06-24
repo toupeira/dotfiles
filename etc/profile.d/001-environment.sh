@@ -28,11 +28,9 @@ if [ "$XDG_SESSION_TYPE" = "wayland" ] && [ ! "$QT_SCALE_FACTOR" ]; then
 fi
 
 # initialize mise
-if [ -d ~/.config/mise ]; then
-  if [ "$HOSTNAME" != "snafu" ]; then
-    export MISE_ENV='development,gamedev'
-    [ "$TMUX" ] && tmux set-environment MISE_ENV "$MISE_ENV"
-  fi
+if [ -d ~/.config/mise ] && [ "$USER" != "root" ]; then
+  export MISE_ENV='gamedev'
+  [ "$TMUX" ] && tmux set-environment MISE_ENV "$MISE_ENV"
 
   if [ "$BASH_INTERACTIVE" ]; then
     eval "$( mise activate bash )"

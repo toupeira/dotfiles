@@ -24,6 +24,7 @@ file
 fortune-anarchism
 fortune-mod
 fortunes
+fzf
 gawk
 git
 git-absorb
@@ -48,12 +49,12 @@ ltrace
 lynx
 mailutils
 make
-mise
 moreutils
 ncal
 ncurses-term
 needrestart
 neomutt
+neovim
 netcat-openbsd
 net-tools
 nftables
@@ -80,6 +81,7 @@ systemd-timesyncd
 tcpdump
 tmux
 tree
+tree-sitter-cli
 unattended-upgrades
 unzip
 wamerican

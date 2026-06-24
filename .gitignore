@@ -1,6 +1,8 @@
 /packages/lazy
 /packages/mason
-/packages/mise
+
+/packages/mise/*
+!/packages/mise/.keep
 
 # avoid symlink loops in lua_ls:
 /vim/lua/

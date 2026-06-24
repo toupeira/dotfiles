@@ -629,8 +629,8 @@ function run {
       fi
 
       lint root "Dotfile symlinks"
-      fix sudo mkdir -p /root/.config /root/.local/share /root/.local/share/nvim >/dev/null
-      for path in config/nvim config/fd config/rg config/mise local/share/mise; do
+      fix sudo mkdir -p /root/.config /root/.local/share/nvim >/dev/null
+      for path in config/nvim config/fd config/rg; do
         target=$( origin "$path" )
         origin=${target/#$HOME/\/root}
 
@@ -885,7 +885,7 @@ function run {
         local type="$1"
         shift
 
-        set -- "$0" "update-$type"
+        set -- "$( basename "$0" )" "update-$type"
 
         if [ "$filter" ] && [ "$filter" != "$type" ]; then
           return

@@ -95,7 +95,6 @@ mpv
 quodlibet
 shotwell
 unison
-yt-dlp
 
 flatpak: io.missioncenter.MissionCenter
 flatpak: md.obsidian.Obsidian

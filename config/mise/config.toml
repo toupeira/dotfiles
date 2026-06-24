@@ -1,16 +1,26 @@
 [tools]
-fzf = "0.73.1"
-neovim = "0.12.3"
-tree-sitter = "0.26.9"
-usage = "3.5.0"
+# Languages
+ruby = "latest"
+node = "latest"
+
+# Tools
+blender = "latest"
+usage = "latest"
+yt-dlp = "latest"
+"github:dlvhdr/diffnav" = "latest"
+"github:TheWaWaR/simple-http-server" = { version = "latest", bin = "simple-http-server" }
 
 [settings]
 auto_install = false
 not_found_auto_install = false
+minimum_release_age = "7d"
 env_file = ".env"
+lockfile = true
+
 disable_backends = ["asdf"]
 disable_hints = ["outdated_bump"]
-minimum_release_age = "7d"
+idiomatic_version_file_enable_tools = ["node"]
 
 [settings.ruby]
 compile = false
+ruby_build_opts = "RUBY_CONFIGURE_OPTS='--disable-install-doc'"

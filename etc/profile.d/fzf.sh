@@ -106,11 +106,12 @@ bind '"\C-s": " \C-e\C-ugit switch-branch\C-m"'
 function __tmux_complete {
   local words=()
   local pane
-  for pane in $( tmux list-panes -a -F '#D' ); do
-    words=( "${words[@]}"
-      $( tmux capture-pane -p -t "$pane" -S -1000 | grep -Eio '\w[-_.:/@[:alnum:]]{1,}\w' )
-    )
-  done
+  
+  mapfile -t words < <(
+    for pane in $( tmux list-panes -a -F '#D' ); do
+      tmux capture-pane -p -t "$pane" -S -1000 | grep -Eio '\w[-_.:/@[:alnum:]]{1,}\w'
+    done
+  )
 
   result=$(
     printf '%s\n' "${words[@]}" | sort | uniq | \

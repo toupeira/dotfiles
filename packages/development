@@ -10,6 +10,7 @@ ansible-mitogen
 gettext
 hexyl
 hyperfine
+mise
 sqlite3
 universal-ctags
 visidata
