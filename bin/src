@@ -9,7 +9,7 @@ function usage {
   echo "  src [--path]                        Show source path"
   echo "  src status [-a] [PROJECT..]         Show status for all projects"
   echo "  src list [-a] [--path] [PROJECT..]  List all project paths"
-  echo "  src each [-a] COMMAND [PROJECT..]   Run command in each project"
+  echo "  src each [-a] COMMAND               Run command in each project"
   echo
   echo "  src PROJECT [--path]                Output project path"
   echo "  src PROJECT [GIT-COMMAND] [ARGS]    Run Git command"
@@ -32,7 +32,7 @@ case "$ACTION" in
     ;;
   status|st|s)
     echo
-    for project in $( src list $all --path "$@" ); do
+    for project in $( "$0" list $all --path "$@" ); do
       status=$( git -C "$project" -c color.ui=always status -sb )
 
       changes=$( echo "$status" | grep -c '^[^#]' )
@@ -65,12 +65,8 @@ case "$ACTION" in
     exit
     ;;
   list|ls|l|-l)
-    if [ -z "$all" ]; then
-      filter="
-        -not \( -path $SRC/scrapbook -prune \)
-        -not \( -path $SRC/upstream -prune \)
-      "
-    fi
+    paths=( "$SRC" )
+    [ "$all" ] && paths+=( "$SRC/scrapbook" "$SRC/upstream" )
 
     if [ "$1" = "--path" ]; then
       shift
@@ -83,9 +79,7 @@ case "$ACTION" in
     shift
     [ $# -gt 0 ] && pattern="$pattern$( printf '|%s' "$@" )"
 
-    eval find -L "$SRC" \
-      -mindepth 1 \
-      -type d $filter -name .git \
+    find -L "${paths[@]}" -maxdepth 2 -type d -name .git \
       | sed -r "s|^($SRC/)(.+)/\.git$|$format|" \
       | grep -E "$pattern" \
       | sort
@@ -95,13 +89,13 @@ case "$ACTION" in
   each)
     [ $# -lt 1 ] && usage
     echo
-    for project in $( src list $all --path ); do
+    for project in $( "$0" list $all --path ); do
       msg "{{$project}}: \e[1;33m$*"
       (cd "$project" || exit 1; "$@")
 
       status=$?
       if [ $status -ne 0 ]; then
-        echo -e "# \e[1;31mexit code $status\e[0m"
+        error "exit code {{$status}}"
       fi
       echo
 
@@ -121,10 +115,10 @@ if [ -d "$PROJECT" ]; then
 elif [ -d "$SRC/$PROJECT" ]; then
   PROJECT_PATH="$SRC/$PROJECT"
 else
-  PROJECT_PATH=$( src list --path "$PROJECT" | head -1 )
+  PROJECT_PATH=$( "$0" list --path "$PROJECT" | head -1 )
 
   if [ -z "$PROJECT_PATH" ]; then
-    PROJECT_PATH=$( src list -a --path "$PROJECT" | head -1 )
+    PROJECT_PATH=$( "$0" list -a --path "$PROJECT" | head -1 )
 
     if [ -z "$PROJECT_PATH" ]; then
       echo "Project not found: $PROJECT" >&2
