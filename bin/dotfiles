@@ -1125,7 +1125,7 @@ function run {
       done
       ;;
     # }}}
-    e|edit) # {{{
+    edit|e) # {{{
       case "$1" in
         dotfiles|d) git-edit bin/dotfiles;;
         lib|l)      git-edit bin/lib.sh;;
@@ -1157,8 +1157,16 @@ while [ $# -gt 0 ]; do
     -v|--verbose) set-verbose;;
     -q|--quiet)   set-quiet;;
     -d|--debug)   set-debug;;
-       --path)    exec echo "$DOTFILES";;
-    -*|help)      usage;;
+    --path)
+      exec echo "$DOTFILES"
+      ;;
+    --complete)
+      grep -Po '^    \K([-a-z]+)(?=[|)])' "$0"
+      exit
+      ;;
+    help|-*)
+      usage
+      ;;
     *)
       COMMAND=( "$@" )
       break

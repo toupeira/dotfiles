@@ -30,8 +30,21 @@ if has_completion git __git_main; then
   function _git_delete_branch { _git_checkout; }
 
   if has dotfiles; then
-    __git_complete dotfiles git
-    __git_complete dt git
+    function _dotfiles {
+      __git_wrap__git_main
+
+      if [ "$COMP_CWORD" -eq 1 ]; then
+        local cur=${COMP_WORDS[COMP_CWORD]}
+        local completions
+        mapfile -t completions < <(
+          compgen -W "$( dotfiles --complete )" -- "$cur"
+        )
+
+        COMPREPLY+=( "${completions[@]}" )
+      fi
+    }
+
+    complete -F _dotfiles dotfiles dt
   fi
 fi
 
@@ -50,7 +63,7 @@ complete -F _packages_installed pkglist pkgpurge pkgremove
 complete -C 'src list -a' src
 
 function _src_alias {
-  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local cur=${COMP_WORDS[COMP_CWORD]}
 
   if [ "${cur:0:1}" = "@" ]; then
     _mux
@@ -61,7 +74,7 @@ function _src_alias {
 
 # mux completion
 function _mux {
-  local cur="${COMP_WORDS[COMP_CWORD]}"
+  local cur=${COMP_WORDS[COMP_CWORD]}
 
   if [ "${cur:0:1}" = "@" ]; then
     local commands=( bundle console dev edit log migrate run server test )
