@@ -317,7 +317,7 @@ function run {
       status "Linking {{slack}}..."
       for dir in /slack/*; do
         local name=$( basename "$dir" )
-        if [ -d "$dir" ] && ! [[ "$name" =~ ^(backups|dotfiles|lost\+found|scrapbook|virtualbox)$ ]] && ! [ -d "$dir/0.syncthing-enc" ]; then
+        if [ -d "$dir" ] && ! [[ "$name" =~ ^(backups|dotfiles|lost\+found|machines|scrapbook)$ ]] && ! [ -d "$dir/0.syncthing-enc" ]; then
           run link "$dir" ~/"$name"
         fi
       done
