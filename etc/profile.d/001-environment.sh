@@ -16,6 +16,7 @@ export MANPAGER="sensible-vim +Man!"
 export SYSTEMD_LESS="iRMKFX --mouse"
 export RIPGREP_CONFIG_PATH=~/.config/rg/config
 export BAT_THEME="TwoDark"
+export ANSIBLE_VAULT_PASSWORD_FILE="$DOTFILES/bin/ansible-vault-key"
 
 # debian tools
 export DEBEMAIL='markus@snafu.ch'

@@ -1,0 +1,3 @@
+#!/bin/bash
+echo -n "ansible-vault-key" \
+  | ssh-keygen -Y sign -n ansible -f ~/.ssh/id_ed25519 2>/dev/null

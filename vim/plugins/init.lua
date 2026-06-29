@@ -79,6 +79,9 @@ return {
     dependencies = { 'fzf-lua' },
   },
   lazy_file { 'nemanjamalesija/smart-paste.nvim',
+    keys = {
+      { '<C-v>', '<Cmd>lua require("smart-paste").paste({ register = "+", key = "gP" })<CR>', desc = 'Paste from clipboard' },
+    },
     opts = { exclude_filetypes = { 'help', 'gitsigns-blame' }},
   },
   lazy      { 'pechorin/any-jump.vim',
