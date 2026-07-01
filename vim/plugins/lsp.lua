@@ -2,8 +2,10 @@ local util = require('util')
 
 local servers = {
   bashls   = { install = true },
-  gdscript = { enable = true },
   lua_ls   = { install = true },
+  tailwindcss = { install = true },
+
+  gdscript = { enable = true },
   ruby_lsp = {},
 }
 

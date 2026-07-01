@@ -83,18 +83,6 @@ return {
       end,
 
       providers = {
-        path = {
-          enabled = function()
-            return vim.bo.filetype ~= 'codecompanion'
-          end,
-          transform_items = hide_source,
-          opts = {
-            get_cwd = function(_)
-              return vim.fn.getcwd()
-            end,
-          },
-        },
-
         buffer = {
           transform_items = hide_source,
           opts = {
@@ -106,6 +94,22 @@ return {
                 end,
                 vim.api.nvim_list_bufs()
               )
+            end,
+          },
+        },
+
+        lsp = {
+          async = true,
+        },
+
+        path = {
+          enabled = function()
+            return vim.bo.filetype ~= 'codecompanion'
+          end,
+          transform_items = hide_source,
+          opts = {
+            get_cwd = function(_)
+              return vim.fn.getcwd()
             end,
           },
         },
