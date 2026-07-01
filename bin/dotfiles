@@ -409,7 +409,7 @@ function run {
       [ $# -eq 0 ] && usage
 
       for path in "$@"; do
-        local origin=$( readlink -f "$path" 2>/dev/null )
+        local origin=$( origin "$( readlink -f "$path" 2>/dev/null )" )
         local target=$( target "$origin" )
         local target_dir=$( dirname "$target" )
 
@@ -418,7 +418,7 @@ function run {
         elif ! validate "$origin"; then
           continue
         elif [ -L "$path" ]; then
-          info "Already symlinked: {{$path}}"
+          warning "Already symlinked: {{$path}}"
           continue
         fi
 

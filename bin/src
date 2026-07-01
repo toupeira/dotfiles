@@ -66,7 +66,12 @@ case "$ACTION" in
     ;;
   list|ls|l|-l)
     paths=( "$SRC" )
-    [ "$all" ] && paths+=( "$SRC/scrapbook" "$SRC/upstream" )
+    depth=2
+
+    if [ "$all" ]; then
+      depth=3
+      paths+=( "$SRC/scrapbook/archive" "$SRC/upstream" )
+    fi
 
     if [ "$1" = "--path" ]; then
       shift
@@ -79,7 +84,7 @@ case "$ACTION" in
     shift
     [ $# -gt 0 ] && pattern="$pattern$( printf '|%s' "$@" )"
 
-    find -L "${paths[@]}" -maxdepth 2 -type d -name .git \
+    find -L "${paths[@]}" -maxdepth "$depth" -type d -name .git \
       | sed -r "s|^($SRC/)(.+)/\.git$|$format|" \
       | grep -E "$pattern" \
       | sort

@@ -176,6 +176,7 @@ case "$1" in
         args=( -d -l )
 
         if [ -x bin/dev ]; then
+          msg "Starting {{dev server}}"
           command="bin/dev"
         else
           exec $0 @server
@@ -183,6 +184,7 @@ case "$1" in
         ;;
       edit)
         if is-godot; then
+          msg "Editing {{Godot}} project"
           exec start godot project.godot "$@"
         else
           exec sensible-vim "$@"
@@ -230,14 +232,36 @@ case "$1" in
         ;;
       server)
         args=( -d -l )
+        port=
 
         if is-phoenix; then
           command="mix phx.server"
+          port=4000
         elif is-rails; then
           command="rails server"
+          port=3000
+        elif [ -f Makefile ] && grep -q '^browser:'; then
+          command="make browser"
         else
           echo "Can't find server for project."
           exit 1
+        fi
+
+
+        if [ "$port" ]; then
+          url="http://localhost:$port"
+          msg "Starting server for {{$url}}"
+
+          (
+            count=0
+            while ! timeout 1 bash -c "echo > /dev/tcp/localhost/$port" &>/dev/null; do
+              sleep 0.1
+              (( ++count > 50 )) && exit
+            done
+            xdg-open "$url"
+          ) &
+        else
+          msg "Starting {{server}}"
         fi
         ;;
       test)
