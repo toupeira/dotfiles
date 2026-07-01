@@ -1,4 +1,4 @@
 gnome-boxes
-qemu
 qemu-system-modules-spice
+qemu-system-x86
 qemu-utils
