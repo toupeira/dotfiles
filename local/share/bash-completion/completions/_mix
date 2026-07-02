@@ -101,7 +101,7 @@ _mix_complete_complete() {
   __mix_completion_debug "==$(date)=="
   __mix_completion_debug "cur $cur"
   __mix_completion_debug "words $words"
-  if [[ $prev == 'mix' ]] || [[ $prev == 'help' ]]; then
+  if [[ $prev == 'mix' ]]; then
     __mix_completion_handle_standard_completion_case
   else
     COMPREPLY=()

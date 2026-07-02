@@ -896,7 +896,7 @@ function run {
         fi
       }
 
-      system sudo true
+      [ "$SSH_CONNECTION" ] || system sudo true
 
       has aptitude && update-packages apt
       has pacman   && update-packages arch

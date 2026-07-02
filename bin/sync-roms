@@ -62,11 +62,13 @@ case "$1" in
 esac
 shift
 
+RSYNC_ARGS=( "$@" )
+
 function rsync {
   command rsync -Wrv \
     --size-only \
     --copy-links \
-    "$@"
+    "${RSYNC_ARGS[@]}" "$@"
 }
 
 if [[ "$TARGET" = *:* ]]; then
@@ -109,7 +111,7 @@ rsync \
   --exclude 'pico-8/plates' \
   --exclude 'psp/PSP' \
   --exclude 'scummvm/games/.scummvm' \
-  "$ROMS/" "$TARGET/roms/" "$@"
+  "$ROMS/" "$TARGET/roms/"
 
 [ $METADATA = 1 ] || exit
 
@@ -123,7 +125,7 @@ rsync \
   --exclude 'ThemeMaster' \
   --exclude 'SAVE' \
   --exclude 'saves' \
-  "$TARGET/roms/ports/" "$ROMS/ports/" "$@"
+  "$TARGET/roms/ports/" "$ROMS/ports/"
 
 echo
 msg "Syncing metadata from {{$NAME}} to {{$ROMS}}..."
@@ -144,12 +146,12 @@ for gamelist in $gamelists; do
 
   rsync \
     --info=stats0,flist0 \
-    "$gamelist" "$ROMS/$system/gamelist.xml" "$@"
+    "$gamelist" "$ROMS/$system/gamelist.xml"
 
   rsync \
     --info=stats0,flist0 \
     --delete \
-    "$path/images/" "$ROMS/$system/images/" "$@"
+    "$path/images/" "$ROMS/$system/images/"
 done
 
 echo

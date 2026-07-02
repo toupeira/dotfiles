@@ -30,6 +30,7 @@ tuned
 tuned-ppd
 
 # multimedia
+alsa-ucm-conf
 alsa-utils
 drm-info
 ffmpeg
@@ -101,7 +102,6 @@ flatpak: md.obsidian.Obsidian
 flatpak: org.gnome.Decibels
 flatpak: org.gtk.Gtk3theme.Numix
 
--alsa-ucm-conf
 -bluez-obexd
 -cabextract
 -calibre
