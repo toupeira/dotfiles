@@ -7,6 +7,8 @@ esmtp-run
 exfat-fuse
 exfatprogs
 firmware-linux
+firmware-mediatek
+firmware-realtek
 flatpak
 flatseal
 fwupd
@@ -107,7 +109,6 @@ flatpak: org.gtk.Gtk3theme.Numix
 -calibre
 -evolution-data-server
 -evolution-data-server-common
--firmware-mediatek
 -gimp-plugin-registry
 -gnome-bluetooth-sendto
 -gnome-browser-connector

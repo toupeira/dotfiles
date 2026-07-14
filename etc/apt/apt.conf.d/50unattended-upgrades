@@ -18,10 +18,11 @@
 // "apt-cache policy", and can be debugged by running
 // "unattended-upgrades -d" and looking at the log file.
 //
-// Within lines unattended-upgrades allows 2 macros whose values are
+// Within lines unattended-upgrades allows 3 macros whose values are
 // derived from /etc/debian_version:
 //   ${distro_id}            Installed origin.
 //   ${distro_codename}      Installed codename (eg, "buster")
+//   ${distro_release}       Installed release number (eg, "10")
 Unattended-Upgrade::Origins-Pattern {
         // Codename based matching:
         // This will follow the migration of a release through different
@@ -125,6 +126,17 @@ Unattended-Upgrade::MailReport "only-on-error";
 // Automatically reboot even if there are users currently logged in
 // when Unattended-Upgrade::Automatic-Reboot is set to true
 //Unattended-Upgrade::Automatic-Reboot-WithUsers "true";
+
+// Automatically reboot even if there are system users currently logged in
+// when Unattended-Upgrade::Automatic-Reboot is set to true, but
+// do not reboot if the root user or users with UID larger than 1000 are
+// logged in. This option is ignored if Unattended-Upgrade::Automatic-Reboot-WithUsers
+// is "true"
+//Unattended-Upgrade::Automatic-Reboot-WithSystemUsers "true";
+
+// A comma-separated list of users that are ignored when checking logged in
+// users for Automatic-Reboot-WithUsers and Automatic-Reboot-WithSystemUsers
+//Unattended-Upgrade::Automatic-Reboot-IgnoredUsers "Debian-gdm,sddm,lightdm";
 
 // If automatic reboot is enabled and needed, reboot at the specific
 // time instead of immediately
