@@ -264,8 +264,14 @@ function run {
       git remote set-url --no-push origin "https://github.com/$repository"
       git remote set-url --push    origin "git@github.com:$repository"
 
-      local hook="$DOTFILES/.git/hooks/pre-commit"
-      echo -e "#!/bin/sh\nbin/dotfiles --quiet test" > "$hook"
+      local hook
+
+      hook="$DOTFILES/.git/hooks/pre-commit"
+      echo -e '#!/bin/sh\nbin/dotfiles --quiet test' > "$hook"
+      chmod +x "$hook"
+
+      hook="$DOTFILES/.git/hooks/prepare-commit-msg"
+      echo -e '#!/bin/sh\necho "Sync dotfiles" > "$1"' > "$hook"
       chmod +x "$hook"
 
       run link-dotfiles "$@"
@@ -548,7 +554,7 @@ function run {
 
       function lint {
         (( count++ ))
-        info "[{{$( printf '%2d/%2d' "$count" "$total" )}}] $( printf '%8s' "$1" ): {{$2}}"
+        info "[{{$( printf '%d/%d' "$count" "$total" )}}] $( printf '%8s' "$1" ): {{$2}}"
       }
 
       function list { indent 3; warning "{{$1}}"; }

@@ -95,36 +95,36 @@ url = "https://github.com/dlvhdr/diffnav/releases/download/v0.11.0/diffnav_Windo
 url_api = "https://api.github.com/repos/dlvhdr/diffnav/releases/assets/378589423"
 
 [[tools.node]]
-version = "26.4.0"
+version = "26.5.0"
 backend = "core:node"
 
 [tools.node."platforms.linux-arm64"]
-checksum = "sha256:773d9ec67266838270ddc105c2548ae8aaff28bc8fe6f34c55d1094043c4165e"
-url = "https://nodejs.org/dist/v26.4.0/node-v26.4.0-linux-arm64.tar.gz"
+checksum = "sha256:308e5fe89a82461ba5a6cf15ff5221b2cdbd7ae87600aa72bb3c3fbdc66412d1"
+url = "https://nodejs.org/dist/v26.5.0/node-v26.5.0-linux-arm64.tar.gz"
 
 [tools.node."platforms.linux-arm64-musl"]
-checksum = "sha256:d2ad8c6e9fa955edf0337078c1d1acda345d36a84986b218cce3cfd1d2d26920"
-url = "https://unofficial-builds.nodejs.org/download/release/v26.4.0/node-v26.4.0-linux-arm64-musl.tar.gz"
+checksum = "sha256:1ab31aef6561191693f366cacd75bbcefa0301e49a18bc05554c21893bbdb490"
+url = "https://unofficial-builds.nodejs.org/download/release/v26.5.0/node-v26.5.0-linux-arm64-musl.tar.gz"
 
 [tools.node."platforms.linux-x64"]
-checksum = "sha256:f221dab30d0e9d544332f06fbee2c62186c97d864d5cac8482dba34f1e38b8dc"
-url = "https://nodejs.org/dist/v26.4.0/node-v26.4.0-linux-x64.tar.gz"
+checksum = "sha256:22b5f47ad6ae78837e4c2b846019965ce1a06ba143de176102294a1bf44fc677"
+url = "https://nodejs.org/dist/v26.5.0/node-v26.5.0-linux-x64.tar.gz"
 
 [tools.node."platforms.linux-x64-musl"]
-checksum = "sha256:554e960f6570bd3d1987f5170d8f2a373a21818581a8d307b697e7839988314a"
-url = "https://unofficial-builds.nodejs.org/download/release/v26.4.0/node-v26.4.0-linux-x64-musl.tar.gz"
+checksum = "sha256:00f1398411a4216c5a6ecaad3b825a0da5ec00e79ee8c173ab65a094d97b9ad8"
+url = "https://unofficial-builds.nodejs.org/download/release/v26.5.0/node-v26.5.0-linux-x64-musl.tar.gz"
 
 [tools.node."platforms.macos-arm64"]
-checksum = "sha256:4f4fbcacf6b1ff1a95deedba7bd7b2d79efecaa53a8ecb0530546dc9063fefbc"
-url = "https://nodejs.org/dist/v26.4.0/node-v26.4.0-darwin-arm64.tar.gz"
+checksum = "sha256:ee920559aaa2391569cff4d737e3b83963430e3a14dedd91bfe0ff53171b5af9"
+url = "https://nodejs.org/dist/v26.5.0/node-v26.5.0-darwin-arm64.tar.gz"
 
 [tools.node."platforms.macos-x64"]
-checksum = "sha256:eb3bdd8dec3ff2558ee10e284da7d2a3865af0cbda21f06d397b0265837c641e"
-url = "https://nodejs.org/dist/v26.4.0/node-v26.4.0-darwin-x64.tar.gz"
+checksum = "sha256:98293394c945a24e64e00b4177bf075ec963ea70b34d1d2e24bd4a71716d334f"
+url = "https://nodejs.org/dist/v26.5.0/node-v26.5.0-darwin-x64.tar.gz"
 
 [tools.node."platforms.windows-x64"]
-checksum = "sha256:5f87d038c6ec442aa46b9126f8ca170acbd2f3b9b9152ca798cf54596a31e214"
-url = "https://nodejs.org/dist/v26.4.0/node-v26.4.0-win-x64.zip"
+checksum = "sha256:d3b2277dbcccfdf24ef6302928f64f484cff1d77a6d3caa3a28f4d20ce9158f6"
+url = "https://nodejs.org/dist/v26.5.0/node-v26.5.0-win-x64.zip"
 
 [[tools.ruby]]
 version = "4.0.5"
@@ -166,80 +166,91 @@ provenance = "github-attestations"
 checksum = "sha256:7d6149079a63f8ae1d326c9fa65c6019ba2dc3155eae7b39159817911c88958e"
 url = "https://cache.ruby-lang.org/pub/ruby/4.0/ruby-4.0.5.tar.gz"
 
+[tools.ruby."platforms.windows-x64"]
+checksum = "sha256:74e31613fc71e6e23431dfc4d8b6ec2818a4dc1fd16e0983b074144c16719c8b"
+url = "https://github.com/oneclick/rubyinstaller2/releases/download/RubyInstaller-4.0.5-1/rubyinstaller-4.0.5-1-x64.7z"
+
 [[tools.usage]]
-version = "3.5.3"
+version = "3.5.4"
 backend = "aqua:jdx/usage"
 
 [tools.usage."platforms.linux-arm64"]
-checksum = "sha256:c5ee535f65cadca0a0883ce0073095e1a12fc749224a79a13d57e38cbcc88dd4"
-url = "https://github.com/jdx/usage/releases/download/v3.5.3/usage-aarch64-unknown-linux-musl.tar.gz"
+checksum = "sha256:6f826638194da61fc5f631a9ed25930ddc3746e8f9de97f218b36a3a899c196c"
+url = "https://github.com/jdx/usage/releases/download/v3.5.4/usage-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/468428362"
 
 [tools.usage."platforms.linux-arm64-musl"]
-checksum = "sha256:c5ee535f65cadca0a0883ce0073095e1a12fc749224a79a13d57e38cbcc88dd4"
-url = "https://github.com/jdx/usage/releases/download/v3.5.3/usage-aarch64-unknown-linux-musl.tar.gz"
+checksum = "sha256:6f826638194da61fc5f631a9ed25930ddc3746e8f9de97f218b36a3a899c196c"
+url = "https://github.com/jdx/usage/releases/download/v3.5.4/usage-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/468428362"
 
 [tools.usage."platforms.linux-x64"]
-checksum = "sha256:678114d182273bc8a1316f3528f1f8ded047ed56b41b822656de7046e16a6deb"
-url = "https://github.com/jdx/usage/releases/download/v3.5.3/usage-x86_64-unknown-linux-musl.tar.gz"
+checksum = "sha256:642e6eb31e58db1f3cda206d0484685950a224825f5ed22eb9cc9a6d6ddbbb46"
+url = "https://github.com/jdx/usage/releases/download/v3.5.4/usage-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/468428453"
 
 [tools.usage."platforms.linux-x64-musl"]
-checksum = "sha256:678114d182273bc8a1316f3528f1f8ded047ed56b41b822656de7046e16a6deb"
-url = "https://github.com/jdx/usage/releases/download/v3.5.3/usage-x86_64-unknown-linux-musl.tar.gz"
+checksum = "sha256:642e6eb31e58db1f3cda206d0484685950a224825f5ed22eb9cc9a6d6ddbbb46"
+url = "https://github.com/jdx/usage/releases/download/v3.5.4/usage-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/468428453"
 
 [tools.usage."platforms.macos-arm64"]
-checksum = "sha256:dc6628015c420f0e0384c95999266ca74dc19de8279b4d54667844286cf8fa13"
-url = "https://github.com/jdx/usage/releases/download/v3.5.3/usage-universal-apple-darwin.tar.gz"
+checksum = "sha256:25b0fff15f030f3c08caa960174b3fb9f85be601824744424a7409dcdf1ee37a"
+url = "https://github.com/jdx/usage/releases/download/v3.5.4/usage-universal-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/468433769"
 
 [tools.usage."platforms.macos-x64"]
-checksum = "sha256:dc6628015c420f0e0384c95999266ca74dc19de8279b4d54667844286cf8fa13"
-url = "https://github.com/jdx/usage/releases/download/v3.5.3/usage-universal-apple-darwin.tar.gz"
+checksum = "sha256:25b0fff15f030f3c08caa960174b3fb9f85be601824744424a7409dcdf1ee37a"
+url = "https://github.com/jdx/usage/releases/download/v3.5.4/usage-universal-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/468433769"
 
 [tools.usage."platforms.windows-x64"]
-checksum = "sha256:3cd7995171854518873f84bf60be17c8e331cad1ca180e03911fac414a7a6372"
-url = "https://github.com/jdx/usage/releases/download/v3.5.3/usage-x86_64-pc-windows-msvc.zip"
+checksum = "sha256:61dbc0aedc54696c6201d1e8f107348b30706a47e23a44c08280c3c7f63b6804"
+url = "https://github.com/jdx/usage/releases/download/v3.5.4/usage-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/468428934"
 
 [[tools.yt-dlp]]
-version = "2026.06.09"
+version = "2026.07.04"
 backend = "github:yt-dlp/yt-dlp"
 
 [tools.yt-dlp."platforms.linux-arm64"]
-checksum = "sha256:1afe383d9984377f03bb849d96b477ba4c642ca13c2817822f76514cbff4815d"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.06.09/yt-dlp_linux_aarch64.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/443156636"
+checksum = "sha256:0554d39b22e039b4c0f70a492b9852870f281ed6a93eb75e78f150b32df76543"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_linux_aarch64.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665348"
 provenance = "github-attestations"
 
 [tools.yt-dlp."platforms.linux-arm64-musl"]
-checksum = "sha256:eaf111ee9531c5e3ed3b629cc22506e1509aba8296e7cad63b6f486455d2a8f3"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.06.09/yt-dlp_musllinux_aarch64.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/443156708"
+checksum = "sha256:fbbd71eb964513954232c705e82f36b982fec5af47718088fb5eaebca6421fc1"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_musllinux_aarch64.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665378"
 provenance = "github-attestations"
 
 [tools.yt-dlp."platforms.linux-x64"]
-checksum = "sha256:217bbc9c3ed19ea75a7f151a3e48dbfeac7f459a7dce2deeeecc2d6e2871bd5b"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.06.09/yt-dlp_linux.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/443156628"
+checksum = "sha256:d7d2d09e900b5ae11821b5784b18cf064984a2bd88b1ca5c798d744bcbe3658b"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_linux.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665341"
 provenance = "github-attestations"
 
 [tools.yt-dlp."platforms.linux-x64-musl"]
-checksum = "sha256:8fcef2bba0675ebbe8575f960ed4592c929a5532572607fc37509ce2e1ce97f3"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.06.09/yt-dlp_musllinux.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/443156697"
+checksum = "sha256:ee66ae15987ee1aa911e762883e94586fca958ba03040f659c67410b4672444e"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_musllinux.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665368"
 provenance = "github-attestations"
 
 [tools.yt-dlp."platforms.macos-arm64"]
-checksum = "sha256:62a3108d7c37090107f0bb9a2369b953b35e43f4bc76ab0ea87e4ab593c23ec7"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.06.09/yt-dlp_macos.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/443156647"
+checksum = "sha256:b0724470a0cf6dae5175a87eee05d6e75c5a0c10d2c3015166bd4d34e92b1b7b"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_macos.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665361"
 provenance = "github-attestations"
 
 [tools.yt-dlp."platforms.macos-x64"]
-checksum = "sha256:62a3108d7c37090107f0bb9a2369b953b35e43f4bc76ab0ea87e4ab593c23ec7"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.06.09/yt-dlp_macos.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/443156647"
+checksum = "sha256:b0724470a0cf6dae5175a87eee05d6e75c5a0c10d2c3015166bd4d34e92b1b7b"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_macos.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665361"
 provenance = "github-attestations"
 
 [tools.yt-dlp."platforms.windows-x64"]
-checksum = "sha256:f8f13d4f17a102332cd17d0106b53a4595c3e081bc7c32729135d3effcc77088"
-url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.06.09/yt-dlp_win_x86.zip"
-url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/443156721"
+checksum = "sha256:ec8b896cca7883cfe3324e611cc7b1c9258b243a0405297c6ed7e7fca61db880"
+url = "https://github.com/yt-dlp/yt-dlp/releases/download/2026.07.04/yt-dlp_win_x86.zip"
+url_api = "https://api.github.com/repos/yt-dlp/yt-dlp/releases/assets/466665404"
 provenance = "github-attestations"
