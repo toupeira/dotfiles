@@ -236,10 +236,10 @@ case "$1" in
 
         if is-phoenix; then
           command="mix phx.server"
-          port=4000
+          port=${PORT:-4000}
         elif is-rails; then
           command="rails server"
-          port=3000
+          port=${PORT:-3000}
         elif [ -f Makefile ] && grep -q '^browser:'; then
           command="make browser"
         else
@@ -247,8 +247,8 @@ case "$1" in
           exit 1
         fi
 
-
         if [ "$port" ]; then
+          command="env PORT=$port $command"
           url="http://localhost:$port"
           msg "Starting server for {{$url}}"
 
