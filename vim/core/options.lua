@@ -22,9 +22,15 @@ vim.filetype.add({
     run = 'sh',
 
     pac = 'javascript',
+
+    service = 'systemd',
+    container = 'systemd',
+    timer = 'systemd',
+    volume = 'systemd',
   },
 
   filename = {
+    Caddyfile = 'nginx',
     Dangerfile = 'ruby',
     pryrc = 'ruby',
   },
