@@ -97,7 +97,11 @@ case "$select" in
     ;;
   commit)
     [ "$label" = 'files' ] && label="files from commit \e[1m$commit"
-    mapfile -t files < <( git show "$commit" --name-only --pretty=format: )
+    mapfile -t files < <(
+      git show "$commit" --name-status --no-renames --pretty=format: \
+        | grep -v '^D' \
+        | cut -f2
+    )
     ;;
 esac
 
