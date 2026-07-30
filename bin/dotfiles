@@ -904,15 +904,15 @@ function run {
 
       [ "$SSH_CONNECTION" ] || system sudo true
 
-      has aptitude && update-packages apt
-      has pacman   && update-packages arch
-      has flatpak  && update-packages flatpak
-      has fwupdmgr && update-packages firmware
+      has aptitude  && update-packages apt
+      has pacman    && update-packages arch
+      has flatpak   && update-packages flatpak
+      has fwupdtool && update-packages firmware
 
-      has mise     && update-packages mise
-      has gem      && update-packages gem
-      has mix      && update-packages hex
-      has mise     && update-packages completions
+      has mise      && update-packages mise
+      has gem       && update-packages gem
+      has mix       && update-packages hex
+      has mise      && update-packages completions
       ;;
 
     update-apt)
@@ -933,7 +933,8 @@ function run {
       ;;
     update-firmware)
       status "Updating firmware versions..."
-      system fwupdmgr update
+      sudo fwupdtool refresh
+      system sudo fwupdtool update
       ;;
     update-mise)
       local args=()
