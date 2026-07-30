@@ -70,6 +70,7 @@ rlwrap
 rsync
 smem
 socat
+sqlite3
 ssh
 strace
 sudo

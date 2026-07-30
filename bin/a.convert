@@ -32,7 +32,7 @@ for file in "${files[@]}"; do
   file_options=( "${options[@]}" )
 
   mime=$( file -b --mime-type "$file" )
-  if [ "${mime:0:6}" != "audio/" ]; then
+  if [ "${mime:0:6}" != "audio/" ] || [ "$mime" = "audio/x-mpegurl" ]; then
     warning "Skipping {{$file}}"
     continue
   fi
@@ -42,10 +42,8 @@ for file in "${files[@]}"; do
       file_options+=( -sample_fmt s16 )
       ;;
     flac)
-      if file "$file" | grep -Eq '24 bit.* (96|192) kHz'; then
-        file_options+=( -sample_fmt s16 -ar 48000 )
-      else
-        file_options+=( -sample_fmt s16 )
+      if file "$file" | grep -Eq ' (96|192) kHz'; then
+        file_options+=( -ar 48000 )
       fi
       ;;
     mp3)

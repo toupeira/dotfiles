@@ -109,6 +109,7 @@ flatpak: org.gtk.Gtk3theme.Numix
 -calibre
 -evolution-data-server
 -evolution-data-server-common
+-gfortran
 -gimp-plugin-registry
 -gnome-bluetooth-sendto
 -gnome-browser-connector
@@ -124,6 +125,7 @@ flatpak: org.gtk.Gtk3theme.Numix
 -gnome-terminal
 -gnome-user-share
 -gstreamer1.0-packagekit
+-libopenblas-dev
 -malcontent
 -malcontent-gui
 -mousai
@@ -132,6 +134,7 @@ flatpak: org.gtk.Gtk3theme.Numix
 -peek
 -qt5-gtk-platformtheme
 -simple-scan
+-sqlitebrowser
 -syncthing-gtk
 -task-desktop
 -task-gnome-desktop
@@ -141,3 +144,4 @@ flatpak: org.gtk.Gtk3theme.Numix
 -ttf-mscorefonts-installer
 -wmctrl
 -xdotool
+-zeal

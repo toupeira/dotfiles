@@ -16,9 +16,15 @@ function usage {
 }
 
 case "$action" in
-  list)
+  list|ls)
+    if [ "$1" = "-v" ]; then
+      filter=( sed 's/-/ /' )
+    else
+      filter=( sed 's/-[^-]*$//' )
+    fi
+
     fd . ~/.mix/archives -t d --exact-depth 1 --format '{/}' 2>/dev/null \
-      | sed 's/-[^-]*$//' \
+      | "${filter[@]}" \
       | sort
     ;;
   install)

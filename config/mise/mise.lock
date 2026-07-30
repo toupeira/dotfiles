@@ -96,34 +96,36 @@ url = "https://github.com/dlvhdr/diffnav/releases/download/v0.12.0/diffnav_Windo
 url_api = "https://api.github.com/repos/dlvhdr/diffnav/releases/assets/488282401"
 
 [[tools.node]]
-version = "26.5.1"
+version = "26.6.0"
 backend = "core:node"
 
 [tools.node."platforms.linux-arm64"]
-checksum = "sha256:21194bbf41c18d9ec277545c4d14cce8597d57a9d9f494c323d8121a25de33e8"
-url = "https://nodejs.org/dist/v26.5.1/node-v26.5.1-linux-arm64.tar.gz"
+checksum = "sha256:51c59de738843677a3c97bccbdbf9895141cb308bf25a95daeafd1aade09f0d5"
+url = "https://nodejs.org/dist/v26.6.0/node-v26.6.0-linux-arm64.tar.gz"
 
 [tools.node."platforms.linux-arm64-musl"]
-url = "https://unofficial-builds.nodejs.org/download/release/v26.5.1/node-v26.5.1-linux-arm64-musl.tar.gz"
+checksum = "sha256:a4ad7beedb23618d1febb55b02b4e96b19f90d61e80a3d8bb52d621b8acf3f82"
+url = "https://unofficial-builds.nodejs.org/download/release/v26.6.0/node-v26.6.0-linux-arm64-musl.tar.gz"
 
 [tools.node."platforms.linux-x64"]
-checksum = "sha256:2b07f09c218d473a26442bff5a90151f53f7b7c0a23bad244eda2c26303a2ba7"
-url = "https://nodejs.org/dist/v26.5.1/node-v26.5.1-linux-x64.tar.gz"
+checksum = "sha256:714f352a7539c5ce09af15e440cbaadbe935bb23ba23fcee66b066d00a063822"
+url = "https://nodejs.org/dist/v26.6.0/node-v26.6.0-linux-x64.tar.gz"
 
 [tools.node."platforms.linux-x64-musl"]
-url = "https://unofficial-builds.nodejs.org/download/release/v26.5.1/node-v26.5.1-linux-x64-musl.tar.gz"
+checksum = "sha256:60e6a77f6fc69f77925f15c1af78e70320c9a64fe541668c7662906ef5adf3c0"
+url = "https://unofficial-builds.nodejs.org/download/release/v26.6.0/node-v26.6.0-linux-x64-musl.tar.gz"
 
 [tools.node."platforms.macos-arm64"]
-checksum = "sha256:f4387df0b46556516d19abf2f2d6806481ac8368aa7f9d96bafed422a56a1d01"
-url = "https://nodejs.org/dist/v26.5.1/node-v26.5.1-darwin-arm64.tar.gz"
+checksum = "sha256:75480cd43b6fcb35d8e772dd18983fbd9f691b2f03b1c94393206098e9944b5e"
+url = "https://nodejs.org/dist/v26.6.0/node-v26.6.0-darwin-arm64.tar.gz"
 
 [tools.node."platforms.macos-x64"]
-checksum = "sha256:077d5c936868dab19d21f77f1e71ce13697e80b3e86a399dcab238902a2ebf93"
-url = "https://nodejs.org/dist/v26.5.1/node-v26.5.1-darwin-x64.tar.gz"
+checksum = "sha256:de075ffc09f33cc4b44ed38e1e4b2ef71f699b986f6d5952329da4973220726d"
+url = "https://nodejs.org/dist/v26.6.0/node-v26.6.0-darwin-x64.tar.gz"
 
 [tools.node."platforms.windows-x64"]
-checksum = "sha256:c432c996b95cbf7568f13a0fbb37526de84a27e3a5c520c3be15f05a9a168212"
-url = "https://nodejs.org/dist/v26.5.1/node-v26.5.1-win-x64.zip"
+checksum = "sha256:aa81c8552f251ff280134985ccdaf16d336e2961b1e2c3eeb7b7b2221509f723"
+url = "https://nodejs.org/dist/v26.6.0/node-v26.6.0-win-x64.zip"
 
 [[tools.ruby]]
 version = "4.0.6"
@@ -174,43 +176,43 @@ checksum = "sha256:837d299e8f7ddf2be31a229a7a7e019d354979825117989acb3b32b1a9be2
 url = "https://cache.ruby-lang.org/pub/ruby/4.0/ruby-4.0.6.tar.gz"
 
 [[tools.usage]]
-version = "4.0.0"
+version = "5.0.0"
 backend = "aqua:jdx/usage"
 
 [tools.usage."platforms.linux-arm64"]
-checksum = "sha256:bb9556ad822852f1824d9fb6e4d4063d3bf2639929ec4b74750c1f419c2ef733"
-url = "https://github.com/jdx/usage/releases/download/v4.0.0/usage-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/usage/releases/assets/489800370"
+checksum = "sha256:fb2dfc21532129ce230314818e05a8a75ee1c8929936f8b3a5bbd078736706d7"
+url = "https://github.com/jdx/usage/releases/download/v5.0.0/usage-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/501424806"
 
 [tools.usage."platforms.linux-arm64-musl"]
-checksum = "sha256:bb9556ad822852f1824d9fb6e4d4063d3bf2639929ec4b74750c1f419c2ef733"
-url = "https://github.com/jdx/usage/releases/download/v4.0.0/usage-aarch64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/usage/releases/assets/489800370"
+checksum = "sha256:fb2dfc21532129ce230314818e05a8a75ee1c8929936f8b3a5bbd078736706d7"
+url = "https://github.com/jdx/usage/releases/download/v5.0.0/usage-aarch64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/501424806"
 
 [tools.usage."platforms.linux-x64"]
-checksum = "sha256:3ce4d8d30f27db44f0aa2fe8bd351229e36e8d38b09060b0cadb7e02be57c69e"
-url = "https://github.com/jdx/usage/releases/download/v4.0.0/usage-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/usage/releases/assets/489800150"
+checksum = "sha256:16e87ac9110face925d39a9aae5c90767738df2cc390af1be1f00e625b599280"
+url = "https://github.com/jdx/usage/releases/download/v5.0.0/usage-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/501424566"
 
 [tools.usage."platforms.linux-x64-musl"]
-checksum = "sha256:3ce4d8d30f27db44f0aa2fe8bd351229e36e8d38b09060b0cadb7e02be57c69e"
-url = "https://github.com/jdx/usage/releases/download/v4.0.0/usage-x86_64-unknown-linux-musl.tar.gz"
-url_api = "https://api.github.com/repos/jdx/usage/releases/assets/489800150"
+checksum = "sha256:16e87ac9110face925d39a9aae5c90767738df2cc390af1be1f00e625b599280"
+url = "https://github.com/jdx/usage/releases/download/v5.0.0/usage-x86_64-unknown-linux-musl.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/501424566"
 
 [tools.usage."platforms.macos-arm64"]
-checksum = "sha256:b86b3b96590c40156977906758b92238fab506edcbdc5331f9efb034207e2ab4"
-url = "https://github.com/jdx/usage/releases/download/v4.0.0/usage-universal-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/jdx/usage/releases/assets/489800167"
+checksum = "sha256:35f1703ed922486387d499265c9d6c0dbc84b8347e565fb31d54ad23fdff712d"
+url = "https://github.com/jdx/usage/releases/download/v5.0.0/usage-universal-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/501428939"
 
 [tools.usage."platforms.macos-x64"]
-checksum = "sha256:b86b3b96590c40156977906758b92238fab506edcbdc5331f9efb034207e2ab4"
-url = "https://github.com/jdx/usage/releases/download/v4.0.0/usage-universal-apple-darwin.tar.gz"
-url_api = "https://api.github.com/repos/jdx/usage/releases/assets/489800167"
+checksum = "sha256:35f1703ed922486387d499265c9d6c0dbc84b8347e565fb31d54ad23fdff712d"
+url = "https://github.com/jdx/usage/releases/download/v5.0.0/usage-universal-apple-darwin.tar.gz"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/501428939"
 
 [tools.usage."platforms.windows-x64"]
-checksum = "sha256:91a241e3abf4925855814ae8cab3e6e826736b9cfaddc55a12cf4c3fe03d0dc7"
-url = "https://github.com/jdx/usage/releases/download/v4.0.0/usage-x86_64-pc-windows-msvc.zip"
-url_api = "https://api.github.com/repos/jdx/usage/releases/assets/489801502"
+checksum = "sha256:0ca7cbc821d6fe274ef42162058935261bf0f7ad8029a197275ff83cc36d996e"
+url = "https://github.com/jdx/usage/releases/download/v5.0.0/usage-x86_64-pc-windows-msvc.zip"
+url_api = "https://api.github.com/repos/jdx/usage/releases/assets/501427490"
 
 [[tools.yt-dlp]]
 version = "2026.07.04"

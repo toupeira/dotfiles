@@ -121,10 +121,13 @@ msg "Syncing ports from {{$NAME}} to {{$ROMS}}..."
 rsync \
   --delete \
   --exclude 'autoinstall' \
+  --exclude 'gamelist.xml.bak' \
+  --exclude 'gamestate*.dat' \
+  --exclude 'log.txt' \
   --exclude 'PortMaster' \
-  --exclude 'ThemeMaster' \
   --exclude 'SAVE' \
   --exclude 'saves' \
+  --exclude 'ThemeMaster' \
   "$TARGET/roms/ports/" "$ROMS/ports/"
 
 echo

@@ -764,16 +764,10 @@ function run {
       # Read packages from list
       local packages=$( grep -E "$filter" "$path" )
 
-      if has-gui; then
-        if [ -f "$path-gui" ]; then
-          packages=$( echo "$packages"; grep -E "$filter" "$path-gui" )
-        fi
-
-        if is-amd && [ -f "$path-amd" ]; then
-          packages=$( echo "$packages"; grep -E "$filter" "$path-amd" )
-        elif is-intel && [ -f "$path-intel" ]; then
-          packages=$( echo "$packages"; grep -E "$filter" "$path-intel" )
-        fi
+      if is-amd && [ -f "$path-amd" ]; then
+        packages=$( echo "$packages"; grep -E "$filter" "$path-amd" )
+      elif is-intel && [ -f "$path-intel" ]; then
+        packages=$( echo "$packages"; grep -E "$filter" "$path-intel" )
       fi
 
       if [ "$packages" ]; then
