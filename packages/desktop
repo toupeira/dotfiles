@@ -1,5 +1,6 @@
 # system
 bluetooth
+dhcpcd-base
 dnsmasq-base
 dosfstools
 eject
