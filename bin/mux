@@ -232,15 +232,24 @@ case "$1" in
         ;;
       server)
         args=( -d -l )
-        port=
+        label="{{server}}"
+        port=$PORT
+
+        if [ "$1" = "-p" ]; then
+          port=$2
+          shift 2
+        fi
 
         if is-phoenix; then
+          label="{{Phoenix}} server"
           command="mix phx.server"
-          port=${PORT:-4000}
+          port=${port:-4000}
         elif is-rails; then
+          label="{{Rails}} server"
           command="rails server"
-          port=${PORT:-3000}
+          port=${port:-3000}
         elif [ -f Makefile ] && grep -q '^browser:'; then
+          label="{{Rails}} server"
           command="make browser"
         else
           echo "Can't find server for project."
@@ -250,7 +259,7 @@ case "$1" in
         if [ "$port" ]; then
           command="env PORT=$port $command"
           url="http://localhost:$port"
-          msg "Starting server for {{$url}}"
+          msg "Starting $label for {{$url}}"
 
           (
             count=0
@@ -261,7 +270,7 @@ case "$1" in
             xdg-open "$url"
           ) &
         else
-          msg "Starting {{server}}"
+          msg "Starting $label"
         fi
         ;;
       test)

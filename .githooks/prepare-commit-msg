@@ -1,0 +1,2 @@
+#!/bin/sh
+echo "Sync dotfiles" > "$1"

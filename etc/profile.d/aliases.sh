@@ -140,7 +140,9 @@ alias iotop='sudo iotop'
 
 if getent passwd app >/dev/null; then
   alias su.app='sudo -u app'
-  alias sctl.app='sudo --preserve-env=SYSTEMD_LESS systemctl --user -M app@.host'
+  alias sctl.app='sudo -u app --preserve-env=SYSTEMD_LESS env XDG_RUNTIME_DIR=/run/user/1001 systemctl --user'
   alias jctl.app='journalctl _UID=$( id -u app )'
   alias podman.app='sudo -u app -D /home/app podman'
+else
+  alias jctl.snafu='ssh snafu journalctl'
 fi
