@@ -75,6 +75,7 @@ numix-gtk-theme
 numix-icon-theme-circle
 qt6-gtk-platformtheme
 qt6-wayland
+resources
 seahorse
 xdg-user-dirs-gtk
 xdg-utils
@@ -100,7 +101,6 @@ quodlibet
 shotwell
 unison
 
-flatpak: io.missioncenter.MissionCenter
 flatpak: md.obsidian.Obsidian
 flatpak: org.gnome.Decibels
 flatpak: org.gtk.Gtk3theme.Numix

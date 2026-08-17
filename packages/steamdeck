@@ -9,7 +9,6 @@ arch: neovim
 flatpak: com.github.neithern.g4music
 flatpak: com.github.tchx84.Flatseal
 flatpak: de.haeckerfelix.Shortwave
-flatpak: io.missioncenter.MissionCenter
 flatpak: org.gnome.Loupe
 flatpak: org.mozilla.firefox
 flatpak: rocks.shy.VacuumTube

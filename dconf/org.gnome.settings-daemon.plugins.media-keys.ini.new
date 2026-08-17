@@ -8,7 +8,7 @@ name='Terminal'
 
 [custom-keybindings/custom1]
 binding='<Super>y'
-command='flatpak run io.missioncenter.MissionCenter'
+command='resources'
 name='System Monitor'
 
 [custom-keybindings/custom10]
