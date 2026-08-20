@@ -22,10 +22,6 @@ export ANSIBLE_VAULT_PASSWORD_FILE="$DOTFILES/bin/ansible-vault-key"
 export DEBEMAIL='markus@snafu.ch'
 export DEBFULLNAME='Markus Koller'
 
-if [ "$SUDO_COMMAND" ] && [ ! "$XDG_RUNTIME_DIR" ]; then
-  export XDG_RUNTIME_DIR="/run/user/$UID"
-fi
-
 # desktop apps
 if [ "$XDG_SESSION_TYPE" = "wayland" ] && [ ! "$QT_SCALE_FACTOR" ]; then
   export QT_SCALE_FACTOR=$( dconf read /org/gnome/desktop/interface/text-scaling-factor )
