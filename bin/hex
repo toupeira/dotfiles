@@ -23,18 +23,20 @@ case "$action" in
       filter=( sed 's/-[^-]*$//' )
     fi
 
-    fd . ~/.mix/archives -t d --exact-depth 1 --format '{/}' 2>/dev/null \
+    eval "$( mise env )"
+
+    fd . "${MIX_ARCHIVES:-$HOME/.mix/archives}" -t d --exact-depth 1 --format '{/}' 2>/dev/null \
       | "${filter[@]}" \
       | sort
     ;;
   install)
     for package in "$@"; do
-      mix archive.install --force hex "$package"
+      mise exec -- mix archive.install --force hex "$package"
     done
     ;;
   uninstall)
     for package in "$@"; do
-      mix archive.uninstall "$package"
+      mise exec -- mix archive.uninstall "$package"
     done
     ;;
   update)

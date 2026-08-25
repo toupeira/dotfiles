@@ -343,7 +343,7 @@ function sheet {
 }
 
 function mise.add {
-  mise use -g --pin "$1@latest"
+  mise use -g "$1@latest"
 }
 
 function mise.remove {

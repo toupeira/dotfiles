@@ -957,15 +957,13 @@ function run {
 
       function update-completions {
         local tool="$1"
-        local command
+        local command=( "$tool" )
         local args=( completion bash )
         shift
 
-        if has "$tool"; then
-          command=( "$tool" )
-        elif [ -x ~/.local/share/mise/shims/"$tool" ]; then
-          command=( mise exec "$tool" -- "$tool" )
-        else
+        if [ -x ~/.local/share/mise/shims/"$tool" ]; then
+          command=( mise exec -- "$tool" )
+        elif ! has "$tool"; then
           warning "Skipping {{$tool}}..."
           return
         fi

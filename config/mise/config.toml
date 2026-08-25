@@ -1,5 +1,6 @@
 [tools]
 # Languages
+elixir = "latest"
 ruby = "latest"
 node = "latest"
 

@@ -10,7 +10,7 @@ local severity = vim.diagnostic.severity
 vim.diagnostic.config({
   severity_sort = true,
   float = false,
-  underline = { severity = severity.ERROR },
+  underline = { severity = { severity.WARN, severity.ERROR } },
   virtual_text = false,
 
   signs = {

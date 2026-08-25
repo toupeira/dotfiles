@@ -15,10 +15,12 @@ universal-ctags
 visidata
 
 # erlang
-elixir
 erlang-base
 erlang-dev
+erlang-inets
+erlang-parsetools
 erlang-syntax-tools
+erlang-tools
 erlang-xmerl
 
 hex: igniter_new

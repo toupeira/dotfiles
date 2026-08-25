@@ -145,9 +145,9 @@ case "$1" in
         if is-ansible; then
           run-bundle ansible-galaxy collection install -r requirements.yml "$@"
         elif is-phoenix; then
-          run-bundle mix setup
+          run-bundle mise exec -- mix setup
         elif is-elixir; then
-          run-bundle mix deps.get
+          run-bundle mise exec -- mix deps.get
         elif is-ruby; then
           run-bundle bundle
         fi
@@ -164,7 +164,7 @@ case "$1" in
         ;;
       console)
         if is-elixir; then
-          command="iex -S mix"
+          command="mise exec -- iex -S mix"
         elif is-rails; then
           command="rails console"
         else
@@ -185,7 +185,8 @@ case "$1" in
       edit)
         if is-godot; then
           msg "Editing {{Godot}} project"
-          exec start godot project.godot "$@"
+          godot project.godot "$@" >&/dev/null &
+          exit
         else
           exec sensible-vim "$@"
         fi
@@ -204,7 +205,7 @@ case "$1" in
         args+=( -d -w )
 
         if is-phoenix; then
-          command="mix ecto.migrate"
+          command="mise exec -- mix ecto.migrate"
         elif is-rails; then
           command="bundle exec rake db:migrate; [ -f db/schema.rb ] && git checkout db/schema.rb; [ -f db/structure.sql ] && git checkout db/structure.sql"
         else
@@ -214,9 +215,9 @@ case "$1" in
         ;;
       run)
         if is-ansible; then
-          if [ $# -eq 0 ]; then
+          if [ $# -eq 0 ] || [ "${1:0:1}" = "-" ]; then
             sudo true
-            set -- "$HOSTNAME"
+            set -- "$HOSTNAME" "$@"
           else
             set -- "$@" --ask-become-pass
           fi
@@ -233,7 +234,7 @@ case "$1" in
       server)
         args=( -d -l )
         label="{{server}}"
-        port=$PORT
+        port=${PORT:-}
 
         if [ "$1" = "-p" ]; then
           port=$2
@@ -242,7 +243,7 @@ case "$1" in
 
         if is-phoenix; then
           label="{{Phoenix}} server"
-          command="mix phx.server"
+          command="mise exec -- mix phx.server"
           port=${port:-4000}
         elif is-rails; then
           label="{{Rails}} server"
@@ -277,9 +278,9 @@ case "$1" in
         args+=( -d -w )
 
         if is-ansible; then
-          if [ $# -eq 0 ]; then
+          if [ $# -eq 0 ] || [ "${1:0:1}" = "-" ]; then
             sudo true
-            set -- "$HOSTNAME"
+            set -- "$HOSTNAME" "$@"
           else
             set -- "$@" --ask-become-pass
           fi
@@ -287,14 +288,13 @@ case "$1" in
           info "[{{ansible}}] Testing {{$1}}..."
           exec ansible-playbook site.yml --check --diff --limit "$@"
         elif is-phoenix; then
-          command="mix test"
+          command="mise exec -- mix test"
         elif is-rails; then
           command="rails test"
         fi
         ;;
       *)
         abort "Can't find process '@$proc'"
-        exit 1
         ;;
     esac
 
