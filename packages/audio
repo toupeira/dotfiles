@@ -1,7 +1,4 @@
 bitwig-studio
-jackd2
-jack-example-tools
-qjackctl
 qpwgraph
 
 # dependencies for overwitch

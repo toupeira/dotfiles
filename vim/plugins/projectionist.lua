@@ -11,6 +11,11 @@ return {
         ['config/*.exs'] = { type = 'config' },
         ['lib/mix/tasks/*.ex'] = { type = 'task' },
 
+        ['lib/*.ex'] = {
+          type = 'lib',
+          alternate = 'test/{}_test.exs',
+        },
+
         ['test/*_test.exs'] = {
           type = 'test',
           alternate = 'lib/{}.ex',
