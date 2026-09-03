@@ -34,7 +34,7 @@ while read -r query; do
     echo "$files" > "$playlist"
   else
     indent 2
-    warning "{{$title}: No songs, deleting... {{(-$previous)}}"
+    warning "{{$title}}: No songs, deleting... {{(-$previous)}}"
     rm -f "$playlist"
   fi
 done < "$QUERIES"
