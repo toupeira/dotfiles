@@ -143,6 +143,9 @@ user_pref("browser.tabs.warnOnClose", true);
 user_pref("browser.warnOnQuit", true);
 user_pref("browser.warnOnQuitShortcut", true);
 
+// Enable builtin VPN
+user_pref("browser.ipProtection.enabled", true);
+
 // Disable AI features
 user_pref("browser.ai.control.default", "blocked");
 user_pref("browser.ai.control.linkPreviewKeyPoints", "blocked");
