@@ -18,6 +18,7 @@ debian-archive-keyring
 debian-keyring
 dos2unix
 ethtool
+expect
 fakeroot
 fd-find
 file
