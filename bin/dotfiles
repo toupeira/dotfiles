@@ -556,7 +556,7 @@ function run {
       lint dotfiles "Empty directories"
       while read -r path; do
         list "$path"
-        fix system rmdir -v "$path"
+        fix system rmdir -v --parents --ignore-fail-on-non-empty "$path"
       done < <( fd . "$DOTFILES" --type d --type e )
 
       lint home+etc "Orphaned symlinks"
