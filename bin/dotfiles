@@ -914,8 +914,8 @@ function run {
       ;;
     update-flatpak)
       status "Updating Flatpak packages..."
-      system sudo --preserve-env=XDG_DATA_DIRS flatpak update \
-        && system sudo flatpak uninstall --unused \
+      system flatpak update \
+        && system flatpak uninstall --unused \
         && system flatpak uninstall --delete-data
       ;;
     update-firmware)

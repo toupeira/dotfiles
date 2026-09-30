@@ -106,21 +106,6 @@ return {
       vim.g.smoothie_speed_linear_factor = 20
     end,
   },
-  very_lazy { 'sphamba/smear-cursor.nvim',
-    keys = {
-      { '<LocalLeader>ct', function()
-        local cursor = require('smear_cursor')
-        cursor.toggle()
-        util.notify_toggle('Cursor trail:', cursor.enabled)
-      end, mode = { 'n' }, desc = 'Toggle cursor trail' },
-    },
-    opts = {
-      enabled = false,
-      smear_insert_mode = false,
-      min_horizontal_distance_smear = 10,
-      min_vertical_distance_smear = 2,
-    },
-  },
   lazy_file { 'tpope/vim-eunuch',
     init = function()
       util.alias_command({
