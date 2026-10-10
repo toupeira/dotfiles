@@ -105,7 +105,7 @@ vim.o.history = 1000
 
 vim.opt.jumpoptions:remove { 'clean' }
 
-vim.opt.shada:append { "'1000", '\"100' }
+vim.opt.shada:append { "'1000", '"100' }
 vim.opt.shada:remove { "'100", '<50' }
 
 -- }}}

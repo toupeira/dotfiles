@@ -5,8 +5,6 @@ return {
   event = 'LazyFile',
   branch = 'fix/elixir-mix',
 
-  dependencies = { 'mason.nvim' },
-
   init = function()
     util.nmap('<Leader>i', ':ALEDetail')
 

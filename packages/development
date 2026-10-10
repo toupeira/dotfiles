@@ -10,9 +10,12 @@ ansible-mitogen
 gettext
 hexyl
 hyperfine
+jsonlint
 mise
+shellcheck
 universal-ctags
 visidata
+yamllint
 
 # erlang
 erlang-base

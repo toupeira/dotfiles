@@ -1,0 +1,5 @@
+std = "lua51+vim/selene"
+
+[lints]
+mixed_table = "allow"
+multiple_statements = "allow"

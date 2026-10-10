@@ -1,18 +1,12 @@
 local util = require('util')
 
 local servers = {
-  bashls   = { install = true },
-  lua_ls   = { install = true },
-  tailwindcss = { install = true },
-
+  bashls   = {},
   gdscript = { enable = true },
+  lua_ls   = {},
   ruby_lsp = {},
+  tailwindcss = {},
 }
-
-local install_servers = (util.is_sudo or util.is_ssh) and {} or vim.tbl_filter(
-  function(key) return servers[key].install end,
-  vim.tbl_keys(servers)
-)
 
 -- Toggle LSP servers for the current buffer's filetype
 local toggle_lsp = function()
@@ -37,13 +31,6 @@ return {
   event = 'LazyFile',
 
   dependencies = {
-    { 'mason-org/mason-lspconfig.nvim',
-      dependencies = { 'mason.nvim' },
-      opts = {
-        ensure_installed = install_servers,
-        automatic_enable = false,
-      },
-    },
     { 'folke/lazydev.nvim',
       ft = 'lua',
       config = true,

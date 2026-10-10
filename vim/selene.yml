@@ -1,0 +1,21 @@
+globals:
+  vim:
+    any: true
+  MiniBracketed:
+    any: true
+  MiniClue:
+    any: true
+  MiniClue:
+    any: true
+  MiniDiff:
+    any: true
+  MiniIcons:
+    any: true
+  MiniJump:
+    any: true
+  MiniSessions:
+    any: true
+  MiniStarter:
+    any: true
+  MiniTrailspace:
+    any: true

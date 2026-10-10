@@ -31,7 +31,6 @@ return {
         'fzf-custom',
         'lazy',
         'man',
-        'mason',
         'neo-tree',
         'quickfix',
         'trouble',

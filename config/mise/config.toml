@@ -4,12 +4,20 @@ elixir = "latest"
 ruby = "latest"
 node = "latest"
 
-# Tools
+# Apps
 blender = "latest"
+
+# Tools
 usage = "latest"
+lua-language-server = "latest"
+stylua = "latest"
 yt-dlp = "latest"
+
+"aqua:Kampfkarren/selene" = "latest"
 "github:dlvhdr/diffnav" = "latest"
 "github:TheWaWaR/simple-http-server" = { version = "latest", bin = "simple-http-server" }
+"npm:bash-language-server" = "latest"
+"npm:@tailwindcss/language-server" = "latest"
 
 [settings]
 auto_install = false

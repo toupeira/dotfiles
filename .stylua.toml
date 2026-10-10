@@ -1,6 +1,7 @@
 syntax = 'LuaJIT'
 
 call_parentheses = 'Input'
+collapse_simple_statement = 'Input'
 column_width = 160
 indent_type = 'Spaces'
 indent_width = 2

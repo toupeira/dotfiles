@@ -2,10 +2,9 @@
 
 export PATH="/usr/sbin:$DOTFILES/bin:/usr/bin:/usr/local/sbin:/usr/local/bin:/usr/games"
 
-for dir in ~/bin "$DOTFILES/packages/mason/bin"; do
-  [ -d "$dir" ] && export PATH="$PATH:$dir"
-done
-unset dir
+if [ -d ~/bin ]; then
+  export PATH="$PATH:~/bin"
+fi
 
 # terminal apps
 export TERMINAL_EMULATOR="x-terminal-emulator"
