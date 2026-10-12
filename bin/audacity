@@ -1,5 +1,5 @@
 #!/bin/bash
 
-export GDK_BACKEND=wayland
+export QT_SCALE_FACTOR=1
 
 exec pw-jack /usr/bin/audacity "$@"

@@ -4,16 +4,18 @@ return {
   { 'tmux-plugins/tmux-open', lazy = true },
   { 'tmux-plugins/tmux-yank', lazy = true },
 
-  { 'mrjones2014/smart-splits.nvim',
+  { 'smart-splits-nvim/smart-splits.nvim',
     event = 'VeryLazy',
     cond = function()
       return (util.is_tmux and not util.is_headless)
     end,
+    dependencies = {
+      { 'smart-splits-nvim/backend-tmux', main = 'smart-splits-backend-tmux' },
+    },
 
     opts = {
-      at_edge = 'stop',
-      float_win_behavior = 'mux',
-      multiplexer_integration = 'tmux',
+      move = { at_edge = 'stop' },
+      mux = { backend = 'smart-splits-backend-tmux' },
     },
 
     keys = {
