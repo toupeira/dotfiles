@@ -32,7 +32,7 @@ local filetypes = {
     'linebreak',
   },
 
-  ['markdown,codecompanion'] = {
+  ['markdown'] = {
     'conceallevel=2',
     'suffixesadd+=.md',
     'foldlevel=2',

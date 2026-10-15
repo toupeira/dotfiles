@@ -95,9 +95,6 @@ return {
         },
 
         lualine_x = {
-          { 'codecompanion-custom',
-            color = { fg = magenta, gui = 'bold' },
-          },
           { 'searchcount',
             icon = '',
             separator = '',

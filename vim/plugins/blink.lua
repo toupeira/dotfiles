@@ -103,9 +103,6 @@ return {
         },
 
         path = {
-          enabled = function()
-            return vim.bo.filetype ~= 'codecompanion'
-          end,
           transform_items = hide_source,
           opts = {
             get_cwd = function(_)

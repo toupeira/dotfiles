@@ -49,7 +49,7 @@ return {
     cmd = 'Helpview',
   },
   { 'OXY2DEV/markview.nvim',
-    ft = { 'markdown', 'codecompanion' },
+    ft = { 'markdown' },
     cmd = { 'Markview' },
     keys = {
       { '<LocalLeader>M', '<Cmd>Markview toggle<CR>', desc = 'Toggle Markdown formatting' },
@@ -100,21 +100,6 @@ return {
           },
 
           tags = { enable = false },
-        },
-
-        html = {
-          container_elements = {
-            ['^buf$']         = conceal_tag('', 'CodeCompanionChatVariable'),
-            ['^file$']        = conceal_tag('', 'CodeCompanionChatVariable'),
-            ['^help$']        = conceal_tag('󰘥', 'CodeCompanionChatVariable'),
-            ['^image$']       = conceal_tag('', 'CodeCompanionChatVariable'),
-            ['^symbols$']     = conceal_tag('', 'CodeCompanionChatVariable'),
-            ['^url$']         = conceal_tag('󰖟', 'CodeCompanionChatVariable'),
-            ['^var$']         = conceal_tag('', 'CodeCompanionChatVariable'),
-            ['^tool$']        = conceal_tag('', 'CodeCompanionChatTool'),
-            ['^user_prompt$'] = conceal_tag('', 'CodeCompanionChatTool'),
-            ['^group$']       = conceal_tag('', 'CodeCompanionChatToolGroup'),
-          },
         },
       }
     end,

@@ -203,10 +203,6 @@ return {
             BlinkCmpMenuBorder = { link = 'BlinkCmpDocBorder' },
             BlinkCmpSignatureHelpBorder = { link = 'BlinkCmpDocBorder' },
 
-            CodeCompanionChatTool = { fg = 'diag.info', bg = 'diag_bg.info', style = 'bold' },
-            CodeCompanionChatToolGroup = { fg = 'diag.error', bg = 'diag_bg.error', style = 'bold' },
-            CodeCompanionChatVariable = { fg = 'diag.hint', bg = 'diag_bg.hint', style = 'bold' },
-
             FlashCurrent = { link = 'CurSearch' },
             FlashLabel = { fg = 'palette.black', bg = 'palette.yellow', style = 'bold' },
 
