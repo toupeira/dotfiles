@@ -25,7 +25,7 @@ return {
     vim.g.ale_linters = {
       elixir = { 'mix' },
       javascript = { 'eslint' },
-      json = { 'jsonlint' },
+      json = { 'jq' },
       ruby = { 'ruby', 'rubocop' },
       typescript = { 'eslint' },
       yaml = { 'yamllint' },

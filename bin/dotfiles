@@ -155,11 +155,12 @@ function is-steamos {
 # Load rules for the given keys
 function read-rules {
   if ! [[ $* = *.* ]]; then
+    local roles_prefix
     if [ "$1" != "role" ]; then
       mapfile -t roles < <( read-rules role )
-      [ ${#roles[@]} ] && roles=$( printf '|role\.%s' "${roles[@]}" )
+      [ ${#roles[@]} -gt 0 ] && roles_prefix=$( printf '|role\.%s' "${roles[@]}" )
     fi
-    local prefix="(global|host\.$HOSTNAME$roles)\."
+    local prefix="(global|host\.$HOSTNAME$roles_prefix)\."
   fi
 
   local pattern=$( printf '|%s' "$@" )
@@ -179,7 +180,7 @@ function validate {
   if ! [ "$SKIP_PATHS" ]; then
     function read-paths {
       mapfile -t paths < <( read-rules "$@" )
-      if [ ${#paths[@]} ]; then
+      if [ ${#paths[@]} -gt 0 ]; then
         local patterns=()
         for path in "${paths[@]}"; do
           if [[ "$path" =~ ^/(.*)/$  ]]; then
@@ -791,7 +792,7 @@ function run {
         local missing_apt=$(
           get-missing "$( echo "$packages_apt" | grep -v '^-' )" "$installed_apt";
           comm -12 \
-            <( echo "$installed_apt ") \
+            <( echo "$installed_apt" ) \
             <( echo "$packages_apt" | grep '^-' | cut -d- -f2- ) \
             | sed 's/$/_/'
         )
@@ -1141,7 +1142,7 @@ if [ ! -f "$DOTFILES/bin/dotfiles" ]; then
   abort "Couldn't find dotfiles repository in '$DOTFILES'"
 fi
 
-COMMAND=
+COMMAND=()
 
 # Parse arguments
 while [ $# -gt 0 ]; do
@@ -1167,7 +1168,7 @@ while [ $# -gt 0 ]; do
   shift
 done
 
-if [ "${#COMMAND[@]}" ]; then
+if [ ${#COMMAND[@]} -gt 0 ]; then
   run "${COMMAND[@]}"
   finish
 else

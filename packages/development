@@ -10,7 +10,6 @@ ansible-mitogen
 gettext
 hexyl
 hyperfine
-jsonlint
 mise
 shellcheck
 universal-ctags
