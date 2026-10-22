@@ -51,6 +51,7 @@ Unattended-Upgrade::Origins-Pattern {
 // Python regular expressions, matching packages to exclude from upgrading
 Unattended-Upgrade::Package-Blacklist {
     "gnome-";
+    "gdm";
     "podman";
 
     // The following matches all packages starting with linux-
