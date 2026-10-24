@@ -16,6 +16,7 @@ fwupd
 fwupd-amd64-signed
 hdparm
 inxi
+libmtp-runtime
 linux-cpupower
 lm-sensors
 mesa-utils
