@@ -30,10 +30,20 @@ menuseparator#context-sep-setbackground
 }
 
 .tab-icon-stack[activemedia-blocked] {
-  --tab-icon-end-margin: 5.5px !important;
+  --tab-icon-margin-inline-end: 5.5px !important;
 }
 
 /* Hide "New" badges */
 menuitem.badge-new::after {
   display: none !important;
+}
+
+/* Hide indicator dots on pinned tabs */
+.tab-content[pinned][titlechanged] {
+  background-image: none !important;
+}
+
+/* Override colors for URLs in urlbar */
+.urlbarView-url {
+  color: #aaa !important;
 }
