@@ -289,31 +289,6 @@ function jq.base64-decode {
   jq "$key | map_values(@base64d)"
 }
 
-# Serve a directory over HTTP
-function serve {
-  local dir
-  if [ -d "$1" ]; then
-    dir=$1
-    shift
-  fi
-
-  if [ "$1" ]; then
-    local port="$1"
-    shift
-  else
-    local port=$((9000 + RANDOM % 1000))
-  fi
-
-  (
-    if [ "$dir" ]; then
-      cd "$dir" || exit 1
-    fi
-
-    xdg-open "http://localhost:$port/" &>/dev/null
-    python3 -m http.server "$port" "$@"
-  )
-}
-
 function du.sort {
   (
     if [ $# -eq 0 ]; then
@@ -348,4 +323,12 @@ function mise.add {
 
 function mise.remove {
   mise unuse "$1"
+}
+
+function pi.jail {
+  jail --pwd --net \
+    --setenv OPENROUTER_API_KEY "$OPENROUTER_API_KEY" \
+    --setenv GEMINI_API_KEY "$GEMINI_API_KEY" \
+    --bind ~/.pi ~/.pi \
+    pi --no-extensions "$@"
 }

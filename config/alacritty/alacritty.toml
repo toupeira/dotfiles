@@ -32,7 +32,10 @@ white = '#ededeb'
 
 [keyboard]
 bindings = [
+  { key = "Return", mods = "Shift", chars = "\u001b[13;2u" },
+
   { key = 'L', mods = 'Control', action = 'ReceiveChar' },
+  { key = 'F', mods = 'Control|Shift', action = 'ReceiveChar' },
 
   { key = 'PageUp', mods = 'Shift', mode = '~Alt', action = 'ReceiveChar' },
   { key = 'PageDown', mods = 'Shift', mode = '~Alt', action = 'ReceiveChar' },

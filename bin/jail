@@ -5,21 +5,43 @@ args=(
   --die-with-parent
 
   --unshare-all
-  # --share-net
   --hostname localhost
 
   --clearenv
-  --setenv PATH "/usr/sbin:/usr/bin"
+  --setenv PATH "/usr/sbin:/usr/bin:$HOME/.local/share/mise/shims:/slack/dotfiles/bin"
+  --setenv HOME "$HOME"
+  --setenv TERM "$TERM"
+  --setenv COLORTERM "$COLORTERM"
+  --setenv EDITOR "$EDITOR"
 
+  --ro-bind /bin /bin
   --ro-bind /usr /usr
   --symlink /usr/lib64 /lib64
 
   --ro-bind /etc/localtime /etc/localtime
 
-  # --proc /proc
-  # --dev /dev
-  # --tmpfs /run
-  # --tmpfs /tmp
+  --ro-bind /slack/dotfiles /slack/dotfiles
+  --ro-bind ~/.config/mise ~/.config/mise
+  --ro-bind ~/.local/share/mise ~/.local/share/mise
+
+  --dev-bind /dev/null /dev/null
+  --dev-bind /dev/urandom /dev/urandom
+  --tmpfs /run
+  --tmpfs /tmp
+  --proc /proc
 )
+
+for arg in "$@"; do
+  case "$arg" in
+    -p|--pwd)
+      args+=( --chdir "$PWD" --bind "$PWD" "$PWD" )
+      shift
+      ;;
+    -n|--net)
+      args+=( --share-net )
+      shift
+      ;;
+  esac
+done
 
 exec bwrap "${args[@]}" "$@"

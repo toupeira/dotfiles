@@ -1,0 +1,24 @@
+{
+  "defaultProvider": "openrouter",
+  "defaultModel": "~deepseek/deepseek-flash-latest",
+  "defaultProjectTrust": "ask",
+  "doubleEscapeAction": "tree",
+  "enableAnalytics": false,
+  "enableInstallTelemetry": false,
+  "fullscreenExitOutput": "resume-hint",
+  "hideThinkingBlock": false,
+  "lastChangelogVersion": "1.5.0",
+  "theme": "system",
+  "treeFilterMode": "no-tools",
+  "terminal": {
+    "showImages": false,
+    "showTerminalProgress": true
+  },
+  "packages": [
+    "npm:@gotgenes/pi-permission-system"
+  ],
+  "extensionChangelogVersions": {
+    "{\"source\":\"npm:@gotgenes/pi-permission-system\",\"scope\":\"user\"}": "42.0.0",
+    "{\"source\":\"npm:@heyhuynhgiabuu/pi-pretty\",\"scope\":\"user\"}": "0.9.0"
+  }
+}

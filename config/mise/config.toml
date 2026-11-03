@@ -6,11 +6,12 @@ node = "latest"
 
 # Apps
 blender = "latest"
+pi = "latest"
 
 # Tools
-usage = "latest"
 lua-language-server = "latest"
 stylua = "latest"
+usage = "latest"
 yt-dlp = "latest"
 
 "aqua:Kampfkarren/selene" = "latest"

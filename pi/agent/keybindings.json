@@ -1,0 +1,4 @@
+ {
+   "$schema": "https://pi.dev/schemas/keybindings.schema.json",
+   "app.session.resume": "ctrl+r"
+ }
