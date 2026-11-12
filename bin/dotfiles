@@ -884,7 +884,10 @@ function run {
         if [ "$filter" ] && [ "$filter" != "$type" ]; then
           return
         elif [ "$filter" = "$type" ] || ask-yes "Update {{$type}} packages?"; then
-          mux-wrap -w -t "update-packages [$type]" \
+          local args=()
+          [ "$type" = "apt" ] && args+=( -n -d )
+
+          mux-wrap -w -t "update-packages [$type]" "${args[@]}" \
             -- "$@"
           [ "$TMUX" ] && system tmux select-layout even-vertical
         fi

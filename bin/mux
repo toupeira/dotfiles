@@ -17,6 +17,7 @@ function usage {
   echo
   echo "Options:"
   echo "  -t TITLE    Specify title for new window"
+  echo "  -n          Open new window (default)"
   echo "  -s          Split window horizontally"
   echo "  -b          Split small window horizontally"
   echo "  -v          Split window vertically"
@@ -48,6 +49,10 @@ function run {
       -t)
         title="$2"
         shift
+        ;;
+      -n)
+        action="new-window"
+        args=()
         ;;
       -s)
         action="split-window"
