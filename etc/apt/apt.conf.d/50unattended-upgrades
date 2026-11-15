@@ -3,26 +3,26 @@
 // Unattended-Upgrade::Origins-Pattern controls which packages are
 // upgraded.
 //
-// Lines below have the format "keyword=value,...".  A
-// package will be upgraded only if the values in its metadata match
+// Lines below have the format "keyword=value,...".
+// A package will be upgraded only if the values in its metadata match
 // all the supplied keywords in a line.  (In other words, omitted
 // keywords are wild cards.) The keywords originate from the Release
 // file, but several aliases are accepted.  The accepted keywords are:
 //   a,archive,suite (eg, "stable")
-//   c,component     (eg, "main", "contrib", "non-free")
+//   c,component     (eg, "main", "contrib", "non-free-firmware", "non-free")
 //   l,label         (eg, "Debian", "Debian-Security")
 //   o,origin        (eg, "Debian", "Unofficial Multimedia Packages")
-//   n,codename      (eg, "jessie", "jessie-updates")
-//     site          (eg, "http.debian.net")
+//   n,codename      (eg, "forky", "forky-security", "forky-updates")
+//     site          (eg, "deb.debian.org")
 // The available values on the system are printed by the command
 // "apt-cache policy", and can be debugged by running
 // "unattended-upgrades -d" and looking at the log file.
 //
-// Within lines unattended-upgrades allows 3 macros whose values are
-// derived from /etc/debian_version:
-//   ${distro_id}            Installed origin.
-//   ${distro_codename}      Installed codename (eg, "buster")
-//   ${distro_release}       Installed release number (eg, "10")
+// Within lines unattended-upgrades allows three macros whose values are
+// derived from /etc/os-release and /usr/lib/os-release:
+//   ${distro_id}            Installed origin (eg, "Debian")
+//   ${distro_codename}      Installed codename (eg, "forky")
+//   ${distro_release}       Installed release number (eg, "14")
 Unattended-Upgrade::Origins-Pattern {
         // Codename based matching:
         // This will follow the migration of a release through different
@@ -31,18 +31,18 @@ Unattended-Upgrade::Origins-Pattern {
         // but the Debian release itself will not be automatically upgraded.
 //      "origin=Debian,codename=${distro_codename}-updates";
 //      "origin=Debian,codename=${distro_codename}-proposed-updates";
-//      "origin=Debian,codename=${distro_codename},label=Debian";
-//      "origin=Debian,codename=${distro_codename},label=Debian-Security";
-//      "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
+        "origin=Debian,codename=${distro_codename},label=Debian";
+        "origin=Debian,codename=${distro_codename},label=Debian-Security";
+        "origin=Debian,codename=${distro_codename}-security,label=Debian-Security";
 //      "o=Debian Backports,n=${distro_codename}-backports,l=Debian Backports";
 
         // Archive or Suite based matching:
         // Note that this will silently match a different release after
         // migration to the specified archive (e.g. testing becomes the
         // new stable).
-//      "o=Debian,a=stable";
         "o=Debian,a=unstable";
         "o=mise,a=stable";
+//      "o=Debian,a=stable";
 //      "o=Debian,a=stable-updates";
 //      "o=Debian,a=proposed-updates";
 //      "o=Debian Backports,a=stable-backports,l=Debian Backports";
@@ -74,8 +74,8 @@ Unattended-Upgrade::Package-Blacklist {
     // https://docs.python.org/3/howto/regex.html
 };
 
-// This option allows you to control if on a unclean dpkg exit
-// unattended-upgrades will automatically run 
+// This option allows you to control if unattended-upgrades will
+// automatically run on an unclean dpkg exit:
 //   dpkg --force-confold --configure -a
 // The default is true, to ensure updates keep getting installed
 //Unattended-Upgrade::AutoFixInterruptedDpkg "true";
@@ -104,9 +104,13 @@ Unattended-Upgrade::Package-Blacklist {
 Unattended-Upgrade::Mail "root";
 
 // Set this value to one of:
-//    "always", "only-on-error" or "on-change"
+//    "always", "only-on-error", "on-change", "on-new-change" or "on-upgrade"
+// "on-new-change" is like "on-change", but a package that stays kept back
+// is reported once, and again only when a new version of it is kept back.
+// "on-upgrade" mails only when packages were upgraded or removed, or on
+// error; kept back packages are listed but never trigger a mail by themselves.
 // If this is not set, then any legacy MailOnlyOnError (boolean) value
-// is used to chose between "only-on-error" and "on-change"
+// is used to choose between "only-on-error" and "on-change"
 Unattended-Upgrade::MailReport "only-on-error";
 
 // Remove unused automatically installed kernel-related packages
@@ -140,7 +144,8 @@ Unattended-Upgrade::MailReport "only-on-error";
 //Unattended-Upgrade::Automatic-Reboot-IgnoredUsers "Debian-gdm,sddm,lightdm";
 
 // If automatic reboot is enabled and needed, reboot at the specific
-// time instead of immediately
+// time instead of immediately. Logged in users are checked only when
+// the reboot is scheduled, so users who log in later do not block it
 //  Default: "now"
 //Unattended-Upgrade::Automatic-Reboot-Time "02:00";
 
@@ -154,9 +159,12 @@ Unattended-Upgrade::MailReport "only-on-error";
 // Specify syslog facility. Default is daemon
 // Unattended-Upgrade::SyslogFacility "daemon";
 
-// Download and install upgrades only on AC power
-// (i.e. skip or gracefully stop updates on battery)
-// Unattended-Upgrade::OnlyOnACPower "true";
+// Download and install upgrades on battery only while the average
+// charge of the batteries is at least this many percent
+// (i.e. skip or gracefully stop updates below that).
+// Set it to "ac-only" to only run on AC power, or to "0" to run
+// regardless of power source.
+// Unattended-Upgrade::MinBatteryLevel "40";
 
 // Download and install upgrades only on non-metered connection
 // (i.e. skip or gracefully stop updates on a metered connection)
