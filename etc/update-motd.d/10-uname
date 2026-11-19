@@ -1,0 +1,2 @@
+#!/bin/sh
+echo "$( lsb_release -ds ) $(uname -r )"

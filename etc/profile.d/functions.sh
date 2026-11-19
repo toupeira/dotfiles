@@ -48,7 +48,7 @@ function login_banner {
   elif [ -f /etc/motd ]; then
     local motd=$( cat /etc/motd )
   else
-    local motd=$( uname -a )
+    local motd=$( run-parts /etc/update-motd.d )
   fi
   echo -e "\e[1;37m$motd\e[0m"
   if [ "$( echo "$motd" | wc -l )" != 1 ]; then
@@ -58,7 +58,7 @@ function login_banner {
   uptime
   echo
   if [ "$SSH_CONNECTION" ] || [ -z "$DISPLAY" ]; then
-    echo -e "\\e[0;36mWelcome \\e[1;36m${USERNAME:-$USER}\\e[0;36m on \\e[1;33m$( hostname -f )\\e[0m"
+    echo -e "\\e[0;36mWelcome \\e[1;36m${USERNAME:-$USER}\\e[0;36m on \\e[1;33m$HOSTNAME\\e[0m"
     echo
   fi
 
